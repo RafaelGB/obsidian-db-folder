@@ -1,15 +1,8 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-interface DBFolderSettings {
-	mySetting: string;
-}
-
-const DEFAULT_SETTINGS: DBFolderSettings = {
-	mySetting: 'default'
-}
+import { DEFAULT_SETTINGS, Settings , DBFolderSettingTab } from './settings';
 
 export default class DBFolderPlugin extends Plugin {
-	settings: DBFolderSettings;
+	settings: Settings;
 
 	async onload() {
 		await this.loadSettings();
@@ -64,7 +57,7 @@ export default class DBFolderPlugin extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new DBFolderSettingTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -84,9 +77,17 @@ export default class DBFolderPlugin extends Plugin {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
-	async saveSettings() {
-		await this.saveData(this.settings);
-	}
+	async save_settings(): Promise<void> {
+        await this.saveData(this.settings);
+    }
+
+    async load_settings(): Promise<void> {
+        this.settings = Object.assign(
+            {},
+            DEFAULT_SETTINGS,
+            await this.loadData()
+        );
+    }
 }
 
 class SampleModal extends Modal {
@@ -102,34 +103,5 @@ class SampleModal extends Modal {
 	onClose() {
 		let {contentEl} = this;
 		contentEl.empty();
-	}
-}
-
-class SampleSettingTab extends PluginSettingTab {
-	plugin: DBFolderPlugin;
-
-	constructor(app: App, plugin: DBFolderPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		let {containerEl} = this;
-
-		containerEl.empty();
-
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
-
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
 	}
 }
