@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-sample-plugin",
-	"name": "Sample Plugin",
+	"id": "obsidian-dbfolder",
+	"name": "DB Folder Plugin",
 	"version": "1.0.1",
 	"minAppVersion": "0.12.0",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
+	"description": "Folder with the capability to store and retrieve data from a folder like database",
+	"author": "RafaelGB",
 	"authorUrl": "https://obsidian.md",
 	"isDesktopOnly": false
 }
