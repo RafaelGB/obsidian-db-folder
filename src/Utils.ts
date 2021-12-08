@@ -1,4 +1,4 @@
-import { TemplaterError } from "./Error";
+import { TemplaterError } from 'Base';
 import {
     App,
     normalizePath,

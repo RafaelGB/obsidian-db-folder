@@ -1,10 +1,10 @@
 // Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
 
 import { App, TAbstractFile, TFile } from "obsidian";
-import { TextInputSuggest } from "./suggest";
-import { get_tfiles_from_folder } from "../Utils";
-import TemplaterPlugin from "../main";
-import { errorWrapperSync } from "../Error";
+import { TextInputSuggest } from 'suggesters/suggest';
+import { get_tfiles_from_folder } from 'Utils';
+import TemplaterPlugin from 'main';
+import { errorWrapperSync } from 'Base';
 
 export enum FileSuggestMode {
     TemplateFiles

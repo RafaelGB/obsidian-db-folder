@@ -19,5 +19,6 @@ export default (commandLineArgs) => ({
     typescript(),
     nodeResolve({browser: true}),
     commonjs(),
+    json(),
   ]
   });

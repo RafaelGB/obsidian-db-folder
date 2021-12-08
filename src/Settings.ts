@@ -1,10 +1,9 @@
 import { App, ButtonComponent, PluginSettingTab, Setting } from "obsidian";
-import { arraymove, get_tfiles_from_folder } from "./Utils";
-import { errorWrapperSync, TemplaterError } from "./Error";
-import DBFolderPlugin from "./main";
-import { FolderSuggest } from "./suggesters/FolderSuggester";
-import { FileSuggest, FileSuggestMode } from "./suggesters/FileSuggester";
-import { log_error } from "./Log";
+import { arraymove, get_tfiles_from_folder } from 'Utils';
+import { log_error,errorWrapperSync, TemplaterError } from 'Base';
+import DBFolderPlugin from 'main';
+import { FolderSuggest } from 'suggesters/FolderSuggester';
+import { FileSuggest, FileSuggestMode } from 'suggesters/FileSuggester';
 
 export interface FolderTemplate {
     folder: string;

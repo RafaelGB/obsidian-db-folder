@@ -1,5 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { DEFAULT_SETTINGS, Settings , DBFolderSettingTab } from './settings';
+import { DEFAULT_SETTINGS, Settings , DBFolderSettingTab } from 'Settings';
 
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
