@@ -1,4 +1,8 @@
-/* Sets all the text color to red! */
-body {
-    color: red;
+.templater_div {
+    border-top: 1px solid var(--background-modifier-border);
+}
+
+.templater_div > .setting-item {
+    border-top: none !important;
+    align-self: center;
 }
