@@ -10,7 +10,9 @@
       "moduleResolution": "node",
       "importHelpers": true,
       "esModuleInterop": true,
-      "lib": ["dom", "es6", "scripthost", "es2016", "es2019"]
+      "allowSyntheticDefaultImports": true,
+      "lib": ["dom", "es6", "scripthost", "es2015", "es2019"]
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules", "**/*.d.ts"]
 }
