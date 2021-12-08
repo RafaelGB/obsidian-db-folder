@@ -4,8 +4,8 @@ import { DEFAULT_SETTINGS, Settings , DBFolderSettingTab } from 'Settings';
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
 
-	async onload() {
-		await this.loadSettings();
+	async onload(): Promise<void>{
+		await this.load_settings();
 
 		// This creates an icon in the left ribbon.
 		let ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
@@ -71,10 +71,6 @@ export default class DBFolderPlugin extends Plugin {
 
 	onunload() {
 
-	}
-
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
 	async save_settings(): Promise<void> {

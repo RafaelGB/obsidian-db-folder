@@ -31,6 +31,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
 	display(): void {
 		this.containerEl.empty();
 		this.add_setting_header();
+        this.add_folder_templates_setting();
 	}
     /**
      * Add a header to the settings tab
