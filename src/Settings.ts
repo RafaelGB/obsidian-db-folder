@@ -29,7 +29,9 @@ export class DBFolderSettingTab extends PluginSettingTab {
     }
 
 	display(): void {
+        // Empty the container
 		this.containerEl.empty();
+
 		this.add_setting_header();
         this.add_folder_templates_setting();
 	}
@@ -41,6 +43,9 @@ export class DBFolderSettingTab extends PluginSettingTab {
         containerEl.createEl('h2', {text: 'DBFolder Settings'});
     }
 
+    /**
+     * Selector of pairs of folder and template
+     */
     add_folder_templates_setting(): void {
         this.containerEl.createEl("h2", { text: "Folder Templates" });
 

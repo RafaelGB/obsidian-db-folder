@@ -1,5 +1,21 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { DEFAULT_SETTINGS, Settings, DBFolderSettingTab } from 'Settings';
+import { 
+	App, 
+	Modal, 
+	Notice, 
+	Plugin, 
+	Component,
+	MarkdownPostProcessorContext
+} from 'obsidian';
+
+import { 
+	DEFAULT_SETTINGS, 
+	Settings, 
+	DBFolderSettingTab 
+} from 'Settings';
+
+import {
+	DBFolderSearchRenderer
+} from 'DBFolder';
 
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
@@ -14,6 +30,10 @@ export default class DBFolderPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new DBFolderSettingTab(this.app, this));
+
+		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
+		 	this.dbfolder(source, el, ctx, ctx.sourcePath)
+	 	);
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -40,6 +60,31 @@ export default class DBFolderPlugin extends Plugin {
 			await this.loadData()
 		);
 	}
+
+    public registerPriorityCodeblockPostProcessor(
+        language: string,
+        priority: number,
+        processor: (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => Promise<void>
+    ) {
+        let registered = this.registerMarkdownCodeBlockProcessor(language, processor);
+        registered.sortOrder = priority;
+    }
+
+	public async dbfolder(
+		source: string,
+		el: HTMLElement,
+		component: Component | MarkdownPostProcessorContext,
+		sourcePath: string
+	) {
+		console.log('render dbfolder:', source, el, component, sourcePath);
+		switch (source) {
+			case "task":
+				component.addChild(
+					new DBFolderSearchRenderer(el)
+				);
+				break;
+		}
+	}
 }
 
 class DBFolderModalCreate extends Modal {
@@ -52,7 +97,7 @@ class DBFolderModalCreate extends Modal {
 		/*
 			http Form where user can add, edit or delete properties with the format name-type asociated with a db folder
 		*/
-		contentEl.innerHTML	= `
+		contentEl.innerHTML = `
 			<div class="modal-content">
 				<div class="modal-header">
 					<h3>DB Folder Properties</h3>
