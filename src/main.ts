@@ -76,9 +76,16 @@ export default class DBFolderPlugin extends Plugin {
 		component: Component | MarkdownPostProcessorContext,
 		sourcePath: string
 	) {
-		console.log('render dbfolder:', source, el, component, sourcePath);
+		console.log('render dbfolder: '+source, el, component, sourcePath);
 		switch (source) {
-			case "task":
+			case "task\n":
+				console.log('render task');
+				component.addChild(
+					new DBFolderSearchRenderer(el)
+				);
+				break;
+			default:
+				console.log('render default');
 				component.addChild(
 					new DBFolderSearchRenderer(el)
 				);
