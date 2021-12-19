@@ -1,6 +1,6 @@
 import { App, ButtonComponent, PluginSettingTab, Setting } from "obsidian";
 import { arraymove, get_tfiles_from_folder } from 'Utils';
-import { log_error,errorWrapperSync, TemplaterError } from 'Base';
+import { log_error,errorWrapperSync, DBFolderError } from 'Base';
 import DBFolderPlugin from 'main';
 import { FolderSuggest } from 'suggesters/FolderSuggester';
 import { FileSuggest, FileSuggestMode } from 'suggesters/FileSuggester';
@@ -121,7 +121,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
                                     )
                                 ) {
                                     log_error(
-                                        new TemplaterError(
+                                        new DBFolderError(
                                             "This folder already has a template associated with it"
                                         )
                                     );

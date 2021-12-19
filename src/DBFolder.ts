@@ -3,6 +3,9 @@ import {
     MarkdownRenderChild
 } from "obsidian";
 
+import {
+    verbose
+} from 'decorators/Verbose';
 /**
  * Render a search bar of notes into a folder path with filters
  */
@@ -16,6 +19,7 @@ export class DBFolderSearchRenderer extends MarkdownRenderChild {
     async onload() {
         await this.render();
     }
+
 
     async render() {
         console.log('->render dbfolder search');

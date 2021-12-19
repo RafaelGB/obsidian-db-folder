@@ -1,4 +1,4 @@
-import { TemplaterError } from 'Base';
+import { DBFolderError } from 'Base';
 import {
     App,
     normalizePath,
@@ -21,10 +21,10 @@ export function resolve_tfolder(app: App, folder_str: string): TFolder {
 
     const folder = app.vault.getAbstractFileByPath(folder_str);
     if (!folder) {
-        throw new TemplaterError(`Folder "${folder_str}" doesn't exist`);
+        throw new DBFolderError(`Folder "${folder_str}" doesn't exist`);
     }
     if (!(folder instanceof TFolder)) {
-        throw new TemplaterError(`${folder_str} is a file, not a folder`);
+        throw new DBFolderError(`${folder_str} is a file, not a folder`);
     }
 
     return folder;
@@ -35,10 +35,10 @@ export function resolve_tfile(app: App, file_str: string): TFile {
 
     const file = app.vault.getAbstractFileByPath(file_str);
     if (!file) {
-        throw new TemplaterError(`File "${file_str}" doesn't exist`);
+        throw new DBFolderError(`File "${file_str}" doesn't exist`);
     }
     if (!(file instanceof TFile)) {
-        throw new TemplaterError(`${file_str} is a folder, not a file`);
+        throw new DBFolderError(`${file_str} is a folder, not a file`);
     }
 
     return file;

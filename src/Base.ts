@@ -1,6 +1,6 @@
 import { Notice } from "obsidian";
 
-export class TemplaterError extends Error {
+export class DBFolderError extends Error {
     constructor(msg: string, public console_msg?: string) {
         super(msg);
         this.name = this.constructor.name;
@@ -15,8 +15,8 @@ export async function errorWrapper<T>(
     try {
         return await fn();
     } catch (e) {
-        if (!(e instanceof TemplaterError)) {
-            log_error(new TemplaterError(msg, e.message));
+        if (!(e instanceof DBFolderError)) {
+            log_error(new DBFolderError(msg, e.message));
         } else {
             log_error(e);
         }
@@ -28,7 +28,7 @@ export function errorWrapperSync<T>(fn: () => T, msg: string): T {
     try {
         return fn();
     } catch (e) {
-        log_error(new TemplaterError(msg, e.message));
+        log_error(new DBFolderError(msg, e.message));
         return null;
     }
 }
@@ -47,9 +47,9 @@ export function log_update(msg: string): void {
  * Log alert when something is wrong
  * @param e 
  */
-export function log_error(e: Error | TemplaterError): void {
+export function log_error(e: Error | DBFolderError): void {
     const notice = new Notice("", 8000);
-    if (e instanceof TemplaterError && e.console_msg) {
+    if (e instanceof DBFolderError && e.console_msg) {
         // TODO: Find a better way for this
         // @ts-ignore
         notice.noticeEl.innerHTML = `<b>Templater Error</b>:<br/>${e.message}<br/>Check console for more informations`;
