@@ -1,2 +1,5 @@
-/** The supported query types (corresponding to view types). */
-export type DatabaseType = "list" | "board";
+
+export enum DatabaseType {
+    LIST = 'LIST',
+    BOARD = 'BOARD'
+}

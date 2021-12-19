@@ -20,6 +20,11 @@ import {
 import{
 	parseDatabase
 }from 'database/parse';
+
+import{
+	DatabaseType
+} from 'database/Database';
+
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
 	async onload(): Promise<void> {
@@ -81,23 +86,20 @@ export default class DBFolderPlugin extends Plugin {
 		component: Component | MarkdownPostProcessorContext,
 		sourcePath: string
 	) {
-		console.log('render dbfolder: '+source, el, component, sourcePath);
-		let database = await parseDatabase(source);
-		switch (database) {
-			case "task":
+		let databaseYaml = await parseDatabase(source);
+		switch (databaseYaml.type as DatabaseType) {
+			case DatabaseType.LIST:
 				console.log('render task');
 				component.addChild(
 					new DBFolderSearchRenderer(el,this.settings)
 				);
 				break;
-			case "error":
+			case DatabaseType.BOARD:
+				// TODO
+				console.warn('not implemented yet');
 				break;
 			default:
-				console.log('render default');
-				component.addChild(
-					new DBFolderSearchRenderer(el,this.settings)
-				);
-				break;
+				console.error('something went wrong rendering dbfolder');
 		}
 	}
 }
