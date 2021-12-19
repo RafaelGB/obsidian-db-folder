@@ -17,6 +17,9 @@ import {
 	DBFolderSearchRenderer
 } from 'DBFolder';
 
+import{
+	parseDatabase
+}from 'database/parse';
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
 	async onload(): Promise<void> {
@@ -49,9 +52,11 @@ export default class DBFolderPlugin extends Plugin {
 		console.log('Unloading DBFolder plugin');
 	}
 
-	async save_settings(): Promise<void> {
-		await this.saveData(this.settings);
-	}
+	/** Update plugin settings. */
+    async updateSettings(settings: Partial<Settings>) {
+        Object.assign(this.settings, settings);
+        await this.saveData(this.settings);
+    }
 
 	async load_settings(): Promise<void> {
 		this.settings = Object.assign(
@@ -77,17 +82,20 @@ export default class DBFolderPlugin extends Plugin {
 		sourcePath: string
 	) {
 		console.log('render dbfolder: '+source, el, component, sourcePath);
-		switch (source) {
-			case "task\n":
+		let database = await parseDatabase(source);
+		switch (database) {
+			case "task":
 				console.log('render task');
 				component.addChild(
-					new DBFolderSearchRenderer(el)
+					new DBFolderSearchRenderer(el,this.settings)
 				);
+				break;
+			case "error":
 				break;
 			default:
 				console.log('render default');
 				component.addChild(
-					new DBFolderSearchRenderer(el)
+					new DBFolderSearchRenderer(el,this.settings)
 				);
 				break;
 		}

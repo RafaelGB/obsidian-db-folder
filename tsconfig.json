@@ -11,6 +11,7 @@
       "importHelpers": true,
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
       "lib": ["dom", "es6", "scripthost", "es2015", "es2019"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],

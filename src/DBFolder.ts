@@ -3,15 +3,22 @@ import {
     MarkdownRenderChild
 } from "obsidian";
 
+import { 
+	Settings
+} from 'Settings';
+
 import {
-    verbose
-} from 'decorators/Verbose';
+    AttachToAllClassDecorator
+} from 'decorators/BaseDecorator'
+
 /**
  * Render a search bar of notes into a folder path with filters
  */
 export class DBFolderSearchRenderer extends MarkdownRenderChild {
+    
     constructor(
-        public container: HTMLElement
+        public container: HTMLElement,
+        public settings: Settings
     ) {
         super(container);
     }
@@ -20,9 +27,7 @@ export class DBFolderSearchRenderer extends MarkdownRenderChild {
         await this.render();
     }
 
-
     async render() {
-        console.log('->render dbfolder search');
         this.container.createEl("h2", { text: "DBFolder" });
         this.container.createEl("h3", { text: "Search" });
 
@@ -34,10 +39,9 @@ export class DBFolderSearchRenderer extends MarkdownRenderChild {
         });
 
         searchButton.addEventListener("click", async () => {
-            const search = searchEl.value;
-            console.log(search);
+            const searchResult = searchEl.value;
+            console.log(searchResult);
         });
-        console.log('<-render dbfolder search');
     }
     
 }
