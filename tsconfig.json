@@ -12,8 +12,9 @@
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
       "experimentalDecorators": true,
-      "lib": ["dom", "es6", "scripthost", "es2015", "es2019"]
+      "lib": ["dom", "es6", "scripthost", "es2015", "es2019"],
+      "jsx": "react"
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "**/*.d.ts"]
 }

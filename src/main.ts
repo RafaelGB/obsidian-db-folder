@@ -91,7 +91,7 @@ export default class DBFolderPlugin extends Plugin {
 			case DatabaseType.LIST:
 				console.log('render task');
 				component.addChild(
-					new DBFolderSearchRenderer(el, databaseYaml,sourcePath, this.settings)
+					new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings)
 				);
 				break;
 			case DatabaseType.BOARD:
