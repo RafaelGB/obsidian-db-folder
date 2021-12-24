@@ -1,8 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Card from "@material-ui/core/Card";
 import SortIcon from "@material-ui/icons/ArrowDownward";
 import DataTable from "react-data-table-component";
-import ReactDOM from 'react-dom';
 
 let sample = [
     {
@@ -45,7 +45,7 @@ const columns = [
     }
 ];
 
-export function ReactSample() {
+function ReactSample() {
     return (
         <div className="ReactSample">
         <Card>
@@ -63,5 +63,6 @@ export function ReactSample() {
     );
   }
 
-  const rootElement = document.getElementById("table-container");
-  ReactDOM.render(<ReactSample />, rootElement);
+  export function createTable(divToRender: HTMLDivElement) {
+    ReactDOM.render(<ReactSample />, divToRender);
+  }
