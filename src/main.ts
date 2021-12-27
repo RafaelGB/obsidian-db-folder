@@ -19,11 +19,11 @@ import {
 
 import{
 	parseDatabase
-}from 'database/parse';
+}from 'database/parse/parse';
 
 import{
 	DatabaseType
-} from 'database/Database';
+} from 'database/parse/parse';
 
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
