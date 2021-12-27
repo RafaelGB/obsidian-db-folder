@@ -1,22 +1,20 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "inlineSourceMap": true,
-    "inlineSources": true,
-    "module": "ESNext",
-    "target": "ES6",
-    "allowJs": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "lib": [
-      "dom",
-      "es5",
-      "scripthost",
-      "es2015"
-    ]
+      "baseUrl": "src",
+      "inlineSourceMap": true,
+      "inlineSources": true,
+      "module": "ESNext",
+      "target": "es6",
+      "allowJs": true,
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "importHelpers": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
+      "lib": ["dom", "es6", "scripthost", "es2015", "es2019"],
+      "jsx": "react"
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "**/*.d.ts"]
 }

@@ -1,135 +1,153 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { 
+	App, 
+	Modal, 
+	Notice, 
+	Plugin, 
+	Component,
+	MarkdownPostProcessorContext
+} from 'obsidian';
 
-interface DBFolderSettings {
-	mySetting: string;
-}
+import { 
+	DEFAULT_SETTINGS, 
+	Settings, 
+	DBFolderSettingTab 
+} from 'Settings';
 
-const DEFAULT_SETTINGS: DBFolderSettings = {
-	mySetting: 'default'
-}
+import {
+	DBFolderSearchRenderer
+} from 'DBFolder';
+
+import{
+	parseDatabase
+}from 'database/parse';
+
+import{
+	DatabaseType
+} from 'database/Database';
 
 export default class DBFolderPlugin extends Plugin {
-	settings: DBFolderSettings;
-
-	async onload() {
-		await this.loadSettings();
+	settings: Settings;
+	async onload(): Promise<void> {
+		await this.load_settings();
 
 		// This creates an icon in the left ribbon.
 		let ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
 			new Notice('This is a notice!');
 		});
-		// Perform additional things with the ribbon
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
 
-		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		let statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
+		// This adds a settings tab so the user can configure various aspects of the plugin
+		this.addSettingTab(new DBFolderSettingTab(this.app, this));
+
+		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
+		 	this.dbfolder(source, el, ctx, ctx.sourcePath)
+	 	);
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
 			id: 'open-sample-modal-simple',
 			name: 'Open sample modal (simple)',
 			callback: () => {
-				new SampleModal(this.app).open();
+				new DBFolderModalCreate(this.app).open();
 			}
 		});
-		// This adds an editor command that can perform some operation on the current editor instance
-		this.addCommand({
-			id: 'sample-editor-command',
-			name: 'Sample editor command',
-			editorCallback: (editor: Editor, view: MarkdownView) => {
-				console.log(editor.getSelection());
-				editor.replaceSelection('Sample Editor Command');
-			}
-		});
-		// This adds a complex command that can check whether the current state of the app allows execution of the command
-		this.addCommand({
-			id: 'open-sample-modal-complex',
-			name: 'Open sample modal (complex)',
-			checkCallback: (checking: boolean) => {
-				// Conditions to check
-				let markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (markdownView) {
-					// If checking is true, we're simply "checking" if the command can be run.
-					// If checking is false, then we want to actually perform the operation.
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-
-					// This command will only show up in Command Palette when the check function returns true
-					return true;
-				}
-			}
-		});
-
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
-	onunload() {
-
+	async onunload() {
+		console.log('Unloading DBFolder plugin');
 	}
 
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	/** Update plugin settings. */
+    async updateSettings(settings: Partial<Settings>) {
+        Object.assign(this.settings, settings);
+        await this.saveData(this.settings);
+    }
+
+	async load_settings(): Promise<void> {
+		this.settings = Object.assign(
+			{},
+			DEFAULT_SETTINGS,
+			await this.loadData()
+		);
 	}
 
-	async saveSettings() {
-		await this.saveData(this.settings);
+    public registerPriorityCodeblockPostProcessor(
+        language: string,
+        priority: number,
+        processor: (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => Promise<void>
+    ) {
+        let registered = this.registerMarkdownCodeBlockProcessor(language, processor);
+        registered.sortOrder = priority;
+    }
+
+	public async dbfolder(
+		source: string,
+		el: HTMLElement,
+		component: Component | MarkdownPostProcessorContext,
+		sourcePath: string
+	) {
+		let databaseYaml = await parseDatabase(source);
+		switch (databaseYaml.type as DatabaseType) {
+			case DatabaseType.LIST:
+				console.log('render task');
+				component.addChild(
+					new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings)
+				);
+				break;
+			case DatabaseType.BOARD:
+				// TODO
+				console.warn('not implemented yet');
+				break;
+			default:
+				console.error('something went wrong rendering dbfolder');
+		}
 	}
 }
 
-class SampleModal extends Modal {
+class DBFolderModalCreate extends Modal {
 	constructor(app: App) {
 		super(app);
 	}
 
 	onOpen() {
-		let {contentEl} = this;
-		contentEl.setText('Woah!');
+		const { contentEl } = this;
+		/*
+			http Form where user can add, edit or delete properties with the format name-type asociated with a db folder
+		*/
+		contentEl.innerHTML = `
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>DB Folder Properties</h3>
+				</div>
+				<div class="modal-body">
+					<form id="db-folder-properties-form">
+						<div class="form-group">
+							<label for="db-folder-name">DB Folder Name</label>
+							<input type="text" class="form-control" id="db-folder-name" placeholder="Enter DB Folder Name">
+						</div>
+						<div class="form-group">
+							<label for="db-folder-type">DB Folder Type</label>
+							<select class="form-control" id="db-folder-type">
+								<option>String</option>
+								<option>Number</option>
+								<option>Boolean</option>
+								<option>Date</option>
+								<option>Array</option>
+								<option>Object</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="db-folder-properties-submit">Submit</button>
+					<button type="button" class="btn btn-secondary" id="db-folder-properties-cancel">Cancel</button>
+				</div>
+			</div>
+		`;
 	}
 
 	onClose() {
-		let {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
-	}
-}
-
-class SampleSettingTab extends PluginSettingTab {
-	plugin: DBFolderPlugin;
-
-	constructor(app: App, plugin: DBFolderPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		let {containerEl} = this;
-
-		containerEl.empty();
-
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
-
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
 	}
 }

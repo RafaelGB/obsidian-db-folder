@@ -8,23 +8,37 @@
 		"build": "rollup --config rollup.config.js",
 		"pretest": "eslint --ignore-path .gitignore src/"
 	},
-	"keywords": [],
+	"keywords": [
+		"obsidian",
+		"obsidian-md",
+		"obsidian-plugin",
+		"obsidian-md-plugin"
+	],
 	"author": "",
-	"license": "MIT",
+	"license": "AGPL-3.0-only",
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^18.1.0",
 		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-node-resolve": "^11.2.1",
 		"@rollup/plugin-typescript": "^8.2.5",
 		"@types/node": "^16.11.1",
-		"esbuild": "0.13.8",
-		"eslint": "^7.32.0",
-		"obsidian": "^0.12.17",
+		"@typescript-eslint/eslint-plugin": "^5.8.0",
+		"@typescript-eslint/parser": "^5.8.0",
+		"@types/react": "17.0.38",
+    	"@types/react-dom": "17.0.11",
+		"eslint": "^8.5.0",
+		"obsidian": "^0.13.11",
 		"rollup": "2.60.2",
 		"tslib": "2.3.1",
-		"typescript": "4.4.4"
+		"typescript": "4.5.4"
 	},
 	"dependencies": {
-		"package.json": "^2.0.1"
+		"@popperjs/core": "^2.11.0",
+		"pkg.json": "^2.0.8",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-data-table-component": "^7.4.6",
+		"@material-ui/core": "4.12.3",
+    	"@material-ui/icons": "4.11.2"
 	}
 }
