@@ -1,7 +1,9 @@
+import { App } from "obsidian";
+
 export interface Handler {
     setNext(handler: Handler): Handler;
 
-    handle(yaml: any): string[];
+    handle(yaml: any, app: App): string[];
 }
 
 export abstract class AbstractHandler implements Handler {
@@ -14,9 +16,9 @@ export abstract class AbstractHandler implements Handler {
         return handler;
     }
 
-    public handle(yaml: any): string[] {
+    public handle(yaml: any, app: App): string[] {
         if (this.nextHandler) {
-            return this.nextHandler.handle(yaml);
+            return this.nextHandler.handle(yaml,app);
         }
 
         return this.listOfErrors;

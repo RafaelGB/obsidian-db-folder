@@ -1,4 +1,4 @@
-import { parseYaml } from "obsidian";
+import { parseYaml,App } from "obsidian";
 
 // Interface of handlers
 import { Handler } from "database/parse/handlers/AbstractHandler";
@@ -12,16 +12,17 @@ import {TypeHandler} from 'database/parse/handlers/TypeHandler';
 /**
  * Parse a string
  */
-export function parseDatabase(yamlText: string): any {
+export function parseDatabase(yamlText: string,app: App): any {
     let yaml;
     try {
         yaml = parseYaml(yamlText);
-        // TODO check if yaml is valid, throw error if not
-        validateYaml(yaml);
-        return yaml;
+        if(validateYaml(yaml,app)){
+            return yaml;
+        }
+        // TODO create custom errors
+        throw new Error("Yaml is not valid");
     } catch (err) {
-        let errorMessage = "Error parsing YAML: ";
-        console.error(errorMessage+err);
+        console.error(err);
         return "error";
     }
 }
@@ -34,7 +35,7 @@ export function parseDatabase(yamlText: string): any {
 /**
  * Validate yaml received from input using handlers of function getHandlers
  */
-function validateYaml(yaml: any): boolean {
+function validateYaml(yaml: any, app: App): boolean {
     let handlers = getHandlers();
     let i = 1;
     while (i < handlers.length) {
@@ -42,7 +43,7 @@ function validateYaml(yaml: any): boolean {
         i++;
     }
     // TODO create custom errors
-    let errors = handlers[0].handle(yaml);
+    let errors = handlers[0].handle(yaml,app);
     if (errors.length > 0) {
         console.error("Errors found: ");
         errors.forEach(error => {
