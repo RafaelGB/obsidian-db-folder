@@ -1,10 +1,15 @@
 import {AbstractHandler} from 'database/parse/handlers/AbstractHandler';
 
 export class FolderHandler extends AbstractHandler {
-    public handle(yaml: any): boolean {
+    public handle(yaml: any): string[] {
         if (!yaml.folder) {
-            throw new Error("Folder is not defined");
+            this.listOfErrors.push('Folder is not defined');
         }
-        return true;
+
+        // Check next handler
+        if (this.nextHandler) {
+            return this.nextHandler.handle(yaml);
+        }
+        return this.listOfErrors;
     }
 }

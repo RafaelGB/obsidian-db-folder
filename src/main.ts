@@ -23,7 +23,7 @@ import{
 
 import{
 	DatabaseType
-} from 'database/parse/parse';
+} from 'database/parse/handlers/TypeHandler';
 
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;

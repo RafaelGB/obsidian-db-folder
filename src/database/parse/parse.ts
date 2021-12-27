@@ -41,7 +41,16 @@ function validateYaml(yaml: any): boolean {
         handlers[i-1].setNext(handlers[i]);
         i++;
     }
-    return handlers[0].handle(yaml);
+    // TODO create custom errors
+    let errors = handlers[0].handle(yaml);
+    if (errors.length > 0) {
+        console.error("Errors found: ");
+        errors.forEach(error => {
+            console.error(error);
+        });
+        return false;
+    }   
+    return true;
 }
 
 
