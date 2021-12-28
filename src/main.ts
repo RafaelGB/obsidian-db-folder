@@ -19,11 +19,11 @@ import {
 
 import{
 	parseDatabase
-}from 'database/parse';
+}from 'database/parse/parse';
 
 import{
 	DatabaseType
-} from 'database/Database';
+} from 'database/parse/handlers/TypeHandler';
 
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
@@ -86,10 +86,9 @@ export default class DBFolderPlugin extends Plugin {
 		component: Component | MarkdownPostProcessorContext,
 		sourcePath: string
 	) {
-		let databaseYaml = await parseDatabase(source);
+		let databaseYaml = await parseDatabase(source,this.app);
 		switch (databaseYaml.type as DatabaseType) {
 			case DatabaseType.LIST:
-				console.log('render task');
 				component.addChild(
 					new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings)
 				);
