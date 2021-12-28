@@ -32,6 +32,9 @@ export class FolderHandler extends AbstractHandler {
         let file = app.workspace.getActiveFile();
         // obtain folder to check
         // TODO best way to do this?
+        if(!file){
+            return false;
+        }
         let folderToCheck = file.path.split("/").slice(0,-1).join("/")+"/"+yaml.folder;
         // check if folder exists
         let folder_str = normalizePath(folderToCheck);
