@@ -1,6 +1,5 @@
 import {AbstractHandler} from 'database/parse/handlers/AbstractHandler';
 import { App,normalizePath } from "obsidian";
-import path from 'path/posix';
 
 export class FolderHandler extends AbstractHandler {
     public handle(yaml: any, app: App): string[] {
@@ -32,10 +31,8 @@ export class FolderHandler extends AbstractHandler {
     checkIfFolderExist(yaml: any, app: App): boolean {
         let file = app.workspace.getActiveFile();
         // obtain folder to check
-        console.log(file.path.split);
-        console.log(file.path.split("/"));
-        let folderToCheck = file.path.split("/").slice(0,-1).join("/")+yaml.folder;
-        console.log(folderToCheck);
+        // TODO best way to do this?
+        let folderToCheck = file.path.split("/").slice(0,-1).join("/")+"/"+yaml.folder;
         // check if folder exists
         let folder_str = normalizePath(folderToCheck);
         const folder = app.vault.getAbstractFileByPath(folder_str);
