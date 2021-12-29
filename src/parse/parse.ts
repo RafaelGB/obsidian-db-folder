@@ -1,11 +1,11 @@
 import { parseYaml,App } from "obsidian";
 
 // Interface of handlers
-import { Handler } from "database/parse/handlers/AbstractHandler";
+import { Handler } from "parse/handlers/AbstractHandler";
 // Handlers of yaml parse
-import {FolderHandler} from 'database/parse/handlers/FolderHandler';
-import {TypeHandler} from 'database/parse/handlers/TypeHandler';
-import { TitleHandler } from 'database/parse/handlers/TitleHandler';
+import {FolderHandler} from 'parse/handlers/FolderHandler';
+import {TypeHandler} from 'parse/handlers/TypeHandler';
+import { TitleHandler } from 'parse/handlers/TitleHandler';
 /**
  * PUBLIC METHODS
  ****************/

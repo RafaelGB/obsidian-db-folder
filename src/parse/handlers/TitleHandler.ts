@@ -1,4 +1,4 @@
-import {AbstractHandler} from 'database/parse/handlers/AbstractHandler';
+import {AbstractHandler} from 'parse/handlers/AbstractHandler';
 import { App } from "obsidian";
 
 export class TitleHandler extends AbstractHandler {
