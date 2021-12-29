@@ -52,5 +52,5 @@ function ReactSample(props: any) {
 
   export function createTable(divToRender: HTMLDivElement, myInput: any[]) {
     const element = <ReactSample input={myInput} />;
-    ReactDOM.render(<ReactSample input={myInput} />, divToRender);
+    ReactDOM.render(element, divToRender);
   }

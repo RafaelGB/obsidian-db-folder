@@ -38,7 +38,7 @@ export default class DBFolderPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new DBFolderSettingTab(this.app, this));
-
+		
 		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
 			this.dbfolder(source, el, ctx, ctx.sourcePath)
 		);
@@ -91,7 +91,7 @@ export default class DBFolderPlugin extends Plugin {
 			switch (databaseYaml.type as DatabaseType) {
 				case DatabaseType.LIST:
 					component.addChild(
-						new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings)
+						new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings,this.app)
 					);
 					break;
 				case DatabaseType.BOARD:

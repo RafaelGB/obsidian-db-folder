@@ -1,8 +1,6 @@
 import {
-    MetadataCache, 
-    TFile,
-    Vault,
-    MarkdownRenderChild
+    MarkdownRenderChild,
+    App
 } from "obsidian";
 
 import { 
@@ -12,16 +10,21 @@ import {
 import {
     createTable
 } from 'components/Table';
+
+import {
+    obtainTFilesFromTFolder,
+    obtainCurrentFolder
+} from 'utils/VaultManagement';
 /**
  * Render a search bar of notes into a folder path with filters
  */
 export class DBFolderSearchRenderer extends MarkdownRenderChild {
-    
     constructor(
         public container: HTMLElement,
         public db_yaml: any,
         public sourcePath: string,
-        public settings: Settings
+        public settings: Settings,
+        public app: App
     ) {
         super(container);
     }
@@ -45,27 +48,15 @@ export class DBFolderSearchRenderer extends MarkdownRenderChild {
             console.log(searchResult);
         });
         // Add a table to the container
-
+        
         const tableContainer  = this.container.createDiv("table-container");
-        createTable(tableContainer,sample);
+        let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
+        console.log(folder);
+        let files = obtainTFilesFromTFolder(this.app,folder);
+        createTable(tableContainer,files);
         // TODO obtain current file
         // TODO generate a factory of renderers with unique id
         // TODO use de result of the search to filter the files inside db_yaml defined folder
     }
     
 }
-let sample = [
-    {
-        id: 1,
-        title: "Beetlejuice",
-        year: "1988",
-        runtime: "92",
-        genres: ["Comedy", "Fantasy"],
-        director: "Tim Burton",
-        actors: "Alec Baldwin, Geena Davis, Annie McEnroe, Maurice Page",
-        plot:
-          'A couple of recently deceased ghosts contract the services of a "bio-exorcist" in order to remove the obnoxious new owners of their house.',
-        posterUrl:
-          "https://images-na.ssl-images-amazon.com/images/M/MV5BMTUwODE3MDE0MV5BMl5BanBnXkFtZTgwNTk1MjI4MzE@._V1_SX300.jpg"
-      }
-];

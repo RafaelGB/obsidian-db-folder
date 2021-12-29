@@ -1,4 +1,4 @@
-import {App} from "obsidian";
+import { App,TFile,TFolder } from "obsidian";
 
 export function obtainCurrentFolder(app: App): string {
     let file = app.workspace.getActiveFile();
@@ -7,4 +7,23 @@ export function obtainCurrentFolder(app: App): string {
         return null;
     }
     return file.path.split("/").slice(0,-1).join("/")+"/";
+}
+
+export function obtainTFilesFromTFolder(app: App, folderPath: string): any[] {
+    let files: any[] = [];
+    // TODO improve this filter?
+    let id = 0;
+    app.vault.getFiles().forEach(file => {
+        if(file.path.startsWith(folderPath)){
+            let aFile = {
+                id: ++id,
+                title: file.basename,
+                director: "asfas",
+                runtime: file.path
+            }
+            files.push(aFile);
+        }
+    });
+    console.log(files);
+    return files;
 }
