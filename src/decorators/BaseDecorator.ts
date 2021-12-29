@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Create class decorator that logs the function name and arguments when called if verbose config is true
  */
@@ -17,11 +19,11 @@
 
 function logDecorator(): (methodName: string, descriptor: PropertyDescriptor) => PropertyDescriptor {
     return (methodName: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
-        let method = descriptor.value;
+        const method = descriptor.value;
         
         descriptor.value = function(...args: any[]) {
             console.log(methodName + "(" + args.join(", ") + ")");
-            let result = method.apply(this, args);
+            const result = method.apply(this, args);
             console.log("=> " + result);
             return result
         }

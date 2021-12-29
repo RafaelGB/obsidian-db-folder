@@ -5,6 +5,7 @@ import { Handler } from "database/parse/handlers/AbstractHandler";
 // Handlers of yaml parse
 import {FolderHandler} from 'database/parse/handlers/FolderHandler';
 import {TypeHandler} from 'database/parse/handlers/TypeHandler';
+import { TitleHandler } from 'database/parse/handlers/TitleHandler';
 /**
  * PUBLIC METHODS
  ****************/
@@ -62,6 +63,7 @@ function validateYaml(yaml: any, app: App): boolean {
 function getHandlers(): Handler[] {
     return [
         new TypeHandler(),
-        new FolderHandler()
+        new FolderHandler(),
+        new TitleHandler()
     ];
 }

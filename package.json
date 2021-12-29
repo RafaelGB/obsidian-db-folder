@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "rollup --config rollup.config.js -w",
 		"build": "rollup --config rollup.config.js",
-		"pretest": "eslint --ignore-path .gitignore src/"
+		"test": "jest --env=node --colors --coverage test",
+		"pretest": "eslint --ignore-path .gitignore src/**/*.ts"
 	},
 	"keywords": [
 		"obsidian",
@@ -14,8 +15,8 @@
 		"obsidian-plugin",
 		"obsidian-md-plugin"
 	],
-	"author": "",
-	"license": "AGPL-3.0-only",
+	"author": "Rafael Gomez Bermejo",
+  	"license": "MIT",
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^18.1.0",
 		"@rollup/plugin-json": "^4.1.0",
@@ -26,10 +27,13 @@
 		"@typescript-eslint/parser": "^5.8.0",
 		"@types/react": "17.0.38",
     	"@types/react-dom": "17.0.11",
+		"@types/jest": "^27.0.3",
 		"eslint": "^8.5.0",
+		"jest": "^27.4.5",
 		"obsidian": "^0.13.11",
 		"rollup": "2.60.2",
 		"tslib": "2.3.1",
+		"ts-jest": "^27.1.2",
 		"typescript": "4.5.4"
 	},
 	"dependencies": {

@@ -32,8 +32,7 @@ export class DBFolderSearchRenderer extends MarkdownRenderChild {
     }
 
     async render() {
-        this.container.createEl("h2", { text: "DBFolder" });
-        this.container.createEl("h3", { text: "Search" });
+        this.container.createEl("h3", { text: this.db_yaml.title });
 
         const searchEl = this.container.createEl("input", {
             type: "text"
