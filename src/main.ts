@@ -1,27 +1,27 @@
-import { 
-	App, 
-	Modal, 
-	Notice, 
-	Plugin, 
+import {
+	App,
+	Modal,
+	Notice,
+	Plugin,
 	Component,
 	MarkdownPostProcessorContext
 } from 'obsidian';
 
-import { 
-	DEFAULT_SETTINGS, 
-	Settings, 
-	DBFolderSettingTab 
+import {
+	DEFAULT_SETTINGS,
+	Settings,
+	DBFolderSettingTab
 } from 'Settings';
 
 import {
 	DBFolderSearchRenderer
 } from 'DBFolder';
 
-import{
+import {
 	parseDatabase
-}from 'parse/parse';
+} from 'parse/Parser';
 
-import{
+import {
 	DatabaseType
 } from 'parse/handlers/TypeHandler';
 
@@ -40,8 +40,8 @@ export default class DBFolderPlugin extends Plugin {
 		this.addSettingTab(new DBFolderSettingTab(this.app, this));
 
 		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
-		 	this.dbfolder(source, el, ctx, ctx.sourcePath)
-	 	);
+			this.dbfolder(source, el, ctx, ctx.sourcePath)
+		);
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -58,10 +58,10 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	/** Update plugin settings. */
-    async updateSettings(settings: Partial<Settings>) {
-        Object.assign(this.settings, settings);
-        await this.saveData(this.settings);
-    }
+	async updateSettings(settings: Partial<Settings>) {
+		Object.assign(this.settings, settings);
+		await this.saveData(this.settings);
+	}
 
 	async load_settings(): Promise<void> {
 		this.settings = Object.assign(
@@ -71,14 +71,14 @@ export default class DBFolderPlugin extends Plugin {
 		);
 	}
 
-    public registerPriorityCodeblockPostProcessor(
-        language: string,
-        priority: number,
-        processor: (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => Promise<void>
-    ) {
-        let registered = this.registerMarkdownCodeBlockProcessor(language, processor);
-        registered.sortOrder = priority;
-    }
+	public registerPriorityCodeblockPostProcessor(
+		language: string,
+		priority: number,
+		processor: (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => Promise<void>
+	) {
+		let registered = this.registerMarkdownCodeBlockProcessor(language, processor);
+		registered.sortOrder = priority;
+	}
 
 	public async dbfolder(
 		source: string,
@@ -86,19 +86,25 @@ export default class DBFolderPlugin extends Plugin {
 		component: Component | MarkdownPostProcessorContext,
 		sourcePath: string
 	) {
-		let databaseYaml = await parseDatabase(source,this.app);
-		switch (databaseYaml.type as DatabaseType) {
-			case DatabaseType.LIST:
-				component.addChild(
-					new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings)
-				);
-				break;
-			case DatabaseType.BOARD:
-				// TODO
-				console.warn('not implemented yet');
-				break;
-			default:
-				console.error('something went wrong rendering dbfolder');
+		try {
+			let databaseYaml = await parseDatabase(source, this.app);
+			switch (databaseYaml.type as DatabaseType) {
+				case DatabaseType.LIST:
+					component.addChild(
+						new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings)
+					);
+					break;
+				case DatabaseType.BOARD:
+					// TODO
+					console.warn('not implemented yet');
+					break;
+				default:
+					console.error('something went wrong rendering dbfolder');
+			}
+		} catch (e) {
+			// TODO render parser error
+			
+			console.error(e);
 		}
 	}
 }

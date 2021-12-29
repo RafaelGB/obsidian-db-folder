@@ -24,7 +24,6 @@ export class DBFolderSearchRenderer extends MarkdownRenderChild {
         public settings: Settings
     ) {
         super(container);
-        console.log("Ruta origen", sourcePath);
     }
 
     async onload() {

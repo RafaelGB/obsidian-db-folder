@@ -1,10 +1,12 @@
 import {AbstractHandler} from 'parse/handlers/AbstractHandler';
 import { App,normalizePath } from "obsidian";
+import { ParserError } from 'errors/ParserError';
 
 export class FolderHandler extends AbstractHandler {
-    public handle(yaml: any, app: App): string[] {
+    handlerName: string = 'folder';
+    public handle(yaml: any, app: App): [string, string][]{
         if (!yaml.folder) {
-            this.listOfErrors.push('Folder name is not defined');
+            this.addError('Folder name is not defined');
             // handle is ended if there is no folder name
             return this.listOfErrors;
         }
@@ -40,7 +42,7 @@ export class FolderHandler extends AbstractHandler {
         let folder_str = normalizePath(folderToCheck);
         const folder = app.vault.getAbstractFileByPath(folder_str);
         if(!folder){
-            this.listOfErrors.push(`Folder ${folderToCheck} does not exist`);
+            this.addError(`Folder ${folderToCheck} does not exist`);
             return false;
         }
         return true;

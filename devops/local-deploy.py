@@ -5,7 +5,7 @@ import shutil
 read from config.yaml file the origin and target folders and copy the files inside
 '''
 if __name__ == '__main__':
-    with open('test/config.yaml', 'r') as stream:
+    with open('devops/config.yaml', 'r') as stream:
         try:
             config = yaml.safe_load(stream)
             origin = config['base']['origin']
