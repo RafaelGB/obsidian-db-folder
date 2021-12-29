@@ -29,24 +29,28 @@ const columns = [
     }
 ];
 
-function ReactSample(input: any) {
+function ReactSample(props: any) {
+    const tableProps = { // make sure all required component's inputs/Props keys&types match
+      data: props.input,
+      title: "Files",
+      columns : columns,
+      defaultSortFieldId: 1,
+      sortIcon: <SortIcon />,
+      pagination: true,
+      selectableRows: true
+    }
     return (
         <div className="ReactSample">
         <Card>
           <DataTable
-            title="Movies"
-            columns={columns}
-            data={input}
-            defaultSortFieldId={1}
-            sortIcon={<SortIcon />}
-            pagination
-            selectableRows
+            {...tableProps}
           />
         </Card>
       </div>
     );
   }
 
-  export function createTable(divToRender: HTMLDivElement, myInput: any) {
+  export function createTable(divToRender: HTMLDivElement, myInput: any[]) {
+    const element = <ReactSample input={myInput} />;
     ReactDOM.render(<ReactSample input={myInput} />, divToRender);
   }
