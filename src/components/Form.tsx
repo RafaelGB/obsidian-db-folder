@@ -62,14 +62,14 @@ const Form = (rForm: RForm) => {
   };
 
   const navigatePages = (direction:any) => () => {
-    const findNextPage = (page:any) => {
+    const findNextPage = (page:number) => {
       const upcomingPageData = rForm.formData[page];
       if (upcomingPageData.conditional && upcomingPageData.conditional.field) {
         // we're going to a conditional page, make sure it's the right one
         const segments = upcomingPageData.conditional.field.split("_");
         const fieldId = segments[segments.length - 1];
 
-        const fieldToMatchValue = values[fieldId];
+        const fieldToMatchValue = values[fieldId as keyof typeof values];
 
         if (fieldToMatchValue !== upcomingPageData.conditional.value) {
           // if we didn't find a match, try the next page
@@ -114,7 +114,7 @@ const Form = (rForm: RForm) => {
                   key={field._uid}
                   field={field}
                   fieldChanged={fieldChanged}
-                  value={values[field._uid]}
+                  value={values[field._uid as keyof typeof values]}
                 />
               );
             default:
@@ -123,7 +123,7 @@ const Form = (rForm: RForm) => {
                   key={field._uid}
                   field={field}
                   fieldChanged={fieldChanged}
-                  value={values[field._uid]}
+                  value={values[field._uid as keyof typeof values]}
                 />
               );
           }
