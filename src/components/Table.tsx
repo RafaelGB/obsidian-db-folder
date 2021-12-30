@@ -1,24 +1,8 @@
-import React from 'react';
+import React, { Component }  from 'react';
 import ReactDOM from 'react-dom';
 import Card from "@material-ui/core/Card";
 import SortIcon from "@material-ui/icons/ArrowDownward";
 import DataTable from "react-data-table-component";
-
-let sample = [
-    {
-        id: 1,
-        title: "Beetlejuice",
-        year: "1988",
-        runtime: "92",
-        genres: ["Comedy", "Fantasy"],
-        director: "Tim Burton",
-        actors: "Alec Baldwin, Geena Davis, Annie McEnroe, Maurice Page",
-        plot:
-          'A couple of recently deceased ghosts contract the services of a "bio-exorcist" in order to remove the obnoxious new owners of their house.',
-        posterUrl:
-          "https://images-na.ssl-images-amazon.com/images/M/MV5BMTUwODE3MDE0MV5BMl5BanBnXkFtZTgwNTk1MjI4MzE@._V1_SX300.jpg"
-      }
-];
 
 const columns = [
     {
@@ -45,24 +29,28 @@ const columns = [
     }
 ];
 
-function ReactSample() {
+function DBFolderList(props: any) {
+    const tableProps = { // make sure all required component's inputs/Props keys&types match
+      data: props.input,
+      title: "Files",
+      columns : columns,
+      defaultSortFieldId: 1,
+      sortIcon: <SortIcon />,
+      pagination: true,
+      selectableRows: true
+    }
     return (
-        <div className="ReactSample">
+        <div className="DBFolderList">
         <Card>
           <DataTable
-            title="Movies"
-            columns={columns}
-            data={sample}
-            defaultSortFieldId={1}
-            sortIcon={<SortIcon />}
-            pagination
-            selectableRows
+            {...tableProps}
           />
         </Card>
       </div>
     );
   }
 
-  export function createTable(divToRender: HTMLDivElement) {
-    ReactDOM.render(<ReactSample />, divToRender);
+  export function createTable(divToRender: HTMLDivElement, myInput: any[]) {
+    const element = <DBFolderList input={myInput} />;
+    ReactDOM.render(element, divToRender);
   }
