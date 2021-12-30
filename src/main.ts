@@ -14,7 +14,7 @@ import {
 } from 'Settings';
 
 import {
-	DBFolderSearchRenderer
+	DBFolderListRenderer
 } from 'DBFolder';
 
 import {
@@ -24,6 +24,10 @@ import {
 import {
 	DatabaseType
 } from 'parse/handlers/TypeHandler';
+
+import {
+	ParserError
+} from 'errors/ParserError';
 
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
@@ -91,7 +95,7 @@ export default class DBFolderPlugin extends Plugin {
 			switch (databaseYaml.type as DatabaseType) {
 				case DatabaseType.LIST:
 					component.addChild(
-						new DBFolderSearchRenderer(el, databaseYaml, sourcePath, this.settings,this.app)
+						new DBFolderListRenderer(el, databaseYaml, sourcePath, this.settings,this.app)
 					);
 					break;
 				case DatabaseType.BOARD:
@@ -102,9 +106,13 @@ export default class DBFolderPlugin extends Plugin {
 					console.error('something went wrong rendering dbfolder');
 			}
 		} catch (e) {
-			// TODO render parser error
-			
-			console.error(e);
+			switch(true){
+				case e instanceof ParserError:
+					console.error(e.getErrorsList());
+					break;
+				default:
+					console.error(e);
+			}
 		}
 	}
 }

@@ -29,7 +29,7 @@ const columns = [
     }
 ];
 
-function ReactSample(props: any) {
+function DBFolderList(props: any) {
     const tableProps = { // make sure all required component's inputs/Props keys&types match
       data: props.input,
       title: "Files",
@@ -40,7 +40,7 @@ function ReactSample(props: any) {
       selectableRows: true
     }
     return (
-        <div className="ReactSample">
+        <div className="DBFolderList">
         <Card>
           <DataTable
             {...tableProps}
@@ -51,6 +51,6 @@ function ReactSample(props: any) {
   }
 
   export function createTable(divToRender: HTMLDivElement, myInput: any[]) {
-    const element = <ReactSample input={myInput} />;
+    const element = <DBFolderList input={myInput} />;
     ReactDOM.render(element, divToRender);
   }

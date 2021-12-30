@@ -18,7 +18,7 @@ import {
 /**
  * Render a search bar of notes into a folder path with filters
  */
-export class DBFolderSearchRenderer extends MarkdownRenderChild {
+export class DBFolderListRenderer extends MarkdownRenderChild {
     constructor(
         public container: HTMLElement,
         public db_yaml: any,
@@ -49,12 +49,10 @@ export class DBFolderSearchRenderer extends MarkdownRenderChild {
         });
         // Add a table to the container
         
-        const tableContainer  = this.container.createDiv("table-container");
+        const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
-        console.log(folder);
         let files = obtainTFilesFromTFolder(this.app,folder);
         createTable(tableContainer,files);
-        // TODO obtain current file
         // TODO generate a factory of renderers with unique id
         // TODO use de result of the search to filter the files inside db_yaml defined folder
     }

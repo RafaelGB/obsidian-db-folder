@@ -1,4 +1,4 @@
-import { App,TFile,TFolder } from "obsidian";
+import { App, TFile,TFolder } from "obsidian";
 
 export function obtainCurrentFolder(app: App): string {
     let file = app.workspace.getActiveFile();
@@ -24,6 +24,5 @@ export function obtainTFilesFromTFolder(app: App, folderPath: string): any[] {
             files.push(aFile);
         }
     });
-    console.log(files);
     return files;
 }
