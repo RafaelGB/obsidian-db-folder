@@ -1,22 +1,19 @@
 import React from "react";
 import Field from "components/Field";
 
-const FieldGroup = ({ field, fieldChanged, values }) => {
-  const fields = field.fields;
+interface RFieldGroup {
+  field: any, 
+  fieldChanged: any,
+  values: any
+}
+
+const FieldGroup = (rfieldGroup: RFieldGroup) => {
+  const fields = rfieldGroup.field.fields;
 
   return (
-    <fieldset key={field._uid}>
-      <h3>{field.label}</h3>
-      {fields.map((field) => {
-        return (
-          <Field
-            key={field._uid}
-            field={field}
-            fieldChanged={fieldChanged}
-            value={values[field._uid]}
-          />
-        );
-      })}
+    <fieldset key={rfieldGroup.field._uid}>
+      <h3>{rfieldGroup.field.label}</h3>
+      
     </fieldset>
   );
 };

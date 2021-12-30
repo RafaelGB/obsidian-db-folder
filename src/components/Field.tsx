@@ -1,17 +1,25 @@
 import React from "react";
 
-const Field = ({ field, fieldChanged, type, value }) => {
+interface   RField {
+  field: any, 
+  fieldChanged: any, 
+  type?: any, 
+  value: any
+}
+
+
+const Field = (rfield: RField) => {
   return (
-    <div key={field._uid}>
-      <label htmlFor={field._uid}>{field.label}</label>
+    <div key={rfield.field._uid}>
+      <label htmlFor={rfield.field._uid}>{rfield.field.label}</label>
       <input
-        type={type || field.component}
-        id={field._uid}
-        name={field._uid}
-        value={value}
+        type={rfield.type || rfield.field.component}
+        id={rfield.field._uid}
+        name={rfield.field._uid}
+        value={rfield.value}
         onChange={(e) => {
           // Notify the main state list of the new value
-          fieldChanged(field._uid, e.target.value);
+          rfield.fieldChanged(rfield.field._uid, e.target.value);
         }}
       />
     </div>
