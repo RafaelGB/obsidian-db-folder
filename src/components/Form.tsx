@@ -3,7 +3,7 @@ import FieldGroup from "components/FieldGroup";
 import Field from "components/Field";
 import Option from "components/Option";
 
-const fieldMeetsCondition = (values) => (field) => {
+const fieldMeetsCondition = (values:any) => (field:any) => {
   if (field.conditional && field.conditional.field) {
     const segments = field.conditional.field.split("_");
     const fieldId = segments[segments.length - 1];
@@ -12,22 +12,26 @@ const fieldMeetsCondition = (values) => (field) => {
   return true;
 };
 
-const Form = ({ formData }) => {
+interface RForm {
+  formData: any
+}
+
+const Form = (rForm: RForm) => {
   // state to track the current page ID of the form
   const [page, setPage] = useState(0);
 
   // state to track the current form data that will be displayed
-  const [currentPageData, setCurrentPageData] = useState(formData[page]);
+  const [currentPageData, setCurrentPageData] = useState(rForm.formData[page]);
 
   // track the values of the form fields
   const [values, setValues] = useState({});
 
   // this effect will run when the `page` changes
   useEffect(() => {
-    const upcomingPageData = formData[page];
+    const upcomingPageData = rForm.formData[page];
     setCurrentPageData(upcomingPageData);
-    setValues((currentValues) => {
-      const newValues = upcomingPageData.fields.reduce((obj, field) => {
+    setValues((currentValues:any) => {
+      const newValues = upcomingPageData.fields.reduce((obj:any, field:any) => {
         if (field.component === "field_group") {
           for (const subField of field.fields) {
             obj[subField._uid] = "";
@@ -41,25 +45,25 @@ const Form = ({ formData }) => {
 
       return Object.assign({}, newValues, currentValues);
     });
-  }, [page, formData]);
+  }, [page, rForm.formData]);
 
   // callback provided to components to update the main list of form values
-  const fieldChanged = (fieldId, value) => {
+  const fieldChanged = (fieldId:any, value:any) => {
     // use a callback to find the field in the value list and update it
-    setValues((currentValues) => {
+    setValues((currentValues:any) => {
       currentValues[fieldId] = value;
       return currentValues;
     });
 
     // this just fakes that we've updated the `currentPageData` to force a re-render in React
-    setCurrentPageData((currentPageData) => {
+    setCurrentPageData((currentPageData:any) => {
       return Object.assign({}, currentPageData);
     });
   };
 
-  const navigatePages = (direction) => () => {
-    const findNextPage = (page) => {
-      const upcomingPageData = formData[page];
+  const navigatePages = (direction:any) => () => {
+    const findNextPage = (page:any) => {
+      const upcomingPageData = rForm.formData[page];
       if (upcomingPageData.conditional && upcomingPageData.conditional.field) {
         // we're going to a conditional page, make sure it's the right one
         const segments = upcomingPageData.conditional.field.split("_");
@@ -82,7 +86,7 @@ const Form = ({ formData }) => {
   const nextPage = navigatePages("next");
   const prevPage = navigatePages("prev");
 
-  const onSubmit = (e) => {
+  const onSubmit = (e:any) => {
     e.preventDefault();
     // todo - send data somewhere
   };
@@ -92,7 +96,7 @@ const Form = ({ formData }) => {
       <h2>{currentPageData.label}</h2>
       {currentPageData.fields
         .filter(fieldMeetsCondition(values))
-        .map((field) => {
+        .map((field:any) => {
           switch (field.component) {
             case "field_group":
               return (
@@ -125,7 +129,7 @@ const Form = ({ formData }) => {
           }
         })}
       {page > 0 && <button onClick={prevPage}>Back</button>}&nbsp;
-      {page < formData.length - 1 && <button onClick={nextPage}>Next</button>}
+      {page < rForm.formData.length - 1 && <button onClick={nextPage}>Next</button>}
       <hr />
       <button onClick={() => console.log(values)}>Dump form data</button>
     </form>
@@ -133,11 +137,3 @@ const Form = ({ formData }) => {
 };
 
 export default Form;
-
-export default function App() {
-  return (
-    <div className="App">
-      <Form formData={formData} />
-    </div>
-  );
-}
