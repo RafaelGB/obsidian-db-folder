@@ -33,6 +33,11 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         await this.render();
     }
 
+    async onunload() {
+        // TODO improve this
+        this.container.innerHTML = "";
+    }
+
     async render() {
         this.container.createEl("h3", { text: this.db_yaml.title });
 
@@ -53,8 +58,6 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
         let files = obtainTFilesFromTFolder(this.app,folder);
         createTable(tableContainer,files);
-        // TODO generate a factory of renderers with unique id
-        // TODO use de result of the search to filter the files inside db_yaml defined folder
     }
     
 }
