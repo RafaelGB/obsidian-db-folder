@@ -13,7 +13,16 @@ const FieldGroup = (rfieldGroup: RFieldGroup) => {
   return (
     <fieldset key={rfieldGroup.field._uid}>
       <h3>{rfieldGroup.field.label}</h3>
-      
+      {fields.map((field:any) => {
+        return (
+          <Field
+            key={field._uid}
+            field={field}
+            fieldChanged={rfieldGroup.fieldChanged}
+            value={rfieldGroup.values[field._uid]}
+          />
+        );
+      })}
     </fieldset>
   );
 };
