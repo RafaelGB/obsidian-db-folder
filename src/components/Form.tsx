@@ -62,7 +62,7 @@ const Form = (rForm: RForm) => {
   };
 
   const navigatePages = (direction:any) => () => {
-    const findNextPage = (page:number) => {
+    const findNextPage = (page:number):number => {
       const upcomingPageData = rForm.formData[page];
       if (upcomingPageData.conditional && upcomingPageData.conditional.field) {
         // we're going to a conditional page, make sure it's the right one
