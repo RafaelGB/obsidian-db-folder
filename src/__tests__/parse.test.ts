@@ -1,6 +1,6 @@
 import{
 	parseDatabase
-}from 'database/parse/parse';
+}from 'parse/Parser';
 
 import {
 	App
