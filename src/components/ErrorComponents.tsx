@@ -1,3 +1,8 @@
-function ErrorComponent(error:String) {
-    return <p className='p-dbfolder-error'>{error}</p>
+import React from "react";
+
+export function generateErrorComponent(error:String): JSX.Element {
+    return <div className="p-dbfolder-error">
+        <p>{error}</p>
+    </div>
+    
   }

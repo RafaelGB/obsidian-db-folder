@@ -15,6 +15,8 @@ import {
     obtainTFilesFromTFolder,
     obtainCurrentFolder
 } from 'utils/VaultManagement';
+
+import ReactDOM from 'react-dom';
 /**
  * Render a search bar of notes into a folder path with filters
  */
@@ -57,7 +59,9 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
         let files = obtainTFilesFromTFolder(this.app,folder);
-        createTable(tableContainer,files);
+        
+        let table = createTable(tableContainer,files);
+        ReactDOM.render(table, tableContainer);
     }
     
 }

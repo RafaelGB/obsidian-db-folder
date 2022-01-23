@@ -1,4 +1,6 @@
 import { Notice, Component } from "obsidian";
+import { generateErrorComponent } from "components/ErrorComponents"
+import ReactDOM from 'react-dom';
 
 export class DbFolderError extends Error{
 
@@ -10,8 +12,12 @@ export class DbFolderError extends Error{
         Object.setPrototypeOf(this, DbFolderError.prototype);
     }
 
-    public render(component: Component): void {
+    public render(container: HTMLElement): void {
         new Notice(this.errorType.getMessage());
+
+        const errorContainer  = container.createDiv("dbfolder-error-container");
+        let errorComponent = generateErrorComponent(this.errorType.getMessage());
+        ReactDOM.render(errorComponent, errorContainer);
     }
 }
 

@@ -108,7 +108,7 @@ export default class DBFolderPlugin extends Plugin {
 		} catch (e) {
 			switch(true){
 				case e instanceof DbFolderError:
-					e.render(component);
+					e.render(el);
 					break;
 				default:
 					console.error(e);
