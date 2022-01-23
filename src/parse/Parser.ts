@@ -6,6 +6,7 @@ import { Handler } from "parse/handlers/AbstractHandler";
 import { FolderHandler } from 'parse/handlers/FolderHandler';
 import { TypeHandler } from 'parse/handlers/TypeHandler';
 import { TitleHandler } from 'parse/handlers/TitleHandler';
+import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
 /**
  * PUBLIC METHODS
@@ -19,7 +20,7 @@ export function parseDatabase(yamlText: string, app: App): any {
     yaml = parseYaml(yamlText);
     let errors = validateYaml(yaml, app);
     if (errors.length > 0) {
-        throw new ParserError("Yaml is not valid", errors);
+        throw new DbFolderError(new ParserError("Error parsing database", errors));
     }
     return yaml;
 

@@ -15,6 +15,8 @@ import {
     obtainTFilesFromTFolder,
     obtainCurrentFolder
 } from 'utils/VaultManagement';
+
+import ReactDOM from 'react-dom';
 /**
  * Render a search bar of notes into a folder path with filters
  */
@@ -31,6 +33,11 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
 
     async onload() {
         await this.render();
+    }
+
+    async onunload() {
+        // TODO improve this
+        this.container.innerHTML = "";
     }
 
     async render() {
@@ -52,9 +59,9 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
         let files = obtainTFilesFromTFolder(this.app,folder);
-        createTable(tableContainer,files);
-        // TODO generate a factory of renderers with unique id
-        // TODO use de result of the search to filter the files inside db_yaml defined folder
+        
+        let table = createTable(tableContainer,files);
+        ReactDOM.render(table, tableContainer);
     }
     
 }

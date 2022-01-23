@@ -1,5 +1,4 @@
-import React, { Component }  from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import Card from "@material-ui/core/Card";
 import SortIcon from "@material-ui/icons/ArrowDownward";
 import DataTable from "react-data-table-component";
@@ -50,7 +49,6 @@ function DBFolderList(props: any) {
     );
   }
 
-  export function createTable(divToRender: HTMLDivElement, myInput: any[]) {
-    const element = <DBFolderList input={myInput} />;
-    ReactDOM.render(element, divToRender);
+  export function createTable(divToRender: HTMLDivElement, myInput: any[]): JSX.Element {
+    return <DBFolderList input={myInput} />;
   }
