@@ -26,8 +26,8 @@ import {
 } from 'parse/handlers/TypeHandler';
 
 import {
-	ParserError
-} from 'errors/ParserError';
+	DbFolderError
+} from 'errors/AbstractError';
 
 export default class DBFolderPlugin extends Plugin {
 	settings: Settings;
@@ -107,8 +107,8 @@ export default class DBFolderPlugin extends Plugin {
 			}
 		} catch (e) {
 			switch(true){
-				case e instanceof ParserError:
-					console.error(e.getErrorsList());
+				case e instanceof DbFolderError:
+					e.render(component);
 					break;
 				default:
 					console.error(e);

@@ -1,20 +1,24 @@
-import {BaseError} from 'errors/BaseError';
+import {ErrorImplementation} from 'errors/AbstractError';
 import Form from "components/Form";
 
 /**
  * Custom error for parser yaml of dbfolder
  */
-export class ParserError extends BaseError {
+export class ParserError implements ErrorImplementation {
+    message: string;
     errorsList: [string, string][];
 
     constructor(message: string, public errors: [string, string][]) {
-        super(message+'\n'+errors.map(e => e[0]+': '+e[1]).join('\n'));
+        this.message = message;
         this.errorsList = errors;
-        Object.setPrototypeOf(this, ParserError.prototype);
     }
 
     public getErrorsList(): [string, string][] {
         return this.errorsList;
+    }
+
+    public getMessage(): string {
+        return this.message+'\n'+this.errorsList.map(e => e[0]+': '+e[1]).join('\n')
     }
 }
 

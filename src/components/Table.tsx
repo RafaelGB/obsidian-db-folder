@@ -1,4 +1,4 @@
-import React, { Component }  from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import Card from "@material-ui/core/Card";
 import SortIcon from "@material-ui/icons/ArrowDownward";

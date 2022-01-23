@@ -1,6 +1,6 @@
 import React from "react";
 
-interface   RField {
+interface RField {
   field: any, 
   fieldChanged: any, 
   type?: any, 
