@@ -1,5 +1,4 @@
 import {ErrorImplementation} from 'errors/AbstractError';
-import Form from "components/Form";
 
 /**
  * Custom error for parser yaml of dbfolder

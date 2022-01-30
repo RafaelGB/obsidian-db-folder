@@ -1,7 +1,7 @@
 import { App, TFile,TFolder } from "obsidian";
 
 export function obtainCurrentFolder(app: App): string {
-    let file = app.workspace.getActiveFile();
+    const file = app.workspace.getActiveFile();
     // obtain folder to check
     if(!file){
         return null;
