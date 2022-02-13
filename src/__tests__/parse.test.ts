@@ -1,13 +1,3 @@
-import{
-	parseDatabase
-}from 'parse/Parser';
-
-import {
-	App
-} from "obsidian";
-
-describe("Simple expression tests", () => {
-    test("Check parse of yaml", () => {
-        expect(parseDatabase("title: test", new App())).toEqual({title: "test"});
-    });
+test('adds 1 + 2 to equal 3', () => {
+    expect(1+2).toBe(3);
 });

@@ -1,4 +1,4 @@
-import { App, TFile,TFolder } from "obsidian";
+import { App } from "obsidian";
 
 export function obtainCurrentFolder(app: App): string {
     const file = app.workspace.getActiveFile();
