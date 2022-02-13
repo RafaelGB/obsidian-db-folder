@@ -1,8 +1,8 @@
 {
-	"id": "obsidian-dbfolder",
+	"id": "dbfolder",
 	"name": "DB Folder",
 	"version": "0.0.1",
-	"minAppVersion": "0.12.0",
+	"minAppVersion": "0.13.0",
 	"description": "Folder with the capability to store and retrieve data from a folder like database",
 	"author": "RafaelGB",
 	"authorUrl": "https://github.com/RafaelGB/obsidian-bd-folder",
