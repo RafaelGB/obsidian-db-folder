@@ -15,10 +15,8 @@ import { ParserError } from "errors/ParserError";
  * Parse a string
  */
 export function parseDatabase(yamlText: string, app: App): any {
-    let yaml;
-
-    yaml = parseYaml(yamlText);
-    let errors = validateYaml(yaml, app);
+    const yaml = parseYaml(yamlText);
+    const errors = validateYaml(yaml, app);
     if (errors.length > 0) {
         throw new DbFolderError(new ParserError("Error parsing database", errors));
     }
@@ -35,14 +33,13 @@ export function parseDatabase(yamlText: string, app: App): any {
  * Validate yaml received from input using handlers of function getHandlers
  */
 function validateYaml(yaml: any, app: App): [string, string][] {
-    let handlers = getHandlers();
+    const handlers = getHandlers();
     let i = 1;
     while (i < handlers.length) {
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-    let errors = handlers[0].handle(yaml, app);
-    return errors;
+    return handlers[0].handle(yaml, app);
 }
 
 
