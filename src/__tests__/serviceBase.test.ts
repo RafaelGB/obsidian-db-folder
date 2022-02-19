@@ -1,21 +1,27 @@
-import {  
-    Config
-  } from 'services/Base';
+import {
+    Models
+}from 'cdm/folder';
+
+import {
+    Schema
+} from 'services/Base';
+
 test('Configuration init', () => {
-    const input = {
-        models: [
-            {
-                label: 'test',
-                path: 'test',
-                params: [
-                    {
-                        input: 'test',
-                        optional: true
-                    }
-                ]
+    
+    // Generate models test
+    const models: Models = {
+        "test": {
+            "label": "Test",
+            "path": "test",
+            "params": {
+                "test": {
+                    "input": "test",
+                    "optional": true
+                }
             }
-        ]
-    };
-    const config = new Config(input);
-    expect(config.settings.models[0].label).toBe('test');
+        }
+    }
+    const schema = new Schema(models);
+
+    expect(schema.models.test.params.test.optional).toBe(true);
 });

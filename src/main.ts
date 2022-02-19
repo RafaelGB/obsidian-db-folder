@@ -14,6 +14,14 @@ import {
 } from 'Settings';
 
 import {
+	DbfAPIInterface
+} from 'typings/api';
+
+import {
+	DBFolderAPI
+}from 'api/plugin-api';
+
+import {
 	DBFolderListRenderer
 } from 'DBFolder';
 
@@ -30,12 +38,17 @@ import {
 } from 'errors/AbstractError';
 
 export default class DBFolderPlugin extends Plugin {
-	settings: Settings;
+	/** Plugin-wide default settings. */
+	public settings: Settings;
+
+	/** External-facing plugin API */
+	public api: DbfAPIInterface;
+
 	async onload(): Promise<void> {
 		await this.load_settings();
 
 		// This creates an icon in the left ribbon.
-		let ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
+		let ribbonIconEl = this.addRibbonIcon('dice', 'DBFolder Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
 			new Notice('This is a notice!');
 		});
@@ -43,9 +56,12 @@ export default class DBFolderPlugin extends Plugin {
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new DBFolderSettingTab(this.app, this));
 		
+		// This registers a code block processor that will be called when the user types `<code>` in markdown.
 		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
 			this.dbfolder(source, el, ctx, ctx.sourcePath)
 		);
+
+		this.api = new DBFolderAPI(this.app, this.settings);
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({

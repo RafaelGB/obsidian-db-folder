@@ -1,23 +1,12 @@
-type Parameter = {
-    input: string,
-    optional?: boolean;
-}
+import {
+    Models
+}from 'cdm/folder';
 
-type Model= {
-    label: string,
-    path: string,
-    params: Parameter[]
-}
+export class Schema{
+    models: Models;
 
-type Settings= {
-    models: Model[]
-}
-
-export class Config{
-    settings: Settings;
-
-    constructor(settings: Settings){
-        this.settings = settings;
+    constructor(models: Models){
+        this.models = models;
     }
 
     /**
@@ -33,7 +22,7 @@ export class Config{
      * Obtain subgroup of root settings
      */
     getProperty(keypath: string){
-        return this.getSubgroupProperty(this.settings,keypath);
+        return this.getSubgroupProperty(this.models,keypath);
     }
 
     /**
