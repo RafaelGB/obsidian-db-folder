@@ -1,8 +1,10 @@
 import {
-    Models
+    Models,
+    Group
 }from 'cdm/folder';
 
 export class Schema{
+    private static instance: Schema;
     models: Models;
 
     constructor(models: Models){
@@ -10,26 +12,53 @@ export class Schema{
     }
 
     /**
-    * Obtain property inside of input subgroup
+    * Obtain property inside of input group
     */
-    getSubgroupProperty(subgroup: any ,keypath: string){
+    getProperty(group: Group ,keypath: string){
       const s = keypath.split('.');
-      subgroup = subgroup[s.shift()];
-      while(subgroup && s.length) subgroup = subgroup[s.shift()];
-      return subgroup;
+      group = group[s.shift() as keyof Group];
+      while(group && s.length) group = group[s.shift()];
+      return group;
     }
+    
     /**
-     * Obtain subgroup of root settings
+     * Obtain model object
      */
-    getProperty(keypath: string){
-        return this.getSubgroupProperty(this.models,keypath);
+    getModel(key: string){
+        // Error handling if key contains '.'
+        if(key.indexOf('.') !== -1){
+            throw new Error('Keypath cannot contain "."');
+        }
+      return this.getProperty(this.models, key);
     }
 
     /**
-     * Obtain list of keys from root settings
+     * Obtain property inside of input model
+     * @param key 
+     * @param property 
+     * @returns 
      */
-    getKeys(keypath: string){
-        const subgroup = this.getProperty(keypath);
-        return Object.keys(subgroup);
+    getModelProperty(key: string, property: string){
+       // Concatenate key and property to obtain full keypath
+        const keypath = key + '.' + property;
+        return this.getProperty(this.models, keypath);
+    }
+
+    /**
+     * Obtain list of models available
+     */
+    avaliableModels(){
+        return Object.keys(this.models);
+    }
+
+    /**
+     * Singleton instance
+     * @returns {Schema}
+     */
+    public static getInstance(models?: Models): Schema {
+    if (!Schema.instance) {
+        Schema.instance = new Schema(models);
+    }
+        return Schema.instance;
     }
 }

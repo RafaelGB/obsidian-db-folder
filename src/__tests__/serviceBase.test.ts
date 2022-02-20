@@ -7,11 +7,19 @@ import {
 } from 'services/Base';
 
 test('Schema class test', () => {
-    const schema = new Schema(generateModels());
-    // Test getKeys function
-    expect(schema.getKeys('test.params')).toEqual(['test']);
-    // Test getProperty function
-    expect(schema.getProperty('test.params.test.input')).toBe('test');
+    const schema = Schema.getInstance(generateModels());
+    // Test avaliableModels function
+
+    expect(schema.avaliableModels()).toEqual(['myTestModel']);
+    // Test getModel function
+    expect(schema.getModel('myTestModel')).toEqual(
+        generateModels()['myTestModel']
+    );
+
+    // Test getModel function
+    expect(schema.getModelProperty('myTestModel','params.field.input')).toBe('inputTest');
+    // Expect error if key contains '.'
+    expect(() => schema.getModel('myTestModel.test')).toThrow();
 });
 
 /******************
@@ -24,12 +32,12 @@ test('Schema class test', () => {
  */
 function generateModels(){
     const models: Models = {
-        "test": {
-            "label": "Test",
-            "path": "test",
+        "myTestModel": {
+            "label": "labelTest",
+            "path": "pathTest",
             "params": {
-                "test": {
-                    "input": "test",
+                "field": {
+                    "input": "inputTest",
                     "optional": true
                 }
             }

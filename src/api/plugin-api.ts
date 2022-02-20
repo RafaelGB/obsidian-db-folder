@@ -1,7 +1,7 @@
-import { FolderModel } from 'cdm/Folder';
+import { FolderModel, } from 'cdm/Folder';
 import { App } from 'obsidian';
 import { Settings } from 'Settings';
-
+import { Schema } from 'services/Base';
 import { DbfAPIInterface } from 'typings/api';
 
 export class DBFolderAPI implements DbfAPIInterface {
@@ -17,7 +17,8 @@ export class DBFolderAPI implements DbfAPIInterface {
     }
     
     obtainFolderModel(key: string): FolderModel {
-        throw new Error('Method not implemented.');
+        const model:FolderModel = Schema.getInstance().getModel(key);
+        return model;
     }
 }
 

@@ -1,3 +1,4 @@
+export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
     input: string,
     optional?: boolean;
