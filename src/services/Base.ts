@@ -1,5 +1,6 @@
 import {
     Models,
+    FolderModel,
     Group
 }from 'cdm/folder';
 
@@ -19,6 +20,10 @@ export class Schema{
       group = group[s.shift() as keyof Group];
       while(group && s.length) group = group[s.shift()];
       return group;
+    }
+    
+    addModel(name:string, model: FolderModel){
+        this.models[name] = model;
     }
     
     /**
