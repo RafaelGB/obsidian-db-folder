@@ -9,7 +9,7 @@ export class Schema{
     models: Models;
 
     constructor(models: Models){
-        this.models = models;
+        this.models = models===undefined ? {} : models;
     }
 
     /**

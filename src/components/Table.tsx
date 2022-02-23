@@ -10,21 +10,6 @@ const columns = [
       selector: (row: any) => row.title,
       sortable: true,
       reorder: true
-    },
-    {
-      id: 2,
-      name: "Director",
-      selector: (row: any) => row.director,
-      sortable: true,
-      reorder: true
-    },
-    {
-      id: 3,
-      name: "Runtime (m)",
-      selector: (row: any) => row.runtime,
-      sortable: true,
-      right: true,
-      reorder: true
     }
 ];
 

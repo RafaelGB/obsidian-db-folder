@@ -18,3 +18,11 @@ export type FolderModel = {
 export type Models = {
     [key: string]: FolderModel
 }
+
+
+
+/** Note type */
+export type Note = {
+    id: string,
+    title: string
+}
