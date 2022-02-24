@@ -35,11 +35,10 @@ type TableProps = {
 };
 
 export default function Table(
-  columns:any,
-  data:any,
-  dataDispatch:any,
-  skipReset:any,
+  props:TableProps
 ) {
+  const columns = props.columns;
+  const data = props.data;
   const sortTypes = useMemo(
     () => ({
       alphanumericFalsyLast(rowA:any, rowB:any, columnId:any, desc:any) {
@@ -135,7 +134,7 @@ export default function Table(
           </FixedSizeList>
           <div
             className="tr add-row"
-            onClick={() => dataDispatch({ type: ActionTypes.ADD_ROW })}
+            onClick={() => props.dataDispatch({ type: ActionTypes.ADD_ROW })}
           >
             <span className="svg-icon svg-gray icon-margin">
               <PlusIcon />
@@ -328,7 +327,7 @@ export function createTable(): JSX.Element {
   const tableProps = { // make sure all required component's inputs/Props keys&types match
     columns: state.columns,
     data: state.data,
-    dispatch : dispatch,
+    dataDispatch : dispatch,
     skipReset: state.skipReset
   }
     return (
