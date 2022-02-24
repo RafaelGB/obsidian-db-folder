@@ -17,5 +17,5 @@ export const DataTypes = Object.freeze({
   });
 
   export function shortId() {
-    return '_' + Math.random().toString(36).substr(2, 9);
+    return '_' + Math.random().toString(36).substring(2, 9);
   }

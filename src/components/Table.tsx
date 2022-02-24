@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useReducer } from 'react';
 import clsx from 'clsx';
 import {
   useTable,
@@ -12,6 +12,11 @@ import PlusIcon from './img/Plus';
 import { ActionTypes } from 'utils/Constants';
 import { FixedSizeList } from 'react-window';
 import scrollbarWidth from 'components/elements/ScrollbarWidth';
+import { makeData } from 'mock/mockUtils';
+import update from 'immutability-helper';
+import { DataTypes } from 'utils/Constants';
+import { randomColor } from 'utils/colors';
+import { shortId } from 'utils/Constants';
 
 const defaultColumn = {
   minWidth: 50,
@@ -134,4 +139,190 @@ export default function Table(
       </div>
     </>
   );
+}
+
+function reducer(state:any, action:any) {
+  switch (action.type) {
+    case ActionTypes.ADD_OPTION_TO_COLUMN:
+      const optionIndex = state.columns.findIndex(
+        (column:any) => column.id === action.columnId
+      );
+      return update(state, {
+        skipReset: { $set: true },
+        columns: {
+          [optionIndex]: {
+            options: {
+              $push: [
+                {
+                  label: action.option,
+                  backgroundColor: action.backgroundColor,
+                },
+              ],
+            },
+          },
+        },
+      });
+    case ActionTypes.ADD_ROW:
+      return update(state, {
+        skipReset: { $set: true },
+        data: { $push: [{}] },
+      });
+    case ActionTypes.UPDATE_COLUMN_TYPE:
+      const typeIndex = state.columns.findIndex(
+        (column:any) => column.id === action.columnId
+      );
+      switch (action.dataType) {
+        case DataTypes.NUMBER:
+          if (state.columns[typeIndex].dataType === DataTypes.NUMBER) {
+            return state;
+          } else {
+            return update(state, {
+              skipReset: { $set: true },
+              columns: { [typeIndex]: { dataType: { $set: action.dataType } } },
+              data: {
+                $apply: (data:any) =>
+                  data.map((row:any) => ({
+                    ...row,
+                    [action.columnId]: isNaN(row[action.columnId])
+                      ? ''
+                      : Number.parseInt(row[action.columnId]),
+                  })),
+              },
+            });
+          }
+        case DataTypes.SELECT:
+          if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
+            return state;
+          } else {
+            let options:any = [];
+            state.data.forEach((row:any) => {
+              if (row[action.columnId]) {
+                options.push({
+                  label: row[action.columnId],
+                  backgroundColor: randomColor(),
+                });
+              }
+            });
+            return update(state, {
+              skipReset: { $set: true },
+              columns: {
+                [typeIndex]: {
+                  dataType: { $set: action.dataType },
+                  options: { $push: options },
+                },
+              },
+            });
+          }
+        case DataTypes.TEXT:
+          if (state.columns[typeIndex].dataType === DataTypes.TEXT) {
+            return state;
+          } else if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
+            return update(state, {
+              skipReset: { $set: true },
+              columns: { [typeIndex]: { dataType: { $set: action.dataType } } },
+            });
+          } else {
+            return update(state, {
+              skipReset: { $set: true },
+              columns: { [typeIndex]: { dataType: { $set: action.dataType } } },
+              data: {
+                $apply: (data:any) =>
+                  data.map((row:any) => ({
+                    ...row,
+                    [action.columnId]: row[action.columnId] + '',
+                  })),
+              },
+            });
+          }
+        default:
+          return state;
+      }
+    case ActionTypes.UPDATE_COLUMN_HEADER:
+      const index = state.columns.findIndex(
+        (column:any) => column.id === action.columnId
+      );
+      return update(state, {
+        skipReset: { $set: true },
+        columns: { [index]: { label: { $set: action.label } } },
+      });
+    case ActionTypes.UPDATE_CELL:
+      return update(state, {
+        skipReset: { $set: true },
+        data: {
+          [action.rowIndex]: { [action.columnId]: { $set: action.value } },
+        },
+      });
+    case ActionTypes.ADD_COLUMN_TO_LEFT:
+      const leftIndex = state.columns.findIndex(
+        (column:any) => column.id === action.columnId
+      );
+      let leftId = shortId();
+      return update(state, {
+        skipReset: { $set: true },
+        columns: {
+          $splice: [
+            [
+              leftIndex,
+              0,
+              {
+                id: leftId,
+                label: 'Column',
+                accessor: leftId,
+                dataType: DataTypes.TEXT,
+                created: action.focus && true,
+                options: [],
+              },
+            ],
+          ],
+        },
+      });
+    case ActionTypes.ADD_COLUMN_TO_RIGHT:
+      const rightIndex = state.columns.findIndex(
+        (column:any) => column.id === action.columnId
+      );
+      const rightId = shortId();
+      return update(state, {
+        skipReset: { $set: true },
+        columns: {
+          $splice: [
+            [
+              rightIndex + 1,
+              0,
+              {
+                id: rightId,
+                label: 'Column',
+                accessor: rightId,
+                dataType: DataTypes.TEXT,
+                created: action.focus && true,
+                options: [],
+              },
+            ],
+          ],
+        },
+      });
+    case ActionTypes.DELETE_COLUMN:
+      const deleteIndex = state.columns.findIndex(
+        (column:any) => column.id === action.columnId
+      );
+      return update(state, {
+        skipReset: { $set: true },
+        columns: { $splice: [[deleteIndex, 1]] },
+      });
+    case ActionTypes.ENABLE_RESET:
+      return update(state, { skipReset: { $set: true } });
+    default:
+      return state;
+  }
+}
+
+export function createTable(): JSX.Element {
+  const [state, dispatch] = useReducer(reducer, makeData(1000));
+    return (
+        <Table
+          columns={state.columns}
+          data={state.data}
+          dispatch={dispatch}
+          skipReset={state.skipReset}
+        />
+    );
 }
