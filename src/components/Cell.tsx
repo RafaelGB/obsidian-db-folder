@@ -7,13 +7,32 @@ import PlusIcon from 'components/img/Plus';
 import { ActionTypes, DataTypes } from 'utils/Constants';
 import { createPortal } from 'react-dom';
 
-export default function Cell({
+type ColumnProp={
+  id:string,
+  dataType:any,
+  options:any
+}
+
+type IndexProp={
+  index:number
+}
+
+type CellProps={
+  initialValue:any,
+  row:IndexProp,
+  column:ColumnProp,
+  dataDispatch:any
+}
+/*
+{
   value: initialValue,
   row: { index },
   column: { id, dataType, options },
   dataDispatch,
-}) {
-  const [value, setValue] = useState({ value: initialValue, update: false });
+}
+*/
+export default function Cell(fn: CellProps) {
+  const [value, setValue] = useState({ value: fn.initialValue, update: false });
   const [selectRef, setSelectRef] = useState(null);
   const [selectPop, setSelectPop] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -24,52 +43,52 @@ export default function Cell({
     strategy: 'fixed',
   });
 
-  function handleOptionKeyDown(e) {
+  function handleOptionKeyDown(e: any) {
     if (e.key === 'Enter') {
       if (e.target.value !== '') {
-        dataDispatch({
+        fn.dataDispatch({
           type: ActionTypes.ADD_OPTION_TO_COLUMN,
           option: e.target.value,
           backgroundColor: randomColor(),
-          columnId: id,
+          columnId: fn.column.id,
         });
       }
       setShowAdd(false);
     }
   }
 
-  function handleAddOption(e) {
+  function handleAddOption(e: any) {
     setShowAdd(true);
   }
 
-  function handleOptionBlur(e) {
+  function handleOptionBlur(e: any) {
     if (e.target.value !== '') {
-      dataDispatch({
+      fn.dataDispatch({
         type: ActionTypes.ADD_OPTION_TO_COLUMN,
         option: e.target.value,
         backgroundColor: randomColor(),
-        columnId: id,
+        columnId: fn.column.id,
       });
     }
     setShowAdd(false);
   }
 
   function getColor() {
-    let match = options.find(option => option.label === value.value);
+    let match = fn.column.options.find((option:any) => option.label === value.value);
     return (match && match.backgroundColor) || grey(200);
   }
 
-  function onChange(e) {
+  function onChange(e: any) {
     setValue({ value: e.target.value, update: false });
   }
 
-  function handleOptionClick(option) {
+  function handleOptionClick(option:any) {
     setValue({ value: option.label, update: true });
     setShowSelect(false);
   }
 
   function getCellElement() {
-    switch (dataType) {
+    switch (fn.column.dataType) {
       case DataTypes.TEXT:
         return (
           <ContentEditable
@@ -123,7 +142,7 @@ export default function Cell({
                     className="d-flex flex-wrap-wrap"
                     style={{ marginTop: '-0.5rem' }}
                   >
-                    {options.map(option => (
+                    {fn.column.options.map((option:any) => (
                       <div
                         className="cursor-pointer mr-5 mt-5"
                         onClick={() => handleOptionClick(option)}
@@ -182,19 +201,19 @@ export default function Cell({
   }, [addSelectRef, showAdd]);
 
   useEffect(() => {
-    setValue({ value: initialValue, update: false });
-  }, [initialValue]);
+    setValue({ value: fn.initialValue, update: false });
+  }, [fn.initialValue]);
 
   useEffect(() => {
     if (value.update) {
-      dataDispatch({
+      fn.dataDispatch({
         type: ActionTypes.UPDATE_CELL,
-        columnId: id,
-        rowIndex: index,
+        columnId: fn.column.id,
+        rowIndex: fn.row.index,
         value: value.value,
       });
     }
-  }, [value, dataDispatch, id, index]);
+  }, [value, fn.dataDispatch, fn.column.id, fn.row.index]);
 
   return getCellElement();
 }

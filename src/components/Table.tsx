@@ -7,11 +7,11 @@ import {
   useSortBy,
 } from 'react-table';
 import Cell from 'components/Cell';
-import Header from './Header';
+import Header from 'components/Header';
 import PlusIcon from './img/Plus';
-import { ActionTypes } from './utils';
+import { ActionTypes } from 'utils/Constants';
 import { FixedSizeList } from 'react-window';
-import scrollbarWidth from './scrollbarWidth';
+import scrollbarWidth from 'components/elements/ScrollbarWidth';
 
 const defaultColumn = {
   minWidth: 50,

@@ -176,11 +176,11 @@ export default function Header({
     }
   }
 
-  function handleChange(e) {
+  function handleChange(e: any) {
     setHeader(e.target.value);
   }
 
-  function handleBlur(e) {
+  function handleBlur(e: any) {
     e.preventDefault();
     dataDispatch({ type: 'update_column_header', columnId: id, label: header });
   }
