@@ -41,7 +41,10 @@
 		"pkg.json": "2.0.8",
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
-		"react-data-table-component": "7.4.6",
+		"react-table": "7.7.0",
+		"react-contenteditable": "3.3.6",
+		"react-popper": "2.2.5",
+		"@types/react-table": "7.7.9",
 		"@material-ui/core": "4.12.3",
     	"@material-ui/icons": "4.11.2"
 	}
