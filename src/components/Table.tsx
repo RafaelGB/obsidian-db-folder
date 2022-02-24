@@ -27,6 +27,13 @@ const defaultColumn = {
   sortType: 'alphanumericFalsyLast',
 };
 
+type TableProps = {
+  columns: any,
+  data: any,
+  dataDispatch:any,
+  skipReset:any
+};
+
 export default function Table(
   columns:any,
   data:any,
@@ -317,12 +324,16 @@ function reducer(state:any, action:any) {
 
 export function createTable(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, makeData(1000));
+
+  const tableProps = { // make sure all required component's inputs/Props keys&types match
+    columns: state.columns,
+    data: state.data,
+    dispatch : dispatch,
+    skipReset: state.skipReset
+  }
     return (
         <Table
-          columns={state.columns}
-          data={state.data}
-          dispatch={dispatch}
-          skipReset={state.skipReset}
+            {...tableProps}
         />
     );
 }
