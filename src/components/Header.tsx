@@ -24,13 +24,22 @@ function getPropertyIcon(dataType:string) {
       return null;
   }
 }
+type ColumProps={
+  id:number,
+  created:any,
+  label:any, 
+  dataType:any, 
+  getResizerProps:any, 
+  getHeaderProps:any
+}
+type HeaderProps={
+  column:any,
+  setSortBy:any,
+  dataDispatch:any
+}
 
-export default function Header({
-  column: { id, created, label, dataType, getResizerProps, getHeaderProps },
-  setSortBy,
-  dataDispatch,
-}) {
-  const [expanded, setExpanded] = useState(created || false);
+export default function Header(column: ColumProps, setSortBy:any, dataDispatch:any) {
+  const [expanded, setExpanded] = useState(column.created || false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
@@ -38,7 +47,7 @@ export default function Header({
     placement: 'bottom',
     strategy: 'absolute',
   });
-  const [header, setHeader] = useState(label);
+  const [header, setHeader] = useState(column.label);
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
@@ -48,41 +57,41 @@ export default function Header({
   const [showType, setShowType] = useState(false);
   const buttons = [
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: ActionTypes.UPDATE_COLUMN_HEADER,
-          columnId: id,
+          columnId: column.id,
           label: header,
         });
-        setSortBy([{ id: id, desc: false }]);
+        setSortBy([{ id: column.id, desc: false }]);
         setExpanded(false);
       },
       icon: <ArrowUpIcon />,
       label: 'Sort ascending',
     },
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: ActionTypes.UPDATE_COLUMN_HEADER,
-          columnId: id,
+          columnId: column.id,
           label: header,
         });
-        setSortBy([{ id: id, desc: true }]);
+        setSortBy([{ id: column.id, desc: true }]);
         setExpanded(false);
       },
       icon: <ArrowDownIcon />,
       label: 'Sort descending',
     },
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: ActionTypes.UPDATE_COLUMN_HEADER,
-          columnId: id,
+          columnId: column.id,
           label: header,
         });
         dataDispatch({
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
-          columnId: id,
+          columnId: column.id,
           focus: false,
         });
         setExpanded(false);
@@ -91,15 +100,15 @@ export default function Header({
       label: 'Insert left',
     },
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: ActionTypes.UPDATE_COLUMN_HEADER,
-          columnId: id,
+          columnId: column.id,
           label: header,
         });
         dataDispatch({
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
-          columnId: id,
+          columnId: column.id,
           focus: false,
         });
         setExpanded(false);
@@ -108,27 +117,27 @@ export default function Header({
       label: 'Insert right',
     },
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: ActionTypes.UPDATE_COLUMN_HEADER,
-          columnId: id,
+          columnId: column.id,
           label: header,
         });
-        dataDispatch({ type: ActionTypes.DELETE_COLUMN, columnId: id });
+        dataDispatch({ type: ActionTypes.DELETE_COLUMN, columnId: column.id });
         setExpanded(false);
       },
       icon: <TrashIcon />,
       label: 'Delete',
     },
   ];
-  const propertyIcon = getPropertyIcon(dataType);
+  const propertyIcon = getPropertyIcon(column.dataType);
 
   const types = [
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: 'update_column_type',
-          columnId: id,
+          columnId: column.id,
           dataType: DataTypes.SELECT,
         });
         setShowType(false);
@@ -138,10 +147,10 @@ export default function Header({
       label: 'Select',
     },
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: 'update_column_type',
-          columnId: id,
+          columnId: column.id,
           dataType: DataTypes.TEXT,
         });
         setShowType(false);
@@ -151,10 +160,10 @@ export default function Header({
       label: 'Text',
     },
     {
-      onClick: e => {
+      onClick: (e:any) => {
         dataDispatch({
           type: 'update_column_type',
-          columnId: id,
+          columnId: column.id,
           dataType: DataTypes.NUMBER,
         });
         setShowType(false);
@@ -165,11 +174,11 @@ export default function Header({
     },
   ];
 
-  function handleKeyDown(e) {
+  function handleKeyDown(e:any) {
     if (e.key === 'Enter') {
       dataDispatch({
         type: 'update_column_header',
-        columnId: id,
+        columnId: column.id,
         label: header,
       });
       setExpanded(false);
@@ -182,14 +191,14 @@ export default function Header({
 
   function handleBlur(e: any) {
     e.preventDefault();
-    dataDispatch({ type: 'update_column_header', columnId: id, label: header });
+    dataDispatch({ type: 'update_column_header', columnId: column.id, label: header });
   }
 
   function getHeader() {
-    if (id !== 999999) {
+    if (column.id !== 999999) {
       return (
         <>
-          <div {...getHeaderProps()} className="th noselect d-inline-block">
+          <div {...column.getHeaderProps()} className="th noselect d-inline-block">
             <div
               className="th-content"
               onClick={() => setExpanded(true)}
@@ -198,9 +207,9 @@ export default function Header({
               <span className="svg-icon svg-gray icon-margin">
                 {propertyIcon}
               </span>
-              {label}
+              {column.label}
             </div>
-            <div {...getResizerProps()} className="resizer" />
+            <div {...column.getResizerProps()} className="resizer" />
           </div>
           {expanded && (
             <div className="overlay" onClick={() => setExpanded(false)} />
@@ -252,7 +261,7 @@ export default function Header({
                       {getPropertyIcon}
                     </span>
                     <span className="text-transform-capitalize">
-                      {dataType}
+                      {column.dataType}
                     </span>
                   </button>
                   {showType && (
@@ -307,7 +316,7 @@ export default function Header({
       );
     }
     return (
-      <div {...getHeaderProps()} className="th noselect d-inline-block">
+      <div {...column.getHeaderProps()} className="th noselect d-inline-block">
         <div
           className="th-content d-flex justify-content-center"
           onClick={e =>
@@ -327,14 +336,14 @@ export default function Header({
   }
 
   useEffect(() => {
-    if (created) {
+    if (column.created) {
       setExpanded(true);
     }
-  }, [created]);
+  }, [column.created]);
 
   useEffect(() => {
-    setHeader(label);
-  }, [label]);
+    setHeader(column.label);
+  }, [column.label]);
 
   useEffect(() => {
     if (inputRef) {

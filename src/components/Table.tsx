@@ -22,15 +22,15 @@ const defaultColumn = {
   sortType: 'alphanumericFalsyLast',
 };
 
-export default function Table({
-  columns,
-  data,
-  dispatch: dataDispatch,
-  skipReset,
-}) {
+export default function Table(
+  columns:any,
+  data:any,
+  dataDispatch:any,
+  skipReset:any,
+) {
   const sortTypes = useMemo(
     () => ({
-      alphanumericFalsyLast(rowA, rowB, columnId, desc) {
+      alphanumericFalsyLast(rowA:any, rowB:any, columnId:any, desc:any) {
         if (!rowA.values[columnId] && !rowB.values[columnId]) {
           return 0;
         }
@@ -51,6 +51,7 @@ export default function Table({
     []
   );
 
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -62,12 +63,7 @@ export default function Table({
     {
       columns,
       data,
-      defaultColumn,
-      dataDispatch,
-      autoResetSortBy: !skipReset,
-      autoResetFilters: !skipReset,
-      autoResetRowState: !skipReset,
-      sortTypes,
+      defaultColumn
     },
     useBlockLayout,
     useResizeColumns,
@@ -94,7 +90,7 @@ export default function Table({
   function isTableResizing() {
     for (let headerGroup of headerGroups) {
       for (let column of headerGroup.headers) {
-        if (column.isResizing) {
+        if ((column as any).isResizing) {
           return true;
         }
       }
@@ -121,7 +117,7 @@ export default function Table({
             height={window.innerHeight - 100}
             itemCount={rows.length}
             itemSize={40}
-            width={totalColumnsWidth + scrollbarWidth}
+            width={totalColumnsWidth + scrollbarWidth()}
           >
             {RenderRow}
           </FixedSizeList>
