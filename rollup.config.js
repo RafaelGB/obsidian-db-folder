@@ -8,7 +8,7 @@ const isProd = (process.env.BUILD === 'production');
 export default (commandLineArgs) => ({
     input: 'src/main.ts',
     output: {
-        dir: 'obsidian-dbfolder',
+        dir: 'compiled',
         sourcemap: 'inline',
         sourcemapExcludeSources: isProd,
         format: 'cjs',

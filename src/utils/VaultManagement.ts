@@ -17,9 +17,7 @@ export function obtainTFilesFromTFolder(app: App, folderPath: string): any[] {
         if(file.path.startsWith(folderPath)){
             const aFile = {
                 id: ++id,
-                title: file.basename,
-                director: "asfas",
-                runtime: file.path
+                title: `[[${file.basename}]]`
             }
             files.push(aFile);
         }
