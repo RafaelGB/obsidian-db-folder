@@ -17,6 +17,7 @@ import update from 'immutability-helper';
 import { DataTypes } from 'utils/Constants';
 import { randomColor } from 'utils/colors';
 import { shortId } from 'utils/Constants';
+import { App } from 'components/Lab';
 
 const defaultColumn = {
   minWidth: 50,
@@ -322,17 +323,8 @@ function reducer(state:any, action:any) {
 }
 
 export function createTable(): JSX.Element {
-  const [state, dispatch] = useReducer(reducer, makeData(1000));
-
-  const tableProps = { // make sure all required component's inputs/Props keys&types match
-    columns: state.columns,
-    data: state.data,
-    dataDispatch : dispatch,
-    skipReset: state.skipReset
-  }
     return (
-        <Table
-            {...tableProps}
+        <App
         />
     );
 }
