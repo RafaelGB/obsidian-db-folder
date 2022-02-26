@@ -30,7 +30,7 @@ function useInstance(instance:any) {
   Object.assign(instance, { rowSpanHeaders });
 }
 
-export function App() {
+export function Table() {
   const origData = [
     {
       actor: "Johnny Depp",

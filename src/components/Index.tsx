@@ -1,9 +1,9 @@
 import React from 'react';
-import { App } from 'components/Table';
+import { Table } from 'components/Table';
 
 export function createTable(): JSX.Element {
     return (
-        <App
+        <Table
         />
     );
 }
