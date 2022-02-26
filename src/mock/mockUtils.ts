@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { randomColor } from 'utils/Colors';
-import { DataTypes } from 'utils/Constants';
+import { randomColor } from 'cross/Colors';
+import { DataTypes } from 'cross/Constants';
 
 export function makeData(count:number) {
     let data = [];

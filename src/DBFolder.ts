@@ -9,12 +9,12 @@ import {
 
 import {
     createTable
-} from 'components/Table';
+} from 'components/Index';
 
 import {
     obtainTFilesFromTFolder,
     obtainCurrentFolder
-} from 'utils/VaultManagement';
+} from 'cross/VaultManagement';
 
 import ReactDOM from 'react-dom';
 /**
