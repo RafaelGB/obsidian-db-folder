@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { randomColor } from 'cross/Colors';
 import { DataTypes } from 'cross/Constants';
-
-export function makeData(count:number) {
-    let data = [];
+import {TableDataType, TableColumns, TableRows} from 'cdm/FolderModel';
+export function makeData(count:number):TableDataType {
+    let data:TableRows = [];
     let options = [];
     for (let i = 0; i < count; i++) {
       let row = {
@@ -18,7 +18,7 @@ export function makeData(count:number) {
   
       data.push(row);
     }
-    let columns = [
+    let columns:TableColumns = [
       {
         id: 'firstName',
         label: 'First Name',
@@ -58,14 +58,7 @@ export function makeData(count:number) {
         dataType: DataTypes.SELECT,
         width: 200,
         options: options,
-      },
-      {
-        id: 999999,
-        width: 20,
-        label: '+',
-        disableResizing: true,
-        dataType: 'null',
-      },
+      }
     ];
     return { columns: columns, data: data, skipReset: false };
   }

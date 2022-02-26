@@ -1,10 +1,7 @@
 import * as React from "react";
 import { useTable } from "react-table";
-
-type Data = {
-  actor: string;
-  movie: string;
-};
+import { TableDataType,TableRows } from "cdm/FolderModel";
+import {makeData } from 'mock/mockUtils';
 
 const borderStyle = {
   border: "1px solid gray",
@@ -29,51 +26,11 @@ function useInstance(instance:any) {
 
   Object.assign(instance, { rowSpanHeaders });
 }
-
-export function Table() {
-  const origData = [
-    {
-      actor: "Johnny Depp",
-      movies: [
-        {
-          name: "Pirates of the Carribean 1"
-        },
-        {
-          name: "Pirates of the Carribean 2"
-        },
-        {
-          name: "Pirates of the Carribean 3"
-        },
-        {
-          name: "Pirates of the Carribean 4"
-        }
-      ]
-    }
-  ];
-  const newData: Array<Data> = [];
-  origData.forEach(actorObj => {
-    actorObj.movies.forEach(movie => {
-      newData.push({
-        actor: actorObj.actor,
-        movie: movie.name
-      });
-    });
-  });
+export function Table(){
+  const mockedData:TableDataType = makeData(10);
+  const newData: TableRows = mockedData.data;
   const data = React.useMemo(() => newData, []);
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Actor",
-        accessor: "actor",
-        enableRowSpan: true
-      },
-      {
-        Header: "Movies",
-        accessor: "movie"
-      }
-    ],
-    []
-  );
+  const columns = mockedData.columns;
   let propsUseTable:any = {columns, data};
   const {
     getTableProps,

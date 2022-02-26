@@ -1,6 +1,6 @@
 import {
     Models
-}from 'cdm/folder';
+}from 'cdm/FolderModel';
 
 import {
     Schema

@@ -1,4 +1,4 @@
-import { FolderModel, } from 'cdm/Folder';
+import { FolderModel, } from 'cdm/FolderModel';
 import { App } from 'obsidian';
 import { Settings } from 'Settings';
 import { Schema } from 'services/Base';

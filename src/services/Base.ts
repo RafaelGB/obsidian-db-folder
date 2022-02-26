@@ -2,7 +2,7 @@ import {
     Models,
     FolderModel,
     Group
-}from 'cdm/folder';
+}from 'cdm/FolderModel';
 
 export class Schema{
     private static instance: Schema;

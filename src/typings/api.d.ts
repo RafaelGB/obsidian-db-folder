@@ -4,7 +4,7 @@ import {
 
 import {
     FolderModel
-} from 'cdm/Folder';
+} from 'cdm/FolderModel';
 
 import {
     Settings
