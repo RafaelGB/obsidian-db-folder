@@ -14,22 +14,23 @@ function useInstance(instance:any) {
   let rowSpanHeaders:any = [];
 
   allColumns.forEach((column:any, i:any) => {
-    const { id, enableRowSpan } = column;
-
-    if (enableRowSpan !== undefined) {
+    const { id } = column;
       rowSpanHeaders = [
         ...rowSpanHeaders,
         { id, topCellValue: null, topCellIndex: 0 }
       ];
-    }
   });
 
   Object.assign(instance, { rowSpanHeaders });
 }
 export function Table(){
+  /** all info needed to operate. On future will be params */
   const mockedData:TableDataType = makeData(10);
+  /** Rows information */
   const newData: TableRows = mockedData.data;
+  /** Rows showed information */
   const data = React.useMemo(() => newData, []);
+  /** Columns information */
   const columns = mockedData.columns;
   let propsUseTable:any = {columns, data};
   const {
@@ -41,6 +42,7 @@ export function Table(){
   } = useTable(propsUseTable, hooks => {
     hooks.useInstance.push(useInstance);
   });
+  console.log("Header groups",headerGroups);
   return (
     <table {...getTableProps()}>
       <thead>

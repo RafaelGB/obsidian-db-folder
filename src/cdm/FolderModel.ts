@@ -26,7 +26,7 @@ export type Note = {
 }
 
 export type TableColumn = {
-    id: string,
+    Header: string,
     label: string,
     accessor: string,
     minWidth?: number,

@@ -20,7 +20,7 @@ export function makeData(count:number):TableDataType {
     }
     let columns:TableColumns = [
       {
-        id: 'firstName',
+        Header: 'firstName',
         label: 'First Name',
         accessor: 'firstName',
         minWidth: 100,
@@ -28,7 +28,7 @@ export function makeData(count:number):TableDataType {
         options: ([] as any[]),
       },
       {
-        id: 'lastName',
+        Header: 'lastName',
         label: 'Last Name',
         accessor: 'lastName',
         minWidth: 100,
@@ -36,7 +36,7 @@ export function makeData(count:number):TableDataType {
         options: ([] as any[]),
       },
       {
-        id: 'age',
+        Header: 'age',
         label: 'Age',
         accessor: 'age',
         width: 80,
@@ -44,7 +44,7 @@ export function makeData(count:number):TableDataType {
         options: ([] as any[]),
       },
       {
-        id: 'email',
+        Header: 'email',
         label: 'E-Mail',
         accessor: 'email',
         width: 300,
@@ -52,7 +52,7 @@ export function makeData(count:number):TableDataType {
         options: ([] as any[]),
       },
       {
-        id: 'music',
+        Header: 'music',
         label: 'Music Preference',
         accessor: 'music',
         dataType: DataTypes.SELECT,
