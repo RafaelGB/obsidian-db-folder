@@ -1,7 +1,8 @@
 import { App } from "obsidian";
-
+import { TableRows } from 'cdm/FolderModel';
 export function obtainCurrentFolder(app: App): string {
     const file = app.workspace.getActiveFile();
+    console.log("file",file);
     // obtain folder to check
     if(!file){
         return null;
@@ -9,18 +10,20 @@ export function obtainCurrentFolder(app: App): string {
     return file.path.split("/").slice(0,-1).join("/")+"/";
 }
 
-export function obtainTFilesFromTFolder(app: App, folderPath: string): any[] {
-    const files: any[] = [];
+export function adapterTFilesToRows(app: App, folderPath: string): TableRows {
+    const rows: TableRows = [];
     // TODO improve this filter?
     let id = 0;
+    console.log("folderPath",folderPath);
     app.vault.getFiles().forEach(file => {
         if(file.path.startsWith(folderPath)){
             const aFile = {
                 id: ++id,
                 title: `[[${file.basename}]]`
             }
-            files.push(aFile);
+            rows.push(aFile);
         }
     });
-    return files;
+    console.log("adapter rows",rows);
+    return rows;
 }

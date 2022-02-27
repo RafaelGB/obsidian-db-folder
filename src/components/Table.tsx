@@ -23,11 +23,15 @@ function useInstance(instance:any) {
 
   Object.assign(instance, { rowSpanHeaders });
 }
-export function Table(){
+type TableProperties = {
+  data: TableRows
+};
+export function Table(properties: TableProperties){
   /** all info needed to operate. On future will be params */
   const mockedData:TableDataType = makeData(10);
   /** Rows information */
-  const newData: TableRows = mockedData.data;
+  const newData: TableRows = properties.data;
+  console.log("newData",newData);
   /** Rows showed information */
   const data = React.useMemo(() => newData, []);
   /** Columns information */
@@ -42,7 +46,6 @@ export function Table(){
   } = useTable(propsUseTable, hooks => {
     hooks.useInstance.push(useInstance);
   });
-  console.log("Header groups",headerGroups);
   return (
     <table {...getTableProps()}>
       <thead>

@@ -36,6 +36,7 @@ export type TableColumn = {
 }
 
 export type TableRow = {
+    id: number,
     [key: string]: any
 }
 

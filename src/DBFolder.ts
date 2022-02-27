@@ -12,7 +12,7 @@ import {
 } from 'components/Index';
 
 import {
-    obtainTFilesFromTFolder,
+    adapterTFilesToRows,
     obtainCurrentFolder
 } from 'cross/VaultManagement';
 
@@ -58,8 +58,9 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
-        let files = obtainTFilesFromTFolder(this.app,folder);
-        let table = createTable();
+        console.log("folder",folder);
+        let rows = adapterTFilesToRows(this.app,folder);
+        let table = createTable(rows);
         ReactDOM.render(table, tableContainer);
     }
 }
