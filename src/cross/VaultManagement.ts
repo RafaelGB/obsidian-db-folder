@@ -1,5 +1,7 @@
 import { App } from "obsidian";
-import { TableRows } from 'cdm/FolderModel';
+import { TableRows,TableRow } from 'cdm/FolderModel';
+import { MetaInfoService } from 'services/MetaInfoService';
+
 export function obtainCurrentFolder(app: App): string {
     const file = app.workspace.getActiveFile();
     // obtain folder to check
@@ -9,16 +11,21 @@ export function obtainCurrentFolder(app: App): string {
     return file.path.split("/").slice(0,-1).join("/")+"/";
 }
 
-export function adapterTFilesToRows(app: App, folderPath: string): TableRows {
+export async function adapterTFilesToRows(app: App, folderPath: string): Promise<TableRows> {
     const rows: TableRows = [];
     // TODO improve this filter?
     let id = 0;
-    app.vault.getFiles().forEach(file => {
+    app.vault.getFiles().forEach(async file => {
         if(file.path.startsWith(folderPath)){
-            const aFile = {
+            let properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
+            
+            const aFile:TableRow = {
                 id: ++id,
                 title: `[[${file.basename}]]`
             }
+            properties.forEach(property => {
+                aFile[property.key] = property.content;
+            });
             rows.push(aFile);
         }
     });

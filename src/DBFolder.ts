@@ -52,14 +52,13 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
 
         searchButton.addEventListener("click", async () => {
             const searchResult = searchEl.value;
-            console.log(searchResult);
         });
         // Add a table to the container
         
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
-        console.log("folder",folder);
-        let rows = adapterTFilesToRows(this.app,folder);
+        let rows = await adapterTFilesToRows(this.app,folder);
+        console.log(rows);
         let table = createTable(rows);
         ReactDOM.render(table, tableContainer);
     }

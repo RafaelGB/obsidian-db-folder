@@ -1,6 +1,10 @@
 import * as React from "react";
 import { useTable } from "react-table";
-import { TableDataType,TableRows } from "cdm/FolderModel";
+import { 
+  TableDataType,
+  TableRows,
+  TableRow 
+} from "cdm/FolderModel";
 import {makeData } from 'mock/mockUtils';
 
 const borderStyle = {
@@ -29,13 +33,12 @@ type TableProperties = {
 export function Table(properties: TableProperties){
   /** all info needed to operate. On future will be params */
   const mockedData:TableDataType = makeData(10);
-  /** Rows information */
-  const newData: TableRows = properties.data;
-  console.log("newData",newData);
-  /** Rows showed information */
-  const data = React.useMemo(() => newData, []);
   /** Columns information */
   const columns = mockedData.columns;
+  /** Rows information */
+  const sourceData: TableRows = properties.data;
+  /** Rows showed information */
+  const data = React.useMemo(() => filterDataWithcolumHeaders(sourceData,columns.map(column => column.Header)), []);
   let propsUseTable:any = {columns, data};
   const {
     getTableProps,
@@ -86,4 +89,19 @@ export function Table(properties: TableProperties){
       </tbody>
     </table>
   );
+}
+
+function filterDataWithcolumHeaders(data:TableRows,columnHeaders:string[]): TableRows{
+  let filterData:TableRows = [];
+  let id:number = 0;
+  data.forEach(row => {
+    let newRow:TableRow={
+      id: ++id
+    };
+    columnHeaders.forEach(columnHeader => {
+      newRow[columnHeader] = row[columnHeader];
+    });
+    filterData.push(newRow);
+  });
+  return filterData;
 }
