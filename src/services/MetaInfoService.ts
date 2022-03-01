@@ -52,10 +52,10 @@ export class MetaInfoService {
             let parts = str.split("::");
 
             if (parts[0] && parts[1]) {
-                obj.push({key: parts[0], content: parts[1].trim(), type: MetaType.Dataview});
+                obj.push({key: parts[0].replaceAll("**",""), content: parts[1].trim(), type: MetaType.Dataview});
             }
             else if (str.includes("::")) {
-                const key: string = str.replace("::",'');
+                const key: string = str.replace("::",'').replaceAll("**","");
                 obj.push({key, content: "", type: MetaType.Dataview});
             }
 

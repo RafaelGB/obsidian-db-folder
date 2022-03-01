@@ -22,6 +22,14 @@ export function makeData(count:number):TableDataType {
         minWidth: 100,
         dataType: DataTypes.TEXT,
         options: options,
+      },
+      {
+        Header: 'Status',
+        label: 'Status',
+        accessor: 'Status',
+        minWidth: 100,
+        dataType: DataTypes.TEXT,
+        options: options,
       }
     ];
     return { columns: columns, data: data, skipReset: false };

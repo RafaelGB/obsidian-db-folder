@@ -99,7 +99,7 @@ function filterDataWithcolumHeaders(data:TableRows,columnHeaders:string[]): Tabl
       id: ++id
     };
     columnHeaders.forEach(columnHeader => {
-      newRow[columnHeader] = row[columnHeader];
+      newRow[columnHeader] = row[columnHeader] ? row[columnHeader] : '';
     });
     filterData.push(newRow);
   });
