@@ -25,8 +25,8 @@ export type Note = {
     title: string
 }
 export type ColumnOptions = {
-    label: string,
-    backgroundColor: string
+    label?: string,
+    backgroundColor?: string
 }
 
 export type TableColumn = {

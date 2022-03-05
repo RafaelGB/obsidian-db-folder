@@ -5,7 +5,7 @@ import type {
 
 import {parseYaml} from 'obsidian';
 import {MetaType} from 'cdm/MetaType';
-import { RowType} from 'cdm/FolderModel';
+import {RowType} from 'cdm/FolderModel';
 
 export type Property = {key: string, content: RowType, type: MetaType};
 
@@ -53,11 +53,11 @@ export class MetaInfoService {
             const parts = str.split("::");
 
             if (parts[0] && parts[1]) {
-                obj.push({key: parts[0].replaceAll("**",""), content: parts[1].trim(), type: MetaType.Dataview});
+                obj.push({key: parts[0].replaceAll("**",""), content: parts[1].trim(), type: MetaType.Inline});
             }
             else if (str.includes("::")) {
                 const key: string = str.replace("::",'').replaceAll("**","");
-                obj.push({key, content: "", type: MetaType.Dataview});
+                obj.push({key, content: "", type: MetaType.Inline});
             }
 
             return obj;

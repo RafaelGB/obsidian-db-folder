@@ -21,7 +21,7 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
             /** Mandatory fields */
             const aFile: TableRow = {
                 id: ++id,
-                title: `[[${file.basename}]]`
+                title: `${app.vault.getResourcePath(file)}`
             };
             /** Rest of fields */
             properties.forEach(property => {

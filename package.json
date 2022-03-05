@@ -31,6 +31,7 @@
 		"eslint": "8.9.0",
 		"jest": "27.5.1",
 		"obsidian": "0.13.26",
+		"obsidian-dataview": "0.4.25",
 		"rollup": "2.68.0",
 		"tslib": "2.3.1",
 		"ts-jest": "27.1.3",
