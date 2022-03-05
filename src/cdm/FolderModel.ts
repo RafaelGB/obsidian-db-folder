@@ -24,6 +24,10 @@ export type Note = {
     id: string,
     title: string
 }
+export type ColumnOptions = {
+    label: string,
+    backgroundColor: string
+}
 
 export type TableColumn = {
     Header: string,
@@ -32,7 +36,7 @@ export type TableColumn = {
     minWidth?: number,
     width?:number
     dataType: string,
-    options: any[]
+    options: ColumnOptions[]
 }
 
 export type RowType = number | string | boolean | Date;
