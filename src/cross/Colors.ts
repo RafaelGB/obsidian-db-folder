@@ -3,7 +3,7 @@ export function randomColor() {
 }
 
 export function grey(value: number){
-  let reference = {
+  const reference = {
     50: '#fafafa',
     100: '#f5f5f5',
     200: '#eeeeee',

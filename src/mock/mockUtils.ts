@@ -3,10 +3,10 @@ import { randomColor } from 'cross/Colors';
 import { DataTypes } from 'cross/Constants';
 import {TableDataType, TableColumns, TableRows} from 'cdm/FolderModel';
 export function makeData(count:number):TableDataType {
-    let data:TableRows = [];
-    let options = [];
+    const data:TableRows = [];
+    const options = [];
     for (let i = 0; i < count; i++) {
-      let row = {
+      const row = {
         id: faker.mersenne.rand(),
         title: faker.system.fileName(),
       };
@@ -14,7 +14,7 @@ export function makeData(count:number):TableDataType {
   
       data.push(row);
     }
-    let columns:TableColumns = [
+    const columns:TableColumns = [
       {
         Header: 'title',
         label: 'File Name',

@@ -35,9 +35,10 @@ export type TableColumn = {
     options: any[]
 }
 
+export type RowType = number | string | boolean | Date;
 export type TableRow = {
     id: number,
-    [key: string]: any
+    [key: string]: RowType
 }
 
 export type TableRows = Array<TableRow>;

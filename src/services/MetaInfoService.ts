@@ -5,8 +5,9 @@ import type {
 
 import {parseYaml} from 'obsidian';
 import {MetaType} from 'cdm/MetaType';
+import { RowType} from 'cdm/FolderModel';
 
-export type Property = {key: string, content: any, type: MetaType};
+export type Property = {key: string, content: RowType, type: MetaType};
 
 export class MetaInfoService {
     private static instance: MetaInfoService;
@@ -22,7 +23,7 @@ export class MetaInfoService {
         const tags = cache.tags;
         if (!tags) return [];
 
-        let mTags: Property[] = [];
+        const mTags: Property[] = [];
         tags.forEach(tag => mTags.push({key: tag.tag, content: tag.tag, type: MetaType.Tag}));
         return mTags;
     }
@@ -36,7 +37,7 @@ export class MetaInfoService {
         const yamlContent: string = filecontent.split("\n").slice(start.line, end.line).join("\n");
         const parsedYaml = parseYaml(yamlContent);
 
-        let metaYaml: Property[] = [];
+        const metaYaml: Property[] = [];
 
         for (const key in parsedYaml) {
             metaYaml.push({key, content: parsedYaml[key], type: MetaType.YAML});
@@ -49,7 +50,7 @@ export class MetaInfoService {
         const content = await this.app.vault.cachedRead(file);
 
         return content.split("\n").reduce((obj: Property[], str: string) => {
-            let parts = str.split("::");
+            const parts = str.split("::");
 
             if (parts[0] && parts[1]) {
                 obj.push({key: parts[0].replaceAll("**",""), content: parts[1].trim(), type: MetaType.Dataview});

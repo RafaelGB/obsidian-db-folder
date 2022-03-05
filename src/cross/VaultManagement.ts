@@ -17,7 +17,7 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
     let id = 0;
     await Promise.all(app.vault.getFiles().map(async (file) => {
         if (file.path.startsWith(folderPath)) {
-            let properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
+            const properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
             /** Mandatory fields */
             const aFile: TableRow = {
                 id: ++id,
