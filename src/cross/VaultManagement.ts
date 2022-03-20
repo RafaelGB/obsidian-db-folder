@@ -1,6 +1,7 @@
 import { App } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
+import { Link } from 'obsidian-dataview';
 
 export function obtainCurrentFolder(app: App): string {
     const file = app.workspace.getActiveFile();
