@@ -1,7 +1,7 @@
 import { App } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
-import { Link } from 'obsidian-dataview';
+import { getAPI } from "obsidian-dataview"
 
 export function obtainCurrentFolder(app: App): string {
     const file = app.workspace.getActiveFile();
@@ -19,12 +19,13 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
     await Promise.all(app.vault.getFiles().map(async (file) => {
         if (file.path.startsWith(folderPath)) {
             const properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
+            const filelink = getAPI(app).fileLink(file.path);
             /** Mandatory fields */
             const aFile: TableRow = {
                 id: ++id,
-                title: `${app.vault.getResourcePath(file)}`
+                title: `${filelink}`
             };
-            /** Rest of fields */
+            /** Optional fields */
             properties.forEach(property => {
                 aFile[property.key] = property.content;
             });

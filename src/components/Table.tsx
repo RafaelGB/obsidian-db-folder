@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useTable } from "react-table";
+import { Component, MarkdownRenderer } from "obsidian";
+import { Row, useTable } from "react-table";
 import { 
   TableDataType,
   TableRows,
@@ -11,6 +12,40 @@ const borderStyle = {
   border: "1px solid gray",
   padding: "8px 10px"
 };
+
+
+export async function renderCompactMarkdown(
+  markdown: string,
+  container: HTMLElement,
+  sourcePath: string,
+  component: Component
+) {
+  let subcontainer = container.createSpan();
+  await MarkdownRenderer.renderMarkdown(markdown, subcontainer, sourcePath, component);
+
+  let paragraph = subcontainer.querySelector("p");
+  if (subcontainer.children.length == 1 && paragraph) {
+      while (paragraph.firstChild) {
+          subcontainer.appendChild(paragraph.firstChild);
+      }
+      subcontainer.removeChild(paragraph);
+  }
+}
+
+function renderRow(row:Row) { 
+  (
+    <div {...row.getRowProps()} className="tr">
+        {row.cells.map(cell => {
+            console.log(cell);
+            return (
+                <div {...cell.getCellProps()} className="td">
+                    {cell.render('Cell')}
+                </div>
+            )
+        })}
+    </div>
+  )
+}
 
 function useInstance(instance:any) {
   const { allColumns } = instance;
@@ -65,7 +100,7 @@ export function Table(properties: TableProperties){
       <tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
           prepareRow(row);
-          return null;
+          return renderRow(row);
         })}
         {rows.map(row => {
           return (
