@@ -58,7 +58,6 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
         let rows = await adapterTFilesToRows(this.app,folder);
-        console.log("tras el await",rows);
         let table = createTable(rows);
         ReactDOM.render(table, tableContainer);
     }

@@ -18,12 +18,13 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
     let id = 0;
     await Promise.all(app.vault.getFiles().map(async (file) => {
         if (file.path.startsWith(folderPath)) {
+            // TODO dependency injection of service on future
             const properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
             const filelink = getAPI(app).fileLink(file.path);
             /** Mandatory fields */
             const aFile: TableRow = {
                 id: ++id,
-                title: `${filelink}`
+                title: filelink
             };
             /** Optional fields */
             properties.forEach(property => {

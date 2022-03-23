@@ -1,3 +1,5 @@
+import { Link } from "obsidian-dataview";
+
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
     input: string,
@@ -39,7 +41,7 @@ export type TableColumn = {
     options: ColumnOptions[]
 }
 
-export type RowType = number | string | boolean | Date;
+export type RowType = number | string | boolean | Date | Link;
 export type TableRow = {
     id: number,
     [key: string]: RowType
