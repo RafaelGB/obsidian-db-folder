@@ -1,4 +1,4 @@
-import { App } from "obsidian";
+import { App, parseLinktext } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
 import { getAPI } from "obsidian-dataview"
@@ -21,6 +21,7 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
             // TODO dependency injection of service on future
             const properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
             const filelink = getAPI(app).fileLink(file.path);
+            console.log(filelink);
             /** Mandatory fields */
             const aFile: TableRow = {
                 id: ++id,

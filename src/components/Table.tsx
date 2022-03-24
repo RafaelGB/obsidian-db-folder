@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Row, useTable } from "react-table";
+import { MarkdownRenderer } from "obsidian";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { 
   TableDataType,
   TableRows,
@@ -11,47 +13,33 @@ const borderStyle = {
   border: "1px solid gray",
   padding: "8px 10px"
 };
-
-/**
- * Log decorator
- * @param target 
- * @param key 
- * @param descriptor 
- * @returns 
- */
-function log(target:any, key:any, descriptor: PropertyDescriptor) {
-	var originalMethod = descriptor.value;
-
-    descriptor.value = function(...args: any[]) {
-		let functionName = key;
-		console.log(functionName + "(" + args.join(", ") + ")");
-        let result = originalMethod.apply(this, args);
-        console.log("=> " + result);
-        return result;
-    };
-
-    return descriptor;
+function lab(markdownStr:string,content:HTMLElement){
+  const container = useRef<HTMLElement | null>(null);
 }
-
 
 function renderRow(row:Row) { 
   return (
     <tr {...row.getRowProps()}>
-        {row.cells.map((cell:any) => {
-                if (cell.isRowSpanned) return null;
-                else
-                  return (
-                    <td
-                      style={borderStyle}
-                      rowSpan={cell.rowSpan}
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  );
-              })}
+        {row.cells.map(
+          (cell:any) => renderCell(cell)
+          )
+        }
     </tr>
   )
+}
+
+function renderCell(cell:any){
+  if (cell.isRowSpanned) return null;
+  else
+    return (
+      <td
+        style={borderStyle}
+        rowSpan={cell.rowSpan}
+        {...cell.getCellProps()}
+      >
+        {cell.render("Cell")}
+      </td>
+    );
 }
 
 function useInstance(instance:any) {
@@ -82,6 +70,7 @@ export function Table(properties: TableProperties){
   /** Rows showed information */
   const data = React.useMemo(() => filterDataWithcolumHeaders(sourceData,columns.map(column => column.Header)), []);
   let propsUseTable:any = {columns, data};
+  /** Hook to use react-table */
   const {
     getTableProps,
     getTableBodyProps,
@@ -91,6 +80,7 @@ export function Table(properties: TableProperties){
   } = useTable(propsUseTable, hooks => {
     hooks.useInstance.push(useInstance);
   });
+/** return table structure */
   return (
     <table {...getTableProps()}>
       <thead>
