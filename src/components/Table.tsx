@@ -36,16 +36,21 @@ function log(target:any, key:any, descriptor: PropertyDescriptor) {
 
 function renderRow(row:Row) { 
   return (
-    <div {...row.getRowProps()} className="tr">
-        {row.cells.map(cell => {
-
-            return (
-                <div {...cell.getCellProps()} className="td">
-                    {cell.render('Cell')}
-                </div>
-            )
-        })}
-    </div>
+    <tr {...row.getRowProps()}>
+        {row.cells.map((cell:any) => {
+                if (cell.isRowSpanned) return null;
+                else
+                  return (
+                    <td
+                      style={borderStyle}
+                      rowSpan={cell.rowSpan}
+                      {...cell.getCellProps()}
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  );
+              })}
+    </tr>
   )
 }
 
@@ -103,25 +108,6 @@ export function Table(properties: TableProperties){
         {rows.map((row, i) => {
           prepareRow(row);
           return renderRow(row);
-        })}
-        {rows.map(row => {
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell:any) => {
-                if (cell.isRowSpanned) return null;
-                else
-                  return (
-                    <td
-                      style={borderStyle}
-                      rowSpan={cell.rowSpan}
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  );
-              })}
-            </tr>
-          );
         })}
       </tbody>
     </table>
