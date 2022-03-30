@@ -25,7 +25,7 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
             /** Mandatory fields */
             const aFile: TableRow = {
                 id: ++id,
-                title: `${filelink}`
+                title: `${filelink.markdown()}`
             };
             /** Optional fields */
             properties.forEach(property => {

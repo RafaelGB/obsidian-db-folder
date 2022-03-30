@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Row, useTable } from "react-table";
-import { MarkdownRenderer } from "obsidian";
+import { MarkdownRenderChild } from "obsidian";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { 
   TableDataType,
@@ -13,8 +13,31 @@ const borderStyle = {
   border: "1px solid gray",
   padding: "8px 10px"
 };
-function lab(markdownStr:string,content:HTMLElement){
-  const container = useRef<HTMLElement | null>(null);
+/**
+ * Adds a caption to an image.
+ * 
+ * @param {HTMLElement} target - Parent element for the caption.
+ * @param {string} caption_text - Text to add for the caption.
+ * @param {boolean} [asHtml=false] - Insert caption text as HTML rather than text.
+ * @returns {MarkdownRenderChild} - Caption element that was added to the target as the caption.
+ */
+function addCaption(
+	target: HTMLElement,
+	caption_text: string,
+	asHtml: boolean = false
+): MarkdownRenderChild {
+	const caption = document.createElement("p");
+	caption.addClass("dbfolder-table-cell");
+	if ( asHtml ) {
+		caption.innerHTML = caption_text;
+	}
+	else{
+		caption.innerText = caption_text;
+	}
+
+	target.appendChild( caption );
+
+	return new MarkdownRenderChild( caption );
 }
 
 function renderRow(row:Row) { 
