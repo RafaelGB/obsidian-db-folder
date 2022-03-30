@@ -1,6 +1,7 @@
 import {
     MarkdownRenderChild,
-    App
+    App,
+    MarkdownRenderer
 } from "obsidian";
 
 import { 
@@ -43,6 +44,14 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
     async render() {
         this.container.createEl("h3", { text: this.db_yaml.title });
 
+        
+        const lab = this.container.createDiv("dbfolder-lab");
+        await MarkdownRenderer.renderMarkdown(
+            "[[readme]]",
+            lab,
+            "readme.md",
+            null
+        );
         const searchEl = this.container.createEl("input", {
             type: "text"
         });

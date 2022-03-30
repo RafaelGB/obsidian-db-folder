@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Row, useTable } from "react-table";
+import { Cell, Row, useTable } from 'react-table';
 import { MarkdownRenderChild } from "obsidian";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { CellRenderer } from 'components/CellComponent';
 import { 
   TableDataType,
   TableRows,
@@ -51,7 +52,9 @@ function renderRow(row:Row) {
   )
 }
 
-function renderCell(cell:any){
+// TODO fix indexes with Cell
+function renderCell(cell:any) {
+  console.log(cell);
   if (cell.isRowSpanned) return null;
   else
     return (

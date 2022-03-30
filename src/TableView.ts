@@ -33,6 +33,4 @@ export class TableView extends TextFileView implements HoverParent {
     setViewData(data: string, clear: boolean): void{
         
     }
-
-
 }

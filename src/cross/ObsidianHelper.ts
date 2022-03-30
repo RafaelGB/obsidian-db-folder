@@ -115,85 +115,6 @@ function getSubpathBoundary(fileCache: CachedMetadata, subpath: string) {
     : null;
 }
 
-function applyCheckboxIndexes(dom: HTMLDivElement) {
-  const checkboxes = dom.querySelectorAll('.task-list-item-checkbox');
-
-  checkboxes.forEach((el, i) => {
-    (el as HTMLElement).dataset.checkboxIndex = i.toString();
-  });
-}
-
-function findUnresolvedLinks(dom: HTMLDivElement, view: TableView) {
-  const links = dom.querySelectorAll('.internal-link');
-
-  links.forEach((link) => {
-    const path = getNormalizedPath(link.getAttr('href'));
-    const dest = view.app.metadataCache.getFirstLinkpathDest(
-      path.root,
-      view.file.path
-    );
-
-    if (!dest) {
-      link.addClass('is-unresolved');
-    }
-  });
-}
-
-function handleImage(el: HTMLElement, file: TFile, view: TableView) {
-  el.empty();
-
-  el.createEl(
-    'img',
-    { attr: { src: view.app.vault.getResourcePath(file) } },
-    (img) => {
-      if (el.hasAttribute('width')) {
-        img.setAttribute('width', el.getAttribute('width'));
-      }
-
-      if (el.hasAttribute('height')) {
-        img.setAttribute('height', el.getAttribute('height'));
-      }
-
-      if (el.hasAttribute('alt')) {
-        img.setAttribute('alt', el.getAttribute('alt'));
-      }
-    }
-  );
-
-  el.addClasses(['image-embed', 'is-loaded']);
-}
-
-function handleAudio(el: HTMLElement, file: TFile, view: TableView) {
-  el.empty();
-  el.createEl('audio', {
-    attr: { controls: '', src: view.app.vault.getResourcePath(file) },
-  });
-  el.addClasses(['media-embed', 'is-loaded']);
-}
-
-function handleVideo(el: HTMLElement, file: TFile, view: TableView) {
-  el.empty();
-
-  el.createEl(
-    'video',
-    { attr: { controls: '', src: view.app.vault.getResourcePath(file) } },
-    (video) => {
-      const handleLoad = () => {
-        video.removeEventListener('loadedmetadata', handleLoad);
-
-        if (video.videoWidth === 0 && video.videoHeight === 0) {
-          el.empty();
-          handleAudio(el, file, view);
-        }
-      };
-
-      video.addEventListener('loadedmetadata', handleLoad);
-    }
-  );
-
-  el.addClasses(['media-embed', 'is-loaded']);
-}
-
 async function getEmbeddedMarkdownString(
   file: TFile,
   normalizedPath: NormalizedPath,
@@ -310,18 +231,6 @@ function handleEmbeds(dom: HTMLDivElement, view: TableView, depth: number) {
         return;
       }
 
-      if (imageExt.contains(target.extension)) {
-        return handleImage(el, target, view);
-      }
-
-      if (audioExt.contains(target.extension)) {
-        return handleAudio(el, target, view);
-      }
-
-      if (videoExt.contains(target.extension)) {
-        return handleVideo(el, target, view);
-      }
-
       if (target.extension === 'md') {
         return await handleMarkdown(el, target, normalizedPath, view, depth);
       }
@@ -346,8 +255,6 @@ export async function renderMarkdown(
     );
 
     await handleEmbeds(dom, view, 5);
-    applyCheckboxIndexes(dom);
-    findUnresolvedLinks(dom, view);
   } catch (e) {
     console.error(e);
   }
