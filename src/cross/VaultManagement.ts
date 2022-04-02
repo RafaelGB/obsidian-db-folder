@@ -21,7 +21,6 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
             // TODO dependency injection of service on future
             const properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
             const filelink = getAPI(app).fileLink(file.path);
-            console.log(filelink);
             /** Mandatory fields */
             const aFile: TableRow = {
                 id: ++id,

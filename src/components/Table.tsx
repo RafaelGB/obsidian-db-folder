@@ -1,59 +1,31 @@
 import * as React from "react";
 import { Cell, Row, useTable } from 'react-table';
-import { MarkdownRenderChild } from "obsidian";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { CellRenderer } from 'components/CellComponent';
 import { 
   TableDataType,
   TableRows,
   TableRow 
 } from "cdm/FolderModel";
 import {makeData } from 'mock/mockUtils';
+import CellView from 'components/CellView';
 
 const borderStyle = {
   border: "1px solid gray",
   padding: "8px 10px"
 };
-/**
- * Adds a caption to an image.
- * 
- * @param {HTMLElement} target - Parent element for the caption.
- * @param {string} caption_text - Text to add for the caption.
- * @param {boolean} [asHtml=false] - Insert caption text as HTML rather than text.
- * @returns {MarkdownRenderChild} - Caption element that was added to the target as the caption.
- */
-function addCaption(
-	target: HTMLElement,
-	caption_text: string,
-	asHtml: boolean = false
-): MarkdownRenderChild {
-	const caption = document.createElement("p");
-	caption.addClass("dbfolder-table-cell");
-	if ( asHtml ) {
-		caption.innerHTML = caption_text;
-	}
-	else{
-		caption.innerText = caption_text;
-	}
-
-	target.appendChild( caption );
-
-	return new MarkdownRenderChild( caption );
-}
 
 function renderRow(row:Row) { 
   return (
     <tr {...row.getRowProps()}>
         {row.cells.map(
-          (cell:any) => renderCell(cell)
+          (cell:CellView) => renderCell(cell)
           )
         }
     </tr>
   )
 }
 
-// TODO fix indexes with Cell
-function renderCell(cell:any) {
+function renderCell(cell:CellView) {
   console.log(cell);
   if (cell.isRowSpanned) return null;
   else
