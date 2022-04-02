@@ -13,14 +13,14 @@ export default class CellView extends ItemView implements Cell{
         throw new Error("Method not implemented.");
     }
     // TODO da un error de que esto no lo coge como función...
-    renderCustom(type: string, userProps?: object): React.ReactNode {
-        // const cellDiv = this.contentEl.createDiv(type);
-        // await MarkdownRenderer.renderMarkdown(
-        //     this.value,
-        //     cellDiv,
-        //     "readme.md",
-        //     null
-        // );
+    public async markdownRender(type: string, userProps?: object){
+        const cellDiv = this.contentEl.createDiv(type);
+        await MarkdownRenderer.renderMarkdown(
+            this.value,
+            cellDiv,
+            "readme.md",
+            null
+        );
         return this.render(type,userProps);
     }
 

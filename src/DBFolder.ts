@@ -43,7 +43,6 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
 
     async render() {
         this.container.createEl("h3", { text: this.db_yaml.title });
-
         
         const lab = this.container.createDiv("dbfolder-lab");
         await MarkdownRenderer.renderMarkdown(
@@ -52,22 +51,12 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
             "readme.md",
             null
         );
-        const searchEl = this.container.createEl("input", {
-            type: "text"
-        });
-        const searchButton = this.container.createEl("button", {
-            text: "Search"
-        });
-
-        searchButton.addEventListener("click", async () => {
-            const searchResult = searchEl.value;
-        });
         // Add a table to the container
         
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
         let rows = await adapterTFilesToRows(this.app,folder);
-        let table = createTable(rows);
+        let table = createTable(rows,this.app);
         ReactDOM.render(table, tableContainer);
     }
 }
