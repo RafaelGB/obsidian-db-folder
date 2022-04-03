@@ -3,20 +3,6 @@ import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
 import { getAPI } from "obsidian-dataview"
 
-/**
- * Obtain current folder from active file in Obsidian
- * @param app 
- * @returns 
- */
-export function obtainCurrentFolder(app: App): string {
-    const file = app.workspace.getActiveFile();
-    // obtain folder to check
-    if(!file){
-        return null;
-    }
-    return file.path.split("/").slice(0,-1).join("/")+"/";
-}
-
 export async function adapterTFilesToRows(app: App, folderPath: string): Promise<TableRows> {
     console.log("=> adapterTFilesToRows.  folderPath:",folderPath);
     const rows: TableRows = [];
