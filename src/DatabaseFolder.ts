@@ -15,7 +15,7 @@ import {
 import {
     adapterTFilesToRows,
     obtainCurrentFolder
-} from 'cross/VaultManagement';
+} from 'helpers/VaultManagement';
 
 import ReactDOM from 'react-dom';
 /**
@@ -43,18 +43,11 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
 
     async render() {
         this.container.createEl("h3", { text: this.db_yaml.title });
-        
-        const lab = this.container.createDiv("dbfolder-lab");
-        await MarkdownRenderer.renderMarkdown(
-            "[[readme]]",
-            lab,
-            "readme.md",
-            null
-        );
         // Add a table to the container
-        
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
+        let columns;
+        // Obtain rows from file notes inside the folder selected
         let rows = await adapterTFilesToRows(this.app,folder);
         let table = createTable(rows,this.app);
         ReactDOM.render(table, tableContainer);

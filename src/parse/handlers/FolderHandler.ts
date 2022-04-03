@@ -1,6 +1,6 @@
 import { AbstractHandler } from 'parse/handlers/AbstractHandler';
 import { App, normalizePath } from "obsidian";
-import { obtainCurrentFolder } from "cross/VaultManagement";
+import { obtainCurrentFolder } from "helpers/VaultManagement";
 
 export class FolderHandler extends AbstractHandler {
     handlerName: string = 'folder';

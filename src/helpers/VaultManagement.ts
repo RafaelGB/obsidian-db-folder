@@ -3,6 +3,11 @@ import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
 import { getAPI } from "obsidian-dataview"
 
+/**
+ * Obtain current folder from active file in Obsidian
+ * @param app 
+ * @returns 
+ */
 export function obtainCurrentFolder(app: App): string {
     const file = app.workspace.getActiveFile();
     // obtain folder to check

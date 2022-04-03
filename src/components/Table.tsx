@@ -1,32 +1,39 @@
 import * as React from "react";
 import { Cell, Row, useTable } from 'react-table';
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { 
   TableDataType,
   TableRows,
   TableRow 
 } from "cdm/FolderModel";
 import {makeData } from 'mock/mockUtils';
-import CellView from 'components/CellView';
 
 const borderStyle = {
   border: "1px solid gray",
   padding: "8px 10px"
 };
 
+/**
+ * Render entire row of elements inside table
+ * @param row 
+ * @returns 
+ */
 function renderRow(row:Row) { 
   return (
     <tr {...row.getRowProps()}>
         {row.cells.map(
-          (cell:CellView) => renderCell(cell)
+          (cell:any) => renderCell(cell)
           )
         }
     </tr>
   )
 }
 
-function renderCell(cell:CellView) {
-  console.log(cell);
+/**
+ * Render individual cell inside table
+ * @param cell 
+ * @returns 
+ */
+function renderCell(cell:any) {
   if (cell.isRowSpanned) return null;
   else
     return (
@@ -58,6 +65,12 @@ function useInstance(instance:any) {
 type TableProperties = {
   data: TableRows
 };
+
+/**
+ * Table component based on react-table
+ * @param properties 
+ * @returns 
+ */
 export function Table(properties: TableProperties){
   /** all info needed to operate. On future will be params */
   const mockedData:TableDataType = makeData(10);

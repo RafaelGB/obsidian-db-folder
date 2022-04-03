@@ -21,7 +21,7 @@ import {
 
 import {
 	DBFolderListRenderer
-} from 'DBFolder';
+} from 'DatabaseFolder';
 
 import {
 	parseDatabase
