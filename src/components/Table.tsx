@@ -1,39 +1,126 @@
-import React from 'react';
-import Card from "@material-ui/core/Card";
-import SortIcon from "@material-ui/icons/ArrowDownward";
-import DataTable from "react-data-table-component";
+import * as React from "react";
+import { Cell, Row, useTable } from 'react-table';
+import { 
+  TableDataType,
+  TableRows,
+  TableRow 
+} from "cdm/FolderModel";
+import {makeData } from 'mock/mockUtils';
 
-const columns = [
-    {
-      id: 1,
-      name: "Title",
-      selector: (row: any) => row.title,
-      sortable: true,
-      reorder: true
-    }
-];
+const borderStyle = {
+  border: "1px solid gray",
+  padding: "8px 10px"
+};
 
-function DBFolderList(props: any) {
-    const tableProps = { // make sure all required component's inputs/Props keys&types match
-      data: props.input,
-      title: "Files",
-      columns : columns,
-      defaultSortFieldId: 1,
-      sortIcon: <SortIcon />,
-      pagination: true,
-      selectableRows: true
-    }
+/**
+ * Render entire row of elements inside table
+ * @param row 
+ * @returns 
+ */
+function renderRow(row:Row) { 
+  return (
+    <tr {...row.getRowProps()}>
+        {row.cells.map(
+          (cell:any) => renderCell(cell)
+          )
+        }
+    </tr>
+  )
+}
+
+/**
+ * Render individual cell inside table
+ * @param cell 
+ * @returns 
+ */
+function renderCell(cell:any) {
+  if (cell.isRowSpanned) return null;
+  else
     return (
-        <div className="DBFolderList">
-        <Card>
-          <DataTable
-            {...tableProps}
-          />
-        </Card>
-      </div>
+      <td
+        style={borderStyle}
+        rowSpan={cell.rowSpan}
+        {...cell.getCellProps()}
+      >
+        {cell.render("Cell")}
+      </td>
     );
-  }
+}
 
-  export function createTable(divToRender: HTMLDivElement, myInput: any[]): JSX.Element {
-    return <DBFolderList input={myInput} />;
-  }
+function useInstance(instance:any) {
+  const { allColumns } = instance;
+
+  let rowSpanHeaders:any = [];
+
+  allColumns.forEach((column:any, i:any) => {
+    const { id } = column;
+      rowSpanHeaders = [
+        ...rowSpanHeaders,
+        { id, topCellValue: null, topCellIndex: 0 }
+      ];
+  });
+
+  Object.assign(instance, { rowSpanHeaders });
+}
+
+/**
+ * Table component based on react-table
+ * @param properties 
+ * @returns 
+ */
+export function Table(properties: TableDataType){
+  /** Columns information */
+  const columns = properties.columns;
+  /** Rows information */
+  const sourceData: TableRows = properties.data;
+  /** Rows showed information */
+  const data = React.useMemo(() => filterDataWithcolumnHeaders(sourceData,columns.map(column => column.Header)), []);
+  let propsUseTable:any = {columns, data};
+  /** Hook to use react-table */
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow
+  } = useTable(propsUseTable, hooks => {
+    hooks.useInstance.push(useInstance);
+  });
+/** return table structure */
+  return (
+    <table {...getTableProps()}>
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th {...column.getHeaderProps()} style={borderStyle}>
+                {column.render("Header")}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row);
+          return renderRow(row);
+        })}
+      </tbody>
+    </table>
+  );
+}
+
+function filterDataWithcolumnHeaders(data:TableRows,columnHeaders:string[]): TableRows{
+  let filterData:TableRows = [];
+  let id:number = 0;
+  data.forEach(row => {
+    let newRow:TableRow={
+      id: ++id
+    };
+    columnHeaders.forEach(columnHeader => {
+      newRow[columnHeader] = row[columnHeader] ? row[columnHeader] : '';
+    });
+    filterData.push(newRow);
+  });
+  return filterData;
+}

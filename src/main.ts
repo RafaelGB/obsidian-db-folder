@@ -1,6 +1,4 @@
 import {
-	App,
-	Modal,
 	Notice,
 	Plugin,
 	Component,
@@ -23,7 +21,7 @@ import {
 
 import {
 	DBFolderListRenderer
-} from 'DBFolder';
+} from 'DatabaseFolder';
 
 import {
 	parseDatabase
@@ -62,15 +60,6 @@ export default class DBFolderPlugin extends Plugin {
 		);
 
 		this.api = new DBFolderAPI(this.app, this.settings);
-
-		// This adds a simple command that can be triggered anywhere
-		this.addCommand({
-			id: 'open-sample-modal-simple',
-			name: 'Open sample modal (simple)',
-			callback: () => {
-				new DBFolderModalCreate(this.app).open();
-			}
-		});
 	}
 
 	async onunload() {
@@ -130,53 +119,5 @@ export default class DBFolderPlugin extends Plugin {
 					console.error(e);
 			}
 		}
-	}
-}
-
-class DBFolderModalCreate extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
-
-	onOpen() {
-		const { contentEl } = this;
-		/*
-			http Form where user can add, edit or delete properties with the format name-type asociated with a db folder
-		*/
-		contentEl.innerHTML = `
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3>DB Folder Properties</h3>
-				</div>
-				<div class="modal-body">
-					<form id="db-folder-properties-form">
-						<div class="form-group">
-							<label for="db-folder-name">DB Folder Name</label>
-							<input type="text" class="form-control" id="db-folder-name" placeholder="Enter DB Folder Name">
-						</div>
-						<div class="form-group">
-							<label for="db-folder-type">DB Folder Type</label>
-							<select class="form-control" id="db-folder-type">
-								<option>String</option>
-								<option>Number</option>
-								<option>Boolean</option>
-								<option>Date</option>
-								<option>Array</option>
-								<option>Object</option>
-							</select>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" id="db-folder-properties-submit">Submit</button>
-					<button type="button" class="btn btn-secondary" id="db-folder-properties-cancel">Cancel</button>
-				</div>
-			</div>
-		`;
-	}
-
-	onClose() {
-		const { contentEl } = this;
-		contentEl.empty();
 	}
 }

@@ -1,10 +1,10 @@
 import {
     Models
-}from 'cdm/folder';
+}from 'cdm/FolderModel';
 
 import {
     Schema
-} from 'services/Base';
+} from 'services/BaseService';
 
 test('Schema class test', () => {
     const schema = Schema.getInstance(generateModels());

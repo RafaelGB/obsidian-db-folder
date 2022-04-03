@@ -1,7 +1,10 @@
 import {
     MarkdownRenderChild,
-    App
+    App,
+    MarkdownRenderer
 } from "obsidian";
+
+import { TableDataType } from 'cdm/FolderModel';
 
 import { 
 	Settings
@@ -9,12 +12,15 @@ import {
 
 import {
     createTable
-} from 'components/Table';
+} from 'components/Index';
 
 import {
-    obtainTFilesFromTFolder,
+    obtainColumnsFromFolder
+} from 'components/Columns';
+import {
+    adapterTFilesToRows,
     obtainCurrentFolder
-} from 'utils/VaultManagement';
+} from 'helpers/VaultManagement';
 
 import ReactDOM from 'react-dom';
 /**
@@ -42,24 +48,18 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
 
     async render() {
         this.container.createEl("h3", { text: this.db_yaml.title });
-
-        const searchEl = this.container.createEl("input", {
-            type: "text"
-        });
-        const searchButton = this.container.createEl("button", {
-            text: "Search"
-        });
-
-        searchButton.addEventListener("click", async () => {
-            const searchResult = searchEl.value;
-            console.log(searchResult);
-        });
         // Add a table to the container
-        
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
-        let files = obtainTFilesFromTFolder(this.app,folder);
-        let table = createTable(tableContainer,files);
+        let columns = obtainColumnsFromFolder();
+        // Obtain rows from file notes inside the folder selected
+        let rows = await adapterTFilesToRows(this.app,folder);
+        const tableProps:TableDataType = { // make sure all required component's inputs/Props keys&types match
+            columns: columns,
+            data: rows,
+            skipReset: false
+          }
+        let table = createTable(tableProps,this.app);
         ReactDOM.render(table, tableContainer);
     }
 }
