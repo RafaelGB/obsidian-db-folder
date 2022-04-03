@@ -4,6 +4,8 @@ import {
     MarkdownRenderer
 } from "obsidian";
 
+import { TableDataType } from 'cdm/FolderModel';
+
 import { 
 	Settings
 } from 'Settings';
@@ -12,6 +14,9 @@ import {
     createTable
 } from 'components/Index';
 
+import {
+    obtainColumnsFromFolder
+} from 'components/Columns';
 import {
     adapterTFilesToRows,
     obtainCurrentFolder
@@ -46,10 +51,15 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         // Add a table to the container
         const tableContainer  = this.container.createDiv("dbfolder-table-container");
         let folder = obtainCurrentFolder(this.app)+this.db_yaml.folder;
-        let columns;
+        let columns = obtainColumnsFromFolder();
         // Obtain rows from file notes inside the folder selected
         let rows = await adapterTFilesToRows(this.app,folder);
-        let table = createTable(rows,this.app);
+        const tableProps:TableDataType = { // make sure all required component's inputs/Props keys&types match
+            columns: columns,
+            data: rows,
+            skipReset: false
+          }
+        let table = createTable(tableProps,this.app);
         ReactDOM.render(table, tableContainer);
     }
 }

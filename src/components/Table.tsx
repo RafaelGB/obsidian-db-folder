@@ -62,20 +62,15 @@ function useInstance(instance:any) {
 
   Object.assign(instance, { rowSpanHeaders });
 }
-type TableProperties = {
-  data: TableRows
-};
 
 /**
  * Table component based on react-table
  * @param properties 
  * @returns 
  */
-export function Table(properties: TableProperties){
-  /** all info needed to operate. On future will be params */
-  const mockedData:TableDataType = makeData(10);
+export function Table(properties: TableDataType){
   /** Columns information */
-  const columns = mockedData.columns;
+  const columns = properties.columns;
   /** Rows information */
   const sourceData: TableRows = properties.data;
   /** Rows showed information */
