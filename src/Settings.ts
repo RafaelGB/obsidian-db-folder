@@ -44,7 +44,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
         add_toggle(
             this.containerEl,
             "Enable debug mode", 
-            "Opcional. Enables debug mode. This will log all the errors and warnings in the console",
+            "This will log all the errors and warnings in the console",
             this.plugin.settings.enable_debug_mode, 
             debug_togle_promise);
     }

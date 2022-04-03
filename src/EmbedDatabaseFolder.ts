@@ -48,7 +48,7 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
     async render() {
         this.container.createEl("h3", { text: this.db_yaml.title });
         // Add a table to the container
-        const tableContainer  = this.container.createDiv("dbfolder-table-container");
+        const tableContainer  = this.container.createDiv("dbfolder-embed-table-container");
         let folder = this.db_yaml.folder;
         let columns = obtainColumnsFromFolder();
         // Obtain rows from file notes inside the folder selected
