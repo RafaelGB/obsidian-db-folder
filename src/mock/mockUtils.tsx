@@ -1,4 +1,8 @@
 import { faker } from '@faker-js/faker';
+import {
+  MarkdownRenderer
+} from "obsidian";
+import React,{useRef,useLayoutEffect} from 'react';
 import { randomColor } from 'cross/Colors';
 import { DataTypes } from 'cross/Constants';
 import {TableDataType, TableColumns, TableRows} from 'cdm/FolderModel';
@@ -22,6 +26,22 @@ export function makeData(count:number):TableDataType {
         minWidth: 100,
         dataType: DataTypes.TEXT,
         options: options,
+        Cell: ({ cell }:any) => {
+          const { value } = cell;
+          const containerRef = useRef<HTMLElement>();
+          console.log("containerRef: "+containerRef);
+          useLayoutEffect(() => {
+            console.log(containerRef); // { current: <DIV_object> }
+            MarkdownRenderer.renderMarkdown(
+              '[[readme]]',
+              containerRef.current,
+              'readme.md',
+              null
+            );
+          })
+          
+          return <span ref={containerRef}></span>;
+        }
       },
       {
         Header: 'Status',

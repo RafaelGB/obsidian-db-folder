@@ -66,7 +66,7 @@ export function Table(properties: TableProperties){
   /** Rows information */
   const sourceData: TableRows = properties.data;
   /** Rows showed information */
-  const data = React.useMemo(() => filterDataWithcolumHeaders(sourceData,columns.map(column => column.Header)), []);
+  const data = React.useMemo(() => filterDataWithcolumnHeaders(sourceData,columns.map(column => column.Header)), []);
   let propsUseTable:any = {columns, data};
   /** Hook to use react-table */
   const {
@@ -102,7 +102,7 @@ export function Table(properties: TableProperties){
   );
 }
 
-function filterDataWithcolumHeaders(data:TableRows,columnHeaders:string[]): TableRows{
+function filterDataWithcolumnHeaders(data:TableRows,columnHeaders:string[]): TableRows{
   let filterData:TableRows = [];
   let id:number = 0;
   data.forEach(row => {
