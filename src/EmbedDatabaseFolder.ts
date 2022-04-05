@@ -7,7 +7,7 @@ import {
 import { TableDataType } from 'cdm/FolderModel';
 
 import { 
-	Settings
+	DatabaseSettings
 } from 'Settings';
 
 import {
@@ -30,7 +30,7 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         public container: HTMLElement,
         public db_yaml: any,
         public sourcePath: string,
-        public settings: Settings,
+        public settings: DatabaseSettings,
         public app: App
     ) {
         super(container);

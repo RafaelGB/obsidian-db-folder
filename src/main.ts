@@ -1,10 +1,11 @@
 import {
-	Notice,
+	WorkspaceLeaf,
 	Plugin,
 	Component,
 	MarkdownPostProcessorContext,
 	TFolder,
-	TFile
+	TFile,
+	ViewState
 } from 'obsidian';
 
 import{
@@ -15,7 +16,7 @@ import{
 
 import {
 	DEFAULT_SETTINGS,
-	Settings,
+	DatabaseSettings,
 	DBFolderSettingTab
 } from 'Settings';
 
@@ -43,14 +44,21 @@ import {
 	DbFolderError
 } from 'errors/AbstractError';
 import { basicFrontmatter } from 'parsers/DatabaseParser';
+import { StateManager } from 'StateManager';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
-	public settings: Settings;
+	public settings: DatabaseSettings;
 
 	/** External-facing plugin API */
 	public api: DbfAPIInterface;
 
+	databaseFileModes: Record<string, string> = {};
+
+	viewMap: Map<string, DatabaseView> = new Map();
+
+	stateManagers: Map<TFile, StateManager> = new Map();
+	
 	async onload(): Promise<void> {
 		await this.load_settings();
 
@@ -72,7 +80,7 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	/** Update plugin settings. */
-	async updateSettings(settings: Partial<Settings>) {
+	async updateSettings(settings: Partial<DatabaseSettings>) {
 		Object.assign(this.settings, settings);
 		await this.saveData(this.settings);
 	}
@@ -124,6 +132,69 @@ export default class DBFolderPlugin extends Plugin {
 					console.error(e);
 			}
 		}
+	}
+
+	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
+
+	addView(view: DatabaseView, data: string, shouldParseData: boolean) {
+		if (!this.viewMap.has(view.id)) {
+		  this.viewMap.set(view.id, view);
+		}
+	
+		const file = view.file;
+	
+		if (this.stateManagers.has(file)) {
+		  this.stateManagers.get(file).registerView(view, data, shouldParseData);
+		} else {
+		  this.stateManagers.set(
+			file,
+			new StateManager(
+			  this.app,
+			  view,
+			  data,
+			  () => this.stateManagers.delete(file),
+			  () => this.settings
+			)
+		  );
+		}
+	
+		this.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews()));
+	  }
+
+	getStateManager(file: TFile) {
+		return this.stateManagers.get(file);
+	}
+
+	removeView(view: DatabaseView) {
+		const file = view.file;
+	
+		if (this.viewMap.has(view.id)) {
+		  this.viewMap.delete(view.id);
+		}
+	
+		if (this.stateManagers.has(file)) {
+		  this.stateManagers.get(file).unregisterView(view);
+		  this.viewStateReceivers.forEach((fn:any) => fn(this.getDatabaseViews()));
+		}
+	  }
+
+	async setMarkdownView(leaf: WorkspaceLeaf, focus: boolean = true) {
+		await leaf.setViewState(
+		  {
+			type: 'markdown',
+			state: leaf.view.getState(),
+			popstate: true,
+		  } as ViewState,
+		  { focus }
+		);
+	}
+
+	getDatabaseViews() {
+	return Array.from(this.viewMap.values());
+	}
+
+	getDatabaseView(id: string) {
+	return this.viewMap.get(id);
 	}
 
 	async newDatabase(folder?: TFolder) {

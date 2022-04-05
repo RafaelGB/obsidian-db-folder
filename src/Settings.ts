@@ -3,11 +3,11 @@ import { add_toggle} from 'components/SettingsComponents';
 import DBFolderPlugin from 'main';
 
 
-export interface Settings {
+export interface DatabaseSettings {
     enable_debug_mode: boolean;
 }
 
-export const DEFAULT_SETTINGS: Settings = {
+export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
 };
 

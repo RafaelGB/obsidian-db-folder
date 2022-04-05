@@ -3,11 +3,10 @@ import DBFolderPlugin from 'main';
 import {
     HoverParent,
     HoverPopover,
-    Menu,
-    TFile,
     TextFileView,
     WorkspaceLeaf,
   } from 'obsidian';
+import { hasFrontmatterKey } from 'parsers/DatabaseParser';
 
 export const databaseViewType = 'database-view';
 export const databaseIcon = 'blocks';
@@ -30,12 +29,29 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     setViewData(data: string, clear: boolean): void {
-        // TODO
-        throw new Error('Method not implemented.');
+        if (!hasFrontmatterKey(data)) {
+            this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
+              'markdown';
+            this.plugin.removeView(this);
+            this.plugin.setMarkdownView(this.leaf, false);
+      
+            return;
+          }
+      
+          this.plugin.addView(this, data, !clear && this.isPrimary);
     }
 
     getViewType(): string {
         return databaseViewType;
+    }
+
+    get id(): string {
+        // TODO define id on workfleaf
+        return `${(this.leaf as any).id}:::${this.file?.path}`;
+    }
+
+    get isPrimary(): boolean {
+        return this.plugin.getStateManager(this.file)?.getAView() === this;
     }
 
     clear(): void {
