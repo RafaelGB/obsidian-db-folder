@@ -1,4 +1,4 @@
-import { AbstractHandler } from 'parse/handlers/AbstractHandler';
+import { AbstractHandler } from 'parsers/handlers/AbstractHandler';
 import { App, normalizePath } from "obsidian";
 export class FolderHandler extends AbstractHandler {
     handlerName: string = 'folder';

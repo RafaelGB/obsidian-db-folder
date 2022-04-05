@@ -2,8 +2,16 @@ import {
 	Notice,
 	Plugin,
 	Component,
-	MarkdownPostProcessorContext
+	MarkdownPostProcessorContext,
+	TFolder,
+	TFile
 } from 'obsidian';
+
+import{
+	databaseViewType,
+	DatabaseView,
+	databaseIcon
+} from 'DatabaseView';
 
 import {
 	DEFAULT_SETTINGS,
@@ -25,15 +33,16 @@ import {
 
 import {
 	parseDatabase
-} from 'parse/Parser';
+} from 'parsers/YamlParser';
 
 import {
 	DatabaseType
-} from 'parse/handlers/TypeHandler';
+} from 'parsers/handlers/TypeHandler';
 
 import {
 	DbFolderError
 } from 'errors/AbstractError';
+import { basicFrontmatter } from 'parsers/DatabaseParser';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -45,12 +54,6 @@ export default class DBFolderPlugin extends Plugin {
 	async onload(): Promise<void> {
 		await this.load_settings();
 
-		// This creates an icon in the left ribbon.
-		let ribbonIconEl = this.addRibbonIcon('dice', 'DBFolder Plugin', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
-		});
-
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new DBFolderSettingTab(this.app, this));
 		
@@ -59,6 +62,8 @@ export default class DBFolderPlugin extends Plugin {
 			this.dbfolder(source, el, ctx, ctx.sourcePath)
 		);
 
+		this.registerView(databaseViewType, (leaf) => new DatabaseView(leaf, this));
+		this.registerEvents();
 		this.api = new DBFolderAPI(this.app, this.settings);
 	}
 
@@ -119,5 +124,43 @@ export default class DBFolderPlugin extends Plugin {
 					console.error(e);
 			}
 		}
+	}
+
+	async newDatabase(folder?: TFolder) {
+		const targetFolder = folder
+		  ? folder
+		  : this.app.fileManager.getNewFileParent(
+			  this.app.workspace.getActiveFile()?.path || ''
+			);
+	
+		try {
+		  const database: TFile = await (
+			this.app.fileManager as any
+		  ).createNewMarkdownFile(targetFolder, 'Untitled Kanban');
+	
+		  await this.app.vault.modify(database, basicFrontmatter);
+		  await this.app.workspace.activeLeaf.setViewState({
+			type: databaseViewType,
+			state: { file: database.path },
+		  });
+		} catch (e) {
+		  console.error('Error creating database folder:', e);
+		}
+	}
+
+	registerEvents() {
+		this.registerEvent(
+		  this.app.workspace.on('file-menu', (menu, file: TFile) => {
+			// Add a menu item to the folder context menu to create a board
+			if (file instanceof TFolder) {
+			  menu.addItem((item) => {
+				item
+				  .setTitle('New database folder')
+				  .setIcon(databaseIcon)
+				  .onClick(() => this.newDatabase(file));
+			  });
+			}
+		  })
+		);
 	}
 }

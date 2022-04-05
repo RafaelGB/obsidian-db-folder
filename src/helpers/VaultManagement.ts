@@ -1,4 +1,4 @@
-import { App, parseLinktext } from "obsidian";
+import { App } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
 import { getAPI } from "obsidian-dataview"
