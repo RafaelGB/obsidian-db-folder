@@ -8,6 +8,8 @@ import {
     TFile
   } from 'obsidian';
 import { hasFrontmatterKey } from 'parsers/DatabaseParser';
+import * as React from "react";
+import ReactDOM from 'react-dom';
 
 export const databaseViewType = 'database-view';
 export const databaseIcon = 'blocks';
@@ -56,6 +58,12 @@ export class DatabaseView extends TextFileView implements HoverParent {
         return this.plugin.getStateManager(this.file)?.getAView() === this;
     }
 
+    initDatabase(): void {
+        // Lab
+        const tableContainer  = this.containerEl.createDiv("dbfolder-table-container");
+        ReactDOM.render(<h1>Esto es una prueba</h1>, tableContainer);
+    }
+    
     destroy() {
         // Remove draggables from render, as the DOM has already detached
         this.plugin.removeView(this);

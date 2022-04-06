@@ -249,6 +249,9 @@ export default class DBFolderPlugin extends Plugin {
 		);
 	}
 
+	/**
+	 * Wrap Obsidian functionalities to add the database support needed
+	 */
 	registerMonkeyPatches() {
 		const self = this;
 	
@@ -298,11 +301,11 @@ export default class DBFolderPlugin extends Plugin {
 				  // And the current mode of the file is not set to markdown
 				  self.databaseFileModes[this.id || state.state.file] !== 'markdown'
 				) {
-				  // Then check for the kanban frontMatterKey
+				  // Then check for the database frontMatterKey
 				  const cache = self.app.metadataCache.getCache(state.state.file);
 	
 				  if (cache?.frontmatter && cache.frontmatter[frontMatterKey]) {
-					// If we have it, force the view type to kanban
+					// If we have it, force the view type to database
 					const newState = {
 					  ...state,
 					  type: databaseViewType,
@@ -341,7 +344,7 @@ export default class DBFolderPlugin extends Plugin {
 				menu
 				  .addItem((item) => {
 					item
-					  .setTitle('Open as kanban board')
+					  .setTitle('Open as database folder')
 					  .setIcon(databaseIcon)
 					  .onClick(() => {
 						self.databaseFileModes[this.leaf.id || file.path] =

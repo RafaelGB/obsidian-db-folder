@@ -28,6 +28,7 @@ export class StateManager {
       registerView(view: DatabaseView, data: string, shouldParseData: boolean) {
         if (!this.viewSet.has(view)) {
           this.viewSet.add(view);
+          view.initDatabase();
         }
       }
 
