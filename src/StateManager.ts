@@ -44,6 +44,4 @@ export class StateManager {
     getAView(): DatabaseView {
         return this.viewSet.values().next().value;
     }
-
-
 }

@@ -5,6 +5,7 @@ import {
     HoverPopover,
     TextFileView,
     WorkspaceLeaf,
+    TFile
   } from 'obsidian';
 import { hasFrontmatterKey } from 'parsers/DatabaseParser';
 
@@ -14,6 +15,7 @@ export const databaseIcon = 'blocks';
 export class DatabaseView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
     hoverPopover: HoverPopover | null;
+    actionButtons: Record<string, HTMLElement> = {};
     
     constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
         super(leaf);
@@ -53,6 +55,33 @@ export class DatabaseView extends TextFileView implements HoverParent {
     get isPrimary(): boolean {
         return this.plugin.getStateManager(this.file)?.getAView() === this;
     }
+
+    destroy() {
+        // Remove draggables from render, as the DOM has already detached
+        this.plugin.removeView(this);
+    
+        Object.values(this.actionButtons).forEach((b) => b.remove());
+        this.actionButtons = {};
+      }
+    
+      async onClose() {
+        this.destroy();
+      }
+    
+      async onUnloadFile(file: TFile) {
+        this.destroy();
+        return await super.onUnloadFile(file);
+      }
+
+    async onLoadFile(file: TFile) {
+        console.log(`onLoadFile: ${file.path}`);
+        try {
+          return await super.onLoadFile(file);
+        } catch (e) {
+          const stateManager = this.plugin.stateManagers.get(this.file);    
+          throw e;
+        }
+      }
 
     clear(): void {
         /*
