@@ -1,3 +1,7 @@
+import { TableDataType } from 'cdm/FolderModel';
+import { obtainColumnsFromFolder } from 'components/Columns';
+import { createTable } from 'components/Index';
+import { adapterTFilesToRows } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
 
 import {
@@ -58,10 +62,21 @@ export class DatabaseView extends TextFileView implements HoverParent {
         return this.plugin.getStateManager(this.file)?.getAView() === this;
     }
 
-    initDatabase(): void {
+    async initDatabase(): Promise<void> {
         // Lab
+        let yamlFrontmatter = this.app.metadataCache.getFileCache(this.file).frontmatter?.frontmatter || {};
+        console.log(yamlFrontmatter);
+        let folder = this.file.path.split('/').slice(0, -1).join('/');
+        let columns = obtainColumnsFromFolder();
+        let rows = await adapterTFilesToRows(this.app,folder);
+        const tableProps:TableDataType = { // make sure all required component's inputs/Props keys&types match
+          columns: columns,
+          data: rows,
+          skipReset: false
+        }
+      let table = createTable(tableProps,this.app);
         const tableContainer  = this.containerEl.createDiv("dbfolder-table-container");
-        ReactDOM.render(<h1>Esto es una prueba</h1>, tableContainer);
+        ReactDOM.render(table, tableContainer);
     }
     
     destroy() {

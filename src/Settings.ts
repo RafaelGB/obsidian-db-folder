@@ -11,6 +11,21 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
 };
 
+export type SettingRetriever = <K extends keyof DatabaseSettings>(
+    key: K,
+    supplied?: DatabaseSettings
+  ) => DatabaseSettings[K];
+  
+  export interface SettingRetrievers {
+    getGlobalSettings: () => DatabaseSettings;
+    getGlobalSetting: SettingRetriever;
+    getSetting: SettingRetriever;
+  }
+  
+  export interface SettingsManagerConfig {
+    onSettingsChange: (newSettings: DatabaseSettings) => void;
+  }
+
 export class DBFolderSettingTab extends PluginSettingTab {
 
 	constructor(public app: App, private plugin: DBFolderPlugin) {

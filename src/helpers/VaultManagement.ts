@@ -2,9 +2,10 @@ import { App } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
 import { getAPI } from "obsidian-dataview"
+import { Log } from "services/Logger";
 
 export async function adapterTFilesToRows(app: App, folderPath: string): Promise<TableRows> {
-    console.log("=> adapterTFilesToRows.  folderPath:",folderPath);
+    Log.getInstance().debug("=> adapterTFilesToRows.  folderPath:",folderPath);
     const rows: TableRows = [];
     let id = 0;
     await Promise.all(app.vault.getFiles().map(async (file) => {
@@ -24,6 +25,6 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
             rows.push(aFile);
         }
     }));
-    console.log("<= adapterTFilesToRows.  rows:",rows);
+    Log.getInstance().debug("<= adapterTFilesToRows.  number of rows:",rows.length);
     return rows;
 }
