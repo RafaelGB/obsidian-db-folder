@@ -5,12 +5,10 @@ export interface LogInterface{
     error(primaryMessage: string, ...supportingData: any[]):void;
 }
 
-export class Log implements LogInterface{
+class Log implements LogInterface{
     private static instance: LogInterface;
     private isDebugModeEnabled: boolean = false;
-    private constructor() { 
-        console.log("Logger created");
-    }
+    private constructor() {}
 
     public debug(primaryMessage: string, ...supportingData: any[]){
         this.emitLogMessage("debug", primaryMessage, ...supportingData);
@@ -50,3 +48,5 @@ export class Log implements LogInterface{
         }
     }
 }
+
+export const LOGGER = Log.getInstance();

@@ -1,4 +1,6 @@
+import { DatabaseView } from "DatabaseView";
 import { Link } from "obsidian-dataview";
+import { StateManager } from "StateManager";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -52,8 +54,10 @@ export type TableRows = Array<TableRow>;
 
 export type TableColumns = Array<TableColumn>;
 
-export type TableDataType = {
+export type TableDataType={
     columns: TableColumns, 
     data: TableRows, 
-    skipReset: boolean
-};
+    skipReset: boolean,
+    view?: DatabaseView,
+    stateManager?: StateManager
+}

@@ -11,7 +11,6 @@ import {
 } from 'obsidian';
 
 import{
-	databaseViewType,
 	DatabaseView,
 	databaseIcon
 } from 'DatabaseView';
@@ -75,7 +74,7 @@ export default class DBFolderPlugin extends Plugin {
 			this.dbfolder(source, el, ctx, ctx.sourcePath)
 		);
 
-		this.registerView(databaseViewType, (leaf) => new DatabaseView(leaf, this));
+		this.registerView(frontMatterKey, (leaf) => new DatabaseView(leaf, this));
 		this.registerEvents();
 		this.registerMonkeyPatches();
 		this.api = new DBFolderAPI(this.app, this.settings);
@@ -142,7 +141,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	async setDatabaseView(leaf: WorkspaceLeaf) {
 		await leaf.setViewState({
-		  type: databaseViewType,
+		  type: frontMatterKey,
 		  state: leaf.view.getState(),
 		  popstate: true,
 		} as ViewState);
@@ -225,7 +224,7 @@ export default class DBFolderPlugin extends Plugin {
 	
 		  await this.app.vault.modify(database, basicFrontmatter);
 		  await this.app.workspace.activeLeaf.setViewState({
-			type: databaseViewType,
+			type: frontMatterKey,
 			state: { file: database.path },
 		  });
 		} catch (e) {
@@ -308,10 +307,10 @@ export default class DBFolderPlugin extends Plugin {
 					// If we have it, force the view type to database
 					const newState = {
 					  ...state,
-					  type: databaseViewType,
+					  type: frontMatterKey,
 					};
 	
-					self.databaseFileModes[state.state.file] = databaseViewType;
+					self.databaseFileModes[state.state.file] = frontMatterKey;
 	
 					return next.apply(this, [newState, ...rest]);
 				  }
@@ -348,7 +347,7 @@ export default class DBFolderPlugin extends Plugin {
 					  .setIcon(databaseIcon)
 					  .onClick(() => {
 						self.databaseFileModes[this.leaf.id || file.path] =
-						databaseViewType;
+						frontMatterKey;
 						self.setDatabaseView(this.leaf);
 					  });
 				  })

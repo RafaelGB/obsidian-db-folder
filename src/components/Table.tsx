@@ -6,6 +6,11 @@ import {
   TableRow 
 } from "cdm/FolderModel";
 import {makeData } from 'mock/mockUtils';
+import { frontMatterKey } from "parsers/DatabaseParser";
+import { TFile } from "obsidian";
+import { DatabaseView } from "DatabaseView";
+import { StateManager } from "StateManager";
+import { getNormalizedPath } from "helpers/VaultManagement";
 
 const borderStyle = {
   border: "1px solid gray",
@@ -73,9 +78,83 @@ export function Table(properties: TableDataType){
   const columns = properties.columns;
   /** Rows information */
   const sourceData: TableRows = properties.data;
+  /**   */
+  const view:DatabaseView = properties.view;
+  const stateManager:StateManager = properties.stateManager;
+  const filePath = stateManager.file.path;
+
   /** Rows showed information */
   const data = React.useMemo(() => filterDataWithcolumnHeaders(sourceData,columns.map(column => column.Header)), []);
   let propsUseTable:any = {columns, data};
+  /** Obsidian hooks to markdown events */
+  const onMouseOver = React.useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      
+      const targetEl = e.target as HTMLElement;
+      if (targetEl.tagName !== 'A' || !view) return;
+
+      if (targetEl.hasClass('internal-link')) {
+        view.app.workspace.trigger('hover-link', {
+          event: e.nativeEvent,
+          source: frontMatterKey,
+          hoverParent: view,
+          targetEl,
+          linktext: targetEl.getAttr('href'),
+          sourcePath: view.file.path,
+        });
+      }
+    },
+    [view]
+  );
+
+  const onClick = React.useCallback(
+    async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (e.type === 'auxclick' && e.button == 2) {
+        return;
+      }
+
+      const targetEl = e.target as HTMLElement;
+      const closestAnchor =
+        targetEl.tagName === 'A' ? targetEl : targetEl.closest('a');
+
+      if (!closestAnchor) return;
+
+      if (closestAnchor.hasClass('file-link')) {
+        e.preventDefault();
+        const href = closestAnchor.getAttribute('href');
+        const normalizedPath = getNormalizedPath(href);
+        const target =
+          typeof href === 'string' &&
+          view.app.metadataCache.getFirstLinkpathDest(
+            normalizedPath.root,
+            view.file.path
+          );
+
+        if (!target) return;
+
+        (stateManager.app as any).openWithDefaultApp(target.path);
+
+        return;
+      }
+
+      // Open an internal link in a new pane
+      if (closestAnchor.hasClass('internal-link')) {
+        e.preventDefault();
+        const destination = closestAnchor.getAttr('href');
+        const inNewLeaf = e.button === 1 || e.ctrlKey || e.metaKey;
+        const isUnresolved = closestAnchor.hasClass('is-unresolved');
+
+        stateManager.app.workspace.openLinkText(
+          destination,
+          filePath,
+          inNewLeaf
+        );
+
+        return;
+      }
+    },
+    [stateManager, filePath]
+  );
   /** Hook to use react-table */
   const {
     getTableProps,
@@ -88,7 +167,10 @@ export function Table(properties: TableDataType){
   });
 /** return table structure */
   return (
-    <table {...getTableProps()}>
+    <table 
+    onMouseOver={onMouseOver}
+    onClick={onClick}
+    {...getTableProps()}>
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>

@@ -2,13 +2,13 @@ import { DatabaseView } from "DatabaseView";
 import { App, TFile, moment } from 'obsidian';
 import { DatabaseSettings } from 'Settings';
 export class StateManager {
-    private app: App;
-    private file: TFile;
     private onEmpty: () => void;
     private getGlobalSettings: () => DatabaseSettings;
     //private parser: BaseFormat;
     private viewSet: Set<DatabaseView> = new Set();
 
+    public app: App;
+    public file: TFile;
     constructor(
         app: App,
         initialView: DatabaseView,

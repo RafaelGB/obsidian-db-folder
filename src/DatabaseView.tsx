@@ -11,11 +11,10 @@ import {
     WorkspaceLeaf,
     TFile
   } from 'obsidian';
-import { hasFrontmatterKey } from 'parsers/DatabaseParser';
+import { frontMatterKey, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
-
-export const databaseViewType = 'database-view';
+import { StateManager } from 'StateManager';
 export const databaseIcon = 'blocks';
 
 export class DatabaseView extends TextFileView implements HoverParent {
@@ -50,9 +49,12 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     getViewType(): string {
-        return databaseViewType;
+        return frontMatterKey;
     }
 
+    getStateManager(): StateManager {
+        return this.plugin.getStateManager(this.file);
+    }
     get id(): string {
         // TODO define id on workfleaf
         return `${(this.leaf as any).id}:::${this.file?.path}`;
@@ -72,10 +74,13 @@ export class DatabaseView extends TextFileView implements HoverParent {
         const tableProps:TableDataType = { // make sure all required component's inputs/Props keys&types match
           columns: columns,
           data: rows,
-          skipReset: false
+          skipReset: false,
+          view: this,
+          stateManager: this.plugin.getStateManager(this.file)
         }
       let table = createTable(tableProps,this.app);
-        const tableContainer  = this.containerEl.createDiv("dbfolder-table-container");
+
+        const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
         ReactDOM.render(table, tableContainer);
     }
     
