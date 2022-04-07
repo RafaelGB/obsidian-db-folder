@@ -14,6 +14,7 @@ import {
 import { frontMatterKey, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
+import { LOGGER } from 'services/Logger';
 import { StateManager } from 'StateManager';
 export const databaseIcon = 'blocks';
 
@@ -65,23 +66,23 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     async initDatabase(): Promise<void> {
-        // Lab
-        let yamlFrontmatter = this.app.metadataCache.getFileCache(this.file).frontmatter?.frontmatter || {};
-        console.log(yamlFrontmatter);
+        let yamlFrontmatter = this.app.metadataCache.getFileCache(this.file).frontmatter || {};
+        LOGGER.debug(`=>initDatabaseyaml ${this.file.path}`,`Frontmatter: ${JSON.stringify(yamlFrontmatter)}`);
         let folder = this.file.path.split('/').slice(0, -1).join('/');
+        // TODO use yaml to get the columns
         let columns = obtainColumnsFromFolder();
         let rows = await adapterTFilesToRows(this.app,folder);
-        const tableProps:TableDataType = { // make sure all required component's inputs/Props keys&types match
+        const tableProps:TableDataType = {
           columns: columns,
           data: rows,
           skipReset: false,
           view: this,
           stateManager: this.plugin.getStateManager(this.file)
         }
-      let table = createTable(tableProps,this.app);
-
+        let table = createTable(tableProps,this.app);
         const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
         ReactDOM.render(table, tableContainer);
+        LOGGER.debug(`<=initDatabaseyaml ${this.file.path}`);
     }
     
     destroy() {

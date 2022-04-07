@@ -58,7 +58,9 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
             data: rows,
             skipReset: false
           }
-        let table = createTable(tableProps,this.app);
-        ReactDOM.render(table, tableContainer);
+          // TODO a futuro implementar la base de datos embebida
+        //let table = createTable(tableProps,this.app);
+
+       // ReactDOM.render(table, tableContainer);
     }
 }
