@@ -50,14 +50,14 @@ export class DBFolderListRenderer extends MarkdownRenderChild {
         // Add a table to the container
         const tableContainer  = this.container.createDiv("dbfolder-embed-table-container");
         let folder = this.db_yaml.folder;
-        let columns = obtainColumnsFromFolder();
+        //let columns = obtainColumnsFromFolder();
         // Obtain rows from file notes inside the folder selected
         let rows = await adapterTFilesToRows(this.app,folder);
-        const tableProps:TableDataType = { // make sure all required component's inputs/Props keys&types match
-            columns: columns,
-            data: rows,
-            skipReset: false
-          }
+        // const tableProps:TableDataType = { // make sure all required component's inputs/Props keys&types match
+        //     columns: columns,
+        //     data: rows,
+        //     skipReset: false
+        //   }
           // TODO a futuro implementar la base de datos embebida
         //let table = createTable(tableProps,this.app);
 

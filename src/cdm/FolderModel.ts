@@ -35,12 +35,12 @@ export type ColumnOptions = {
 
 export type TableColumn = {
     Header: string,
-    label: string,
+    label?: string,
     accessor: string,
     minWidth?: number,
     width?:number
-    dataType: string,
-    options: ColumnOptions[]
+    dataType?: string,
+    options?: ColumnOptions[]
     Cell?: any
 }
 
@@ -60,4 +60,23 @@ export type TableDataType={
     skipReset: boolean,
     view?: DatabaseView,
     stateManager?: StateManager
+}
+/** database column */
+export type DatabaseColumn = {
+    input: string,
+    header: string,
+    accessor: string,
+    [key: string]: string
+}
+export type DatabaseColumns = {
+    [key: string]: DatabaseColumn
+}
+/** database yaml */
+export type DatabaseYaml = {
+    /** database name */
+    name: string,
+    /** database description */
+    description: string,
+    /** database columns */
+    columns: DatabaseColumns
 }

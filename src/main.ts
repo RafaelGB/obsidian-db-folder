@@ -35,7 +35,7 @@ import {
 
 import {
 	parseDatabase
-} from 'parsers/YamlParser';
+} from 'parsers/EmbedYamlParser';
 
 import {
 	DatabaseType

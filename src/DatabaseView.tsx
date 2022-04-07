@@ -1,7 +1,7 @@
 import { TableDataType } from 'cdm/FolderModel';
 import { obtainColumnsFromFolder } from 'components/Columns';
 import { createTable } from 'components/Index';
-import { adapterTFilesToRows } from 'helpers/VaultManagement';
+import { adapterTFilesToRows, obtainContentFromTfile } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
 
 import {
@@ -66,11 +66,9 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     async initDatabase(): Promise<void> {
-        let yamlFrontmatter = this.app.metadataCache.getFileCache(this.file).frontmatter || {};
-        LOGGER.debug(`=>initDatabaseyaml ${this.file.path}`,`Frontmatter: ${JSON.stringify(yamlFrontmatter)}`);
-        let folder = this.file.path.split('/').slice(0, -1).join('/');
         // TODO use yaml to get the columns
-        let columns = obtainColumnsFromFolder();
+        let columns = await obtainColumnsFromFolder(this.file);
+        let folder = this.file.path.split('/').slice(0, -1).join('/');
         let rows = await adapterTFilesToRows(this.app,folder);
         const tableProps:TableDataType = {
           columns: columns,
