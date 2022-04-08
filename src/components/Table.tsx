@@ -197,7 +197,8 @@ function filterDataWithcolumnHeaders(data:TableRows,columnHeaders:string[]): Tab
   let id:number = 0;
   data.forEach(row => {
     let newRow:TableRow={
-      id: ++id
+      id: ++id,
+      title:row.title
     };
     columnHeaders.forEach(columnHeader => {
       newRow[columnHeader] = row[columnHeader] ? row[columnHeader] : '';

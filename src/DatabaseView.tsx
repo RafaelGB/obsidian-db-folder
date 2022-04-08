@@ -9,7 +9,8 @@ import {
     HoverPopover,
     TextFileView,
     WorkspaceLeaf,
-    TFile
+    TFile,
+    Menu
   } from 'obsidian';
 import { frontMatterKey, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
@@ -63,6 +64,53 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
     get isPrimary(): boolean {
         return this.plugin.getStateManager(this.file)?.getAView() === this;
+    }
+
+    onMoreOptionsMenu(menu: Menu) {
+      // Add a menu item to force the board to markdown view
+      menu
+        .addItem((item) => {
+          item
+            .setTitle('Open as markdown')
+            .setIcon('document')
+            .onClick(() => {
+              this.plugin.databaseFileModes[
+                (this.leaf as any).id || this.file.path
+              ] = 'markdown';
+              this.plugin.setMarkdownView(this.leaf);
+            });
+        })
+        .addItem((item) => {
+          item
+            .setTitle('Open database settings')
+            .setIcon('gear')
+            .onClick(() => {
+              const stateManager = this.plugin.stateManagers.get(this.file);
+              // const board = stateManager.state;
+  
+              // new SettingsModal(
+              //   this,
+              //   {
+              //     onSettingsChange: (settings) => {
+              //       const updatedBoard = update(board, {
+              //         data: {
+              //           settings: {
+              //             $set: settings,
+              //           },
+              //         },
+              //       });
+  
+              //       // Save to disk, compute text of new board
+              //       stateManager.setState(updatedBoard);
+              //     },
+              //   },
+              //   board.data.settings
+              // ).open();
+            });
+        })
+        .addSeparator();
+  
+      super.onMoreOptionsMenu(menu);
     }
 
     async initDatabase(): Promise<void> {
