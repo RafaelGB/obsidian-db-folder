@@ -2,7 +2,7 @@ import {
   MarkdownRenderer, parseYaml, TFile
 } from "obsidian";
 import React,{useRef,useLayoutEffect} from 'react';
-import { DataTypes } from 'helpers/Constants';
+import { DataTypes } from 'services/Constants';
 import {DatabaseColumn, TableColumn, TableColumns} from 'cdm/FolderModel';
 import { randomColor } from 'helpers/Colors';
 import { obtainContentFromTfile } from "helpers/VaultManagement";

@@ -56,7 +56,7 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
                 aFile[property] = value;
             }
         });
-        console.log(`aFile:${JSON.stringify(aFile)}`);
+        LOGGER.debug(`Push row ${aFile.id}:${JSON.stringify(aFile)}`);
         rows.push(aFile);
     }));
     LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);

@@ -47,6 +47,7 @@ export type TableColumn = {
 export type RowType = number | string | boolean | Date | Link;
 export type TableRow = {
     id: number,
+    title: string,
     [key: string]: RowType
 }
 

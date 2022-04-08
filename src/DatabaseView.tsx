@@ -66,7 +66,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     async initDatabase(): Promise<void> {
-        // TODO use yaml to get the columns
+      LOGGER.debug(`=>initDatabase ${this.file.path}`);
         let columns = await obtainColumnsFromFolder(this.file);
         let folder = this.file.path.split('/').slice(0, -1).join('/');
         let rows = await adapterTFilesToRows(this.app,folder);
@@ -80,7 +80,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         let table = createTable(tableProps,this.app);
         const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
         ReactDOM.render(table, tableContainer);
-        LOGGER.debug(`<=initDatabaseyaml ${this.file.path}`);
+        LOGGER.debug(`<=initDatabase ${this.file.path}`);
     }
     
     destroy() {

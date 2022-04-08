@@ -4,7 +4,7 @@ import {
 } from "obsidian";
 import React,{useRef,useLayoutEffect} from 'react';
 import { randomColor } from 'helpers/Colors';
-import { DataTypes } from 'helpers/Constants';
+import { DataTypes } from 'services/Constants';
 import {TableDataType, TableColumns, TableRows} from 'cdm/FolderModel';
 export function makeData(count:number):TableDataType {
     const data:TableRows = [];
