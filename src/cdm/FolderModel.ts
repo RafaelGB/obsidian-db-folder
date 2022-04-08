@@ -1,4 +1,6 @@
+import { DatabaseView } from "DatabaseView";
 import { Link } from "obsidian-dataview";
+import { StateManager } from "StateManager";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -33,18 +35,19 @@ export type ColumnOptions = {
 
 export type TableColumn = {
     Header: string,
-    label: string,
+    label?: string,
     accessor: string,
     minWidth?: number,
     width?:number
-    dataType: string,
-    options: ColumnOptions[]
+    dataType?: string,
+    options?: ColumnOptions[]
     Cell?: any
 }
 
 export type RowType = number | string | boolean | Date | Link;
 export type TableRow = {
     id: number,
+    title: string,
     [key: string]: RowType
 }
 
@@ -52,8 +55,29 @@ export type TableRows = Array<TableRow>;
 
 export type TableColumns = Array<TableColumn>;
 
-export type TableDataType = {
+export type TableDataType={
     columns: TableColumns, 
     data: TableRows, 
-    skipReset: boolean
-};
+    skipReset: boolean,
+    view?: DatabaseView,
+    stateManager?: StateManager
+}
+/** database column */
+export type DatabaseColumn = {
+    input: string,
+    header: string,
+    accessor: string,
+    [key: string]: string
+}
+export type DatabaseColumns = {
+    [key: string]: DatabaseColumn
+}
+/** database yaml */
+export type DatabaseYaml = {
+    /** database name */
+    name: string,
+    /** database description */
+    description: string,
+    /** database columns */
+    columns: DatabaseColumns
+}

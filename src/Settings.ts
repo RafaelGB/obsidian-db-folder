@@ -3,13 +3,28 @@ import { add_toggle} from 'components/SettingsComponents';
 import DBFolderPlugin from 'main';
 
 
-export interface Settings {
+export interface DatabaseSettings {
     enable_debug_mode: boolean;
 }
 
-export const DEFAULT_SETTINGS: Settings = {
+export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
 };
+
+export type SettingRetriever = <K extends keyof DatabaseSettings>(
+    key: K,
+    supplied?: DatabaseSettings
+  ) => DatabaseSettings[K];
+  
+  export interface SettingRetrievers {
+    getGlobalSettings: () => DatabaseSettings;
+    getGlobalSetting: SettingRetriever;
+    getSetting: SettingRetriever;
+  }
+  
+  export interface SettingsManagerConfig {
+    onSettingsChange: (newSettings: DatabaseSettings) => void;
+  }
 
 export class DBFolderSettingTab extends PluginSettingTab {
 
@@ -44,7 +59,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
         add_toggle(
             this.containerEl,
             "Enable debug mode", 
-            "Opcional. Enables debug mode. This will log all the errors and warnings in the console",
+            "This will log all the errors and warnings in the console",
             this.plugin.settings.enable_debug_mode, 
             debug_togle_promise);
     }

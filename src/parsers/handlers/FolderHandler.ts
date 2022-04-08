@@ -1,7 +1,5 @@
-import { AbstractHandler } from 'parse/handlers/AbstractHandler';
+import { AbstractHandler } from 'parsers/handlers/AbstractHandler';
 import { App, normalizePath } from "obsidian";
-import { obtainCurrentFolder } from "helpers/VaultManagement";
-
 export class FolderHandler extends AbstractHandler {
     handlerName: string = 'folder';
     public handle(yaml: any, app: App): [string, string][] {
@@ -31,17 +29,11 @@ export class FolderHandler extends AbstractHandler {
      * @param folderName 
      */
     checkIfFolderExist(yaml: any, app: App): boolean {
-        let currentFolder = obtainCurrentFolder(app);
-        // obtain folder to check
-        if (!currentFolder) {
-            return false;
-        }
-        let folderToCheck = currentFolder + "/" + yaml.folder;
         // check if folder exists
-        let folder_str = normalizePath(folderToCheck);
+        let folder_str = normalizePath(yaml.folder);
         const folder = app.vault.getAbstractFileByPath(folder_str);
         if (!folder) {
-            this.addError(`Folder ${folderToCheck} does not exist`);
+            this.addError(`Folder ${yaml.folder} does not exist`);
             return false;
         }
         return true;

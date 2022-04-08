@@ -30,15 +30,15 @@
 		"@types/jest": "27.4.1",
 		"eslint": "8.12.0",
 		"jest": "27.5.1",
-		"obsidian": "0.14.3",
-		"obsidian-dataview": "0.5.2",
+		"obsidian": "0.14.4",
+		"obsidian-dataview": "0.5.4",
 		"rollup": "2.70.1",
 		"tslib": "2.3.1",
 		"ts-jest": "27.1.4",
 		"typescript": "4.6.3"
 	},
 	"dependencies": {
-		"@popperjs/core": "2.11.4",
+		"@popperjs/core": "2.11.5",
 		"pkg.json": "2.0.8",
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
@@ -46,11 +46,12 @@
 		"react-contenteditable": "3.3.6",
 		"react-popper": "2.2.5",
 		"react-window": "1.8.6",
+		"monkey-around": "2.3.0",
 		"immutability-helper": "3.1.1",
-		"@faker-js/faker": "6.1.1",
+		"@faker-js/faker": "6.1.2",
 		"@types/react-table": "7.7.10",
 		"@types/react-window": "1.8.5",
-		"@material-ui/core": "4.12.3",
-    	"@material-ui/icons": "4.11.2"
+		"@material-ui/core": "4.12.4",
+    	"@material-ui/icons": "4.11.3"
 	}
 }

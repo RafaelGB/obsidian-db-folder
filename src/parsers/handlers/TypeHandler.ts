@@ -1,4 +1,4 @@
-import {AbstractHandler} from 'parse/handlers/AbstractHandler';
+import {AbstractHandler} from 'parsers/handlers/AbstractHandler';
 import { App } from "obsidian";
 
 /**
@@ -14,9 +14,8 @@ export class TypeHandler extends AbstractHandler {
     public handle(yaml: any, app: App): [string, string][] {
 
         if (!yaml.type) {
-            this.addError('Type is not defined');
-            // handle is ended if type is not defined
-            return this.listOfErrors;
+            // Default type is LIST if not specified
+            yaml.type=DatabaseType.LIST;
         }
 
         if (!DatabaseType.hasOwnProperty(yaml.type)) {

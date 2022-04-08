@@ -1,43 +1,64 @@
-import { App, parseLinktext } from "obsidian";
+import { App, TFile } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { MetaInfoService } from 'services/MetaInfoService';
-import { getAPI } from "obsidian-dataview"
+import { getAPI} from "obsidian-dataview"
+import { LOGGER } from "services/Logger";
+import { frontMatterKey } from "parsers/DatabaseParser";
 
-/**
- * Obtain current folder from active file in Obsidian
- * @param app 
- * @returns 
- */
-export function obtainCurrentFolder(app: App): string {
-    const file = app.workspace.getActiveFile();
-    // obtain folder to check
-    if(!file){
-        return null;
-    }
-    return file.path.split("/").slice(0,-1).join("/")+"/";
+const noBreakSpace = /\u00A0/g;
+interface NormalizedPath {
+    root: string;
+    subpath: string;
+    alias: string;
+  }
+
+export async function obtainContentFromTfile(tfile: TFile): Promise<string> {
+    let content = await app.vault.read(tfile);
+    return content;
 }
+  
+export function getNormalizedPath(path: string): NormalizedPath {
+    const stripped = path.replace(noBreakSpace, ' ').normalize('NFC');
+  
+    // split on first occurance of '|'
+    // "root#subpath##subsubpath|alias with |# chars"
+    //             0            ^        1
+    const splitOnAlias = stripped.split(/\|(.*)/);
+  
+    // split on first occurance of '#' (in substring)
+    // "root#subpath##subsubpath"
+    //   0  ^        1
+    const splitOnHash = splitOnAlias[0].split(/#(.*)/);
+  
+    return {
+      root: splitOnHash[0],
+      subpath: splitOnHash[1] ? '#' + splitOnHash[1] : '',
+      alias: splitOnAlias[1] || '',
+    };
+  }
 
 export async function adapterTFilesToRows(app: App, folderPath: string): Promise<TableRows> {
-    console.log("=> adapterTFilesToRows.  folderPath:",folderPath);
+    LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
     const rows: TableRows = [];
     let id = 0;
-    await Promise.all(app.vault.getFiles().map(async (file) => {
-        if (file.path.startsWith(folderPath)) {
-            // TODO dependency injection of service on future
-            const properties = await MetaInfoService.getInstance(app).getPropertiesInFile(file);
-            const filelink = getAPI(app).fileLink(file.path);
-            /** Mandatory fields */
-            const aFile: TableRow = {
-                id: ++id,
-                title: `${filelink.markdown()}`
-            };
-            /** Optional fields */
-            properties.forEach(property => {
-                aFile[property.key] = property.content;
-            });
-            rows.push(aFile);
-        }
+
+    const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p=>!p[frontMatterKey]);
+    await Promise.all(folderFiles.map(async (page) => {
+        /** Mandatory fields */
+        const aFile: TableRow = {
+            id: ++id,
+            title: `${page.file.link.markdown()}`
+        };
+        /** Optional fields */
+        Object.keys(page).forEach(property => {
+            const value = page[property];
+            if (value && typeof value === 'string') {
+                aFile[property] = value;
+            }
+        });
+        LOGGER.debug(`Push row ${aFile.id}:${JSON.stringify(aFile)}`);
+        rows.push(aFile);
     }));
-    console.log("<= adapterTFilesToRows.  rows:",rows);
+    LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
     return rows;
 }

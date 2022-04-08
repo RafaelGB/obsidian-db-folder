@@ -1,10 +1,13 @@
 import {
-  MarkdownRenderer
+  MarkdownRenderer, parseYaml, TFile
 } from "obsidian";
 import React,{useRef,useLayoutEffect} from 'react';
-import { DataTypes } from 'helpers/Constants';
-import {TableColumns} from 'cdm/FolderModel';
+import { DataTypes } from 'services/Constants';
+import {DatabaseColumn, TableColumn, TableColumns} from 'cdm/FolderModel';
 import { randomColor } from 'helpers/Colors';
+import { obtainContentFromTfile } from "helpers/VaultManagement";
+import { LOGGER } from "services/Logger";
+import { getDatabaseconfigYaml } from "parsers/DatabaseParser";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -22,7 +25,11 @@ function getFilePath(cellValue:string):string {
     return "";
 }
 
-export function obtainColumnsFromFolder(){
+export async function obtainColumnsFromFolder(databaseFile: TFile){
+    LOGGER.debug(`=> obtainColumnsFromFolder(${databaseFile.path})`);
+    const databaseRaw = await obtainContentFromTfile(databaseFile);
+    const databaseConfigYaml = getDatabaseconfigYaml(databaseRaw);
+    const columns:TableColumns = [];
     // Define mandatory columns
     const titleOptions = [];
     titleOptions.push({ backgroundColor: randomColor() });
@@ -49,7 +56,34 @@ export function obtainColumnsFromFolder(){
           }
         }
     ];
-    const columns:TableColumns = [];
+    
     columns.push(...mandatoryColumns);
+    await Promise.all(Object.keys(databaseConfigYaml.columns).map(async (columnKey) => {
+      const column = databaseConfigYaml.columns[columnKey];
+      columns.push(await columnOptions(columnKey,column));
+    }));
+
+    LOGGER.debug(`<= obtainColumnsFromFolder(${databaseFile.path})`);
     return columns;
+}
+
+async function columnOptions(key:string, column:DatabaseColumn):Promise<TableColumn> {
+  LOGGER.debug(`=> columnOptions`,`column: ${JSON.stringify(column)}`);
+  function isText():TableColumn {
+    LOGGER.debug(`<= columnOptions`,`return text column`);
+		return {
+      Header: key,
+      accessor: column.accessor,
+    };
+  }
+
+  let inputs: Record<string, any> = {
+    'text': isText
+  };
+
+  if(inputs.hasOwnProperty(column.input)){
+    return await inputs[column.input]();
+  }else{
+    throw `Error: option ${column.input} not supported yet`;
+  }
 }

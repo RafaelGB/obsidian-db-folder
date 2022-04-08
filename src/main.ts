@@ -1,13 +1,23 @@
 import {
-	Notice,
+	WorkspaceLeaf,
 	Plugin,
 	Component,
-	MarkdownPostProcessorContext
+	MarkdownPostProcessorContext,
+	TFolder,
+	TFile,
+	ViewState,
+	MarkdownView,
+	Menu
 } from 'obsidian';
+
+import{
+	DatabaseView,
+	databaseIcon
+} from 'DatabaseView';
 
 import {
 	DEFAULT_SETTINGS,
-	Settings,
+	DatabaseSettings,
 	DBFolderSettingTab
 } from 'Settings';
 
@@ -21,35 +31,40 @@ import {
 
 import {
 	DBFolderListRenderer
-} from 'DatabaseFolder';
+} from 'EmbedDatabaseFolder';
 
 import {
 	parseDatabase
-} from 'parse/Parser';
+} from 'parsers/EmbedYamlParser';
 
 import {
 	DatabaseType
-} from 'parse/handlers/TypeHandler';
+} from 'parsers/handlers/TypeHandler';
 
 import {
 	DbFolderError
 } from 'errors/AbstractError';
+import { basicFrontmatter, frontMatterKey } from 'parsers/DatabaseParser';
+import { StateManager } from 'StateManager';
+import { around } from 'monkey-around';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
-	public settings: Settings;
+	public settings: DatabaseSettings;
 
 	/** External-facing plugin API */
 	public api: DbfAPIInterface;
 
+	databaseFileModes: Record<string, string> = {};
+
+	viewMap: Map<string, DatabaseView> = new Map();
+
+	_loaded: boolean = false;
+
+	stateManagers: Map<TFile, StateManager> = new Map();
+	
 	async onload(): Promise<void> {
 		await this.load_settings();
-
-		// This creates an icon in the left ribbon.
-		let ribbonIconEl = this.addRibbonIcon('dice', 'DBFolder Plugin', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
-		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new DBFolderSettingTab(this.app, this));
@@ -59,6 +74,9 @@ export default class DBFolderPlugin extends Plugin {
 			this.dbfolder(source, el, ctx, ctx.sourcePath)
 		);
 
+		this.registerView(frontMatterKey, (leaf) => new DatabaseView(leaf, this));
+		this.registerEvents();
+		this.registerMonkeyPatches();
 		this.api = new DBFolderAPI(this.app, this.settings);
 	}
 
@@ -67,7 +85,7 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	/** Update plugin settings. */
-	async updateSettings(settings: Partial<Settings>) {
+	async updateSettings(settings: Partial<DatabaseSettings>) {
 		Object.assign(this.settings, settings);
 		await this.saveData(this.settings);
 	}
@@ -120,4 +138,225 @@ export default class DBFolderPlugin extends Plugin {
 			}
 		}
 	}
+
+	async setDatabaseView(leaf: WorkspaceLeaf) {
+		await leaf.setViewState({
+		  type: frontMatterKey,
+		  state: leaf.view.getState(),
+		  popstate: true,
+		} as ViewState);
+	  }
+	  
+	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
+
+	addView(view: DatabaseView, data: string, shouldParseData: boolean) {
+		if (!this.viewMap.has(view.id)) {
+		  this.viewMap.set(view.id, view);
+		}
+	
+		const file = view.file;
+	
+		if (this.stateManagers.has(file)) {
+		  this.stateManagers.get(file).registerView(view, data, shouldParseData);
+		} else {
+		  this.stateManagers.set(
+			file,
+			new StateManager(
+			  this.app,
+			  view,
+			  data,
+			  () => this.stateManagers.delete(file),
+			  () => this.settings
+			)
+		  );
+		}
+	
+		this.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews()));
+	  }
+
+	getStateManager(file: TFile) {
+		return this.stateManagers.get(file);
+	}
+
+	removeView(view: DatabaseView) {
+		const file = view.file;
+	
+		if (this.viewMap.has(view.id)) {
+		  this.viewMap.delete(view.id);
+		}
+	
+		if (this.stateManagers.has(file)) {
+		  this.stateManagers.get(file).unregisterView(view);
+		  this.viewStateReceivers.forEach((fn:any) => fn(this.getDatabaseViews()));
+		}
+	  }
+
+	async setMarkdownView(leaf: WorkspaceLeaf, focus: boolean = true) {
+		await leaf.setViewState(
+		  {
+			type: 'markdown',
+			state: leaf.view.getState(),
+			popstate: true,
+		  } as ViewState,
+		  { focus }
+		);
+	}
+
+	getDatabaseViews() {
+	return Array.from(this.viewMap.values());
+	}
+
+	getDatabaseView(id: string) {
+	return this.viewMap.get(id);
+	}
+
+	async newDatabase(folder?: TFolder) {
+		const targetFolder = folder
+		  ? folder
+		  : this.app.fileManager.getNewFileParent(
+			  this.app.workspace.getActiveFile()?.path || ''
+			);
+	
+		try {
+		  const database: TFile = await (
+			this.app.fileManager as any
+		  ).createNewMarkdownFile(targetFolder, 'Untitled database');
+	
+		  await this.app.vault.modify(database, basicFrontmatter);
+		  await this.app.workspace.activeLeaf.setViewState({
+			type: frontMatterKey,
+			state: { file: database.path },
+		  });
+		} catch (e) {
+		  console.error('Error creating database folder:', e);
+		}
+	}
+
+	registerEvents() {
+		this.registerEvent(
+		  this.app.workspace.on('file-menu', (menu, file: TFile) => {
+			// Add a menu item to the folder context menu to create a board
+			if (file instanceof TFolder) {
+			  menu.addItem((item) => {
+				item
+				  .setTitle('New database folder')
+				  .setIcon(databaseIcon)
+				  .onClick(() => this.newDatabase(file));
+			  });
+			}
+		  })
+		);
+	}
+
+	/**
+	 * Wrap Obsidian functionalities to add the database support needed
+	 */
+	registerMonkeyPatches() {
+		const self = this;
+	
+		this.app.workspace.onLayoutReady(() => {
+		  this.register(
+			around((this.app as any).commands, {
+			  executeCommandById(next) {
+				return function (command: string) {
+				  const view = self.app.workspace.getActiveViewOfType(DatabaseView);
+	
+				  if (view) {
+					//view.emitter.emit('hotkey', command);
+				  }
+	
+				  return next.call(this, command);
+				};
+			  },
+			})
+		  );
+		});
+	
+		// Monkey patch WorkspaceLeaf to open Kanbans with KanbanView by default
+		this.register(
+		  around(WorkspaceLeaf.prototype, {
+			// Kanbans can be viewed as markdown or kanban, and we keep track of the mode
+			// while the file is open. When the file closes, we no longer need to keep track of it.
+			detach(next) {
+			  return function () {
+				const state = this.view?.getState();
+	
+				if (state?.file && self.databaseFileModes[this.id || state.file]) {
+				  delete self.databaseFileModes[this.id || state.file];
+				}
+	
+				return next.apply(this);
+			  };
+			},
+	
+			setViewState(next) {
+			  return function (state: ViewState, ...rest: any[]) {
+				if (
+				  // Don't force kanban mode during shutdown
+				  self._loaded &&
+				  // If we have a markdown file
+				  state.type === 'markdown' &&
+				  state.state?.file &&
+				  // And the current mode of the file is not set to markdown
+				  self.databaseFileModes[this.id || state.state.file] !== 'markdown'
+				) {
+				  // Then check for the database frontMatterKey
+				  const cache = self.app.metadataCache.getCache(state.state.file);
+	
+				  if (cache?.frontmatter && cache.frontmatter[frontMatterKey]) {
+					// If we have it, force the view type to database
+					const newState = {
+					  ...state,
+					  type: frontMatterKey,
+					};
+	
+					self.databaseFileModes[state.state.file] = frontMatterKey;
+	
+					return next.apply(this, [newState, ...rest]);
+				  }
+				}
+	
+				return next.apply(this, [state, ...rest]);
+			  };
+			},
+		  })
+		);
+	
+		// Add a menu item to go back to database view
+		this.register(
+		  around(MarkdownView.prototype, {
+			onMoreOptionsMenu(next) {
+			  return function (menu: Menu) {
+				const file = this.file;
+				const cache = file
+				  ? self.app.metadataCache.getFileCache(file)
+				  : null;
+	
+				if (
+				  !file ||
+				  !cache?.frontmatter ||
+				  !cache.frontmatter[frontMatterKey]
+				) {
+				  return next.call(this, menu);
+				}
+	
+				menu
+				  .addItem((item) => {
+					item
+					  .setTitle('Open as database folder')
+					  .setIcon(databaseIcon)
+					  .onClick(() => {
+						self.databaseFileModes[this.leaf.id || file.path] =
+						frontMatterKey;
+						self.setDatabaseView(this.leaf);
+					  });
+				  })
+				  .addSeparator();
+	
+				next.call(this, menu);
+			  };
+			},
+		  })
+		);
+	  }
 }

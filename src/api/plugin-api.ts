@@ -1,16 +1,16 @@
 import { FolderModel, } from 'cdm/FolderModel';
 import { App } from 'obsidian';
-import { Settings } from 'Settings';
+import { DatabaseSettings } from 'Settings';
 import { Schema } from 'services/BaseService';
 import { DbfAPIInterface } from 'typings/api';
 
 export class DBFolderAPI implements DbfAPIInterface {
     app: App;
-    settings: Settings;
+    settings: DatabaseSettings;
 
     public constructor(
         app: App, 
-        settings: Settings
+        settings: DatabaseSettings
     ) {
         this.app = app;
         this.settings = settings;

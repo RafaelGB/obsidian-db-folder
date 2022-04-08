@@ -7,12 +7,12 @@ import {
 } from 'cdm/FolderModel';
 
 import {
-    Settings
+    DatabaseSettings
 } from 'Settings';
 
 export interface DbfAPIInterface {
     app: App;
-    settings: Settings;
+    settings: DatabaseSettings;
 
     /** Obtain model using key name */
     obtainFolderModel(key: string): FolderModel;
