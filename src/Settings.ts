@@ -22,45 +22,70 @@ export type SettingRetriever = <K extends keyof DatabaseSettings>(
     getSetting: SettingRetriever;
   }
   
-  export interface SettingsManagerConfig {
+export interface SettingsManagerConfig {
     onSettingsChange: (newSettings: DatabaseSettings) => void;
   }
 
-export class DBFolderSettingTab extends PluginSettingTab {
-
-	constructor(public app: App, private plugin: DBFolderPlugin) {
-        super(app, plugin);
+  export class SettingsManager {
+    app: App;
+    plugin: DBFolderPlugin;
+    config: SettingsManagerConfig;
+    settings: DatabaseSettings;
+    cleanupFns: Array<() => void> = [];
+    applyDebounceTimer: number = 0;
+  
+    constructor(
+      plugin: DBFolderPlugin,
+      config: SettingsManagerConfig,
+      settings: DatabaseSettings
+    ) {
+      this.app = plugin.app;
+      this.plugin = plugin;
+      this.config = config;
+      this.settings = settings;
     }
-
-	display(): void {
-        // Empty the container
-		this.containerEl.empty();
-		this.add_setting_header("DBFolder Settings");
-        this.developer_settings();
-	}
-    /**
-     * Add a header to the settings tab
-     */
-    add_setting_header(tittle: string,level: keyof HTMLElementTagNameMap = 'h2'): void{
-        let {containerEl} = this;
-        containerEl.createEl(level, {text: tittle});
+    constructUI(containerEl: HTMLElement, heading: string, local: boolean) {
+        this.developer_settings(containerEl)
     }
-
     /**
-     * developer settings
+     * developer settings section
      */
-    developer_settings(): void {
+     developer_settings(containerEl: HTMLElement): void {
         // title of the section
-        this.add_setting_header("Developer section",'h3');
+        this.add_setting_header(containerEl,"Developer section",'h3');
         // Enable or disable debug mode
         let debug_togle_promise = async (value: boolean): Promise<void> => {
             await this.plugin.updateSettings({ enable_debug_mode: value });
         }
         add_toggle(
-            this.containerEl,
+            containerEl,
             "Enable debug mode", 
             "This will log all the errors and warnings in the console",
             this.plugin.settings.enable_debug_mode, 
             debug_togle_promise);
     }
+
+    /**
+     * Add a header to the settings tab
+     */
+    add_setting_header(containerEl: HTMLElement,tittle: string,level: keyof HTMLElementTagNameMap = 'h2'): void{
+        containerEl.createEl(level, {text: tittle});
+    }
+}
+export class DBFolderSettingTab extends PluginSettingTab {
+    plugin: DBFolderPlugin;
+    settingsManager: SettingsManager;
+	constructor(plugin: DBFolderPlugin, config: SettingsManagerConfig) {
+        super(plugin.app, plugin);
+        this.plugin = plugin;
+        this.settingsManager = new SettingsManager(plugin, config, plugin.settings);
+    }
+
+	display(): void {
+        const { containerEl } = this;
+        containerEl.empty();
+        containerEl.addClass('board-settings-modal');
+        
+        this.settingsManager.constructUI(containerEl,'Kanban Plugin', false);
+	}
 }

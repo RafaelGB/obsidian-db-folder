@@ -1,5 +1,6 @@
 import { DatabaseView } from "DatabaseView";
 import { App, TFile, moment } from 'obsidian';
+import { LOGGER } from "services/Logger";
 import { DatabaseSettings } from 'Settings';
 export class StateManager {
     private onEmpty: () => void;
@@ -44,5 +45,9 @@ export class StateManager {
 
     getAView(): DatabaseView {
         return this.viewSet.values().next().value;
+    }
+
+    async forceRefresh() {
+      LOGGER.warn("TODO forceRefresh");
     }
 }

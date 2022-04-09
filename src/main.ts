@@ -47,6 +47,7 @@ import {
 import { basicFrontmatter, frontMatterKey } from 'parsers/DatabaseParser';
 import { StateManager } from 'StateManager';
 import { around } from 'monkey-around';
+import { LOGGER } from 'services/Logger';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -67,7 +68,18 @@ export default class DBFolderPlugin extends Plugin {
 		await this.load_settings();
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new DBFolderSettingTab(this.app, this));
+		this.addSettingTab(new DBFolderSettingTab(this, {
+			onSettingsChange: async (newSettings) => {
+			  this.settings = newSettings;
+			  await this.saveSettings();
+	  
+			  // Force a complete re-render when settings change
+			  this.stateManagers.forEach((stateManager) => {
+				//stateManager.forceRefresh();
+			  });
+			},
+		  })
+		);
 		
 		// This registers a code block processor that will be called when the user types `<code>` in markdown.
 		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
@@ -81,12 +93,16 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	async onunload() {
-		console.log('Unloading DBFolder plugin');
+		LOGGER.debug('Unloading DBFolder plugin');
 	}
 
 	/** Update plugin settings. */
 	async updateSettings(settings: Partial<DatabaseSettings>) {
 		Object.assign(this.settings, settings);
+		await this.saveData(this.settings);
+	}
+
+	async saveSettings() {
 		await this.saveData(this.settings);
 	}
 
@@ -123,10 +139,10 @@ export default class DBFolderPlugin extends Plugin {
 					break;
 				case DatabaseType.BOARD:
 					// TODO
-					console.warn('not implemented yet');
+					LOGGER.warn('not implemented yet');
 					break;
 				default:
-					console.error('something went wrong rendering dbfolder');
+					LOGGER.error('something went wrong rendering dbfolder');
 			}
 		} catch (e) {
 			switch(true){
@@ -134,7 +150,7 @@ export default class DBFolderPlugin extends Plugin {
 					e.render(el);
 					break;
 				default:
-					console.error(e);
+					LOGGER.error(e);
 			}
 		}
 	}
