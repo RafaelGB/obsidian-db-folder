@@ -1,6 +1,5 @@
 import { App, TFile } from "obsidian";
-import { TableRows,TableRow,RowType } from 'cdm/FolderModel';
-import { MetaInfoService } from 'services/MetaInfoService';
+import { TableRows,TableRow } from 'cdm/FolderModel';
 import { getAPI} from "obsidian-dataview"
 import { LOGGER } from "services/Logger";
 import { frontMatterKey } from "parsers/DatabaseParser";

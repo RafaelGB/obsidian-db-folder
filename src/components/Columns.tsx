@@ -3,11 +3,9 @@ import {
 } from "obsidian";
 import React,{useRef,useLayoutEffect} from 'react';
 import { DataTypes } from 'services/Constants';
-import {DatabaseColumn, TableColumn, TableColumns} from 'cdm/FolderModel';
+import {DatabaseColumn, DatabaseColumns, TableColumn, TableColumns} from 'cdm/FolderModel';
 import { randomColor } from 'helpers/Colors';
-import { obtainContentFromTfile } from "helpers/VaultManagement";
 import { LOGGER } from "services/Logger";
-import { getDatabaseconfigYaml } from "parsers/DatabaseParser";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -25,50 +23,38 @@ function getFilePath(cellValue:string):string {
     return "";
 }
 
-export async function obtainColumnsFromFolder(databaseFile: TFile){
-    LOGGER.debug(`=> obtainColumnsFromFolder(${databaseFile.path})`);
-    const databaseRaw = await obtainContentFromTfile(databaseFile);
-    const databaseConfigYaml = getDatabaseconfigYaml(databaseRaw);
+export function addMandatoryColumns(columns: DatabaseColumns): DatabaseColumns {
+  const mandatoryColumns: DatabaseColumns = {
+    'title': {
+      accessor: 'title',
+      input: 'markdown',
+      header: 'title'
+    }
+  };
+  return {...mandatoryColumns, ...columns};
+}
+
+export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns){
+    LOGGER.debug(`=> obtainColumnsFromFolder. databaseColumns: ${JSON.stringify(databaseColumns)}`);
     const columns:TableColumns = [];
     // Define mandatory columns
     const titleOptions = [];
     titleOptions.push({ backgroundColor: randomColor() });
-    const mandatoryColumns:TableColumns = [
-        {
-          Header: 'title',
-          label: 'File Name',
-          accessor: 'title',
-          minWidth: 100,
-          dataType: DataTypes.TEXT,
-          options: titleOptions,
-          Cell: ({ cell }:any) => {
-            const { value } = cell;
-            const containerRef = useRef<HTMLElement>();
-            useLayoutEffect(() => {
-              MarkdownRenderer.renderMarkdown(
-                value,
-                containerRef.current,
-                getFilePath(value),
-                null
-              );
-            })
-            return <span ref={containerRef}></span>;
-          }
-        }
-    ];
-    
-    columns.push(...mandatoryColumns);
-    await Promise.all(Object.keys(databaseConfigYaml.columns).map(async (columnKey) => {
-      const column = databaseConfigYaml.columns[columnKey];
+    await Promise.all(Object.keys(databaseColumns).map(async (columnKey) => {
+      const column = databaseColumns[columnKey];
       columns.push(await columnOptions(columnKey,column));
     }));
 
-    LOGGER.debug(`<= obtainColumnsFromFolder(${databaseFile.path})`);
+    LOGGER.debug(`<= obtainColumnsFromFolder(. return ${columns.length} columns`);
     return columns;
 }
 
 async function columnOptions(key:string, column:DatabaseColumn):Promise<TableColumn> {
   LOGGER.debug(`=> columnOptions`,`column: ${JSON.stringify(column)}`);
+  /**
+   * return plain text
+   * @returns {TableColumn}
+   */
   function isText():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return text column`);
 		return {
@@ -77,8 +63,35 @@ async function columnOptions(key:string, column:DatabaseColumn):Promise<TableCol
     };
   }
 
+  /**
+   * return markdown rendered text
+   * @returns {TableColumn}
+   */
+  function isMarkdown():TableColumn {
+    LOGGER.debug(`<= columnOptions`,`return markdown column`);
+    return {
+      Header: key,
+      accessor: column.accessor,
+      dataType: DataTypes.TEXT,
+      Cell: ({ cell }:any) => {
+        const { value } = cell;
+        const containerRef = useRef<HTMLElement>();
+        useLayoutEffect(() => {
+          MarkdownRenderer.renderMarkdown(
+            value,
+            containerRef.current,
+            getFilePath(value),
+            null
+          );
+        })
+        return <span ref={containerRef}></span>;
+      }
+    };
+  }
+
   let inputs: Record<string, any> = {
-    'text': isText
+    'text': isText,
+    'markdown': isMarkdown
   };
 
   if(inputs.hasOwnProperty(column.input)){

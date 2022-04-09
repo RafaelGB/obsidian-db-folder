@@ -1,5 +1,5 @@
 import { TableDataType } from 'cdm/FolderModel';
-import { obtainColumnsFromFolder } from 'components/Columns';
+import { obtainColumnsFromFolder, addMandatoryColumns} from 'components/Columns';
 import { createTable } from 'components/Index';
 import { adapterTFilesToRows, obtainContentFromTfile } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
@@ -12,7 +12,7 @@ import {
     TFile,
     Menu
   } from 'obsidian';
-import { frontMatterKey, hasFrontmatterKey } from 'parsers/DatabaseParser';
+import { frontMatterKey, getDatabaseconfigYaml, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
 import { LOGGER } from 'services/Logger';
@@ -106,20 +106,23 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
     async initDatabase(): Promise<void> {
       LOGGER.debug(`=>initDatabase ${this.file.path}`);
-        let columns = await obtainColumnsFromFolder(this.file);
-        let folder = this.file.path.split('/').slice(0, -1).join('/');
-        let rows = await adapterTFilesToRows(this.app,folder);
-        const tableProps:TableDataType = {
-          columns: columns,
-          data: rows,
-          skipReset: false,
-          view: this,
-          stateManager: this.plugin.getStateManager(this.file)
-        }
-        let table = createTable(tableProps,this.app);
-        const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
-        ReactDOM.render(table, tableContainer);
-        LOGGER.debug(`<=initDatabase ${this.file.path}`);
+      const databaseRaw = await obtainContentFromTfile(this.file);
+      const databaseConfigYaml = getDatabaseconfigYaml(databaseRaw);
+      databaseConfigYaml.columns = addMandatoryColumns(databaseConfigYaml.columns);
+      let columns = await obtainColumnsFromFolder(databaseConfigYaml.columns);
+      let folder = this.file.path.split('/').slice(0, -1).join('/');
+      let rows = await adapterTFilesToRows(this.app,folder);
+      const tableProps:TableDataType = {
+        columns: columns,
+        data: rows,
+        skipReset: false,
+        view: this,
+        stateManager: this.plugin.getStateManager(this.file)
+      }
+      let table = createTable(tableProps,this.app);
+      const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
+      ReactDOM.render(table, tableContainer);
+      LOGGER.debug(`<=initDatabase ${this.file.path}`);
     }
     
     destroy() {
