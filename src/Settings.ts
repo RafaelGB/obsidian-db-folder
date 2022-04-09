@@ -46,6 +46,10 @@ export interface SettingsManagerConfig {
       this.settings = settings;
     }
     constructUI(containerEl: HTMLElement, heading: string, local: boolean) {
+        /** Common modal headings */
+        containerEl.empty();
+        containerEl.addClass('database-settings-modal');
+        this.add_setting_header(containerEl,heading,'h2');
         if(!local){
             this.developer_settings(containerEl);
         }
@@ -123,10 +127,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
     }
 
 	display(): void {
-        const { containerEl } = this;
-        containerEl.empty();
-        containerEl.addClass('database-settings-modal');
-        
+        const { containerEl } = this;    
         this.settingsManager.constructUI(containerEl,'Kanban Plugin', false);
 	}
 }
