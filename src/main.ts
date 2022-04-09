@@ -138,7 +138,6 @@ export default class DBFolderPlugin extends Plugin {
 					);
 					break;
 				case DatabaseType.BOARD:
-					// TODO
 					LOGGER.warn('not implemented yet');
 					break;
 				default:

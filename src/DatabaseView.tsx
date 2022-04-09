@@ -16,6 +16,7 @@ import { frontMatterKey, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
 import { LOGGER } from 'services/Logger';
+import { SettingsModal } from 'Settings';
 import { StateManager } from 'StateManager';
 export const databaseIcon = 'blocks';
 
@@ -67,7 +68,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     onMoreOptionsMenu(menu: Menu) {
-      // Add a menu item to force the board to markdown view
+      // Add a menu item to force the database to markdown view
       menu
         .addItem((item) => {
           item
@@ -85,27 +86,17 @@ export class DatabaseView extends TextFileView implements HoverParent {
             .setTitle('Open database settings')
             .setIcon('gear')
             .onClick(() => {
-              const stateManager = this.plugin.stateManagers.get(this.file);
-              // const board = stateManager.state;
-  
-              // new SettingsModal(
-              //   this,
-              //   {
-              //     onSettingsChange: (settings) => {
-              //       const updatedBoard = update(board, {
-              //         data: {
-              //           settings: {
-              //             $set: settings,
-              //           },
-              //         },
-              //       });
-  
-              //       // Save to disk, compute text of new board
-              //       stateManager.setState(updatedBoard);
-              //     },
-              //   },
-              //   board.data.settings
-              // ).open();
+              new SettingsModal(
+                this,
+                {
+                  onSettingsChange: (settings) => {
+                    
+                    LOGGER.warn("TODO on settings change");
+                    // Save to disk, compute text of new board
+                  },
+                },
+                this.plugin.settings
+              ).open();
             });
         })
         .addSeparator();

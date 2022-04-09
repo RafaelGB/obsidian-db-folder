@@ -1,6 +1,7 @@
-import { App, PluginSettingTab } from "obsidian";
+import { App, Modal, PluginSettingTab } from "obsidian";
 import { add_toggle} from 'components/SettingsComponents';
 import DBFolderPlugin from 'main';
+import { DatabaseView } from "DatabaseView";
 
 
 export interface DatabaseSettings {
@@ -45,7 +46,10 @@ export interface SettingsManagerConfig {
       this.settings = settings;
     }
     constructUI(containerEl: HTMLElement, heading: string, local: boolean) {
-        this.developer_settings(containerEl)
+        if(!local){
+            this.developer_settings(containerEl);
+        }
+        
     }
     /**
      * developer settings section
@@ -71,7 +75,44 @@ export interface SettingsManagerConfig {
     add_setting_header(containerEl: HTMLElement,tittle: string,level: keyof HTMLElementTagNameMap = 'h2'): void{
         containerEl.createEl(level, {text: tittle});
     }
+
+    cleanUp() {
+        this.cleanupFns.forEach((fn) => fn());
+        this.cleanupFns = [];
+      }
 }
+
+export class SettingsModal extends Modal {
+    view: DatabaseView;
+    settingsManager: SettingsManager;
+  
+    constructor(
+      view: DatabaseView,
+      config: SettingsManagerConfig,
+      settings: DatabaseSettings
+    ) {
+      super(view.app);
+  
+      this.view = view;
+      this.settingsManager = new SettingsManager(view.plugin, config, settings);
+    }
+  
+    onOpen() {
+      const { contentEl, modalEl } = this;
+  
+      modalEl.addClass('database-settings-modal');
+  
+      this.settingsManager.constructUI(contentEl, this.view.file.basename, true);
+    }
+  
+    onClose() {
+      const { contentEl } = this;
+  
+      this.settingsManager.cleanUp();
+      contentEl.empty();
+    }
+  }
+  
 export class DBFolderSettingTab extends PluginSettingTab {
     plugin: DBFolderPlugin;
     settingsManager: SettingsManager;
@@ -84,7 +125,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
 	display(): void {
         const { containerEl } = this;
         containerEl.empty();
-        containerEl.addClass('board-settings-modal');
+        containerEl.addClass('database-settings-modal');
         
         this.settingsManager.constructUI(containerEl,'Kanban Plugin', false);
 	}
