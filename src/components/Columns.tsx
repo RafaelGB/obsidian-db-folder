@@ -23,6 +23,11 @@ function getFilePath(cellValue:string):string {
     return "";
 }
 
+/**
+ * Add mandatory columns to the table
+ * @param columns 
+ * @returns 
+ */
 export function addMandatoryColumns(columns: DatabaseColumns): DatabaseColumns {
   const mandatoryColumns: DatabaseColumns = {
     'title': {
