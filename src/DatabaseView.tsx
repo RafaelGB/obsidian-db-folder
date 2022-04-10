@@ -92,7 +92,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
                   onSettingsChange: (settings) => {
                     
                     LOGGER.warn("TODO on settings change");
-                    // Save to disk, compute text of new board
+                    // Save to disk, compute text of new database
                   },
                 },
                 this.plugin.settings

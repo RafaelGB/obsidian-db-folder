@@ -1,11 +1,10 @@
 import { DatabaseView } from "DatabaseView";
-import { App, TFile, moment } from 'obsidian';
+import { App, TFile } from 'obsidian';
 import { LOGGER } from "services/Logger";
 import { DatabaseSettings } from 'Settings';
 export class StateManager {
     private onEmpty: () => void;
     private getGlobalSettings: () => DatabaseSettings;
-    //private parser: BaseFormat;
     private viewSet: Set<DatabaseView> = new Set();
 
     public app: App;
@@ -21,7 +20,6 @@ export class StateManager {
         this.file = initialView.file;
         this.onEmpty = onEmpty;
         this.getGlobalSettings = getGlobalSettings;
-        //this.parser = new ListFormat(this);
     
         this.registerView(initialView, initialData, true);
       }

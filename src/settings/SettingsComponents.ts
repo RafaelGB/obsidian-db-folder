@@ -1,14 +1,16 @@
 import { Setting } from "obsidian";
 
 /**
- * create toggle in the settings window
+ * Setting that add a toggle to the settings page. Returns it as a Setting object if you want to modify it.
+ * @param container 
  * @param name 
  * @param desc 
  * @param value 
  * @param onChangePromise 
+ * @returns {Setting}
  */
-export function add_toggle(container: HTMLElement,name: string, desc: string, value: boolean, onChangePromise: (value: boolean) => Promise<void>): void {
-    new Setting(container)
+export function add_toggle(container: HTMLElement,name: string, desc: string, value: boolean, onChangePromise: (value: boolean) => Promise<void>): Setting {
+    const toggle = new Setting(container)
         .setName(name)
         .setDesc(desc)
         .addToggle(toggle =>
@@ -16,7 +18,7 @@ export function add_toggle(container: HTMLElement,name: string, desc: string, va
                 .setValue(value)
                 .onChange(onChangePromise)
         );
-
+    return toggle;
 }
 
 /**
