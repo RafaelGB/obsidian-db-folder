@@ -1,13 +1,12 @@
 import * as React from "react";
-import { Cell, Row, useTable } from 'react-table';
+import { Row, TableOptions, useTable } from 'react-table';
+import { FixedSizeList } from 'react-window';
 import { 
   TableDataType,
   TableRows,
   TableRow 
 } from "cdm/FolderModel";
-import {makeData } from 'mock/mockUtils';
 import { frontMatterKey } from "parsers/DatabaseParser";
-import { TFile } from "obsidian";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
@@ -85,7 +84,7 @@ export function Table(properties: TableDataType){
 
   /** Rows showed information */
   const data = React.useMemo(() => filterDataWithcolumnHeaders(sourceData,columns.map(column => column.Header)), []);
-  let propsUseTable:any = {columns, data};
+  let propsUseTable:TableOptions<any> = {columns, data};
   /** Obsidian hooks to markdown events */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -161,10 +160,12 @@ export function Table(properties: TableDataType){
     getTableBodyProps,
     headerGroups,
     rows,
-    prepareRow
+    prepareRow,
+    totalColumnsWidth
   } = useTable(propsUseTable, hooks => {
     hooks.useInstance.push(useInstance);
   });
+
 /** return table structure */
   return (
     <table 
