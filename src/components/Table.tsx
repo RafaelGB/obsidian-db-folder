@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Row, TableOptions, useTable } from 'react-table';
+import { Row, TableOptions, useTable, useBlockLayout } from 'react-table';
 import { FixedSizeList } from 'react-window';
 import { 
   TableDataType,
@@ -10,46 +10,7 @@ import { frontMatterKey } from "parsers/DatabaseParser";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-
-const borderStyle = {
-  border: "1px solid gray",
-  padding: "8px 10px"
-};
-
-/**
- * Render entire row of elements inside table
- * @param row 
- * @returns 
- */
-function renderRow(row:Row) { 
-  return (
-    <tr {...row.getRowProps()}>
-        {row.cells.map(
-          (cell:any) => renderCell(cell)
-          )
-        }
-    </tr>
-  )
-}
-
-/**
- * Render individual cell inside table
- * @param cell 
- * @returns 
- */
-function renderCell(cell:any) {
-  if (cell.isRowSpanned) return null;
-  else
-    return (
-      <td
-        style={borderStyle}
-        rowSpan={cell.rowSpan}
-        {...cell.getCellProps()}
-      >
-        {cell.render("Cell")}
-      </td>
-    );
-}
+import scrollbarWidth from "components/scrollbarWidth";
 
 function useInstance(instance:any) {
   const { allColumns } = instance;
@@ -84,7 +45,14 @@ export function Table(properties: TableDataType){
 
   /** Rows showed information */
   const data = React.useMemo(() => filterDataWithcolumnHeaders(sourceData,columns.map(column => column.Header)), []);
-  let propsUseTable:TableOptions<any> = {columns, data};
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      width: 150,
+    }),
+    []
+  )
+  let propsUseTable:TableOptions<any> = {columns, data, defaultColumn};
   /** Obsidian hooks to markdown events */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -154,6 +122,8 @@ export function Table(properties: TableDataType){
     },
     [stateManager, filePath]
   );
+  const scrollBarSize = React.useMemo(() => scrollbarWidth(), [])
+
   /** Hook to use react-table */
   const {
     getTableProps,
@@ -162,35 +132,67 @@ export function Table(properties: TableDataType){
     rows,
     prepareRow,
     totalColumnsWidth
-  } = useTable(propsUseTable, hooks => {
-    hooks.useInstance.push(useInstance);
-  });
-
-/** return table structure */
-  return (
-    <table 
+  } = useTable(
+    propsUseTable,
+    useBlockLayout, 
+    hooks => {
+      hooks.useInstance.push(useInstance);
+    }
+  );
+  const RenderRow = React.useCallback(
+    ({ index, style }) => {
+      const row = rows[index]
+      prepareRow(row)
+      return (
+        <div
+          {...row.getRowProps({
+            style,
+          })}
+          className="tr"
+        >
+          {row.cells.map(cell => {
+            return (
+              <div {...cell.getCellProps()} className="td">
+                {cell.render('Cell')}
+              </div>
+            )
+          })}
+        </div>
+      )
+    },
+    [prepareRow, rows]
+  )
+   //Render the UI for your table
+   return (
+    <div {...getTableProps()} 
+    className="table"
     onMouseOver={onMouseOver}
     onClick={onClick}
-    {...getTableProps()}>
-      <thead>
+    >
+      <div>
         {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
+          <div {...headerGroup.getHeaderGroupProps()} className="tr">
             {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()} style={borderStyle}>
-                {column.render("Header")}
-              </th>
+              <div {...column.getHeaderProps()} className="th">
+                {column.render('Header')}
+              </div>
             ))}
-          </tr>
+          </div>
         ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return renderRow(row);
-        })}
-      </tbody>
-    </table>
-  );
+      </div>
+
+      <div {...getTableBodyProps()}>
+        <FixedSizeList
+          height={400}
+          itemCount={rows.length}
+          itemSize={35}
+          width={totalColumnsWidth+scrollBarSize}
+        >
+          {RenderRow}
+        </FixedSizeList>
+      </div>
+    </div>
+  )
 }
 
 function filterDataWithcolumnHeaders(data:TableRows,columnHeaders:string[]): TableRows{
