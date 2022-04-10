@@ -1,6 +1,6 @@
-import { AbstractHandler } from 'parsers/handlers/AbstractHandler';
+import { AbstractYamlHandler } from 'parsers/handlers/AbstractYamlPropertyHandler';
 import { App, normalizePath } from "obsidian";
-export class FolderHandler extends AbstractHandler {
+export class FolderHandler extends AbstractYamlHandler {
     handlerName: string = 'folder';
     public handle(yaml: any, app: App): [string, string][] {
         if (!yaml.folder) {

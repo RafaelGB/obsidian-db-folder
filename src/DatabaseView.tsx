@@ -143,7 +143,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
       }
 
     async onLoadFile(file: TFile) {
-        console.log(`onLoadFile: ${file.path}`);
         try {
           return await super.onLoadFile(file);
         } catch (e) {

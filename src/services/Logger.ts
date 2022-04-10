@@ -3,6 +3,7 @@ export interface LogInterface{
     info(primaryMessage: string, ...supportingData: any[]):void;
     warn(primaryMessage: string, ...supportingData: any[]):void;
     error(primaryMessage: string, ...supportingData: any[]):void;
+    setDebugMode(isDebugModeEnabled: boolean):void;
 }
 
 class Log implements LogInterface{

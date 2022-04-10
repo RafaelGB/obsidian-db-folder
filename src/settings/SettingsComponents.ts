@@ -18,3 +18,10 @@ export function add_toggle(container: HTMLElement,name: string, desc: string, va
         );
 
 }
+
+/**
+ * Add a header to the settings tab
+ */
+export function add_setting_header(containerEl: HTMLElement,tittle: string,level: keyof HTMLElementTagNameMap = 'h2'): void{
+    containerEl.createEl(level, {text: tittle});
+}

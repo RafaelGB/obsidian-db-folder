@@ -1,7 +1,9 @@
 import { App, Modal, PluginSettingTab } from "obsidian";
-import { add_toggle} from 'components/SettingsComponents';
+import { add_setting_header, add_toggle} from 'settings/SettingsComponents';
 import DBFolderPlugin from 'main';
 import { DatabaseView } from "DatabaseView";
+import { LOGGER } from "services/Logger";
+import { developer_settings_section } from "settings/DeveloperSection";
 
 
 export interface DatabaseSettings {
@@ -49,35 +51,9 @@ export interface SettingsManagerConfig {
         /** Common modal headings */
         containerEl.empty();
         containerEl.addClass('database-settings-modal');
-        this.add_setting_header(containerEl,heading,'h2');
-        if(!local){
-            this.developer_settings(containerEl);
-        }
-        
-    }
-    /**
-     * developer settings section
-     */
-     developer_settings(containerEl: HTMLElement): void {
-        // title of the section
-        this.add_setting_header(containerEl,"Developer section",'h3');
-        // Enable or disable debug mode
-        let debug_togle_promise = async (value: boolean): Promise<void> => {
-            await this.plugin.updateSettings({ enable_debug_mode: value });
-        }
-        add_toggle(
-            containerEl,
-            "Enable debug mode", 
-            "This will log all the errors and warnings in the console",
-            this.plugin.settings.enable_debug_mode, 
-            debug_togle_promise);
-    }
-
-    /**
-     * Add a header to the settings tab
-     */
-    add_setting_header(containerEl: HTMLElement,tittle: string,level: keyof HTMLElementTagNameMap = 'h2'): void{
-        containerEl.createEl(level, {text: tittle});
+        add_setting_header(containerEl,heading,'h2');
+        /** Developer section */
+        developer_settings_section(this, containerEl, local);
     }
 
     cleanUp() {

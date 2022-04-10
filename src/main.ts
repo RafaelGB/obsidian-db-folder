@@ -29,21 +29,6 @@ import {
 	DBFolderAPI
 }from 'api/plugin-api';
 
-import {
-	DBFolderListRenderer
-} from 'EmbedDatabaseFolder';
-
-import {
-	parseDatabase
-} from 'parsers/EmbedYamlParser';
-
-import {
-	DatabaseType
-} from 'parsers/handlers/TypeHandler';
-
-import {
-	DbFolderError
-} from 'errors/AbstractError';
 import { basicFrontmatter, frontMatterKey } from 'parsers/DatabaseParser';
 import { StateManager } from 'StateManager';
 import { around } from 'monkey-around';
@@ -79,11 +64,6 @@ export default class DBFolderPlugin extends Plugin {
 			  });
 			},
 		  })
-		);
-		
-		// This registers a code block processor that will be called when the user types `<code>` in markdown.
-		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
-			this.dbfolder(source, el, ctx, ctx.sourcePath)
 		);
 
 		this.registerView(frontMatterKey, (leaf) => new DatabaseView(leaf, this));
@@ -121,37 +101,6 @@ export default class DBFolderPlugin extends Plugin {
 	) {
 		let registered = this.registerMarkdownCodeBlockProcessor(language, processor);
 		registered.sortOrder = priority;
-	}
-
-	public async dbfolder(
-		source: string,
-		el: HTMLElement,
-		component: Component | MarkdownPostProcessorContext,
-		sourcePath: string
-	) {
-		try {
-			let databaseYaml = await parseDatabase(source, this.app);
-			switch (databaseYaml.type as DatabaseType) {
-				case DatabaseType.LIST:
-					component.addChild(
-						new DBFolderListRenderer(el, databaseYaml, sourcePath, this.settings,this.app)
-					);
-					break;
-				case DatabaseType.BOARD:
-					LOGGER.warn('not implemented yet');
-					break;
-				default:
-					LOGGER.error('something went wrong rendering dbfolder');
-			}
-		} catch (e) {
-			switch(true){
-				case e instanceof DbFolderError:
-					e.render(el);
-					break;
-				default:
-					LOGGER.error(e);
-			}
-		}
 	}
 
 	async setDatabaseView(leaf: WorkspaceLeaf) {
