@@ -15,6 +15,7 @@ import scrollbarWidth from "components/scrollbarWidth";
 import { getDispatch } from "components/reducers/DatabaseDispatch";
 import { ActionTypes } from "helpers/Constants";
 import PlusIcon from "./img/Plus";
+import { LOGGER } from "services/Logger";
 
 function useInstance(instance:any) {
   const { allColumns } = instance;
@@ -34,11 +35,11 @@ function useInstance(instance:any) {
 
 /**
  * Table component based on react-table
- * @param properties 
+ * @param initialState 
  * @returns 
  */
-export function Table(properties: TableDataType){
-  const {state, dataDispatch} = getDispatch(properties);
+export function Table(initialState: TableDataType){
+  const {state, dataDispatch} = getDispatch(initialState);
   /** Columns information */
   const columns:TableColumns = state.columns;
   /** Rows information */
@@ -46,8 +47,8 @@ export function Table(properties: TableDataType){
   /** skipReset information */
   const skipReset:boolean = state.skipReset;
   /** Database information  */
-  const view:DatabaseView = properties.view;
-  const stateManager:StateManager = properties.stateManager;
+  const view:DatabaseView = initialState.view;
+  const stateManager:StateManager = initialState.stateManager;
   const filePath = stateManager.file.path;
 
   /** Rows showed information */
@@ -63,7 +64,6 @@ export function Table(properties: TableDataType){
     columns, 
     data, 
     defaultColumn
-
   };
   /** Obsidian hooks to markdown events */
   const onMouseOver = React.useCallback(
@@ -217,6 +217,7 @@ export function Table(properties: TableDataType){
 }
 
 function filterDataWithcolumnHeaders(data:TableRows,columnHeaders:string[]): TableRows{
+  LOGGER.debug(`=> filterDataWithcolumnHeaders. number of total rows: ${data.length}`);
   let filterData:TableRows = [];
   let id:number = 0;
   data.forEach(row => {
@@ -229,5 +230,6 @@ function filterDataWithcolumnHeaders(data:TableRows,columnHeaders:string[]): Tab
     });
     filterData.push(newRow);
   });
+  LOGGER.debug(`<= filterDataWithcolumnHeaders. number of filtered rows: ${filterData.length}`);
   return filterData;
 }
