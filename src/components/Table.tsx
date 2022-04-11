@@ -4,13 +4,17 @@ import { FixedSizeList } from 'react-window';
 import { 
   TableDataType,
   TableRows,
-  TableRow 
+  TableRow, 
+  TableColumns
 } from "cdm/FolderModel";
 import { frontMatterKey } from "parsers/DatabaseParser";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import scrollbarWidth from "components/scrollbarWidth";
+import { getDispatch } from "components/reducers/DatabaseDispatch";
+import { ActionTypes } from "helpers/Constants";
+import PlusIcon from "./img/Plus";
 
 function useInstance(instance:any) {
   const { allColumns } = instance;
@@ -34,11 +38,14 @@ function useInstance(instance:any) {
  * @returns 
  */
 export function Table(properties: TableDataType){
+  const {state, dataDispatch} = getDispatch(properties);
   /** Columns information */
-  const columns = properties.columns;
+  const columns:TableColumns = state.columns;
   /** Rows information */
-  const sourceData: TableRows = properties.data;
-  /**   */
+  const sourceData: TableRows = state.data;
+  /** skipReset information */
+  const skipReset:boolean = state.skipReset;
+  /** Database information  */
   const view:DatabaseView = properties.view;
   const stateManager:StateManager = properties.stateManager;
   const filePath = stateManager.file.path;
@@ -52,7 +59,12 @@ export function Table(properties: TableDataType){
     }),
     []
   )
-  let propsUseTable:TableOptions<any> = {columns, data, defaultColumn};
+  let propsUseTable:TableOptions<any> = {
+    columns, 
+    data, 
+    defaultColumn
+
+  };
   /** Obsidian hooks to markdown events */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -190,6 +202,15 @@ export function Table(properties: TableDataType){
         >
           {RenderRow}
         </FixedSizeList>
+        <div
+            className="tr add-row"
+            onClick={() => dataDispatch({ type: ActionTypes.ADD_ROW })}
+        >
+          <span className="svg-icon svg-gray icon-margin">
+            <PlusIcon />
+          </span>
+          New
+        </div>
       </div>
     </div>
   )
