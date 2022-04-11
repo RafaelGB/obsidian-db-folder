@@ -14,7 +14,7 @@ import { getNormalizedPath } from "helpers/VaultManagement";
 import scrollbarWidth from "components/scrollbarWidth";
 import { databaseReducer, getDispatch } from "components/reducers/DatabaseDispatch";
 import { ActionTypes } from "helpers/Constants";
-import PlusIcon from "./img/Plus";
+import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 
 function useInstance(instance:any) {
@@ -44,8 +44,6 @@ export function Table(initialState: TableDataType){
   const columns:TableColumns = initialState.columns;
   /** Rows information */
   const sourceData: TableRows = initialState.data;
-  /** skipReset information */
-  const skipReset:boolean = initialState.skipReset;
   /** Reducer */
   const stateReducer = databaseReducer;
   /** Database information  */
@@ -58,7 +56,10 @@ export function Table(initialState: TableDataType){
 
   const defaultColumn = React.useMemo(
     () => ({
+      minWidth: 50,
       width: 150,
+      maxWidth: 400,
+      sortType: 'alphanumericFalsyLast',
     }),
     []
   )
@@ -149,7 +150,7 @@ export function Table(initialState: TableDataType){
     totalColumnsWidth
   } = useTable(
     propsUseTable,
-    useBlockLayout, 
+    useBlockLayout,
     hooks => {
       hooks.useInstance.push(useInstance);
     }
