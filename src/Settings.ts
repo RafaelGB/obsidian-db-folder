@@ -107,3 +107,8 @@ export class DBFolderSettingTab extends PluginSettingTab {
         this.settingsManager.constructUI(containerEl,'Kanban Plugin', false);
 	}
 }
+
+export function loadServicesThatRequireSettings(settings: DatabaseSettings) {
+  /** Init logger */
+    LOGGER.setDebugMode(settings.enable_debug_mode);
+}

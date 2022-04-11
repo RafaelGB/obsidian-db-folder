@@ -1,7 +1,6 @@
 import {
 	WorkspaceLeaf,
 	Plugin,
-	Component,
 	MarkdownPostProcessorContext,
 	TFolder,
 	TFile,
@@ -18,7 +17,8 @@ import{
 import {
 	DEFAULT_SETTINGS,
 	DatabaseSettings,
-	DBFolderSettingTab
+	DBFolderSettingTab,
+	loadServicesThatRequireSettings
 } from 'Settings';
 
 import {
@@ -92,6 +92,7 @@ export default class DBFolderPlugin extends Plugin {
 			DEFAULT_SETTINGS,
 			await this.loadData()
 		);
+		loadServicesThatRequireSettings(this.settings);
 	}
 
 	public registerPriorityCodeblockPostProcessor(

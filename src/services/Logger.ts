@@ -8,7 +8,7 @@ export interface LogInterface{
 
 class Log implements LogInterface{
     private static instance: LogInterface;
-    private isDebugModeEnabled: boolean = true;
+    private isDebugModeEnabled: boolean = false;
     private constructor() {}
 
     public debug(primaryMessage: string, ...supportingData: any[]){
