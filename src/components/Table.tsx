@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Row, TableOptions, useTable, useBlockLayout } from 'react-table';
+import { Row, TableOptions, useTable, useBlockLayout, TableInstance } from 'react-table';
 import { FixedSizeList } from 'react-window';
 import { 
   TableDataType,
@@ -12,12 +12,12 @@ import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import scrollbarWidth from "components/scrollbarWidth";
-import { databaseReducer, getDispatch } from "components/reducers/DatabaseDispatch";
+import { databaseReducer } from "components/reducers/DatabaseDispatch";
 import { ActionTypes } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 
-function useInstance(instance:any) {
+function useInstance(instance:TableInstance<any>) {
   const { allColumns } = instance;
 
   let rowSpanHeaders:any = [];
@@ -43,17 +43,13 @@ export function Table(initialState: TableDataType){
   /** Columns information */
   const columns:TableColumns = initialState.columns;
   /** Rows information */
-  const sourceData: TableRows = initialState.data;
+  const data: TableRows = initialState.data;
   /** Reducer */
   const stateReducer = databaseReducer;
   /** Database information  */
   const view:DatabaseView = initialState.view;
   const stateManager:StateManager = initialState.stateManager;
   const filePath = stateManager.file.path;
-
-  /** Rows showed information */
-  const data = React.useMemo(() => filterDataWithcolumnHeaders(sourceData,columns.map(column => column.Header)), []);
-
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 50,
@@ -219,22 +215,4 @@ export function Table(initialState: TableDataType){
       </div>
     </div>
   )
-}
-
-function filterDataWithcolumnHeaders(data:TableRows,columnHeaders:string[]): TableRows{
-  LOGGER.debug(`=> filterDataWithcolumnHeaders. number of total rows: ${data.length}`);
-  let filterData:TableRows = [];
-  let id:number = 0;
-  data.forEach(row => {
-    let newRow:TableRow={
-      id: ++id,
-      title:row.title
-    };
-    columnHeaders.forEach(columnHeader => {
-      newRow[columnHeader] = row[columnHeader] ? row[columnHeader] : '';
-    });
-    filterData.push(newRow);
-  });
-  LOGGER.debug(`<= filterDataWithcolumnHeaders. number of filtered rows: ${filterData.length}`);
-  return filterData;
 }
