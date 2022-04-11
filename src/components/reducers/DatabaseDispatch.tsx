@@ -5,7 +5,7 @@ import { DatabaseColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 
-function databaseReducer(state:any, action:ActionType) {
+export function databaseReducer(state:any, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer: ${action.type}`);
     switch (action.type) {
         /**
@@ -35,7 +35,7 @@ function databaseReducer(state:any, action:ActionType) {
 
 export function getDispatch(initialState:TableDataType) {
     const [state, dataDispatch] = useReducer(databaseReducer, initialState);
-
+    
     useEffect(() => {
         dataDispatch({ type: ActionTypes.ENABLE_RESET });
     }, [state.data, state.columns]);

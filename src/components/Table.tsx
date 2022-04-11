@@ -12,7 +12,7 @@ import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import scrollbarWidth from "components/scrollbarWidth";
-import { getDispatch } from "components/reducers/DatabaseDispatch";
+import { databaseReducer, getDispatch } from "components/reducers/DatabaseDispatch";
 import { ActionTypes } from "helpers/Constants";
 import PlusIcon from "./img/Plus";
 import { LOGGER } from "services/Logger";
@@ -39,13 +39,15 @@ function useInstance(instance:any) {
  * @returns 
  */
 export function Table(initialState: TableDataType){
-  const {state, dataDispatch} = getDispatch(initialState);
+  LOGGER.debug(`=> Table. number of columns: ${initialState.columns.length}. number of rows: ${initialState.data.length}`);
   /** Columns information */
-  const columns:TableColumns = state.columns;
+  const columns:TableColumns = initialState.columns;
   /** Rows information */
-  const sourceData: TableRows = state.data;
+  const sourceData: TableRows = initialState.data;
   /** skipReset information */
-  const skipReset:boolean = state.skipReset;
+  const skipReset:boolean = initialState.skipReset;
+  /** Reducer */
+  const stateReducer = databaseReducer;
   /** Database information  */
   const view:DatabaseView = initialState.view;
   const stateManager:StateManager = initialState.stateManager;
@@ -63,7 +65,8 @@ export function Table(initialState: TableDataType){
   let propsUseTable:TableOptions<any> = {
     columns, 
     data, 
-    defaultColumn
+    defaultColumn,
+    stateReducer
   };
   /** Obsidian hooks to markdown events */
   const onMouseOver = React.useCallback(
@@ -174,6 +177,7 @@ export function Table(initialState: TableDataType){
     },
     [prepareRow, rows]
   )
+    LOGGER.debug(`<= Table`);
    //Render the UI for your table
    return (
     <div {...getTableProps()} 
@@ -204,7 +208,7 @@ export function Table(initialState: TableDataType){
         </FixedSizeList>
         <div
             className="tr add-row"
-            onClick={() => dataDispatch({ type: ActionTypes.ADD_ROW })}
+            onClick={() => initialState.dispatch({ type: ActionTypes.ADD_ROW })}
         >
           <span className="svg-icon svg-gray icon-margin">
             <PlusIcon />

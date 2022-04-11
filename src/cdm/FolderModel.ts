@@ -1,5 +1,6 @@
 import { DatabaseView } from "DatabaseView";
 import { Link } from "obsidian-dataview";
+import { Dispatch } from "react";
 import { StateManager } from "StateManager";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
@@ -60,7 +61,8 @@ export type TableDataType={
     data: TableRows, 
     skipReset: boolean,
     view?: DatabaseView,
-    stateManager?: StateManager
+    stateManager?: StateManager,
+    dispatch?: Dispatch<any>
 }
 /** database column */
 export type DatabaseColumn = {
