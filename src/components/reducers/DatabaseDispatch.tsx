@@ -20,12 +20,17 @@ export function databaseReducer(state:any, action:ActionType) {
                     [column.Header]: ''
                  };
             });
+            const filename = `${action.payload}`;
             // Add note to persist row
             FileManagerDB.create_markdown_file(
                 app.workspace.getActiveFile().parent, 
-                "esto es una prueba", 
+                filename,
                 `${JSON.stringify(row)}`
             );
+            row = {
+                ...row,
+                ['title']: `[[${filename}]]`
+             };
             return update(state, {
             skipReset: { $set: true },
             data: { $push: [row] },

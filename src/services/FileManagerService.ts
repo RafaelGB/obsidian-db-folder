@@ -1,4 +1,4 @@
-import { TFolder } from "obsidian";
+import { TFile, TFolder } from "obsidian";
 import { LOGGER } from "./Logger";
 
 export class FileManager{
@@ -11,7 +11,7 @@ export class FileManager{
      * @param filename 
      * @param content 
      */
-    async create_markdown_file(targetFolder: TFolder, filename:string, content?: string): Promise<void> {
+    async create_markdown_file(targetFolder: TFolder, filename:string, content?: string): Promise<TFile> {
         LOGGER.debug(`=> create_markdown_file. name:${targetFolder.path}/${filename})`);
         const created_note = await app.fileManager.createNewMarkdownFile(
             targetFolder,
@@ -19,6 +19,7 @@ export class FileManager{
         );
         await app.vault.modify(created_note, content ?? "");
         LOGGER.debug(`<= create_markdown_file`);
+        return created_note;
     }
     /**
      * Singleton instance

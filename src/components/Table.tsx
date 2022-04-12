@@ -176,6 +176,8 @@ export function Table(initialState: TableDataType){
   )
     LOGGER.debug(`<= Table`);
    //Render the UI for your table
+   const [inputNewRow, setInputNewRow] = React.useState('');
+   const newRowRef = React.useRef(null);
    return (
     <div {...getTableProps()} 
     className="table"
@@ -203,15 +205,33 @@ export function Table(initialState: TableDataType){
         >
           {RenderRow}
         </FixedSizeList>
-        <div
-            className="tr add-row"
-            onClick={() => initialState.dispatch({ type: ActionTypes.ADD_ROW })}
-        >
-          <span className="svg-icon svg-gray icon-margin">
-            <PlusIcon />
-          </span>
-          New
-        </div>
+          <div className="tr">
+            <input type="text"
+              ref={newRowRef}
+              onChange={(e) => {
+                setInputNewRow(e.target.value);
+               }                   
+              }
+              placeholder='filename of new row'
+            />
+            <div
+              className="add-row"
+              onClick={() => {
+                initialState.dispatch({ 
+                type: ActionTypes.ADD_ROW,
+                payload: inputNewRow
+              });
+              setInputNewRow('');
+              newRowRef.current.value='';
+            }
+            }
+            >
+              <span className="svg-icon svg-gray icon-margin">
+                <PlusIcon />
+              </span>
+              New Row
+            </div>
+          </div>
       </div>
     </div>
   )
