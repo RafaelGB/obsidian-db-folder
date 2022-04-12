@@ -111,7 +111,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       databaseConfigYaml.columns = addMandatoryColumns(databaseConfigYaml.columns);
       let columns = await obtainColumnsFromFolder(databaseConfigYaml.columns);
       let folder = this.file.path.split('/').slice(0, -1).join('/');
-      let rows = await adapterTFilesToRows(this.app,folder);
+      let rows = await adapterTFilesToRows(folder);
       const tableProps:TableDataType = {
         columns: columns,
         data: rows,

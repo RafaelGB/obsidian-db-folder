@@ -2,6 +2,6 @@ import "obsidian";
 
 declare module "obsidian" {
   interface FileManager {
-    createNewMarkdownFile: (folder: string, filename: string) => Promise<void>;
+    createNewMarkdownFile: (folder: TFolder, filename: string) => Promise<TFile>;
   }
 }

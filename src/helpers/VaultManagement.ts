@@ -36,7 +36,7 @@ export function getNormalizedPath(path: string): NormalizedPath {
     };
   }
 
-export async function adapterTFilesToRows(app: App, folderPath: string): Promise<TableRows> {
+export async function adapterTFilesToRows(folderPath: string): Promise<TableRows> {
     LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
     const rows: TableRows = [];
     let id = 0;

@@ -4,6 +4,7 @@ import { ActionTypes } from 'helpers/Constants';
 import { DatabaseColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
+import { FileManagerDB } from 'services/FileManagerService';
 
 export function databaseReducer(state:any, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer: ${action.type}`);
@@ -19,6 +20,12 @@ export function databaseReducer(state:any, action:ActionType) {
                     [column.Header]: ''
                  };
             });
+            // Add note to persist row
+            FileManagerDB.create_markdown_file(
+                app.workspace.getActiveFile().parent, 
+                "esto es una prueba", 
+                `${JSON.stringify(row)}`
+            );
             return update(state, {
             skipReset: { $set: true },
             data: { $push: [row] },
