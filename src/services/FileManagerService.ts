@@ -1,26 +1,23 @@
-import { App } from "obsidian";
-
 export class FileManager{
     private static instance: FileManager;
-    private app: App;
-    constructor(app: App){
-        this.app = app;
-    }
+    constructor(){}
     
     async create_markdown_file(file_path: string, content: string): Promise<void> {
-        await this.app.fileManager.createNewMarkdownFile(
+        await app.fileManager.createNewMarkdownFile(
             file_path,
             "filename" ?? "Untitled"
         );
     }
     /**
      * Singleton instance
-     * @returns {Schema}
+     * @returns {FileManager}
      */
-    public static getInstance(app?: App): FileManager {
+    public static getInstance(): FileManager {
     if (!this.instance) {
-        this.instance = new FileManager(app);
+        this.instance = new FileManager();
     }
         return this.instance;
     }
 }
+ 
+export const FileManagerDB = FileManager.getInstance();
