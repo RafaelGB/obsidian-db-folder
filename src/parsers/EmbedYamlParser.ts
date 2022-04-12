@@ -1,11 +1,11 @@
 import { parseYaml, App } from "obsidian";
 
 // Interface of handlers
-import { YamlHandler } from "parsers/handlers/AbstractYamlPropertyHandler";
+import { YamlHandler } from "parsers/embedYamlHandlers/AbstractYamlPropertyHandler";
 // Handlers of yaml parse
-import { FolderHandler } from 'parsers/handlers/FolderHandler';
-import { TypeHandler } from 'parsers/handlers/TypeHandler';
-import { TitleHandler } from 'parsers/handlers/TitleHandler';
+import { FolderHandler } from 'parsers/embedYamlHandlers/FolderHandler';
+import { TypeHandler } from 'parsers/embedYamlHandlers/TypeHandler';
+import { TitleHandler } from 'parsers/embedYamlHandlers/TitleHandler';
 import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
 /**

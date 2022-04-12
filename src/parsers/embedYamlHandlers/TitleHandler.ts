@@ -1,4 +1,4 @@
-import {AbstractYamlHandler} from 'parsers/handlers/AbstractYamlPropertyHandler';
+import {AbstractYamlHandler} from 'parsers/embedYamlHandlers/AbstractYamlPropertyHandler';
 import { App } from "obsidian";
 
 export class TitleHandler extends AbstractYamlHandler {

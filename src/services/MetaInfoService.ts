@@ -1,5 +1,4 @@
 import type {
-    App, 
     TFile
 } from 'obsidian';
 
@@ -11,14 +10,11 @@ export type Property = {key: string, content: RowType, type: MetaType};
 
 export class MetaInfoService {
     private static instance: MetaInfoService;
-    private app: App;
 
-    constructor(app: App) {
-        this.app = app;
-    }
+    constructor() {}
 
     public async getTagsForFile(file: TFile): Promise<Property[]> {
-        const cache = this.app.metadataCache.getFileCache(file);
+        const cache = app.metadataCache.getFileCache(file);
         if (!cache) return [];
         const tags = cache.tags;
         if (!tags) return [];
@@ -29,10 +25,10 @@ export class MetaInfoService {
     }
 
     public async parseFrontmatter(file: TFile): Promise<Property[]> {
-        const frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
+        const frontmatter = app.metadataCache.getFileCache(file)?.frontmatter;
         if (!frontmatter) return [];
         const {position: {start, end}} = frontmatter;
-        const filecontent = await this.app.vault.cachedRead(file);
+        const filecontent = await app.vault.cachedRead(file);
 
         const yamlContent: string = filecontent.split("\n").slice(start.line, end.line).join("\n");
         const parsedYaml = parseYaml(yamlContent);
@@ -47,7 +43,7 @@ export class MetaInfoService {
     }
 
     public async parseInlineFields(file: TFile): Promise<Property[]> {
-        const content = await this.app.vault.cachedRead(file);
+        const content = await app.vault.cachedRead(file);
 
         return content.split("\n").reduce((obj: Property[], str: string) => {
             const parts = str.split("::");
@@ -75,9 +71,9 @@ export class MetaInfoService {
      * Singleton instance
      * @returns {Schema}
      */
-    public static getInstance(app?: App): MetaInfoService {
+    public static getInstance(): MetaInfoService {
     if (!MetaInfoService.instance) {
-        MetaInfoService.instance = new MetaInfoService(app);
+        MetaInfoService.instance = new MetaInfoService();
     }
         return MetaInfoService.instance;
     }
