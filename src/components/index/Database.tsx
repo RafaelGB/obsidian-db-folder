@@ -6,7 +6,7 @@ import { DatabaseContext } from 'context/context';
 import { databaseReducer } from 'components/reducers/DatabaseDispatch';
 import { ActionTypes } from 'helpers/Constants';
   
-export function createTable(tableProps:TableDataType,app:App): JSX.Element {
+export function createDatabase(tableProps:TableDataType,app:App): JSX.Element {
     return (
         <DatabaseContext.Provider value={app}>
             <Database

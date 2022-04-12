@@ -33,7 +33,7 @@ export function addMandatoryColumns(columns: DatabaseColumns): DatabaseColumns {
     'title': {
       accessor: 'title',
       input: 'markdown',
-      header: 'title'
+      Header: 'title'
     }
   };
   return {...mandatoryColumns, ...columns};
@@ -54,7 +54,7 @@ export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns){
     return columns;
 }
 
-async function columnOptions(key:string, column:DatabaseColumn):Promise<TableColumn> {
+async function columnOptions(value:string, column:DatabaseColumn):Promise<TableColumn> {
   LOGGER.debug(`=> columnOptions`,`column: ${JSON.stringify(column)}`);
   /**
    * return plain text
@@ -63,7 +63,7 @@ async function columnOptions(key:string, column:DatabaseColumn):Promise<TableCol
   function isText():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return text column`);
 		return {
-      Header: key,
+      Header: value,
       accessor: column.accessor,
     };
   }
@@ -75,7 +75,7 @@ async function columnOptions(key:string, column:DatabaseColumn):Promise<TableCol
   function isMarkdown():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return markdown column`);
     return {
-      Header: key,
+      Header: value,
       accessor: column.accessor,
       dataType: DataTypes.TEXT,
       Cell: ({ cell }:any) => {

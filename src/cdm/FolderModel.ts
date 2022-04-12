@@ -67,7 +67,7 @@ export type TableDataType={
 /** database column */
 export type DatabaseColumn = {
     input: string,
-    header: string,
+    Header: string,
     accessor: string,
     [key: string]: string
 }
