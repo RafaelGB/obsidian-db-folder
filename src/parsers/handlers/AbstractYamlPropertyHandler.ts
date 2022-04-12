@@ -1,22 +1,22 @@
 import { App } from "obsidian";
 
-export interface Handler {
-    setNext(handler: Handler): Handler;
+export interface YamlHandler {
+    setNext(handler: YamlHandler): YamlHandler;
 
     handle(yaml: any, app: App): [string, string][];
 }
 
-export abstract class AbstractHandler implements Handler {
+export abstract class AbstractYamlHandler implements YamlHandler {
     abstract handlerName: string;
 
-    protected nextHandler: Handler;
+    protected nextHandler: YamlHandler;
     protected listOfErrors: [string,string][] = [];
 
     protected addError(error: string): void {
         this.listOfErrors.push([this.handlerName, error]);
     }
     
-    public setNext(handler: Handler): Handler {
+    public setNext(handler: YamlHandler): YamlHandler {
         this.nextHandler = handler;
         return handler;
     }

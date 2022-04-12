@@ -1,7 +1,6 @@
 import {
 	WorkspaceLeaf,
 	Plugin,
-	Component,
 	MarkdownPostProcessorContext,
 	TFolder,
 	TFile,
@@ -18,7 +17,8 @@ import{
 import {
 	DEFAULT_SETTINGS,
 	DatabaseSettings,
-	DBFolderSettingTab
+	DBFolderSettingTab,
+	loadServicesThatRequireSettings
 } from 'Settings';
 
 import {
@@ -29,24 +29,10 @@ import {
 	DBFolderAPI
 }from 'api/plugin-api';
 
-import {
-	DBFolderListRenderer
-} from 'EmbedDatabaseFolder';
-
-import {
-	parseDatabase
-} from 'parsers/EmbedYamlParser';
-
-import {
-	DatabaseType
-} from 'parsers/handlers/TypeHandler';
-
-import {
-	DbFolderError
-} from 'errors/AbstractError';
 import { basicFrontmatter, frontMatterKey } from 'parsers/DatabaseParser';
 import { StateManager } from 'StateManager';
 import { around } from 'monkey-around';
+import { LOGGER } from 'services/Logger';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -67,11 +53,17 @@ export default class DBFolderPlugin extends Plugin {
 		await this.load_settings();
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new DBFolderSettingTab(this.app, this));
-		
-		// This registers a code block processor that will be called when the user types `<code>` in markdown.
-		this.registerPriorityCodeblockPostProcessor("dbfolder", -100, async (source: string, el, ctx) =>
-			this.dbfolder(source, el, ctx, ctx.sourcePath)
+		this.addSettingTab(new DBFolderSettingTab(this, {
+			onSettingsChange: async (newSettings) => {
+			  this.settings = newSettings;
+			  await this.saveSettings();
+	  
+			  // Force a complete re-render when settings change
+			  this.stateManagers.forEach((stateManager) => {
+				//stateManager.forceRefresh();
+			  });
+			},
+		  })
 		);
 
 		this.registerView(frontMatterKey, (leaf) => new DatabaseView(leaf, this));
@@ -81,12 +73,16 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	async onunload() {
-		console.log('Unloading DBFolder plugin');
+		LOGGER.debug('Unloading DBFolder plugin');
 	}
 
 	/** Update plugin settings. */
 	async updateSettings(settings: Partial<DatabaseSettings>) {
 		Object.assign(this.settings, settings);
+		await this.saveData(this.settings);
+	}
+
+	async saveSettings() {
 		await this.saveData(this.settings);
 	}
 
@@ -96,6 +92,7 @@ export default class DBFolderPlugin extends Plugin {
 			DEFAULT_SETTINGS,
 			await this.loadData()
 		);
+		loadServicesThatRequireSettings(this.settings);
 	}
 
 	public registerPriorityCodeblockPostProcessor(
@@ -105,38 +102,6 @@ export default class DBFolderPlugin extends Plugin {
 	) {
 		let registered = this.registerMarkdownCodeBlockProcessor(language, processor);
 		registered.sortOrder = priority;
-	}
-
-	public async dbfolder(
-		source: string,
-		el: HTMLElement,
-		component: Component | MarkdownPostProcessorContext,
-		sourcePath: string
-	) {
-		try {
-			let databaseYaml = await parseDatabase(source, this.app);
-			switch (databaseYaml.type as DatabaseType) {
-				case DatabaseType.LIST:
-					component.addChild(
-						new DBFolderListRenderer(el, databaseYaml, sourcePath, this.settings,this.app)
-					);
-					break;
-				case DatabaseType.BOARD:
-					// TODO
-					console.warn('not implemented yet');
-					break;
-				default:
-					console.error('something went wrong rendering dbfolder');
-			}
-		} catch (e) {
-			switch(true){
-				case e instanceof DbFolderError:
-					e.render(el);
-					break;
-				default:
-					console.error(e);
-			}
-		}
 	}
 
 	async setDatabaseView(leaf: WorkspaceLeaf) {

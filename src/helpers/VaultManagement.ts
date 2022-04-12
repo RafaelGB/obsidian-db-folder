@@ -1,6 +1,5 @@
 import { App, TFile } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
-import { MetaInfoService } from 'services/MetaInfoService';
 import { getAPI} from "obsidian-dataview"
 import { LOGGER } from "services/Logger";
 import { frontMatterKey } from "parsers/DatabaseParser";
@@ -52,7 +51,7 @@ export async function adapterTFilesToRows(app: App, folderPath: string): Promise
         /** Optional fields */
         Object.keys(page).forEach(property => {
             const value = page[property];
-            if (value && typeof value === 'string') {
+            if (value && typeof value !== 'object') {
                 aFile[property] = value;
             }
         });

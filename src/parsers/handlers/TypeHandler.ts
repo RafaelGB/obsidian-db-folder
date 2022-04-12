@@ -1,4 +1,4 @@
-import {AbstractHandler} from 'parsers/handlers/AbstractHandler';
+import {AbstractYamlHandler} from 'parsers/handlers/AbstractYamlPropertyHandler';
 import { App } from "obsidian";
 
 /**
@@ -9,7 +9,7 @@ import { App } from "obsidian";
     BOARD = 'BOARD'
 }
 
-export class TypeHandler extends AbstractHandler {
+export class TypeHandler extends AbstractYamlHandler {
     handlerName: string = 'type';
     public handle(yaml: any, app: App): [string, string][] {
 

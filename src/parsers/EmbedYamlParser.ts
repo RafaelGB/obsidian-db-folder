@@ -1,7 +1,7 @@
 import { parseYaml, App } from "obsidian";
 
 // Interface of handlers
-import { Handler } from "parsers/handlers/AbstractHandler";
+import { YamlHandler } from "parsers/handlers/AbstractYamlPropertyHandler";
 // Handlers of yaml parse
 import { FolderHandler } from 'parsers/handlers/FolderHandler';
 import { TypeHandler } from 'parsers/handlers/TypeHandler';
@@ -47,7 +47,7 @@ function validateYaml(yaml: any, app: App): [string, string][] {
 /**
  * Obtain all classes than extends from AbstractHandler
  */
-function getHandlers(): Handler[] {
+function getHandlers(): YamlHandler[] {
     return [
         new TypeHandler(),
         new FolderHandler(),

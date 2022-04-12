@@ -1,3 +1,4 @@
+/** Table Actions */
 export const ActionTypes = Object.freeze({
     ADD_OPTION_TO_COLUMN: 'add_option_to_column',
     ADD_ROW: 'add_row',
@@ -8,7 +9,7 @@ export const ActionTypes = Object.freeze({
     ADD_COLUMN_TO_RIGHT: 'add_column_to_right',
     DELETE_COLUMN: 'delete_column',
     ENABLE_RESET: 'enable_reset',
-  });
+});
   
 export const DataTypes = Object.freeze({
     NUMBER: 'number',

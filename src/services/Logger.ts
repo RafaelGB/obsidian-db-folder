@@ -3,11 +3,12 @@ export interface LogInterface{
     info(primaryMessage: string, ...supportingData: any[]):void;
     warn(primaryMessage: string, ...supportingData: any[]):void;
     error(primaryMessage: string, ...supportingData: any[]):void;
+    setDebugMode(isDebugModeEnabled: boolean):void;
 }
 
 class Log implements LogInterface{
     private static instance: LogInterface;
-    private isDebugModeEnabled: boolean = true;
+    private isDebugModeEnabled: boolean = false;
     private constructor() {}
 
     public debug(primaryMessage: string, ...supportingData: any[]){
