@@ -205,7 +205,7 @@ export function Table(initialState: TableDataType){
         >
           {RenderRow}
         </FixedSizeList>
-          <div className="tr">
+          <div className="tr add-row">
             <input type="text"
               ref={newRowRef}
               onChange={(e) => {
@@ -215,7 +215,6 @@ export function Table(initialState: TableDataType){
               placeholder='filename of new row'
             />
             <div
-              className="add-row"
               onClick={() => {
                 initialState.dispatch({ 
                 type: ActionTypes.ADD_ROW,
