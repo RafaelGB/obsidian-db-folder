@@ -78,7 +78,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
 		return {
       Header: value,
       accessor: column.accessor,
-      dataType: DataTypes.NUMBER,
+      dataType: DataTypes.SELECT,
       options: options
     };
   }

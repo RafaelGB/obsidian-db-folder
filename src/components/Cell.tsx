@@ -122,6 +122,7 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function getCellElement() {
+      LOGGER.debug(`<=>Cell: Type: ${dataType}`);
       switch (dataType) {
         /** Plain text option */
         case DataTypes.TEXT:
@@ -138,7 +139,7 @@ export default function Cell(cellProperties:Cell) {
         return (
           <ContentEditable
             html={(value.value && value.value.toString()) || ''}
-            onChange={onChange}
+            onChange={handleOnChange}
             onBlur={() => setValue(old => ({ value: old.value, update: true }))}
             className="data-input text-align-right"
           />
@@ -242,7 +243,7 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Default option */
         default:
-          LOGGER.warn(`Cell: unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
+          LOGGER.warn(`<=Cell. unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
           return <span></span>;
       }
     }

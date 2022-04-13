@@ -23,9 +23,18 @@ function Database(tableProps:TableDataType){
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
   }, [state.data, state.columns]);
   return(
-    <Table
-      {...state}
-      dispatch={dataDispatch}
-    />
+    <div
+      className="overflow-y-hidden"
+      style={{
+        width: '100vw',
+        height: '100vh',
+      }}
+    >
+      <Table
+        {...state}
+        dispatch={dataDispatch}
+      />
+      <div id="popper-portal"></div>
+    </div>
   );
 }

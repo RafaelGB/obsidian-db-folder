@@ -41,6 +41,7 @@ export function databaseReducer(state:any, action:ActionType) {
         case ActionTypes.ENABLE_RESET:
             return update(state, { skipReset: { $set: true } });
         default:
+            LOGGER.warn(`<=databaseReducer: unknown action ${action.type}`);
             return state;
     }
 }
