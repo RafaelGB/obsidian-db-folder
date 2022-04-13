@@ -1,4 +1,4 @@
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from 'react-dom';
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
@@ -72,7 +72,7 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function onChange(event:ContentEditableEvent) {
-      const cellBasenameFile:string = (cellProperties.row.original as any).title.replace(/\[\[|\]\]/g, '').split('|')[0];
+      const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
       LOGGER.debug(`<=>Cell: onChange: ${cellBasenameFile} with value: ${event.target.value}`);
       const columnHeader = cellProperties.column.Header;
       

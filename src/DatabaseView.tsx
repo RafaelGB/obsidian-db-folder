@@ -1,7 +1,7 @@
 import { TableDataType } from 'cdm/FolderModel';
 import { obtainColumnsFromFolder} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
-import { DatabaseCore } from 'helpers/Constants';
+import { DatabaseCore, DataTypes } from 'helpers/Constants';
 import { adapterTFilesToRows, obtainContentFromTfile } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
 
@@ -42,7 +42,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     setViewData(data: string, clear: boolean): void {
         if (!hasFrontmatterKey(data)) {
             this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
-              'markdown';
+              DataTypes.MARKDOWN;
             this.plugin.removeView(this);
             this.plugin.setMarkdownView(this.leaf, false);
       
@@ -78,7 +78,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
             .onClick(() => {
               this.plugin.databaseFileModes[
                 (this.leaf as any).id || this.file.path
-              ] = 'markdown';
+              ] = DataTypes.MARKDOWN;
               this.plugin.setMarkdownView(this.leaf);
             });
         })

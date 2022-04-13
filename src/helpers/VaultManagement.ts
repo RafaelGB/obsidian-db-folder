@@ -41,6 +41,11 @@ export function getNormalizedPath(path: string): NormalizedPath {
     };
   }
 
+/**
+ * With the use of Dataview and the folder path, we can obtain an array of rows
+ * @param folderPath 
+ * @returns 
+ */
 export async function adapterTFilesToRows(folderPath: string): Promise<TableRows> {
     LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
     const rows: TableRows = [];
@@ -66,5 +71,16 @@ export async function adapterTFilesToRows(folderPath: string): Promise<TableRows
     }));
     LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
     return rows;
+}
+
+export function adapterRowToDatabaseYaml(rowInfo:any):string{
+    let yaml = [];
+    yaml.push('---');
+    Object.entries(rowInfo).forEach(entry => {
+        const [key, value] = entry;
+        yaml.push(`${key}: ${value??''}`);
+      });
+    yaml.push('---');
+    return yaml.join('\n');
 }
 

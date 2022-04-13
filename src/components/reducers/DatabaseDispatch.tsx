@@ -1,10 +1,11 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import { ActionTypes } from 'helpers/Constants';
+import { ActionTypes, MetadataColumns } from 'helpers/Constants';
 import { DatabaseColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { FileManagerDB } from 'services/FileManagerService';
+import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
 
 export function databaseReducer(state:any, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer: ${action.type}`);
@@ -25,11 +26,11 @@ export function databaseReducer(state:any, action:ActionType) {
             FileManagerDB.create_markdown_file(
                 state.databaseFolder, 
                 filename,
-                `${JSON.stringify(row)}`
+                adapterRowToDatabaseYaml(row)
             );
             row = {
                 ...row,
-                ['title']: `[[${filename}]]`
+                [MetadataColumns.FILE]: `[[${filename}]]`
              };
             return update(state, {
             skipReset: { $set: true },
