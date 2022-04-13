@@ -9,24 +9,25 @@ export class FileContent{
     }
 
     replaceAll(pattern_to_replace:RegExp, input:string): FileContent{
-      if(input!==''){
-        if(Array.isArray(pattern_to_replace)){
-          pattern_to_replace.forEach(
-            (regex,index) =>  {
-              this.value = this.value.replaceAll(
-                regex,
-                input[index]
-              );
+        if(input!==''){
+            if(Array.isArray(pattern_to_replace)){
+                console.log("as Array");
+                pattern_to_replace.forEach(
+                    (regex,index) =>  {
+                        this.value = this.value.replaceAll(
+                        regex,
+                        input[index]
+                        );
+                    }
+                );
+            }else{
+                this.value = this.value.replaceAll(
+                    pattern_to_replace,
+                    input
+                );
             }
-          );
-        }else{
-          this.value = this.value.replaceAll(
-            pattern_to_replace,
-            input
-          );
         }
-      }
-      return this;
+        return this;
     }
 
     remove(pattern_to_be_removed:RegExp): FileContent{

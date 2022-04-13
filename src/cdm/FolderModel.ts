@@ -85,10 +85,3 @@ export type DatabaseYaml = {
     /** database columns */
     columns: DatabaseColumns
 }
-
-export type CellDataType = {
-    /** database columns */
-    column: TableColumn,
-    value: string,
-    [key: string]: any
-}

@@ -1,4 +1,3 @@
-import { CellDataType } from "cdm/FolderModel";
 import { DataTypes } from "helpers/Constants";
 import React, { useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
@@ -35,14 +34,14 @@ export default function Cell(cellProperties:Cell) {
 
     function onChange(event:ContentEditableEvent) {
       const cellBasenameFile:string = (cellProperties.row.original as any).title.replace(/\[\[|\]\]/g, '').split('|')[0];
-      LOGGER.debug(`<=>Cell: onChange: ${cellBasenameFile}`);
+      LOGGER.debug(`<=>Cell: onChange: ${cellBasenameFile} with value: ${event.target.value}`);
       const columnHeader = cellProperties.column.Header;
       
       let noteObject = {
         action: 'replace',
         filePath: `${cellBasenameFile}`,
         regexp: new RegExp(`^[\s]*${columnHeader}[:]{1}(.+)$`,"gm"),
-        newValue: `${columnHeader}: ${value.value}`
+        newValue: `${columnHeader}: ${event.target.value}`
       };
       
       FileManagerDB.editNoteContent(noteObject);
