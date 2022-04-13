@@ -16,6 +16,15 @@ import { databaseReducer } from "components/reducers/DatabaseDispatch";
 import { ActionTypes } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
+import Cell from "components/Cell";
+
+const defaultColumn = {
+  minWidth: 50,
+  width: 150,
+  maxWidth: 400,
+  Cell: Cell,
+  sortType: 'alphanumericFalsyLast',
+};
 
 function useInstance(instance:TableInstance<any>) {
   const { allColumns } = instance;
@@ -50,15 +59,7 @@ export function Table(initialState: TableDataType){
   const view:DatabaseView = initialState.view;
   const stateManager:StateManager = initialState.stateManager;
   const filePath = stateManager.file.path;
-  const defaultColumn = React.useMemo(
-    () => ({
-      minWidth: 50,
-      width: 150,
-      maxWidth: 400,
-      sortType: 'alphanumericFalsyLast',
-    }),
-    []
-  )
+  
   let propsUseTable:TableOptions<any> = {
     columns, 
     data, 
@@ -175,9 +176,10 @@ export function Table(initialState: TableDataType){
     [prepareRow, rows]
   )
     LOGGER.debug(`<= Table`);
-   //Render the UI for your table
+   // Manage input of new row
    const [inputNewRow, setInputNewRow] = React.useState('');
    const newRowRef = React.useRef(null);
+   //Render the UI for your table
    return (
     <div {...getTableProps()} 
     className="table"

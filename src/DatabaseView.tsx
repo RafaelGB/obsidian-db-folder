@@ -117,8 +117,10 @@ export class DatabaseView extends TextFileView implements HoverParent {
         data: rows,
         skipReset: false,
         view: this,
-        stateManager: this.plugin.getStateManager(this.file)
+        stateManager: this.plugin.getStateManager(this.file),
+        databaseFolder: this.file.parent
       }
+      
       let table = createDatabase(tableProps,this.app);
       const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
       ReactDOM.render(table, tableContainer);

@@ -65,6 +65,8 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
 		return {
       Header: value,
       accessor: column.accessor,
+      dataType: DataTypes.TEXT,
+      options: []
     };
   }
 
@@ -90,7 +92,8 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
           );
         })
         return <span ref={containerRef}></span>;
-      }
+      },
+      options: []
     };
   }
 

@@ -1,6 +1,7 @@
+import { FileContent } from "helpers/FileContent";
+import { obtainContentFromTfile, obtainTfileFromFilePath } from "helpers/VaultManagement";
 import { TFile, TFolder } from "obsidian";
-import { LOGGER } from "./Logger";
-
+import { LOGGER } from "services/Logger";
 export class FileManager{
     private static instance: FileManager;
     constructor(){}
@@ -21,6 +22,33 @@ export class FileManager{
         LOGGER.debug(`<= create_markdown_file`);
         return created_note;
     }
+     /**
+      * Edit file content
+      * @param note 
+      */
+    async editNoteContent(note:any) {
+        LOGGER.debug(`=> editNoteContent. note:${JSON.stringify(note)}`);
+        try{
+            let tfile = obtainTfileFromFilePath(note.filePath);
+            let tfileContent = await obtainContentFromTfile(tfile);
+            let line_string = new FileContent(tfileContent);
+            let releasedContent = tfileContent;
+            switch (note.action) {
+              case 'remove':
+                releasedContent = line_string.remove(note.regexp).value;
+                break;
+              case 'replace':
+                releasedContent = line_string.replaceAll(note.regexp, note.newValue).value;
+                break;
+              default:
+                throw "Error: Option " + note.action + " is not supported with tp.user.editNoteContent.";
+            }
+            app.vault.modify(tfile,releasedContent);
+            LOGGER.debug(`<= editNoteContent. file '${tfile.path}' edited`);
+        }catch(err) {
+            LOGGER.error(`<= editNoteContent exit with errors`,err);
+        }
+      }
     /**
      * Singleton instance
      * @returns {FileManager}
