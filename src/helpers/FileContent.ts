@@ -8,7 +8,7 @@ export class FileContent{
         return this.real_array(this.value.split('\n'));
     }
 
-    replaceAll(pattern_to_replace:any, input:any): FileContent{
+    replaceAll(pattern_to_replace:RegExp, input:string): FileContent{
       if(input!==''){
         if(Array.isArray(pattern_to_replace)){
           pattern_to_replace.forEach(
@@ -29,7 +29,7 @@ export class FileContent{
       return this;
     }
 
-    remove(pattern_to_be_removed:any): FileContent{
+    remove(pattern_to_be_removed:RegExp): FileContent{
         let _object = this.object();
         _object.forEach((value,index) => {
             if (value.match(pattern_to_be_removed)){
@@ -40,7 +40,7 @@ export class FileContent{
         return this;
     }
 
-    removeAll(string_to_be_removed:any): FileContent{
+    removeAll(string_to_be_removed:string): FileContent{
         let _object = this.object();
         _object.forEach((value,index) => {
             if (value.trim().indexOf(string_to_be_removed)!=-1){
@@ -61,7 +61,7 @@ export class FileContent{
         return null;
     }
 
-    edit(content:string,line_number:any): FileContent{
+    edit(content:string,line_number:number): FileContent{
          let _object = this.object();
         _object[line_number-1] = content;
          this.value = this.real_array(_object).join('\n');
