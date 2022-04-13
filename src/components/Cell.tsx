@@ -75,13 +75,13 @@ export default function Cell(cellProperties:Cell) {
     function onChange(event:ContentEditableEvent) {
       const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
       LOGGER.debug(`<=>Cell: onChange: ${cellBasenameFile} with value: ${event.target.value}`);
-      const columnHeader = cellProperties.column.Header;
+      const columnId = cellProperties.column.id;
       
       let noteObject = {
         action: 'replace',
         filePath: `${cellBasenameFile}`,
-        regexp: new RegExp(`^[\s]*${columnHeader}[:]{1}(.+)$`,"gm"),
-        newValue: `${columnHeader}: ${event.target.value}`
+        regexp: new RegExp(`^[\s]*${columnId}[:]{1}(.+)$`,"gm"),
+        newValue: `${columnId}: ${event.target.value}`
       };
       
       FileManagerDB.editNoteContent(noteObject);

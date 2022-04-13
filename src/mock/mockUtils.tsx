@@ -20,7 +20,7 @@ export function makeData(count:number):TableDataType {
     }
     const columns:TableColumns = [
       {
-        Header: 'title',
+        id: 'title',
         label: 'File Name',
         accessor: 'title',
         minWidth: 100,
@@ -44,7 +44,7 @@ export function makeData(count:number):TableDataType {
         }
       },
       {
-        Header: 'Status',
+        id: 'Status',
         label: 'Status',
         accessor: 'Status',
         minWidth: 100,

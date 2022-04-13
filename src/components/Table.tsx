@@ -16,12 +16,14 @@ import { ActionTypes, DatabaseCore } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
+import Header from "components/Header";
 
 const defaultColumn = {
   minWidth: 50,
   width: 150,
   maxWidth: 400,
   Cell: Cell,
+  Header: Header,
   sortType: 'alphanumericFalsyLast',
 };
 

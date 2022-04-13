@@ -46,7 +46,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   function isText():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return text column`);
 		return {
-      Header: value,
+      id: value,
       accessor: column.accessor,
       dataType: DataTypes.TEXT,
       options: options
@@ -60,7 +60,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
    function isNumber():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return number column`);
 		return {
-      Header: value,
+      id: value,
       accessor: column.accessor,
       dataType: DataTypes.NUMBER,
       options: options
@@ -75,7 +75,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
     options.push({ backgroundColor: randomColor() });
     LOGGER.debug(`options: ${JSON.stringify(options)}`);
 		return {
-      Header: value,
+      id: value,
       accessor: column.accessor,
       dataType: DataTypes.SELECT,
       options: options
@@ -89,7 +89,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   function isMarkdown():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return markdown column`);
     return {
-      Header: value,
+      id: value,
       accessor: column.accessor,
       dataType: DataTypes.MARKDOWN,
       options: options

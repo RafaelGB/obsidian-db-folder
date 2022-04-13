@@ -31,7 +31,8 @@ export type ColumnOptions = {
 }
 
 export type TableColumn = {
-    Header: string,
+    id: string,
+    Header?: any,
     label?: string,
     accessor: string,
     minWidth?: number,

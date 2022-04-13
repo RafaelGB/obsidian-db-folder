@@ -39,7 +39,7 @@ export function databaseReducer(state:any, action:ActionType) {
             state.columns.forEach((column:DatabaseColumn) => {
                 row = {
                     ...row,
-                    [column.Header]: ''
+                    [column.id]: ''
                  };
             });
             const filename = `${action.payload}`;
