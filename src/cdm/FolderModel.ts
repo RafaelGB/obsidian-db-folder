@@ -1,4 +1,5 @@
 import { DatabaseView } from "DatabaseView";
+import { TFolder } from "obsidian";
 import { Link } from "obsidian-dataview";
 import { Dispatch } from "react";
 import { StateManager } from "StateManager";
@@ -63,6 +64,7 @@ export type TableDataType={
     view?: DatabaseView,
     stateManager?: StateManager,
     dispatch?: Dispatch<any>
+    databaseFolder: TFolder
 }
 /** database column */
 export type DatabaseColumn = {

@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
 import { FileManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
+import { Cell } from 'react-table';
 
-export default function Cell(cellProperties:CellDataType) {
+export default function Cell(cellProperties:Cell) {
     /** Initial state of cell */
     const initialValue = cellProperties.value;
     /** Type of cell */
-    const dataType = cellProperties.column.dataType;
+    const dataType = (cellProperties.column as any).dataType;
     // state of cell value
     const [value, setValue] = useState({ value: initialValue, update: false });
     // state for keeping the timeout
@@ -33,11 +34,13 @@ export default function Cell(cellProperties:CellDataType) {
   };
 
     function onChange(event:ContentEditableEvent) {
-      LOGGER.debug(`row values ${Object.keys(cellProperties.row.original)}`);
+      const cellBasenameFile:string = (cellProperties.row.original as any).title.replace(/\[\[|\]\]/g, '').split('|')[0];
+      LOGGER.debug(`<=>Cell: onChange: ${cellBasenameFile}`);
       const columnHeader = cellProperties.column.Header;
+      
       let noteObject = {
         action: 'replace',
-        basename: 'mi fichero de testing',
+        filePath: `${cellBasenameFile}`,
         regexp: new RegExp(`^[\s]*${columnHeader}[:]{1}(.+)$`,"gm"),
         newValue: `${columnHeader}: ${value.value}`
       };

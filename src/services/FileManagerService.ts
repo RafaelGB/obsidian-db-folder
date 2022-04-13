@@ -1,4 +1,4 @@
-import { obtainContentFromTfile, obtainTfileFromBasename } from "helpers/VaultManagement";
+import { obtainContentFromTfile, obtainTfileFromFilePath } from "helpers/VaultManagement";
 import { TFile, TFolder } from "obsidian";
 import { LOGGER } from "./Logger";
 
@@ -104,7 +104,7 @@ export class FileManager{
     async editNoteContent(note:any) {
         LOGGER.debug(`=> editNoteContent. note:${JSON.stringify(note)}`);
         try{
-            let tfile = obtainTfileFromBasename(note.basename);
+            let tfile = obtainTfileFromFilePath(note.filePath);
             let tfileContent = await obtainContentFromTfile(tfile);
             let line_string = new FileContent(tfileContent);
             let releasedContent = tfileContent;

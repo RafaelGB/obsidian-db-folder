@@ -16,8 +16,8 @@ export async function obtainContentFromTfile(tfile: TFile): Promise<string> {
     return content;
 }
 
-export function obtainTfileFromBasename(basename:string):TFile{
-    let tfile = app.vault.getMarkdownFiles().find(tfile => tfile.basename===basename);
+export function obtainTfileFromFilePath(filePath:string):TFile{
+    let tfile = app.vault.getMarkdownFiles().find(tfile => tfile.path===filePath);
     return tfile;
 }
   
