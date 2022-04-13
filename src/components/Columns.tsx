@@ -2,7 +2,7 @@ import {
   MarkdownRenderer
 } from "obsidian";
 import React,{useRef,useLayoutEffect} from 'react';
-import { DataTypes } from 'helpers/Constants';
+import { DataTypes, MetadataColumns } from 'helpers/Constants';
 import {DatabaseColumn, DatabaseColumns, TableColumn, TableColumns} from 'cdm/FolderModel';
 import { randomColor } from 'helpers/Colors';
 import { LOGGER } from "services/Logger";
@@ -13,22 +13,20 @@ import { LOGGER } from "services/Logger";
  * @returns 
  */
 export function addMandatoryColumns(columns: DatabaseColumns): DatabaseColumns {
-  const mandatoryColumns: DatabaseColumns = {
-    'title': {
-      accessor: 'title',
-      input: 'markdown',
-      Header: 'title'
-    }
+  const metadataColumns: DatabaseColumns = {};
+  metadataColumns[MetadataColumns.FILE]={
+      accessor: MetadataColumns.FILE,
+      input: DataTypes.MARKDOWN,
+      Header: MetadataColumns.FILE
   };
-  return {...mandatoryColumns, ...columns};
+
+  return {...columns, ...metadataColumns};
 }
 
 export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns){
     LOGGER.debug(`=> obtainColumnsFromFolder. databaseColumns: ${JSON.stringify(databaseColumns)}`);
+    databaseColumns = addMandatoryColumns(databaseColumns);
     const columns:TableColumns = [];
-    // Define mandatory columns
-    const titleOptions = [];
-    titleOptions.push({ backgroundColor: randomColor() });
     await Promise.all(Object.keys(databaseColumns).map(async (columnKey) => {
       const column = databaseColumns[columnKey];
       columns.push(await columnOptions(columnKey,column));
@@ -75,6 +73,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
    function isSelect():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return select column`);
     options.push({ backgroundColor: randomColor() });
+    LOGGER.debug(`options: ${JSON.stringify(options)}`);
 		return {
       Header: value,
       accessor: column.accessor,
@@ -100,8 +99,8 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   let inputs: Record<string, any> = {
     'text': isText,
     'markdown': isMarkdown,
-    'number': isNumber, // TODO
-    'select': isSelect // TODO
+    'number': isNumber,
+    'select': isSelect
   };
 
   if(inputs.hasOwnProperty(column.input)){

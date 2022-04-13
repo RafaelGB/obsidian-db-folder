@@ -2,7 +2,7 @@ import { App, TFile } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { getAPI} from "obsidian-dataview"
 import { LOGGER } from "services/Logger";
-import { frontMatterKey } from "parsers/DatabaseParser";
+import { DatabaseCore, MetadataColumns } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
 interface NormalizedPath {
@@ -46,13 +46,14 @@ export async function adapterTFilesToRows(folderPath: string): Promise<TableRows
     const rows: TableRows = [];
     let id = 0;
 
-    const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p=>!p[frontMatterKey]);
+    const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p=>!p[DatabaseCore.FRONTMATTER_KEY]);
     await Promise.all(folderFiles.map(async (page) => {
         /** Mandatory fields */
         const aFile: TableRow = {
-            id: ++id,
-            title: `${page.file.link.markdown()}`
+            id: ++id
         };
+        /** Metadata fields */
+        aFile[MetadataColumns.FILE]=`${page.file.link.markdown()}`
         /** Optional fields */
         Object.keys(page).forEach(property => {
             const value = page[property];

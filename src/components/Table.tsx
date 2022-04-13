@@ -7,13 +7,12 @@ import {
   TableRow, 
   TableColumns
 } from "cdm/FolderModel";
-import { frontMatterKey } from "parsers/DatabaseParser";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import scrollbarWidth from "components/scrollbarWidth";
 import { databaseReducer } from "components/reducers/DatabaseDispatch";
-import { ActionTypes } from "helpers/Constants";
+import { ActionTypes, DatabaseCore } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
@@ -76,7 +75,7 @@ export function Table(initialState: TableDataType){
       if (targetEl.hasClass('internal-link')) {
         view.app.workspace.trigger('hover-link', {
           event: e.nativeEvent,
-          source: frontMatterKey,
+          source: DatabaseCore.FRONTMATTER_KEY,
           hoverParent: view,
           targetEl,
           linktext: targetEl.getAttr('href'),

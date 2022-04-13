@@ -18,6 +18,46 @@ export const DataTypes = Object.freeze({
     MARKDOWN: 'markdown'
   });
 
+export const MetadataColumns = Object.freeze({
+  FILE: 'file'
+});
+
+export const DatabaseCore = Object.freeze({
+FRONTMATTER_KEY: 'database-plugin'
+});
+
+export const DatabaseFrontmatterOptions = Object.freeze({
+  BASIC: [
+    '---',
+    '',
+    `${DatabaseCore.FRONTMATTER_KEY}: basic`,
+    '',
+    '---',
+    '',
+    '<%%',
+    'columns:',
+    ' column1:',
+    '  input: text',
+    '  accessor: column1',
+    '%%>'
+  ].join('\n')
+});
+
+export const basicFrontmatter = [
+    '---',
+    '',
+    `${DatabaseCore.FRONTMATTER_KEY}: basic`,
+    '',
+    '---',
+    '',
+    '<%%',
+    'columns:',
+    ' column1:',
+    '  input: text',
+    '  accessor: column1',
+    '%%>'
+  ].join('\n');
+
   export function shortId() {
     return '_' + Math.random().toString(36).substring(2, 9);
   }

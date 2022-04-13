@@ -1,6 +1,7 @@
 import { TableDataType } from 'cdm/FolderModel';
-import { obtainColumnsFromFolder, addMandatoryColumns} from 'components/Columns';
+import { obtainColumnsFromFolder} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
+import { DatabaseCore } from 'helpers/Constants';
 import { adapterTFilesToRows, obtainContentFromTfile } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
 
@@ -12,7 +13,7 @@ import {
     TFile,
     Menu
   } from 'obsidian';
-import { frontMatterKey, getDatabaseconfigYaml, hasFrontmatterKey } from 'parsers/DatabaseParser';
+import { getDatabaseconfigYaml, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
 import { LOGGER } from 'services/Logger';
@@ -52,7 +53,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     getViewType(): string {
-        return frontMatterKey;
+        return DatabaseCore.FRONTMATTER_KEY;
     }
 
     getStateManager(): StateManager {
@@ -108,7 +109,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
       LOGGER.debug(`=>initDatabase ${this.file.path}`);
       const databaseRaw = await obtainContentFromTfile(this.file);
       const databaseConfigYaml = getDatabaseconfigYaml(databaseRaw);
-      databaseConfigYaml.columns = addMandatoryColumns(databaseConfigYaml.columns);
       let columns = await obtainColumnsFromFolder(databaseConfigYaml.columns);
       let folder = this.file.path.split('/').slice(0, -1).join('/');
       let rows = await adapterTFilesToRows(folder);

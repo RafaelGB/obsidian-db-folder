@@ -25,11 +25,6 @@ export type Models = {
     [key: string]: FolderModel
 }
 
-/** Note type */
-export type Note = {
-    id: string,
-    title: string
-}
 export type ColumnOptions = {
     label?: string,
     backgroundColor?: string
@@ -49,7 +44,6 @@ export type TableColumn = {
 export type RowType = number | string | boolean | Date | Link;
 export type TableRow = {
     id: number,
-    title: string,
     [key: string]: RowType
 }
 
