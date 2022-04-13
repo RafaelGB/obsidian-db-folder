@@ -8,22 +8,6 @@ import { randomColor } from 'helpers/Colors';
 import { LOGGER } from "services/Logger";
 
 /**
- * Obtain the path of the file inside cellValue
- * i.e. if cellValue is "[[path/to/file.md|File Name]]" then return "path/to/file.md"
- * i.e. if cellValue is "[[path/to/file.md]]" then return "path/to/file.md"
- * i.e. if cellValue is "[[file.md]]" then return "file.md"
- * @param cellValue 
- */
-function getFilePath(cellValue:string):string {
-    const regex = /\[\[(.*)\]\]/;
-    const matches = regex.exec(cellValue);
-    if (matches && matches.length > 1) {
-        return matches[1];
-    }
-    return "";
-}
-
-/**
  * Add mandatory columns to the table
  * @param columns 
  * @returns 
@@ -56,6 +40,7 @@ export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns){
 
 async function columnOptions(value:string, column:DatabaseColumn):Promise<TableColumn> {
   LOGGER.debug(`=> columnOptions`,`column: ${JSON.stringify(column)}`);
+  const options: any[] = [];
   /**
    * return plain text
    * @returns {TableColumn}
@@ -66,7 +51,35 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
       Header: value,
       accessor: column.accessor,
       dataType: DataTypes.TEXT,
-      options: []
+      options: options
+    };
+  }
+
+  /**
+   * return number
+   * @returns {TableColumn}
+   */
+   function isNumber():TableColumn {
+    LOGGER.debug(`<= columnOptions`,`return number column`);
+		return {
+      Header: value,
+      accessor: column.accessor,
+      dataType: DataTypes.NUMBER,
+      options: options
+    };
+  }
+  /**
+   * return selector
+   * @returns {TableColumn}
+   */
+   function isSelect():TableColumn {
+    LOGGER.debug(`<= columnOptions`,`return select column`);
+    options.push({ backgroundColor: randomColor() });
+		return {
+      Header: value,
+      accessor: column.accessor,
+      dataType: DataTypes.NUMBER,
+      options: options
     };
   }
 
@@ -79,27 +92,16 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
     return {
       Header: value,
       accessor: column.accessor,
-      dataType: DataTypes.TEXT,
-      Cell: ({ cell }:any) => {
-        const { value } = cell;
-        const containerRef = useRef<HTMLElement>();
-        useLayoutEffect(() => {
-          MarkdownRenderer.renderMarkdown(
-            value,
-            containerRef.current,
-            getFilePath(value),
-            null
-          );
-        })
-        return <span ref={containerRef}></span>;
-      },
-      options: []
+      dataType: DataTypes.MARKDOWN,
+      options: options
     };
   }
 
   let inputs: Record<string, any> = {
     'text': isText,
-    'markdown': isMarkdown
+    'markdown': isMarkdown,
+    'number': isNumber, // TODO
+    'select': isSelect // TODO
   };
 
   if(inputs.hasOwnProperty(column.input)){

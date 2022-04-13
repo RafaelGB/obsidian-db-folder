@@ -23,7 +23,7 @@ export function databaseReducer(state:any, action:ActionType) {
             const filename = `${action.payload}`;
             // Add note to persist row
             FileManagerDB.create_markdown_file(
-                app.workspace.getActiveFile().parent, 
+                state.databaseFolder, 
                 filename,
                 `${JSON.stringify(row)}`
             );

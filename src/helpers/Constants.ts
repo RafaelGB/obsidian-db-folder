@@ -15,6 +15,7 @@ export const DataTypes = Object.freeze({
     NUMBER: 'number',
     TEXT: 'text',
     SELECT: 'select',
+    MARKDOWN: 'markdown'
   });
 
   export function shortId() {
