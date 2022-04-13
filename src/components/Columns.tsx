@@ -1,7 +1,3 @@
-import {
-  MarkdownRenderer
-} from "obsidian";
-import React,{useRef,useLayoutEffect} from 'react';
 import { DataTypes, MetadataColumns } from 'helpers/Constants';
 import {DatabaseColumn, DatabaseColumns, TableColumn, TableColumns} from 'cdm/FolderModel';
 import { randomColor } from 'helpers/Colors';
@@ -37,8 +33,13 @@ export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns){
 }
 
 async function columnOptions(value:string, column:DatabaseColumn):Promise<TableColumn> {
-  LOGGER.debug(`=> columnOptions`,`column: ${JSON.stringify(column)}`);
+  LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: any[] = [];
+  const mandatory = {
+    id: value,
+    label: column.label ?? value,
+    accessor: column.accessor ?? value
+  }
   /**
    * return plain text
    * @returns {TableColumn}
@@ -46,10 +47,10 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   function isText():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return text column`);
 		return {
-      id: value,
-      accessor: column.accessor,
+      ...mandatory,
       dataType: DataTypes.TEXT,
-      options: options
+      options: options,
+      // width: getColumnWidth(column.rows, column.accessor, column.id),
     };
   }
 
@@ -60,8 +61,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
    function isNumber():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return number column`);
 		return {
-      id: value,
-      accessor: column.accessor,
+      ...mandatory,
       dataType: DataTypes.NUMBER,
       options: options
     };
@@ -75,8 +75,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
     options.push({ backgroundColor: randomColor() });
     LOGGER.debug(`options: ${JSON.stringify(options)}`);
 		return {
-      id: value,
-      accessor: column.accessor,
+      ...mandatory,
       dataType: DataTypes.SELECT,
       options: options
     };
@@ -89,8 +88,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   function isMarkdown():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return markdown column`);
     return {
-      id: value,
-      accessor: column.accessor,
+      ...mandatory,
       dataType: DataTypes.MARKDOWN,
       options: options
     };

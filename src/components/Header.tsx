@@ -13,6 +13,7 @@ import PlusIcon from 'components/img/Plus';
 import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
 import { databaseReducer } from './reducers/DatabaseDispatch';
 import { LOGGER } from 'services/Logger';
+import { HeaderProps } from 'react-table';
 
 function getPropertyIcon(dataType:string) {
   switch (dataType) {
@@ -26,23 +27,36 @@ function getPropertyIcon(dataType:string) {
       return null;
   }
 }
-/* columns,data,initialState,defaultColumn,
-getSubRows,getRowId,stateReducer,useControlledState,
-plugins,getHooks,state,dispatch,allColumns,rows,initialRows
-,flatRows,rowsById,headerGroups,headers,flatHeaders,visibleColumns,
-totalColumnsMinWidth,totalColumnsWidth,totalColumnsMaxWidth,allColumnsHidden,
-toggleHideColumn,setHiddenColumns,toggleHideAllColumns,getToggleHideAllColumnsProps,
-rowSpanHeaders,footerGroups,prepareRow,getTableProps,getTableBodyProps,column
-*/
+
+/**
+ * Control the width of the cell in function of the content of all rows and header
+ * @param rows 
+ * @param accessor 
+ * @param headerText 
+ * @returns 
+ */
+const getColumnWidth = (rows:any, accessor:any, headerText:any) => {
+  const maxWidth = 400
+  const magicSpacing = 12
+  const cellLength = Math.max(
+    ...rows.map((row:any) => (`${row.values[accessor]}` || '').length),
+    headerText.length,
+  )
+  return Math.min(maxWidth, cellLength * magicSpacing)
+}
 
 /**
  * Default header of the table
  * @param headerProps 
  * @returns 
  */
- export default function Header(headerProps:any) {
-     /** Header name */
+ export default function Header(headerProps:HeaderProps<any>) {
+     /** Header name state */
     const [header, setHeader] = useState(headerProps.column.id);
+    /** Width of column state */
+    headerProps.column.width=getColumnWidth(headerProps.rows, headerProps.column.id, headerProps.column.id);
+    const [width, setWidth] = useState(headerProps.column.width);
+    //getColumnWidth
     function getHeader() {
         return (
             <div className="header-container">
