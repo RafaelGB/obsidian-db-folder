@@ -10,6 +10,7 @@ import PlusIcon from "components/img/Plus";
 import Badge from "components/Badge";
 import { grey, randomColor } from "helpers/Colors";
 import { usePopper } from "react-popper";
+import { databaseReducer } from "./reducers/DatabaseDispatch";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -28,7 +29,7 @@ import { usePopper } from "react-popper";
 }
 
 export default function Cell(cellProperties:Cell) {
-    const dataDispatch = (cellProperties as any).dataDispatch;
+    const dataDispatch = databaseReducer;
     /** Initial state of cell */
     const initialValue = cellProperties.value;
     /** Type of cell */
@@ -98,11 +99,10 @@ export default function Cell(cellProperties:Cell) {
     function handleOptionBlur(e:any) {
       if (e.target.value !== '') {
         dataDispatch({
-          type: ActionTypes.ADD_OPTION_TO_COLUMN,
           option: e.target.value,
           backgroundColor: randomColor(),
           columnId: (cellProperties.column as any).id
-        });
+        }, {type: ActionTypes.ADD_OPTION_TO_COLUMN});
       }
       setShowAdd(false);
     }
@@ -111,11 +111,10 @@ export default function Cell(cellProperties:Cell) {
       if (e.key === 'Enter') {
         if (e.target.value !== '') {
           dataDispatch({
-            type: ActionTypes.ADD_OPTION_TO_COLUMN,
             option: e.target.value,
             backgroundColor: randomColor(),
             columnId: (cellProperties.column as any).id
-          });
+          },{type: ActionTypes.ADD_OPTION_TO_COLUMN});
         }
         setShowAdd(false);
       }

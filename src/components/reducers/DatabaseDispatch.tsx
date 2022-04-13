@@ -11,6 +11,27 @@ export function databaseReducer(state:any, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer: ${action.type}`);
     switch (action.type) {
         /**
+         * Add option to column
+         */
+        case ActionTypes.ADD_OPTION_TO_COLUMN:
+            const optionIndex = state.columns.findIndex(
+                (column:any) => column.id === action.columnId
+            );
+            return update(state, {
+                columns: {
+                [optionIndex]: {
+                    options: {
+                    $push: [
+                        {
+                        label: action.option,
+                        backgroundColor: action.backgroundColor,
+                        },
+                    ],
+                    },
+                },
+                },
+            });
+        /**
          * Add new row into table
          */
         case ActionTypes.ADD_ROW:
@@ -33,7 +54,6 @@ export function databaseReducer(state:any, action:ActionType) {
                 [MetadataColumns.FILE]: `[[${filename}]]`
              };
             return update(state, {
-            skipReset: { $set: true },
             data: { $push: [row] },
             });
         /**
