@@ -23,9 +23,11 @@ function Database(tableProps:TableDataType){
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
   }, [state.data, state.columns]);
   return(
-    <Table
-      {...state}
-      dispatch={dataDispatch}
-    />
+    <div>
+      <Table
+        {...state}
+        dispatch={dataDispatch}
+      />
+    </div>
   );
 }

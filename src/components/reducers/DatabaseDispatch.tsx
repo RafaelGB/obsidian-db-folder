@@ -1,38 +1,59 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import { ActionTypes } from 'helpers/Constants';
-import { DatabaseColumn, TableDataType } from 'cdm/FolderModel';
+import { ActionTypes, MetadataColumns } from 'helpers/Constants';
+import { DatabaseColumn, TableColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { FileManagerDB } from 'services/FileManagerService';
+import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
 
 export function databaseReducer(state:any, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer: ${action.type}`);
     switch (action.type) {
         /**
+         * Add option to column
+         */
+        case ActionTypes.ADD_OPTION_TO_COLUMN:
+            const optionIndex = state.columns.findIndex(
+                (column:TableColumn) => column.id === action.columnId
+            );
+            return update(state, {
+                columns: {
+                [optionIndex]: {
+                    options: {
+                    $push: [
+                        {
+                        label: action.option,
+                        backgroundColor: action.backgroundColor,
+                        },
+                    ],
+                    },
+                },
+                },
+            });
+        /**
          * Add new row into table
          */
         case ActionTypes.ADD_ROW:
             let row = {};
-            state.columns.forEach((column:DatabaseColumn) => {
+            state.columns.forEach((column:TableColumn) => {
                 row = {
                     ...row,
-                    [column.Header]: ''
+                    [column.id]: ''
                  };
             });
             const filename = `${action.payload}`;
             // Add note to persist row
             FileManagerDB.create_markdown_file(
-                app.workspace.getActiveFile().parent, 
+                state.databaseFolder, 
                 filename,
-                `${JSON.stringify(row)}`
+                adapterRowToDatabaseYaml(row)
             );
             row = {
                 ...row,
-                ['title']: `[[${filename}]]`
+                [MetadataColumns.FILE]: `[[${filename}]]`
              };
             return update(state, {
-            skipReset: { $set: true },
             data: { $push: [row] },
             });
         /**
@@ -41,6 +62,7 @@ export function databaseReducer(state:any, action:ActionType) {
         case ActionTypes.ENABLE_RESET:
             return update(state, { skipReset: { $set: true } });
         default:
+            LOGGER.warn(`<=databaseReducer: unknown action ${action.type}`);
             return state;
     }
 }

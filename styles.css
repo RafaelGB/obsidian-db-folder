@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 html {
   box-sizing: border-box;
 }
@@ -12,7 +12,7 @@ html {
 * {
   margin: 0px;
   padding: 0px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 #root {
@@ -92,9 +92,8 @@ html {
 }
 
 .shadow-5 {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.12),
-    0 4px 6px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.12),
-    0 16px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.12), 0 4px 6px rgba(0, 0, 0, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.12), 0 16px 32px rgba(0, 0, 0, 0.12);
 }
 
 .svg-icon-sm svg {
@@ -165,7 +164,6 @@ html {
   align-items: center;
   font-size: 0.875rem;
   cursor: pointer;
-  height: 50px;
 }
 
 .add-row:hover {
@@ -189,7 +187,6 @@ html {
   padding: 0.5rem;
   display: flex;
   align-items: center;
-  height: 50px;
 }
 
 .td {
@@ -206,8 +203,9 @@ html {
 }
 
 .table {
-  display: inline-block;
   border-spacing: 0;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .th:last-child {
@@ -257,10 +255,6 @@ html {
   display: flex;
 }
 
-.d-inline-block {
-  display: inline-block;
-}
-
 .cursor-default {
   cursor: default;
 }
@@ -289,78 +283,10 @@ html {
   font-weight: 600;
 }
 
-.font-weight-400 {
-  font-weight: 400;
-}
-
 .font-size-75 {
   font-size: 0.75rem;
 }
 
 .flex-1 {
   flex: 1;
-}
-
-.mt-5 {
-  margin-top: 0.5rem;
-}
-
-.mr-auto {
-  margin-right: auto;
-}
-
-.ml-auto {
-  margin-left: auto;
-}
-
-.mr-5 {
-  margin-right: 0.5rem;
-}
-
-.justify-content-center {
-  justify-content: center;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.overflow-auto {
-  overflow: auto;
-}
-
-.overflow-y-hidden {
-  overflow-y: hidden;
-}
-
-.list-padding {
-  padding: 4px 0px;
-}
-
-.bg-grey-200 {
-  background-color: #eeeeee;
-}
-
-.color-grey-800 {
-  color: #424242;
-}
-
-.color-grey-600 {
-  color: #757575;
-}
-
-.color-grey-500 {
-  color: #9e9e9e;
-}
-
-.border-radius-sm {
-  border-radius: 4px;
-}
-
-.text-transform-uppercase {
-  text-transform: uppercase;
-}
-
-.text-transform-capitalize {
-  text-transform: capitalize;
 }

@@ -29,10 +29,10 @@ import {
 	DBFolderAPI
 }from 'api/plugin-api';
 
-import { basicFrontmatter, frontMatterKey } from 'parsers/DatabaseParser';
 import { StateManager } from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
+import { DatabaseCore,DatabaseFrontmatterOptions } from 'helpers/Constants';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -66,7 +66,7 @@ export default class DBFolderPlugin extends Plugin {
 		  })
 		);
 
-		this.registerView(frontMatterKey, (leaf) => new DatabaseView(leaf, this));
+		this.registerView(DatabaseCore.FRONTMATTER_KEY, (leaf) => new DatabaseView(leaf, this));
 		this.registerEvents();
 		this.registerMonkeyPatches();
 		this.api = new DBFolderAPI(this.app, this.settings);
@@ -106,7 +106,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	async setDatabaseView(leaf: WorkspaceLeaf) {
 		await leaf.setViewState({
-		  type: frontMatterKey,
+		  type: DatabaseCore.FRONTMATTER_KEY,
 		  state: leaf.view.getState(),
 		  popstate: true,
 		} as ViewState);
@@ -187,13 +187,13 @@ export default class DBFolderPlugin extends Plugin {
 			this.app.fileManager as any
 		  ).createNewMarkdownFile(targetFolder, 'Untitled database');
 	
-		  await this.app.vault.modify(database, basicFrontmatter);
+		  await this.app.vault.modify(database, DatabaseFrontmatterOptions.BASIC);
 		  await this.app.workspace.activeLeaf.setViewState({
-			type: frontMatterKey,
+			type: DatabaseCore.FRONTMATTER_KEY,
 			state: { file: database.path },
 		  });
 		} catch (e) {
-		  console.error('Error creating database folder:', e);
+		  LOGGER.error('Error creating database folder:', e);
 		}
 	}
 
@@ -268,14 +268,14 @@ export default class DBFolderPlugin extends Plugin {
 				  // Then check for the database frontMatterKey
 				  const cache = self.app.metadataCache.getCache(state.state.file);
 	
-				  if (cache?.frontmatter && cache.frontmatter[frontMatterKey]) {
+				  if (cache?.frontmatter && cache.frontmatter[DatabaseCore.FRONTMATTER_KEY]) {
 					// If we have it, force the view type to database
 					const newState = {
 					  ...state,
-					  type: frontMatterKey,
+					  type: DatabaseCore.FRONTMATTER_KEY,
 					};
 	
-					self.databaseFileModes[state.state.file] = frontMatterKey;
+					self.databaseFileModes[state.state.file] = DatabaseCore.FRONTMATTER_KEY;
 	
 					return next.apply(this, [newState, ...rest]);
 				  }
@@ -300,7 +300,7 @@ export default class DBFolderPlugin extends Plugin {
 				if (
 				  !file ||
 				  !cache?.frontmatter ||
-				  !cache.frontmatter[frontMatterKey]
+				  !cache.frontmatter[DatabaseCore.FRONTMATTER_KEY]
 				) {
 				  return next.call(this, menu);
 				}
@@ -312,7 +312,7 @@ export default class DBFolderPlugin extends Plugin {
 					  .setIcon(databaseIcon)
 					  .onClick(() => {
 						self.databaseFileModes[this.leaf.id || file.path] =
-						frontMatterKey;
+						DatabaseCore.FRONTMATTER_KEY;
 						self.setDatabaseView(this.leaf);
 					  });
 				  })

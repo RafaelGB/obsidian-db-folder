@@ -1,28 +1,27 @@
 import * as React from "react";
-import { Row, TableOptions, useTable, useBlockLayout, TableInstance } from 'react-table';
-import { FixedSizeList } from 'react-window';
+import { TableOptions, useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy } from 'react-table';
+import clsx from "clsx";
 import { 
   TableDataType,
   TableRows,
-  TableRow, 
   TableColumns
 } from "cdm/FolderModel";
-import { frontMatterKey } from "parsers/DatabaseParser";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import scrollbarWidth from "components/scrollbarWidth";
 import { databaseReducer } from "components/reducers/DatabaseDispatch";
-import { ActionTypes } from "helpers/Constants";
+import { ActionTypes, DatabaseCore } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
+import Header from "components/Header";
 
 const defaultColumn = {
   minWidth: 50,
   width: 150,
   maxWidth: 400,
   Cell: Cell,
+  Header: Header,
   sortType: 'alphanumericFalsyLast',
 };
 
@@ -76,7 +75,7 @@ export function Table(initialState: TableDataType){
       if (targetEl.hasClass('internal-link')) {
         view.app.workspace.trigger('hover-link', {
           event: e.nativeEvent,
-          source: frontMatterKey,
+          source: DatabaseCore.FRONTMATTER_KEY,
           hoverParent: view,
           targetEl,
           linktext: targetEl.getAttr('href'),
@@ -135,7 +134,6 @@ export function Table(initialState: TableDataType){
     },
     [stateManager, filePath]
   );
-  const scrollBarSize = React.useMemo(() => scrollbarWidth(), [])
 
   /** Hook to use react-table */
   const {
@@ -143,97 +141,86 @@ export function Table(initialState: TableDataType){
     getTableBodyProps,
     headerGroups,
     rows,
-    prepareRow,
-    totalColumnsWidth
+    prepareRow
   } = useTable(
     propsUseTable,
-    useBlockLayout,
+    useFlexLayout,
+    useResizeColumns,
+    useSortBy,
     hooks => {
       hooks.useInstance.push(useInstance);
     }
   );
-  const RenderRow = React.useCallback(
-    ({ index, style }) => {
-      const row = rows[index]
-      prepareRow(row)
-      return (
-        <div
-          {...row.getRowProps({
-            style,
-          })}
-          className="tr"
-        >
-          {row.cells.map(cell => {
-            return (
-              <div {...cell.getCellProps()} className="td">
-                {cell.render('Cell')}
-              </div>
-            )
-          })}
-        </div>
-      )
-    },
-    [prepareRow, rows]
-  )
+    function isTableResizing() {
+      for (let headerGroup of headerGroups) {
+        for (let column of headerGroup.headers) {
+          if ((column as any).isResizing) {
+            return true;
+          }
+        }
+      }
+  
+      return false;
+    }
+    // Manage input of new row
+    const [inputNewRow, setInputNewRow] = React.useState('');
+    const newRowRef = React.useRef(null);
     LOGGER.debug(`<= Table`);
-   // Manage input of new row
-   const [inputNewRow, setInputNewRow] = React.useState('');
-   const newRowRef = React.useRef(null);
-   //Render the UI for your table
-   return (
-    <div {...getTableProps()} 
-    className="table"
-    onMouseOver={onMouseOver}
-    onClick={onClick}
-    >
-      <div>
-        {headerGroups.map(headerGroup => (
-          <div {...headerGroup.getHeaderGroupProps()} className="tr">
-            {headerGroup.headers.map(column => (
-              <div {...column.getHeaderProps()} className="th">
-                {column.render('Header')}
+    return (
+      <>
+        <div {...getTableProps()} 
+        className={clsx("table", isTableResizing() && "noselect")}
+        onMouseOver={onMouseOver}
+        onClick={onClick}
+        >
+          <div>
+            {headerGroups.map((headerGroup) => (
+              <div {...headerGroup.getHeaderGroupProps()} className='tr'>
+                {headerGroup.headers.map((column) => column.render("Header"))}
               </div>
             ))}
           </div>
-        ))}
-      </div>
-
-      <div {...getTableBodyProps()}>
-        <FixedSizeList
-          height={400}
-          itemCount={rows.length}
-          itemSize={35}
-          width={totalColumnsWidth+scrollBarSize}
-        >
-          {RenderRow}
-        </FixedSizeList>
-          <div className="tr add-row">
-            <input type="text"
-              ref={newRowRef}
-              onChange={(e) => {
-                setInputNewRow(e.target.value);
-               }                   
-              }
-              placeholder='filename of new row'
-            />
-            <div
-              onClick={() => {
-                initialState.dispatch({ 
-                type: ActionTypes.ADD_ROW,
-                payload: inputNewRow
-              });
-              setInputNewRow('');
-              newRowRef.current.value='';
-            }
-            }
-            >
-              <span className="svg-icon svg-gray icon-margin">
-                <PlusIcon />
-              </span>
-              New Row
+          <div {...getTableBodyProps()}>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <div {...row.getRowProps()} className='tr'>
+                  {row.cells.map((cell) => (
+                    <div {...cell.getCellProps()} className='td'>
+                      {cell.render("Cell")}
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+            <div className='tr add-row'>
+              <input type="text"
+                ref={newRowRef}
+                onChange={(e) => {
+                  setInputNewRow(e.target.value);
+                  } 
+                }
+                placeholder='filename of new row'
+              />
+              <div onClick={() => 
+                  {
+                    initialState.dispatch({ 
+                      type: ActionTypes.ADD_ROW,
+                      payload: inputNewRow
+                    });
+                    setInputNewRow('');
+                    newRowRef.current.value='';
+                  }
+                }
+              >
+                <span className='svg-icon svg-gray' style={{marginRight: 4}}>
+                  <PlusIcon />
+                </span>
+                New
+              </div>
             </div>
           </div>
-      </div>
-    </div>
-  )
+        </div>
+      </>
+    );
 }
