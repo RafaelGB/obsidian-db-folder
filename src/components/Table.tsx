@@ -1,6 +1,7 @@
 import * as React from "react";
-import { TableOptions, useTable, useBlockLayout, TableInstance } from 'react-table';
+import { TableOptions, useTable, useBlockLayout, TableInstance, useFlexLayout, useResizeColumns, useSortBy } from 'react-table';
 import { FixedSizeList } from 'react-window';
+import clsx from "clsx";
 import { 
   TableDataType,
   TableRows,
@@ -12,7 +13,7 @@ import { getNormalizedPath } from "helpers/VaultManagement";
 import scrollbarWidth from "components/scrollbarWidth";
 import { databaseReducer } from "components/reducers/DatabaseDispatch";
 import { ActionTypes, DatabaseCore } from "helpers/Constants";
-import { c } from "helpers/StylesHelper";
+//import { c } from "helpers/StylesHelper";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
@@ -144,11 +145,12 @@ export function Table(initialState: TableDataType){
     getTableBodyProps,
     headerGroups,
     rows,
-    prepareRow,
-    totalColumnsWidth
+    prepareRow
   } = useTable(
     propsUseTable,
-    useBlockLayout,
+    useFlexLayout,
+    useResizeColumns,
+    useSortBy,
     hooks => {
       hooks.useInstance.push(useInstance);
     }
@@ -162,11 +164,11 @@ export function Table(initialState: TableDataType){
           {...row.getRowProps({
             style,
           })}
-          className={c("tr")}
+          className="tr"
         >
           {row.cells.map(cell => {
             return (
-              <div {...cell.getCellProps()} className={c("td")}>
+              <div {...cell.getCellProps()} className="td">
                 {cell.render('Cell')}
               </div>
             )
@@ -177,64 +179,133 @@ export function Table(initialState: TableDataType){
     [prepareRow, rows]
   )
     LOGGER.debug(`<= Table`);
+
+    function isTableResizing() {
+      for (let headerGroup of headerGroups) {
+        for (let column of headerGroup.headers) {
+          if ((column as any).isResizing) {
+            return true;
+          }
+        }
+      }
+  
+      return false;
+    }
     // Manage input of new row
     const [inputNewRow, setInputNewRow] = React.useState('');
     const newRowRef = React.useRef(null);
-    //Render the UI for your table
     return (
-      <div {...getTableProps()} 
-      className={c("table")}
-      onMouseOver={onMouseOver}
-      onClick={onClick}
-      >
-      <div>
-        {headerGroups.map(headerGroup => (
-          <div {...headerGroup.getHeaderGroupProps()} className={c("tr")}>
-            {headerGroup.headers.map(column => (
-              <div {...column.getHeaderProps()} className={c("th")}>
-                {column.render('Header')}
+      <>
+        <div {...getTableProps()} 
+        className={clsx("table", isTableResizing() && "noselect")}
+        onMouseOver={onMouseOver}
+        onClick={onClick}
+        >
+          <div>
+            {headerGroups.map((headerGroup) => (
+              <div {...headerGroup.getHeaderGroupProps()} className='tr'>
+                {headerGroup.headers.map((column) => column.render("Header"))}
               </div>
             ))}
           </div>
-        ))}
-      </div>
-
-      <div {...getTableBodyProps()}>
-        <FixedSizeList
-          height={400}
-          itemCount={rows.length}
-          itemSize={35}
-          width={totalColumnsWidth+scrollBarSize}
-        >
-          {RenderRow}
-        </FixedSizeList>
-        <div className={c("tr add-row")}>
-          <input type="text"
-            ref={newRowRef}
-            onChange={(e) => {
-              setInputNewRow(e.target.value);
-              } 
-            }
-            placeholder='filename of new row'
-          />
-          <div
-            onClick={() => {
-              initialState.dispatch({ 
-              type: ActionTypes.ADD_ROW,
-              payload: inputNewRow
-            });
-            setInputNewRow('');
-            newRowRef.current.value='';
-          }
-          }
-          >
-            <span className={c("svg-icon svg-gray icon-margin")}>
-              <PlusIcon />
-            </span>
-            New Row
+          <div {...getTableBodyProps()}>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <div {...row.getRowProps()} className='tr'>
+                  {row.cells.map((cell) => (
+                    <div {...cell.getCellProps()} className='td'>
+                      {cell.render("Cell")}
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+            <div 
+              className='tr add-row' 
+              onClick={() => 
+                {
+                  initialState.dispatch({ 
+                    type: ActionTypes.ADD_ROW,
+                    payload: inputNewRow
+                  });
+                  setInputNewRow('');
+                  newRowRef.current.value='';
+                }
+              }
+            >
+              <input type="text"
+                ref={newRowRef}
+                onChange={(e) => {
+                  setInputNewRow(e.target.value);
+                  } 
+                }
+                placeholder='filename of new row'
+              />
+              <span className='svg-icon svg-gray' style={{marginRight: 4}}>
+                <PlusIcon />
+              </span>
+              New
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  )
+      </>
+    );
+    //Render the UI for your table
+  //   return (
+  //     <div {...getTableProps()} 
+  //     className={c("table")}
+  //     onMouseOver={onMouseOver}
+  //     onClick={onClick}
+  //     >
+  //     <div>
+  //       {headerGroups.map(headerGroup => (
+  //         <div {...headerGroup.getHeaderGroupProps()} className={c("tr")}>
+  //           {headerGroup.headers.map(column => (
+  //             <div {...column.getHeaderProps()} className={c("th")}>
+  //               {column.render('Header')}
+  //             </div>
+  //           ))}
+  //         </div>
+  //       ))}
+  //     </div>
+
+  //     <div {...getTableBodyProps()}>
+  //       <FixedSizeList
+  //         height={400}
+  //         itemCount={rows.length}
+  //         itemSize={35}
+  //         width={totalColumnsWidth+scrollBarSize}
+  //       >
+  //         {RenderRow}
+  //       </FixedSizeList>
+  //       <div className={c("tr add-row")}>
+  //         <input type="text"
+  //           ref={newRowRef}
+  //           onChange={(e) => {
+  //             setInputNewRow(e.target.value);
+  //             } 
+  //           }
+  //           placeholder='filename of new row'
+  //         />
+  //         <div
+  //           onClick={() => {
+  //             initialState.dispatch({ 
+  //             type: ActionTypes.ADD_ROW,
+  //             payload: inputNewRow
+  //           });
+  //           setInputNewRow('');
+  //           newRowRef.current.value='';
+  //         }
+  //         }
+  //         >
+  //           <span className={c("svg-icon svg-gray icon-margin")}>
+  //             <PlusIcon />
+  //           </span>
+  //           New Row
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // )
 }

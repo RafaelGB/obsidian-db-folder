@@ -11,7 +11,6 @@ import Badge from "components/Badge";
 import { grey, randomColor } from "helpers/Colors";
 import { usePopper } from "react-popper";
 import { databaseReducer } from "./reducers/DatabaseDispatch";
-import { c } from "helpers/StylesHelper";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -153,6 +152,8 @@ export default function Cell(cellProperties:Cell) {
         case DataTypes.MARKDOWN:
           const containerRef = useRef<HTMLElement>();
           useLayoutEffect(() => {
+            //TODO - this is a hack. find why is layout effect called twice
+            containerRef.current.innerHTML = '';
             MarkdownRenderer.renderMarkdown(
               value.value,
               containerRef.current,
@@ -196,7 +197,7 @@ export default function Cell(cellProperties:Cell) {
                     }}
                   >
                     <div
-                      className={c("d-flex flex-wrap-wrap")}
+                      className="d-flex flex-wrap-wrap"
                       style={{ marginTop: '-0.5rem' }}
                     >
                       {options.map((option: { label: any; backgroundColor: any; }) => (
