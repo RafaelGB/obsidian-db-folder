@@ -24,8 +24,7 @@ export const databaseIcon = 'blocks';
 export class DatabaseView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
     hoverPopover: HoverPopover | null;
-    actionButtons: Record<string, HTMLElement> = {};
-    
+    tableContainer: HTMLDivElement | null = null;
     constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
         super(leaf);
         this.plugin = plugin;
@@ -106,7 +105,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     async initDatabase(): Promise<void> {
-      LOGGER.debug(`=>initDatabase ${this.file.path}`);
+      LOGGER.info(`=>initDatabase ${this.file.path}`);
       const databaseRaw = await obtainContentFromTfile(this.file);
       const databaseConfigYaml = getDatabaseconfigYaml(databaseRaw);
       let columns = await obtainColumnsFromFolder(databaseConfigYaml.columns);
@@ -121,28 +120,28 @@ export class DatabaseView extends TextFileView implements HoverParent {
         databaseFolder: this.file.parent
       }
       
-      let table = createDatabase(tableProps,this.app);
-      const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
-      ReactDOM.render(table, tableContainer);
-      LOGGER.debug(`<=initDatabase ${this.file.path}`);
+      let table = createDatabase(tableProps);
+      this.tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
+      ReactDOM.render(table, this.tableContainer);
+      LOGGER.info(`<=initDatabase ${this.file.path}`);
     }
     
     destroy() {
+      LOGGER.info(`=>destroy ${this.file.path}`);
         // Remove draggables from render, as the DOM has already detached
-        this.plugin.removeView(this);
+      this.plugin.removeView(this);
+      this.tableContainer.remove();
+      LOGGER.info(`<=destroy ${this.file.path}`);
+    }
     
-        Object.values(this.actionButtons).forEach((b) => b.remove());
-        this.actionButtons = {};
-      }
-    
-      async onClose() {
-        this.destroy();
-      }
-    
-      async onUnloadFile(file: TFile) {
-        this.destroy();
-        return await super.onUnloadFile(file);
-      }
+    async onClose() {
+      this.destroy();
+    }
+  
+    async onUnloadFile(file: TFile) {
+      this.destroy();
+      return await super.onUnloadFile(file);
+    }
 
     async onLoadFile(file: TFile) {
         try {

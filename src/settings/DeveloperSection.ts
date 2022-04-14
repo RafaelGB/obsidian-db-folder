@@ -2,6 +2,7 @@ import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler } from 'settings/handlers/AbstractSettingHandler';
 import { DebugToggleHandler } from 'settings/handlers/DebugToggleSettingHandler';
 import { SettingsManager } from 'Settings';
+import { DropDownLevelInfoHandler } from 'settings/handlers/DropDownLevelInfoHandler';
 
 /**
      * developer settings section
@@ -24,6 +25,7 @@ export function developer_settings_section(settingsManager: SettingsManager, con
  */
  function getHandlers(): SettingHandler[] {
     return [
-        new DebugToggleHandler()
+        new DebugToggleHandler(),
+        new DropDownLevelInfoHandler()
     ];
 }

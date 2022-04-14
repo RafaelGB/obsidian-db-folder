@@ -174,7 +174,7 @@ export function Table(initialState: TableDataType){
         onClick={onClick}
         >
           <div>
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map((headerGroup,i) => (
               <div {...headerGroup.getHeaderGroupProps()} className='tr'>
                 {headerGroup.headers.map((column) => column.render("Header"))}
               </div>

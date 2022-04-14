@@ -1,12 +1,11 @@
 import React, { useEffect, useReducer } from 'react';
-import { App } from 'obsidian';
 import { Table } from 'components/Table';
 import { TableDataType } from 'cdm/FolderModel';
 import { DatabaseContext } from 'context/context';
 import { databaseReducer } from 'components/reducers/DatabaseDispatch';
 import { ActionTypes } from 'helpers/Constants';
   
-export function createDatabase(tableProps:TableDataType,app:App): JSX.Element {
+export function createDatabase(tableProps:TableDataType): JSX.Element {
     return (
         <DatabaseContext.Provider value={app}>
             <Database

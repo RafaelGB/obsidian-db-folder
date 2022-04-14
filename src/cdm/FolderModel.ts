@@ -2,7 +2,6 @@ import { DatabaseView } from "DatabaseView";
 import { TFolder } from "obsidian";
 import { Link } from "obsidian-dataview";
 import { Dispatch } from "react";
-import { HeaderProps } from "react-table";
 import { StateManager } from "StateManager";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
