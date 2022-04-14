@@ -26,9 +26,9 @@ export type Models = {
     [key: string]: FolderModel
 }
 
-export type ColumnOptions = {
-    label?: string,
-    backgroundColor?: string
+export type RowSelectOption = {
+    backgroundColor: string,
+    label: string,
 }
 
 export type TableColumn = {
@@ -39,13 +39,13 @@ export type TableColumn = {
     minWidth?: number,
     width?:number
     dataType?: string,
-    options?: ColumnOptions[]
+    options?: RowSelectOption[]
     Cell?: any,
     getHeaderProps?: any,
     getResizerProps?: any
 }
 
-export type RowType = number | string | boolean | Date | Link;
+export type RowType = number | string | boolean | Date | Link | RowSelectOption[];
 export type TableRow = {
     id: number,
     [key: string]: RowType
@@ -69,7 +69,8 @@ export type DatabaseColumn = {
     input: string,
     Header: string,
     accessor: string,
-    [key: string]: string
+    label: string,
+    [key: string]: RowType
 }
 export type DatabaseColumns = {
     [key: string]: DatabaseColumn

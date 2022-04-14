@@ -1,6 +1,5 @@
 import { DataTypes, MetadataColumns } from 'helpers/Constants';
-import {DatabaseColumn, DatabaseColumns, TableColumn, TableColumns} from 'cdm/FolderModel';
-import { randomColor } from 'helpers/Colors';
+import {DatabaseColumn, DatabaseColumns, RowSelectOption, TableColumn, TableColumns} from 'cdm/FolderModel';
 import { LOGGER } from "services/Logger";
 
 /**
@@ -13,13 +12,14 @@ export function addMandatoryColumns(columns: DatabaseColumns): DatabaseColumns {
   metadataColumns[MetadataColumns.FILE]={
       accessor: MetadataColumns.FILE,
       input: DataTypes.MARKDOWN,
-      Header: MetadataColumns.FILE
+      Header: MetadataColumns.FILE,
+      label: MetadataColumns.FILE,
+      isMetadata: true
   };
-
   return {...columns, ...metadataColumns};
 }
 
-export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns){
+export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns): Promise<TableColumns>{
     LOGGER.debug(`=> obtainColumnsFromFolder. databaseColumns: ${JSON.stringify(databaseColumns)}`);
     databaseColumns = addMandatoryColumns(databaseColumns);
     const columns:TableColumns = [];
@@ -34,8 +34,8 @@ export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns){
 
 async function columnOptions(value:string, column:DatabaseColumn):Promise<TableColumn> {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
-  const options: any[] = [];
-  const mandatory = {
+  const options: RowSelectOption[] = [];
+  const tableRow: TableColumn = {
     id: value,
     label: column.label ?? value,
     accessor: column.accessor ?? value
@@ -47,7 +47,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   function isText():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return text column`);
 		return {
-      ...mandatory,
+      ...tableRow,
       dataType: DataTypes.TEXT,
       options: options
     };
@@ -60,7 +60,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
    function isNumber():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return number column`);
 		return {
-      ...mandatory,
+      ...tableRow,
       dataType: DataTypes.NUMBER,
       options: options
     };
@@ -72,7 +72,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
    function isSelect():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return select column`);
 		return {
-      ...mandatory,
+      ...tableRow,
       dataType: DataTypes.SELECT,
       options: options
     };
@@ -85,11 +85,12 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   function isMarkdown():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return markdown column`);
     return {
-      ...mandatory,
+      ...tableRow,
       dataType: DataTypes.MARKDOWN,
       options: options
     };
   }
+
   // Record of options
   let inputs: Record<string, any> = {};
   inputs[DataTypes.TEXT] = isText;

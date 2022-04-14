@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
 import { ActionTypes, MetadataColumns } from 'helpers/Constants';
-import { DatabaseColumn, TableDataType } from 'cdm/FolderModel';
+import { DatabaseColumn, TableColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { FileManagerDB } from 'services/FileManagerService';
@@ -15,7 +15,7 @@ export function databaseReducer(state:any, action:ActionType) {
          */
         case ActionTypes.ADD_OPTION_TO_COLUMN:
             const optionIndex = state.columns.findIndex(
-                (column:any) => column.id === action.columnId
+                (column:TableColumn) => column.id === action.columnId
             );
             return update(state, {
                 columns: {
@@ -36,7 +36,7 @@ export function databaseReducer(state:any, action:ActionType) {
          */
         case ActionTypes.ADD_ROW:
             let row = {};
-            state.columns.forEach((column:DatabaseColumn) => {
+            state.columns.forEach((column:TableColumn) => {
                 row = {
                     ...row,
                     [column.id]: ''

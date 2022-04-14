@@ -15,7 +15,6 @@ import { LOGGER } from 'services/Logger';
 import { DatabseHeaderProps } from 'cdm/FolderModel';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
-  console.log("setOptionsOfSelectDataType",options,rows);
   rows.forEach((row:any)=>{
     const rowValue = row.values[columnId];
     let match = options.find((option: { label: any; }) => option.label === rowValue);
