@@ -39,7 +39,8 @@ export default function Header(headerProps:DatabseHeaderProps) {
   /** Column values */
   const { id, label, dataType, options, getHeaderProps, getResizerProps} = headerProps.column;
   /** reducer asociated to database */
-  const dataDispatch = headerProps.stateReducer;
+  // TODO typying improve
+  const dataDispatch = (headerProps as any).dataDispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -182,6 +183,11 @@ export default function Header(headerProps:DatabseHeaderProps) {
     setHeader(e.target.value);
   }
 
+  function handlerAddColumnToLeft(e:any) {
+    console.log(`handlerAddColumnToLeft event : ${e}`);
+    dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: 999999, focus: true})
+  }
+
   function handleBlur(e:any) {
     e.preventDefault();
     dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
@@ -276,7 +282,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
       <div
         className='th-content'
         style={{display: "flex", justifyContent: "center"}}
-        onClick={(e:any) => dataDispatch({type: "add_column_to_left", columnId: 999999, focus: true})}>
+        onClick={handlerAddColumnToLeft}>
         <span className='svg-icon-sm svg-gray'>
           <PlusIcon />
         </span>
