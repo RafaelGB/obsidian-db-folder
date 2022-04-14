@@ -40,7 +40,9 @@ export type TableColumn = {
     width?:number
     dataType?: string,
     options?: ColumnOptions[]
-    Cell?: any
+    Cell?: any,
+    getHeaderProps?: any,
+    getResizerProps?: any
 }
 
 export type RowType = number | string | boolean | Date | Link;

@@ -23,13 +23,7 @@ function Database(tableProps:TableDataType){
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
   }, [state.data, state.columns]);
   return(
-    <div
-      // className="overflow-y-hidden"
-      // style={{
-      //   width: '100vw',
-      //   height: '100vh',
-      // }}
-    >
+    <div>
       <Table
         {...state}
         dispatch={dataDispatch}
