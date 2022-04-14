@@ -14,6 +14,7 @@ import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
 import { databaseReducer } from './reducers/DatabaseDispatch';
 import { LOGGER } from 'services/Logger';
 import { HeaderProps } from 'react-table';
+import { DatabseHeaderProps } from 'cdm/FolderModel';
 
 function getPropertyIcon(dataType:string) {
   switch (dataType) {
@@ -68,13 +69,12 @@ const getColumnWidth = (rows:any, accessor:any, headerText:any) => {
 //     return getHeader();
 //  }
 
-// columns,data,initialState,defaultColumn,getSubRows,getRowId,stateReducer,useControlledState,plugins,getHooks,state,dispatch,allColumns,rows,initialRows,flatRows,rowsById,headerGroups,headers,flatHeaders,visibleColumns,totalColumnsMinWidth,totalColumnsWidth,totalColumnsMaxWidth,allColumnsHidden,toggleHideColumn,setHiddenColumns,toggleHideAllColumns,getToggleHideAllColumnsProps,resetResizing,preSortedRows,preSortedFlatRows,sortedRows,sortedFlatRows,setSortBy,toggleSortBy,rowSpanHeaders,footerGroups,prepareRow,getTableProps,getTableBodyProps,column
 /**
  * Headers of the table
  * @param headerProps 
  * @returns 
  */
-export default function Header(headerProps:any) {
+export default function Header(headerProps:DatabseHeaderProps) {
     LOGGER.debug(`=>Header`);
     /** State of table */
     const state = headerProps.state;
@@ -83,7 +83,7 @@ export default function Header(headerProps:any) {
     /** reducer */
     const dataDispatch = databaseReducer;
 
-    const [expanded, setExpanded] = useState(headerProps.created || false);
+    const [expanded, setExpanded] = useState((headerProps as any).created || false);
     const [referenceElement, setReferenceElement] = useState(null);
     const [popperElement, setPopperElement] = useState(null);
     const [inputRef, setInputRef] = useState(null);
@@ -103,10 +103,10 @@ export default function Header(headerProps:any) {
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             label: header,
             },{type: ActionTypes.UPDATE_COLUMN_HEADER});
-            headerProps.setSortBy([{ id: headerProps.id, desc: false }]);
+            headerProps.setSortBy([{ id: column.id, desc: false }]);
             setExpanded(false);
         },
         icon: <ArrowUpIcon />,
@@ -115,10 +115,10 @@ export default function Header(headerProps:any) {
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             label: header,
             },{type: ActionTypes.UPDATE_COLUMN_HEADER});
-            headerProps.setSortBy([{ id: headerProps.id, desc: true }]);
+            headerProps.setSortBy([{ id: column.id, desc: true }]);
             setExpanded(false);
         },
         icon: <ArrowDownIcon />,
@@ -127,12 +127,12 @@ export default function Header(headerProps:any) {
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             label: header,
             },{type: ActionTypes.UPDATE_COLUMN_HEADER});
             dataDispatch({
             type: ActionTypes.ADD_COLUMN_TO_LEFT,
-            columnId: headerProps.id,
+            columnId: column.id,
             focus: false,
             },{type: ActionTypes.ADD_COLUMN_TO_LEFT});
             setExpanded(false);
@@ -143,11 +143,11 @@ export default function Header(headerProps:any) {
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             label: header,
             },{type: ActionTypes.UPDATE_COLUMN_HEADER});
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             focus: false,
             },{type: ActionTypes.ADD_COLUMN_TO_RIGHT});
             setExpanded(false);
@@ -158,23 +158,23 @@ export default function Header(headerProps:any) {
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             label: header,
             },{type: ActionTypes.UPDATE_COLUMN_HEADER});
-            dataDispatch({columnId: headerProps.id },{type: ActionTypes.DELETE_COLUMN});
+            dataDispatch({columnId: column.id },{type: ActionTypes.DELETE_COLUMN});
             setExpanded(false);
         },
         icon: <TrashIcon />,
         label: 'Delete',
         },
     ];
-    const propertyIcon = getPropertyIcon(headerProps.dataType);
+    const propertyIcon = getPropertyIcon(column.dataType);
 
     const types = [
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             dataType: DataTypes.SELECT,
             },{type: ActionTypes.UPDATE_COLUMN_TYPE});
             setShowType(false);
@@ -186,7 +186,7 @@ export default function Header(headerProps:any) {
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             dataType: DataTypes.TEXT,
             },{type: ActionTypes.UPDATE_COLUMN_TYPE});
             setShowType(false);
@@ -198,7 +198,7 @@ export default function Header(headerProps:any) {
         {
         onClick: (e:any) => {
             dataDispatch({
-            columnId: headerProps.id,
+            columnId: column.id,
             dataType: DataTypes.NUMBER,
             },{type: ActionTypes.UPDATE_COLUMN_TYPE});
             setShowType(false);
@@ -213,7 +213,7 @@ export default function Header(headerProps:any) {
         if (e.key === 'Enter') {
         dataDispatch({
             type: 'update_column_header',
-            columnId: headerProps.id,
+            columnId: column.id,
             label: header,
         },{type: ActionTypes.UPDATE_COLUMN_HEADER});
         setExpanded(false);
@@ -226,11 +226,12 @@ export default function Header(headerProps:any) {
 
     function handleBlur(e:any) {
         e.preventDefault();
-        dataDispatch({ type: 'update_column_header', columnId: headerProps.id, label: header },{type: ActionTypes.UPDATE_COLUMN_HEADER});
+        dataDispatch({ type: 'update_column_header', columnId: column.id, label: header },{type: ActionTypes.UPDATE_COLUMN_HEADER});
     }
 
     function getHeader() {
-        if (headerProps.headerProps !== 999999) {
+      //  TODO headerProps.headerProps
+        if (headerProps.rows !== 999999) {
         return (
             <>
             <div className="th noselect d-inline-block">
@@ -242,7 +243,7 @@ export default function Header(headerProps:any) {
                 <span className="svg-icon svg-gray icon-margin">
                     {propertyIcon}
                 </span>
-                {headerProps.label}
+                {column.label}
                 </div>
                 <div className="resizer" />
             </div>
@@ -296,7 +297,7 @@ export default function Header(headerProps:any) {
                         {getPropertyIcon}
                         </span>
                         <span className="text-transform-capitalize">
-                        {headerProps.dataType}
+                        {column.dataType}
                         </span>
                     </button>
                     {showType && (
@@ -370,14 +371,14 @@ export default function Header(headerProps:any) {
     }
 
     useEffect(() => {
-        if (headerProps.created) {
+        if ((headerProps as any).created) {
         setExpanded(true);
         }
-    }, [headerProps.created]);
+    }, [(headerProps as any).created]);
 
     useEffect(() => {
-        setHeader(headerProps.label);
-    }, [headerProps.label]);
+        setHeader(column.label);
+    }, [column.label]);
 
     useEffect(() => {
         if (inputRef) {

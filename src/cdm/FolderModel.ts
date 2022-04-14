@@ -2,6 +2,7 @@ import { DatabaseView } from "DatabaseView";
 import { TFolder } from "obsidian";
 import { Link } from "obsidian-dataview";
 import { Dispatch } from "react";
+import { HeaderProps } from "react-table";
 import { StateManager } from "StateManager";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
@@ -79,4 +80,48 @@ export type DatabaseYaml = {
     description: string,
     /** database columns */
     columns: DatabaseColumns
+}
+
+export interface DatabseHeaderProps{
+    columns:any,
+    data:any,
+    initialState:any,
+    defaultColumn:any,
+    getSubRows:any,
+    getRowId:any,
+    stateReducer:any,
+    useControlledState:any,
+    plugins:any,
+    getHooks:any,
+    state:any,
+    dispatch:any,
+    allColumns:any,
+    rows:any,
+    initialRows:any,
+    flatRows:any,
+    rowsById:any,
+    headerGroups:any,
+    headers:any,flatHeaders:any,
+    visibleColumns:any,
+    totalColumnsMinWidth:any,
+    totalColumnsWidth:any,
+    totalColumnsMaxWidth:any,
+    allColumnsHidden:any,
+    toggleHideColumn:any,
+    setHiddenColumns:any,
+    toggleHideAllColumns:any,
+    getToggleHideAllColumnsProps:any,
+    resetResizing:any,
+    preSortedRows:any,
+    preSortedFlatRows:any,
+    sortedRows:any,
+    sortedFlatRows:any,
+    setSortBy:any,
+    toggleSortBy:any,
+    rowSpanHeaders:any,
+    footerGroups:any,
+    prepareRow:any,
+    getTableProps:any,
+    getTableBodyProps:any,
+    column: TableColumn
 }
