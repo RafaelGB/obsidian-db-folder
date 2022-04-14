@@ -53,19 +53,42 @@ export function Table(initialState: TableDataType){
   /** Rows information */
   const data: TableRows = initialState.data;
   /** Reducer */
-  const stateReducer = databaseReducer;
+  const dataDispatch = initialState.dispatch;
   /** Database information  */
   const view:DatabaseView = initialState.view;
   const stateManager:StateManager = initialState.stateManager;
   const filePath = stateManager.file.path;
-  
-  let propsUseTable:TableOptions<any> = {
+  /** Sort columns */
+  const sortTypes = React.useMemo(
+    () => ({
+      alphanumericFalsyLast(rowA:any, rowB:any, columnId:any, desc:boolean) {
+        if (!rowA.values[columnId] && !rowB.values[columnId]) {
+          return 0;
+        }
+
+        if (!rowA.values[columnId]) {
+          return desc ? -1 : 1;
+        }
+
+        if (!rowB.values[columnId]) {
+          return desc ? 1 : -1;
+        }
+
+        return isNaN(rowA.values[columnId])
+          ? rowA.values[columnId].localeCompare(rowB.values[columnId])
+          : rowA.values[columnId] - rowB.values[columnId];
+      }
+    }),
+    []
+  );
+  let propsUseTable:any = {
     columns, 
     data, 
     defaultColumn,
-    stateReducer
+    dataDispatch,
+    sortTypes
   };
-  /** Obsidian hooks to markdown events */
+  /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       
@@ -85,7 +108,7 @@ export function Table(initialState: TableDataType){
     },
     [view]
   );
-
+  /** Obsidian to open an internal link in a new pane */
   const onClick = React.useCallback(
     async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (e.type === 'auxclick' && e.button == 2) {
@@ -116,7 +139,6 @@ export function Table(initialState: TableDataType){
         return;
       }
 
-      // Open an internal link in a new pane
       if (closestAnchor.hasClass('internal-link')) {
         e.preventDefault();
         const destination = closestAnchor.getAttr('href');
@@ -204,7 +226,7 @@ export function Table(initialState: TableDataType){
               />
               <div onClick={() => 
                   {
-                    initialState.dispatch({ 
+                    dataDispatch({ 
                       type: ActionTypes.ADD_ROW,
                       payload: inputNewRow
                     });

@@ -8,6 +8,8 @@ import { FileManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
 
 export function databaseReducer(state:any, action:ActionType) {
+    // Check if action exists
+    if (!action){ return state; }
     LOGGER.debug(`<=>databaseReducer: ${action.type}`);
     switch (action.type) {
         /**
@@ -56,15 +58,40 @@ export function databaseReducer(state:any, action:ActionType) {
             return update(state, {
             data: { $push: [row] },
             });
+        case ActionTypes.UPDATE_COLUMN_HEADER:
+            const index = state.columns.findIndex(
+                (column:any) => column.id === action.columnId
+            );
+            return {
+                ...state,
+                skipReset: true,
+                columns: [
+                ...state.columns.slice(0, index),
+                { ...state.columns[index], label: action.label },
+                ...state.columns.slice(index + 1, state.columns.length)
+                ]
+            };
+        case ActionTypes.UPDATE_CELL:
+            LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
+            break;
+        case ActionTypes.ADD_COLUMN_TO_LEFT:
+            LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
+            break;
+        case ActionTypes.ADD_COLUMN_TO_RIGHT:
+            LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
+            break;
+        case ActionTypes.DELETE_COLUMN:
+            LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
+            break;
         /**
          * Enable reset
          */
         case ActionTypes.ENABLE_RESET:
-            return update(state, { skipReset: { $set: true } });
+            return update(state, { skipReset: { $set: false } });
         default:
-            LOGGER.warn(`<=databaseReducer: unknown action ${action.type}`);
-            return state;
+            LOGGER.warn(`<=> databaseReducer: unknown action ${action.type}`);
     }
+    return state;
 }
 
 export function getDispatch(initialState:TableDataType) {
