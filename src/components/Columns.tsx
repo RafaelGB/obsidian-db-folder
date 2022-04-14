@@ -71,8 +71,6 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
    */
    function isSelect():TableColumn {
     LOGGER.debug(`<= columnOptions`,`return select column`);
-    options.push({ backgroundColor: randomColor() });
-    LOGGER.debug(`options: ${JSON.stringify(options)}`);
 		return {
       ...mandatory,
       dataType: DataTypes.SELECT,

@@ -30,8 +30,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
   const { id, label, dataType, getHeaderProps, getResizerProps} = headerProps.column;
   /** reducer asociated to database */
   const dataDispatch = headerProps.stateReducer;
-
-    const [expanded, setExpanded] = useState(created || false);
+  const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
@@ -152,7 +151,6 @@ export default function Header(headerProps:DatabseHeaderProps) {
       inputRef.select();
     }
   }, [inputRef]);
-
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: "right",
     strategy: "fixed"

@@ -7,10 +7,10 @@ import { LOGGER } from "services/Logger";
 import { Cell } from 'react-table';
 import { MarkdownRenderer } from "obsidian";
 import PlusIcon from "components/img/Plus";
-import Badge from "components/Badge";
 import { grey, randomColor } from "helpers/Colors";
 import { usePopper } from "react-popper";
 import { databaseReducer } from "./reducers/DatabaseDispatch";
+import Relationship from "components/RelationShip";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -27,9 +27,7 @@ import { databaseReducer } from "./reducers/DatabaseDispatch";
   }
   return "";
 }
-const getRowHeight = (index:number) => {
-  return 
-}
+
 export default function Cell(cellProperties:Cell) {
     const dataDispatch = databaseReducer;
     /** Initial state of cell */
@@ -38,9 +36,6 @@ export default function Cell(cellProperties:Cell) {
     const dataType = (cellProperties.column as any).dataType;
     /** Column options */
     const options = (cellProperties.column as any).options;
-    // state of height asociated with the row of the cell
-    // TODO (`cellProperties ${cellProperties}`);
-    
     // state of cell value
     const [value, setValue] = useState({ value: initialValue, update: false });
     // state for keeping the timeout
@@ -166,85 +161,76 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Selector option */
         case DataTypes.SELECT:
+          // TODO asociate options to the header
+          //options.push({label: initialValue, backgroundColor: randomColor()});
           return (
             <>
               <div
                 ref={setSelectRef}
-                className="cell-padding d-flex cursor-default align-items-center flex-1"
-                onClick={() => setShowSelect(true)}
-              >
-                {value.value && (
-                  <Badge value={value.value} backgroundColor={getColor()} />
-                )}
+                className='cell-padding d-flex cursor-default align-items-center flex-1'
+                onClick={() => setShowSelect(true)}>
+                {value.value && <Relationship value={value.value} backgroundColor={getColor()} />}
               </div>
+              {showSelect && <div className='overlay' onClick={() => setShowSelect(false)} />}
               {showSelect && (
-                <div className="overlay" onClick={() => setShowSelect(false)} />
-              )}
-              {showSelect &&
-                createPortal(
-                  <div
-                    className="shadow-5 bg-white border-radius-md"
-                    ref={setSelectPop}
-                    {...attributes.popper}
-                    style={{
-                      ...styles.popper,
-                      zIndex: 4,
-                      minWidth: 200,
-                      maxWidth: 320,
-                      maxHeight: 400,
-                      padding: '0.75rem',
-                      overflow: 'auto',
-                    }}
-                  >
-                    <div
-                      className="d-flex flex-wrap-wrap"
-                      style={{ marginTop: '-0.5rem' }}
-                    >
-                      {options.map((option: { label: any; backgroundColor: any; }) => (
-                        <div
-                          className="cursor-pointer mr-5 mt-5"
-                          onClick={() => handleOptionClick(option)}
-                        >
-                          <Badge
-                            value={option.label}
-                            backgroundColor={option.backgroundColor}
-                          />
-                        </div>
-                      ))}
-                      {showAdd && (
-                        <div
-                          className="mr-5 mt-5 bg-grey-200 border-radius-sm"
-                          style={{
-                            width: 120,
-                            padding: '2px 4px',
-                          }}
-                        >
-                          <input
-                            type="text"
-                            className="option-input"
-                            onBlur={handleOptionBlur}
-                            ref={setAddSelectRef}
-                            onKeyDown={handleOptionKeyDown}
-                          />
-                        </div>
-                      )}
+                <div
+                  className='shadow-5 bg-white border-radius-md'
+                  ref={setSelectPop}
+                  {...attributes.popper}
+                  style={{
+                    ...styles.popper,
+                    zIndex: 4,
+                    minWidth: 200,
+                    maxWidth: 320,
+                    padding: "0.75rem"
+                  }}>
+                  <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
+                    {options.map((option:any) => (
                       <div
-                        className="cursor-pointer mr-5 mt-5"
-                        onClick={handleAddOption}
-                      >
-                        <Badge
-                          value={
-                            <span className="svg-icon-sm svg-text">
-                              <PlusIcon />
-                            </span>
-                          }
-                          backgroundColor={grey(200)}
+                        className='cursor-pointer'
+                        style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                        onClick={() => {
+                          setValue({value: option.label, update: true});
+                          setShowSelect(false);
+                        }}>
+                        <Relationship value={option.label} backgroundColor={option.backgroundColor} />
+                      </div>
+                    ))}
+                    {showAdd && (
+                      <div
+                        style={{
+                          marginRight: "0.5rem",
+                          marginTop: "0.5rem",
+                          width: 120,
+                          padding: "2px 4px",
+                          backgroundColor: grey(200),
+                          borderRadius: 4
+                        }}>
+                        <input
+                          type='text'
+                          className='option-input'
+                          onBlur={handleOptionBlur}
+                          ref={setAddSelectRef}
+                          onKeyDown={handleOptionKeyDown}
                         />
                       </div>
+                    )}
+                    <div
+                      className='cursor-pointer'
+                      style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                      onClick={handleAddOption}>
+                      <Relationship
+                        value={
+                          <span className='svg-icon-sm svg-text'>
+                            <PlusIcon />
+                          </span>
+                        }
+                        backgroundColor={grey(200)}
+                      />
                     </div>
-                  </div>,
-                  document.querySelector('#popper-portal')
-                )}
+                  </div>
+                </div>
+              )}
             </>
           );
         /** Default option */

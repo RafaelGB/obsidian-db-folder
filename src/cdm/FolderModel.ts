@@ -127,3 +127,8 @@ export interface DatabseHeaderProps{
     getTableBodyProps:any,
     column: TableColumn
 }
+
+export type RelationshipProps = {
+    value:any,
+    backgroundColor:string
+}
