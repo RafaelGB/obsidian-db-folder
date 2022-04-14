@@ -14,52 +14,22 @@ import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabseHeaderProps } from 'cdm/FolderModel';
 
-function getPropertyIcon(dataType:string) {
-  switch (dataType) {
-    case DataTypes.NUMBER:
-      return <HashIcon />;
-    case DataTypes.TEXT:
-      return <TextIcon />;
-    case DataTypes.SELECT:
-      return <MultiIcon />;
-    default:
-      return null;
-  }
-}
-
-/**
- * Control the width of the cell in function of the content of all rows and header
- * @param rows 
- * @param accessor 
- * @param headerText 
- * @returns 
- */
-const getColumnWidth = (rows:any, accessor:any, headerText:any) => {
-  const maxWidth = 400
-  const magicSpacing = 12
-  const cellLength = Math.max(
-    ...rows.map((row:any) => (`${row.values[accessor]}` || '').length),
-    headerText.length,
-  )
-  return Math.min(maxWidth, cellLength * magicSpacing)
-}
-
 /**
  * Default headers of the table
  * @param headerProps 
  * @returns 
  */
 export default function Header(headerProps:DatabseHeaderProps) {
-    console.log(`here starts header ${headerProps.column.id}`);
-    LOGGER.debug(`=>Header`);
-    // TODO : add a tooltip to the header
-    const created:boolean = false;
-    /** Properties of header */
-    const {state,setSortBy} = headerProps;
-    /** Column values */
-    const { id, label, dataType, getHeaderProps, getResizerProps} = headerProps.column;
-    /** reducer asociated to database */
-    const dataDispatch = headerProps.stateReducer;
+  console.log(`here starts header ${headerProps.column.id}`);
+  LOGGER.debug(`=>Header`);
+  // TODO : add a tooltip to the header
+  const created:boolean = false;
+  /** Properties of header */
+  const {setSortBy} = headerProps;
+  /** Column values */
+  const { id, label, dataType, getHeaderProps, getResizerProps} = headerProps.column;
+  /** reducer asociated to database */
+  const dataDispatch = headerProps.stateReducer;
 
     const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -76,7 +46,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
   const buttons = [
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_header", columnId: id, label: header});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         setSortBy([{id: id, desc: false}]);
         setExpanded(false);
       },
@@ -85,7 +55,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_header", columnId: id, label: header});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         setSortBy([{id: id, desc: true}]);
         setExpanded(false);
       },
@@ -94,7 +64,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_header", columnId: id, label: header});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         dataDispatch({type: "add_column_to_left", columnId: id, focus: false});
         setExpanded(false);
       },
@@ -103,7 +73,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_header", columnId: id, label: header});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         dataDispatch({type: "add_column_to_right", columnId: id, focus: false});
         setExpanded(false);
       },
@@ -112,7 +82,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_header", columnId: id, label: header});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         dataDispatch({type: "delete_column", columnId: id});
         setExpanded(false);
       },
@@ -124,42 +94,42 @@ export default function Header(headerProps:DatabseHeaderProps) {
   const types = [
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_type", columnId: id, dataType: "select"});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_TYPE, columnId: id, dataType: DataTypes.SELECT});
         setShowType(false);
         setExpanded(false);
       },
       icon: <MultiIcon />,
-      label: "Select"
+      label: DataTypes.SELECT
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_type", columnId: id, dataType: "text"});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_TYPE, columnId: id, dataType: DataTypes.TEXT});
         setShowType(false);
         setExpanded(false);
       },
       icon: <TextIcon />,
-      label: "Text"
+      label: DataTypes.TEXT
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: "update_column_type", columnId: id, dataType: "number"});
+        dataDispatch({type: ActionTypes.UPDATE_COLUMN_TYPE, columnId: id, dataType: DataTypes.NUMBER});
         setShowType(false);
         setExpanded(false);
       },
       icon: <HashIcon />,
-      label: "Number"
+      label: DataTypes.NUMBER
     }
   ];
 
   let propertyIcon;
   switch (dataType) {
-    case "number":
+    case DataTypes.NUMBER:
       propertyIcon = <HashIcon />;
       break;
-    case "text":
+    case DataTypes.TEXT:
       propertyIcon = <TextIcon />;
       break;
-    case "select":
+    case DataTypes.SELECT:
       propertyIcon = <MultiIcon />;
       break;
     default:
@@ -190,7 +160,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
 
   function handleKeyDown(e:any) {
     if (e.key === "Enter") {
-      dataDispatch({type: "update_column_header", columnId: id, label: header});
+      dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
       setExpanded(false);
     }
   }
@@ -201,7 +171,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
 
   function handleBlur(e:any) {
     e.preventDefault();
-    dataDispatch({type: "update_column_header", columnId: id, label: header});
+    dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
   }
 
   return id !== "999999" ? (
