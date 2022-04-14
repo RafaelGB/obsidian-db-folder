@@ -24,11 +24,11 @@ function Database(tableProps:TableDataType){
   }, [state.data, state.columns]);
   return(
     <div
-      className="overflow-y-hidden"
-      style={{
-        width: '100vw',
-        height: '100vh',
-      }}
+      // className="overflow-y-hidden"
+      // style={{
+      //   width: '100vw',
+      //   height: '100vh',
+      // }}
     >
       <Table
         {...state}

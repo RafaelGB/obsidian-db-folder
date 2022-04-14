@@ -49,8 +49,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
 		return {
       ...mandatory,
       dataType: DataTypes.TEXT,
-      options: options,
-      // width: getColumnWidth(column.rows, column.accessor, column.id),
+      options: options
     };
   }
 

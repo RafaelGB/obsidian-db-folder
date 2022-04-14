@@ -11,6 +11,7 @@ import Badge from "components/Badge";
 import { grey, randomColor } from "helpers/Colors";
 import { usePopper } from "react-popper";
 import { databaseReducer } from "./reducers/DatabaseDispatch";
+import { c } from "helpers/StylesHelper";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -27,7 +28,9 @@ import { databaseReducer } from "./reducers/DatabaseDispatch";
   }
   return "";
 }
-
+const getRowHeight = (index:number) => {
+  return 
+}
 export default function Cell(cellProperties:Cell) {
     const dataDispatch = databaseReducer;
     /** Initial state of cell */
@@ -36,6 +39,9 @@ export default function Cell(cellProperties:Cell) {
     const dataType = (cellProperties.column as any).dataType;
     /** Column options */
     const options = (cellProperties.column as any).options;
+    // state of height asociated with the row of the cell
+    // TODO
+    console.log(`cellProperties ${cellProperties}`);
     // state of cell value
     const [value, setValue] = useState({ value: initialValue, update: false });
     // state for keeping the timeout
@@ -190,7 +196,7 @@ export default function Cell(cellProperties:Cell) {
                     }}
                   >
                     <div
-                      className="d-flex flex-wrap-wrap"
+                      className={c("d-flex flex-wrap-wrap")}
                       style={{ marginTop: '-0.5rem' }}
                     >
                       {options.map((option: { label: any; backgroundColor: any; }) => (

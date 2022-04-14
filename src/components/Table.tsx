@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Row, TableOptions, useTable, useBlockLayout, TableInstance } from 'react-table';
+import { TableOptions, useTable, useBlockLayout, TableInstance } from 'react-table';
 import { FixedSizeList } from 'react-window';
 import { 
   TableDataType,
   TableRows,
-  TableRow, 
   TableColumns
 } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
@@ -13,6 +12,7 @@ import { getNormalizedPath } from "helpers/VaultManagement";
 import scrollbarWidth from "components/scrollbarWidth";
 import { databaseReducer } from "components/reducers/DatabaseDispatch";
 import { ActionTypes, DatabaseCore } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
@@ -162,11 +162,11 @@ export function Table(initialState: TableDataType){
           {...row.getRowProps({
             style,
           })}
-          className="tr"
+          className={c("tr")}
         >
           {row.cells.map(cell => {
             return (
-              <div {...cell.getCellProps()} className="td">
+              <div {...cell.getCellProps()} className={c("td")}>
                 {cell.render('Cell')}
               </div>
             )
@@ -183,15 +183,15 @@ export function Table(initialState: TableDataType){
    //Render the UI for your table
    return (
     <div {...getTableProps()} 
-    className="table"
+    className={c("table")}
     onMouseOver={onMouseOver}
     onClick={onClick}
     >
       <div>
         {headerGroups.map(headerGroup => (
-          <div {...headerGroup.getHeaderGroupProps()} className="tr">
+          <div {...headerGroup.getHeaderGroupProps()} className={c("tr")}>
             {headerGroup.headers.map(column => (
-              <div {...column.getHeaderProps()} className="th">
+              <div {...column.getHeaderProps()} className={c("th")}>
                 {column.render('Header')}
               </div>
             ))}
@@ -208,32 +208,32 @@ export function Table(initialState: TableDataType){
         >
           {RenderRow}
         </FixedSizeList>
-          <div className="tr add-row">
-            <input type="text"
-              ref={newRowRef}
-              onChange={(e) => {
-                setInputNewRow(e.target.value);
-               }                   
-              }
-              placeholder='filename of new row'
-            />
-            <div
-              onClick={() => {
-                initialState.dispatch({ 
-                type: ActionTypes.ADD_ROW,
-                payload: inputNewRow
-              });
-              setInputNewRow('');
-              newRowRef.current.value='';
+        <div className={c("tr add-row")}>
+          <input type="text"
+            ref={newRowRef}
+            onChange={(e) => {
+              setInputNewRow(e.target.value);
+              } 
             }
-            }
-            >
-              <span className="svg-icon svg-gray icon-margin">
-                <PlusIcon />
-              </span>
-              New Row
-            </div>
+            placeholder='filename of new row'
+          />
+          <div
+            onClick={() => {
+              initialState.dispatch({ 
+              type: ActionTypes.ADD_ROW,
+              payload: inputNewRow
+            });
+            setInputNewRow('');
+            newRowRef.current.value='';
+          }
+          }
+          >
+            <span className={c("svg-icon svg-gray icon-margin")}>
+              <PlusIcon />
+            </span>
+            New Row
           </div>
+        </div>
       </div>
     </div>
   )

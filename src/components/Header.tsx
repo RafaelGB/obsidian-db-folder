@@ -52,10 +52,10 @@ const getColumnWidth = (rows:any, accessor:any, headerText:any) => {
  */
  export default function Header(headerProps:HeaderProps<any>) {
      /** Header name state */
-    const [header, setHeader] = useState(headerProps.column.id);
+    const [header, setHeader] = useState((headerProps.column as any).label);
     /** Width of column state */
     headerProps.column.width=getColumnWidth(headerProps.rows, headerProps.column.id, headerProps.column.id);
-    const [width, setWidth] = useState(headerProps.column.width);
+    // const [width, setWidth] = useState(headerProps.column.width);
     //getColumnWidth
     function getHeader() {
         return (
