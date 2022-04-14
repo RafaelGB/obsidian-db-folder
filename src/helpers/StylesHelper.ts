@@ -6,5 +6,9 @@ import { DatabaseCore } from "helpers/Constants";
  * @returns 
  */
 export function c(className: string): string {
-    return `${DatabaseCore.FRONTMATTER_KEY}__${className}`;
+    const wrappedClasses: string[] = [];
+    className.split(' ').forEach((cls) => {
+        wrappedClasses.push(`${DatabaseCore.FRONTMATTER_KEY}__${cls}`);
+    });
+    return wrappedClasses.join(' ');
   }

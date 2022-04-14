@@ -177,16 +177,16 @@ export function Table(initialState: TableDataType){
     [prepareRow, rows]
   )
     LOGGER.debug(`<= Table`);
-   // Manage input of new row
-   const [inputNewRow, setInputNewRow] = React.useState('');
-   const newRowRef = React.useRef(null);
-   //Render the UI for your table
-   return (
-    <div {...getTableProps()} 
-    className={c("table")}
-    onMouseOver={onMouseOver}
-    onClick={onClick}
-    >
+    // Manage input of new row
+    const [inputNewRow, setInputNewRow] = React.useState('');
+    const newRowRef = React.useRef(null);
+    //Render the UI for your table
+    return (
+      <div {...getTableProps()} 
+      className={c("table")}
+      onMouseOver={onMouseOver}
+      onClick={onClick}
+      >
       <div>
         {headerGroups.map(headerGroup => (
           <div {...headerGroup.getHeaderGroupProps()} className={c("tr")}>
