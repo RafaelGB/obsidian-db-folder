@@ -161,8 +161,6 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Selector option */
         case DataTypes.SELECT:
-          // TODO asociate options to the header
-          //options.push({label: initialValue, backgroundColor: randomColor()});
           return (
             <>
               <div

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePopper } from 'react-popper';
-import { grey } from 'helpers/Colors';
+import { grey, randomColor } from 'helpers/Colors';
 import ArrowUpIcon from 'components/img/ArrowUp';
 import ArrowDownIcon from 'components/img/ArrowDown';
 import ArrowLeftIcon from 'components/img/ArrowLeft';
@@ -14,20 +14,31 @@ import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabseHeaderProps } from 'cdm/FolderModel';
 
+function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
+  console.log("setOptionsOfSelectDataType",options,rows);
+  rows.forEach((row:any)=>{
+    const rowValue = row.values[columnId];
+    let match = options.find((option: { label: any; }) => option.label === rowValue);
+    if(!match){
+      options.push({label: rowValue, backgroundColor: randomColor()});
+    }
+  });
+  return options;
+}
+
 /**
  * Default headers of the table
  * @param headerProps 
  * @returns 
  */
 export default function Header(headerProps:DatabseHeaderProps) {
-  console.log(`here starts header ${headerProps.column.id}`);
   LOGGER.debug(`=>Header`);
   // TODO : add a tooltip to the header
   const created:boolean = false;
   /** Properties of header */
-  const {setSortBy} = headerProps;
+  const {setSortBy, rows} = headerProps;
   /** Column values */
-  const { id, label, dataType, getHeaderProps, getResizerProps} = headerProps.column;
+  const { id, label, dataType, options, getHeaderProps, getResizerProps} = headerProps.column;
   /** reducer asociated to database */
   const dataDispatch = headerProps.stateReducer;
   const [expanded, setExpanded] = useState(created || false);
@@ -129,6 +140,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
       propertyIcon = <TextIcon />;
       break;
     case DataTypes.SELECT:
+      setOptionsOfSelectDataType(options,rows,id);
       propertyIcon = <MultiIcon />;
       break;
     default:

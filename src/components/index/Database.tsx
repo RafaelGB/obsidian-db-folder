@@ -28,7 +28,6 @@ function Database(tableProps:TableDataType){
         {...state}
         dispatch={dataDispatch}
       />
-      <div id="popper-portal"></div>
     </div>
   );
 }

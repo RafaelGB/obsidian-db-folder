@@ -90,13 +90,12 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
       options: options
     };
   }
-
-  let inputs: Record<string, any> = {
-    'text': isText,
-    'markdown': isMarkdown,
-    'number': isNumber,
-    'select': isSelect
-  };
+  // Record of options
+  let inputs: Record<string, any> = {};
+  inputs[DataTypes.TEXT] = isText;
+  inputs[DataTypes.NUMBER] = isNumber;
+  inputs[DataTypes.SELECT] = isSelect;
+  inputs[DataTypes.MARKDOWN] = isMarkdown;
 
   if(inputs.hasOwnProperty(column.input)){
     return await inputs[column.input]();
