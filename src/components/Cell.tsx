@@ -1,6 +1,5 @@
 import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { createPortal } from 'react-dom';
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
 import { FileManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
@@ -52,6 +51,7 @@ export default function Cell(cellProperties:Cell) {
     });
     // onChange handler
   const handleOnChange = (event:ContentEditableEvent) => {
+    LOGGER.debug(`=>Cell.handleOnChange. ${event.target.value}`);
     // cancelling previous timeouts
       if (editNoteTimeout) {
         clearTimeout(editNoteTimeout);
@@ -65,6 +65,7 @@ export default function Cell(cellProperties:Cell) {
           // timeout until event is triggered after user has stopped typing
         }, 1500),
       );
+      LOGGER.debug(`<=Cell.handleOnChange`);
   };
 
     function getColor() {
@@ -73,20 +74,21 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function onChange(event:ContentEditableEvent) {
+      updateTargetNoteCell(event.target.value);
+    }
+
+    function updateTargetNoteCell(targetValue:string) {
       const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
-      LOGGER.debug(`<=>Cell: onChange: ${cellBasenameFile} with value: ${event.target.value}`);
+      LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${targetValue}`);
       const columnId = cellProperties.column.id;
-      
       let noteObject = {
         action: 'replace',
         filePath: `${cellBasenameFile}`,
         regexp: new RegExp(`^[\s]*${columnId}[:]{1}(.+)$`,"gm"),
-        newValue: `${columnId}: ${event.target.value}`
+        newValue: `${columnId}: ${targetValue}`
       };
-      
       FileManagerDB.editNoteContent(noteObject);
     }
-
     function handleAddOption(e:any) {
       setShowAdd(true);
     }
@@ -190,6 +192,7 @@ export default function Cell(cellProperties:Cell) {
                         onClick={() => {
                           setValue({value: option.label, update: true});
                           setShowSelect(false);
+                          updateTargetNoteCell(option.label);
                         }}>
                         <Relationship value={option.label} backgroundColor={option.backgroundColor} />
                       </div>

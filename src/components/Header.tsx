@@ -74,7 +74,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     {
       onClick: (e:any) => {
         dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
-        dataDispatch({type: "add_column_to_left", columnId: id, focus: false});
+        dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: id, focus: false});
         setExpanded(false);
       },
       icon: <ArrowLeftIcon />,
@@ -83,7 +83,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     {
       onClick: (e:any) => {
         dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
-        dataDispatch({type: "add_column_to_right", columnId: id, focus: false});
+        dataDispatch({type: ActionTypes.ADD_COLUMN_TO_RIGHT, columnId: id, focus: false});
         setExpanded(false);
       },
       icon: <ArrowRightIcon />,
@@ -92,7 +92,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     {
       onClick: (e:any) => {
         dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
-        dataDispatch({type: "delete_column", columnId: id});
+        dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id});
         setExpanded(false);
       },
       icon: <TrashIcon />,
