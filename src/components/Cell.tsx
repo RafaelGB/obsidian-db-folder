@@ -39,8 +39,8 @@ export default function Cell(cellProperties:Cell) {
     /** Column options */
     const options = (cellProperties.column as any).options;
     // state of height asociated with the row of the cell
-    // TODO
-    console.log(`cellProperties ${cellProperties}`);
+    // TODO (`cellProperties ${cellProperties}`);
+    
     // state of cell value
     const [value, setValue] = useState({ value: initialValue, update: false });
     // state for keeping the timeout

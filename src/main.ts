@@ -193,7 +193,7 @@ export default class DBFolderPlugin extends Plugin {
 			state: { file: database.path },
 		  });
 		} catch (e) {
-		  console.error('Error creating database folder:', e);
+		  LOGGER.error('Error creating database folder:', e);
 		}
 	}
 

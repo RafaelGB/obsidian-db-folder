@@ -11,9 +11,7 @@ import MultiIcon from 'components/img/Multi';
 import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
 import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
-import { databaseReducer } from './reducers/DatabaseDispatch';
 import { LOGGER } from 'services/Logger';
-import { HeaderProps } from 'react-table';
 import { DatabseHeaderProps } from 'cdm/FolderModel';
 
 function getPropertyIcon(dataType:string) {
@@ -47,41 +45,19 @@ const getColumnWidth = (rows:any, accessor:any, headerText:any) => {
 }
 
 /**
- * Default header of the table
- * @param headerProps 
- * @returns 
- */
-//  export default function HeaderLab(headerProps:HeaderProps<any>) {
-//      /** Header name state */
-//     const [header, setHeader] = useState((headerProps.column as any).label);
-//     /** Width of column state */
-//     headerProps.column.width=getColumnWidth(headerProps.rows, headerProps.column.id, headerProps.column.id);
-//     // const [width, setWidth] = useState(headerProps.column.width);
-//     //getColumnWidth
-//     function getHeader() {
-//         return (
-//             <div className="header-container">
-//                 <div className="header-name">
-//                     {header}
-//                 </div>
-//             </div>);
-//     }
-//     return getHeader();
-//  }
-
-/**
- * Headers of the table
+ * Default headers of the table
  * @param headerProps 
  * @returns 
  */
 export default function Header(headerProps:DatabseHeaderProps) {
+    console.log(`here starts header ${headerProps.column.id}`);
     LOGGER.debug(`=>Header`);
     /** State of table */
     const state = headerProps.state;
     /** Column of the header */
     const column = headerProps.column;
-    /** reducer */
-    const dataDispatch = databaseReducer;
+    /** reducer asociated to database */
+    const dataDispatch = headerProps.stateReducer;
 
     const [expanded, setExpanded] = useState((headerProps as any).created || false);
     const [referenceElement, setReferenceElement] = useState(null);
