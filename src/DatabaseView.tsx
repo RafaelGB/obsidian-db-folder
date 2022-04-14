@@ -24,7 +24,7 @@ export const databaseIcon = 'blocks';
 export class DatabaseView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
     hoverPopover: HoverPopover | null;
-    
+    tableContainer: HTMLDivElement | null = null;
     constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
         super(leaf);
         this.plugin = plugin;
@@ -121,8 +121,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       }
       
       let table = createDatabase(tableProps);
-      const tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
-      ReactDOM.render(table, tableContainer);
+      this.tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
+      ReactDOM.render(table, this.tableContainer);
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     }
     
@@ -130,7 +130,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       LOGGER.info(`=>destroy ${this.file.path}`);
         // Remove draggables from render, as the DOM has already detached
       this.plugin.removeView(this);
-      ReactDOM.unmountComponentAtNode(this.contentEl);
+      this.tableContainer.remove();
       LOGGER.info(`<=destroy ${this.file.path}`);
     }
     

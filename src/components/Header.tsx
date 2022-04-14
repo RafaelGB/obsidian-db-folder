@@ -142,6 +142,10 @@ export default function Header(headerProps:DatabseHeaderProps) {
       setOptionsOfSelectDataType(options,rows,id);
       propertyIcon = <MultiIcon />;
       break;
+    case DataTypes.MARKDOWN:
+      // TODO : add a markdown icon
+      propertyIcon = <TextIcon />;
+      break;
     default:
       break;
   }
