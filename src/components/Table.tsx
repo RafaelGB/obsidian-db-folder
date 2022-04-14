@@ -184,7 +184,7 @@ export function Table(initialState: TableDataType){
             {rows.map((row, i) => {
               prepareRow(row);
               return (
-                <div {...row.getRowProps()} className='tr'>
+                <div {...row.getRowProps()} key={i} className='tr'>
                   {row.cells.map((cell) => (
                     <div {...cell.getCellProps()} className='td'>
                       {cell.render("Cell")}

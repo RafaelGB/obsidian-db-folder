@@ -96,6 +96,7 @@ export default function Cell(cellProperties:Cell) {
     function handleOptionClick(option: { label: any; backgroundColor?: any; }) {
       setValue({ value: option.label, update: true });
       setShowSelect(false);
+      updateTargetNoteCell(option.label);
     }
 
     function handleOptionBlur(e:any) {
@@ -189,11 +190,7 @@ export default function Cell(cellProperties:Cell) {
                       <div
                         className='cursor-pointer'
                         style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
-                        onClick={() => {
-                          setValue({value: option.label, update: true});
-                          setShowSelect(false);
-                          updateTargetNoteCell(option.label);
-                        }}>
+                        onClick={() => handleOptionClick(option)}>
                         <Relationship value={option.label} backgroundColor={option.backgroundColor} />
                       </div>
                     ))}

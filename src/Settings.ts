@@ -8,10 +8,12 @@ import { developer_settings_section } from "settings/DeveloperSection";
 
 export interface DatabaseSettings {
     enable_debug_mode: boolean;
+    logger_level_info: string;
 }
 
 export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
+    logger_level_info: "error"
 };
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
@@ -52,10 +54,15 @@ export interface SettingsManagerConfig {
         containerEl.empty();
         containerEl.addClass('database-settings-modal');
         add_setting_header(containerEl,heading,'h2');
-        /** Developer section */
-        developer_settings_section(this, containerEl, local);
+        const settingsBody:HTMLDivElement = containerEl.createDiv('database-settings-body');
+        this.constructSettingBody(settingsBody, local);
     }
 
+    constructSettingBody(containerEl: HTMLElement, local: boolean) {
+      containerEl.empty();
+      /** Developer section */
+      developer_settings_section(this, containerEl, local);
+    }
     cleanUp() {
         this.cleanupFns.forEach((fn) => fn());
         this.cleanupFns = [];
