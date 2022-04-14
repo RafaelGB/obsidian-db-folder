@@ -8,19 +8,21 @@ export interface LogInterface{
 }
 
 const LevelInfoRecord: Record<string, number> = {
-    debug: 0,
-    info: 1,
-    warn: 2,
-    error: 3
+    debug: 3,
+    info: 2,
+    warn: 1,
+    error: 0
 };
 class Log implements LogInterface{
     private static instance: LogInterface;
     private isDebugModeEnabled: boolean = false;
-    private levelInfo:number = 1;
+    private levelInfo:number = 0;
     private constructor() {}
 
     public debug(primaryMessage: string, ...supportingData: any[]){
-        this.emitLogMessage("debug", primaryMessage, ...supportingData);
+        if(this.levelInfo >= LevelInfoRecord.debug){
+            this.emitLogMessage("debug", primaryMessage, ...supportingData);
+        }
     }
     public info(primaryMessage: string, ...supportingData: any[]){
         if(this.levelInfo >= LevelInfoRecord.info){

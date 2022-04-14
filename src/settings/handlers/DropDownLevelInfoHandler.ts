@@ -15,6 +15,7 @@ export class DropDownLevelInfoHandler extends AbstractSettingsHandler {
             .addDropdown((dropdown) => {
                 dropdown.addOption('debug', 'debug');
                 dropdown.addOption('info', 'info');
+                dropdown.addOption('warn', 'warn');
                 dropdown.addOption('error', 'error');
                 dropdown.setValue(
                     settingsManager.plugin.settings.logger_level_info

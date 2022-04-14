@@ -59,9 +59,9 @@ export default class DBFolderPlugin extends Plugin {
 			  await this.saveSettings();
 	  
 			  // Force a complete re-render when settings change
-			  this.stateManagers.forEach((stateManager) => {
-				//stateManager.forceRefresh();
-			  });
+			  //this.stateManagers.forEach((stateManager) => {
+			  //stateManager.forceRefresh();
+			  //});
 			},
 		  })
 		);

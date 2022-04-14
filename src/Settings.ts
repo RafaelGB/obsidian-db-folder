@@ -118,4 +118,5 @@ export class DBFolderSettingTab extends PluginSettingTab {
 export function loadServicesThatRequireSettings(settings: DatabaseSettings) {
   /** Init logger */
     LOGGER.setDebugMode(settings.enable_debug_mode);
+    LOGGER.setLevelInfo(settings.logger_level_info);
 }
