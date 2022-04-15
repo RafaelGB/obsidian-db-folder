@@ -8,7 +8,6 @@ import { MarkdownRenderer } from "obsidian";
 import PlusIcon from "components/img/Plus";
 import { grey, randomColor } from "helpers/Colors";
 import { usePopper } from "react-popper";
-import { databaseReducer } from "./reducers/DatabaseDispatch";
 import Relationship from "components/RelationShip";
 
 /**
@@ -28,9 +27,11 @@ import Relationship from "components/RelationShip";
 }
 
 export default function Cell(cellProperties:Cell) {
-    const dataDispatch = databaseReducer;
+    const dataDispatch = (cellProperties as any).dataDispatch;
     /** Initial state of cell */
     const initialValue = cellProperties.value;
+    /** Columns information */
+    const columns = (cellProperties as any).columns;
     /** Type of cell */
     const dataType = (cellProperties.column as any).dataType;
     /** Column options */
@@ -51,7 +52,6 @@ export default function Cell(cellProperties:Cell) {
     });
     // onChange handler
   const handleOnChange = (event:ContentEditableEvent) => {
-    LOGGER.debug(`=>Cell.handleOnChange. ${event.target.value}`);
     // cancelling previous timeouts
       if (editNoteTimeout) {
         clearTimeout(editNoteTimeout);
@@ -110,10 +110,15 @@ export default function Cell(cellProperties:Cell) {
       setShowAdd(false);
     }
 
+    /**
+     * 
+     * @param e Handler for click event on cell
+     */
     function handleOptionKeyDown(e:any) {
       if (e.key === 'Enter') {
         if (e.target.value !== '') {
           dataDispatch({
+            columns: columns,
             option: e.target.value,
             backgroundColor: randomColor(),
             columnId: (cellProperties.column as any).id

@@ -21,8 +21,19 @@ function Database(tableProps:TableDataType){
   useEffect(() => {
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
   }, [state.data, state.columns]);
+  
   return(
-    <div>
+    <div
+    style={{
+      flex: "1 1 auto",
+      padding: "1rem",
+      maxWidth: 1000,
+      marginLeft: "auto",
+      marginRight: "auto",
+      overflow: "auto",
+      display: "flex"
+    }}
+    >
       <Table
         {...state}
         dispatch={dataDispatch}

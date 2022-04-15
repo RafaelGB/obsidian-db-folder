@@ -8,9 +8,9 @@ import { FileManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
 
 export function databaseReducer(state:any, action:ActionType) {
+    LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
     // Check if action exists
     if (!action){ return state; }
-    LOGGER.debug(`<=>databaseReducer: ${action.type}`);
     switch (action.type) {
         /**
          * Add option to column
