@@ -198,7 +198,11 @@ export function Table(initialState: TableDataType){
           <div>
             {headerGroups.map((headerGroup,i) => (
               <div {...headerGroup.getHeaderGroupProps()} className='tr'>
-                {headerGroup.headers.map((column) => column.render("Header"))}
+                {headerGroup.headers.map((column) => (
+                  <div {...column.getHeaderProps()} className='th'>
+                    {column.render("Header")}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -206,7 +210,7 @@ export function Table(initialState: TableDataType){
             {rows.map((row, i) => {
               prepareRow(row);
               return (
-                <div {...row.getRowProps()} className='tr'>
+                <div {...row.getRowProps()} className='tr' key={row.id} >
                   {row.cells.map((cell) => (
                     <div {...cell.getCellProps()} className='td'>
                       {cell.render("Cell")}
