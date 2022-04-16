@@ -204,7 +204,6 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function getCellElement() {
-      LOGGER.debug(`<=>Cell: Type: ${dataType}`);
       switch (dataType) {
         /** Plain text option */
         case DataTypes.TEXT:
@@ -258,7 +257,7 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Default option */
         default:
-          LOGGER.warn(`<=Cell. unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
+          LOGGER.error(`<=>Cell. unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
           return <span></span>;
       }
     }

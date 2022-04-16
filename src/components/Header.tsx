@@ -274,17 +274,14 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   }
   return id !== "999999" ? (
     <>
-      <div {...getHeaderProps({style: {display: "inline-block"}})} className='th noselect'>
-        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
-          <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
-          {label}
-        </div>
-        <div {...getResizerProps()} className='resizer' />
+      <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
+        <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
+        {label}
       </div>
-      {/* {renderHeaderOptions()} */}
+      <div {...getResizerProps()} className='resizer' />
+      {renderHeaderOptions()}
     </>
   ) : (
-    <div {...getHeaderProps({style: {display: "inline-block"}})} className='th noselect'>
       <div
         className='th-content'
         style={{display: "flex", justifyContent: "center"}}
@@ -293,6 +290,5 @@ export default function Header(headerProps:DatabaseHeaderProps) {
           <PlusIcon />
         </span>
       </div>
-    </div>
   );
 }

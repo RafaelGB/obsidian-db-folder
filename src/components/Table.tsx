@@ -198,7 +198,11 @@ export function Table(initialState: TableDataType){
           <div>
           {headerGroups.map((headerGroup,i) => (
               <div {...headerGroup.getHeaderGroupProps()} className='tr'>
-                {headerGroup.headers.map((column) => column.render("Header"))}
+                {headerGroup.headers.map((column) => (
+                  <div {...column.getHeaderProps()} className='th noselect'>
+                    {column.render("Header")}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
