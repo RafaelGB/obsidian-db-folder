@@ -36,19 +36,21 @@ export default function Cell(cellProperties:Cell) {
     const dataType = (cellProperties.column as any).dataType;
     /** Column options */
     const options = (cellProperties.column as any).options;
-    // state of cell value
+    /** state of cell value */
     const [value, setValue] = useState({ value: initialValue, update: false });
-    // state for keeping the timeout
+    /** state for keeping the timeout to trigger the editior */
     const [editNoteTimeout, setEditNoteTimeout] = useState(null);
-    // states for selector option
+    /** states for selector option  */
+    // Selector reference state
     const [selectRef, setSelectRef] = useState(null);
+    // Selector popper state
     const [selectPop, setSelectPop] = useState(null);
     const [showSelect, setShowSelect] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
     const [addSelectRef, setAddSelectRef] = useState(null);
     const { styles, attributes } = usePopper(selectRef, selectPop, {
       placement: 'bottom-start',
-      strategy: 'fixed',
+      strategy: 'fixed'
     });
     // onChange handler
   const handleOnChange = (event:ContentEditableEvent) => {
@@ -170,14 +172,17 @@ export default function Cell(cellProperties:Cell) {
         /** Selector option */
         case DataTypes.SELECT:
           return (
-            <>
+            <div>
+              {/* Current value of the select */}
               <div
                 ref={setSelectRef}
                 className='cell-padding d-flex cursor-default align-items-center flex-1'
                 onClick={() => setShowSelect(true)}>
                 {value.value && <Relationship value={value.value} backgroundColor={getColor()} />}
               </div>
+              {/* hide selector if click outside of it */}
               {showSelect && <div className='overlay' onClick={() => setShowSelect(false)} />}
+              {/* show selector if click on the current value */}
               {showSelect && (
                 <div
                   className='shadow-5 bg-white border-radius-md'
@@ -234,7 +239,7 @@ export default function Cell(cellProperties:Cell) {
                   </div>
                 </div>
               )}
-            </>
+            </div>
           );
         /** Default option */
         default:
