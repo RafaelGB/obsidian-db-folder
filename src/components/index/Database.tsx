@@ -21,7 +21,7 @@ function Database(tableProps:TableDataType){
   useEffect(() => {
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
   }, [state.data, state.columns]);
-  
+
   return(
     <div
     style={{
@@ -38,6 +38,7 @@ function Database(tableProps:TableDataType){
         {...state}
         dispatch={dataDispatch}
       />
+      <div id="popper-container"></div>
     </div>
   );
 }

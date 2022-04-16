@@ -9,6 +9,7 @@ import PlusIcon from "components/img/Plus";
 import { grey, randomColor } from "helpers/Colors";
 import { usePopper } from "react-popper";
 import Relationship from "components/RelationShip";
+import ReactDOM from "react-dom";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -45,13 +46,15 @@ export default function Cell(cellProperties:Cell) {
     const [selectRef, setSelectRef] = useState(null);
     // Selector popper state
     const [selectPop, setSelectPop] = useState(null);
+    const [domReady, setDomReady] = useState(false);
     const [showSelect, setShowSelect] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
     const [addSelectRef, setAddSelectRef] = useState(null);
-    const { styles, attributes } = usePopper(selectRef, selectPop, {
-      placement: 'bottom-start',
-      strategy: 'fixed'
-    });
+    const { styles, attributes } = usePopper(selectRef, selectPop);
+
+    React.useEffect(() => {
+      setDomReady(true)
+    })
     // onChange handler
   const handleOnChange = (event:ContentEditableEvent) => {
     // cancelling previous timeouts
@@ -245,7 +248,7 @@ export default function Cell(cellProperties:Cell) {
               onClick={() => setShowSelect(true)}>
               {value.value && <Relationship value={value.value} backgroundColor={getColor()} />}
             </div>
-            {renderPopperSelect()}
+            {domReady ? ReactDOM.createPortal(renderPopperSelect(),document.getElementById('popper-container')) : null}
           </>
           );
         /** Default option */
