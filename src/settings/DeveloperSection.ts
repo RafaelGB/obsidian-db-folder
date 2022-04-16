@@ -10,6 +10,8 @@ import { DropDownLevelInfoHandler } from 'settings/handlers/DropDownLevelInfoHan
 export function developer_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean): void {
     // title of the section
     add_setting_header(containerEl,"Developer section",'h3');
+    // add soft red background color to the section - TODO: make it configurable
+    containerEl.style.backgroundColor = '#ffdddd';
     // section settings
     const handlers = getHandlers();
     let i = 1;

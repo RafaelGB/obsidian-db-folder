@@ -12,7 +12,8 @@ import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
 import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
-import { DatabseHeaderProps } from 'cdm/FolderModel';
+import { DatabaseHeaderProps } from 'cdm/FolderModel';
+import ReactDOM from 'react-dom';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
@@ -30,7 +31,7 @@ function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[
  * @param headerProps 
  * @returns 
  */
-export default function Header(headerProps:DatabseHeaderProps) {
+export default function Header(headerProps:DatabaseHeaderProps) {
   LOGGER.debug(`=>Header`);
   // TODO : add a tooltip to the header
   const created:boolean = false;
@@ -131,7 +132,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     }
   ];
 
-  let propertyIcon;
+  let propertyIcon:any;
   switch (dataType) {
     case DataTypes.NUMBER:
       propertyIcon = <HashIcon />;
@@ -184,7 +185,6 @@ export default function Header(headerProps:DatabseHeaderProps) {
   }
 
   function handlerAddColumnToLeft(e:any) {
-    console.log(`handlerAddColumnToLeft event : ${e}`);
     dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: 999999, focus: true})
   }
 
@@ -193,23 +193,18 @@ export default function Header(headerProps:DatabseHeaderProps) {
     dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
   }
 
-  return id !== "999999" ? (
-    <>
-      <div {...getHeaderProps({style: {display: "inline-block"}})} className='th noselect'>
-        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
-          <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
-          {label}
-        </div>
-        <div {...getResizerProps()} className='resizer' />
-      </div>
-      {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
-      {expanded && (
+  function renderHeaderOptions(){
+    return(
+      <div>
+        {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
+        {expanded && (
         <div ref={setPopperElement} style={{...styles.popper, zIndex: 3}} {...attributes.popper}>
           <div
             className='bg-white shadow-5 border-radius-md'
             style={{
               width: 240
             }}>
+            {/** Edit header label section */}
             <div style={{paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem"}}>
               <div className='is-fullwidth' style={{marginBottom: 12}}>
                 <input
@@ -227,6 +222,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
                 Property Type
               </span>
             </div>
+            {/** Edit header label section */}
             <div style={{padding: "4px 0px"}}>
               <button
                 className='sort-button'
@@ -252,22 +248,23 @@ export default function Header(headerProps:DatabseHeaderProps) {
                     padding: "4px 0px"
                   }}>
                   {types.map((type) => (
-                    <button className='sort-button' onClick={type.onClick}>
-                      <span className='svg-icon svg-text icon-margin'>{type.icon}</span>
-                      {type.label}
-                    </button>
+                    <div key={type.label}>
+                      <button className='sort-button' onClick={type.onClick}>
+                        <span className='svg-icon svg-text icon-margin'>{type.icon}</span>
+                        {type.label}
+                      </button>
+                    </div>
                   ))}
                 </div>
               )}
             </div>
             <div
-              key={shortId()}
               style={{
                 borderTop: `2px solid ${grey(200)}`,
                 padding: "4px 0px"
               }}>
               {buttons.map((button) => (
-                <button type='button' className='sort-button' onMouseDown={button.onClick}>
+                <button key={button.label} type='button' className='sort-button' onMouseDown={button.onClick}>
                   <span className='svg-icon svg-text icon-margin'>{button.icon}</span>
                   {button.label}
                 </button>
@@ -276,9 +273,19 @@ export default function Header(headerProps:DatabseHeaderProps) {
           </div>
         </div>
       )}
+    </div>
+    );
+  }
+  return id !== "999999" ? (
+    <>
+      <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
+        <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
+        {label}
+      </div>
+      <div {...getResizerProps()} className='resizer' />
+      {renderHeaderOptions()}
     </>
   ) : (
-    <div {...getHeaderProps({style: {display: "inline-block"}})} className='th noselect'>
       <div
         className='th-content'
         style={{display: "flex", justifyContent: "center"}}
@@ -287,6 +294,5 @@ export default function Header(headerProps:DatabseHeaderProps) {
           <PlusIcon />
         </span>
       </div>
-    </div>
   );
 }

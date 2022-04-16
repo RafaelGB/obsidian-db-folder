@@ -8,8 +8,8 @@ import { MarkdownRenderer } from "obsidian";
 import PlusIcon from "components/img/Plus";
 import { grey, randomColor } from "helpers/Colors";
 import { usePopper } from "react-popper";
-import { databaseReducer } from "./reducers/DatabaseDispatch";
 import Relationship from "components/RelationShip";
+import ReactDOM from "react-dom";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -28,30 +28,35 @@ import Relationship from "components/RelationShip";
 }
 
 export default function Cell(cellProperties:Cell) {
-    const dataDispatch = databaseReducer;
+    const dataDispatch = (cellProperties as any).dataDispatch;
     /** Initial state of cell */
     const initialValue = cellProperties.value;
+    /** Columns information */
+    const columns = (cellProperties as any).columns;
     /** Type of cell */
     const dataType = (cellProperties.column as any).dataType;
     /** Column options */
     const options = (cellProperties.column as any).options;
-    // state of cell value
+    /** state of cell value */
     const [value, setValue] = useState({ value: initialValue, update: false });
-    // state for keeping the timeout
+    /** state for keeping the timeout to trigger the editior */
     const [editNoteTimeout, setEditNoteTimeout] = useState(null);
-    // states for selector option
+    /** states for selector option  */
+    // Selector reference state
     const [selectRef, setSelectRef] = useState(null);
+    // Selector popper state
     const [selectPop, setSelectPop] = useState(null);
+    const [domReady, setDomReady] = useState(false);
     const [showSelect, setShowSelect] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
     const [addSelectRef, setAddSelectRef] = useState(null);
-    const { styles, attributes } = usePopper(selectRef, selectPop, {
-      placement: 'bottom-start',
-      strategy: 'fixed',
-    });
+    const { styles, attributes } = usePopper(selectRef, selectPop);
+
+    React.useEffect(() => {
+      setDomReady(true)
+    })
     // onChange handler
   const handleOnChange = (event:ContentEditableEvent) => {
-    LOGGER.debug(`=>Cell.handleOnChange. ${event.target.value}`);
     // cancelling previous timeouts
       if (editNoteTimeout) {
         clearTimeout(editNoteTimeout);
@@ -110,21 +115,95 @@ export default function Cell(cellProperties:Cell) {
       setShowAdd(false);
     }
 
+    /**
+     * 
+     * @param e Handler for click event on cell
+     */
     function handleOptionKeyDown(e:any) {
       if (e.key === 'Enter') {
         if (e.target.value !== '') {
           dataDispatch({
+            columns: columns,
             option: e.target.value,
             backgroundColor: randomColor(),
-            columnId: (cellProperties.column as any).id
-          },{type: ActionTypes.ADD_OPTION_TO_COLUMN});
+            columnId: (cellProperties.column as any).id,
+            type: ActionTypes.ADD_OPTION_TO_COLUMN
+          });
         }
         setShowAdd(false);
       }
     }
+    /**
+     * Popper for selector
+     * @returns 
+     */
+    function renderPopperSelect() {
+      return (
+        <div>
+          {/* hide selector if click outside of it */}
+          {showSelect && <div className='overlay' onClick={() => setShowSelect(false)} />}
+          {/* show selector if click on the current value */}
+          {showSelect && (
+            <div
+              className='shadow-5 bg-white border-radius-md'
+              ref={setSelectPop}
+              {...attributes.popper}
+              style={{
+                ...styles.popper,
+                zIndex: 4,
+                minWidth: 200,
+                maxWidth: 320,
+                padding: "0.75rem"
+              }}>
+              <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
+                {options.map((option:any) => (
+                  <div
+                    className='cursor-pointer'
+                    style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                    onClick={() => handleOptionClick(option)}>
+                    <Relationship value={option.label} backgroundColor={option.backgroundColor} />
+                  </div>
+                ))}
+                {showAdd && (
+                  <div
+                    style={{
+                      marginRight: "0.5rem",
+                      marginTop: "0.5rem",
+                      width: 120,
+                      padding: "2px 4px",
+                      backgroundColor: grey(200),
+                      borderRadius: 4
+                    }}>
+                    <input
+                      type='text'
+                      className='option-input'
+                      onBlur={handleOptionBlur}
+                      ref={setAddSelectRef}
+                      onKeyDown={handleOptionKeyDown}
+                    />
+                  </div>
+                )}
+                <div
+                  className='cursor-pointer'
+                  style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                  onClick={handleAddOption}>
+                  <Relationship
+                    value={
+                      <span className='svg-icon-sm svg-text'>
+                        <PlusIcon />
+                      </span>
+                    }
+                    backgroundColor={grey(200)}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
 
     function getCellElement() {
-      LOGGER.debug(`<=>Cell: Type: ${dataType}`);
       switch (dataType) {
         /** Plain text option */
         case DataTypes.TEXT:
@@ -164,76 +243,21 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Selector option */
         case DataTypes.SELECT:
-          return (
-            <>
-              <div
-                ref={setSelectRef}
-                className='cell-padding d-flex cursor-default align-items-center flex-1'
-                onClick={() => setShowSelect(true)}>
-                {value.value && <Relationship value={value.value} backgroundColor={getColor()} />}
-              </div>
-              {showSelect && <div className='overlay' onClick={() => setShowSelect(false)} />}
-              {showSelect && (
-                <div
-                  className='shadow-5 bg-white border-radius-md'
-                  ref={setSelectPop}
-                  {...attributes.popper}
-                  style={{
-                    ...styles.popper,
-                    zIndex: 4,
-                    minWidth: 200,
-                    maxWidth: 320,
-                    padding: "0.75rem"
-                  }}>
-                  <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
-                    {options.map((option:any) => (
-                      <div
-                        className='cursor-pointer'
-                        style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
-                        onClick={() => handleOptionClick(option)}>
-                        <Relationship value={option.label} backgroundColor={option.backgroundColor} />
-                      </div>
-                    ))}
-                    {showAdd && (
-                      <div
-                        style={{
-                          marginRight: "0.5rem",
-                          marginTop: "0.5rem",
-                          width: 120,
-                          padding: "2px 4px",
-                          backgroundColor: grey(200),
-                          borderRadius: 4
-                        }}>
-                        <input
-                          type='text'
-                          className='option-input'
-                          onBlur={handleOptionBlur}
-                          ref={setAddSelectRef}
-                          onKeyDown={handleOptionKeyDown}
-                        />
-                      </div>
-                    )}
-                    <div
-                      className='cursor-pointer'
-                      style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
-                      onClick={handleAddOption}>
-                      <Relationship
-                        value={
-                          <span className='svg-icon-sm svg-text'>
-                            <PlusIcon />
-                          </span>
-                        }
-                        backgroundColor={grey(200)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
+          return(
+          <>
+            {/* Current value of the select */}
+            <div
+              ref={setSelectRef}
+              className='cell-padding d-flex cursor-default align-items-center flex-1'
+              onClick={() => setShowSelect(true)}>
+              {value.value && <Relationship value={value.value} backgroundColor={getColor()} />}
+            </div>
+            {domReady ? ReactDOM.createPortal(renderPopperSelect(),document.getElementById('popper-container')) : null}
+          </>
           );
         /** Default option */
         default:
-          LOGGER.warn(`<=Cell. unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
+          LOGGER.error(`<=>Cell. unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
           return <span></span>;
       }
     }

@@ -84,7 +84,7 @@ export type DatabaseYaml = {
     columns: DatabaseColumns
 }
 
-export interface DatabseHeaderProps{
+export interface DatabaseHeaderProps{
     columns:any,
     data:any,
     initialState:any,
