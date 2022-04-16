@@ -12,7 +12,8 @@ import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
 import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
-import { DatabseHeaderProps } from 'cdm/FolderModel';
+import { DatabaseHeaderProps } from 'cdm/FolderModel';
+import ReactDOM from 'react-dom';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
@@ -30,7 +31,7 @@ function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[
  * @param headerProps 
  * @returns 
  */
-export default function Header(headerProps:DatabseHeaderProps) {
+export default function Header(headerProps:DatabaseHeaderProps) {
   LOGGER.debug(`=>Header`);
   // TODO : add a tooltip to the header
   const created:boolean = false;
@@ -131,7 +132,7 @@ export default function Header(headerProps:DatabseHeaderProps) {
     }
   ];
 
-  let propertyIcon;
+  let propertyIcon:any;
   switch (dataType) {
     case DataTypes.NUMBER:
       propertyIcon = <HashIcon />;
@@ -184,7 +185,6 @@ export default function Header(headerProps:DatabseHeaderProps) {
   }
 
   function handlerAddColumnToLeft(e:any) {
-    console.log(`handlerAddColumnToLeft event : ${e}`);
     dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: 999999, focus: true})
   }
 
@@ -193,15 +193,8 @@ export default function Header(headerProps:DatabseHeaderProps) {
     dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
   }
 
-  return id !== "999999" ? (
-    <>
-      <div {...getHeaderProps({style: {display: "inline-block"}})} className='th noselect'>
-        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
-          <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
-          {label}
-        </div>
-        <div {...getResizerProps()} className='resizer' />
-      </div>
+  function renderHeaderOptions(){
+    return(<div>
       {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
       {expanded && (
         <div ref={setPopperElement} style={{...styles.popper, zIndex: 3}} {...attributes.popper}>
@@ -276,6 +269,19 @@ export default function Header(headerProps:DatabseHeaderProps) {
           </div>
         </div>
       )}
+    </div>
+    );
+  }
+  return id !== "999999" ? (
+    <>
+      <div {...getHeaderProps({style: {display: "inline-block"}})} className='th noselect'>
+        <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
+          <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
+          {label}
+        </div>
+        <div {...getResizerProps()} className='resizer' />
+      </div>
+      {/* {renderHeaderOptions()} */}
     </>
   ) : (
     <div {...getHeaderProps({style: {display: "inline-block"}})} className='th noselect'>

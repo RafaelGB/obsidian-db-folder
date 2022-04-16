@@ -6,7 +6,6 @@ import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { FileManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
-import { Console } from 'console';
 
 export function databaseReducer(state:any, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
