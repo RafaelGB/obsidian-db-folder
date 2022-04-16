@@ -194,15 +194,17 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   }
 
   function renderHeaderOptions(){
-    return(<div>
-      {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
-      {expanded && (
+    return(
+      <div>
+        {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
+        {expanded && (
         <div ref={setPopperElement} style={{...styles.popper, zIndex: 3}} {...attributes.popper}>
           <div
             className='bg-white shadow-5 border-radius-md'
             style={{
               width: 240
             }}>
+            {/** Edit header label section */}
             <div style={{paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem"}}>
               <div className='is-fullwidth' style={{marginBottom: 12}}>
                 <input
@@ -220,6 +222,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
                 Property Type
               </span>
             </div>
+            {/** Edit header label section */}
             <div style={{padding: "4px 0px"}}>
               <button
                 className='sort-button'
@@ -245,22 +248,23 @@ export default function Header(headerProps:DatabaseHeaderProps) {
                     padding: "4px 0px"
                   }}>
                   {types.map((type) => (
-                    <button className='sort-button' onClick={type.onClick}>
-                      <span className='svg-icon svg-text icon-margin'>{type.icon}</span>
-                      {type.label}
-                    </button>
+                    <div key={type.label}>
+                      <button className='sort-button' onClick={type.onClick}>
+                        <span className='svg-icon svg-text icon-margin'>{type.icon}</span>
+                        {type.label}
+                      </button>
+                    </div>
                   ))}
                 </div>
               )}
             </div>
             <div
-              key={shortId()}
               style={{
                 borderTop: `2px solid ${grey(200)}`,
                 padding: "4px 0px"
               }}>
               {buttons.map((button) => (
-                <button type='button' className='sort-button' onMouseDown={button.onClick}>
+                <button key={button.label} type='button' className='sort-button' onMouseDown={button.onClick}>
                   <span className='svg-icon svg-text icon-margin'>{button.icon}</span>
                   {button.label}
                 </button>
