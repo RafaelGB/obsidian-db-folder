@@ -126,12 +126,17 @@ export default function Cell(cellProperties:Cell) {
             columns: columns,
             option: e.target.value,
             backgroundColor: randomColor(),
-            columnId: (cellProperties.column as any).id
-          },{type: ActionTypes.ADD_OPTION_TO_COLUMN});
+            columnId: (cellProperties.column as any).id,
+            type: ActionTypes.ADD_OPTION_TO_COLUMN
+          });
         }
         setShowAdd(false);
       }
     }
+    /**
+     * Popper for selector
+     * @returns 
+     */
     function renderPopperSelect() {
       return (
         <div>

@@ -6,9 +6,11 @@ import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { FileManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
+import { Console } from 'console';
 
 export function databaseReducer(state:any, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
+    console.log(`<=>databaseReducer action: ${action.type}`);
     // Check if action exists
     if (!action){ return state; }
     switch (action.type) {
@@ -16,6 +18,7 @@ export function databaseReducer(state:any, action:ActionType) {
          * Add option to column
          */
         case ActionTypes.ADD_OPTION_TO_COLUMN:
+            console.log("ADD_OPTION_TO_COLUMN");
             const optionIndex = state.columns.findIndex(
                 (column:TableColumn) => column.id === action.columnId
             );
