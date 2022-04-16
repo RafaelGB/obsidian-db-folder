@@ -129,6 +129,71 @@ export default function Cell(cellProperties:Cell) {
         setShowAdd(false);
       }
     }
+    function renderPopperSelect() {
+      return (
+        <div>
+          {/* hide selector if click outside of it */}
+          {showSelect && <div className='overlay' onClick={() => setShowSelect(false)} />}
+          {/* show selector if click on the current value */}
+          {showSelect && (
+            <div
+              className='shadow-5 bg-white border-radius-md'
+              ref={setSelectPop}
+              {...attributes.popper}
+              style={{
+                ...styles.popper,
+                zIndex: 4,
+                minWidth: 200,
+                maxWidth: 320,
+                padding: "0.75rem"
+              }}>
+              <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
+                {options.map((option:any) => (
+                  <div
+                    className='cursor-pointer'
+                    style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                    onClick={() => handleOptionClick(option)}>
+                    <Relationship value={option.label} backgroundColor={option.backgroundColor} />
+                  </div>
+                ))}
+                {showAdd && (
+                  <div
+                    style={{
+                      marginRight: "0.5rem",
+                      marginTop: "0.5rem",
+                      width: 120,
+                      padding: "2px 4px",
+                      backgroundColor: grey(200),
+                      borderRadius: 4
+                    }}>
+                    <input
+                      type='text'
+                      className='option-input'
+                      onBlur={handleOptionBlur}
+                      ref={setAddSelectRef}
+                      onKeyDown={handleOptionKeyDown}
+                    />
+                  </div>
+                )}
+                <div
+                  className='cursor-pointer'
+                  style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
+                  onClick={handleAddOption}>
+                  <Relationship
+                    value={
+                      <span className='svg-icon-sm svg-text'>
+                        <PlusIcon />
+                      </span>
+                    }
+                    backgroundColor={grey(200)}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
 
     function getCellElement() {
       LOGGER.debug(`<=>Cell: Type: ${dataType}`);
@@ -171,75 +236,17 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Selector option */
         case DataTypes.SELECT:
-          return (
-            <div>
-              {/* Current value of the select */}
-              <div
-                ref={setSelectRef}
-                className='cell-padding d-flex cursor-default align-items-center flex-1'
-                onClick={() => setShowSelect(true)}>
-                {value.value && <Relationship value={value.value} backgroundColor={getColor()} />}
-              </div>
-              {/* hide selector if click outside of it */}
-              {showSelect && <div className='overlay' onClick={() => setShowSelect(false)} />}
-              {/* show selector if click on the current value */}
-              {showSelect && (
-                <div
-                  className='shadow-5 bg-white border-radius-md'
-                  ref={setSelectPop}
-                  {...attributes.popper}
-                  style={{
-                    ...styles.popper,
-                    zIndex: 4,
-                    minWidth: 200,
-                    maxWidth: 320,
-                    padding: "0.75rem"
-                  }}>
-                  <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
-                    {options.map((option:any) => (
-                      <div
-                        className='cursor-pointer'
-                        style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
-                        onClick={() => handleOptionClick(option)}>
-                        <Relationship value={option.label} backgroundColor={option.backgroundColor} />
-                      </div>
-                    ))}
-                    {showAdd && (
-                      <div
-                        style={{
-                          marginRight: "0.5rem",
-                          marginTop: "0.5rem",
-                          width: 120,
-                          padding: "2px 4px",
-                          backgroundColor: grey(200),
-                          borderRadius: 4
-                        }}>
-                        <input
-                          type='text'
-                          className='option-input'
-                          onBlur={handleOptionBlur}
-                          ref={setAddSelectRef}
-                          onKeyDown={handleOptionKeyDown}
-                        />
-                      </div>
-                    )}
-                    <div
-                      className='cursor-pointer'
-                      style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
-                      onClick={handleAddOption}>
-                      <Relationship
-                        value={
-                          <span className='svg-icon-sm svg-text'>
-                            <PlusIcon />
-                          </span>
-                        }
-                        backgroundColor={grey(200)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
+          return(
+          <>
+            {/* Current value of the select */}
+            <div
+              ref={setSelectRef}
+              className='cell-padding d-flex cursor-default align-items-center flex-1'
+              onClick={() => setShowSelect(true)}>
+              {value.value && <Relationship value={value.value} backgroundColor={getColor()} />}
             </div>
+            {renderPopperSelect()}
+          </>
           );
         /** Default option */
         default:
