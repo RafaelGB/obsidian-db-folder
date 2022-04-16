@@ -1,7 +1,7 @@
 import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
-import { FileManagerDB } from "services/FileManagerService";
+import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 import { Cell } from 'react-table';
 import { MarkdownRenderer } from "obsidian";
@@ -92,7 +92,7 @@ export default function Cell(cellProperties:Cell) {
         regexp: new RegExp(`^[\s]*${columnId}[:]{1}(.+)$`,"gm"),
         newValue: `${columnId}: ${targetValue}`
       };
-      FileManagerDB.editNoteContent(noteObject);
+      VaultManagerDB.editNoteContent(noteObject);
     }
     function handleAddOption(e:any) {
       setShowAdd(true);
