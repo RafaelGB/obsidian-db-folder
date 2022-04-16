@@ -38,7 +38,10 @@ export function databaseReducer(state:any, action:ActionType) {
          */
         case ActionTypes.ADD_ROW:
             let row = {};
-            state.columns.forEach((column:TableColumn) => {
+            console.log("ADD_ROW: ", action.row);
+            state.columns
+            .filter((column:TableColumn)=>!column.isMetadata)
+            .forEach((column:TableColumn) => {
                 row = {
                     ...row,
                     [column.id]: ''

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TableOptions, useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy } from 'react-table';
+import { useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy } from 'react-table';
 import clsx from "clsx";
 import { 
   TableDataType,
@@ -9,7 +9,6 @@ import {
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import { databaseReducer } from "components/reducers/DatabaseDispatch";
 import { ActionTypes, DatabaseCore } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";

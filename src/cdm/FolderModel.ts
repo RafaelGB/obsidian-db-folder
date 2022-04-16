@@ -41,7 +41,8 @@ export type TableColumn = {
     options?: RowSelectOption[]
     Cell?: any,
     getHeaderProps?: any,
-    getResizerProps?: any
+    getResizerProps?: any,
+    isMetadata?: boolean
 }
 
 export type RowType = number | string | boolean | Date | Link | RowSelectOption[];
@@ -69,6 +70,7 @@ export type DatabaseColumn = {
     Header: string,
     accessor: string,
     label: string,
+    isMetadata: boolean,
     [key: string]: RowType
 }
 export type DatabaseColumns = {
