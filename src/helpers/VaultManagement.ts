@@ -1,4 +1,3 @@
-import { App, TFile } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { getAPI} from "obsidian-dataview"
 import { LOGGER } from "services/Logger";
@@ -10,16 +9,6 @@ interface NormalizedPath {
     subpath: string;
     alias: string;
   }
-
-export async function obtainContentFromTfile(tfile: TFile): Promise<string> {
-    let content = await app.vault.read(tfile);
-    return content;
-}
-
-export function obtainTfileFromFilePath(filePath:string):TFile{
-    let tfile = app.vault.getMarkdownFiles().find(tfile => tfile.path===filePath);
-    return tfile;
-}
   
 export function getNormalizedPath(path: string): NormalizedPath {
     const stripped = path.replace(noBreakSpace, ' ').normalize('NFC');

@@ -1,9 +1,8 @@
 import { FileContent } from "helpers/FileContent";
-import { obtainContentFromTfile, obtainTfileFromFilePath } from "helpers/VaultManagement";
 import { TFile, TFolder } from "obsidian";
 import { LOGGER } from "services/Logger";
-export class FileManager{
-    private static instance: FileManager;
+export class VaultManager{
+    private static instance: VaultManager;
     constructor(){}
     
     /**
@@ -29,8 +28,8 @@ export class FileManager{
     async editNoteContent(note:any) {
         LOGGER.debug(`=> editNoteContent. note:${JSON.stringify(note)}`);
         try{
-            let tfile = obtainTfileFromFilePath(note.filePath);
-            let tfileContent = await obtainContentFromTfile(tfile);
+            let tfile = this.obtainTfileFromFilePath(note.filePath);
+            let tfileContent = await this.obtainContentFromTfile(tfile);
             let line_string = new FileContent(tfileContent);
             let releasedContent = tfileContent;
             switch (note.action) {
@@ -48,17 +47,38 @@ export class FileManager{
         }catch(err) {
             LOGGER.error(`<= editNoteContent exit with errors`,err);
         }
-      }
+    }
+
+    /**
+     * Obtain content from TFile
+     * @param tfile 
+     * @returns 
+     */
+    async obtainContentFromTfile(tfile: TFile): Promise<string> {
+      let content = await app.vault.read(tfile);
+      return content;
+    }
+
+    /**
+     * Obtain TFile from file path
+     * @param filePath 
+     * @returns 
+     */
+    obtainTfileFromFilePath(filePath:string):TFile{
+      let tfile = app.vault.getMarkdownFiles().find(tfile => tfile.path===filePath);
+      return tfile;
+    }
+
     /**
      * Singleton instance
-     * @returns {FileManager}
+     * @returns {VaultManager}
      */
-    public static getInstance(): FileManager {
+    public static getInstance(): VaultManager {
     if (!this.instance) {
-        this.instance = new FileManager();
+        this.instance = new VaultManager();
     }
         return this.instance;
     }
 }
  
-export const FileManagerDB = FileManager.getInstance();
+export const VaultManagerDB = VaultManager.getInstance();

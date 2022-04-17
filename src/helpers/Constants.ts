@@ -43,21 +43,6 @@ export const DatabaseFrontmatterOptions = Object.freeze({
   ].join('\n')
 });
 
-export const basicFrontmatter = [
-    '---',
-    '',
-    `${DatabaseCore.FRONTMATTER_KEY}: basic`,
-    '',
-    '---',
-    '',
-    '<%%',
-    'columns:',
-    ' column1:',
-    '  input: text',
-    '  accessor: column1',
-    '%%>'
-  ].join('\n');
-
   export function shortId() {
     return '_' + Math.random().toString(36).substring(2, 9);
   }

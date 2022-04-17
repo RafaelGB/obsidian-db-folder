@@ -4,7 +4,7 @@ import { ActionTypes, MetadataColumns } from 'helpers/Constants';
 import { DatabaseColumn, TableColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
-import { FileManagerDB } from 'services/FileManagerService';
+import { VaultManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
 
 export function databaseReducer(state:any, action:ActionType) {
@@ -38,19 +38,21 @@ export function databaseReducer(state:any, action:ActionType) {
          */
         case ActionTypes.ADD_ROW:
             let row = {};
-            state.columns.forEach((column:TableColumn) => {
+            state.columns
+            .filter((column:TableColumn)=>!column.isMetadata)
+            .forEach((column:TableColumn) => {
                 row = {
                     ...row,
                     [column.id]: ''
                  };
             });
-            const filename = `${action.payload}`;
             // Add note to persist row
-            FileManagerDB.create_markdown_file(
+            VaultManagerDB.create_markdown_file(
                 state.databaseFolder, 
-                filename,
+                action.payload,
                 adapterRowToDatabaseYaml(row)
             );
+            const filename = `${state.databaseFolder.path}/${action.payload}.md`;
             row = {
                 ...row,
                 [MetadataColumns.FILE]: `[[${filename}]]`

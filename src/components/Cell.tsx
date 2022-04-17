@@ -1,7 +1,7 @@
 import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
-import { FileManagerDB } from "services/FileManagerService";
+import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 import { Cell } from 'react-table';
 import { MarkdownRenderer } from "obsidian";
@@ -83,16 +83,24 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function updateTargetNoteCell(targetValue:string) {
+      console.log("updateTargetNoteCell", targetValue);
       const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
       LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${targetValue}`);
       const columnId = cellProperties.column.id;
+      /* Regex explanation
+      * group 1 is frontmatter centinel until current column
+      * group 2 is key of current column
+      * group 3 is value we want to replace
+      * group 4 is the rest of the frontmatter
+      */
+      const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
       let noteObject = {
         action: 'replace',
         filePath: `${cellBasenameFile}`,
-        regexp: new RegExp(`^[\s]*${columnId}[:]{1}(.+)$`,"gm"),
-        newValue: `${columnId}: ${targetValue}`
+        regexp: frontmatterRegex,
+        newValue: `$1$2 ${targetValue}$4`
       };
-      FileManagerDB.editNoteContent(noteObject);
+      VaultManagerDB.editNoteContent(noteObject);
     }
     function handleAddOption(e:any) {
       setShowAdd(true);
@@ -158,6 +166,7 @@ export default function Cell(cellProperties:Cell) {
               <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
                 {options.map((option:any) => (
                   <div
+                    key={option.label}
                     className='cursor-pointer'
                     style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
                     onClick={() => handleOptionClick(option)}>

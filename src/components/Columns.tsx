@@ -38,7 +38,8 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   const tableRow: TableColumn = {
     id: value,
     label: column.label ?? value,
-    accessor: column.accessor ?? value
+    accessor: column.accessor ?? value,
+    isMetadata: column.isMetadata ?? false
   }
   /**
    * return plain text
