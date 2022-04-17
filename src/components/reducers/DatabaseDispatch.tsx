@@ -38,7 +38,6 @@ export function databaseReducer(state:any, action:ActionType) {
          */
         case ActionTypes.ADD_ROW:
             let row = {};
-            console.log("ADD_ROW: ", action.row);
             state.columns
             .filter((column:TableColumn)=>!column.isMetadata)
             .forEach((column:TableColumn) => {
@@ -47,13 +46,13 @@ export function databaseReducer(state:any, action:ActionType) {
                     [column.id]: ''
                  };
             });
-            const filename = `${action.payload}`;
             // Add note to persist row
             VaultManagerDB.create_markdown_file(
                 state.databaseFolder, 
-                filename,
+                action.payload,
                 adapterRowToDatabaseYaml(row)
             );
+            const filename = `${state.databaseFolder.path}/${action.payload}.md`;
             row = {
                 ...row,
                 [MetadataColumns.FILE]: `[[${filename}]]`

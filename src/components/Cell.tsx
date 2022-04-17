@@ -83,6 +83,7 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function updateTargetNoteCell(targetValue:string) {
+      console.log("updateTargetNoteCell", targetValue);
       const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
       LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${targetValue}`);
       const columnId = cellProperties.column.id;
@@ -92,7 +93,7 @@ export default function Cell(cellProperties:Cell) {
       * group 3 is value we want to replace
       * group 4 is the rest of the frontmatter
       */
-      const frontmatterRegex = new RegExp(`(^---\\n[\\w\\W]+?)+([\\s]*${columnId}[:]{1})+(.+)+(\\n[\\w\\W]+?\\n---)`, 'g');
+      const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
       let noteObject = {
         action: 'replace',
         filePath: `${cellBasenameFile}`,
