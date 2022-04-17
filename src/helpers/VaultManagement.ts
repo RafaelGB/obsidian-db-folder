@@ -1,4 +1,3 @@
-import { App, TFile } from "obsidian";
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { getAPI} from "obsidian-dataview"
 import { LOGGER } from "services/Logger";

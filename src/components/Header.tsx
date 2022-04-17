@@ -10,7 +10,7 @@ import TextIcon from 'components/img/Text';
 import MultiIcon from 'components/img/Multi';
 import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
-import { ActionTypes, DataTypes, shortId } from 'helpers/Constants';
+import { ActionTypes, DataTypes } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 import ReactDOM from 'react-dom';
