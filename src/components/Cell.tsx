@@ -165,6 +165,7 @@ export default function Cell(cellProperties:Cell) {
               <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
                 {options.map((option:any) => (
                   <div
+                    key={option.label}
                     className='cursor-pointer'
                     style={{marginRight: "0.5rem", marginTop: "0.5rem"}}
                     onClick={() => handleOptionClick(option)}>
