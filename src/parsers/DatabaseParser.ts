@@ -1,6 +1,7 @@
 import { DatabaseYaml } from "cdm/FolderModel";
 import { DatabaseCore } from "helpers/Constants";
-import { parseYaml } from "obsidian";
+import { parseYaml, TFile } from "obsidian";
+import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 
 export function hasFrontmatterKey(data: string) {
@@ -19,11 +20,12 @@ export function hasFrontmatterKey(data: string) {
   return true;
 }
 
-  export function getDatabaseconfigYaml(data: string):DatabaseYaml {
-    LOGGER.debug(`=>getDatabaseconfigYaml`,`data:${data}`);
-    if (!data || !hasFrontmatterKey(data))  throw new Error('No frontmatter found');
+  export async function getDatabaseconfigYaml(file: TFile):Promise<DatabaseYaml> {
+    LOGGER.debug(`=>getDatabaseconfigYaml`,`file:${file.path}`);
+    const databaseRaw = await VaultManagerDB.obtainContentFromTfile(file);
+    if (!databaseRaw || !hasFrontmatterKey(databaseRaw))  throw new Error('No frontmatter found');
   
-    const match = data.match(/<%%\s+([\w\W]+?)\s+%%>/);
+    const match = databaseRaw.match(/<%%\s+([\w\W]+?)\s+%%>/);
   
     if (!match) {
       return null;

@@ -86,11 +86,18 @@ export default function Cell(cellProperties:Cell) {
       const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
       LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${targetValue}`);
       const columnId = cellProperties.column.id;
+      /* Regex explanation
+      * group 1 is frontmatter centinel until current column
+      * group 2 is key of current column
+      * group 3 is value we want to replace
+      * group 4 is the rest of the frontmatter
+      */
+      const frontmatterRegex = new RegExp(`(^---\\n[\\w\\W]+?)+([\\s]*${columnId}[:]{1})+(.+)+(\\n[\\w\\W]+?\\n---)`, 'g');
       let noteObject = {
         action: 'replace',
         filePath: `${cellBasenameFile}`,
-        regexp: new RegExp(`^[\s]*${columnId}[:]{1}(.+)$`,"gm"),
-        newValue: `${columnId}: ${targetValue}`
+        regexp: frontmatterRegex,
+        newValue: `$1$2 ${targetValue}$4`
       };
       VaultManagerDB.editNoteContent(noteObject);
     }

@@ -107,8 +107,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
     async initDatabase(): Promise<void> {
       LOGGER.info(`=>initDatabase ${this.file.path}`);
-      const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
-      const databaseConfigYaml = getDatabaseconfigYaml(databaseRaw);
+      const databaseConfigYaml = await getDatabaseconfigYaml(this.file);
       let columns = await obtainColumnsFromFolder(databaseConfigYaml.columns);
       let folder = this.file.path.split('/').slice(0, -1).join('/');
       let rows = await adapterTFilesToRows(folder);
