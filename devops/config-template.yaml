@@ -1,0 +1,9 @@
+files:
+  - main.js
+  - styles.css
+  - manifest.json
+base:
+  origin:
+    - /path/to/files/1/
+    - /path/to/files/n/
+  target: /path/to/vault/.obsidian/plugins/obsidian-dbfolder/

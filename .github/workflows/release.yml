@@ -1,0 +1,25 @@
+name: Plugin release
+
+on:
+    push:
+        tags:
+            - "v*"
+
+jobs:
+    build:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v2
+            - uses: denolib/setup-deno@v2
+              with:
+                  deno-version: v1.x
+            - name: npm build
+              run: |
+                  npm install
+                  npm run build --if-present
+            - name: Create Release
+              # https://github.com/ncipollo/release-action
+              uses: ncipollo/release-action@v1.10.0
+              with:
+                  artifacts: "dist/main.js,manifest.json,styles.css"
+                  token: ${{ secrets.GITHUB_TOKEN }}
