@@ -117,7 +117,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         skipReset: false,
         view: this,
         stateManager: this.plugin.getStateManager(this.file),
-        databaseFolder: this.file.parent
+        configuration: databaseConfigYaml
       }
       
       let table = createDatabase(tableProps);

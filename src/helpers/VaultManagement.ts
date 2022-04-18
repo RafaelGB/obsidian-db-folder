@@ -1,5 +1,7 @@
 import { TableRows,TableRow } from 'cdm/FolderModel';
 import { getAPI} from "obsidian-dataview"
+import { Cell } from 'react-table';
+import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import { DatabaseCore, MetadataColumns } from "./Constants";
 
@@ -73,3 +75,22 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
     return yaml.join('\n');
 }
 
+export function updateRowColumnValue(cellProperties:Cell, newColumnValue:string){
+  const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
+  LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${newColumnValue}`);
+  const columnId = cellProperties.column.id;
+  /* Regex explanation
+  * group 1 is frontmatter centinel until current column
+  * group 2 is key of current column
+  * group 3 is value we want to replace
+  * group 4 is the rest of the frontmatter
+  */
+  const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
+  let noteObject = {
+    action: 'replace',
+    filePath: `${cellBasenameFile}`,
+    regexp: frontmatterRegex,
+    newValue: `$1$2 ${newColumnValue}$4`
+  };
+  VaultManagerDB.editNoteContent(noteObject);
+}
