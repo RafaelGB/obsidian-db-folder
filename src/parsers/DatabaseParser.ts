@@ -62,7 +62,10 @@ export function hasFrontmatterKey(data: string) {
     currentCol.accessor = newColumnId;
     delete state.configuration.columns[oldColumnId];
     state.configuration.columns[newColumnId] = currentCol;
+    // save on disk
     setDatabaseconfigYaml(state.view.file, state.configuration);
+    state.data.forEach((row) => {
+    });
   }
   /**
    * Given a database config, obtain the string on yaml format

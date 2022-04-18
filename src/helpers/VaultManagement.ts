@@ -75,10 +75,14 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
     return yaml.join('\n');
 }
 
-export function updateRowColumnValue(cellProperties:Cell, newColumnValue:string){
-  const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
+/**
+ * Modify the file asociated to the row with the new column value
+ * @param cellProperties 
+ * @param newColumnValue 
+ */
+export function updateRowColumnValue(asociatedCFilePathToCell:string, columnId:string, newColumnValue:string){
+  const cellBasenameFile:string = asociatedCFilePathToCell.replace(/\[\[|\]\]/g, '').split('|')[0];
   LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${newColumnValue}`);
-  const columnId = cellProperties.column.id;
   /* Regex explanation
   * group 1 is frontmatter centinel until current column
   * group 2 is key of current column

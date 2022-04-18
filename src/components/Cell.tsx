@@ -1,7 +1,6 @@
 import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
-import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 import { Cell } from 'react-table';
 import { MarkdownRenderer } from "obsidian";
@@ -80,7 +79,12 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function onChange(event:ContentEditableEvent) {
-      updateRowColumnValue(cellProperties, event.target.value);
+      // save on disk
+      updateRowColumnValue(
+        (cellProperties.row.original as any)[MetadataColumns.FILE],
+        cellProperties.column.id,
+        event.target.value
+      );
     }
 
     function handleAddOption(e:any) {
@@ -90,7 +94,12 @@ export default function Cell(cellProperties:Cell) {
     function handleOptionClick(option: { label: any; backgroundColor?: any; }) {
       setValue({ value: option.label, update: true });
       setShowSelect(false);
-      updateRowColumnValue(cellProperties, option.label);
+      // save on disk
+      updateRowColumnValue(
+        (cellProperties.row.original as any)[MetadataColumns.FILE],
+        cellProperties.column.id,
+        option.label
+      );
     }
 
     function handleOptionBlur(e:any) {
