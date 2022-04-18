@@ -1,13 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import { ActionTypes, MetadataColumns } from 'helpers/Constants';
-import { DatabaseColumn, TableColumn, TableDataType } from 'cdm/FolderModel';
+import { ActionTypes, MetadataColumns, UpdateRowOptions } from 'helpers/Constants';
+import { TableColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
-import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
+import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement';
+import { updateColumnHeaderOnDatabase } from 'parsers/DatabaseParser';
 
-export function databaseReducer(state:any, action:ActionType) {
+export function databaseReducer(state:TableDataType, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
     // Check if action exists
     if (!action){ return state; }
@@ -48,22 +49,33 @@ export function databaseReducer(state:any, action:ActionType) {
             });
             // Add note to persist row
             VaultManagerDB.create_markdown_file(
-                state.databaseFolder, 
+                state.view.file.parent, 
                 action.payload,
                 adapterRowToDatabaseYaml(row)
             );
-            const filename = `${state.databaseFolder.path}/${action.payload}.md`;
+            const filename = `${state.view.file.parent.path}/${action.payload}.md`;
             row = {
                 ...row,
                 [MetadataColumns.FILE]: `[[${filename}]]`
              };
-            return update(state, {
+             // TODO add typing
+            return update(state as any, {
             data: { $push: [row] },
             });
         case ActionTypes.UPDATE_COLUMN_HEADER:
             const index = state.columns.findIndex(
                 (column:any) => column.id === action.columnId
             );
+            // Update configuration on disk
+            updateColumnHeaderOnDatabase(state, action.columnId, action.label);
+            Promise.all(state.data.map(async (row:any) => {
+                updateRowFile(
+                row[MetadataColumns.FILE],
+                action.columnId,
+                action.label,
+                UpdateRowOptions.COLUMN_KEY);
+            }));
+            // Update state
             return {
                 ...state,
                 skipReset: true,

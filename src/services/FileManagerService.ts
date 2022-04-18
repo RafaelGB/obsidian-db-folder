@@ -1,3 +1,4 @@
+import { NoteContentAction } from "cdm/FolderModel";
 import { FileContent } from "helpers/FileContent";
 import { TFile, TFolder } from "obsidian";
 import { LOGGER } from "services/Logger";
@@ -21,12 +22,13 @@ export class VaultManager{
         LOGGER.debug(`<= create_markdown_file`);
         return created_note;
     }
-     /**
-      * Edit file content
-      * @param note 
-      */
-    async editNoteContent(note:any) {
-        LOGGER.debug(`=> editNoteContent. note:${JSON.stringify(note)}`);
+    
+    /**
+    * Edit file content
+    * @param note 
+    */
+    async editNoteContent(note:NoteContentAction):Promise<void>{
+        LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.filePath}`);
         try{
             let tfile = this.obtainTfileFromFilePath(note.filePath);
             let tfileContent = await this.obtainContentFromTfile(tfile);
@@ -42,7 +44,7 @@ export class VaultManager{
               default:
                 throw "Error: Option " + note.action + " is not supported with tp.user.editNoteContent.";
             }
-            app.vault.modify(tfile,releasedContent);
+            await app.vault.modify(tfile,releasedContent);
             LOGGER.debug(`<= editNoteContent. file '${tfile.path}' edited`);
         }catch(err) {
             LOGGER.error(`<= editNoteContent exit with errors`,err);

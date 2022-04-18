@@ -52,6 +52,6 @@ export function makeData(count:number):TableDataType {
         options: options,
       }
     ];
-    return { columns: columns, data: data, skipReset: false,databaseFolder:null};
+    return { columns: columns, data: data, skipReset: false, configuration:null, view:null };
   }
   

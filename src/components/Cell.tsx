@@ -1,12 +1,12 @@
-import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
+import { ActionTypes, DataTypes, MetadataColumns, UpdateRowOptions } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
-import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 import { Cell } from 'react-table';
 import { MarkdownRenderer } from "obsidian";
 import PlusIcon from "components/img/Plus";
 import { grey, randomColor } from "helpers/Colors";
+import { updateRowFile } from "helpers/VaultManagement";
 import { usePopper } from "react-popper";
 import Relationship from "components/RelationShip";
 import ReactDOM from "react-dom";
@@ -79,29 +79,15 @@ export default function Cell(cellProperties:Cell) {
     }
 
     function onChange(event:ContentEditableEvent) {
-      updateTargetNoteCell(event.target.value);
+      // save on disk
+      updateRowFile(
+        (cellProperties.row.original as any)[MetadataColumns.FILE],
+        cellProperties.column.id,
+        event.target.value,
+        UpdateRowOptions.COLUMN_VALUE
+      );
     }
 
-    function updateTargetNoteCell(targetValue:string) {
-      console.log("updateTargetNoteCell", targetValue);
-      const cellBasenameFile:string = (cellProperties.row.original as any)[MetadataColumns.FILE].replace(/\[\[|\]\]/g, '').split('|')[0];
-      LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${targetValue}`);
-      const columnId = cellProperties.column.id;
-      /* Regex explanation
-      * group 1 is frontmatter centinel until current column
-      * group 2 is key of current column
-      * group 3 is value we want to replace
-      * group 4 is the rest of the frontmatter
-      */
-      const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
-      let noteObject = {
-        action: 'replace',
-        filePath: `${cellBasenameFile}`,
-        regexp: frontmatterRegex,
-        newValue: `$1$2 ${targetValue}$4`
-      };
-      VaultManagerDB.editNoteContent(noteObject);
-    }
     function handleAddOption(e:any) {
       setShowAdd(true);
     }
@@ -109,7 +95,13 @@ export default function Cell(cellProperties:Cell) {
     function handleOptionClick(option: { label: any; backgroundColor?: any; }) {
       setValue({ value: option.label, update: true });
       setShowSelect(false);
-      updateTargetNoteCell(option.label);
+      // save on disk
+      updateRowFile(
+        (cellProperties.row.original as any)[MetadataColumns.FILE],
+        cellProperties.column.id,
+        option.label,
+        UpdateRowOptions.COLUMN_VALUE
+      );
     }
 
     function handleOptionBlur(e:any) {

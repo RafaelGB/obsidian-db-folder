@@ -1,5 +1,4 @@
 import { DatabaseView } from "DatabaseView";
-import { TFolder } from "obsidian";
 import { Link } from "obsidian-dataview";
 import { Dispatch } from "react";
 import { StateManager } from "StateManager";
@@ -59,10 +58,10 @@ export type TableDataType={
     columns: TableColumns, 
     data: TableRows, 
     skipReset: boolean,
-    view?: DatabaseView,
+    view: DatabaseView,
     stateManager?: StateManager,
-    dispatch?: Dispatch<any>
-    databaseFolder: TFolder
+    dispatch?: Dispatch<any>,
+    configuration: DatabaseYaml
 }
 /** database column */
 export type DatabaseColumn = {
@@ -73,9 +72,7 @@ export type DatabaseColumn = {
     isMetadata: boolean,
     [key: string]: RowType
 }
-export type DatabaseColumns = {
-    [key: string]: DatabaseColumn
-}
+
 /** database yaml */
 export type DatabaseYaml = {
     /** database name */
@@ -83,7 +80,7 @@ export type DatabaseYaml = {
     /** database description */
     description: string,
     /** database columns */
-    columns: DatabaseColumns
+    columns: Record<string, DatabaseColumn>
 }
 
 export interface DatabaseHeaderProps{
@@ -133,4 +130,11 @@ export interface DatabaseHeaderProps{
 export type RelationshipProps = {
     value:any,
     backgroundColor:string
+}
+
+export type NoteContentAction = {
+    filePath:string,
+    action:string,
+    regexp:RegExp,
+    newValue:string
 }

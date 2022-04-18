@@ -1,5 +1,5 @@
 import { DataTypes, MetadataColumns } from 'helpers/Constants';
-import {DatabaseColumn, DatabaseColumns, RowSelectOption, TableColumn, TableColumns} from 'cdm/FolderModel';
+import {DatabaseColumn, RowSelectOption, TableColumn, TableColumns} from 'cdm/FolderModel';
 import { LOGGER } from "services/Logger";
 
 /**
@@ -7,8 +7,8 @@ import { LOGGER } from "services/Logger";
  * @param columns 
  * @returns 
  */
-export function addMandatoryColumns(columns: DatabaseColumns): DatabaseColumns {
-  const metadataColumns: DatabaseColumns = {};
+export function addMandatoryColumns(columns: Record<string, DatabaseColumn>): Record<string, DatabaseColumn> {
+  const metadataColumns: Record<string, DatabaseColumn> = {};
   metadataColumns[MetadataColumns.FILE]={
       accessor: MetadataColumns.FILE,
       input: DataTypes.MARKDOWN,
@@ -19,7 +19,7 @@ export function addMandatoryColumns(columns: DatabaseColumns): DatabaseColumns {
   return {...columns, ...metadataColumns};
 }
 
-export async function obtainColumnsFromFolder(databaseColumns: DatabaseColumns): Promise<TableColumns>{
+export async function obtainColumnsFromFolder(databaseColumns: Record<string, DatabaseColumn>): Promise<TableColumns>{
     LOGGER.debug(`=> obtainColumnsFromFolder. databaseColumns: ${JSON.stringify(databaseColumns)}`);
     databaseColumns = addMandatoryColumns(databaseColumns);
     const columns:TableColumns = [];
