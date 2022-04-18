@@ -82,7 +82,7 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
  * @param option 
  */
 export async function updateRowFile(asociatedFilePathToCell:string, columnId:string, newValue:string, option:string):Promise<void> {
-  LOGGER.info(`=>updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} columnId: ${columnId} newValue: ${newValue} option: ${option}`);
+  LOGGER.info(`=>updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   const cellBasenameFile:string = asociatedFilePathToCell.replace(/\[\[|\]\]/g, '').split('|')[0];
   // Modify value of a column
   function columnValue():NoteContentAction{
@@ -126,5 +126,5 @@ export async function updateRowFile(asociatedFilePathToCell:string, columnId:str
   }else{
     throw `Error: option ${option} not supported yet`;
   }
-  LOGGER.info(`<=updateRowFile. columnId: ${columnId} option: ${option}`);
+  LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
 }

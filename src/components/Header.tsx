@@ -44,6 +44,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   const dataDispatch = (headerProps as any).dataDispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [referenceElement, setReferenceElement] = useState(null);
+  const [isMetadata, setIsMetadata] = useState(headerProps.column.isMetadata);
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
   const {styles, attributes} = usePopper(referenceElement, popperElement, {
@@ -284,7 +285,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
         {label}
       </div>
       <div {...getResizerProps()} className='resizer' />
-      {renderHeaderOptions()}
+      {!isMetadata && renderHeaderOptions()}
     </>
   ) : (
       <div
