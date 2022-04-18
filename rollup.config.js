@@ -8,7 +8,7 @@ const isProd = (process.env.BUILD === 'production');
 export default (commandLineArgs) => ({
     input: 'src/main.ts',
     output: {
-        dir: 'compiled',
+        dir: 'dist',
         sourcemap: 'inline',
         sourcemapExcludeSources: isProd,
         format: 'cjs',
