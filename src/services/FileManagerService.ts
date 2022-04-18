@@ -22,12 +22,13 @@ export class VaultManager{
         LOGGER.debug(`<= create_markdown_file`);
         return created_note;
     }
-     /**
-      * Edit file content
-      * @param note 
-      */
+    
+    /**
+    * Edit file content
+    * @param note 
+    */
     async editNoteContent(note:NoteContentAction):Promise<void>{
-        LOGGER.debug(`=> editNoteContent. note:${JSON.stringify(note)}`);
+        LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.filePath}`);
         try{
             let tfile = this.obtainTfileFromFilePath(note.filePath);
             let tfileContent = await this.obtainContentFromTfile(tfile);

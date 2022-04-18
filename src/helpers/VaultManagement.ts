@@ -81,9 +81,9 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
  * @param newColumnValue 
  * @param option 
  */
-export async function updateRowFile(asociatedCFilePathToCell:string, columnId:string, newValue:string, option:string):Promise<void> {
-  LOGGER.info(`=>updateRowFile. columnId: ${columnId} option: ${option}`);
-  const cellBasenameFile:string = asociatedCFilePathToCell.replace(/\[\[|\]\]/g, '').split('|')[0];
+export async function updateRowFile(asociatedFilePathToCell:string, columnId:string, newValue:string, option:string):Promise<void> {
+  LOGGER.info(`=>updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} columnId: ${columnId} newValue: ${newValue} option: ${option}`);
+  const cellBasenameFile:string = asociatedFilePathToCell.replace(/\[\[|\]\]/g, '').split('|')[0];
   // Modify value of a column
   function columnValue():NoteContentAction{
     /* Regex explanation
@@ -107,7 +107,7 @@ export async function updateRowFile(asociatedCFilePathToCell:string, columnId:st
     * group 2 is the column we want to replace
     * group 3 is the rest of the frontmatter
     */
-    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*role)+([\\w\\W]*?\\s---)`, 'g');
+    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId})+([\\w\\W]*?\\s---)`, 'g');
     return {
       action: 'replace',
       filePath: `${cellBasenameFile}`,

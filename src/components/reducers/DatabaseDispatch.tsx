@@ -68,13 +68,13 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             );
             // Update configuration on disk
             updateColumnHeaderOnDatabase(state, action.columnId, action.label);
-            state.data.forEach(async (row:any) => {
+            Promise.all(state.data.map(async (row:any) => {
                 updateRowFile(
                 row[MetadataColumns.FILE],
                 action.columnId,
                 action.label,
                 UpdateRowOptions.COLUMN_KEY);
-            });
+            }));
             // Update state
             return {
                 ...state,
