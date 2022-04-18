@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import { ActionTypes, MetadataColumns, UpdateRowOptions } from 'helpers/Constants';
+import { ActionTypes, DataTypes, MetadataColumns, UpdateRowOptions } from 'helpers/Constants';
 import { TableColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
@@ -85,6 +85,35 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
                 ...state.columns.slice(index + 1, state.columns.length)
                 ]
             };
+        case ActionTypes.UPDATE_COLUMN_TYPE:
+            const typeIndex = state.columns.findIndex(
+                column => column.id === action.columnId
+            );
+            switch (action.dataType) {
+                case DataTypes.TEXT:
+                    if (state.columns[typeIndex].dataType === DataTypes.TEXT) {
+                        return state;
+                    } else if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
+                        return update(state, {
+                            skipReset: { $set: true },
+                            columns: { [typeIndex]: { dataType: { $set: action.dataType } } },
+                        });
+                    } else {
+                        return update(state, {
+                            skipReset: { $set: true },
+                            columns: { [typeIndex]: { dataType: { $set: action.dataType } } },
+                            data: {
+                                $apply: (data:any) =>
+                                    data.map((row:any) => ({
+                                        ...row,
+                                        [action.columnId]: row[action.columnId] + '',
+                                    })),
+                            },
+                        });
+                    }
+                default:
+                    return state;
+            }
         case ActionTypes.UPDATE_CELL:
             LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
             break;

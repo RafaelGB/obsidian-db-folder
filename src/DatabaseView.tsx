@@ -16,7 +16,6 @@ import {
 import { getDatabaseconfigYaml, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
-import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from 'services/Logger';
 import { SettingsModal } from 'Settings';
 import { StateManager } from 'StateManager';

@@ -1,7 +1,6 @@
 import { DatabaseYaml, TableDataType } from "cdm/FolderModel";
 import { DatabaseCore } from "helpers/Constants";
 import { parseYaml, TFile } from "obsidian";
-import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 
