@@ -32,7 +32,7 @@ function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[
  * @returns 
  */
 export default function Header(headerProps:DatabaseHeaderProps) {
-  LOGGER.debug(`=>Header`);
+  LOGGER.debug(`=>Header ${headerProps.column.label}`);
   // TODO : add a tooltip to the header
   const created:boolean = false;
   /** Properties of header */
@@ -276,6 +276,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     </div>
     );
   }
+  LOGGER.debug(`<=Header ${headerProps.column.label}`);
   return id !== "999999" ? (
     <>
       <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
