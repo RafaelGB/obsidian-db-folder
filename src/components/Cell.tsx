@@ -1,4 +1,4 @@
-import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
+import { ActionTypes, DataTypes, MetadataColumns, UpdateRowOptions } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
 import { LOGGER } from "services/Logger";
@@ -6,7 +6,7 @@ import { Cell } from 'react-table';
 import { MarkdownRenderer } from "obsidian";
 import PlusIcon from "components/img/Plus";
 import { grey, randomColor } from "helpers/Colors";
-import { updateRowColumnValue } from "helpers/VaultManagement";
+import { updateRowFile } from "helpers/VaultManagement";
 import { usePopper } from "react-popper";
 import Relationship from "components/RelationShip";
 import ReactDOM from "react-dom";
@@ -80,10 +80,11 @@ export default function Cell(cellProperties:Cell) {
 
     function onChange(event:ContentEditableEvent) {
       // save on disk
-      updateRowColumnValue(
+      updateRowFile(
         (cellProperties.row.original as any)[MetadataColumns.FILE],
         cellProperties.column.id,
-        event.target.value
+        event.target.value,
+        UpdateRowOptions.COLUMN_VALUE
       );
     }
 
@@ -95,10 +96,11 @@ export default function Cell(cellProperties:Cell) {
       setValue({ value: option.label, update: true });
       setShowSelect(false);
       // save on disk
-      updateRowColumnValue(
+      updateRowFile(
         (cellProperties.row.original as any)[MetadataColumns.FILE],
         cellProperties.column.id,
-        option.label
+        option.label,
+        UpdateRowOptions.COLUMN_VALUE
       );
     }
 

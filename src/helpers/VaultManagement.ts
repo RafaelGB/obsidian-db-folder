@@ -1,9 +1,8 @@
-import { TableRows,TableRow } from 'cdm/FolderModel';
+import { TableRows,TableRow, NoteContentAction } from 'cdm/FolderModel';
 import { getAPI} from "obsidian-dataview"
-import { Cell } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
-import { DatabaseCore, MetadataColumns } from "./Constants";
+import { DatabaseCore, MetadataColumns, UpdateRowOptions } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
 interface NormalizedPath {
@@ -76,25 +75,56 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
 }
 
 /**
- * Modify the file asociated to the row with the new column value
- * @param cellProperties 
+ * Modify the file asociated to the row in function of input options
+ * @param asociatedCFilePathToCell 
+ * @param columnId 
  * @param newColumnValue 
+ * @param option 
  */
-export function updateRowColumnValue(asociatedCFilePathToCell:string, columnId:string, newColumnValue:string){
+export async function updateRowFile(asociatedCFilePathToCell:string, columnId:string, newValue:string, option:string):Promise<void> {
+  LOGGER.info(`=>updateRowFile. columnId: ${columnId} option: ${option}`);
   const cellBasenameFile:string = asociatedCFilePathToCell.replace(/\[\[|\]\]/g, '').split('|')[0];
-  LOGGER.debug(`<=>Cell: updateTargetNoteCell: ${cellBasenameFile} with value: ${newColumnValue}`);
-  /* Regex explanation
-  * group 1 is frontmatter centinel until current column
-  * group 2 is key of current column
-  * group 3 is value we want to replace
-  * group 4 is the rest of the frontmatter
-  */
-  const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
-  let noteObject = {
-    action: 'replace',
-    filePath: `${cellBasenameFile}`,
-    regexp: frontmatterRegex,
-    newValue: `$1$2 ${newColumnValue}$4`
-  };
-  VaultManagerDB.editNoteContent(noteObject);
+  // Modify value of a column
+  function columnValue():NoteContentAction{
+    /* Regex explanation
+    * group 1 is frontmatter centinel until current column
+    * group 2 is key of current column
+    * group 3 is value we want to replace
+    * group 4 is the rest of the frontmatter
+    */
+    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
+    return {
+      action: 'replace',
+      filePath: `${cellBasenameFile}`,
+      regexp: frontmatterRegex,
+      newValue: `$1$2 ${newValue}$4`
+    };
+  }
+  // Modify key of a column
+  function columnKey():NoteContentAction{
+    /* Regex explanation
+    * group 1 is the frontmatter centinel until previous to current column
+    * group 2 is the column we want to replace
+    * group 3 is the rest of the frontmatter
+    */
+    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*role)+([\\w\\W]*?\\s---)`, 'g');
+    return {
+      action: 'replace',
+      filePath: `${cellBasenameFile}`,
+      regexp: frontmatterRegex,
+      newValue: `$1\n${newValue}$3`
+    };
+  }
+  // Record of options
+  const updateOptions: Record<string, any> = {};
+  updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
+  updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
+
+  if(updateOptions.hasOwnProperty(option)){
+    const noteObject = updateOptions[option]();
+    await VaultManagerDB.editNoteContent(noteObject);
+  }else{
+    throw `Error: option ${option} not supported yet`;
+  }
+  LOGGER.info(`<=updateRowFile. columnId: ${columnId} option: ${option}`);
 }

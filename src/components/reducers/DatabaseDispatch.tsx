@@ -1,11 +1,11 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import { ActionTypes, MetadataColumns } from 'helpers/Constants';
+import { ActionTypes, MetadataColumns, UpdateRowOptions } from 'helpers/Constants';
 import { TableColumn, TableDataType } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
-import { adapterRowToDatabaseYaml } from 'helpers/VaultManagement';
+import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement';
 import { updateColumnHeaderOnDatabase } from 'parsers/DatabaseParser';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
@@ -68,6 +68,13 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             );
             // Update configuration on disk
             updateColumnHeaderOnDatabase(state, action.columnId, action.label);
+            state.data.forEach(async (row:any) => {
+                updateRowFile(
+                row[MetadataColumns.FILE],
+                action.columnId,
+                action.label,
+                UpdateRowOptions.COLUMN_KEY);
+            });
             // Update state
             return {
                 ...state,

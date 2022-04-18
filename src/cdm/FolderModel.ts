@@ -1,5 +1,4 @@
 import { DatabaseView } from "DatabaseView";
-import { TFile, TFolder } from "obsidian";
 import { Link } from "obsidian-dataview";
 import { Dispatch } from "react";
 import { StateManager } from "StateManager";
@@ -131,4 +130,11 @@ export interface DatabaseHeaderProps{
 export type RelationshipProps = {
     value:any,
     backgroundColor:string
+}
+
+export type NoteContentAction = {
+    filePath:string,
+    action:string,
+    regexp:RegExp,
+    newValue:string
 }

@@ -43,6 +43,11 @@ export const DatabaseFrontmatterOptions = Object.freeze({
   ].join('\n')
 });
 
-  export function shortId() {
-    return '_' + Math.random().toString(36).substring(2, 9);
-  }
+export const UpdateRowOptions = Object.freeze({
+  COLUMN_VALUE: 'column_value',
+  COLUMN_KEY: 'column_key'
+});
+
+export function shortId() {
+  return '_' + Math.random().toString(36).substring(2, 9);
+}
