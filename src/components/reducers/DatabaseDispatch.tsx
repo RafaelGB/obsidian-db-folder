@@ -44,7 +44,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           .forEach((column:TableColumn) => {
             row = {
                 ...row,
-                [column.id]: ''
+                [column.accessor]: ''
               };
           });
           // Add note to persist row
@@ -71,13 +71,18 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           const index = state.columns.findIndex(
               (column:any) => column.id === action.columnId
           );
+          // Adapt label to be a valid yaml key
+          const accessor = action.label.trim();
           // Update configuration on disk
-          state.diskConfig.updateColumnProperties(action.columnId,{label: action.label});
+          state.diskConfig.updateColumnProperties(
+            action.columnId,
+            {label: action.label, accessor: accessor}
+          );
           Promise.all(state.data.map(async (row:any) => {
               updateRowFile(
               row[MetadataColumns.FILE],
-              action.oldLabel,
-              action.label,
+              action.accessor,
+              accessor,
               UpdateRowOptions.COLUMN_KEY);
           }));
           // Update state

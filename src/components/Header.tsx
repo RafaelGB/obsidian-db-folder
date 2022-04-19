@@ -37,7 +37,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   /** Properties of header */
   const {setSortBy, rows} = headerProps;
   /** Column values */
-  const { id, label, dataType, options, getResizerProps} = headerProps.column;
+  const { id, dataType, options, getResizerProps} = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -50,8 +50,8 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     placement: "bottom",
     strategy: "absolute"
   });
-  const [header, setHeader] = useState(label);
-  const [oldHeader, setOldHeader] = useState(header);
+  const [labelState, setLabelState] = useState(headerProps.column.label);
+  const [accessorState, setAccessorState] = useState(headerProps.column.label.trim());
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
@@ -160,8 +160,8 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   }, [created]);
 
   useEffect(() => {
-    setHeader(label);
-  }, [label]);
+    setLabelState(labelState);
+  }, [labelState]);
 
   useEffect(() => {
     if (inputRef) {
@@ -179,16 +179,16 @@ export default function Header(headerProps:DatabaseHeaderProps) {
       dataDispatch({
         type: ActionTypes.UPDATE_COLUMN_LABEL,
         columnId: id,
-        oldLabel: oldHeader,
-        label: header
+        accessor: accessorState,
+        label: labelState
       });
       setExpanded(false);
-      setOldHeader(header);
+      setAccessorState(labelState.trim());
     }
   }
 
   function handleChange(e:any) {
-    setHeader(e.target.value);
+    setLabelState(e.target.value);
   }
 
   function handlerAddColumnToLeft(e:any) {
@@ -222,7 +222,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
                   className='form-input'
                   ref={setInputRef}
                   type='text'
-                  value={header}
+                  value={labelState}
                   style={{width: "100%"}}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -292,7 +292,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     <>
       <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
         <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
-        {label}
+        {labelState}
       </div>
       <div {...getResizerProps()} className='resizer' />
       {!isMetadata && renderHeaderOptions()}
