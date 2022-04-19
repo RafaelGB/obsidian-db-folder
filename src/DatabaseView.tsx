@@ -16,7 +16,7 @@ import {
 import { hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
-import { DatabaseInfo } from 'services/DatabaseInfo';
+import DatabaseInfo from 'services/DatabaseInfo';
 import { LOGGER } from 'services/Logger';
 import { SettingsModal } from 'Settings';
 import { StateManager } from 'StateManager';
@@ -109,9 +109,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       LOGGER.info(`=>initDatabase ${this.file.path}`);
       const databaseInfo = new DatabaseInfo(this.file);
       await databaseInfo.initDatabaseconfigYaml();
-      let columns = await obtainColumnsFromFolder(databaseInfo.yaml.columns);
-      let folder = this.file.path.split('/').slice(0, -1).join('/');
-      let rows = await adapterTFilesToRows(folder);
+      const columns = await obtainColumnsFromFolder(databaseInfo.yaml.columns);
+      const rows = await adapterTFilesToRows(this.file.parent.path);
       const tableProps:TableDataType = {
         columns: columns,
         data: rows,

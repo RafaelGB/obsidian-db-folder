@@ -7,7 +7,7 @@ import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { convertDatabaseYamlToParsedString, hasFrontmatterKey } from 'parsers/DatabaseParser';
 
-export class DatabaseInfo {
+export default class DatabaseInfo {
     private file: TFile;
     public yaml: DatabaseYaml;
     constructor(file: TFile) {

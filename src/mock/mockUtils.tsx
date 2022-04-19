@@ -10,10 +10,12 @@ import { LOGGER } from 'services/Logger';
 export function makeData(count:number):TableDataType {
     const data:TableRows = [];
     const options = [];
+    const note:any = null;
     for (let i = 0; i < count; i++) {
       const row = {
         id: faker.mersenne.rand(),
         title: faker.system.fileName(),
+        note: note
       };
       options.push({ label: row.title, backgroundColor: randomColor() });
   

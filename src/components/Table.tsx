@@ -164,7 +164,9 @@ export function Table(initialState: TableDataType){
     rows,
     prepareRow
   } = useTable(
+    // Table properties
     propsUseTable,
+    // React hooks
     useFlexLayout,
     useResizeColumns,
     useSortBy,

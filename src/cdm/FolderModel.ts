@@ -4,7 +4,8 @@ import { StateManager } from "StateManager";
 import { DatabaseYaml } from "cdm/DatabaseModel";
 import { RowType } from "cdm/RowTypeModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
-import { DatabaseInfo } from "services/DatabaseInfo";
+import DatabaseInfo from "services/DatabaseInfo";
+import NoteInfo from "services/NoteInfo";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -45,6 +46,7 @@ export type TableColumn = {
 
 export type TableRow = {
     id: number,
+    note: NoteInfo,
     [key: string]: RowType
 }
 

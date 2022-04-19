@@ -2,6 +2,7 @@ import { TableRows,TableRow, NoteContentAction } from 'cdm/FolderModel';
 import { getAPI} from "obsidian-dataview"
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
+import NoteInfo from 'services/NoteInfo';
 import { DatabaseCore, MetadataColumns, UpdateRowOptions } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
@@ -43,21 +44,8 @@ export async function adapterTFilesToRows(folderPath: string): Promise<TableRows
 
     const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p=>!p[DatabaseCore.FRONTMATTER_KEY]);
     await Promise.all(folderFiles.map(async (page) => {
-        /** Mandatory fields */
-        const aFile: TableRow = {
-            id: ++id
-        };
-        /** Metadata fields */
-        aFile[MetadataColumns.FILE]=`${page.file.link.markdown()}`
-        /** Optional fields */
-        Object.keys(page).forEach(property => {
-            const value = page[property];
-            if (value && typeof value !== 'object') {
-                aFile[property] = value;
-            }
-        });
-        LOGGER.debug(`Push row ${aFile.id}:${JSON.stringify(aFile)}`);
-        rows.push(aFile);
+        const noteInfo = new NoteInfo(page,++id);
+        rows.push(noteInfo.getTableRow());
     }));
     LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
     return rows;
