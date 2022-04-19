@@ -10,11 +10,11 @@ import TextIcon from 'components/img/Text';
 import MultiIcon from 'components/img/Multi';
 import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
-import { ActionTypes, DataTypes } from 'helpers/Constants';
+import { ActionTypes, DataTypes, MAX_CAPACITY_DATABASE } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 
-function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
+function setOptionsOfSelectDataType(options:any[],rows:any,columnId:number):any[]{
   rows.forEach((row:any)=>{
     const rowValue = row.values[columnId];
     let match = options.find((option: { label: any; }) => option.label === rowValue);
@@ -289,7 +289,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     );
   }
   LOGGER.debug(`<=Header ${headerProps.column.label}`);
-  return id !== "999999" ? (
+  return id !== MAX_CAPACITY_DATABASE ? (
     <>
       <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
         <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>

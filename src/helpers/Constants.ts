@@ -15,11 +15,20 @@ export const DataTypes = Object.freeze({
     NUMBER: 'number',
     TEXT: 'text',
     SELECT: 'select',
-    MARKDOWN: 'markdown'
+    MARKDOWN: 'markdown',
+    NEW_COLUMN: 'new_column'
   });
 
+export const MAX_CAPACITY_DATABASE = 999999;
+
 export const MetadataColumns = Object.freeze({
-  FILE: 'file'
+  FILE: MAX_CAPACITY_DATABASE-1,
+  ADD_COLUMN: MAX_CAPACITY_DATABASE
+});
+
+export const MetadataLabels = Object.freeze({
+  FILE: 'File',
+  ADD_COLUMN: 'Add Column'
 });
 
 export const DatabaseCore = Object.freeze({

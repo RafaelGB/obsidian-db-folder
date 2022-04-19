@@ -258,7 +258,6 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Default option */
         default:
-          LOGGER.error(`<=>Cell. unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
           return <span></span>;
       }
     }

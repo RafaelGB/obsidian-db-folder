@@ -4,7 +4,7 @@ import { getAPI} from "obsidian-dataview"
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, MetadataColumns, UpdateRowOptions } from "./Constants";
+import { DatabaseCore, UpdateRowOptions } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
 interface NormalizedPath {

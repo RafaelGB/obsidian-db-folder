@@ -23,7 +23,7 @@ export function makeData(count:number):TableDataType {
     }
     const columns:TableColumns = [
       {
-        id: 'title',
+        id: 1,
         label: 'File Name',
         key: 'title',
         accessor: 'title',
@@ -47,7 +47,7 @@ export function makeData(count:number):TableDataType {
         }
       },
       {
-        id: 'Status',
+        id: 2,
         label: 'Status',
         key: 'Status',
         accessor: 'Status',

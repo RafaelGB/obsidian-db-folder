@@ -3,8 +3,8 @@ import { RowType } from "cdm/RowTypeModel"
 /** database column */
 export type DatabaseColumn = {
     input: string,
-    Header: string,
-    key: string,
+    Header?: string,
+    key?: string,
     accessor: string,
     label: string,
     isMetadata: boolean,
