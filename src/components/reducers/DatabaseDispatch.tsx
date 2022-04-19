@@ -7,6 +7,7 @@ import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement';
 import { updateColumnHeaderOnDatabase } from 'parsers/DatabaseParser';
+import { randomColor } from 'helpers/Colors';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
@@ -90,30 +91,91 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
                 column => column.id === action.columnId
             );
             switch (action.dataType) {
-                case DataTypes.TEXT:
-                    if (state.columns[typeIndex].dataType === DataTypes.TEXT) {
-                        return state;
-                    } else if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
-                        return update(state, {
-                            skipReset: { $set: true },
-                            columns: { [typeIndex]: { dataType: { $set: action.dataType } } },
-                        });
-                    } else {
-                        return update(state, {
-                            skipReset: { $set: true },
-                            columns: { [typeIndex]: { dataType: { $set: action.dataType } } },
-                            data: {
-                                $apply: (data:any) =>
-                                    data.map((row:any) => ({
-                                        ...row,
-                                        [action.columnId]: row[action.columnId] + '',
-                                    })),
-                            },
-                        });
-                    }
-                default:
+                case DataTypes.NUMBER:
+                  if (state.columns[typeIndex].dataType === DataTypes.NUMBER) {
                     return state;
-            }
+                  } else {
+                    return {
+                      ...state,
+                      columns: [
+                        ...state.columns.slice(0, typeIndex),
+                        { ...state.columns[typeIndex], dataType: action.dataType },
+                        ...state.columns.slice(typeIndex + 1, state.columns.length)
+                      ],
+                      data: state.data.map((row:any) => ({
+                        ...row,
+                        [action.columnId]: isNaN(row[action.columnId])
+                          ? ""
+                          : Number.parseInt(row[action.columnId])
+                      }))
+                    };
+                  }
+                case DataTypes.SELECT:
+                  if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
+                    return {
+                      ...state,
+                      columns: [
+                        ...state.columns.slice(0, typeIndex),
+                        { ...state.columns[typeIndex], dataType: action.dataType },
+                        ...state.columns.slice(typeIndex + 1, state.columns.length)
+                      ],
+                      skipReset: true
+                    };
+                  } else {
+                    const options:any = [];
+                    state.data.forEach((row) => {
+                      if (row[action.columnId]) {
+                        options.push({
+                          label: row[action.columnId],
+                          backgroundColor: randomColor()
+                        });
+                      }
+                    });
+                    return {
+                      ...state,
+                      columns: [
+                        ...state.columns.slice(0, typeIndex),
+                        {
+                          ...state.columns[typeIndex],
+                          dataType: action.dataType,
+                          options: [...state.columns[typeIndex].options, ...options]
+                        },
+                        ...state.columns.slice(typeIndex + 1, state.columns.length)
+                      ],
+                      skipReset: true
+                    };
+                  }
+                case DataTypes.TEXT:
+                  if (state.columns[typeIndex].dataType === DataTypes.TEXT) {
+                    return state;
+                  } else if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
+                    return {
+                      ...state,
+                      skipReset: true,
+                      columns: [
+                        ...state.columns.slice(0, typeIndex),
+                        { ...state.columns[typeIndex], dataType: action.dataType },
+                        ...state.columns.slice(typeIndex + 1, state.columns.length)
+                      ]
+                    };
+                  } else {
+                    return {
+                      ...state,
+                      skipReset: true,
+                      columns: [
+                        ...state.columns.slice(0, typeIndex),
+                        { ...state.columns[typeIndex], dataType: action.dataType },
+                        ...state.columns.slice(typeIndex + 1, state.columns.length)
+                      ],
+                      data: state.data.map((row) => ({
+                        ...row,
+                        [action.columnId]: row[action.columnId] + ""
+                      }))
+                    };
+                  }
+                default:
+                  return state;
+              }
         case ActionTypes.UPDATE_CELL:
             LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
             break;
