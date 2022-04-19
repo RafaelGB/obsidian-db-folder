@@ -92,13 +92,13 @@ export default function Cell(cellProperties:Cell) {
       setShowAdd(true);
     }
 
-    function handleOptionClick(option: { label: any; backgroundColor?: any; }) {
+    function handleOptionClick(option: { label: string; backgroundColor?: any; }) {
       setValue({ value: option.label, update: true });
       setShowSelect(false);
       // save on disk
       updateRowFile(
         (cellProperties.row.original as any).note.file,
-        cellProperties.column.id,
+        (cellProperties.column as any).key,
         option.label,
         UpdateRowOptions.COLUMN_VALUE
       );

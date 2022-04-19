@@ -41,7 +41,7 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   const tableRow: TableColumn = {
     id: value,
     label: column.label,
-    key: column.key ?? column.label.trim().toLowerCase(),
+    key: column.key ?? column.label.trim(),
     accessor: column.accessor ?? column.label.trim().toLowerCase(),
     isMetadata: column.isMetadata ?? false
   }
