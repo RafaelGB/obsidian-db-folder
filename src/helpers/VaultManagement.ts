@@ -103,11 +103,27 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
       newValue: `$1\n${newValue}:$3`
     };
   }
+  // Remove a column
+  function removeColumn():NoteContentAction{
+    /* Regex explanation
+    * group 1 is the frontmatter centinel until previous to current column
+    * group 2 is the column we want to remove
+    * group 3 is the rest of the frontmatter
+    */
+    const frontmatterRegex = new RegExp(`(^---[\\w\\W]*?)+([\\s]*${columnId}[:]{1}.+)+([\\s]*[\\w\\W]*?\\s---)`, 'g');
+    return {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterRegex,
+      newValue: `$1$3`
+    };
+  }
   // Record of options
   const updateOptions: Record<string, any> = {};
   updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
   updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
-
+  updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
+  // Execute action
   if(updateOptions.hasOwnProperty(option)){
     const noteObject = updateOptions[option]();
     await VaultManagerDB.editNoteContent(noteObject);

@@ -94,8 +94,9 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
+        console.log("Delete column");
         //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
-        dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id});
+        dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id, key: keyState});
         setExpanded(false);
       },
       icon: <TrashIcon />,

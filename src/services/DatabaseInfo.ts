@@ -78,4 +78,9 @@ export default class DatabaseInfo {
         this.yaml.columns[columnId] = currentCol;
         await this.saveOnDisk();
     }
+
+    async removeColumn(columnId:string):Promise<void>{
+        delete this.yaml.columns[columnId];
+        await this.saveOnDisk();
+    }
 }

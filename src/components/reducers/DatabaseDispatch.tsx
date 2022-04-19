@@ -71,18 +71,18 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           const index = state.columns.findIndex(
               (column:any) => column.id === action.columnId
           );
-          // Adapt label to be a valid yaml key
-          const key:string = action.label.trim();
+          // trim label will get a valid yaml key
+          const update_col_key:string = action.label.trim();
           // Update configuration on disk
           state.diskConfig.updateColumnProperties(
             action.columnId,
-            {label: action.label, accessor: key, key: key}
+            {label: action.label, accessor: update_col_key, key: update_col_key}
           );
           Promise.all(state.data.map(async (row:TableRow) => {
               updateRowFile(
                 row.note.file,
                 action.accessor,
-                key,
+                update_col_key,
                 UpdateRowOptions.COLUMN_KEY
               );
           }));
@@ -204,8 +204,28 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
             break;
         case ActionTypes.DELETE_COLUMN:
-            LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
-            break;
+          const deleteIndex = state.columns.findIndex(
+            (column) => column.id === action.columnId
+          );
+          // Update configuration on disk
+          state.diskConfig.removeColumn(action.columnId);
+          Promise.all(state.data.map(async (row:TableRow) => {
+            updateRowFile(
+              row.note.file,
+              action.key,
+              undefined, // delete does not need this field
+              UpdateRowOptions.REMOVE_COLUMN
+            );
+        }));
+          // Update state
+          return {
+            ...state,
+            skipReset: true,
+            columns: [
+              ...state.columns.slice(0, deleteIndex),
+              ...state.columns.slice(deleteIndex + 1, state.columns.length)
+            ]
+          };
         /**
          * Enable reset
          */

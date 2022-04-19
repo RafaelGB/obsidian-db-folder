@@ -47,7 +47,8 @@ export const DatabaseFrontmatterOptions = Object.freeze({
 
 export const UpdateRowOptions = Object.freeze({
   COLUMN_VALUE: 'column_value',
-  COLUMN_KEY: 'column_key'
+  COLUMN_KEY: 'column_key',
+  REMOVE_COLUMN: 'remove_column'
 });
 
 export function shortId() {
