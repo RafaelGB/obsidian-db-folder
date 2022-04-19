@@ -3,7 +3,7 @@ export const ActionTypes = Object.freeze({
     ADD_OPTION_TO_COLUMN: 'add_option_to_column',
     ADD_ROW: 'add_row',
     UPDATE_COLUMN_TYPE: 'update_column_type',
-    UPDATE_COLUMN_HEADER: 'update_column_header',
+    UPDATE_COLUMN_LABEL: 'update_column_label',
     UPDATE_CELL: 'update_cell',
     ADD_COLUMN_TO_LEFT: 'add_column_to_left',
     ADD_COLUMN_TO_RIGHT: 'add_column_to_right',

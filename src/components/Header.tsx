@@ -13,7 +13,6 @@ import PlusIcon from 'components/img/Plus';
 import { ActionTypes, DataTypes } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
-import ReactDOM from 'react-dom';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
@@ -38,7 +37,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   /** Properties of header */
   const {setSortBy, rows} = headerProps;
   /** Column values */
-  const { id, label, dataType, options, getHeaderProps, getResizerProps} = headerProps.column;
+  const { id, label, dataType, options, getResizerProps} = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -52,13 +51,14 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     strategy: "absolute"
   });
   const [header, setHeader] = useState(label);
+  const [oldHeader, setOldHeader] = useState(header);
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
   const buttons = [
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         setSortBy([{id: id, desc: false}]);
         setExpanded(false);
       },
@@ -67,7 +67,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         setSortBy([{id: id, desc: true}]);
         setExpanded(false);
       },
@@ -76,7 +76,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: id, focus: false});
         setExpanded(false);
       },
@@ -85,7 +85,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         dataDispatch({type: ActionTypes.ADD_COLUMN_TO_RIGHT, columnId: id, focus: false});
         setExpanded(false);
       },
@@ -94,7 +94,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id});
         setExpanded(false);
       },
@@ -176,8 +176,14 @@ export default function Header(headerProps:DatabaseHeaderProps) {
 
   function handleKeyDown(e:any) {
     if (e.key === "Enter") {
-      dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+      dataDispatch({
+        type: ActionTypes.UPDATE_COLUMN_LABEL,
+        columnId: id,
+        oldLabel: oldHeader,
+        label: header
+      });
       setExpanded(false);
+      setOldHeader(header);
     }
   }
 
@@ -189,9 +195,13 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: 999999, focus: true})
   }
 
+  /**
+   * When user leaves the input field
+   * @param e 
+   */
   function handleBlur(e:any) {
     e.preventDefault();
-    dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+    //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
   }
 
   function renderHeaderOptions(){

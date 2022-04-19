@@ -67,16 +67,16 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
          * Modify column label of its header.
          * Update key of column in all rows
          */
-        case ActionTypes.UPDATE_COLUMN_HEADER:
+        case ActionTypes.UPDATE_COLUMN_LABEL:
           const index = state.columns.findIndex(
               (column:any) => column.id === action.columnId
           );
           // Update configuration on disk
-          state.diskConfig.updateColumnKey(action.columnId, action.label);
+          state.diskConfig.updateColumnProperties(action.columnId,{label: action.label});
           Promise.all(state.data.map(async (row:any) => {
               updateRowFile(
               row[MetadataColumns.FILE],
-              action.columnId,
+              action.oldLabel,
               action.label,
               UpdateRowOptions.COLUMN_KEY);
           }));
@@ -101,6 +101,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             );
             // Update configuration on disk
             state.diskConfig.updateColumnProperties(action.columnId, {input: action.dataType});
+            // Update state
             switch (action.dataType) {
                 case DataTypes.NUMBER:
                   if (state.columns[typeIndex].dataType === DataTypes.NUMBER) {
