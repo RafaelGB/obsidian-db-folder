@@ -3,7 +3,7 @@ import { useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy } f
 import clsx from "clsx";
 import { 
   TableDataType,
-  TableRows,
+  TableRow,
   TableColumns
 } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
@@ -50,7 +50,7 @@ export function Table(initialState: TableDataType){
   /** Columns information */
   const columns:TableColumns = initialState.columns;
   /** Rows information */
-  const data: TableRows = initialState.data;
+  const data: Array<TableRow> = initialState.data;
   /** Reducer */
   const dataDispatch = initialState.dispatch;
   /** Database information  */

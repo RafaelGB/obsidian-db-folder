@@ -40,9 +40,9 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   const options: RowSelectOption[] = [];
   const tableRow: TableColumn = {
     id: value,
-    label: column.label ?? value,
-    key: column.key ?? value.trim().toLowerCase(),
-    accessor: column.accessor ?? value.trim().toLowerCase(),
+    label: column.label,
+    key: column.key ?? column.label.trim().toLowerCase(),
+    accessor: column.accessor ?? column.label.trim().toLowerCase(),
     isMetadata: column.isMetadata ?? false
   }
   /**

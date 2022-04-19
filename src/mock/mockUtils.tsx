@@ -5,10 +5,10 @@ import {
 import React,{useRef,useLayoutEffect} from 'react';
 import { randomColor } from 'helpers/Colors';
 import { DataTypes } from 'helpers/Constants';
-import {TableDataType, TableColumns, TableRows} from 'cdm/FolderModel';
+import {TableDataType, TableColumns, TableRow} from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 export function makeData(count:number):TableDataType {
-    const data:TableRows = [];
+    const data:Array<TableRow> = [];
     const options = [];
     const note:any = null;
     for (let i = 0; i < count; i++) {

@@ -28,10 +28,11 @@ export class VaultManager{
     * @param note 
     */
     async editNoteContent(note:NoteContentAction):Promise<void>{
-        LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.filePath}`);
+        LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.file.path}`);
         try{
-            let tfile = this.obtainTfileFromFilePath(note.filePath);
-            let tfileContent = await this.obtainContentFromTfile(tfile);
+            // TODO: find why this is necessary and pass file directly fails
+            const file = this.obtainTfileFromFilePath(note.file.path);
+            let tfileContent = await this.obtainContentFromTfile(file);
             let line_string = new FileContent(tfileContent);
             let releasedContent = tfileContent;
             switch (note.action) {
@@ -44,8 +45,8 @@ export class VaultManager{
               default:
                 throw "Error: Option " + note.action + " is not supported with tp.user.editNoteContent.";
             }
-            await app.vault.modify(tfile,releasedContent);
-            LOGGER.debug(`<= editNoteContent. file '${tfile.path}' edited`);
+            await app.vault.modify(file,releasedContent);
+            LOGGER.debug(`<= editNoteContent. file '${file.path}' edited`);
         }catch(err) {
             LOGGER.error(`<= editNoteContent exit with errors`,err);
         }
@@ -57,6 +58,7 @@ export class VaultManager{
      * @returns 
      */
     async obtainContentFromTfile(tfile: TFile): Promise<string> {
+      console.log("editNoteContent",tfile);
       let content = await app.vault.read(tfile);
       return content;
     }

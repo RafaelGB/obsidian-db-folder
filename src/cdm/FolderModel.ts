@@ -6,6 +6,7 @@ import { RowType } from "cdm/RowTypeModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
 import DatabaseInfo from "services/DatabaseInfo";
 import NoteInfo from "services/NoteInfo";
+import { TFile } from "obsidian";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -50,13 +51,11 @@ export type TableRow = {
     [key: string]: RowType
 }
 
-export type TableRows = Array<TableRow>;
-
 export type TableColumns = Array<TableColumn>;
 
 export type TableDataType={
     columns: TableColumns, 
-    data: TableRows, 
+    data: Array<TableRow>, 
     skipReset: boolean,
     view: DatabaseView,
     stateManager?: StateManager,
@@ -113,7 +112,7 @@ export type RelationshipProps = {
 }
 
 export type NoteContentAction = {
-    filePath:string,
+    file:TFile,
     action:string,
     regexp:RegExp,
     newValue:string

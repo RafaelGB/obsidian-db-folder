@@ -1,4 +1,5 @@
-import { TableRows,TableRow, NoteContentAction } from 'cdm/FolderModel';
+import { TableRow, NoteContentAction } from 'cdm/FolderModel';
+import { TFile } from 'obsidian';
 import { getAPI} from "obsidian-dataview"
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
@@ -37,9 +38,9 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string): Promise<TableRows> {
+export async function adapterTFilesToRows(folderPath: string): Promise<Array<TableRow>> {
     LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
-    const rows: TableRows = [];
+    const rows: Array<TableRow> = [];
     let id = 0;
 
     const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p=>!p[DatabaseCore.FRONTMATTER_KEY]);
@@ -69,9 +70,8 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
  * @param newColumnValue 
  * @param option 
  */
-export async function updateRowFile(asociatedFilePathToCell:string, columnId:string, newValue:string, option:string):Promise<void> {
-  LOGGER.info(`=>updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
-  const cellBasenameFile:string = asociatedFilePathToCell.replace(/\[\[|\]\]/g, '').split('|')[0];
+export async function updateRowFile(file:TFile, columnId:string, newValue:string, option:string):Promise<void> {
+  LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   // Modify value of a column
   function columnValue():NoteContentAction{
     /* Regex explanation
@@ -83,7 +83,7 @@ export async function updateRowFile(asociatedFilePathToCell:string, columnId:str
     const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
     return {
       action: 'replace',
-      filePath: `${cellBasenameFile}`,
+      file: file,
       regexp: frontmatterRegex,
       newValue: `$1$2 ${newValue}$4`
     };
@@ -98,7 +98,7 @@ export async function updateRowFile(asociatedFilePathToCell:string, columnId:str
     const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId})+([\\w\\W]*?\\s---)`, 'g');
     return {
       action: 'replace',
-      filePath: `${cellBasenameFile}`,
+      file: file,
       regexp: frontmatterRegex,
       newValue: `$1\n${newValue}$3`
     };
@@ -114,5 +114,5 @@ export async function updateRowFile(asociatedFilePathToCell:string, columnId:str
   }else{
     throw `Error: option ${option} not supported yet`;
   }
-  LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
+  LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
 }

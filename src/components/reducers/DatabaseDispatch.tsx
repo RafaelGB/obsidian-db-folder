@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
 import { ActionTypes, DataTypes, MetadataColumns, UpdateRowOptions } from 'helpers/Constants';
-import { TableColumn, TableDataType } from 'cdm/FolderModel';
+import { TableColumn, TableDataType, TableRow } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
@@ -78,9 +78,9 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             action.columnId,
             {label: action.label, accessor: key, key: key}
           );
-          Promise.all(state.data.map(async (row:any) => {
+          Promise.all(state.data.map(async (row:TableRow) => {
               updateRowFile(
-              row[MetadataColumns.FILE],
+                row.note.file,
               action.accessor,
               key,
               UpdateRowOptions.COLUMN_KEY);

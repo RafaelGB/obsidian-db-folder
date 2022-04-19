@@ -6,6 +6,7 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { convertDatabaseYamlToParsedString, hasFrontmatterKey } from 'parsers/DatabaseParser';
+import { NoteContentAction } from 'cdm/FolderModel';
 
 export default class DatabaseInfo {
     private file: TFile;
@@ -41,9 +42,9 @@ export default class DatabaseInfo {
         const configRegex = new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`,"g");
         const databaseFilePath = this.file.path;
         const databaseConfigUpdated = convertDatabaseYamlToParsedString(this.yaml).join("\n");
-        let noteObject = {
+        let noteObject:NoteContentAction = {
             action: 'replace',
-            filePath: `${databaseFilePath}`,
+            file: this.file,
             regexp: configRegex,
             newValue: `<%%\n${databaseConfigUpdated}\n%%>`
         };
