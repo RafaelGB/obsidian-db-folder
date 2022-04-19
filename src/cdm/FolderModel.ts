@@ -1,7 +1,10 @@
 import { DatabaseView } from "DatabaseView";
-import { Link } from "obsidian-dataview";
 import { Dispatch } from "react";
 import { StateManager } from "StateManager";
+import { DatabaseYaml } from "cdm/DatabaseModel";
+import { RowType } from "cdm/RowTypeModel";
+import { RowSelectOption } from "cdm/RowSelectModel";
+import { DatabaseInfo } from "services/DatabaseInfo";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -24,11 +27,6 @@ export type Models = {
     [key: string]: FolderModel
 }
 
-export type RowSelectOption = {
-    backgroundColor: string,
-    label: string,
-}
-
 export type TableColumn = {
     id: string,
     Header?: any,
@@ -44,7 +42,6 @@ export type TableColumn = {
     isMetadata?: boolean
 }
 
-export type RowType = number | string | boolean | Date | Link | RowSelectOption[];
 export type TableRow = {
     id: number,
     [key: string]: RowType
@@ -61,28 +58,8 @@ export type TableDataType={
     view: DatabaseView,
     stateManager?: StateManager,
     dispatch?: Dispatch<any>,
-    configuration: DatabaseYaml
+    diskConfig: DatabaseInfo
 }
-/** database column */
-export type DatabaseColumn = {
-    input: string,
-    Header: string,
-    accessor: string,
-    label: string,
-    isMetadata: boolean,
-    [key: string]: RowType
-}
-
-/** database yaml */
-export type DatabaseYaml = {
-    /** database name */
-    name: string,
-    /** database description */
-    description: string,
-    /** database columns */
-    columns: Record<string, DatabaseColumn>
-}
-
 export interface DatabaseHeaderProps{
     columns:any,
     data:any,

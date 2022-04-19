@@ -1,6 +1,8 @@
 import { DataTypes, MetadataColumns } from 'helpers/Constants';
-import {DatabaseColumn, RowSelectOption, TableColumn, TableColumns} from 'cdm/FolderModel';
+import {TableColumn, TableColumns} from 'cdm/FolderModel';
 import { LOGGER } from "services/Logger";
+import { DatabaseColumn } from 'cdm/DatabaseModel';
+import { RowSelectOption } from 'cdm/RowSelectModel';
 
 /**
  * Add mandatory columns to the table

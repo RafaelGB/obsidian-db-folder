@@ -6,7 +6,6 @@ import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement';
-import { updateColumnHeaderOnDatabase } from 'parsers/DatabaseParser';
 import { randomColor } from 'helpers/Colors';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
@@ -39,53 +38,63 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
          * Add new row into table
          */
         case ActionTypes.ADD_ROW:
-            let row = {};
-            state.columns
-            .filter((column:TableColumn)=>!column.isMetadata)
-            .forEach((column:TableColumn) => {
-                row = {
-                    ...row,
-                    [column.id]: ''
-                 };
-            });
-            // Add note to persist row
-            VaultManagerDB.create_markdown_file(
-                state.view.file.parent, 
-                action.payload,
-                adapterRowToDatabaseYaml(row)
-            );
-            const filename = `${state.view.file.parent.path}/${action.payload}.md`;
+          let row = {};
+          state.columns
+          .filter((column:TableColumn)=>!column.isMetadata)
+          .forEach((column:TableColumn) => {
             row = {
                 ...row,
-                [MetadataColumns.FILE]: `[[${filename}]]`
-             };
-             // TODO add typing
-            return update(state as any, {
-            data: { $push: [row] },
-            });
-        case ActionTypes.UPDATE_COLUMN_HEADER:
-            const index = state.columns.findIndex(
-                (column:any) => column.id === action.columnId
-            );
-            // Update configuration on disk
-            updateColumnHeaderOnDatabase(state, action.columnId, action.label);
-            Promise.all(state.data.map(async (row:any) => {
-                updateRowFile(
-                row[MetadataColumns.FILE],
-                action.columnId,
-                action.label,
-                UpdateRowOptions.COLUMN_KEY);
-            }));
-            // Update state
-            return {
-                ...state,
-                skipReset: true,
-                columns: [
-                ...state.columns.slice(0, index),
-                { ...state.columns[index], label: action.label },
-                ...state.columns.slice(index + 1, state.columns.length)
-                ]
+                [column.id]: ''
+              };
+          });
+          // Add note to persist row
+          VaultManagerDB.create_markdown_file(
+            state.view.file.parent, 
+            action.payload,
+            adapterRowToDatabaseYaml(row)
+          );
+          const filename = `${state.view.file.parent.path}/${action.payload}.md`;
+          row = {
+              ...row,
+              [MetadataColumns.FILE]: `[[${filename}]]`
             };
+            // TODO add typing
+          return update(state as any, {
+            data: { $push: [row] },
+          }
+        );
+        /**
+         * Modify column label of its header.
+         * Update key of column in all rows
+         */
+        case ActionTypes.UPDATE_COLUMN_HEADER:
+          const index = state.columns.findIndex(
+              (column:any) => column.id === action.columnId
+          );
+          // Update configuration on disk
+          state.diskConfig.updateColumnHeader(action.columnId, action.label);
+          Promise.all(state.data.map(async (row:any) => {
+              updateRowFile(
+              row[MetadataColumns.FILE],
+              action.columnId,
+              action.label,
+              UpdateRowOptions.COLUMN_KEY);
+          }));
+          // Update state
+          return {
+              ...state,
+              skipReset: true,
+              columns: [
+              ...state.columns.slice(0, index),
+              { ...state.columns[index], label: action.label },
+              ...state.columns.slice(index + 1, state.columns.length)
+              ]
+          };
+        
+          /**
+           * Modify type of column and adapt the data.
+           * Update type on disk
+           */
         case ActionTypes.UPDATE_COLUMN_TYPE:
             const typeIndex = state.columns.findIndex(
                 column => column.id === action.columnId
