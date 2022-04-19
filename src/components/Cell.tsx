@@ -80,7 +80,6 @@ export default function Cell(cellProperties:Cell) {
 
     function onChange(event:ContentEditableEvent) {
       // save on disk
-      console.log("asdasd");
       updateRowFile(
         (cellProperties.row.original as any).note.file,
         (cellProperties.column as any).key,

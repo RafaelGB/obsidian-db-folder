@@ -72,7 +72,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
               (column:any) => column.id === action.columnId
           );
           // Adapt label to be a valid yaml key
-          const key = action.label.trim();
+          const key:string = action.label.trim();
           // Update configuration on disk
           state.diskConfig.updateColumnProperties(
             action.columnId,
@@ -81,9 +81,10 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           Promise.all(state.data.map(async (row:TableRow) => {
               updateRowFile(
                 row.note.file,
-              action.accessor,
-              key,
-              UpdateRowOptions.COLUMN_KEY);
+                action.accessor,
+                key,
+                UpdateRowOptions.COLUMN_KEY
+              );
           }));
           // Update state
           return {

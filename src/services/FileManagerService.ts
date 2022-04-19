@@ -58,9 +58,7 @@ export class VaultManager{
      * @returns 
      */
     async obtainContentFromTfile(tfile: TFile): Promise<string> {
-      console.log("editNoteContent",tfile);
-      let content = await app.vault.read(tfile);
-      return content;
+      return await app.vault.read(tfile);
     }
 
     /**
@@ -69,8 +67,7 @@ export class VaultManager{
      * @returns 
      */
     obtainTfileFromFilePath(filePath:string):TFile{
-      let tfile = app.vault.getMarkdownFiles().find(tfile => tfile.path===filePath);
-      return tfile;
+      return app.vault.getMarkdownFiles().find(tfile => tfile.path===filePath);
     }
 
     /**

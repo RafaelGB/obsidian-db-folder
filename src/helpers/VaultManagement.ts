@@ -95,12 +95,12 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
     * group 2 is the column we want to replace
     * group 3 is the rest of the frontmatter
     */
-    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId})+([\\w\\W]*?\\s---)`, 'g');
+    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\n]{1}${columnId}[:]{1})+([\\w\\W]*?\\s---)`, 'g');
     return {
       action: 'replace',
       file: file,
       regexp: frontmatterRegex,
-      newValue: `$1\n${newValue}$3`
+      newValue: `$1\n${newValue}:$3`
     };
   }
   // Record of options
