@@ -57,7 +57,7 @@ export class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnHeader(oldColumnId:string, newColumnId:string):Promise<void>{
+    async updateColumnKey(oldColumnId:string, newColumnId:string):Promise<void>{
         // clone current column configuration
         const currentCol = this.yaml.columns[oldColumnId];
         // update column id
@@ -66,6 +66,15 @@ export class DatabaseInfo {
         delete this.yaml.columns[oldColumnId];
         this.yaml.columns[newColumnId] = currentCol;
         // save on disk
+        await this.saveOnDisk();
+    }
+
+    async updateColumnProperties(columnId:string, properties:Record<string,any>):Promise<void>{
+        const currentCol = this.yaml.columns[columnId];
+        for (let key in properties) {
+            currentCol[key] = properties[key];
+        }
+        this.yaml.columns[columnId] = currentCol;
         await this.saveOnDisk();
     }
 }

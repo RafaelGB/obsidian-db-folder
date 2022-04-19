@@ -72,7 +72,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
               (column:any) => column.id === action.columnId
           );
           // Update configuration on disk
-          state.diskConfig.updateColumnHeader(action.columnId, action.label);
+          state.diskConfig.updateColumnKey(action.columnId, action.label);
           Promise.all(state.data.map(async (row:any) => {
               updateRowFile(
               row[MetadataColumns.FILE],
@@ -99,6 +99,8 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             const typeIndex = state.columns.findIndex(
                 column => column.id === action.columnId
             );
+            // Update configuration on disk
+            state.diskConfig.updateColumnProperties(action.columnId, {input: action.dataType});
             switch (action.dataType) {
                 case DataTypes.NUMBER:
                   if (state.columns[typeIndex].dataType === DataTypes.NUMBER) {
