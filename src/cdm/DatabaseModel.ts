@@ -4,6 +4,7 @@ import { RowType } from "cdm/RowTypeModel"
 export type DatabaseColumn = {
     input: string,
     Header: string,
+    key: string,
     accessor: string,
     label: string,
     isMetadata: boolean,

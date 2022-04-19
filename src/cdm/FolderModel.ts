@@ -31,7 +31,8 @@ export type TableColumn = {
     id: string,
     Header?: any,
     label?: string,
-    accessor: string,
+    key: string,
+    accessor: any,
     minWidth?: number,
     width?:number
     dataType?: string,

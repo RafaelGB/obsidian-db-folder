@@ -23,6 +23,7 @@ export function makeData(count:number):TableDataType {
       {
         id: 'title',
         label: 'File Name',
+        key: 'title',
         accessor: 'title',
         minWidth: 100,
         dataType: DataTypes.TEXT,
@@ -46,6 +47,7 @@ export function makeData(count:number):TableDataType {
       {
         id: 'Status',
         label: 'Status',
+        key: 'Status',
         accessor: 'Status',
         minWidth: 100,
         dataType: DataTypes.TEXT,

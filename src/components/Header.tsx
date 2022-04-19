@@ -37,7 +37,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   /** Properties of header */
   const {setSortBy, rows} = headerProps;
   /** Column values */
-  const { id, dataType, options, getResizerProps} = headerProps.column;
+  const { id, key, dataType, options, getResizerProps} = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -51,7 +51,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     strategy: "absolute"
   });
   const [labelState, setLabelState] = useState(headerProps.column.label);
-  const [accessorState, setAccessorState] = useState(headerProps.column.label.trim());
+  const [keyState, setkeyState] = useState(key.trim());
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
@@ -179,11 +179,11 @@ export default function Header(headerProps:DatabaseHeaderProps) {
       dataDispatch({
         type: ActionTypes.UPDATE_COLUMN_LABEL,
         columnId: id,
-        accessor: accessorState,
+        accessor: keyState,
         label: labelState
       });
       setExpanded(false);
-      setAccessorState(labelState.trim());
+      setkeyState(labelState.trim());
     }
   }
 

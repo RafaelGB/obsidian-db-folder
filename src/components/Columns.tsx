@@ -12,10 +12,11 @@ import { RowSelectOption } from 'cdm/RowSelectModel';
 export function addMandatoryColumns(columns: Record<string, DatabaseColumn>): Record<string, DatabaseColumn> {
   const metadataColumns: Record<string, DatabaseColumn> = {};
   metadataColumns[MetadataColumns.FILE]={
-      accessor: MetadataColumns.FILE,
+      key: MetadataColumns.FILE,
       input: DataTypes.MARKDOWN,
       Header: MetadataColumns.FILE,
       label: MetadataColumns.FILE,
+      accessor: MetadataColumns.FILE,
       isMetadata: true
   };
   return {...columns, ...metadataColumns};
@@ -40,7 +41,8 @@ async function columnOptions(value:string, column:DatabaseColumn):Promise<TableC
   const tableRow: TableColumn = {
     id: value,
     label: column.label ?? value,
-    accessor: column.accessor ?? value,
+    key: column.key ?? value.trim().toLowerCase(),
+    accessor: column.accessor ?? value.trim().toLowerCase(),
     isMetadata: column.isMetadata ?? false
   }
   /**
