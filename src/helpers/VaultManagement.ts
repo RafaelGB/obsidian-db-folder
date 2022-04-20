@@ -118,11 +118,27 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
       newValue: `$1$3`
     };
   }
+
+  // Add a column
+  function addColumn():NoteContentAction{
+    /* Regex explanation
+    * group 1 the entire frontmatter until flag ---
+    * group 2 is the rest of the frontmatter
+    */
+    const frontmatterRegex = new RegExp(`(^---[\\w\\W]*?)+([\\s]*---)`, 'g');
+    return {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterRegex,
+      newValue: `$1\n${columnId}: ${newValue}$2`
+    };
+  }
   // Record of options
   const updateOptions: Record<string, any> = {};
   updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
   updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
   updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
+  updateOptions[UpdateRowOptions.ADD_COLUMN] = addColumn;
   // Execute action
   if(updateOptions.hasOwnProperty(option)){
     const noteObject = updateOptions[option]();

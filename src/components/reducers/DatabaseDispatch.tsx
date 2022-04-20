@@ -1,12 +1,13 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import { ActionTypes, DataTypes, MetadataColumns, UpdateRowOptions } from 'helpers/Constants';
+import { ActionTypes, DataTypes, MetadataColumns, shortId, UpdateRowOptions } from 'helpers/Constants';
 import { TableColumn, TableDataType, TableRow } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement';
 import { randomColor } from 'helpers/Colors';
+import { DatabaseColumn } from 'cdm/DatabaseModel';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
@@ -198,8 +199,47 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
             break;
         case ActionTypes.ADD_COLUMN_TO_LEFT:
-            LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
-            break;
+          console.log("ADD_COLUMN_TO_LEFT");
+          const leftIndex = state.columns.findIndex(
+            (column) => column.id === action.columnId
+          );
+          let leftId = `${state.columns.length+1-state.metadataColumns.length}`;
+          
+          const newColumn:DatabaseColumn={
+            input: DataTypes.TEXT,
+            accessor: leftId,
+            key: `newColumn${leftId}`,
+            label: `new Column ${leftId}`
+          };
+          // Update configuration on disk
+          state.diskConfig.addColumn(leftId, newColumn);
+          
+          Promise.all(state.data.map(async (row:TableRow) => {
+            updateRowFile(
+              row.note.file,
+              newColumn.key,
+              '',
+              UpdateRowOptions.ADD_COLUMN
+            );
+          }));
+          // Update state
+          return {
+            ...state,
+            skipReset: true,
+            columns: [
+              ...state.columns.slice(0, leftIndex),
+              {
+                id: newColumn.accessor,
+                label: newColumn.label,
+                key: newColumn.key,
+                accessor: newColumn.accessor,
+                dataType: newColumn.input,
+                created: action.focus && true,
+                options: []
+              },
+              ...state.columns.slice(leftIndex, state.columns.length)
+            ]
+          };
         case ActionTypes.ADD_COLUMN_TO_RIGHT:
             LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
             break;

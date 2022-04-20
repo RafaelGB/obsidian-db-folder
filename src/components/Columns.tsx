@@ -1,5 +1,5 @@
 import { DataTypes, MetadataColumns, MetadataLabels } from 'helpers/Constants';
-import {TableColumn, TableColumns} from 'cdm/FolderModel';
+import {TableColumn} from 'cdm/FolderModel';
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import { RowSelectOption } from 'cdm/RowSelectModel';
@@ -9,8 +9,8 @@ import { RowSelectOption } from 'cdm/RowSelectModel';
  * @param columns 
  * @returns 
  */
-
-function metadataColumns(): Record<string, DatabaseColumn> {
+export async function obtainMetadataColumns(): Promise<TableColumn[]> {
+  const columns:TableColumn[] = [];
   const metadataColumns: Record<string, DatabaseColumn> = {};
   metadataColumns[MetadataColumns.FILE]={
       key: `${MetadataColumns.FILE}`,
@@ -20,6 +20,7 @@ function metadataColumns(): Record<string, DatabaseColumn> {
       accessor: `${MetadataColumns.FILE}`,
       isMetadata: true
   };
+
   metadataColumns[MetadataColumns.ADD_COLUMN]={
     key: `${MetadataColumns.ADD_COLUMN}`,
     Header: `${MetadataColumns.ADD_COLUMN}`,
@@ -30,20 +31,20 @@ function metadataColumns(): Record<string, DatabaseColumn> {
     accessor: `${MetadataColumns.ADD_COLUMN}`,
     isMetadata: true
   }
-  return metadataColumns;
+  
+  await Promise.all(Object.keys(metadataColumns).map(async (columnKey) => {
+    const column = metadataColumns[columnKey];
+    columns.push(await columnOptions(parseInt(columnKey),column));
+  }));
+  return columns;
 }
 
-export async function obtainColumnsFromFolder(databaseColumns: Record<string, DatabaseColumn>): Promise<TableColumns>{
+export async function obtainColumnsFromFolder(databaseColumns: Record<string, DatabaseColumn>): Promise<TableColumn[]>{
     LOGGER.debug(`=> obtainColumnsFromFolder. databaseColumns: ${JSON.stringify(databaseColumns)}`);
-    const columns:TableColumns = [];
+    const columns:TableColumn[] = [];
     await Promise.all(Object.keys(databaseColumns).map(async (columnKey, index) => {
       const column = databaseColumns[columnKey];
       columns.push(await columnOptions(index+1,column));
-    }));
-    const meta = metadataColumns();
-    await Promise.all(Object.keys(meta).map(async (columnKey) => {
-      const column = meta[columnKey];
-      columns.push(await columnOptions(parseInt(columnKey),column));
     }));
     LOGGER.debug(`<= obtainColumnsFromFolder(. return ${columns.length} columns`);
     return columns;

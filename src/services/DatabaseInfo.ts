@@ -1,4 +1,4 @@
-import { DatabaseYaml } from 'cdm/DatabaseModel';
+import { DatabaseColumn, DatabaseYaml } from 'cdm/DatabaseModel';
 import {
     parseYaml,
     TFile
@@ -81,6 +81,11 @@ export default class DatabaseInfo {
 
     async removeColumn(columnId:string):Promise<void>{
         delete this.yaml.columns[columnId];
+        await this.saveOnDisk();
+    }
+
+    async addColumn(columnId:string, properties:DatabaseColumn):Promise<void>{
+        this.yaml.columns[columnId] = properties;
         await this.saveOnDisk();
     }
 }

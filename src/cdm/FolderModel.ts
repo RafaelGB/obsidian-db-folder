@@ -51,10 +51,9 @@ export type TableRow = {
     [key: string]: RowType
 }
 
-export type TableColumns = Array<TableColumn>;
-
 export type TableDataType={
-    columns: TableColumns, 
+    columns: TableColumn[],
+    metadataColumns: TableColumn[],
     data: Array<TableRow>, 
     skipReset: boolean,
     view: DatabaseView,

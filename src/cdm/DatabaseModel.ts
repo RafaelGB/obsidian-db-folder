@@ -7,7 +7,7 @@ export type DatabaseColumn = {
     key?: string,
     accessor: string,
     label: string,
-    isMetadata: boolean,
+    isMetadata?: boolean,
     [key: string]: RowType
 }
 

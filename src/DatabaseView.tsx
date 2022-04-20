@@ -1,5 +1,5 @@
 import { TableDataType } from 'cdm/FolderModel';
-import { obtainColumnsFromFolder} from 'components/Columns';
+import { obtainColumnsFromFolder, obtainMetadataColumns} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
 import { DatabaseCore, DataTypes } from 'helpers/Constants';
 import { adapterTFilesToRows } from 'helpers/VaultManagement';
@@ -110,9 +110,12 @@ export class DatabaseView extends TextFileView implements HoverParent {
       const databaseInfo = new DatabaseInfo(this.file);
       await databaseInfo.initDatabaseconfigYaml();
       const columns = await obtainColumnsFromFolder(databaseInfo.yaml.columns);
+      const metatadaColumns = await obtainMetadataColumns();
+      columns.push(...metatadaColumns);
       const rows = await adapterTFilesToRows(this.file.parent.path);
       const tableProps:TableDataType = {
         columns: columns,
+        metadataColumns: metatadaColumns,
         data: rows,
         skipReset: false,
         view: this,

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { 
   TableDataType,
   TableRow,
-  TableColumns
+  TableColumn
 } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
@@ -48,7 +48,7 @@ function useInstance(instance:TableInstance<any>) {
 export function Table(initialState: TableDataType){
   LOGGER.debug(`=> Table. number of columns: ${initialState.columns.length}. number of rows: ${initialState.data.length}`);
   /** Columns information */
-  const columns:TableColumns = initialState.columns;
+  const columns:TableColumn[] = initialState.columns;
   /** Rows information */
   const data: Array<TableRow> = initialState.data;
   /** Reducer */
