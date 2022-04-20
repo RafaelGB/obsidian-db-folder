@@ -80,7 +80,7 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
     * group 3 is value we want to replace
     * group 4 is the rest of the frontmatter
     */
-    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
+    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.*)+([\\w\\W]*?\\s---)`, 'g');
     return {
       action: 'replace',
       file: file,

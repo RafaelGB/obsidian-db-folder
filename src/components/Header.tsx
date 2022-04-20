@@ -58,7 +58,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   const buttons = [
     {
       onClick: (e:any) => {
-        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         setSortBy([{id: id, desc: false}]);
         setExpanded(false);
       },
@@ -67,7 +66,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         setSortBy([{id: id, desc: true}]);
         setExpanded(false);
       },
@@ -76,7 +74,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: id, focus: false});
         setExpanded(false);
       },
@@ -85,7 +82,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         dataDispatch({type: ActionTypes.ADD_COLUMN_TO_RIGHT, columnId: id, focus: false});
         setExpanded(false);
       },
@@ -94,8 +90,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        console.log("Delete column");
-        //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
         dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id, key: keyState});
         setExpanded(false);
       },

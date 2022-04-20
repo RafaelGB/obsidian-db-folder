@@ -198,26 +198,29 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
         case ActionTypes.UPDATE_CELL:
             LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
             break;
+        /**
+         * Add new column to the table to the left of the column with the given id
+         * and save it on disk
+         */
         case ActionTypes.ADD_COLUMN_TO_LEFT:
-          console.log("ADD_COLUMN_TO_LEFT");
           const leftIndex = state.columns.findIndex(
             (column) => column.id === action.columnId
           );
-          let leftId = `${state.columns.length+1-state.metadataColumns.length}`;
+          const leftId = `${state.columns.length+1-state.metadataColumns.length}`;
           
-          const newColumn:DatabaseColumn={
+          const newLeftColumn:DatabaseColumn={
             input: DataTypes.TEXT,
             accessor: leftId,
             key: `newColumn${leftId}`,
             label: `new Column ${leftId}`
           };
           // Update configuration on disk
-          state.diskConfig.addColumn(leftId, newColumn);
+          state.diskConfig.addColumn(leftId, newLeftColumn);
           
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
               row.note.file,
-              newColumn.key,
+              newLeftColumn.key,
               '',
               UpdateRowOptions.ADD_COLUMN
             );
@@ -229,20 +232,61 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             columns: [
               ...state.columns.slice(0, leftIndex),
               {
-                id: newColumn.accessor,
-                label: newColumn.label,
-                key: newColumn.key,
-                accessor: newColumn.accessor,
-                dataType: newColumn.input,
+                id: newLeftColumn.accessor,
+                label: newLeftColumn.label,
+                key: newLeftColumn.key,
+                accessor: newLeftColumn.accessor,
+                dataType: newLeftColumn.input,
                 created: action.focus && true,
                 options: []
               },
               ...state.columns.slice(leftIndex, state.columns.length)
             ]
           };
+        /**
+         * Add new column to the table to the right of the column with the given id
+         * and save it on disk
+         */
         case ActionTypes.ADD_COLUMN_TO_RIGHT:
-            LOGGER.warn(`Method declarated but not implemented yet: ${action.type}`);
-            break;
+          const rightIndex = state.columns.findIndex(
+            (column) => column.id === action.columnId
+          );
+          const rightId = `${state.columns.length+1-state.metadataColumns.length}`;
+          
+          const newRIghtColumn:DatabaseColumn={
+            input: DataTypes.TEXT,
+            accessor: rightId,
+            key: `newColumn${rightId}`,
+            label: `new Column ${rightId}`
+          };
+          // Update configuration on disk
+          state.diskConfig.addColumn(rightId, newRIghtColumn);
+          
+          Promise.all(state.data.map(async (row:TableRow) => {
+            updateRowFile(
+              row.note.file,
+              newRIghtColumn.key,
+              '',
+              UpdateRowOptions.ADD_COLUMN
+            );
+          }));
+          return {
+            ...state,
+            skipReset: true,
+            columns: [
+              ...state.columns.slice(0, rightIndex + 1),
+              {
+                id: newRIghtColumn.accessor,
+                label: newRIghtColumn.label,
+                key: newRIghtColumn.key,
+                accessor: newRIghtColumn.accessor,
+                dataType: newRIghtColumn.input,
+                created: action.focus && true,
+                options: []
+              },
+              ...state.columns.slice(rightIndex + 1, state.columns.length)
+            ]
+          };
         case ActionTypes.DELETE_COLUMN:
           const deleteIndex = state.columns.findIndex(
             (column) => column.id === action.columnId
