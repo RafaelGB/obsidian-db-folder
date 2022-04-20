@@ -51,7 +51,7 @@ export default function Cell(cellProperties:Cell) {
     const [showAdd, setShowAdd] = useState(false);
     const [addSelectRef, setAddSelectRef] = useState(null);
     const { styles, attributes } = usePopper(selectRef, selectPop);
-
+    LOGGER.debug(`<=> Cell.rendering dataType: ${dataType}. value: ${value.value}`);
     React.useEffect(() => {
       setDomReady(true)
     })
@@ -70,7 +70,6 @@ export default function Cell(cellProperties:Cell) {
           // timeout until event is triggered after user has stopped typing
         }, 1500),
       );
-      LOGGER.debug(`<=Cell.handleOnChange`);
   };
 
     function getColor() {
@@ -258,6 +257,7 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Default option */
         default:
+          LOGGER.warn(`Unknown data type: ${dataType}`);
           return <span></span>;
       }
     }
