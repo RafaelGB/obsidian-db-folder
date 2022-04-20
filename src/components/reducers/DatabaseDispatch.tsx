@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import update from 'immutability-helper';
-import { ActionTypes, DataTypes, MetadataColumns, shortId, UpdateRowOptions } from 'helpers/Constants';
+import { ActionTypes, DataTypes, MetadataColumns, UpdateRowOptions } from 'helpers/Constants';
 import { TableColumn, TableDataType, TableRow } from 'cdm/FolderModel';
 import { LOGGER } from 'services/Logger';
 import { ActionType } from 'react-table';
@@ -8,6 +8,7 @@ import { VaultManagerDB } from 'services/FileManagerService';
 import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement';
 import { randomColor } from 'helpers/Colors';
 import { DatabaseColumn } from 'cdm/DatabaseModel';
+import NoteInfo from 'services/NoteInfo';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
@@ -39,24 +40,24 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
          * Add new row into table
          */
         case ActionTypes.ADD_ROW:
-          let row = {};
+          const filename = `${state.view.file.parent.path}/${action.filename}.md`;
+          const rowRecord:Record<string, any> = {};
           state.columns
           .filter((column:TableColumn)=>!column.isMetadata)
           .forEach((column:TableColumn) => {
-            row = {
-                ...row,
-                [column.key]: ''
-              };
+            rowRecord[column.key]= '';
           });
           // Add note to persist row
           VaultManagerDB.create_markdown_file(
             state.view.file.parent, 
-            action.payload,
-            adapterRowToDatabaseYaml(row)
+            action.filename,
+            adapterRowToDatabaseYaml(rowRecord)
           );
-          const filename = `${state.view.file.parent.path}/${action.payload}.md`;
-          row = {
-              ...row,
+          
+          const row:TableRow = {
+              ...rowRecord,
+              id: state.data.length+1,
+              note: new NoteInfo({...rowRecord,file:{path:filename}},state.data.length+1),
               [MetadataColumns.FILE]: `[[${filename}]]`
             };
             // TODO add typing
@@ -81,7 +82,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           );
           Promise.all(state.data.map(async (row:TableRow) => {
               updateRowFile(
-                row.note.file,
+                row.note.getFile(),
                 action.accessor,
                 update_col_key,
                 UpdateRowOptions.COLUMN_KEY
@@ -219,7 +220,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
-              row.note.file,
+              row.note.getFile(),
               newLeftColumn.key,
               '',
               UpdateRowOptions.ADD_COLUMN
@@ -264,7 +265,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
-              row.note.file,
+              row.note.getFile(),
               newRIghtColumn.key,
               '',
               UpdateRowOptions.ADD_COLUMN
@@ -295,7 +296,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           state.diskConfig.removeColumn(action.columnId);
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
-              row.note.file,
+              row.note.getFile(),
               action.key,
               undefined, // delete does not need this field
               UpdateRowOptions.REMOVE_COLUMN

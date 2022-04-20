@@ -2,9 +2,17 @@
 This plugin is a Notion like database based on folders.
 
 ### How to use?
-Database has its own type of view. It will search all notes into the same folder of the database and show the columns you specify
+Database has its own type of view. It will search all notes into the same folder of the database and show the columns that you specify
 
 ![TablePresentation.mov](docs/resources/TablePresentation.mov)
+
+The information you add or edit will be saved into the target obsidian note.
+
+![AddNewRow.mov](docs/resources/AddNewRow.mov)
+### Whats inside the database view?
+Database view read the yaml configuration inside .md file and render a react DOM.
+
+You can edit directly the yaml configuration inside the .md file or use the table features to edit the columns.
 ```markdown
 ---
 
@@ -12,16 +20,29 @@ database-plugin: basic
 
 ---
 <%%
+name: undefined
+description: undefined
 columns:
-  titulo:
+  1:
     input: text
-    accessor: titulo
-  director:
+    accessor: title
+    label: title
+    key: title
+  2:
     input: text
     accessor: director
-  año:
-    input: text
-    accessor: año
+    label: director
+    key: director
+  3:
+    input: number
+    accessor: Year
+    label: Year
+    key: Year
+  5:
+    input: select
+    accessor: Calification
+    label: Calification
+    key: Calification
 %%>
 ```
 

@@ -233,7 +233,7 @@ export function Table(initialState: TableDataType){
                   {
                     dataDispatch({ 
                       type: ActionTypes.ADD_ROW,
-                      payload: inputNewRow
+                      filename: inputNewRow
                     });
                     setInputNewRow('');
                     newRowRef.current.value='';

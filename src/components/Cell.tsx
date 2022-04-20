@@ -81,7 +81,7 @@ export default function Cell(cellProperties:Cell) {
     function onChange(event:ContentEditableEvent) {
       // save on disk
       updateRowFile(
-        (cellProperties.row.original as any).note.file,
+        (cellProperties.row.original as any).note.getFile(),
         (cellProperties.column as any).key,
         event.target.value,
         UpdateRowOptions.COLUMN_VALUE
@@ -97,7 +97,7 @@ export default function Cell(cellProperties:Cell) {
       setShowSelect(false);
       // save on disk
       updateRowFile(
-        (cellProperties.row.original as any).note.file,
+        (cellProperties.row.original as any).note.getFile(),
         (cellProperties.column as any).key,
         option.label,
         UpdateRowOptions.COLUMN_VALUE
