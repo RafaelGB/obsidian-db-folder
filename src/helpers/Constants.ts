@@ -3,7 +3,7 @@ export const ActionTypes = Object.freeze({
     ADD_OPTION_TO_COLUMN: 'add_option_to_column',
     ADD_ROW: 'add_row',
     UPDATE_COLUMN_TYPE: 'update_column_type',
-    UPDATE_COLUMN_HEADER: 'update_column_header',
+    UPDATE_COLUMN_LABEL: 'update_column_label',
     UPDATE_CELL: 'update_cell',
     ADD_COLUMN_TO_LEFT: 'add_column_to_left',
     ADD_COLUMN_TO_RIGHT: 'add_column_to_right',
@@ -15,11 +15,20 @@ export const DataTypes = Object.freeze({
     NUMBER: 'number',
     TEXT: 'text',
     SELECT: 'select',
-    MARKDOWN: 'markdown'
+    MARKDOWN: 'markdown',
+    NEW_COLUMN: 'new_column'
   });
 
+export const MAX_CAPACITY_DATABASE = 999999;
+
 export const MetadataColumns = Object.freeze({
-  FILE: 'file'
+  FILE: MAX_CAPACITY_DATABASE-1,
+  ADD_COLUMN: MAX_CAPACITY_DATABASE
+});
+
+export const MetadataLabels = Object.freeze({
+  FILE: 'File',
+  ADD_COLUMN: 'Add Column'
 });
 
 export const DatabaseCore = Object.freeze({
@@ -36,16 +45,20 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '',
     '<%%',
     'columns:',
-    ' column1:',
+    ' 0:',
     '  input: text',
+    '  key: column1',
     '  accessor: column1',
+    '  label: Column 1',
     '%%>'
   ].join('\n')
 });
 
 export const UpdateRowOptions = Object.freeze({
   COLUMN_VALUE: 'column_value',
-  COLUMN_KEY: 'column_key'
+  COLUMN_KEY: 'column_key',
+  REMOVE_COLUMN: 'remove_column',
+  ADD_COLUMN: 'add_column'
 });
 
 export function shortId() {

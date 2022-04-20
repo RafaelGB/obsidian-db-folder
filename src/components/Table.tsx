@@ -3,8 +3,8 @@ import { useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy } f
 import clsx from "clsx";
 import { 
   TableDataType,
-  TableRows,
-  TableColumns
+  TableRow,
+  TableColumn
 } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
@@ -48,9 +48,9 @@ function useInstance(instance:TableInstance<any>) {
 export function Table(initialState: TableDataType){
   LOGGER.debug(`=> Table. number of columns: ${initialState.columns.length}. number of rows: ${initialState.data.length}`);
   /** Columns information */
-  const columns:TableColumns = initialState.columns;
+  const columns:TableColumn[] = initialState.columns;
   /** Rows information */
-  const data: TableRows = initialState.data;
+  const data: Array<TableRow> = initialState.data;
   /** Reducer */
   const dataDispatch = initialState.dispatch;
   /** Database information  */
@@ -164,7 +164,9 @@ export function Table(initialState: TableDataType){
     rows,
     prepareRow
   } = useTable(
+    // Table properties
     propsUseTable,
+    // React hooks
     useFlexLayout,
     useResizeColumns,
     useSortBy,

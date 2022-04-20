@@ -1,5 +1,5 @@
 import { TableDataType } from 'cdm/FolderModel';
-import { obtainColumnsFromFolder} from 'components/Columns';
+import { obtainColumnsFromFolder, obtainMetadataColumns} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
 import { DatabaseCore, DataTypes } from 'helpers/Constants';
 import { adapterTFilesToRows } from 'helpers/VaultManagement';
@@ -13,10 +13,10 @@ import {
     TFile,
     Menu
   } from 'obsidian';
-import { getDatabaseconfigYaml, hasFrontmatterKey } from 'parsers/DatabaseParser';
+import { hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
-import { VaultManagerDB } from 'services/FileManagerService';
+import DatabaseInfo from 'services/DatabaseInfo';
 import { LOGGER } from 'services/Logger';
 import { SettingsModal } from 'Settings';
 import { StateManager } from 'StateManager';
@@ -107,17 +107,20 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
     async initDatabase(): Promise<void> {
       LOGGER.info(`=>initDatabase ${this.file.path}`);
-      const databaseConfigYaml = await getDatabaseconfigYaml(this.file);
-      let columns = await obtainColumnsFromFolder(databaseConfigYaml.columns);
-      let folder = this.file.path.split('/').slice(0, -1).join('/');
-      let rows = await adapterTFilesToRows(folder);
+      const databaseInfo = new DatabaseInfo(this.file);
+      await databaseInfo.initDatabaseconfigYaml();
+      const columns = await obtainColumnsFromFolder(databaseInfo.yaml.columns);
+      const metatadaColumns = await obtainMetadataColumns();
+      columns.push(...metatadaColumns);
+      const rows = await adapterTFilesToRows(this.file.parent.path);
       const tableProps:TableDataType = {
         columns: columns,
+        metadataColumns: metatadaColumns,
         data: rows,
         skipReset: false,
         view: this,
         stateManager: this.plugin.getStateManager(this.file),
-        configuration: databaseConfigYaml
+        diskConfig: databaseInfo
       }
       
       let table = createDatabase(tableProps);

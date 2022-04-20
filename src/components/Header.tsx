@@ -10,12 +10,11 @@ import TextIcon from 'components/img/Text';
 import MultiIcon from 'components/img/Multi';
 import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
-import { ActionTypes, DataTypes } from 'helpers/Constants';
+import { ActionTypes, DataTypes, MAX_CAPACITY_DATABASE } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
-import ReactDOM from 'react-dom';
 
-function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
+function setOptionsOfSelectDataType(options:any[],rows:any,columnId:number):any[]{
   rows.forEach((row:any)=>{
     const rowValue = row.values[columnId];
     let match = options.find((option: { label: any; }) => option.label === rowValue);
@@ -38,7 +37,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   /** Properties of header */
   const {setSortBy, rows} = headerProps;
   /** Column values */
-  const { id, label, dataType, options, getHeaderProps, getResizerProps} = headerProps.column;
+  const { id, key, dataType, options, getResizerProps} = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -51,14 +50,14 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     placement: "bottom",
     strategy: "absolute"
   });
-  const [header, setHeader] = useState(label);
+  const [labelState, setLabelState] = useState(headerProps.column.label);
+  const [keyState, setkeyState] = useState(key.trim());
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
   const buttons = [
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         setSortBy([{id: id, desc: false}]);
         setExpanded(false);
       },
@@ -67,7 +66,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         setSortBy([{id: id, desc: true}]);
         setExpanded(false);
       },
@@ -76,7 +74,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: id, focus: false});
         setExpanded(false);
       },
@@ -85,7 +82,6 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
         dataDispatch({type: ActionTypes.ADD_COLUMN_TO_RIGHT, columnId: id, focus: false});
         setExpanded(false);
       },
@@ -94,8 +90,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     },
     {
       onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
-        dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id});
+        dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id, key: keyState});
         setExpanded(false);
       },
       icon: <TrashIcon />,
@@ -160,8 +155,8 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   }, [created]);
 
   useEffect(() => {
-    setHeader(label);
-  }, [label]);
+    setLabelState(labelState);
+  }, [labelState]);
 
   useEffect(() => {
     if (inputRef) {
@@ -176,22 +171,32 @@ export default function Header(headerProps:DatabaseHeaderProps) {
 
   function handleKeyDown(e:any) {
     if (e.key === "Enter") {
-      dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+      dataDispatch({
+        type: ActionTypes.UPDATE_COLUMN_LABEL,
+        columnId: id,
+        accessor: keyState,
+        label: labelState
+      });
       setExpanded(false);
+      setkeyState(labelState.trim());
     }
   }
 
   function handleChange(e:any) {
-    setHeader(e.target.value);
+    setLabelState(e.target.value);
   }
 
   function handlerAddColumnToLeft(e:any) {
     dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: 999999, focus: true})
   }
 
+  /**
+   * When user leaves the input field
+   * @param e 
+   */
   function handleBlur(e:any) {
     e.preventDefault();
-    dataDispatch({type: ActionTypes.UPDATE_COLUMN_HEADER, columnId: id, label: header});
+    //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
   }
 
   function renderHeaderOptions(){
@@ -212,7 +217,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
                   className='form-input'
                   ref={setInputRef}
                   type='text'
-                  value={header}
+                  value={labelState}
                   style={{width: "100%"}}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -278,11 +283,11 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     );
   }
   LOGGER.debug(`<=Header ${headerProps.column.label}`);
-  return id !== "999999" ? (
+  return id !== MAX_CAPACITY_DATABASE ? (
     <>
       <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
         <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
-        {label}
+        {labelState}
       </div>
       <div {...getResizerProps()} className='resizer' />
       {!isMetadata && renderHeaderOptions()}

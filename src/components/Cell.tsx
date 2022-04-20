@@ -81,8 +81,8 @@ export default function Cell(cellProperties:Cell) {
     function onChange(event:ContentEditableEvent) {
       // save on disk
       updateRowFile(
-        (cellProperties.row.original as any)[MetadataColumns.FILE],
-        cellProperties.column.id,
+        (cellProperties.row.original as any).note.file,
+        (cellProperties.column as any).key,
         event.target.value,
         UpdateRowOptions.COLUMN_VALUE
       );
@@ -92,13 +92,13 @@ export default function Cell(cellProperties:Cell) {
       setShowAdd(true);
     }
 
-    function handleOptionClick(option: { label: any; backgroundColor?: any; }) {
+    function handleOptionClick(option: { label: string; backgroundColor?: any; }) {
       setValue({ value: option.label, update: true });
       setShowSelect(false);
       // save on disk
       updateRowFile(
-        (cellProperties.row.original as any)[MetadataColumns.FILE],
-        cellProperties.column.id,
+        (cellProperties.row.original as any).note.file,
+        (cellProperties.column as any).key,
         option.label,
         UpdateRowOptions.COLUMN_VALUE
       );
@@ -258,7 +258,6 @@ export default function Cell(cellProperties:Cell) {
           );
         /** Default option */
         default:
-          LOGGER.error(`<=>Cell. unknown data type '${dataType}'`,`Properties asociated: ${Object.keys(cellProperties)}`);
           return <span></span>;
       }
     }

@@ -1,7 +1,12 @@
 import { DatabaseView } from "DatabaseView";
-import { Link } from "obsidian-dataview";
 import { Dispatch } from "react";
 import { StateManager } from "StateManager";
+import { DatabaseYaml } from "cdm/DatabaseModel";
+import { RowType } from "cdm/RowTypeModel";
+import { RowSelectOption } from "cdm/RowSelectModel";
+import DatabaseInfo from "services/DatabaseInfo";
+import NoteInfo from "services/NoteInfo";
+import { TFile } from "obsidian";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -24,16 +29,12 @@ export type Models = {
     [key: string]: FolderModel
 }
 
-export type RowSelectOption = {
-    backgroundColor: string,
-    label: string,
-}
-
 export type TableColumn = {
-    id: string,
+    id: number,
     Header?: any,
     label?: string,
-    accessor: string,
+    key: string,
+    accessor: any,
     minWidth?: number,
     width?:number
     dataType?: string,
@@ -44,45 +45,22 @@ export type TableColumn = {
     isMetadata?: boolean
 }
 
-export type RowType = number | string | boolean | Date | Link | RowSelectOption[];
 export type TableRow = {
     id: number,
+    note: NoteInfo,
     [key: string]: RowType
 }
 
-export type TableRows = Array<TableRow>;
-
-export type TableColumns = Array<TableColumn>;
-
 export type TableDataType={
-    columns: TableColumns, 
-    data: TableRows, 
+    columns: TableColumn[],
+    metadataColumns: TableColumn[],
+    data: Array<TableRow>, 
     skipReset: boolean,
     view: DatabaseView,
     stateManager?: StateManager,
     dispatch?: Dispatch<any>,
-    configuration: DatabaseYaml
+    diskConfig: DatabaseInfo
 }
-/** database column */
-export type DatabaseColumn = {
-    input: string,
-    Header: string,
-    accessor: string,
-    label: string,
-    isMetadata: boolean,
-    [key: string]: RowType
-}
-
-/** database yaml */
-export type DatabaseYaml = {
-    /** database name */
-    name: string,
-    /** database description */
-    description: string,
-    /** database columns */
-    columns: Record<string, DatabaseColumn>
-}
-
 export interface DatabaseHeaderProps{
     columns:any,
     data:any,
@@ -133,7 +111,7 @@ export type RelationshipProps = {
 }
 
 export type NoteContentAction = {
-    filePath:string,
+    file:TFile,
     action:string,
     regexp:RegExp,
     newValue:string

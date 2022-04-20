@@ -1,8 +1,10 @@
-import { TableRows,TableRow, NoteContentAction } from 'cdm/FolderModel';
+import { TableRow, NoteContentAction } from 'cdm/FolderModel';
+import { TFile } from 'obsidian';
 import { getAPI} from "obsidian-dataview"
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
-import { DatabaseCore, MetadataColumns, UpdateRowOptions } from "./Constants";
+import NoteInfo from 'services/NoteInfo';
+import { DatabaseCore, UpdateRowOptions } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
 interface NormalizedPath {
@@ -36,28 +38,15 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string): Promise<TableRows> {
+export async function adapterTFilesToRows(folderPath: string): Promise<Array<TableRow>> {
     LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
-    const rows: TableRows = [];
+    const rows: Array<TableRow> = [];
     let id = 0;
 
     const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p=>!p[DatabaseCore.FRONTMATTER_KEY]);
     await Promise.all(folderFiles.map(async (page) => {
-        /** Mandatory fields */
-        const aFile: TableRow = {
-            id: ++id
-        };
-        /** Metadata fields */
-        aFile[MetadataColumns.FILE]=`${page.file.link.markdown()}`
-        /** Optional fields */
-        Object.keys(page).forEach(property => {
-            const value = page[property];
-            if (value && typeof value !== 'object') {
-                aFile[property] = value;
-            }
-        });
-        LOGGER.debug(`Push row ${aFile.id}:${JSON.stringify(aFile)}`);
-        rows.push(aFile);
+        const noteInfo = new NoteInfo(page,++id);
+        rows.push(noteInfo.getTableRow());
     }));
     LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
     return rows;
@@ -81,9 +70,8 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
  * @param newColumnValue 
  * @param option 
  */
-export async function updateRowFile(asociatedFilePathToCell:string, columnId:string, newValue:string, option:string):Promise<void> {
-  LOGGER.info(`=>updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
-  const cellBasenameFile:string = asociatedFilePathToCell.replace(/\[\[|\]\]/g, '').split('|')[0];
+export async function updateRowFile(file:TFile, columnId:string, newValue:string, option:string):Promise<void> {
+  LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   // Modify value of a column
   function columnValue():NoteContentAction{
     /* Regex explanation
@@ -92,10 +80,10 @@ export async function updateRowFile(asociatedFilePathToCell:string, columnId:str
     * group 3 is value we want to replace
     * group 4 is the rest of the frontmatter
     */
-    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.+)+([\\w\\W]*?\\s---)`, 'g');
+    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.*)+([\\w\\W]*?\\s---)`, 'g');
     return {
       action: 'replace',
-      filePath: `${cellBasenameFile}`,
+      file: file,
       regexp: frontmatterRegex,
       newValue: `$1$2 ${newValue}$4`
     };
@@ -107,24 +95,56 @@ export async function updateRowFile(asociatedFilePathToCell:string, columnId:str
     * group 2 is the column we want to replace
     * group 3 is the rest of the frontmatter
     */
-    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId})+([\\w\\W]*?\\s---)`, 'g');
+    const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\n]{1}${columnId}[:]{1})+([\\w\\W]*?\\s---)`, 'g');
     return {
       action: 'replace',
-      filePath: `${cellBasenameFile}`,
+      file: file,
       regexp: frontmatterRegex,
-      newValue: `$1\n${newValue}$3`
+      newValue: `$1\n${newValue}:$3`
+    };
+  }
+  // Remove a column
+  function removeColumn():NoteContentAction{
+    /* Regex explanation
+    * group 1 is the frontmatter centinel until previous to current column
+    * group 2 is the column we want to remove
+    * group 3 is the rest of the frontmatter
+    */
+    const frontmatterRegex = new RegExp(`(^---[\\w\\W]*?)+([\\s]*${columnId}[:]{1}.+)+([\\s]*[\\w\\W]*?\\s---)`, 'g');
+    return {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterRegex,
+      newValue: `$1$3`
+    };
+  }
+
+  // Add a column
+  function addColumn():NoteContentAction{
+    /* Regex explanation
+    * group 1 the entire frontmatter until flag ---
+    * group 2 is the rest of the frontmatter
+    */
+    const frontmatterRegex = new RegExp(`(^---[\\w\\W]*?)+([\\s]*---)`, 'g');
+    return {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterRegex,
+      newValue: `$1\n${columnId}: ${newValue}$2`
     };
   }
   // Record of options
   const updateOptions: Record<string, any> = {};
   updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
   updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
-
+  updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
+  updateOptions[UpdateRowOptions.ADD_COLUMN] = addColumn;
+  // Execute action
   if(updateOptions.hasOwnProperty(option)){
     const noteObject = updateOptions[option]();
     await VaultManagerDB.editNoteContent(noteObject);
   }else{
     throw `Error: option ${option} not supported yet`;
   }
-  LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${asociatedFilePathToCell} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
+  LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
 }

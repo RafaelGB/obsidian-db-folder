@@ -1,5 +1,5 @@
 import { App, Modal, PluginSettingTab } from "obsidian";
-import { add_setting_header, add_toggle} from 'settings/SettingsComponents';
+import { add_setting_header} from 'settings/SettingsComponents';
 import DBFolderPlugin from 'main';
 import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
