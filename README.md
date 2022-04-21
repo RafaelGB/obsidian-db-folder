@@ -4,14 +4,14 @@ This plugin is a Notion like database based on folders.
 ### How to use?
 Database has its own type of view. It will search all notes into the same folder of the database and show the columns that you specify
 
-![TablePresentation.mov](docs/resources/TablePresentation.mov)
+![TablePresentation.gif](docs/resources/TablePresentation.gif)
 
 The information you add or edit will be saved into the target obsidian note.
 
 ### Features
 #### Rows
 - Add new row
-![AddNewRow.mov](docs/resources/AddNewRow.mov)
+![AddNewRow.gif](docs/resources/AddNewRow.gif)
 - Edit cells directly on table
 #### Headers
 - Add new column
@@ -20,7 +20,7 @@ The information you add or edit will be saved into the target obsidian note.
 - Order column ascending/descending
 #### Filters
 - Global filters
-![GlobalFilter.mov](docs/resources/GlobalFilter.mov)
+![GlobalFilter.gif](docs/resources/GlobalFilter.gif)
 
 ### Whats inside the database view?
 Database view read the yaml configuration inside .md file and render a react DOM.
