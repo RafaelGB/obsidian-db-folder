@@ -13,6 +13,7 @@ import PlusIcon from 'components/img/Plus';
 import { ActionTypes, DataTypes, MAX_CAPACITY_DATABASE } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
+import ReactDOM from 'react-dom';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
@@ -42,6 +43,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
   const [expanded, setExpanded] = useState(created || false);
+  const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [isMetadata, setIsMetadata] = useState(headerProps.column.isMetadata);
   const [popperElement, setPopperElement] = useState(null);
@@ -55,6 +57,11 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
+
+  React.useEffect(() => {
+    setDomReady(true)
+  })
+  
   const buttons = [
     {
       onClick: (e:any) => {
@@ -290,7 +297,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
         {labelState}
       </div>
       <div {...getResizerProps()} className='resizer' />
-      {!isMetadata && renderHeaderOptions()}
+      {(!isMetadata && domReady) ? ReactDOM.createPortal(renderHeaderOptions(),document.getElementById('popper-container')) : null}
     </>
   ) : (
       <div

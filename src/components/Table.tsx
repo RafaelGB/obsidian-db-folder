@@ -35,6 +35,7 @@ const defaultColumn = {
   sortType: 'alphanumericFalsyLast',
 };
 
+// TODO add typing
 const getItemStyle = (styleProps:any) => ({
   ...styleProps.draggableStyle,
   // some basic styles to make the items look a bit nicer
@@ -85,7 +86,7 @@ export function Table(initialState: TableDataType){
   /** Sort columns */
   const sortTypes = React.useMemo(
     () => ({
-      alphanumericFalsyLast(rowA:any, rowB:any, columnId:any, desc:boolean) {
+      alphanumericFalsyLast(rowA:any, rowB:any, columnId:string, desc:boolean) {
         if (!rowA.values[columnId] && !rowB.values[columnId]) {
           return 0;
         }
@@ -188,6 +189,7 @@ export function Table(initialState: TableDataType){
     headerGroups,
     rows,
     prepareRow,
+    // Debug proposes only
     state,
     preGlobalFilteredRows,
     setGlobalFilter,
@@ -250,7 +252,16 @@ export function Table(initialState: TableDataType){
                     setColumnOrder(colOrder);
                   }
                 }}
-                onDragEnd={() => {
+                onDragEnd={(result,provided) => {
+                  console.log(`result: ${result} provided: ${provided}`);
+                  // index of the source before the drop
+                  const sourceId=allColumns[result.source.index].id;
+                  // index of the destination after the drop
+                  const destinationId=allColumns[result.destination.index].id;
+                  // save on disk
+                  const columnIdArrays:string[] = allColumns.filter((column:any)=>!column.isMetadata).map((o:any) => o.id);
+                  initialState.diskConfig.reorderColumns(columnIdArrays);
+                  // clear the current order
                   currentColOrder.current = null;
                 }}
               >

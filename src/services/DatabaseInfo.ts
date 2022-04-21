@@ -78,6 +78,20 @@ export default class DatabaseInfo {
         this.yaml.columns[columnId] = currentCol;
         await this.saveOnDisk();
     }
+    
+    /**
+     * Given an array of column ids, reorder yaml columns to match the order of the array
+     * @param columnIds 
+     */
+    async reorderColumns(columnIds:string[]):Promise<void>{
+        const newColumns:Record<string,DatabaseColumn> = {};
+        columnIds.forEach((columnId,index) => {
+            console.log(`columnId:${columnId} index:${index}`);
+            newColumns[index+1] = this.yaml.columns[columnId];
+        });
+        this.yaml.columns = newColumns;
+        await this.saveOnDisk();
+    }
 
     async removeColumn(columnId:string):Promise<void>{
         delete this.yaml.columns[columnId];
