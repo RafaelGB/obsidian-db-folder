@@ -14,7 +14,7 @@ import { ActionTypes, DataTypes, MAX_CAPACITY_DATABASE } from 'helpers/Constants
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 
-function setOptionsOfSelectDataType(options:any[],rows:any,columnId:number):any[]{
+function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
     const rowValue = row.values[columnId];
     let match = options.find((option: { label: any; }) => option.label === rowValue);
@@ -283,7 +283,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     );
   }
   LOGGER.debug(`<=Header ${headerProps.column.label}`);
-  return id !== MAX_CAPACITY_DATABASE ? (
+  return id !== `${MAX_CAPACITY_DATABASE}` ? (
     <>
       <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
         <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>

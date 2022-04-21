@@ -239,8 +239,6 @@ export function Table(initialState: TableDataType){
                 currentColOrder.current = allColumns.map((o:any) => o.id);
                 }}
                 onDragUpdate={(dragUpdateObj, b) => {
-                  // console.log("onDragUpdate", dragUpdateObj, b);
-
                   const colOrder = [...currentColOrder.current];
                   const sIndex = dragUpdateObj.source.index;
                   const dIndex =
@@ -250,13 +248,6 @@ export function Table(initialState: TableDataType){
                     colOrder.splice(sIndex, 1);
                     colOrder.splice(dIndex, 0, dragUpdateObj.draggableId);
                     setColumnOrder(colOrder);
-
-                    // console.log(
-                    //   "onDragUpdate",
-                    //   dragUpdateObj.destination.index,
-                    //   dragUpdateObj.source.index
-                    // );
-                    // console.log(temp);
                   }
                 }}
                 onDragEnd={() => {
@@ -279,15 +270,6 @@ export function Table(initialState: TableDataType){
                       isDragDisabled={!(column as any).accessor}
                     >
                       {(provided, snapshot) => {
-                        console.log(`columnId:${column.id} index:${index}`);
-
-                        // const {
-                        //   style,
-                        //   ...extraProps
-                        // } = column.getHeaderProps();
-
-                        // console.log(style, extraProps);
-
                         return (
                           <div
                             {...column.getHeaderProps()}

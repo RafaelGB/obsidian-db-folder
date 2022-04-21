@@ -54,7 +54,7 @@ async function columnOptions(columnId:number, column:DatabaseColumn):Promise<Tab
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = [];
   const tableRow: TableColumn = {
-    id: columnId,
+    id: `${columnId}`,
     label: column.label,
     key: column.key ?? column.label.trim(),
     accessor: column.accessor ?? column.label.trim().toLowerCase(),

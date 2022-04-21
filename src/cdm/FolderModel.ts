@@ -30,7 +30,7 @@ export type Models = {
 }
 
 export type TableColumn = {
-    id: number,
+    id: string,
     Header?: any,
     label?: string,
     key: string,
