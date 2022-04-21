@@ -1,5 +1,15 @@
 import * as React from "react";
-import { useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from 'react-table';
+import { 
+  useTable, 
+  TableInstance, 
+  useFlexLayout, 
+  useResizeColumns, 
+  useSortBy, 
+  useGlobalFilter, 
+  useColumnOrder, 
+  useFilters 
+} from 'react-table';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import clsx from "clsx";
 import { 
   TableDataType,
@@ -24,6 +34,20 @@ const defaultColumn = {
   Header: Header,
   sortType: 'alphanumericFalsyLast',
 };
+
+const getItemStyle = (styleProps:any) => ({
+  ...styleProps.draggableStyle,
+  // some basic styles to make the items look a bit nicer
+  userSelect: "none",
+
+  // change background colour if dragging
+  background: styleProps.dragableProps.isDragging ? "lightgreen" : "grey",
+
+  ...(!styleProps.dragableProps.isDragging && { transform: "translate(0,0)" }),
+  ...(styleProps.dragableProps.isDropAnimating && { transitionDuration: "0.001s" })
+
+  // styles we need to apply on draggables
+});
 
 function useInstance(instance:TableInstance<any>) {
   const { allColumns } = instance;
@@ -166,7 +190,9 @@ export function Table(initialState: TableDataType){
     prepareRow,
     state,
     preGlobalFilteredRows,
-    setGlobalFilter
+    setGlobalFilter,
+    allColumns,
+    setColumnOrder
   } = useTable(
     // Table properties
     propsUseTable,
@@ -176,6 +202,7 @@ export function Table(initialState: TableDataType){
     useFilters, 
     useGlobalFilter,
     useSortBy,
+    useColumnOrder,
     hooks => {
       hooks.useInstance.push(useInstance);
     }
@@ -191,6 +218,8 @@ export function Table(initialState: TableDataType){
   
       return false;
     }
+    // Manage DnD
+    const currentColOrder = React.useRef(null);
     // Manage input of new row
     const [inputNewRow, setInputNewRow] = React.useState('');
     const newRowRef = React.useRef(null);
@@ -205,13 +234,90 @@ export function Table(initialState: TableDataType){
           <div>
             {/** Headers */}
             {headerGroups.map((headerGroup,i) => (
-              <div {...headerGroup.getHeaderGroupProps()} className='tr'>
-                {headerGroup.headers.map((column) => (
-                  <div {...column.getHeaderProps()} className='th noselect'>
-                    {column.render("Header")}
+              <DragDropContext
+                onDragStart={() => {
+                currentColOrder.current = allColumns.map((o:any) => o.id);
+                }}
+                onDragUpdate={(dragUpdateObj, b) => {
+                  // console.log("onDragUpdate", dragUpdateObj, b);
+
+                  const colOrder = [...currentColOrder.current];
+                  const sIndex = dragUpdateObj.source.index;
+                  const dIndex =
+                    dragUpdateObj.destination && dragUpdateObj.destination.index;
+
+                  if (typeof sIndex === "number" && typeof dIndex === "number") {
+                    colOrder.splice(sIndex, 1);
+                    colOrder.splice(dIndex, 0, dragUpdateObj.draggableId);
+                    setColumnOrder(colOrder);
+
+                    // console.log(
+                    //   "onDragUpdate",
+                    //   dragUpdateObj.destination.index,
+                    //   dragUpdateObj.source.index
+                    // );
+                    // console.log(temp);
+                  }
+                }}
+                onDragEnd={() => {
+                  currentColOrder.current = null;
+                }}
+              >
+              <Droppable droppableId="droppable" direction="horizontal">
+                {(droppableProvided, snapshot) => (
+                  <div 
+                    {...headerGroup.getHeaderGroupProps()} 
+                    ref={droppableProvided.innerRef}
+                    className='tr'
+                  >
+                    {headerGroup.headers.map((column,index) => (
+                      
+                      <Draggable
+                      key={`${column.id}`}
+                      draggableId={`${column.id}`}
+                      index={index}
+                      isDragDisabled={!(column as any).accessor}
+                    >
+                      {(provided, snapshot) => {
+                        console.log(`columnId:${column.id} index:${index}`);
+
+                        // const {
+                        //   style,
+                        //   ...extraProps
+                        // } = column.getHeaderProps();
+
+                        // console.log(style, extraProps);
+
+                        return (
+                          <div
+                            {...column.getHeaderProps()}
+                            className='th noselect'
+                          >
+                            <div
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              // {...extraProps}
+                              ref={provided.innerRef}
+                              style={{
+                                ...getItemStyle({
+                                  dragableProps: snapshot,
+                                  draggableStyle: provided.draggableProps.style
+                                })
+                                // ...style
+                              }}
+                            >
+                              {column.render("Header")}
+                            </div>
+                          </div>
+                        );
+                      }}
+                    </Draggable>
+                  ))}
+                    {droppableProvided.placeholder}
                   </div>
-                ))}
-              </div>
+                )}
+              </Droppable>
+            </DragDropContext>
             ))}
             {/** Global filter */}
             <div className='tr'>
@@ -271,6 +377,9 @@ export function Table(initialState: TableDataType){
               </div>
             </div>
           </div>
+          <pre>
+            <code>{JSON.stringify(state, null, 2)}</code>
+          </pre>
         </div>
       </>
     );

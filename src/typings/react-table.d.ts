@@ -4,6 +4,7 @@ import 'react-table';
 declare module 'react-table'{
     export interface UseTableInstanceProps<D extends object> {
         preGlobalFilteredRows:any,
-        setGlobalFilter:any
+        setGlobalFilter:any,
+        setColumnOrder:any
     }
 }
