@@ -1,4 +1,4 @@
-import { ActionTypes, DataTypes, MetadataColumns, UpdateRowOptions } from "helpers/Constants";
+import { ActionTypes, DataTypes, UpdateRowOptions } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
 import { LOGGER } from "services/Logger";
