@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy } from 'react-table';
+import { useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from 'react-table';
 import clsx from "clsx";
 import { 
   TableDataType,
@@ -14,6 +14,7 @@ import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
 import Header from "components/Header";
+import GlobalFilter from "components/reducers/GlobalFilter";
 
 const defaultColumn = {
   minWidth: 50,
@@ -162,13 +163,18 @@ export function Table(initialState: TableDataType){
     getTableBodyProps,
     headerGroups,
     rows,
-    prepareRow
+    prepareRow,
+    state,
+    preGlobalFilteredRows,
+    setGlobalFilter
   } = useTable(
     // Table properties
     propsUseTable,
     // React hooks
     useFlexLayout,
     useResizeColumns,
+    useFilters, 
+    useGlobalFilter,
     useSortBy,
     hooks => {
       hooks.useInstance.push(useInstance);
@@ -197,7 +203,8 @@ export function Table(initialState: TableDataType){
         onClick={onClick}
         >
           <div>
-          {headerGroups.map((headerGroup,i) => (
+            {/** Headers */}
+            {headerGroups.map((headerGroup,i) => (
               <div {...headerGroup.getHeaderGroupProps()} className='tr'>
                 {headerGroup.headers.map((column) => (
                   <div {...column.getHeaderProps()} className='th noselect'>
@@ -206,7 +213,24 @@ export function Table(initialState: TableDataType){
                 ))}
               </div>
             ))}
+            {/** Global filter */}
+            <div className='tr'>
+              <div
+                className='th'
+                key="global-filter"
+                style={{
+                  textAlign: 'left',
+                }}
+              >
+                <GlobalFilter
+                  preGlobalFilteredRows={preGlobalFilteredRows}
+                  globalFilter={(state as any).globalFilter}
+                  setGlobalFilter={setGlobalFilter}
+                />
+              </div>
+            </div>
           </div>
+          {/** Body */}
           <div {...getTableBodyProps()}>
             {rows.map((row, i) => {
               prepareRow(row);

@@ -8,7 +8,20 @@ Database has its own type of view. It will search all notes into the same folder
 
 The information you add or edit will be saved into the target obsidian note.
 
+### Features
+#### Rows
+- Add new row
 ![AddNewRow.mov](docs/resources/AddNewRow.mov)
+- Edit cells directly on table
+#### Headers
+- Add new column
+- Edit label of existed column
+- Delete column
+- Order column ascending/descending
+#### Filters
+- Global filters
+![GlobalFilter.mov](docs/resources/GlobalFilter.mov)
+
 ### Whats inside the database view?
 Database view read the yaml configuration inside .md file and render a react DOM.
 
@@ -45,4 +58,3 @@ columns:
     key: Calification
 %%>
 ```
-
