@@ -189,7 +189,7 @@ export function Table(initialState: TableDataType){
     headerGroups,
     rows,
     prepareRow,
-    // Debug proposes only
+    // Debug proposes & metainfo
     state,
     preGlobalFilteredRows,
     setGlobalFilter,
@@ -253,7 +253,6 @@ export function Table(initialState: TableDataType){
                   }
                 }}
                 onDragEnd={() => {
-                  console.log(`columnOrder: ${JSON.stringify((state as any).columnOrder)}`);
                   // save on disk
                   initialState.diskConfig.reorderColumns((state as any).columnOrder);
                   // clear the current order
