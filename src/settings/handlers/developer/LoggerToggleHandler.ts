@@ -24,7 +24,8 @@ export class LoggerToggleHandler extends AbstractSettingsHandler {
                 this.settingTitle, 
                 "This will log all the errors and warnings in the console",
                 settingsManager.plugin.settings.global_settings.enable_debug_mode, 
-                debug_togle_promise);
+                debug_togle_promise
+            );
         }
         // Check next handler
         if (this.nextHandler) {
