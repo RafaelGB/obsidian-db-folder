@@ -108,4 +108,11 @@ export default class DatabaseInfo {
         this.yaml.columns[columnId] = properties;
         await this.saveOnDisk();
     }
+
+    async updateConfig(config:Record<string,any>):Promise<void>{
+        for (let key in config) {
+            this.yaml.config[key] = config[key];
+        }
+        await this.saveOnDisk();
+    }
 }

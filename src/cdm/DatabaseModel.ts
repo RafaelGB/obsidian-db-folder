@@ -20,4 +20,7 @@ export type DatabaseYaml = {
     description: string,
     /** database columns */
     columns: Record<string, DatabaseColumn>
+    /** database local configuration 
+     * TODO typing*/
+    config?: Record<string, any>
 }

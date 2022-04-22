@@ -241,7 +241,7 @@ export function Table(initialState: TableDataType){
                 }}
                 onDragEnd={() => {
                   // save on disk
-                  initialState.diskConfig.reorderColumns((state as any).columnOrder);
+                  initialState.view.diskConfig.reorderColumns((state as any).columnOrder);
                   // clear the current order
                   currentColOrder.current = null;
                 }}

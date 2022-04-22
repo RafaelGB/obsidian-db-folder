@@ -76,7 +76,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           // trim label will get a valid yaml key
           const update_col_key:string = action.label.trim();
           // Update configuration on disk
-          state.diskConfig.updateColumnProperties(
+          state.view.diskConfig.updateColumnProperties(
             action.columnId,
             {label: action.label, accessor: update_col_key, key: update_col_key}
           );
@@ -108,7 +108,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
                 column => column.id === action.columnId
             );
             // Update configuration on disk
-            state.diskConfig.updateColumnProperties(action.columnId, {input: action.dataType});
+            state.view.diskConfig.updateColumnProperties(action.columnId, {input: action.dataType});
             // Update state
             switch (action.dataType) {
                 case DataTypes.NUMBER:
@@ -217,7 +217,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             position: leftId
           };
           // Update configuration on disk
-          state.diskConfig.addColumn(`newColumn${leftId}`, newLeftColumn);
+          state.view.diskConfig.addColumn(`newColumn${leftId}`, newLeftColumn);
           
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
@@ -262,7 +262,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             label: `new Column ${rightId}`
           };
           // Update configuration on disk
-          state.diskConfig.addColumn(rightId, newRIghtColumn);
+          state.view.diskConfig.addColumn(rightId, newRIghtColumn);
           
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
@@ -294,7 +294,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
             (column) => column.id === action.columnId
           );
           // Update configuration on disk
-          state.diskConfig.removeColumn(action.columnId);
+          state.view.diskConfig.removeColumn(action.columnId);
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
               row.note.getFile(),

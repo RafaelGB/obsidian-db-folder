@@ -58,6 +58,6 @@ export function makeData(count:number):TableDataType {
         options: options,
       }
     ];
-    return { columns: columns, metadataColumns:[], data: data, skipReset: false, diskConfig:null, view:null };
+    return { columns: columns, metadataColumns:[], data: data, skipReset: false, view:null };
   }
   

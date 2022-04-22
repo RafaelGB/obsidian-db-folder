@@ -59,8 +59,7 @@ export type TableDataType={
     skipReset: boolean,
     view: DatabaseView,
     stateManager?: StateManager,
-    dispatch?: Dispatch<any>,
-    diskConfig: DatabaseInfo
+    dispatch?: Dispatch<any>
 }
 export interface DatabaseHeaderProps{
     columns:any,

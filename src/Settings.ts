@@ -61,19 +61,27 @@ export interface SettingsManagerConfig {
       this.config = config;
       this.settings = settings;
     }
-    constructUI(containerEl: HTMLElement, heading: string, local: boolean) {
+
+    /**
+     * Render settings window
+     * @param containerEl 
+     * @param heading 
+     * @param local 
+     * @param view optional. Used only for local settings
+     */
+    constructUI(containerEl: HTMLElement, heading: string, local: boolean,view?: DatabaseView) {
         /** Common modal headings */
         containerEl.empty();
         containerEl.addClass('database-settings-modal');
         add_setting_header(containerEl,heading,'h2');
         const settingsBody:HTMLDivElement = containerEl.createDiv('database-settings-body');
-        this.constructSettingBody(settingsBody, local);
+        this.constructSettingBody(settingsBody, local, view);
     }
 
-    constructSettingBody(containerEl: HTMLElement, local: boolean) {
+    constructSettingBody(containerEl: HTMLElement, local: boolean, view?: DatabaseView) {
       containerEl.empty();
       /** Developer section */
-      developer_settings_section(this, containerEl, local);
+      developer_settings_section(this, containerEl, local, view);
     }
     cleanUp() {
         this.cleanupFns.forEach((fn) => fn());

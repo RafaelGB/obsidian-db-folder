@@ -50,7 +50,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '  key: column1',
     '  accessor: column1',
     '  label: Column 1',
-    '%%>'
+    '  position: 0',
   ].join('\n')
 });
 
