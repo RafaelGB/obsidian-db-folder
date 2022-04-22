@@ -25,6 +25,7 @@ import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
 import Header from "components/Header";
 import GlobalFilter from "components/reducers/GlobalFilter";
+import DraggableStyle from "components/styles/DragableStyle";
 
 const defaultColumn = {
   minWidth: 50,
@@ -34,21 +35,6 @@ const defaultColumn = {
   Header: Header,
   sortType: 'alphanumericFalsyLast',
 };
-
-// TODO add typing
-const getItemStyle = (styleProps:any) => ({
-  ...styleProps.draggableStyle,
-  // some basic styles to make the items look a bit nicer
-  userSelect: "none",
-
-  // change background colour if dragging
-  background: styleProps.dragableProps.isDragging ? "lightgreen" : "grey",
-
-  ...(!styleProps.dragableProps.isDragging && { transform: "translate(0,0)" }),
-  ...(styleProps.dragableProps.isDropAnimating && { transitionDuration: "0.001s" })
-
-  // styles we need to apply on draggables
-});
 
 function useInstance(instance:TableInstance<any>) {
   const { allColumns } = instance;
@@ -237,6 +223,7 @@ export function Table(initialState: TableDataType){
             {/** Headers */}
             {headerGroups.map((headerGroup,i) => (
               <DragDropContext
+                key={`DragDropContext-${i}`}
                 onDragStart={() => {
                 currentColOrder.current = allColumns.map((o:any) => o.id);
                 }}
@@ -259,7 +246,7 @@ export function Table(initialState: TableDataType){
                   currentColOrder.current = null;
                 }}
               >
-              <Droppable droppableId="droppable" direction="horizontal">
+              <Droppable key={`Droppable-${i}`} droppableId="droppable" direction="horizontal">
                 {(droppableProvided, snapshot) => (
                   <div 
                     {...headerGroup.getHeaderGroupProps()} 
@@ -269,7 +256,7 @@ export function Table(initialState: TableDataType){
                     {headerGroup.headers.map((column,index) => (
                       
                       <Draggable
-                      key={`${column.id}`}
+                      key={`Draggable-${column.id}`}
                       draggableId={`${column.id}`}
                       index={index}
                       isDragDisabled={!(column as any).accessor}
@@ -286,7 +273,7 @@ export function Table(initialState: TableDataType){
                               // {...extraProps}
                               ref={provided.innerRef}
                               style={{
-                                ...getItemStyle({
+                                ...DraggableStyle({
                                   dragableProps: snapshot,
                                   draggableStyle: provided.draggableProps.style
                                 })

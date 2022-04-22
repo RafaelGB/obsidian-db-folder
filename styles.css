@@ -285,3 +285,16 @@ html {
 .flex-1 {
   flex: 1;
 }
+
+/**
+*  Custom Styles
+*/
+.dbfolder-table-container {
+  flex: 1 1 auto;
+  padding: 1rem;
+  max-width: 1000;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
+  display: flex;
+}

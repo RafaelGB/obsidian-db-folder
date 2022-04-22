@@ -45,7 +45,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '',
     '<%%',
     'columns:',
-    ' 0:',
+    ' column1:',
     '  input: text',
     '  key: column1',
     '  accessor: column1',
@@ -61,6 +61,9 @@ export const UpdateRowOptions = Object.freeze({
   ADD_COLUMN: 'add_column'
 });
 
+export const StyleClasses = Object.freeze({
+  TABLE_CONTAINER: 'dbfolder-table-container',
+});
 export function shortId() {
   return '_' + Math.random().toString(36).substring(2, 9);
 }

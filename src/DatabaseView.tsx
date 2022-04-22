@@ -1,7 +1,7 @@
 import { TableDataType } from 'cdm/FolderModel';
 import { obtainColumnsFromFolder, obtainMetadataColumns} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
-import { DatabaseCore, DataTypes } from 'helpers/Constants';
+import { DatabaseCore, DataTypes, StyleClasses } from 'helpers/Constants';
 import { adapterTFilesToRows } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
 
@@ -124,7 +124,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       }
       
       let table = createDatabase(tableProps);
-      this.tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
+      this.tableContainer  = this.contentEl.createDiv(StyleClasses.TABLE_CONTAINER);
       ReactDOM.render(table, this.tableContainer);
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     }
