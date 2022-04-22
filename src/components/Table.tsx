@@ -252,15 +252,10 @@ export function Table(initialState: TableDataType){
                     setColumnOrder(colOrder);
                   }
                 }}
-                onDragEnd={(result,provided) => {
-                  console.log(`result: ${result} provided: ${provided}`);
-                  // index of the source before the drop
-                  const sourceId=allColumns[result.source.index].id;
-                  // index of the destination after the drop
-                  const destinationId=allColumns[result.destination.index].id;
+                onDragEnd={() => {
+                  console.log(`columnOrder: ${JSON.stringify((state as any).columnOrder)}`);
                   // save on disk
-                  const columnIdArrays:string[] = allColumns.filter((column:any)=>!column.isMetadata).map((o:any) => o.id);
-                  initialState.diskConfig.reorderColumns(columnIdArrays);
+                  initialState.diskConfig.reorderColumns((state as any).columnOrder);
                   // clear the current order
                   currentColOrder.current = null;
                 }}

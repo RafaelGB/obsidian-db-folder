@@ -54,7 +54,7 @@ export default class DatabaseInfo {
     }
     
     /**
-     * modify column key and save it on disk
+     * modify column key
      * @param oldColumnId 
      * @param newColumnId 
      */
@@ -70,6 +70,11 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
+    /**
+     * Modify or add properties to a column
+     * @param columnId 
+     * @param properties 
+     */
     async updateColumnProperties(columnId:string, properties:Record<string,any>):Promise<void>{
         const currentCol = this.yaml.columns[columnId];
         for (let key in properties) {
@@ -84,12 +89,13 @@ export default class DatabaseInfo {
      * @param columnIds 
      */
     async reorderColumns(columnIds:string[]):Promise<void>{
-        const newColumns:Record<string,DatabaseColumn> = {};
-        columnIds.forEach((columnId,index) => {
-            console.log(`columnId:${columnId} index:${index}`);
-            newColumns[index+1] = this.yaml.columns[columnId];
+        let id = 0;
+        columnIds.forEach((columnId) => {
+            // Filter out columns that are not in the list
+            if(this.yaml.columns[columnId]){
+                this.yaml.columns[columnId].position = ++id;
+            }
         });
-        this.yaml.columns = newColumns;
         await this.saveOnDisk();
     }
 
