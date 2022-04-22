@@ -259,7 +259,7 @@ export function Table(initialState: TableDataType){
                       key={`Draggable-${column.id}`}
                       draggableId={`${column.id}`}
                       index={index}
-                      isDragDisabled={!(column as any).accessor}
+                      isDragDisabled={(column as any).isMetadata}
                     >
                       {(provided, snapshot) => {
                         return (

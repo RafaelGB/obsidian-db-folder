@@ -295,6 +295,5 @@ html {
   max-width: 1000;
   margin-left: auto;
   margin-right: auto;
-  overflow: auto;
   display: flex;
 }

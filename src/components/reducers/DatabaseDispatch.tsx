@@ -207,16 +207,17 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           const leftIndex = state.columns.findIndex(
             (column) => column.id === action.columnId
           );
-          const leftId = `${state.columns.length+1-state.metadataColumns.length}`;
+          const leftId = state.columns.length+1-state.metadataColumns.length;
           
           const newLeftColumn:DatabaseColumn={
             input: DataTypes.TEXT,
-            accessor: leftId,
+            accessor: `newColumn${leftId}`,
             key: `newColumn${leftId}`,
-            label: `new Column ${leftId}`
+            label: `new Column ${leftId}`,
+            position: leftId
           };
           // Update configuration on disk
-          state.diskConfig.addColumn(leftId, newLeftColumn);
+          state.diskConfig.addColumn(`newColumn${leftId}`, newLeftColumn);
           
           Promise.all(state.data.map(async (row:TableRow) => {
             updateRowFile(
