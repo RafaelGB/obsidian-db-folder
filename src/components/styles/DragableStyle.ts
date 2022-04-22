@@ -5,7 +5,7 @@ const DraggableStyle = (styleProps:any) => ({
     userSelect: "none",
   
     // change background colour if dragging
-    background: styleProps.dragableProps.isDragging ? "lightgreen" : "grey",
+    // background: styleProps.dragableProps.isDragging ? "lightgreen" : "grey",
   
     ...(!styleProps.dragableProps.isDragging && { transform: "translate(0,0)" }),
     ...(styleProps.dragableProps.isDropAnimating && { transitionDuration: "0.001s" })

@@ -5,15 +5,27 @@ import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 
+interface GlobalSettings {
+  enable_debug_mode: boolean;
+  logger_level_info: string;
+}
 
+interface LocalSettings {
+  enable_show_state: boolean;
+}
 export interface DatabaseSettings {
-    enable_debug_mode: boolean;
-    logger_level_info: string;
+  global_settings: GlobalSettings;
+  local_settings: LocalSettings;
 }
 
 export const DEFAULT_SETTINGS: DatabaseSettings = {
+  global_settings:{
     enable_debug_mode: false,
-    logger_level_info: "error"
+    logger_level_info: 'error'
+  },
+  local_settings:{
+    enable_show_state: false
+  }
 };
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
@@ -117,6 +129,6 @@ export class DBFolderSettingTab extends PluginSettingTab {
 
 export function loadServicesThatRequireSettings(settings: DatabaseSettings) {
   /** Init logger */
-    LOGGER.setDebugMode(settings.enable_debug_mode);
-    LOGGER.setLevelInfo(settings.logger_level_info);
+    LOGGER.setDebugMode(settings.global_settings.enable_debug_mode);
+    LOGGER.setLevelInfo(settings.global_settings.logger_level_info);
 }

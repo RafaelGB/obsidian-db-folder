@@ -1,8 +1,8 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler } from 'settings/handlers/AbstractSettingHandler';
-import { DebugToggleHandler } from 'settings/handlers/DebugToggleSettingHandler';
+import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
 import { SettingsManager } from 'Settings';
-import { DropDownLevelInfoHandler } from 'settings/handlers/DropDownLevelInfoHandler';
+import { LoggerLevelInfoDropDownHandler } from 'settings/handlers/developer/LoggerLevelInfoDropDownHandler';
 
 /**
      * developer settings section
@@ -27,7 +27,7 @@ export function developer_settings_section(settingsManager: SettingsManager, con
  */
  function getHandlers(): SettingHandler[] {
     return [
-        new DebugToggleHandler(),
-        new DropDownLevelInfoHandler()
+        new LoggerToggleHandler(),
+        new LoggerLevelInfoDropDownHandler()
     ];
 }
