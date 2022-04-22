@@ -110,7 +110,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     async initDatabase(): Promise<void> {
       LOGGER.info(`=>initDatabase ${this.file.path}`);
       this.diskConfig = new DatabaseInfo(this.file);
-      await this.diskConfig.initDatabaseconfigYaml();
+      await this.diskConfig.initDatabaseconfigYaml(this.plugin.settings.local_settings);
       const columns = await obtainColumnsFromFolder(this.diskConfig.yaml.columns);
       const metatadaColumns = await obtainMetadataColumns();
       columns.push(...metatadaColumns);

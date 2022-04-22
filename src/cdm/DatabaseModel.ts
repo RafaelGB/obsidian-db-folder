@@ -1,4 +1,5 @@
 import { RowType } from "cdm/RowTypeModel"
+import { LocalSettings } from "Settings"
 
 /** database column */
 export type DatabaseColumn = {
@@ -22,5 +23,5 @@ export type DatabaseYaml = {
     columns: Record<string, DatabaseColumn>
     /** database local configuration 
      * TODO typing*/
-    config?: Record<string, any>
+    config?: LocalSettings
 }

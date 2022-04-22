@@ -11,7 +11,7 @@ export class TableStateToggleHandler extends AbstractSettingsHandler {
                 // Check context to define correct promise
                 if(local){
                     // Persist value
-                    view .diskConfig.updateConfig({enable_show_state: value});
+                    view .diskConfig.updateConfig('enable_show_state', value);
                 }else{
                     // switch table state on/off
                     const update_local_settings = settingsManager.plugin.settings.local_settings;
@@ -22,17 +22,18 @@ export class TableStateToggleHandler extends AbstractSettingsHandler {
                     });
                 }
             }
+
             add_toggle(
                 containerEl,
                 this.settingTitle, 
                 "This will show/hide properties of the table on the bottom of the view",
-                settingsManager.plugin.settings.local_settings.enable_show_state, 
+                local ? view.diskConfig.yaml.config.enable_show_state : settingsManager.plugin.settings.local_settings.enable_show_state, 
                 table_state_togle_promise
             );
         }
         // Check next handler
         if (this.nextHandler) {
-            return this.nextHandler.handle(settingsManager, containerEl, local);
+            return this.nextHandler.handle(settingsManager, containerEl, local, view);
         }
         return this.listOfErrors;
     }

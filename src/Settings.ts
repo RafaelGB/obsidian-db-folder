@@ -10,7 +10,7 @@ interface GlobalSettings {
   logger_level_info: string;
 }
 
-interface LocalSettings {
+export interface LocalSettings {
   enable_show_state: boolean;
 }
 export interface DatabaseSettings {
@@ -109,7 +109,7 @@ export class SettingsModal extends Modal {
   
       modalEl.addClass('database-settings-modal');
   
-      this.settingsManager.constructUI(contentEl, this.view.file.basename, true);
+      this.settingsManager.constructUI(contentEl, this.view.file.basename, true, this.view);
     }
   
     onClose() {

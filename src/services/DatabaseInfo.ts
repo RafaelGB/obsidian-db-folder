@@ -7,6 +7,7 @@ import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { convertDatabaseYamlToParsedString, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import { NoteContentAction } from 'cdm/FolderModel';
+import { LocalSettings } from 'Settings';
 
 export default class DatabaseInfo {
     private file: TFile;
@@ -20,7 +21,7 @@ export default class DatabaseInfo {
      * @param file 
      * @returns 
      */
-    async initDatabaseconfigYaml():Promise<void> {
+    async initDatabaseconfigYaml(default_local_settings:LocalSettings):Promise<void> {
         LOGGER.info(`=>initDatabaseconfigYaml`,`file:${this.file.path}`);
         const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
         if (!databaseRaw || !hasFrontmatterKey(databaseRaw))  throw new Error('No frontmatter found');
@@ -32,6 +33,8 @@ export default class DatabaseInfo {
         }
         const frontmatterRaw = match[1];
         this.yaml = parseYaml(frontmatterRaw);
+        // Add default config in case of does not exist on file yet
+        if(!this.yaml.config) this.yaml.config = default_local_settings;
         LOGGER.info(`<=initDatabaseconfigYaml`);
     }
     /**
@@ -109,10 +112,8 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
-    async updateConfig(config:Record<string,any>):Promise<void>{
-        for (let key in config) {
-            this.yaml.config[key] = config[key];
-        }
+    async updateConfig<K extends keyof LocalSettings>(key: K, value: LocalSettings[K]): Promise<void> {
+        this.yaml.config[key] = value;
         await this.saveOnDisk();
-    }
+      }
 }

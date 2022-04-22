@@ -2,9 +2,10 @@ import { LOGGER } from "services/Logger";
 import { SettingsManager } from "Settings";
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler } from "settings/handlers/AbstractSettingHandler";
+import { DatabaseView } from "DatabaseView";
 export class LoggerToggleHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Enable developer settings. Logger will be enabled';
-    handle(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean): [string, string][] {
+    handle(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): [string, string][] {
         // pass if modal opened from local settings
         if(!local){
             const logger_togle_promise = async (value: boolean): Promise<void> => {
@@ -30,7 +31,7 @@ export class LoggerToggleHandler extends AbstractSettingsHandler {
         }
         // Check next handler
         if (this.nextHandler) {
-            return this.nextHandler.handle(settingsManager, containerEl, local);
+            return this.nextHandler.handle(settingsManager, containerEl, local, view);
         }
         
         return this.listOfErrors;
