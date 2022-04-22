@@ -297,3 +297,20 @@ html {
   margin-right: auto;
   display: flex;
 }
+
+.resizer {
+  display: inline-block;
+  width: 15px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(50%);
+  z-index: 1;
+  /* prevents from scrolling while dragging on touch devices */
+  touch-action:none;
+}
+
+.isResizing {
+  background: rgb(182, 119, 119);
+}

@@ -239,9 +239,12 @@ export function Table(initialState: TableDataType){
                     setColumnOrder(colOrder);
                   }
                 }}
-                onDragEnd={() => {
-                  // save on disk
-                  initialState.view.diskConfig.reorderColumns((state as any).columnOrder);
+                onDragEnd={(result) => {
+                  // save on disk in case of changes
+                  if(result.source.index!==result.destination!.index){
+                    initialState.view.diskConfig.reorderColumns((state as any).columnOrder);
+                  }
+                  
                   // clear the current order
                   currentColOrder.current = null;
                 }}
@@ -281,6 +284,14 @@ export function Table(initialState: TableDataType){
                               }}
                             >
                               {column.render("Header")}
+                              {/* Use column.getResizerProps to hook up the events correctly */}
+                              <div
+                                {...(column as any).getResizerProps()}
+                                key={`resizer-${column.id}`}
+                                className={`resizer ${
+                                  (column as any).isResizing ? 'isResizing' : ''
+                                }`}
+                              />
                             </div>
                           </div>
                         );
