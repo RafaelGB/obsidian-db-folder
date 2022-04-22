@@ -45,7 +45,7 @@ export default class DatabaseInfo {
         const configRegex = new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`,"g");
         const databaseFilePath = this.file.path;
         const databaseConfigUpdated = convertDatabaseYamlToParsedString(this.yaml).join("\n");
-        let noteObject:NoteContentAction = {
+        const noteObject:NoteContentAction = {
             action: 'replace',
             file: this.file,
             regexp: configRegex,
@@ -80,7 +80,7 @@ export default class DatabaseInfo {
      */
     async updateColumnProperties(columnId:string, properties:Record<string,any>):Promise<void>{
         const currentCol = this.yaml.columns[columnId];
-        for (let key in properties) {
+        for (const key in properties) {
             currentCol[key] = properties[key];
         }
         this.yaml.columns[columnId] = currentCol;

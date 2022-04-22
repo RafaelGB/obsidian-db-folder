@@ -300,7 +300,7 @@ html {
 
 .resizer {
   display: inline-block;
-  width: 15px;
+  width: 10px;
   height: 100%;
   position: absolute;
   right: 0;

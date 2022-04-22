@@ -36,9 +36,9 @@ export function hasFrontmatterKey(data: string) {
     databaseConfigString.push(`name: ${databaseConfig.name}`);
     databaseConfigString.push(`description: ${databaseConfig.description}`);
     databaseConfigString.push(`columns:`);
-    for (let columnName in databaseConfig.columns) {
+    for (const columnName in databaseConfig.columns) {
       databaseConfigString.push(`${yamlIndent.repeat(1)}${columnName}:`);
-      for (let columnKey in databaseConfig.columns[columnName]) {
+      for (const columnKey in databaseConfig.columns[columnName]) {
         databaseConfigString.push(`${yamlIndent.repeat(2)}${columnKey}: ${databaseConfig.columns[columnName][columnKey]}`);
       }
     }
