@@ -351,9 +351,12 @@ export function Table(initialState: TableDataType){
               </div>
             </div>
           </div>
-          <pre>
-            <code>{JSON.stringify(state, null, 2)}</code>
-          </pre>
+          {initialState.view.diskConfig.yaml.config.enable_show_state 
+          && (
+            <pre>
+              <code>{JSON.stringify(state, null, 2)}</code>
+            </pre>
+          )}
         </div>
       </>
     );
