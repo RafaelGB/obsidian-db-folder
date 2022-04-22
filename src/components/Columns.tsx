@@ -13,22 +13,22 @@ export async function obtainMetadataColumns(): Promise<TableColumn[]> {
   const columns:TableColumn[] = [];
   const metadataColumns: Record<string, DatabaseColumn> = {};
   metadataColumns[MetadataColumns.FILE]={
-      key: `${MetadataColumns.FILE}`,
+      key: MetadataColumns.FILE,
       input: DataTypes.MARKDOWN,
-      Header: `${MetadataColumns.FILE}`,
+      Header: MetadataColumns.FILE,
       label: MetadataLabels.FILE,
-      accessor: `${MetadataColumns.FILE}`,
+      accessor: MetadataColumns.FILE,
       isMetadata: true
   };
 
   metadataColumns[MetadataColumns.ADD_COLUMN]={
-    key: `${MetadataColumns.ADD_COLUMN}`,
-    Header: `${MetadataColumns.ADD_COLUMN}`,
+    key: MetadataColumns.ADD_COLUMN,
+    Header: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
     width: 20,
     disableResizing: true,
     label: '+',
-    accessor: `${MetadataColumns.ADD_COLUMN}`,
+    accessor: MetadataColumns.ADD_COLUMN,
     isMetadata: true
   }
   

@@ -10,7 +10,7 @@ import TextIcon from 'components/img/Text';
 import MultiIcon from 'components/img/Multi';
 import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
-import { ActionTypes, DataTypes, MAX_CAPACITY_DATABASE } from 'helpers/Constants';
+import { ActionTypes, DataTypes, MAX_CAPACITY_DATABASE, MetadataColumns } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 import ReactDOM from 'react-dom';
@@ -194,7 +194,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   }
 
   function handlerAddColumnToLeft(e:any) {
-    dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: 999999, focus: true})
+    dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: MetadataColumns.ADD_COLUMN, focus: true})
   }
 
   /**
@@ -290,7 +290,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     );
   }
   LOGGER.debug(`<=Header ${headerProps.column.label}`);
-  return id !== `${MAX_CAPACITY_DATABASE}` ? (
+  return id !== MetadataColumns.ADD_COLUMN ? (
     <>
       <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
         <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
