@@ -1,5 +1,5 @@
 import { AbstractYamlHandler } from 'parsers/embedYamlHandlers/AbstractYamlPropertyHandler';
-import { App, normalizePath } from "obsidian";
+import { normalizePath } from "obsidian";
 export class FolderHandler extends AbstractYamlHandler {
     handlerName: string = 'folder';
     public handle(yaml: any): [string, string][] {

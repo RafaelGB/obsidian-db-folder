@@ -15,7 +15,7 @@ export function createDatabase(tableProps:TableDataType): JSX.Element {
     );
 }
 
-function Database(tableProps:TableDataType){
+export function Database(tableProps:TableDataType){
   const [state, dataDispatch] = useReducer(databaseReducer, tableProps);
 
   useEffect(() => {
