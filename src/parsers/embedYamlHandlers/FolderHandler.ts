@@ -2,20 +2,20 @@ import { AbstractYamlHandler } from 'parsers/embedYamlHandlers/AbstractYamlPrope
 import { App, normalizePath } from "obsidian";
 export class FolderHandler extends AbstractYamlHandler {
     handlerName: string = 'folder';
-    public handle(yaml: any, app: App): [string, string][] {
+    public handle(yaml: any): [string, string][] {
         if (!yaml.folder) {
             this.addError('Folder name is not defined');
             // handle is ended if there is no folder name
             return this.listOfErrors;
         }
 
-        if (!this.checkIfFolderExist(yaml, app)) {
+        if (!this.checkIfFolderExist(yaml)) {
             // handle is ended if the folder does not exist
             return this.listOfErrors;
         }
         // Check next handler
         if (this.nextHandler) {
-            return this.nextHandler.handle(yaml, app);
+            return this.nextHandler.handle(yaml);
         }
         return this.listOfErrors;
     }
@@ -28,7 +28,7 @@ export class FolderHandler extends AbstractYamlHandler {
      * @param path
      * @param folderName 
      */
-    checkIfFolderExist(yaml: any, app: App): boolean {
+    checkIfFolderExist(yaml: any): boolean {
         // check if folder exists
         let folder_str = normalizePath(yaml.folder);
         const folder = app.vault.getAbstractFileByPath(folder_str);

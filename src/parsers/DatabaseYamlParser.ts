@@ -8,15 +8,16 @@ import { TypeHandler } from 'parsers/embedYamlHandlers/TypeHandler';
 import { TitleHandler } from 'parsers/embedYamlHandlers/TitleHandler';
 import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
+import { DatabaseYaml } from "cdm/DatabaseModel";
 /**
  * PUBLIC METHODS
  ****************/
 /**
  * Parse a string
  */
-export function parseDatabase(yamlText: string, app: App): any {
+const DatabaseYamlParser = (yamlText: string): DatabaseYaml => {
     const yaml = parseYaml(yamlText);
-    const errors = validateYaml(yaml, app);
+    const errors = validateYaml(yaml);
     if (errors.length > 0) {
         throw new DbFolderError(new ParserError("Error parsing database", errors));
     }
@@ -32,14 +33,14 @@ export function parseDatabase(yamlText: string, app: App): any {
 /**
  * Validate yaml received from input using handlers of function getHandlers
  */
-function validateYaml(yaml: any, app: App): [string, string][] {
+function validateYaml(yaml: any): [string, string][] {
     const handlers = getHandlers();
     let i = 1;
     while (i < handlers.length) {
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-    return handlers[0].handle(yaml, app);
+    return handlers[0].handle(yaml);
 }
 
 
@@ -54,3 +55,6 @@ function getHandlers(): YamlHandler[] {
         new TitleHandler()
     ];
 }
+
+// Export
+export default DatabaseYamlParser;

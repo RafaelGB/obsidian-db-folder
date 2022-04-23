@@ -11,7 +11,7 @@ import { App } from "obsidian";
 
 export class TypeHandler extends AbstractYamlHandler {
     handlerName: string = 'type';
-    public handle(yaml: any, app: App): [string, string][] {
+    public handle(yaml: any): [string, string][] {
 
         if (!yaml.type) {
             // Default type is LIST if not specified
@@ -26,7 +26,7 @@ export class TypeHandler extends AbstractYamlHandler {
 
         // Check next handler
         if (this.nextHandler) {
-            return this.nextHandler.handle(yaml,app);
+            return this.nextHandler.handle(yaml);
         }
         return this.listOfErrors;
     }

@@ -3,7 +3,7 @@ import { App } from "obsidian";
 export interface YamlHandler {
     setNext(handler: YamlHandler): YamlHandler;
 
-    handle(yaml: any, app: App): [string, string][];
+    handle(yaml: any): [string, string][];
 }
 
 export abstract class AbstractYamlHandler implements YamlHandler {
@@ -20,5 +20,5 @@ export abstract class AbstractYamlHandler implements YamlHandler {
         this.nextHandler = handler;
         return handler;
     }
-    abstract handle(yaml: any, app: App): [string, string][];
+    abstract handle(yaml: any): [string, string][];
 }

@@ -4,7 +4,7 @@ import { App } from "obsidian";
 export class TitleHandler extends AbstractYamlHandler {
     handlerName: string = 'title';
 
-    public handle(yaml: any, app: App): [string, string][]{
+    public handle(yaml: any): [string, string][]{
 
         if (!yaml.title || yaml.title.length === 0) {
             this.addError(`Title is empty or is not defined value:${yaml.title}`);
@@ -14,7 +14,7 @@ export class TitleHandler extends AbstractYamlHandler {
 
         // Check next handler
         if (this.nextHandler) {
-            return this.nextHandler.handle(yaml,app);
+            return this.nextHandler.handle(yaml);
         }
         return this.listOfErrors;
     }
