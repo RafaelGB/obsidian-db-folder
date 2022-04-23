@@ -1,4 +1,4 @@
-import { parseYaml, App } from "obsidian";
+import { parseYaml } from "obsidian";
 
 // Interface of handlers
 import { YamlHandler } from "parsers/embedYamlHandlers/AbstractYamlPropertyHandler";

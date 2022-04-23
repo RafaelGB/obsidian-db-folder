@@ -78,7 +78,7 @@ export default class DatabaseInfo {
      * @param columnId 
      * @param properties 
      */
-    async updateColumnProperties(columnId:string, properties:Record<string,any>):Promise<void>{
+    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId:string, properties:Record<string,P>):Promise<void>{
         const currentCol = this.yaml.columns[columnId];
         for (const key in properties) {
             currentCol[key] = properties[key];
