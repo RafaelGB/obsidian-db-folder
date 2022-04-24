@@ -3,6 +3,7 @@ import {TableColumn} from 'cdm/FolderModel';
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import { RowSelectOption } from 'cdm/RowSelectModel';
+import { dbTrim } from 'parsers/DatabaseParser';
 
 /**
  * Add mandatory columns to the table
@@ -58,7 +59,7 @@ async function columnOptions(columnKey:string,index:number, column:DatabaseColum
     position: column.position ?? index,
     label: column.label,
     key: column.key ?? columnKey,
-    accessor: column.accessor ?? column.label.trim().toLowerCase(),
+    accessor: column.accessor ?? dbTrim(column.label),
     isMetadata: column.isMetadata ?? false
   }
   /**

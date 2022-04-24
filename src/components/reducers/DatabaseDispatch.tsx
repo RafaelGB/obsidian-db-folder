@@ -9,6 +9,7 @@ import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement
 import { randomColor } from 'helpers/Colors';
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import NoteInfo from 'services/NoteInfo';
+import { dbTrim } from 'parsers/DatabaseParser';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
@@ -74,27 +75,20 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
               (column:any) => column.id === action.columnId
           );
           // trim label will get a valid yaml key
-          const update_col_key:string = action.label.trim();
-          // Update configuration on disk
+          const update_col_key:string = dbTrim(action.label);
+          // Update configuration & row files on disk
           state.view.diskConfig.updateColumnProperties(
             action.columnId,
-            {label: action.label, accessor: update_col_key, key: update_col_key}
+            {label: action.label, accessor: update_col_key, key: update_col_key},
+            state.data // Update all rows with new key
           );
-          Promise.all(state.data.map(async (row:TableRow) => {
-              updateRowFile(
-                row.note.getFile(),
-                action.accessor,
-                update_col_key,
-                UpdateRowOptions.COLUMN_KEY
-              );
-          }));
           // Update state
           return {
               ...state,
               skipReset: true,
               columns: [
               ...state.columns.slice(0, index),
-              { ...state.columns[index], label: action.label },
+              { ...state.columns[index], label: action.label, id: update_col_key, key: update_col_key, accessor: update_col_key },
               ...state.columns.slice(index + 1, state.columns.length)
               ]
           };
@@ -238,7 +232,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
                 label: newLeftColumn.label,
                 key: newLeftColumn.key,
                 accessor: newLeftColumn.accessor,
-                dataType: newLeftColumn.input,
+                dataType: DataTypes.TEXT,
                 created: action.focus && true,
                 options: []
               },
@@ -282,7 +276,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
                 label: newRIghtColumn.label,
                 key: newRIghtColumn.key,
                 accessor: newRIghtColumn.accessor,
-                dataType: newRIghtColumn.input,
+                dataType: DataTypes.TEXT,
                 created: action.focus && true,
                 options: []
               },
