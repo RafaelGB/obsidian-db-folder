@@ -9,19 +9,23 @@ import { DatabaseView } from 'DatabaseView';
 /**
  * developer settings section
  */
-export function developer_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
-    // title of the section
-    add_setting_header(containerEl,"Developer section",'h3');
-    // add soft red background color to the section - TODO: make it configurable
-    containerEl.style.backgroundColor = '#ffdddd';
-    // section settings
-    const handlers = getHandlers();
-    let i = 1;
-    while (i < handlers.length) {
-        handlers[i - 1].setNext(handlers[i]);
-        i++;
-    }
-  handlers[0].handle(settingsManager, containerEl, local, view);
+export function developer_settings_section(
+  settingsManager: SettingsManager,
+  containerEl: HTMLElement,
+  local: boolean
+): void {
+  // title of the section
+  add_setting_header(containerEl, "Developer section", "h3");
+  // add soft red background color to the section - TODO: make it configurable
+  containerEl.style.backgroundColor = "var(--background-modifier-error)";
+  // section settings
+  const handlers = getHandlers();
+  let i = 1;
+  while (i < handlers.length) {
+    handlers[i - 1].setNext(handlers[i]);
+    i++;
+  }
+  handlers[0].handle(settingsManager, containerEl, local);
 }
 
 /**
@@ -33,4 +37,3 @@ export function developer_settings_section(settingsManager: SettingsManager, con
         new LoggerLevelInfoDropDownHandler(),
         new TableStateToggleHandler()
     ];
-}
