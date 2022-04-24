@@ -87,8 +87,8 @@ export default class DatabaseInfo {
             colToUpdate[key] = properties[key];
         }
         this.yaml.columns[columnId] = colToUpdate;
-        await this.saveOnDisk();
         if(rows){
+        await this.updateColumnKey(columnId, colToUpdate.accessor);
         // Once the column is updated, update the rows in case the key is changed
         await Promise.all(rows.map(async (row:TableRow) => {
                 updateRowFile(
@@ -99,6 +99,7 @@ export default class DatabaseInfo {
                 );
             }));
         }
+        await this.saveOnDisk();
     }
     
     /**

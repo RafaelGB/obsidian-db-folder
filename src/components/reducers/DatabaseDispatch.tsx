@@ -88,7 +88,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
               skipReset: true,
               columns: [
               ...state.columns.slice(0, index),
-              { ...state.columns[index], label: action.label },
+              { ...state.columns[index], label: action.label, id: update_col_key, key: update_col_key, accessor: update_col_key },
               ...state.columns.slice(index + 1, state.columns.length)
               ]
           };
