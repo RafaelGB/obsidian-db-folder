@@ -25,7 +25,7 @@ import { LOGGER } from "services/Logger";
 import Cell from "components/Cell";
 import Header from "components/Header";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import DraggableStyle from "components/styles/DragableStyle";
+import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 
 const defaultColumn = {
   minWidth: 50,
@@ -208,6 +208,7 @@ export function Table(initialState: TableDataType){
     }
     // Manage DnD
     const currentColOrder = React.useRef(null);
+    const renderDraggable = useDraggableInPortal();
     // Manage input of new row
     const [inputNewRow, setInputNewRow] = React.useState('');
     const newRowRef = React.useRef(null);
@@ -249,12 +250,17 @@ export function Table(initialState: TableDataType){
                   currentColOrder.current = null;
                 }}
               >
-              <Droppable key={`Droppable-${i}`} droppableId="droppable" direction="horizontal">
+              <Droppable 
+                key={`Droppable-${i}`}
+                droppableId="droppable" 
+                direction="horizontal"
+              >
                 {(droppableProvided, snapshot) => (
                   <div 
+                    key={`div-Droppable-${i}`}
                     {...headerGroup.getHeaderGroupProps()} 
                     ref={droppableProvided.innerRef}
-                    className='tr'
+                    className='tr header-group'
                   >
                     {headerGroup.headers.map((column,index) => (
                       
@@ -264,24 +270,18 @@ export function Table(initialState: TableDataType){
                       index={index}
                       isDragDisabled={(column as any).isMetadata}
                     >
-                      {(provided, snapshot) => {
+                      {renderDraggable((provided) => {
                         return (
                           <div
                             {...column.getHeaderProps()}
-                            className='th noselect'
+                            className='th noselect header'
                           >
                             <div
+                              key={`div-Draggable-${column.id}`}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               // {...extraProps}
                               ref={provided.innerRef}
-                              style={{
-                                ...DraggableStyle({
-                                  dragableProps: snapshot,
-                                  draggableStyle: provided.draggableProps.style
-                                })
-                                // ...style
-                              }}
                             >
                               {column.render("Header")}
                               {/* Use column.getResizerProps to hook up the events correctly */}
@@ -295,7 +295,7 @@ export function Table(initialState: TableDataType){
                             </div>
                           </div>
                         );
-                      }}
+                      })}
                     </Draggable>
                   ))}
                     {droppableProvided.placeholder}
