@@ -36,7 +36,7 @@
 		"eslint": "8.13.0",
 		"jest": "27.5.1",
 		"obsidian": "0.14.6",
-		"obsidian-dataview": "0.5.13",
+		"obsidian-dataview": "0.5.16",
 		"rollup": "2.70.2",
 		"ts-jest": "27.1.4",
 		"tslib": "2.3.1",
@@ -58,5 +58,24 @@
 		"react-table": "7.7.0",
 		"react-window": "1.8.6",
 		"regenerator-runtime": "0.13.9"
-	}
+	},
+	"jest": {
+		"moduleNameMapper": {
+		  "src/(.*)": "<rootDir>/src/$1"
+		},
+		"transform": {
+		  "^.+\\.svelte$": [
+			"svelte-jester",
+			{
+			  "preprocess": true
+			}
+		  ],
+		  "^.+\\.ts$": "ts-jest"
+		},
+		"moduleFileExtensions": [
+		  "js",
+		  "ts",
+		  "svelte"
+		]
+	  }
 }
