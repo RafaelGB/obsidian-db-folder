@@ -1,5 +1,4 @@
 import {AbstractYamlHandler} from 'parsers/embedYamlHandlers/AbstractYamlPropertyHandler';
-import { App } from "obsidian";
 
 export class BaseInfoHandler extends AbstractYamlHandler {
     handlerName: string = 'baseInfo';
