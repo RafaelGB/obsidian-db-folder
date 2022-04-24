@@ -1,6 +1,5 @@
 import { DatabaseColumn, DatabaseYaml } from 'cdm/DatabaseModel';
 import {
-    parseYaml,
     TFile
 } from 'obsidian';
 import { LOGGER } from 'services/Logger';
@@ -10,6 +9,7 @@ import { NoteContentAction, TableRow } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
 import { hasFrontmatterKey, updateRowFile } from 'helpers/VaultManagement';
 import { UpdateRowOptions } from 'helpers/Constants';
+import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
 
 export default class DatabaseInfo {
     private file: TFile;
@@ -34,7 +34,9 @@ export default class DatabaseInfo {
             return null;
         }
         const frontmatterRaw = match[1];
-        this.yaml = parseYaml(frontmatterRaw);
+        // TODO enter parser
+        this.yaml = DatabaseStringToYamlParser(frontmatterRaw);
+        // this.yaml = parseYaml(frontmatterRaw);
         // Add default config in case of does not exist on file yet
         if(!this.yaml.config) this.yaml.config = default_local_settings;
         LOGGER.info(`<=initDatabaseconfigYaml`);

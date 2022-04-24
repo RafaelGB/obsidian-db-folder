@@ -3,9 +3,7 @@ import { parseYaml } from "obsidian";
 // Interface of handlers
 import { YamlHandler } from "parsers/embedYamlHandlers/AbstractYamlPropertyHandler";
 // Handlers of yaml parse
-import { FolderHandler } from 'parsers/embedYamlHandlers/FolderHandler';
-import { TypeHandler } from 'parsers/embedYamlHandlers/TypeHandler';
-import { TitleHandler } from 'parsers/embedYamlHandlers/TitleHandler';
+import { BaseInfoHandler } from 'parsers/embedYamlHandlers/BaseInfoHandler';
 import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
 import { DatabaseYaml } from "cdm/DatabaseModel";
@@ -50,9 +48,7 @@ function validateYaml(yaml: any): [string, string][] {
  */
 function getHandlers(): YamlHandler[] {
     return [
-        new TypeHandler(),
-        new FolderHandler(),
-        new TitleHandler()
+        new BaseInfoHandler()
     ];
 }
 

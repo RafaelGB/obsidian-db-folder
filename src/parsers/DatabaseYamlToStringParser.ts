@@ -14,7 +14,7 @@ import { DatabaseYaml } from "cdm/DatabaseModel";
    *     key2: value2
    * @param databaseConfig 
    */
-  // TODO refactor to be more generic
+  // TODO could be more generic?
 const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml):string[] =>{
     const yamlIndent = "  ";
     const databaseConfigString:string[] = [];
