@@ -75,19 +75,12 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
           );
           // trim label will get a valid yaml key
           const update_col_key:string = action.label.trim();
-          // Update configuration on disk
+          // Update configuration & row files on disk
           state.view.diskConfig.updateColumnProperties(
             action.columnId,
-            {label: action.label, accessor: update_col_key, key: update_col_key}
+            {label: action.label, accessor: update_col_key, key: update_col_key},
+            state.data // Update all rows with new key
           );
-          Promise.all(state.data.map(async (row:TableRow) => {
-              updateRowFile(
-                row.note.getFile(),
-                action.accessor,
-                update_col_key,
-                UpdateRowOptions.COLUMN_KEY
-              );
-          }));
           // Update state
           return {
               ...state,
@@ -238,7 +231,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
                 label: newLeftColumn.label,
                 key: newLeftColumn.key,
                 accessor: newLeftColumn.accessor,
-                dataType: newLeftColumn.input,
+                dataType: DataTypes.TEXT,
                 created: action.focus && true,
                 options: []
               },
@@ -282,7 +275,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
                 label: newRIghtColumn.label,
                 key: newRIghtColumn.key,
                 accessor: newRIghtColumn.accessor,
-                dataType: newRIghtColumn.input,
+                dataType: DataTypes.TEXT,
                 created: action.focus && true,
                 options: []
               },

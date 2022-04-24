@@ -6,8 +6,10 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { convertDatabaseYamlToParsedString, hasFrontmatterKey } from 'parsers/DatabaseParser';
-import { NoteContentAction } from 'cdm/FolderModel';
+import { NoteContentAction, TableRow } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
+import { updateRowFile } from 'helpers/VaultManagement';
+import { UpdateRowOptions } from 'helpers/Constants';
 
 export default class DatabaseInfo {
     private file: TFile;
@@ -78,13 +80,25 @@ export default class DatabaseInfo {
      * @param columnId 
      * @param properties 
      */
-    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId:string, properties:Record<string,P>):Promise<void>{
-        const currentCol = this.yaml.columns[columnId];
+    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId:string, properties:Record<string,P>,rows?:TableRow[]):Promise<void>{
+        const colToUpdate = this.yaml.columns[columnId];
+        const currentKey = colToUpdate.key;
         for (const key in properties) {
-            currentCol[key] = properties[key];
+            colToUpdate[key] = properties[key];
         }
-        this.yaml.columns[columnId] = currentCol;
+        this.yaml.columns[columnId] = colToUpdate;
         await this.saveOnDisk();
+        if(rows){
+        // Once the column is updated, update the rows in case the key is changed
+        await Promise.all(rows.map(async (row:TableRow) => {
+                updateRowFile(
+                    row.note.getFile(),
+                    currentKey,
+                    colToUpdate.key,
+                    UpdateRowOptions.COLUMN_KEY
+                );
+            }));
+        }
     }
     
     /**
