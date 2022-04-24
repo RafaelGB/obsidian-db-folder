@@ -15,7 +15,7 @@ export function createDatabase(tableProps:TableDataType): JSX.Element {
     );
 }
 
-function Database(tableProps:TableDataType){
+export function Database(tableProps:TableDataType){
   const [state, dataDispatch] = useReducer(databaseReducer, tableProps);
 
   useEffect(() => {
@@ -23,22 +23,12 @@ function Database(tableProps:TableDataType){
   }, [state.data, state.columns]);
 
   return(
-    <div
-    style={{
-      flex: "1 1 auto",
-      padding: "1rem",
-      maxWidth: 1000,
-      marginLeft: "auto",
-      marginRight: "auto",
-      overflow: "auto",
-      display: "flex"
-    }}
-    >
+    <>
       <Table
         {...state}
         dispatch={dataDispatch}
       />
       <div id="popper-container"></div>
-    </div>
+    </>
   );
 }

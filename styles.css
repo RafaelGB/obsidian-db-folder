@@ -15,11 +15,6 @@ html {
   font-family: "Inter", sans-serif;
 }
 
-#root {
-  margin: 0px;
-  padding: 0px;
-}
-
 .transition-fade-enter {
   opacity: 0;
 }
@@ -296,6 +291,26 @@ html {
   flex: 1;
 }
 
+
+/**
+*  Custom Styles
+*/
 .dbfolder-table-container tr input {
   background: var(--background-modifier-box-shadow);
+
+.resizer {
+  display: inline-block;
+  width: 10px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(50%);
+  z-index: 1;
+  /* prevents from scrolling while dragging on touch devices */
+  touch-action:none;
+}
+
+.isResizing {
+  background: rgb(182, 119, 119);
 }

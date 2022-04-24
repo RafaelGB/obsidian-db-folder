@@ -5,15 +5,27 @@ import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 
+interface GlobalSettings {
+  enable_debug_mode: boolean;
+  logger_level_info: string;
+}
 
+export interface LocalSettings {
+  enable_show_state: boolean;
+}
 export interface DatabaseSettings {
-    enable_debug_mode: boolean;
-    logger_level_info: string;
+  global_settings: GlobalSettings;
+  local_settings: LocalSettings;
 }
 
 export const DEFAULT_SETTINGS: DatabaseSettings = {
+  global_settings:{
     enable_debug_mode: false,
-    logger_level_info: "error"
+    logger_level_info: 'error'
+  },
+  local_settings:{
+    enable_show_state: false
+  }
 };
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
@@ -49,19 +61,27 @@ export interface SettingsManagerConfig {
       this.config = config;
       this.settings = settings;
     }
-    constructUI(containerEl: HTMLElement, heading: string, local: boolean) {
+
+    /**
+     * Render settings window
+     * @param containerEl 
+     * @param heading 
+     * @param local 
+     * @param view optional. Used only for local settings
+     */
+    constructUI(containerEl: HTMLElement, heading: string, local: boolean,view?: DatabaseView) {
         /** Common modal headings */
         containerEl.empty();
         containerEl.addClass('database-settings-modal');
         add_setting_header(containerEl,heading,'h2');
         const settingsBody:HTMLDivElement = containerEl.createDiv('database-settings-body');
-        this.constructSettingBody(settingsBody, local);
+        this.constructSettingBody(settingsBody, local, view);
     }
 
-    constructSettingBody(containerEl: HTMLElement, local: boolean) {
+    constructSettingBody(containerEl: HTMLElement, local: boolean, view?: DatabaseView) {
       containerEl.empty();
       /** Developer section */
-      developer_settings_section(this, containerEl, local);
+      developer_settings_section(this, containerEl, local, view);
     }
     cleanUp() {
         this.cleanupFns.forEach((fn) => fn());
@@ -89,7 +109,7 @@ export class SettingsModal extends Modal {
   
       modalEl.addClass('database-settings-modal');
   
-      this.settingsManager.constructUI(contentEl, this.view.file.basename, true);
+      this.settingsManager.constructUI(contentEl, this.view.file.basename, true, this.view);
     }
   
     onClose() {
@@ -117,6 +137,6 @@ export class DBFolderSettingTab extends PluginSettingTab {
 
 export function loadServicesThatRequireSettings(settings: DatabaseSettings) {
   /** Init logger */
-    LOGGER.setDebugMode(settings.enable_debug_mode);
-    LOGGER.setLevelInfo(settings.logger_level_info);
+    LOGGER.setDebugMode(settings.global_settings.enable_debug_mode);
+    LOGGER.setLevelInfo(settings.global_settings.logger_level_info);
 }

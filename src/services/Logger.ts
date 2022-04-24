@@ -15,9 +15,12 @@ const LevelInfoRecord: Record<string, number> = {
 };
 class Log implements LogInterface{
     private static instance: LogInterface;
-    private isDebugModeEnabled: boolean = false;
-    private levelInfo:number = 0;
-    private constructor() {}
+    private isDebugModeEnabled:boolean;
+    private levelInfo:number;
+    private constructor() {
+        this.isDebugModeEnabled = false;
+        this.levelInfo = 0;
+    }
 
     public debug(primaryMessage: string, ...supportingData: any[]){
         if(this.levelInfo >= LevelInfoRecord.debug){
@@ -61,7 +64,7 @@ class Log implements LogInterface{
         if(!this.isDebugModeEnabled){
             return;
         }
-        let moment: string = new Date().toISOString();
+        const moment: string = new Date().toISOString();
         if(supportingData.length > 0){
             console.log(`[${moment}] [${level}] ${message}`, supportingData);
         }else{

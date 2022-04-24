@@ -14,6 +14,3 @@ main.js
 # obsidian
 data.json
 .DS_Store
-
-# dist exception
-!dist/*

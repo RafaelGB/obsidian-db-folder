@@ -22,8 +22,8 @@ export const DataTypes = Object.freeze({
 export const MAX_CAPACITY_DATABASE = 999999;
 
 export const MetadataColumns = Object.freeze({
-  FILE: MAX_CAPACITY_DATABASE-1,
-  ADD_COLUMN: MAX_CAPACITY_DATABASE
+  FILE: `${MAX_CAPACITY_DATABASE-1}`,
+  ADD_COLUMN: `${MAX_CAPACITY_DATABASE}`
 });
 
 export const MetadataLabels = Object.freeze({
@@ -45,12 +45,12 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '',
     '<%%',
     'columns:',
-    ' 0:',
+    ' column1:',
     '  input: text',
     '  key: column1',
     '  accessor: column1',
     '  label: Column 1',
-    '%%>'
+    '  position: 0',
   ].join('\n')
 });
 
@@ -61,6 +61,9 @@ export const UpdateRowOptions = Object.freeze({
   ADD_COLUMN: 'add_column'
 });
 
+export const StyleClasses = Object.freeze({
+  TABLE_CONTAINER: 'dbfolder-table-container',
+});
 export function shortId() {
   return '_' + Math.random().toString(36).substring(2, 9);
 }

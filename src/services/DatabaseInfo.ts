@@ -7,6 +7,7 @@ import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { convertDatabaseYamlToParsedString, hasFrontmatterKey } from 'parsers/DatabaseParser';
 import { NoteContentAction } from 'cdm/FolderModel';
+import { LocalSettings } from 'Settings';
 
 export default class DatabaseInfo {
     private file: TFile;
@@ -20,7 +21,7 @@ export default class DatabaseInfo {
      * @param file 
      * @returns 
      */
-    async initDatabaseconfigYaml():Promise<void> {
+    async initDatabaseconfigYaml(default_local_settings:LocalSettings):Promise<void> {
         LOGGER.info(`=>initDatabaseconfigYaml`,`file:${this.file.path}`);
         const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
         if (!databaseRaw || !hasFrontmatterKey(databaseRaw))  throw new Error('No frontmatter found');
@@ -32,6 +33,8 @@ export default class DatabaseInfo {
         }
         const frontmatterRaw = match[1];
         this.yaml = parseYaml(frontmatterRaw);
+        // Add default config in case of does not exist on file yet
+        if(!this.yaml.config) this.yaml.config = default_local_settings;
         LOGGER.info(`<=initDatabaseconfigYaml`);
     }
     /**
@@ -42,7 +45,7 @@ export default class DatabaseInfo {
         const configRegex = new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`,"g");
         const databaseFilePath = this.file.path;
         const databaseConfigUpdated = convertDatabaseYamlToParsedString(this.yaml).join("\n");
-        let noteObject:NoteContentAction = {
+        const noteObject:NoteContentAction = {
             action: 'replace',
             file: this.file,
             regexp: configRegex,
@@ -54,7 +57,7 @@ export default class DatabaseInfo {
     }
     
     /**
-     * modify column key and save it on disk
+     * modify column key
      * @param oldColumnId 
      * @param newColumnId 
      */
@@ -70,12 +73,32 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
-    async updateColumnProperties(columnId:string, properties:Record<string,any>):Promise<void>{
+    /**
+     * Modify or add properties to a column
+     * @param columnId 
+     * @param properties 
+     */
+    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId:string, properties:Record<string,P>):Promise<void>{
         const currentCol = this.yaml.columns[columnId];
-        for (let key in properties) {
+        for (const key in properties) {
             currentCol[key] = properties[key];
         }
         this.yaml.columns[columnId] = currentCol;
+        await this.saveOnDisk();
+    }
+    
+    /**
+     * Given an array of column ids, reorder yaml columns to match the order of the array
+     * @param columnIds 
+     */
+    async reorderColumns(columnIds:string[]):Promise<void>{
+        let id = 0;
+        columnIds.forEach((columnId) => {
+            // Filter out columns that are not in the list
+            if(this.yaml.columns[columnId]){
+                this.yaml.columns[columnId].position = ++id;
+            }
+        });
         await this.saveOnDisk();
     }
 
@@ -88,4 +111,9 @@ export default class DatabaseInfo {
         this.yaml.columns[columnId] = properties;
         await this.saveOnDisk();
     }
+
+    async updateConfig<K extends keyof LocalSettings>(key: K, value: LocalSettings[K]): Promise<void> {
+        this.yaml.config[key] = value;
+        await this.saveOnDisk();
+      }
 }

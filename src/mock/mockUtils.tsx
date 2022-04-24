@@ -23,10 +23,11 @@ export function makeData(count:number):TableDataType {
     }
     const columns:TableColumn[] = [
       {
-        id: 1,
+        id: "title",
         label: 'File Name',
         key: 'title',
         accessor: 'title',
+        position: 0,
         minWidth: 100,
         dataType: DataTypes.TEXT,
         options: options,
@@ -47,15 +48,16 @@ export function makeData(count:number):TableDataType {
         }
       },
       {
-        id: 2,
+        id: "status",
         label: 'Status',
         key: 'Status',
         accessor: 'Status',
+        position: 1,
         minWidth: 100,
         dataType: DataTypes.TEXT,
         options: options,
       }
     ];
-    return { columns: columns, metadataColumns:[], data: data, skipReset: false, diskConfig:null, view:null };
+    return { columns: columns, metadataColumns:[], data: data, skipReset: false, view:null };
   }
   

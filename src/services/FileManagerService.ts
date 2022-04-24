@@ -4,7 +4,6 @@ import { TFile, TFolder } from "obsidian";
 import { LOGGER } from "services/Logger";
 export class VaultManager{
     private static instance: VaultManager;
-    constructor(){}
     
     /**
      * Add new file inside TFolder
@@ -30,8 +29,8 @@ export class VaultManager{
     async editNoteContent(note:NoteContentAction):Promise<void>{
         LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.file.path}`);
         try{
-            let tfileContent = await this.obtainContentFromTfile(note.file);
-            let line_string = new FileContent(tfileContent);
+            const tfileContent = await this.obtainContentFromTfile(note.file);
+            const line_string = new FileContent(tfileContent);
             let releasedContent = tfileContent;
             switch (note.action) {
               case 'remove':
@@ -41,7 +40,7 @@ export class VaultManager{
                 releasedContent = line_string.replaceAll(note.regexp, note.newValue).value;
                 break;
               default:
-                throw "Error: Option " + note.action + " is not supported with tp.user.editNoteContent.";
+                throw "Error: Option " + note.action + " is not supported yet";
             }
             await app.vault.modify(note.file,releasedContent);
             LOGGER.debug(`<= editNoteContent. file '${note.file.path}' edited`);

@@ -187,7 +187,12 @@ export default class DBFolderPlugin extends Plugin {
 			this.app.fileManager as any
 		  ).createNewMarkdownFile(targetFolder, 'Untitled database');
 	
-		  await this.app.vault.modify(database, DatabaseFrontmatterOptions.BASIC);
+		  await this.app.vault.modify(
+			  database, 
+			  DatabaseFrontmatterOptions.BASIC
+			  	.concat('\n')
+			  	.concat(this.defaultConfiguration())
+			);
 		  await this.app.workspace.activeLeaf.setViewState({
 			type: DatabaseCore.FRONTMATTER_KEY,
 			state: { file: database.path },
@@ -197,6 +202,17 @@ export default class DBFolderPlugin extends Plugin {
 		}
 	}
 
+	/**
+	 * Returns the default configuration for a database file.
+	 */
+	defaultConfiguration():string{
+		const local_settings = this.settings.local_settings;
+		return [
+			`configuration:`,
+			` enable_show_state: ${local_settings.enable_show_state}`,
+			'%%>'
+		].join('\n');
+	}
 	registerEvents() {
 		this.registerEvent(
 		  this.app.workspace.on('file-menu', (menu, file: TFile) => {

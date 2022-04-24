@@ -13,28 +13,28 @@ export async function obtainMetadataColumns(): Promise<TableColumn[]> {
   const columns:TableColumn[] = [];
   const metadataColumns: Record<string, DatabaseColumn> = {};
   metadataColumns[MetadataColumns.FILE]={
-      key: `${MetadataColumns.FILE}`,
+      key: MetadataColumns.FILE,
       input: DataTypes.MARKDOWN,
-      Header: `${MetadataColumns.FILE}`,
+      Header: MetadataColumns.FILE,
       label: MetadataLabels.FILE,
-      accessor: `${MetadataColumns.FILE}`,
+      accessor: MetadataColumns.FILE,
       isMetadata: true
   };
 
   metadataColumns[MetadataColumns.ADD_COLUMN]={
-    key: `${MetadataColumns.ADD_COLUMN}`,
-    Header: `${MetadataColumns.ADD_COLUMN}`,
+    key: MetadataColumns.ADD_COLUMN,
+    Header: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
     width: 20,
     disableResizing: true,
     label: '+',
-    accessor: `${MetadataColumns.ADD_COLUMN}`,
+    accessor: MetadataColumns.ADD_COLUMN,
     isMetadata: true
   }
   
-  await Promise.all(Object.keys(metadataColumns).map(async (columnKey) => {
+  await Promise.all(Object.keys(metadataColumns).map(async (columnKey,index) => {
     const column = metadataColumns[columnKey];
-    columns.push(await columnOptions(parseInt(columnKey),column));
+    columns.push(await columnOptions(columnKey,index,column));
   }));
   return columns;
 }
@@ -44,19 +44,20 @@ export async function obtainColumnsFromFolder(databaseColumns: Record<string, Da
     const columns:TableColumn[] = [];
     await Promise.all(Object.keys(databaseColumns).map(async (columnKey, index) => {
       const column = databaseColumns[columnKey];
-      columns.push(await columnOptions(index+1,column));
+      columns.push(await columnOptions(columnKey,index,column));
     }));
     LOGGER.debug(`<= obtainColumnsFromFolder(. return ${columns.length} columns`);
-    return columns;
+    return sortColumnsByPosition(columns);
 }
 
-async function columnOptions(columnId:number, column:DatabaseColumn):Promise<TableColumn> {
+async function columnOptions(columnKey:string,index:number, column:DatabaseColumn):Promise<TableColumn> {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = [];
   const tableRow: TableColumn = {
-    id: columnId,
+    id: columnKey,
+    position: column.position ?? index,
     label: column.label,
-    key: column.key ?? column.label.trim(),
+    key: column.key ?? columnKey,
     accessor: column.accessor ?? column.label.trim().toLowerCase(),
     isMetadata: column.isMetadata ?? false
   }
@@ -132,4 +133,16 @@ async function columnOptions(columnId:number, column:DatabaseColumn):Promise<Tab
   }else{
     throw `Error: option ${column.input} not supported yet`;
   }
+}
+
+function sortColumnsByPosition(columns:TableColumn[]):TableColumn[] {
+  return columns.sort((a,b) => {
+    if(a.position < b.position){
+      return -1;
+    }else if(a.position > b.position){
+      return 1;
+    }else{
+      return 0;
+    }
+  });
 }

@@ -30,10 +30,11 @@ export type Models = {
 }
 
 export type TableColumn = {
-    id: number,
+    id: string,
     Header?: any,
     label?: string,
     key: string,
+    position: number,
     accessor: any,
     minWidth?: number,
     width?:number
@@ -58,8 +59,7 @@ export type TableDataType={
     skipReset: boolean,
     view: DatabaseView,
     stateManager?: StateManager,
-    dispatch?: Dispatch<any>,
-    diskConfig: DatabaseInfo
+    dispatch?: Dispatch<any>
 }
 export interface DatabaseHeaderProps{
     columns:any,

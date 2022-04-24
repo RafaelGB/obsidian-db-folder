@@ -53,7 +53,7 @@ export async function adapterTFilesToRows(folderPath: string): Promise<Array<Tab
 }
 
 export function adapterRowToDatabaseYaml(rowInfo:any):string{
-    let yaml = [];
+    const yaml = [];
     yaml.push('---');
     Object.entries(rowInfo).forEach(entry => {
         const [key, value] = entry;
@@ -140,7 +140,7 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
   updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
   updateOptions[UpdateRowOptions.ADD_COLUMN] = addColumn;
   // Execute action
-  if(updateOptions.hasOwnProperty(option)){
+  if(updateOptions[option]){
     const noteObject = updateOptions[option]();
     await VaultManagerDB.editNoteContent(noteObject);
   }else{

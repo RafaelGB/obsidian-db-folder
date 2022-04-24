@@ -30,7 +30,7 @@ export class FileContent{
     }
 
     remove(pattern_to_be_removed:RegExp): FileContent{
-        let _object = this.object();
+        const _object = this.object();
         _object.forEach((value,index) => {
             if (value.match(pattern_to_be_removed)){
                 delete _object[index];
@@ -41,7 +41,7 @@ export class FileContent{
     }
 
     removeAll(string_to_be_removed:string): FileContent{
-        let _object = this.object();
+        const _object = this.object();
         _object.forEach((value,index) => {
             if (value.trim().indexOf(string_to_be_removed)!=-1){
                 delete _object[index];
@@ -52,7 +52,7 @@ export class FileContent{
     }
 
     fetch(line_number:number){
-        let _object = this.object();
+        const _object = this.object();
         for (let i=0;i<_object.length;i++){
             if (i+1===line_number){
                 return _object[i];
@@ -62,14 +62,14 @@ export class FileContent{
     }
 
     edit(content:string,line_number:number): FileContent{
-         let _object = this.object();
+        const _object = this.object();
         _object[line_number-1] = content;
          this.value = this.real_array(_object).join('\n');
          return this;
      }
 
     real_array(array:string[]):string[]{
-        let output:string[] = [];
+        const output:string[] = [];
         array.forEach(element=>{
             output.push(element);
         });

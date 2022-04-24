@@ -1,9 +1,10 @@
+import { DatabaseView } from "DatabaseView";
 import DBFolderPlugin from "main";
 import { SettingsManager } from "Settings";
 
 export interface SettingHandler {
     setNext(handler: SettingHandler): SettingHandler;
-    handle(settingsManager: SettingsManager,containerEl: HTMLElement, local: boolean): [string, string][];
+    handle(settingsManager: SettingsManager,containerEl: HTMLElement, local: boolean, view?: DatabaseView): [string, string][];
 }
 
 export abstract class AbstractSettingsHandler implements SettingHandler {
@@ -19,5 +20,5 @@ export abstract class AbstractSettingsHandler implements SettingHandler {
         this.nextHandler = handler;
         return handler;
     }
-    abstract handle(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean): [string, string][];
+    abstract handle(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): [string, string][];
 }

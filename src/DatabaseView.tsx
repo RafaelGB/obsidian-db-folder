@@ -1,7 +1,7 @@
 import { TableDataType } from 'cdm/FolderModel';
 import { obtainColumnsFromFolder, obtainMetadataColumns} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
-import { DatabaseCore, DataTypes } from 'helpers/Constants';
+import { DatabaseCore, DataTypes, StyleClasses } from 'helpers/Constants';
 import { adapterTFilesToRows } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
 
@@ -26,6 +26,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
     hoverPopover: HoverPopover | null;
     tableContainer: HTMLDivElement | null = null;
+    diskConfig: DatabaseInfo;
+
     constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
         super(leaf);
         this.plugin = plugin;
@@ -107,9 +109,9 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
     async initDatabase(): Promise<void> {
       LOGGER.info(`=>initDatabase ${this.file.path}`);
-      const databaseInfo = new DatabaseInfo(this.file);
-      await databaseInfo.initDatabaseconfigYaml();
-      const columns = await obtainColumnsFromFolder(databaseInfo.yaml.columns);
+      this.diskConfig = new DatabaseInfo(this.file);
+      await this.diskConfig.initDatabaseconfigYaml(this.plugin.settings.local_settings);
+      const columns = await obtainColumnsFromFolder(this.diskConfig.yaml.columns);
       const metatadaColumns = await obtainMetadataColumns();
       columns.push(...metatadaColumns);
       const rows = await adapterTFilesToRows(this.file.parent.path);
@@ -119,12 +121,11 @@ export class DatabaseView extends TextFileView implements HoverParent {
         data: rows,
         skipReset: false,
         view: this,
-        stateManager: this.plugin.getStateManager(this.file),
-        diskConfig: databaseInfo
+        stateManager: this.plugin.getStateManager(this.file)
       }
       
-      let table = createDatabase(tableProps);
-      this.tableContainer  = this.contentEl.createDiv("dbfolder-table-container");
+      const table = createDatabase(tableProps);
+      this.tableContainer  = this.contentEl.createDiv(StyleClasses.TABLE_CONTAINER);
       ReactDOM.render(table, this.tableContainer);
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     }
