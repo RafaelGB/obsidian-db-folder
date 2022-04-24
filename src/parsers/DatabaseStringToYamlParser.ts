@@ -15,7 +15,7 @@ import { DatabaseYaml } from "cdm/DatabaseModel";
 /**
  * Parse a string
  */
-const DatabaseYamlParser = (yamlText: string): DatabaseYaml => {
+const DatabaseStringToYamlParser = (yamlText: string): DatabaseYaml => {
     const yaml = parseYaml(yamlText);
     const errors = validateYaml(yaml);
     if (errors.length > 0) {
@@ -57,4 +57,4 @@ function getHandlers(): YamlHandler[] {
 }
 
 // Export
-export default DatabaseYamlParser;
+export default DatabaseStringToYamlParser;

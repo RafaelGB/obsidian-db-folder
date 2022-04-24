@@ -10,7 +10,8 @@ export const ActionTypes = Object.freeze({
     DELETE_COLUMN: 'delete_column',
     ENABLE_RESET: 'enable_reset',
 });
-  
+
+/** Flavours of data types */
 export const DataTypes = Object.freeze({
     NUMBER: 'number',
     TEXT: 'text',
@@ -64,6 +65,3 @@ export const UpdateRowOptions = Object.freeze({
 export const StyleClasses = Object.freeze({
   TABLE_CONTAINER: 'dbfolder-table-container',
 });
-export function shortId() {
-  return '_' + Math.random().toString(36).substring(2, 9);
-}

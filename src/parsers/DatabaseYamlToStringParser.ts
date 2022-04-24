@@ -1,21 +1,5 @@
 import { DatabaseYaml } from "cdm/DatabaseModel";
-import { DatabaseCore } from "helpers/Constants";
 
-export function hasFrontmatterKey(data: string) {
-  if (!data) return false;
-
-  const match = data.match(/---\s+([\w\W]+?)\s+---/);
-
-  if (!match) {
-    return false;
-  }
-
-  if (!match[1].contains(DatabaseCore.FRONTMATTER_KEY)) {
-    return false;
-  }
-
-  return true;
-}
   /**
    * Given a database config, obtain the string on yaml format
    * example:

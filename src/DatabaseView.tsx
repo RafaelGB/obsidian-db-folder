@@ -2,7 +2,7 @@ import { TableDataType } from 'cdm/FolderModel';
 import { obtainColumnsFromFolder, obtainMetadataColumns} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
 import { DatabaseCore, DataTypes, StyleClasses } from 'helpers/Constants';
-import { adapterTFilesToRows } from 'helpers/VaultManagement';
+import { adapterTFilesToRows, hasFrontmatterKey } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
 
 import {
@@ -13,7 +13,6 @@ import {
     TFile,
     Menu
   } from 'obsidian';
-import { hasFrontmatterKey } from 'parsers/DatabaseParser';
 import * as React from "react";
 import ReactDOM from 'react-dom';
 import DatabaseInfo from 'services/DatabaseInfo';

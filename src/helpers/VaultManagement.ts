@@ -12,7 +12,22 @@ interface NormalizedPath {
     subpath: string;
     alias: string;
   }
-  
+
+/** Check if file has frontmatter */
+export function hasFrontmatterKey(data: string): boolean {
+  if (!data) return false;
+  const match = data.match(/---\s+([\w\W]+?)\s+---/);
+
+  if (!match) {
+    return false;
+  }
+
+  if (!match[1].contains(DatabaseCore.FRONTMATTER_KEY)) {
+    return false;
+  }
+  return true;
+}
+
 export function getNormalizedPath(path: string): NormalizedPath {
     const stripped = path.replace(noBreakSpace, ' ').normalize('NFC');
   

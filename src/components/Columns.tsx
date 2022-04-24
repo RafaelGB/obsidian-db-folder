@@ -3,7 +3,7 @@ import {TableColumn} from 'cdm/FolderModel';
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import { RowSelectOption } from 'cdm/RowSelectModel';
-import { dbTrim } from 'parsers/DatabaseParser';
+import { dbTrim } from 'parsers/DatabaseYamlToStringParser';
 
 /**
  * Add mandatory columns to the table

@@ -5,10 +5,10 @@ import {
 } from 'obsidian';
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
-import { convertDatabaseYamlToParsedString, hasFrontmatterKey } from 'parsers/DatabaseParser';
+import { convertDatabaseYamlToParsedString } from 'parsers/DatabaseYamlToStringParser';
 import { NoteContentAction, TableRow } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
-import { updateRowFile } from 'helpers/VaultManagement';
+import { hasFrontmatterKey, updateRowFile } from 'helpers/VaultManagement';
 import { UpdateRowOptions } from 'helpers/Constants';
 
 export default class DatabaseInfo {

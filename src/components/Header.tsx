@@ -10,11 +10,12 @@ import TextIcon from 'components/img/Text';
 import MultiIcon from 'components/img/Multi';
 import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
+import MarkdownObsidian from 'components/img/Markdown';
 import { ActionTypes, DataTypes, MetadataColumns } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 import ReactDOM from 'react-dom';
-import { dbTrim } from 'parsers/DatabaseParser';
+import { dbTrim } from 'parsers/DatabaseYamlToStringParser';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
@@ -150,7 +151,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
       break;
     case DataTypes.MARKDOWN:
       // TODO : add a markdown icon
-      propertyIcon = <TextIcon />;
+      propertyIcon = <MarkdownObsidian/>;
       break;
     default:
       break;
