@@ -1,3 +1,6 @@
+## 0.0.6
+### No longer broken
+- Fixed unable to add frontmatter to note after modify label [ISSUE#10](https://github.com/RafaelGB/obsidian-bd-folder/issues/10)
 ## 0.0.5
 ### Shiny new things
 - Added Drag & Drop columns. Order is persisted [ISSUE#5](https://github.com/RafaelGB/obsidian-bd-folder/issues/5)
