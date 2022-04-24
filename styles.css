@@ -297,6 +297,7 @@ html {
 */
 .dbfolder-table-container tr input {
   background: var(--background-modifier-box-shadow);
+}
 
 .resizer {
   display: inline-block;
@@ -313,4 +314,9 @@ html {
 
 .isResizing {
   background: rgb(182, 119, 119);
+}
+
+.draggable {
+  top: auto !important;
+  left: auto !important;
 }
