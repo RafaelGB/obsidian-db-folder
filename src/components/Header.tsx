@@ -14,6 +14,7 @@ import { ActionTypes, DataTypes, MetadataColumns } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 import ReactDOM from 'react-dom';
+import { dbTrim } from 'parsers/DatabaseParser';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
@@ -53,7 +54,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
     strategy: "absolute"
   });
   const [labelState, setLabelState] = useState(headerProps.column.label);
-  const [keyState, setkeyState] = useState(key.trim());
+  const [keyState, setkeyState] = useState(dbTrim(key));
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
@@ -185,7 +186,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
         label: labelState
       });
       setExpanded(false);
-      setkeyState(labelState.trim());
+      setkeyState(dbTrim(labelState));
     }
   }
 

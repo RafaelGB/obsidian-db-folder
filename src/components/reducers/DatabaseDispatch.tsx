@@ -9,6 +9,7 @@ import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement
 import { randomColor } from 'helpers/Colors';
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import NoteInfo from 'services/NoteInfo';
+import { dbTrim } from 'parsers/DatabaseParser';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);
@@ -74,7 +75,7 @@ export function databaseReducer(state:TableDataType, action:ActionType) {
               (column:any) => column.id === action.columnId
           );
           // trim label will get a valid yaml key
-          const update_col_key:string = action.label.trim();
+          const update_col_key:string = dbTrim(action.label);
           // Update configuration & row files on disk
           state.view.diskConfig.updateColumnProperties(
             action.columnId,

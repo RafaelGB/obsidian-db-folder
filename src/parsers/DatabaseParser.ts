@@ -50,3 +50,12 @@ export function hasFrontmatterKey(data: string) {
     databaseConfigString.push(`${yamlIndent.repeat(1)}enable_show_state: ${databaseConfig.config.enable_show_state}`);
     return databaseConfigString;
   }
+
+  /**
+   * Given a string, parse it to be key candidate
+   * @param str
+   * @returns {string}
+   */
+  export function dbTrim(str: string) {
+    return str.trim().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "_");
+  }
