@@ -1,11 +1,16 @@
 import * as React from "react";
-import { useTable, TableInstance, useFlexLayout, useResizeColumns, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from 'react-table';
+import {
+  useTable,
+  TableInstance,
+  useFlexLayout,
+  useResizeColumns,
+  useSortBy,
+  useGlobalFilter,
+  useAsyncDebounce,
+  useFilters,
+} from "react-table";
 import clsx from "clsx";
-import { 
-  TableDataType,
-  TableRow,
-  TableColumn
-} from "cdm/FolderModel";
+import { TableDataType, TableRow, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
@@ -22,20 +27,20 @@ const defaultColumn = {
   maxWidth: 400,
   Cell: Cell,
   Header: Header,
-  sortType: 'alphanumericFalsyLast',
+  sortType: "alphanumericFalsyLast",
 };
 
-function useInstance(instance:TableInstance<any>) {
+function useInstance(instance: TableInstance<any>) {
   const { allColumns } = instance;
 
-  let rowSpanHeaders:any = [];
+  let rowSpanHeaders: any = [];
 
-  allColumns.forEach((column:any, i:any) => {
+  allColumns.forEach((column: any, i: any) => {
     const { id } = column;
-      rowSpanHeaders = [
-        ...rowSpanHeaders,
-        { id, topCellValue: null, topCellIndex: 0 }
-      ];
+    rowSpanHeaders = [
+      ...rowSpanHeaders,
+      { id, topCellValue: null, topCellIndex: 0 },
+    ];
   });
 
   Object.assign(instance, { rowSpanHeaders });
@@ -43,25 +48,32 @@ function useInstance(instance:TableInstance<any>) {
 
 /**
  * Table component based on react-table
- * @param initialState 
- * @returns 
+ * @param initialState
+ * @returns
  */
-export function Table(initialState: TableDataType){
-  LOGGER.debug(`=> Table. number of columns: ${initialState.columns.length}. number of rows: ${initialState.data.length}`);
+export function Table(initialState: TableDataType) {
+  LOGGER.debug(
+    `=> Table. number of columns: ${initialState.columns.length}. number of rows: ${initialState.data.length}`
+  );
   /** Columns information */
-  const columns:TableColumn[] = initialState.columns;
+  const columns: TableColumn[] = initialState.columns;
   /** Rows information */
   const data: Array<TableRow> = initialState.data;
   /** Reducer */
   const dataDispatch = initialState.dispatch;
   /** Database information  */
-  const view:DatabaseView = initialState.view;
-  const stateManager:StateManager = initialState.stateManager;
+  const view: DatabaseView = initialState.view;
+  const stateManager: StateManager = initialState.stateManager;
   const filePath = stateManager.file.path;
   /** Sort columns */
   const sortTypes = React.useMemo(
     () => ({
-      alphanumericFalsyLast(rowA:any, rowB:any, columnId:any, desc:boolean) {
+      alphanumericFalsyLast(
+        rowA: any,
+        rowB: any,
+        columnId: any,
+        desc: boolean
+      ) {
         if (!rowA.values[columnId] && !rowB.values[columnId]) {
           return 0;
         }
@@ -77,31 +89,30 @@ export function Table(initialState: TableDataType){
         return isNaN(rowA.values[columnId])
           ? rowA.values[columnId].localeCompare(rowB.values[columnId])
           : rowA.values[columnId] - rowB.values[columnId];
-      }
+      },
     }),
     []
   );
-  let propsUseTable:any = {
-    columns, 
-    data, 
+  let propsUseTable: any = {
+    columns,
+    data,
     defaultColumn,
     dataDispatch,
-    sortTypes
+    sortTypes,
   };
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      
       const targetEl = e.target as HTMLElement;
-      if (targetEl.tagName !== 'A' || !view) return;
+      if (targetEl.tagName !== "A" || !view) return;
 
-      if (targetEl.hasClass('internal-link')) {
-        view.app.workspace.trigger('hover-link', {
+      if (targetEl.hasClass("internal-link")) {
+        view.app.workspace.trigger("hover-link", {
           event: e.nativeEvent,
           source: DatabaseCore.FRONTMATTER_KEY,
           hoverParent: view,
           targetEl,
-          linktext: targetEl.getAttr('href'),
+          linktext: targetEl.getAttr("href"),
           sourcePath: view.file.path,
         });
       }
@@ -111,22 +122,22 @@ export function Table(initialState: TableDataType){
   /** Obsidian to open an internal link in a new pane */
   const onClick = React.useCallback(
     async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      if (e.type === 'auxclick' && e.button == 2) {
+      if (e.type === "auxclick" && e.button == 2) {
         return;
       }
 
       const targetEl = e.target as HTMLElement;
       const closestAnchor =
-        targetEl.tagName === 'A' ? targetEl : targetEl.closest('a');
+        targetEl.tagName === "A" ? targetEl : targetEl.closest("a");
 
       if (!closestAnchor) return;
 
-      if (closestAnchor.hasClass('file-link')) {
+      if (closestAnchor.hasClass("file-link")) {
         e.preventDefault();
-        const href = closestAnchor.getAttribute('href');
+        const href = closestAnchor.getAttribute("href");
         const normalizedPath = getNormalizedPath(href);
         const target =
-          typeof href === 'string' &&
+          typeof href === "string" &&
           view.app.metadataCache.getFirstLinkpathDest(
             normalizedPath.root,
             view.file.path
@@ -139,11 +150,11 @@ export function Table(initialState: TableDataType){
         return;
       }
 
-      if (closestAnchor.hasClass('internal-link')) {
+      if (closestAnchor.hasClass("internal-link")) {
         e.preventDefault();
-        const destination = closestAnchor.getAttr('href');
+        const destination = closestAnchor.getAttr("href");
         const inNewLeaf = e.button === 1 || e.ctrlKey || e.metaKey;
-        const isUnresolved = closestAnchor.hasClass('is-unresolved');
+        const isUnresolved = closestAnchor.hasClass("is-unresolved");
 
         stateManager.app.workspace.openLinkText(
           destination,
@@ -166,112 +177,113 @@ export function Table(initialState: TableDataType){
     prepareRow,
     state,
     preGlobalFilteredRows,
-    setGlobalFilter
+    setGlobalFilter,
   } = useTable(
     // Table properties
     propsUseTable,
     // React hooks
     useFlexLayout,
     useResizeColumns,
-    useFilters, 
+    useFilters,
     useGlobalFilter,
     useSortBy,
-    hooks => {
+    (hooks) => {
       hooks.useInstance.push(useInstance);
     }
   );
-    function isTableResizing() {
-      for (let headerGroup of headerGroups) {
-        for (let column of headerGroup.headers) {
-          if ((column as any).isResizing) {
-            return true;
-          }
+  function isTableResizing() {
+    for (let headerGroup of headerGroups) {
+      for (let column of headerGroup.headers) {
+        if ((column as any).isResizing) {
+          return true;
         }
       }
-  
-      return false;
     }
-    // Manage input of new row
-    const [inputNewRow, setInputNewRow] = React.useState('');
-    const newRowRef = React.useRef(null);
-    LOGGER.debug(`<= Table`);
-    return (
-      <>
-        <div {...getTableProps()} 
+
+    return false;
+  }
+  // Manage input of new row
+  const [inputNewRow, setInputNewRow] = React.useState("");
+  const newRowRef = React.useRef(null);
+  LOGGER.debug(`<= Table`);
+  return (
+    <>
+      <div
+        {...getTableProps()}
         className={clsx("table", isTableResizing() && "noselect")}
         onMouseOver={onMouseOver}
         onClick={onClick}
-        >
-          <div>
-            {/** Headers */}
-            {headerGroups.map((headerGroup,i) => (
-              <div {...headerGroup.getHeaderGroupProps()} className='tr'>
-                {headerGroup.headers.map((column) => (
-                  <div {...column.getHeaderProps()} className='th noselect'>
-                    {column.render("Header")}
-                  </div>
-                ))}
-              </div>
-            ))}
-            {/** Global filter */}
-            <div className='tr'>
-              <div
-                className='th'
-                key="global-filter"
-                style={{
-                  textAlign: 'left',
-                }}
-              >
-                <GlobalFilter
-                  preGlobalFilteredRows={preGlobalFilteredRows}
-                  globalFilter={(state as any).globalFilter}
-                  setGlobalFilter={setGlobalFilter}
-                />
-              </div>
-            </div>
-          </div>
-          {/** Body */}
-          <div {...getTableBodyProps()}>
-            {rows.map((row, i) => {
-              prepareRow(row);
-              return (
-                <div {...row.getRowProps()} className='tr' key={row.id} >
-                  {row.cells.map((cell) => (
-                    <div {...cell.getCellProps()} className='td'>
-                      {cell.render("Cell")}
-                    </div>
-                  ))}
+      >
+        <div>
+          {/** Headers */}
+          {headerGroups.map((headerGroup, i) => (
+            <div {...headerGroup.getHeaderGroupProps()} className="tr">
+              {headerGroup.headers.map((column) => (
+                <div {...column.getHeaderProps()} className="th noselect">
+                  {column.render("Header")}
                 </div>
-              );
-            })}
-            <div className='tr add-row'>
-              <input type="text"
-                ref={newRowRef}
-                onChange={(e) => {
-                  setInputNewRow(e.target.value);
-                  } 
-                }
-                placeholder='filename of new row'
+              ))}
+            </div>
+          ))}
+          {/** Global filter */}
+          <div className="tr">
+            <div
+              className="th"
+              key="global-filter"
+              style={{
+                textAlign: "left",
+              }}
+            >
+              <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={(state as any).globalFilter}
+                setGlobalFilter={setGlobalFilter}
               />
-              <div onClick={() => 
-                  {
-                    dataDispatch({ 
-                      type: ActionTypes.ADD_ROW,
-                      filename: inputNewRow
-                    });
-                    setInputNewRow('');
-                    newRowRef.current.value='';
-                  }
-                }
-              >
-                <span className='svg-icon svg-gray' style={{marginRight: 4}}>
-                  <PlusIcon />
-                </span>
-                New
-              </div>
             </div>
           </div>
         </div>
-      </>
-    );
+        {/** Body */}
+        <div {...getTableBodyProps()}>
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <div {...row.getRowProps()} className="tr" key={row.id}>
+                {row.cells.map((cell) => (
+                  <div {...cell.getCellProps()} className="td">
+                    {cell.render("Cell")}
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+          <div className="tr add-row">
+            <input
+              type="text"
+              ref={newRowRef}
+              onChange={(e) => {
+                setInputNewRow(e.target.value);
+              }}
+              placeholder="filename of new row"
+            />
+            <div
+              style={{ display: "flex" }}
+              onClick={() => {
+                dataDispatch({
+                  type: ActionTypes.ADD_ROW,
+                  filename: inputNewRow,
+                });
+                setInputNewRow("");
+                newRowRef.current.value = "";
+              }}
+            >
+              <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+                <PlusIcon />
+              </span>
+              New
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
