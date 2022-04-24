@@ -9,7 +9,7 @@ import { adapterRowToDatabaseYaml, updateRowFile } from 'helpers/VaultManagement
 import { randomColor } from 'helpers/Colors';
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import NoteInfo from 'services/NoteInfo';
-import { dbTrim } from 'parsers/DatabaseYamlToStringParser';
+import { dbTrim } from 'helpers/StylesHelper';
 
 export function databaseReducer(state:TableDataType, action:ActionType) {
     LOGGER.debug(`<=>databaseReducer action: ${action.type}`);

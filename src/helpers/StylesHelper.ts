@@ -17,3 +17,12 @@ export function c(className: string): string {
 export function shortId() {
 return '_' + Math.random().toString(36).substring(2, 9);
 }
+
+/**
+ * Given a string, parse it to be key candidate
+ * @param str
+ * @returns {string}
+ */
+ export function dbTrim(str: string) {
+    return str.trim().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "_");
+  }

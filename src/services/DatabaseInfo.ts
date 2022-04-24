@@ -5,7 +5,7 @@ import {
 } from 'obsidian';
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
-import { convertDatabaseYamlToParsedString } from 'parsers/DatabaseYamlToStringParser';
+import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
 import { NoteContentAction, TableRow } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
 import { hasFrontmatterKey, updateRowFile } from 'helpers/VaultManagement';
@@ -46,7 +46,7 @@ export default class DatabaseInfo {
         LOGGER.debug(`=>setDatabaseconfigYaml`,`file:${this.file.path}`);
         const configRegex = new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`,"g");
         const databaseFilePath = this.file.path;
-        const databaseConfigUpdated = convertDatabaseYamlToParsedString(this.yaml).join("\n");
+        const databaseConfigUpdated = DatabaseYamlToStringParser(this.yaml).join("\n");
         const noteObject:NoteContentAction = {
             action: 'replace',
             file: this.file,

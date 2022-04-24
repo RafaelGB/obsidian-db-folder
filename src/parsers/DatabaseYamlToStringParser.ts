@@ -15,7 +15,7 @@ import { DatabaseYaml } from "cdm/DatabaseModel";
    * @param databaseConfig 
    */
   // TODO refactor to be more generic
-  export function convertDatabaseYamlToParsedString(databaseConfig: DatabaseYaml):string[] {
+const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml):string[] =>{
     const yamlIndent = "  ";
     const databaseConfigString:string[] = [];
     // Database info
@@ -33,13 +33,6 @@ import { DatabaseYaml } from "cdm/DatabaseModel";
     databaseConfigString.push(`config:`);
     databaseConfigString.push(`${yamlIndent.repeat(1)}enable_show_state: ${databaseConfig.config.enable_show_state}`);
     return databaseConfigString;
-  }
+}
 
-  /**
-   * Given a string, parse it to be key candidate
-   * @param str
-   * @returns {string}
-   */
-  export function dbTrim(str: string) {
-    return str.trim().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "_");
-  }
+export default DatabaseYamlToStringParser;

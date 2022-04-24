@@ -15,7 +15,7 @@ import { ActionTypes, DataTypes, MetadataColumns } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 import ReactDOM from 'react-dom';
-import { dbTrim } from 'parsers/DatabaseYamlToStringParser';
+import { dbTrim } from 'helpers/StylesHelper';
 
 function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
   rows.forEach((row:any)=>{
