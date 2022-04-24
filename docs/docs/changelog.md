@@ -1,8 +1,10 @@
 ## 0.0.5
 ### Shiny new things
-- Added Drag & Drop columns. Order is persisted
+- Added Drag & Drop columns. Order is persisted [ISSUE#5](https://github.com/RafaelGB/obsidian-bd-folder/issues/5)
+- Style background of the table is now adapted to the theme [PR#9](https://github.com/RafaelGB/obsidian-bd-folder/pull/9) [zubayrrr](https://github.com/zubayrrr)
+
 ### Developers
-- State of table toggle configuration added. Show react table state at bottom of the page
+- State of table toggle configuration added. Show react table state at bottom of the page. It has a default value & local value of each dadabase.
 
 ## 0.0.4
 ### Shiny new things
