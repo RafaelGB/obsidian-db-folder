@@ -1,26 +1,20 @@
-import {AbstractYamlHandler} from 'parsers/embedYamlHandlers/AbstractYamlPropertyHandler';
+import {AbstractYamlHandler, YamlHandlerResponse} from 'parsers/embedYamlHandlers/AbstractYamlPropertyHandler';
 
 export class BaseInfoHandler extends AbstractYamlHandler {
     handlerName: string = 'baseInfo';
 
-    public handle(yaml: any): [string, string][]{
-
+    public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse{
+        const {yaml} = handlerResponse;
         if (!yaml.name || yaml.name.length === 0) {
-            this.addError(`name of database is empty or is not defined value:${yaml.title}`);
-            // handle is ended if title is empty or not defined
-            return this.listOfErrors;
+            this.addError(`Name of database is empty or is not defined value:${yaml.name}`);
+            // handle is ended if name of database is empty or not defined
         }
 
-        if (!yaml.description || yaml.description.length === 0) {
-            this.addError(`description of database is not defined value:${yaml.title}`);
-            // handle is ended if title is empty or not defined
-            return this.listOfErrors;
+        if (!yaml.description) {
+            // handle continues if description is not defined. Its optional
+            this.localYaml.description = '';
         }
 
-        // Check next handler
-        if (this.nextHandler) {
-            return this.nextHandler.handle(yaml);
-        }
-        return this.listOfErrors;
+        return this.goNext(handlerResponse);
     }
 }
