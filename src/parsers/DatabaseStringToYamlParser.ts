@@ -1,9 +1,9 @@
 import { parseYaml } from "obsidian";
 
 // Interface of handlers
-import { YamlHandler,YamlHandlerResponse } from "parsers/embedYamlHandlers/AbstractYamlPropertyHandler";
+import { YamlHandler,YamlHandlerResponse } from "parsers/handlers/AbstractYamlPropertyHandler";
 // Handlers of yaml parse
-import { BaseInfoHandler } from 'parsers/embedYamlHandlers/BaseInfoHandler';
+import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
 import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
 import { DatabaseYaml } from "cdm/DatabaseModel";
