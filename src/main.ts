@@ -73,7 +73,9 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	async onunload() {
-		LOGGER.debug('Unloading DBFolder plugin');
+		LOGGER.info('Unloading DBFolder plugin');
+		// Unmount views first
+		this.stateManagers.clear();
 	}
 
 	/** Update plugin settings. */
@@ -216,7 +218,7 @@ export default class DBFolderPlugin extends Plugin {
 	registerEvents() {
 		this.registerEvent(
 		  this.app.workspace.on('file-menu', (menu, file: TFile) => {
-			// Add a menu item to the folder context menu to create a board
+			// Add a menu item to the folder context menu to create a database
 			if (file instanceof TFolder) {
 			  menu.addItem((item) => {
 				item
@@ -253,10 +255,10 @@ export default class DBFolderPlugin extends Plugin {
 		  );
 		});
 	
-		// Monkey patch WorkspaceLeaf to open Kanbans with KanbanView by default
+		// Monkey patch WorkspaceLeaf to open Databases with DatabaseView by default
 		this.register(
 		  around(WorkspaceLeaf.prototype, {
-			// Kanbans can be viewed as markdown or kanban, and we keep track of the mode
+			// Databases can be viewed as markdown or Database, and we keep track of the mode
 			// while the file is open. When the file closes, we no longer need to keep track of it.
 			detach(next) {
 			  return function () {
@@ -273,7 +275,7 @@ export default class DBFolderPlugin extends Plugin {
 			setViewState(next) {
 			  return function (state: ViewState, ...rest: any[]) {
 				if (
-				  // Don't force kanban mode during shutdown
+				  // Don't force Databases mode during shutdown
 				  self._loaded &&
 				  // If we have a markdown file
 				  state.type === 'markdown' &&
@@ -339,5 +341,5 @@ export default class DBFolderPlugin extends Plugin {
 			},
 		  })
 		);
-	  }
+	}
 }

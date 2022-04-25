@@ -1,5 +1,5 @@
 import { TableRow, NoteContentAction } from 'cdm/FolderModel';
-import { TFile } from 'obsidian';
+import { Notice, TFile } from 'obsidian';
 import { getAPI} from "obsidian-dataview"
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
@@ -54,6 +54,7 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @returns 
  */
 export async function adapterTFilesToRows(folderPath: string): Promise<Array<TableRow>> {
+    dataviewIsLoaded();
     LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
     const rows: Array<TableRow> = [];
     let id = 0;
@@ -162,4 +163,18 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
     throw `Error: option ${option} not supported yet`;
   }
   LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
+}
+
+/**
+ * Check if dataview plugin is installed
+ * @returns true if installed, false otherwise
+ * @throws Error if plugin is not installed
+ */
+function dataviewIsLoaded():boolean{
+  if(!!getAPI()){
+    return true;
+  }else{
+    new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
+    throw new Error('Dataview plugin is not installed');
+  }
 }

@@ -131,7 +131,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
 
 	display(): void {
         const { containerEl } = this;    
-        this.settingsManager.constructUI(containerEl,'Kanban Plugin', false);
+        this.settingsManager.constructUI(containerEl,'Database Folder Plugin', false);
 	}
 }
 
