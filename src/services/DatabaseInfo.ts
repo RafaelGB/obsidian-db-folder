@@ -33,14 +33,15 @@ export default class DatabaseInfo {
         if (!match) {
             return null;
         }
+        
         const frontmatterRaw = match[1];
-        // TODO enter parser
+
         this.yaml = DatabaseStringToYamlParser(frontmatterRaw);
-        // this.yaml = parseYaml(frontmatterRaw);
-        // Add default config in case of does not exist on file yet
+        // TODO move to handler. default config in case of does not exist on file yet
         if(!this.yaml.config) this.yaml.config = default_local_settings;
         LOGGER.info(`<=initDatabaseconfigYaml`);
     }
+
     /**
      * Save database configuration on disk
      */

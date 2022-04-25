@@ -4,9 +4,11 @@ import { parseYaml } from "obsidian";
 import { YamlHandler,YamlHandlerResponse } from "parsers/handlers/AbstractYamlPropertyHandler";
 // Handlers of yaml parse
 import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
+import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
 import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
 import { DatabaseYaml } from "cdm/DatabaseModel";
+
 /**
  * PUBLIC METHODS
  ****************/
@@ -50,7 +52,8 @@ function validateYaml(yaml: any): YamlHandlerResponse{
  */
 function getHandlers(): YamlHandler[] {
     return [
-        new BaseInfoHandler()
+        new BaseInfoHandler(),
+        new ColumnsHandler()
     ];
 }
 

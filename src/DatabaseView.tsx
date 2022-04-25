@@ -1,6 +1,7 @@
 import { TableDataType } from 'cdm/FolderModel';
 import { obtainColumnsFromFolder, obtainMetadataColumns} from 'components/Columns';
 import { createDatabase } from 'components/index/Database';
+import { DbFolderError } from 'errors/AbstractError';
 import { DatabaseCore, DataTypes, StyleClasses } from 'helpers/Constants';
 import { adapterTFilesToRows, hasFrontmatterKey } from 'helpers/VaultManagement';
 import DBFolderPlugin from 'main';
@@ -107,13 +108,17 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     async initDatabase(): Promise<void> {
+      try{
       LOGGER.info(`=>initDatabase ${this.file.path}`);
+      // Load the database file
       this.diskConfig = new DatabaseInfo(this.file);
       await this.diskConfig.initDatabaseconfigYaml(this.plugin.settings.local_settings);
+      // Obtain base information about the database
       const columns = await obtainColumnsFromFolder(this.diskConfig.yaml.columns);
       const metatadaColumns = await obtainMetadataColumns();
       columns.push(...metatadaColumns);
       const rows = await adapterTFilesToRows(this.file.parent.path);
+      // Define table properties
       const tableProps:TableDataType = {
         columns: columns,
         metadataColumns: metatadaColumns,
@@ -122,21 +127,26 @@ export class DatabaseView extends TextFileView implements HoverParent {
         view: this,
         stateManager: this.plugin.getStateManager(this.file)
       }
-      
+      // Render database
       const table = createDatabase(tableProps);
-      this.tableContainer  = this.contentEl.createDiv(StyleClasses.TABLE_CONTAINER);
       ReactDOM.render(table, this.tableContainer);
       LOGGER.info(`<=initDatabase ${this.file.path}`);
+      } catch (e:unknown) {
+        LOGGER.error(`initDatabase ${this.file.path}`, e);
+        if(e instanceof DbFolderError) {
+          e.render(this.tableContainer);
+        }else{
+          throw e;
+        }
+      }
     }
     
     destroy() {
       LOGGER.info(`=>destroy ${this.file.path}`);
-        // Remove draggables from render, as the DOM has already detached
+      // Remove draggables from render, as the DOM has already detached
       this.plugin.removeView(this);
-      if (this.tableContainer) {
-        ReactDOM.unmountComponentAtNode(this.tableContainer);
-        this.tableContainer.remove();
-      }
+      ReactDOM.unmountComponentAtNode(this.tableContainer);
+      this.tableContainer.remove();
       LOGGER.info(`<=destroy ${this.file.path}`);
     }
     
@@ -151,6 +161,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
     async onLoadFile(file: TFile) {
         try {
+          this.tableContainer  = this.contentEl.createDiv(StyleClasses.TABLE_CONTAINER);
           return await super.onLoadFile(file);
         } catch (e) {
           const stateManager = this.plugin.stateManagers.get(this.file);    
