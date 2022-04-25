@@ -7,6 +7,7 @@ import { YamlHandler,YamlHandlerResponse } from "parsers/handlers/AbstractYamlPr
 // Handlers of yaml parse
 import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
 import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
+import { ConfigHandler } from "parsers/handlers/ConfigHandler";
 
 /**
  * PUBLIC METHODS
@@ -55,7 +56,8 @@ function validateYaml(yaml: any): YamlHandlerResponse{
 function getHandlers(): YamlHandler[] {
     return [
         new BaseInfoHandler(),
-        new ColumnsHandler()
+        new ColumnsHandler(),
+        new ConfigHandler()
     ];
 }
 

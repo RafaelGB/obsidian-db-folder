@@ -7,7 +7,7 @@ import { add_dropdown } from "settings/SettingsComponents";
 export class GroupFolderColumnDropDownHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Choose column for group folder';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, local, view} = settingHandlerResponse;
+        const { containerEl, local, view} = settingHandlerResponse;
         if(local){
             const columns = view.diskConfig.yaml.columns;
             const current_group_folder = view.diskConfig.yaml.config.group_folder_column;
