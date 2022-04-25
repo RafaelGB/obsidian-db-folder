@@ -1,5 +1,6 @@
 import { DatabaseColumn, DatabaseYaml } from 'cdm/DatabaseModel';
 import {
+    Notice,
     TFile
 } from 'obsidian';
 import { LOGGER } from 'services/Logger';
@@ -35,10 +36,16 @@ export default class DatabaseInfo {
         }
         
         const frontmatterRaw = match[1];
-
-        this.yaml = DatabaseStringToYamlParser(frontmatterRaw);
-        // TODO move to handler. default config in case of does not exist on file yet
-        if(!this.yaml.config) this.yaml.config = default_local_settings;
+        const response = DatabaseStringToYamlParser(frontmatterRaw);
+         
+        if (Object.keys(response.errors).length > 0) {
+             const errors = Object.keys(response.errors).map(e => e+': '+response.errors[e].join('\n')).join('\n')
+            new Notice(errors);
+            if(!response.yaml.config) response.yaml.config = default_local_settings;
+        }
+        
+        this.yaml = response.yaml;
+        await this.saveOnDisk();
         LOGGER.info(`<=initDatabaseconfigYaml`);
     }
 

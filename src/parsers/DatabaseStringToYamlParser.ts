@@ -5,9 +5,6 @@ import { YamlHandler,YamlHandlerResponse } from "parsers/handlers/AbstractYamlPr
 // Handlers of yaml parse
 import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
 import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
-import { DbFolderError } from "errors/AbstractError";
-import { ParserError } from "errors/ParserError";
-import { DatabaseYaml } from "cdm/DatabaseModel";
 
 /**
  * PUBLIC METHODS
@@ -15,14 +12,9 @@ import { DatabaseYaml } from "cdm/DatabaseModel";
 /**
  * Parse a string
  */
-const DatabaseStringToYamlParser = (yamlText: string): DatabaseYaml => {
+const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
     const yaml = parseYaml(yamlText);
-    const response = validateYaml(yaml);
-    if (Object.keys(response.errors).length > 0) {
-        throw new DbFolderError(new ParserError("Error parsing database", response.errors));
-    }
-    return response.yaml;
-
+    return validateYaml(yaml);
 }
 
 /**
