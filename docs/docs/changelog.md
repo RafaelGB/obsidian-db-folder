@@ -1,3 +1,6 @@
+## 0.0.7
+### No longer broken
+- Now before render a database, it will check if dataview plugin is installed. Showing a warning message if not. [ISSUE#13](https://github.com/RafaelGB/obsidian-bd-folder/issues/13)
 ## 0.0.6
 ### No longer broken
 - Fixed unable to add frontmatter to note after modify label [ISSUE#10](https://github.com/RafaelGB/obsidian-bd-folder/issues/10)
