@@ -9,7 +9,13 @@ import { Setting } from "obsidian";
  * @param onChangePromise 
  * @returns {Setting}
  */
-export function add_toggle(container: HTMLElement,name: string, desc: string, value: boolean, onChangePromise: (value: boolean) => Promise<void>): Setting {
+export function add_toggle(
+    container: HTMLElement,
+    name: string,
+    desc: string,
+    value: boolean,
+    onChangePromise: (value: boolean) => Promise<void>
+    ): Setting {
     const toggle = new Setting(container)
         .setName(name)
         .setDesc(desc)

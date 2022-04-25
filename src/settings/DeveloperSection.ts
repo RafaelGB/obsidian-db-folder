@@ -1,5 +1,5 @@
 import { add_setting_header } from 'settings/SettingsComponents';
-import { SettingHandler } from 'settings/handlers/AbstractSettingHandler';
+import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
 import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateToggleHandler';
 import { SettingsManager } from 'Settings';
@@ -22,7 +22,14 @@ export function developer_settings_section(settingsManager: SettingsManager, con
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-  handlers[0].handle(settingsManager, containerEl, local, view);
+    const settingHandlerResponse: SettingHandlerResponse = {
+        settingsManager: settingsManager,
+        containerEl: containerEl,
+        local: local,
+        listOfErrors: [],
+        view: view,
+    };
+  handlers[0].handle(settingHandlerResponse);
 }
 
 /**

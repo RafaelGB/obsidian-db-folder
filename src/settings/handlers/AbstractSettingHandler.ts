@@ -1,10 +1,17 @@
 import { DatabaseView } from "DatabaseView";
-import DBFolderPlugin from "main";
 import { SettingsManager } from "Settings";
 
 export interface SettingHandler {
     setNext(handler: SettingHandler): SettingHandler;
-    handle(settingsManager: SettingsManager,containerEl: HTMLElement, local: boolean, view?: DatabaseView): [string, string][];
+    handle(settingHandlerResponse:SettingHandlerResponse): SettingHandlerResponse;
+}
+
+export type SettingHandlerResponse = {
+    settingsManager: SettingsManager, 
+    containerEl: HTMLElement,
+    local: boolean,
+    listOfErrors: [string, string][],
+    view?: DatabaseView,
 }
 
 export abstract class AbstractSettingsHandler implements SettingHandler {
@@ -16,9 +23,18 @@ export abstract class AbstractSettingsHandler implements SettingHandler {
         this.listOfErrors.push([this.settingTitle, error]);
     }
     
+    protected goNext(): SettingHandler {
+        if (this.nextHandler) {
+            return this.nextHandler;
+        }
+        return this;
+    }
+
     public setNext(handler: SettingHandler): SettingHandler {
         this.nextHandler = handler;
         return handler;
     }
-    abstract handle(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): [string, string][];
+
+
+    abstract handle(settingHandlerResponse:SettingHandlerResponse): SettingHandlerResponse;
 }

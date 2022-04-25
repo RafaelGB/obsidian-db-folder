@@ -2,11 +2,12 @@ import { DatabaseView } from "DatabaseView";
 import { Setting } from "obsidian";
 import { LOGGER } from "services/Logger";
 import { SettingsManager } from "Settings";
-import { AbstractSettingsHandler } from "settings/handlers/AbstractSettingHandler";
+import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
 export class LoggerLevelInfoDropDownHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Enable debug mode';
-    handle(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): [string, string][] {
+    handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
+        const { settingsManager, containerEl, local} = settingHandlerResponse;
         if(!local && settingsManager.plugin.settings.global_settings.enable_debug_mode){
             new Setting(containerEl)
             .setName('Select level info of logs')
@@ -32,8 +33,8 @@ export class LoggerLevelInfoDropDownHandler extends AbstractSettingsHandler {
             });
         }
         if (this.nextHandler) {
-            return this.nextHandler.handle(settingsManager, containerEl, local, view);
+            return this.nextHandler.handle(settingHandlerResponse);
         }
-        return this.listOfErrors;
+        return settingHandlerResponse;
     }
 }

@@ -1,5 +1,5 @@
 import { add_setting_header } from 'settings/SettingsComponents';
-import { SettingHandler } from 'settings/handlers/AbstractSettingHandler';
+import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
 import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateToggleHandler';
 import { SettingsManager } from 'Settings';
@@ -10,7 +10,7 @@ import { StyleVariables } from 'helpers/Constants';
 /**
  * developer settings section
  */
-export function developer_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
+export function columns_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
     // title of the section
     add_setting_header(containerEl,"Developer section",'h3');
     // add soft red background color to the section
@@ -22,7 +22,14 @@ export function developer_settings_section(settingsManager: SettingsManager, con
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-  handlers[0].handle(settingsManager, containerEl, local, view);
+    const settingHandlerResponse: SettingHandlerResponse = {
+        settingsManager: settingsManager,
+        containerEl: containerEl,
+        local: local,
+        listOfErrors: [],
+        view: view,
+    };
+    handlers[0].handle(settingHandlerResponse);
 }
 
 /**
@@ -30,8 +37,5 @@ export function developer_settings_section(settingsManager: SettingsManager, con
  */
  function getHandlers(): SettingHandler[] {
     return [
-        new LoggerToggleHandler(),
-        new LoggerLevelInfoDropDownHandler(),
-        new TableStateToggleHandler()
     ];
 }
