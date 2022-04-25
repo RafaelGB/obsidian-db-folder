@@ -1,4 +1,4 @@
-import { ActionTypes, DataTypes, UpdateRowOptions } from "helpers/Constants";
+import { ActionTypes, DataTypes, StyleVariables, UpdateRowOptions } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable"
 import { LOGGER } from "services/Logger";
@@ -153,7 +153,7 @@ export default function Cell(cellProperties:Cell) {
                 minWidth: 200,
                 maxWidth: 320,
                 padding: "0.75rem",
-                background: "var(--background-secondary)",
+                background: StyleVariables.BACKGROUND_SECONDARY,
               }}>
               <div className='d-flex flex-wrap-wrap' style={{marginTop: "-0.5rem"}}>
                 {options.map((option:any) => (

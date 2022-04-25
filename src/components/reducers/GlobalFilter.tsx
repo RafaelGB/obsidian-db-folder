@@ -1,6 +1,7 @@
 import React from "react";
 import 'regenerator-runtime/runtime';
 import { useAsyncDebounce } from "react-table";
+import { StyleVariables } from "helpers/Constants";
 
 /**
  * Filter component based on react-table.
@@ -34,8 +35,8 @@ export default function GlobalFilter(globalFilterProps:any) {
           style={{
             fontSize: '1.1rem',
             border: '0',
-            background: "var(--background-primary)",
-            color: "var(--text-normal)",
+            background: StyleVariables.BACKGROUND_PRIMARY,
+            color: StyleVariables.TEXT_NORMAL,
           }}
         />
       </span>

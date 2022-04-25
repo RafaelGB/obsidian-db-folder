@@ -65,3 +65,12 @@ export const UpdateRowOptions = Object.freeze({
 export const StyleClasses = Object.freeze({
   TABLE_CONTAINER: 'dbfolder-table-container',
 });
+
+export const StyleVariables = Object.freeze({
+  BACKGROUND_MODIFIER_ERROR: 'var(--background-modifier-error)',
+  BACKGROUND_PRIMARY: 'var(--background-primary)',
+  BACKGROUND_SECONDARY: 'var(--background-secondary)',
+  BACKGROUND_DIVIDER: 'var(--background-divider)',
+  TEXT_FAINT: 'var(--text-faint)',
+  TEXT_NORMAL: 'var(--text-normal)',
+});

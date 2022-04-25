@@ -11,7 +11,7 @@ import MultiIcon from 'components/img/Multi';
 import HashIcon from 'components/img/Hash';
 import PlusIcon from 'components/img/Plus';
 import MarkdownObsidian from 'components/img/Markdown';
-import { ActionTypes, DataTypes, MetadataColumns } from 'helpers/Constants';
+import { ActionTypes, DataTypes, MetadataColumns, StyleVariables } from 'helpers/Constants';
 import { LOGGER } from 'services/Logger';
 import { DatabaseHeaderProps } from 'cdm/FolderModel';
 import ReactDOM from 'react-dom';
@@ -218,7 +218,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
             className='shadow-5 border-radius-md'
             style={{
               width: 240,
-              backgroundColor: "var(--background-secondary)",
+              backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
             }}>
             {/** Edit header label section */}
             <div style={{paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem"}}>
@@ -234,7 +234,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
                   onKeyDown={handleKeyDown}
                 />
               </div>
-              <span className='font-weight-600 font-size-75' style={{textTransform: "uppercase", color: "var(--text-faint)"}}>
+              <span className='font-weight-600 font-size-75' style={{textTransform: "uppercase", color: StyleVariables.TEXT_FAINT}}>
                 Property Type
               </span>
             </div>
@@ -259,7 +259,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
                   style={{
                     ...typePopper.styles.popper,
                     width: 200,
-                    backgroundColor: "var(--background-secondary)",
+                    backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
                     zIndex: 4,
                     padding: "4px 0px"
                   }}>
@@ -276,7 +276,7 @@ export default function Header(headerProps:DatabaseHeaderProps) {
             </div>
             <div
               style={{
-                borderTop: `2px solid var(--background-divider)`,
+                borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
                 padding: "4px 0px"
               }}>
               {buttons.map((button) => (
