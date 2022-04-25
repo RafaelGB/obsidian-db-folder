@@ -3,6 +3,7 @@ import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/Abstra
 import { SettingsManager } from 'Settings';
 import { DatabaseView } from 'DatabaseView';
 import { StyleVariables } from 'helpers/Constants';
+import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/GroupFolderColumnDropDownHandler';
 
 /**
  * developer settings section
@@ -34,5 +35,6 @@ export function columns_settings_section(settingsManager: SettingsManager, conta
  */
  function getHandlers(): SettingHandler[] {
     return [
+        new GroupFolderColumnDropDownHandler()
     ];
 }

@@ -4,6 +4,7 @@ import DBFolderPlugin from 'main';
 import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
+import { columns_settings_section } from "settings/ColumnsSection";
 import { StyleClasses } from "helpers/Constants";
 
 interface GlobalSettings {
@@ -13,6 +14,7 @@ interface GlobalSettings {
 
 export interface LocalSettings {
   enable_show_state: boolean;
+  group_folder_column: string;
 }
 export interface DatabaseSettings {
   global_settings: GlobalSettings;
@@ -25,7 +27,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     logger_level_info: 'error'
   },
   local_settings:{
-    enable_show_state: false
+    enable_show_state: false,
+    group_folder_column: ''
   }
 };
 
@@ -81,6 +84,8 @@ export interface SettingsManagerConfig {
 
     constructSettingBody(containerEl: HTMLElement, local: boolean, view?: DatabaseView) {
       containerEl.empty();
+      /** Columns settings section */
+      columns_settings_section(this, containerEl, local, view);
       /** Developer section */
       developer_settings_section(this, containerEl, local, view);
     }
