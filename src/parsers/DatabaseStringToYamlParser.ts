@@ -1,3 +1,5 @@
+import { DbFolderError } from "errors/AbstractError";
+import { ParserError } from "errors/ParserError";
 import { parseYaml } from "obsidian";
 
 // Interface of handlers
@@ -13,8 +15,16 @@ import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
  * Parse a string
  */
 const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
+    try{
     const yaml = parseYaml(yamlText);
-    return validateYaml(yaml);
+    return validateYaml(yaml);       
+    }catch(e){
+        throw new DbFolderError(
+            new ParserError("Error parsing yaml",
+                {exception: [e]}
+            )
+        );
+    }
 }
 
 /**
