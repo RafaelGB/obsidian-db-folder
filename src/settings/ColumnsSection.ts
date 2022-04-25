@@ -1,9 +1,6 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
-import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
-import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateToggleHandler';
 import { SettingsManager } from 'Settings';
-import { LoggerLevelInfoDropDownHandler } from 'settings/handlers/developer/LoggerLevelInfoDropDownHandler';
 import { DatabaseView } from 'DatabaseView';
 import { StyleVariables } from 'helpers/Constants';
 
@@ -26,7 +23,7 @@ export function columns_settings_section(settingsManager: SettingsManager, conta
         settingsManager: settingsManager,
         containerEl: containerEl,
         local: local,
-        listOfErrors: [],
+        errors: {},
         view: view,
     };
     handlers[0].handle(settingHandlerResponse);

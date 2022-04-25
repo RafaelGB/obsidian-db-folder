@@ -1,8 +1,5 @@
-
-import { SettingsManager } from "Settings";
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-import { DatabaseView } from "DatabaseView";
 export class TableStateToggleHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Show state of table';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
@@ -23,7 +20,6 @@ export class TableStateToggleHandler extends AbstractSettingsHandler {
                     });
                 }
             }
-
             add_toggle(
                 containerEl,
                 this.settingTitle, 
@@ -32,10 +28,6 @@ export class TableStateToggleHandler extends AbstractSettingsHandler {
                 table_state_togle_promise
             );
         }
-        // Check next handler
-        if (this.nextHandler) {
-            return this.nextHandler.handle(settingHandlerResponse);
-        }
-        return settingHandlerResponse;
+        return this.goNext(settingHandlerResponse);
     }
 }

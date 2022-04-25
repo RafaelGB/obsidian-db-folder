@@ -26,7 +26,7 @@ export function developer_settings_section(settingsManager: SettingsManager, con
         settingsManager: settingsManager,
         containerEl: containerEl,
         local: local,
-        listOfErrors: [],
+        errors: {},
         view: view,
     };
   handlers[0].handle(settingHandlerResponse);

@@ -2,7 +2,6 @@ import { LOGGER } from "services/Logger";
 import { SettingsManager } from "Settings";
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-import { DatabaseView } from "DatabaseView";
 export class LoggerToggleHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Enable developer settings. Logger will be enabled';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
@@ -30,11 +29,6 @@ export class LoggerToggleHandler extends AbstractSettingsHandler {
                 logger_togle_promise
             );
         }
-        // Check next handler
-        if (this.nextHandler) {
-            return this.nextHandler.handle(settingHandlerResponse);
-        }
-        
-        return settingHandlerResponse;
+        return this.goNext(settingHandlerResponse);
     }
 }

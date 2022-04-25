@@ -4,6 +4,7 @@ import DBFolderPlugin from 'main';
 import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
+import { StyleClasses } from "helpers/Constants";
 
 interface GlobalSettings {
   enable_debug_mode: boolean;
@@ -72,9 +73,9 @@ export interface SettingsManagerConfig {
     constructUI(containerEl: HTMLElement, heading: string, local: boolean,view?: DatabaseView) {
         /** Common modal headings */
         containerEl.empty();
-        containerEl.addClass('database-settings-modal');
+        containerEl.addClass(StyleClasses.SETTINGS_MODAL);
         add_setting_header(containerEl,heading,'h2');
-        const settingsBody:HTMLDivElement = containerEl.createDiv('database-settings-body');
+        const settingsBody:HTMLDivElement = containerEl.createDiv(StyleClasses.SETTINGS_MODAL_BODY);
         this.constructSettingBody(settingsBody, local, view);
     }
 
@@ -107,7 +108,7 @@ export class SettingsModal extends Modal {
     onOpen() {
       const { contentEl, modalEl } = this;
   
-      modalEl.addClass('database-settings-modal');
+      modalEl.addClass(StyleClasses.SETTINGS_MODAL);
   
       this.settingsManager.constructUI(contentEl, this.view.file.basename, true, this.view);
     }

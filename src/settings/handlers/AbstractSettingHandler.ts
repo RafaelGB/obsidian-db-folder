@@ -10,24 +10,29 @@ export type SettingHandlerResponse = {
     settingsManager: SettingsManager, 
     containerEl: HTMLElement,
     local: boolean,
-    listOfErrors: [string, string][],
+    errors: Record<string, string[]>,
     view?: DatabaseView,
 }
 
 export abstract class AbstractSettingsHandler implements SettingHandler {
     abstract settingTitle: string;
     protected nextHandler: SettingHandler;
-    protected listOfErrors: [string,string][] = [];
+    protected listOfErrors: string[] = [];
 
     protected addError(error: string): void {
-        this.listOfErrors.push([this.settingTitle, error]);
+        this.listOfErrors.push(error);
     }
     
-    protected goNext(): SettingHandler {
-        if (this.nextHandler) {
-            return this.nextHandler;
+    public goNext(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
+        // add possible errors to response
+        if(this.listOfErrors.length > 0) {
+            settingHandlerResponse.errors[this.settingTitle] = this.listOfErrors;
         }
-        return this;
+        // Check next handler
+        if (this.nextHandler) {
+            return this.nextHandler.handle(settingHandlerResponse);
+        }
+        return settingHandlerResponse;
     }
 
     public setNext(handler: SettingHandler): SettingHandler {
