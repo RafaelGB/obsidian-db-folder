@@ -1,9 +1,4 @@
-import {
-  ActionTypes,
-  DataTypes,
-  StyleVariables,
-  UpdateRowOptions,
-} from "helpers/Constants";
+import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { LOGGER } from "services/Logger";
@@ -11,7 +6,6 @@ import { Cell } from "react-table";
 import { MarkdownRenderer } from "obsidian";
 import PlusIcon from "components/img/Plus";
 import { grey, randomColor } from "helpers/Colors";
-import { updateRowFile } from "helpers/VaultManagement";
 import { usePopper } from "react-popper";
 import Relationship from "components/RelationShip";
 import ReactDOM from "react-dom";
@@ -44,7 +38,7 @@ export default function DefaultCell(cellProperties: Cell) {
   /** Column options */
   const options = (cellProperties.column as any).options;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row as any).note;
   /** state of cell value */
   const [value, setValue] = useState({ value: initialValue, update: false });
   /** state for keeping the timeout to trigger the editior */
@@ -107,12 +101,13 @@ export default function DefaultCell(cellProperties: Cell) {
     setValue({ value: option.label, update: true });
     setShowSelect(false);
     // save on disk & move file if its configured on the column
+    console.log(`handleOptionClick`);
     dataDispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
       file: note.getFile(),
       key: (cellProperties.column as any).key,
       value: option.label,
-      rowId: cellProperties.row.index,
+      row: cellProperties.row,
     });
   }
 

@@ -339,23 +339,29 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
     case ActionTypes.UPDATE_OPTION_CELL: // save on disk
       if (dbconfig.group_folder_column === action.key) {
         console.log("asdasdasd");
-        const rowIndex = state.data.findIndex((row) => row.id === action.rowId);
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);
-        state.data[rowIndex][
+        action.row[
           MetadataColumns.FILE
         ] = `[[${action.file.parent.path}/${action.value}/${action.file.name}]]`;
-        state.data[rowIndex].note = new NoteInfo(
+        action.row.note = new NoteInfo(
           {
-            ...state.data[rowIndex],
+            ...action.row,
             file: {
               path: `${state.view.file.parent.path}/${action.value}/${action.file.name}`,
             },
           },
-          rowIndex
+          action.row.index
         );
-        // Else go UPDATE_CELL
-        return state;
+        action.row.id = action.row.index + 1;
+        return update(state, {
+          data: {
+            [action.row.index]: {
+              $set: action.row,
+            },
+          },
+        });
       }
+    // Else go UPDATE_CELL
 
     case ActionTypes.UPDATE_CELL:
       // save on disk
