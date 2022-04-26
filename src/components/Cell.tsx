@@ -38,7 +38,7 @@ export default function DefaultCell(cellProperties: Cell) {
   /** Column options */
   const options = (cellProperties.column as any).options;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).note;
   /** state of cell value */
   const [value, setValue] = useState({ value: initialValue, update: false });
   /** state for keeping the timeout to trigger the editior */
@@ -101,7 +101,6 @@ export default function DefaultCell(cellProperties: Cell) {
     setValue({ value: option.label, update: true });
     setShowSelect(false);
     // save on disk & move file if its configured on the column
-    console.log(`handleOptionClick`);
     dataDispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
       file: note.getFile(),

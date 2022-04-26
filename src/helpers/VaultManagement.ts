@@ -174,7 +174,6 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
     UpdateRowOptions.COLUMN_VALUE
   );
   const filePath = `${folderPath}/${action.file.name}`;
-  console.log(`move file from ${action.file.path} |||| to |||| ${filePath}`);
   await app.fileManager.renameFile(action.file, filePath);
 }
 

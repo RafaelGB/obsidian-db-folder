@@ -338,12 +338,11 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       };
     case ActionTypes.UPDATE_OPTION_CELL: // save on disk
       if (dbconfig.group_folder_column === action.key) {
-        console.log("asdasdasd");
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);
         action.row[
           MetadataColumns.FILE
         ] = `[[${action.file.parent.path}/${action.value}/${action.file.name}]]`;
-        action.row.note = new NoteInfo(
+        action.row.original.note = new NoteInfo(
           {
             ...action.row,
             file: {
@@ -356,7 +355,12 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         return update(state, {
           data: {
             [action.row.index]: {
-              $set: action.row,
+              note: {
+                $set: action.row.original.note,
+              },
+              [MetadataColumns.FILE]: {
+                $set: action.row[MetadataColumns.FILE],
+              },
             },
           },
         });
