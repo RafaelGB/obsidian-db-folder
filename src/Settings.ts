@@ -53,7 +53,6 @@ export class SettingsManager {
   plugin: DBFolderPlugin;
   config: SettingsManagerConfig;
   settings: DatabaseSettings;
-  currentContainer: HTMLElement;
   cleanupFns: Array<() => void> = [];
   applyDebounceTimer: number = 0;
 
@@ -76,7 +75,6 @@ export class SettingsManager {
    * @param view optional. Used only for local settings
    */
   constructUI(containerEl: HTMLElement, heading: string, local: boolean, view?: DatabaseView) {
-    this.currentContainer = containerEl;
     /** Common modal headings */
     containerEl.addClass(StyleClasses.SETTINGS_MODAL);
     add_setting_header(containerEl, heading, 'h2');
@@ -92,26 +90,20 @@ export class SettingsManager {
   }
 
   constructSettingBody(settingHandlerResponse: SettingHandlerResponse) {
-    /** Columns settings section */
+    /** Columns section */
     columns_settings_section(settingHandlerResponse);
     /** Developer section */
     developer_settings_section(settingHandlerResponse);
   }
 
   reset(response: SettingHandlerResponse) {
-    response.containerEl.remove();
-    // remove all childs
-    this.currentContainer.childNodes.forEach((child) => {
-      this.currentContainer.removeChild(child);
-    });
-    const settingHandlerResponse: SettingHandlerResponse = {
-      settingsManager: this,
-      containerEl: this.currentContainer,
-      local: response.local,
-      errors: {},
-      view: response.view,
-    };
-    this.constructSettingBody(settingHandlerResponse);
+    const parentElement = response.containerEl.parentElement;
+    // remove all sections
+    parentElement.empty();
+
+    response.errors = {};
+    response.containerEl = parentElement;
+    this.constructSettingBody(response);
   }
 
   cleanUp() {
@@ -137,9 +129,8 @@ export class SettingsModal extends Modal {
 
   onOpen() {
     const { contentEl, modalEl } = this;
-
+    contentEl.empty();
     modalEl.addClass(StyleClasses.SETTINGS_MODAL);
-
     this.settingsManager.constructUI(contentEl, this.view.file.basename, true, this.view);
   }
 
@@ -162,6 +153,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
 
   display(): void {
     const { containerEl } = this;
+    containerEl.empty();
     this.settingsManager.constructUI(containerEl, 'Database Folder Plugin', false);
   }
 }

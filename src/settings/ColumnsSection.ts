@@ -1,7 +1,5 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
-import { SettingsManager } from 'Settings';
-import { DatabaseView } from 'DatabaseView';
 import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/GroupFolderColumnDropDownHandler';
 
 /**

@@ -320,3 +320,10 @@ html {
   top: auto !important;
   left: auto !important;
 }
+
+/*
+*  Settings styles
+*/
+.configuration-section-container-developer {
+  background-color: var(--background-modifier-error)
+}
