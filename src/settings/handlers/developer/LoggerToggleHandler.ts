@@ -19,7 +19,7 @@ export class LoggerToggleHandler extends AbstractSettingsHandler {
                 // update service value
                 LOGGER.setDebugMode(value);
                 // Force refresh of settings
-                settingsManager.constructSettingBody(containerEl, local);
+                settingsManager.reset(settingHandlerResponse);
             }
             add_toggle(
                 containerEl,

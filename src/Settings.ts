@@ -6,6 +6,7 @@ import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 import { columns_settings_section } from "settings/ColumnsSection";
 import { StyleClasses } from "helpers/Constants";
+import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
 interface GlobalSettings {
   enable_debug_mode: boolean;
@@ -52,6 +53,7 @@ export class SettingsManager {
   plugin: DBFolderPlugin;
   config: SettingsManagerConfig;
   settings: DatabaseSettings;
+  currentContainer: HTMLElement;
   cleanupFns: Array<() => void> = [];
   applyDebounceTimer: number = 0;
 
@@ -74,21 +76,44 @@ export class SettingsManager {
    * @param view optional. Used only for local settings
    */
   constructUI(containerEl: HTMLElement, heading: string, local: boolean, view?: DatabaseView) {
+    this.currentContainer = containerEl;
     /** Common modal headings */
-    containerEl.empty();
     containerEl.addClass(StyleClasses.SETTINGS_MODAL);
     add_setting_header(containerEl, heading, 'h2');
-    const settingsBody: HTMLDivElement = containerEl.createDiv(StyleClasses.SETTINGS_MODAL_BODY);
-    this.constructSettingBody(settingsBody, local, view);
+
+    const settingHandlerResponse: SettingHandlerResponse = {
+      settingsManager: this,
+      containerEl: containerEl,
+      local: local,
+      errors: {},
+      view: view,
+    };
+    this.constructSettingBody(settingHandlerResponse);
   }
 
-  constructSettingBody(containerEl: HTMLElement, local: boolean, view?: DatabaseView) {
-    containerEl.empty();
+  constructSettingBody(settingHandlerResponse: SettingHandlerResponse) {
     /** Columns settings section */
-    columns_settings_section(this, containerEl, local, view);
+    columns_settings_section(settingHandlerResponse);
     /** Developer section */
-    developer_settings_section(this, containerEl, local, view);
+    developer_settings_section(settingHandlerResponse);
   }
+
+  reset(response: SettingHandlerResponse) {
+    response.containerEl.remove();
+    // remove all childs
+    this.currentContainer.childNodes.forEach((child) => {
+      this.currentContainer.removeChild(child);
+    });
+    const settingHandlerResponse: SettingHandlerResponse = {
+      settingsManager: this,
+      containerEl: this.currentContainer,
+      local: response.local,
+      errors: {},
+      view: response.view,
+    };
+    this.constructSettingBody(settingHandlerResponse);
+  }
+
   cleanUp() {
     this.cleanupFns.forEach((fn) => fn());
     this.cleanupFns = [];

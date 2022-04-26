@@ -165,6 +165,11 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
 }
 
+export async function moveFile(note: TFile, newPath: string): Promise<void> {
+  console.log(`move file from ${note.path} to ${newPath}`);
+  await app.fileManager.renameFile(note, newPath);
+}
+
 /**
  * Check if dataview plugin is installed
  * @returns true if installed, false otherwise

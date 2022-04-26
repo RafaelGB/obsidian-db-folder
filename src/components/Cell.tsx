@@ -90,7 +90,7 @@ export default function DefaultCell(cellProperties: Cell) {
   }
 
   function onChange(event: ContentEditableEvent) {
-    console.log("on change");
+    // save on disk
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       note: note.getFile(),
@@ -106,13 +106,13 @@ export default function DefaultCell(cellProperties: Cell) {
   function handleOptionClick(option: { label: string; backgroundColor?: any }) {
     setValue({ value: option.label, update: true });
     setShowSelect(false);
-    // save on disk
-    updateRowFile(
-      (cellProperties.row.original as any).note.getFile(),
-      (cellProperties.column as any).key,
-      option.label,
-      UpdateRowOptions.COLUMN_VALUE
-    );
+    // save on disk & move file if its configured on the column
+    dataDispatch({
+      type: ActionTypes.UPDATE_OPTION_CELL,
+      file: note.getFile(),
+      key: (cellProperties.column as any).key,
+      value: option.label,
+    });
   }
 
   function handleOptionBlur(e: any) {

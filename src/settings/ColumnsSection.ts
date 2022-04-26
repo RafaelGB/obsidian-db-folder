@@ -7,10 +7,10 @@ import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/Grou
 /**
  * developer settings section
  */
-export function columns_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
-    const sectionContainer = containerEl.createDiv("configuration-section-container-columns");
+export function columns_settings_section(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
+    settingHandlerResponse.containerEl = settingHandlerResponse.containerEl.createDiv("configuration-section-container-columns");
     // title of the section
-    add_setting_header(sectionContainer, "Configuration about columns", 'h3');
+    add_setting_header(settingHandlerResponse.containerEl, "Configuration about columns", 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;
@@ -18,15 +18,7 @@ export function columns_settings_section(settingsManager: SettingsManager, conta
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-
-    const settingHandlerResponse: SettingHandlerResponse = {
-        settingsManager: settingsManager,
-        containerEl: sectionContainer,
-        local: local,
-        errors: {},
-        view: view,
-    };
-    handlers[0].handle(settingHandlerResponse);
+    return handlers[0].handle(settingHandlerResponse);
 }
 
 /**

@@ -12,6 +12,7 @@ import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import {
   adapterRowToDatabaseYaml,
+  moveFile,
   updateRowFile,
 } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
@@ -23,7 +24,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
     `<=>databaseReducer action: ${action.type} value: ${action.value}`
   );
-  console.log(action.type);
+  /** database configuration */
+  const dbconfig = state.view.diskConfig.yaml.config;
   // Check if action exists
   if (!action) {
     return state;
@@ -334,11 +336,18 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           ...state.columns.slice(deleteIndex + 1, state.columns.length),
         ],
       };
+    case ActionTypes.UPDATE_OPTION_CELL:
+      if (dbconfig.group_folder_column === action.key) {
+        const newFilePath = `${state.view.file.parent.path}/${action.value}/${action.file.basename}.md`;
+        moveFile(action.file, newFilePath);
+      }
+    /** Continues behind
+     * vvvvvvvvvvvvvvvvv
+     */
     case ActionTypes.UPDATE_CELL:
-      console.log("something changed");
       // save on disk
       updateRowFile(
-        action.note,
+        action.file,
         action.key,
         action.value,
         UpdateRowOptions.COLUMN_VALUE

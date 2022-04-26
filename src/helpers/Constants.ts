@@ -5,6 +5,7 @@ export const ActionTypes = Object.freeze({
   UPDATE_COLUMN_TYPE: 'update_column_type',
   UPDATE_COLUMN_LABEL: 'update_column_label',
   UPDATE_CELL: 'update_cell',
+  UPDATE_OPTION_CELL: 'update_option_cell',
   ADD_COLUMN_TO_LEFT: 'add_column_to_left',
   ADD_COLUMN_TO_RIGHT: 'add_column_to_right',
   DELETE_COLUMN: 'delete_column',
