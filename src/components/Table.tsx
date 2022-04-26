@@ -7,7 +7,8 @@ import {
   useSortBy, 
   useGlobalFilter, 
   useColumnOrder, 
-  useFilters 
+  useFilters, 
+  Cell
 } from 'react-table';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import clsx from "clsx";
@@ -22,7 +23,7 @@ import { getNormalizedPath } from "helpers/VaultManagement";
 import { ActionTypes, DatabaseCore } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
-import Cell from "components/Cell";
+import DefaultCell from "components/Cell";
 import Header from "components/Header";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
@@ -31,7 +32,7 @@ const defaultColumn = {
   minWidth: 50,
   width: 150,
   maxWidth: 400,
-  Cell: Cell,
+  Cell: DefaultCell,
   Header: Header,
   sortType: 'alphanumericFalsyLast',
 };
@@ -92,7 +93,7 @@ export function Table(initialState: TableDataType){
     }),
     []
   );
-  let propsUseTable:any = {
+  const propsUseTable:any = {
     columns, 
     data, 
     defaultColumn,
