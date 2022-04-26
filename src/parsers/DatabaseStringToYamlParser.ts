@@ -3,7 +3,7 @@ import { ParserError } from "errors/ParserError";
 import { parseYaml } from "obsidian";
 
 // Interface of handlers
-import { YamlHandler,YamlHandlerResponse } from "parsers/handlers/AbstractYamlPropertyHandler";
+import { YamlHandler, YamlHandlerResponse } from "parsers/handlers/AbstractYamlPropertyHandler";
 // Handlers of yaml parse
 import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
 import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
@@ -16,13 +16,13 @@ import { ConfigHandler } from "parsers/handlers/ConfigHandler";
  * Parse a string
  */
 const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
-    try{
-    const yaml = parseYaml(yamlText);
-    return validateYaml(yaml);       
-    }catch(e){
+    try {
+        const yaml = parseYaml(yamlText);
+        return validateYaml(yaml);
+    } catch (e) {
         throw new DbFolderError(
             new ParserError("Error parsing yaml",
-                {exception: [e]}
+                { exception: [e] }
             )
         );
     }
@@ -36,15 +36,15 @@ const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
 /**
  * Validate yaml received from input using handlers of function getHandlers
  */
-function validateYaml(yaml: any): YamlHandlerResponse{
+function validateYaml(yaml: any): YamlHandlerResponse {
     const handlers = getHandlers();
     let i = 1;
     while (i < handlers.length) {
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-    
-    const response: YamlHandlerResponse={yaml: yaml, errors: {}};
+
+    const response: YamlHandlerResponse = { yaml: yaml, errors: {} };
     return handlers[0].handle(response);
 }
 

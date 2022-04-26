@@ -1,28 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { usePopper } from 'react-popper';
-import { grey, randomColor } from 'helpers/Colors';
-import ArrowUpIcon from 'components/img/ArrowUp';
-import ArrowDownIcon from 'components/img/ArrowDown';
-import ArrowLeftIcon from 'components/img/ArrowLeft';
-import ArrowRightIcon from 'components/img/ArrowRight';
-import TrashIcon from 'components/img/Trash';
-import TextIcon from 'components/img/Text';
-import MultiIcon from 'components/img/Multi';
-import HashIcon from 'components/img/Hash';
-import PlusIcon from 'components/img/Plus';
-import MarkdownObsidian from 'components/img/Markdown';
-import { ActionTypes, DataTypes, MetadataColumns, StyleVariables } from 'helpers/Constants';
-import { LOGGER } from 'services/Logger';
-import { DatabaseHeaderProps } from 'cdm/FolderModel';
-import ReactDOM from 'react-dom';
-import { dbTrim } from 'helpers/StylesHelper';
+import React, { useState, useEffect } from "react";
+import { usePopper } from "react-popper";
+import { grey, randomColor } from "helpers/Colors";
+import ArrowUpIcon from "components/img/ArrowUp";
+import ArrowDownIcon from "components/img/ArrowDown";
+import ArrowLeftIcon from "components/img/ArrowLeft";
+import ArrowRightIcon from "components/img/ArrowRight";
+import TrashIcon from "components/img/Trash";
+import TextIcon from "components/img/Text";
+import MultiIcon from "components/img/Multi";
+import HashIcon from "components/img/Hash";
+import PlusIcon from "components/img/Plus";
+import MarkdownObsidian from "components/img/Markdown";
+import {
+  ActionTypes,
+  DataTypes,
+  MetadataColumns,
+  StyleVariables,
+} from "helpers/Constants";
+import { LOGGER } from "services/Logger";
+import { DatabaseHeaderProps } from "cdm/FolderModel";
+import ReactDOM from "react-dom";
+import { dbTrim } from "helpers/StylesHelper";
 
-function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[]{
-  rows.forEach((row:any)=>{
+function setOptionsOfSelectDataType(
+  options: any[],
+  rows: any,
+  columnId: string
+): any[] {
+  rows.forEach((row: any) => {
     const rowValue = row.values[columnId];
-    let match = options.find((option: { label: any; }) => option.label === rowValue);
-    if(!match){
-      options.push({label: rowValue, backgroundColor: randomColor()});
+    let match = options.find(
+      (option: { label: any }) => option.label === rowValue
+    );
+    if (!match) {
+      options.push({ label: rowValue, backgroundColor: randomColor() });
     }
   });
   return options;
@@ -30,17 +41,17 @@ function setOptionsOfSelectDataType(options:any[],rows:any,columnId:string):any[
 
 /**
  * Default headers of the table
- * @param headerProps 
- * @returns 
+ * @param headerProps
+ * @returns
  */
-export default function Header(headerProps:DatabaseHeaderProps) {
+export default function Header(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.label}`);
   // TODO : add a tooltip to the header
-  const created:boolean = false;
+  const created: boolean = false;
   /** Properties of header */
-  const {setSortBy, rows} = headerProps;
+  const { setSortBy, rows } = headerProps;
   /** Column values */
-  const { id, key, dataType, options, getResizerProps} = headerProps.column;
+  const { id, key, dataType, options, getResizerProps } = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -50,9 +61,9 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   const [isMetadata, setIsMetadata] = useState(headerProps.column.isMetadata);
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
-  const {styles, attributes} = usePopper(referenceElement, popperElement, {
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: "bottom",
-    strategy: "absolute"
+    strategy: "absolute",
   });
   const [labelState, setLabelState] = useState(headerProps.column.label);
   const [keyState, setkeyState] = useState(dbTrim(key));
@@ -61,83 +72,107 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   const [showType, setShowType] = useState(false);
 
   React.useEffect(() => {
-    setDomReady(true)
-  })
-  
+    setDomReady(true);
+  });
+
   const buttons = [
     {
-      onClick: (e:any) => {
-        setSortBy([{id: id, desc: false}]);
+      onClick: (e: any) => {
+        setSortBy([{ id: id, desc: false }]);
         setExpanded(false);
       },
       icon: <ArrowUpIcon />,
-      label: "Sort ascending"
+      label: "Sort ascending",
     },
     {
-      onClick: (e:any) => {
-        setSortBy([{id: id, desc: true}]);
+      onClick: (e: any) => {
+        setSortBy([{ id: id, desc: true }]);
         setExpanded(false);
       },
       icon: <ArrowDownIcon />,
-      label: "Sort descending"
+      label: "Sort descending",
     },
     {
-      onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: id, focus: false});
+      onClick: (e: any) => {
+        dataDispatch({
+          type: ActionTypes.ADD_COLUMN_TO_LEFT,
+          columnId: id,
+          focus: false,
+        });
         setExpanded(false);
       },
       icon: <ArrowLeftIcon />,
-      label: "Insert left"
+      label: "Insert left",
     },
     {
-      onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.ADD_COLUMN_TO_RIGHT, columnId: id, focus: false});
+      onClick: (e: any) => {
+        dataDispatch({
+          type: ActionTypes.ADD_COLUMN_TO_RIGHT,
+          columnId: id,
+          focus: false,
+        });
         setExpanded(false);
       },
       icon: <ArrowRightIcon />,
-      label: "Insert right"
+      label: "Insert right",
     },
     {
-      onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.DELETE_COLUMN, columnId: id, key: keyState});
+      onClick: (e: any) => {
+        dataDispatch({
+          type: ActionTypes.DELETE_COLUMN,
+          columnId: id,
+          key: keyState,
+        });
         setExpanded(false);
       },
       icon: <TrashIcon />,
-      label: "Delete"
-    }
+      label: "Delete",
+    },
   ];
 
   const types = [
     {
-      onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_TYPE, columnId: id, dataType: DataTypes.SELECT});
+      onClick: (e: any) => {
+        dataDispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: id,
+          dataType: DataTypes.SELECT,
+        });
         setShowType(false);
         setExpanded(false);
       },
       icon: <MultiIcon />,
-      label: DataTypes.SELECT
+      label: DataTypes.SELECT,
     },
     {
-      onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_TYPE, columnId: id, dataType: DataTypes.TEXT});
+      onClick: (e: any) => {
+        dataDispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: id,
+          dataType: DataTypes.TEXT,
+        });
         setShowType(false);
         setExpanded(false);
       },
       icon: <TextIcon />,
-      label: DataTypes.TEXT
+      label: DataTypes.TEXT,
     },
     {
-      onClick: (e:any) => {
-        dataDispatch({type: ActionTypes.UPDATE_COLUMN_TYPE, columnId: id, dataType: DataTypes.NUMBER});
+      onClick: (e: any) => {
+        dataDispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: id,
+          dataType: DataTypes.NUMBER,
+        });
         setShowType(false);
         setExpanded(false);
       },
       icon: <HashIcon />,
-      label: DataTypes.NUMBER
-    }
+      label: DataTypes.NUMBER,
+    },
   ];
 
-  let propertyIcon:any;
+  let propertyIcon: any;
   switch (dataType) {
     case DataTypes.NUMBER:
       propertyIcon = <HashIcon />;
@@ -146,12 +181,12 @@ export default function Header(headerProps:DatabaseHeaderProps) {
       propertyIcon = <TextIcon />;
       break;
     case DataTypes.SELECT:
-      setOptionsOfSelectDataType(options,rows,id);
+      setOptionsOfSelectDataType(options, rows, id);
       propertyIcon = <MultiIcon />;
       break;
     case DataTypes.MARKDOWN:
       // TODO : add a markdown icon
-      propertyIcon = <MarkdownObsidian/>;
+      propertyIcon = <MarkdownObsidian />;
       break;
     default:
       break;
@@ -175,141 +210,190 @@ export default function Header(headerProps:DatabaseHeaderProps) {
   }, [inputRef]);
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: "right",
-    strategy: "fixed"
+    strategy: "fixed",
   });
 
-  function handleKeyDown(e:any) {
+  function handleKeyDown(e: any) {
     if (e.key === "Enter") {
       dataDispatch({
         type: ActionTypes.UPDATE_COLUMN_LABEL,
         columnId: id,
         accessor: keyState,
-        label: labelState
+        label: labelState,
       });
       setExpanded(false);
       setkeyState(dbTrim(labelState));
     }
   }
 
-  function handleChange(e:any) {
+  function handleChange(e: any) {
     setLabelState(e.target.value);
   }
 
-  function handlerAddColumnToLeft(e:any) {
-    dataDispatch({type: ActionTypes.ADD_COLUMN_TO_LEFT, columnId: MetadataColumns.ADD_COLUMN, focus: true})
+  function handlerAddColumnToLeft(e: any) {
+    dataDispatch({
+      type: ActionTypes.ADD_COLUMN_TO_LEFT,
+      columnId: MetadataColumns.ADD_COLUMN,
+      focus: true,
+    });
   }
 
   /**
    * When user leaves the input field
-   * @param e 
+   * @param e
    */
-  function handleBlur(e:any) {
+  function handleBlur(e: any) {
     e.preventDefault();
     //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
   }
 
-  function renderHeaderOptions(){
-    return(
+  function renderHeaderOptions() {
+    return (
       <div>
-        {expanded && <div className='overlay' onClick={() => setExpanded(false)} />}
         {expanded && (
-        <div ref={setPopperElement} style={{...styles.popper, zIndex: 3}} {...attributes.popper}>
+          <div className="overlay" onClick={() => setExpanded(false)} />
+        )}
+        {expanded && (
           <div
-            className='shadow-5 border-radius-md'
-            style={{
-              width: 240,
-              backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
-            }}>
-            {/** Edit header label section */}
-            <div style={{paddingTop: "0.75rem", paddingLeft: "0.75rem", paddingRight: "0.75rem"}}>
-              <div className='is-fullwidth' style={{marginBottom: 12}}>
-                <input
-                  className='form-input'
-                  ref={setInputRef}
-                  type='text'
-                  value={labelState}
-                  style={{width: "100%"}}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  onKeyDown={handleKeyDown}
-                />
+            ref={setPopperElement}
+            style={{ ...styles.popper, zIndex: 3 }}
+            {...attributes.popper}
+          >
+            <div
+              className="shadow-5 border-radius-md"
+              style={{
+                width: 240,
+                backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+              }}
+            >
+              {/** Edit header label section */}
+              <div
+                style={{
+                  paddingTop: "0.75rem",
+                  paddingLeft: "0.75rem",
+                  paddingRight: "0.75rem",
+                }}
+              >
+                <div className="is-fullwidth" style={{ marginBottom: 12 }}>
+                  <input
+                    className="form-input"
+                    ref={setInputRef}
+                    type="text"
+                    value={labelState}
+                    style={{ width: "100%" }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+                <span
+                  className="font-weight-600 font-size-75"
+                  style={{
+                    textTransform: "uppercase",
+                    color: StyleVariables.TEXT_FAINT,
+                  }}
+                >
+                  Property Type
+                </span>
               </div>
-              <span className='font-weight-600 font-size-75' style={{textTransform: "uppercase", color: StyleVariables.TEXT_FAINT}}>
-                Property Type
-              </span>
-            </div>
-            {/** Edit header label section */}
-            <div style={{padding: "4px 0px"}}>
-              <button
-                className='sort-button'
-                type='button'
-                onMouseEnter={() => setShowType(true)}
-                onMouseLeave={() => setShowType(false)}
-                ref={setTypeReferenceElement}>
-                <span className='svg-icon svg-text icon-margin'>{propertyIcon}</span>
-                <span style={{textTransform: "capitalize"}}>{dataType}</span>
-              </button>
-              {showType && (
-                <div
-                  className='shadow-5 border-radius-m'
-                  ref={setTypePopperElement}
+              {/** Edit header label section */}
+              <div style={{ padding: "4px 0px" }}>
+                <button
+                  className="sort-button"
+                  type="button"
                   onMouseEnter={() => setShowType(true)}
                   onMouseLeave={() => setShowType(false)}
-                  {...typePopper.attributes.popper}
-                  style={{
-                    ...typePopper.styles.popper,
-                    width: 200,
-                    backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
-                    zIndex: 4,
-                    padding: "4px 0px"
-                  }}>
-                  {types.map((type) => (
-                    <div key={type.label}>
-                      <button className='sort-button' onClick={type.onClick}>
-                        <span className='svg-icon svg-text icon-margin'>{type.icon}</span>
-                        {type.label}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div
-              style={{
-                borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
-                padding: "4px 0px"
-              }}>
-              {buttons.map((button) => (
-                <button key={button.label} type='button' className='sort-button' onMouseDown={button.onClick}>
-                  <span className='svg-icon svg-text icon-margin'>{button.icon}</span>
-                  {button.label}
+                  ref={setTypeReferenceElement}
+                >
+                  <span className="svg-icon svg-text icon-margin">
+                    {propertyIcon}
+                  </span>
+                  <span style={{ textTransform: "capitalize" }}>
+                    {dataType}
+                  </span>
                 </button>
-              ))}
+                {showType && (
+                  <div
+                    className="shadow-5 border-radius-m"
+                    ref={setTypePopperElement}
+                    onMouseEnter={() => setShowType(true)}
+                    onMouseLeave={() => setShowType(false)}
+                    {...typePopper.attributes.popper}
+                    style={{
+                      ...typePopper.styles.popper,
+                      width: 200,
+                      backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+                      zIndex: 4,
+                      padding: "4px 0px",
+                    }}
+                  >
+                    {types.map((type) => (
+                      <div key={type.label}>
+                        <button className="sort-button" onClick={type.onClick}>
+                          <span className="svg-icon svg-text icon-margin">
+                            {type.icon}
+                          </span>
+                          {type.label}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                  padding: "4px 0px",
+                }}
+              >
+                {buttons.map((button) => (
+                  <button
+                    key={button.label}
+                    type="button"
+                    className="sort-button"
+                    onMouseDown={button.onClick}
+                  >
+                    <span className="svg-icon svg-text icon-margin">
+                      {button.icon}
+                    </span>
+                    {button.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     );
   }
   LOGGER.debug(`<=Header ${headerProps.column.label}`);
   return id !== MetadataColumns.ADD_COLUMN ? (
     <>
-      <div className='th-content' onClick={() => setExpanded(true)} ref={setReferenceElement}>
-        <span className='svg-icon svg-gray icon-margin'>{propertyIcon}</span>
+      <div
+        className="th-content"
+        onClick={() => setExpanded(true)}
+        ref={setReferenceElement}
+      >
+        <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
       </div>
-      <div {...getResizerProps()} className='resizer' />
-      {(!isMetadata && domReady) ? ReactDOM.createPortal(renderHeaderOptions(),document.getElementById('popper-container')) : null}
+      <div {...getResizerProps()} className="resizer" />
+      {!isMetadata && domReady
+        ? ReactDOM.createPortal(
+            renderHeaderOptions(),
+            document.getElementById("popper-container")
+          )
+        : null}
     </>
   ) : (
-      <div
-        className='th-content'
-        style={{display: "flex", justifyContent: "center"}}
-        onClick={handlerAddColumnToLeft}>
-        <span className='svg-icon-sm svg-gray'>
-          <PlusIcon />
-        </span>
-      </div>
+    <div
+      className="th-content"
+      style={{ display: "flex", justifyContent: "center" }}
+      onClick={handlerAddColumnToLeft}
+    >
+      <span className="svg-icon-sm svg-gray">
+        <PlusIcon />
+      </span>
+    </div>
   );
 }

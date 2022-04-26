@@ -1,57 +1,71 @@
-import { DataTypes, MetadataColumns, MetadataLabels } from 'helpers/Constants';
-import {TableColumn} from 'cdm/FolderModel';
+import { DataTypes, MetadataColumns, MetadataLabels } from "helpers/Constants";
+import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
-import { DatabaseColumn } from 'cdm/DatabaseModel';
-import { RowSelectOption } from 'cdm/RowSelectModel';
-import { dbTrim } from 'helpers/StylesHelper';
+import { DatabaseColumn } from "cdm/DatabaseModel";
+import { RowSelectOption } from "cdm/RowSelectModel";
+import { dbTrim } from "helpers/StylesHelper";
 
 /**
  * Add mandatory columns to the table
- * @param columns 
- * @returns 
+ * @param columns
+ * @returns
  */
 export async function obtainMetadataColumns(): Promise<TableColumn[]> {
-  const columns:TableColumn[] = [];
+  const columns: TableColumn[] = [];
   const metadataColumns: Record<string, DatabaseColumn> = {};
-  metadataColumns[MetadataColumns.FILE]={
-      key: MetadataColumns.FILE,
-      input: DataTypes.MARKDOWN,
-      Header: MetadataColumns.FILE,
-      label: MetadataLabels.FILE,
-      accessor: MetadataColumns.FILE,
-      isMetadata: true
+  metadataColumns[MetadataColumns.FILE] = {
+    key: MetadataColumns.FILE,
+    input: DataTypes.MARKDOWN,
+    Header: MetadataColumns.FILE,
+    label: MetadataLabels.FILE,
+    accessor: MetadataColumns.FILE,
+    isMetadata: true,
   };
 
-  metadataColumns[MetadataColumns.ADD_COLUMN]={
+  metadataColumns[MetadataColumns.ADD_COLUMN] = {
     key: MetadataColumns.ADD_COLUMN,
     Header: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
     width: 20,
     disableResizing: true,
-    label: '+',
+    label: "+",
     accessor: MetadataColumns.ADD_COLUMN,
-    isMetadata: true
-  }
-  
-  await Promise.all(Object.keys(metadataColumns).map(async (columnKey,index) => {
-    const column = metadataColumns[columnKey];
-    columns.push(await columnOptions(columnKey,index,column));
-  }));
+    isMetadata: true,
+  };
+
+  await Promise.all(
+    Object.keys(metadataColumns).map(async (columnKey, index) => {
+      const column = metadataColumns[columnKey];
+      columns.push(await columnOptions(columnKey, index, column));
+    })
+  );
   return columns;
 }
 
-export async function obtainColumnsFromFolder(databaseColumns: Record<string, DatabaseColumn>): Promise<TableColumn[]>{
-    LOGGER.debug(`=> obtainColumnsFromFolder. databaseColumns: ${JSON.stringify(databaseColumns)}`);
-    const columns:TableColumn[] = [];
-    await Promise.all(Object.keys(databaseColumns).map(async (columnKey, index) => {
+export async function obtainColumnsFromFolder(
+  databaseColumns: Record<string, DatabaseColumn>
+): Promise<TableColumn[]> {
+  LOGGER.debug(
+    `=> obtainColumnsFromFolder. databaseColumns: ${JSON.stringify(
+      databaseColumns
+    )}`
+  );
+  const columns: TableColumn[] = [];
+  await Promise.all(
+    Object.keys(databaseColumns).map(async (columnKey, index) => {
       const column = databaseColumns[columnKey];
-      columns.push(await columnOptions(columnKey,index,column));
-    }));
-    LOGGER.debug(`<= obtainColumnsFromFolder(. return ${columns.length} columns`);
-    return sortColumnsByPosition(columns);
+      columns.push(await columnOptions(columnKey, index, column));
+    })
+  );
+  LOGGER.debug(`<= obtainColumnsFromFolder(. return ${columns.length} columns`);
+  return sortColumnsByPosition(columns);
 }
 
-async function columnOptions(columnKey:string,index:number, column:DatabaseColumn):Promise<TableColumn> {
+async function columnOptions(
+  columnKey: string,
+  index: number,
+  column: DatabaseColumn
+): Promise<TableColumn> {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = [];
   const tableRow: TableColumn = {
@@ -60,18 +74,18 @@ async function columnOptions(columnKey:string,index:number, column:DatabaseColum
     label: column.label,
     key: column.key ?? columnKey,
     accessor: column.accessor ?? dbTrim(column.label),
-    isMetadata: column.isMetadata ?? false
-  }
+    isMetadata: column.isMetadata ?? false,
+  };
   /**
    * return plain text
    * @returns {TableColumn}
    */
-  function isText():TableColumn {
-    LOGGER.debug(`<= columnOptions`,`return text column`);
-		return {
+  function isText(): TableColumn {
+    LOGGER.debug(`<= columnOptions`, `return text column`);
+    return {
       ...tableRow,
       dataType: DataTypes.TEXT,
-      options: options
+      options: options,
     };
   }
 
@@ -79,24 +93,24 @@ async function columnOptions(columnKey:string,index:number, column:DatabaseColum
    * return number
    * @returns {TableColumn}
    */
-   function isNumber():TableColumn {
-    LOGGER.debug(`<= columnOptions`,`return number column`);
-		return {
+  function isNumber(): TableColumn {
+    LOGGER.debug(`<= columnOptions`, `return number column`);
+    return {
       ...tableRow,
       dataType: DataTypes.NUMBER,
-      options: options
+      options: options,
     };
   }
   /**
    * return selector
    * @returns {TableColumn}
    */
-   function isSelect():TableColumn {
-    LOGGER.debug(`<= columnOptions`,`return select column`);
-		return {
+  function isSelect(): TableColumn {
+    LOGGER.debug(`<= columnOptions`, `return select column`);
+    return {
       ...tableRow,
       dataType: DataTypes.SELECT,
-      options: options
+      options: options,
     };
   }
 
@@ -104,21 +118,21 @@ async function columnOptions(columnKey:string,index:number, column:DatabaseColum
    * return markdown rendered text
    * @returns {TableColumn}
    */
-  function isMarkdown():TableColumn {
-    LOGGER.debug(`<= columnOptions`,`return markdown column`);
+  function isMarkdown(): TableColumn {
+    LOGGER.debug(`<= columnOptions`, `return markdown column`);
     return {
       ...tableRow,
       dataType: DataTypes.MARKDOWN,
-      options: options
+      options: options,
     };
   }
 
-  function isNewColumn():TableColumn {
-    LOGGER.debug(`<= columnOptions`,`return new column`);
+  function isNewColumn(): TableColumn {
+    LOGGER.debug(`<= columnOptions`, `return new column`);
     return {
       ...tableRow,
       dataType: DataTypes.NEW_COLUMN,
-      options: options
+      options: options,
     };
   }
 
@@ -129,20 +143,20 @@ async function columnOptions(columnKey:string,index:number, column:DatabaseColum
   inputs[DataTypes.SELECT] = isSelect;
   inputs[DataTypes.MARKDOWN] = isMarkdown;
   inputs[DataTypes.NEW_COLUMN] = isNewColumn;
-  if(inputs.hasOwnProperty(column.input)){
+  if (inputs.hasOwnProperty(column.input)) {
     return await inputs[column.input]();
-  }else{
+  } else {
     throw `Error: option ${column.input} not supported yet`;
   }
 }
 
-function sortColumnsByPosition(columns:TableColumn[]):TableColumn[] {
-  return columns.sort((a,b) => {
-    if(a.position < b.position){
+function sortColumnsByPosition(columns: TableColumn[]): TableColumn[] {
+  return columns.sort((a, b) => {
+    if (a.position < b.position) {
       return -1;
-    }else if(a.position > b.position){
+    } else if (a.position > b.position) {
       return 1;
-    }else{
+    } else {
       return 0;
     }
   });

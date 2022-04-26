@@ -16,7 +16,7 @@ export function add_toggle(
     desc: string,
     value: boolean,
     onChangePromise: (value: boolean) => Promise<void>
-    ): Setting {
+): Setting {
     const toggle = new Setting(container)
         .setName(name)
         .setDesc(desc)
@@ -44,24 +44,24 @@ export function add_dropdown(
     name: string,
     desc: string,
     value: string,
-    options: Record<string,string>,
+    options: Record<string, string>,
     onChangePromise: (value: string) => Promise<void>
-    ): Setting {
-    const dropdown =  new Setting(container)
-    .setName(name)
-    .setDesc(desc)
-    .addDropdown((dropdown) => {
-        Object.entries(options).forEach(([key, value]) => {
-            dropdown.addOption(key, value);
+): Setting {
+    const dropdown = new Setting(container)
+        .setName(name)
+        .setDesc(desc)
+        .addDropdown((dropdown) => {
+            Object.entries(options).forEach(([key, value]) => {
+                dropdown.addOption(key, value);
+            });
+            dropdown.setValue(value);
+            dropdown.onChange(onChangePromise);
         });
-        dropdown.setValue(value);
-        dropdown.onChange(onChangePromise);
-    });
     return dropdown;
 }
 /**
  * Add a header to the settings tab
  */
-export function add_setting_header(containerEl: HTMLElement,tittle: string,level: keyof HTMLElementTagNameMap = 'h2'): void{
-    containerEl.createEl(level, {text: tittle});
+export function add_setting_header(containerEl: HTMLElement, tittle: string, level: keyof HTMLElementTagNameMap = 'h2'): void {
+    containerEl.createEl(level, { text: tittle });
 }

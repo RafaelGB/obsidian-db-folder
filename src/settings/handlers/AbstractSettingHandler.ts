@@ -3,11 +3,11 @@ import { SettingsManager } from "Settings";
 
 export interface SettingHandler {
     setNext(handler: SettingHandler): SettingHandler;
-    handle(settingHandlerResponse:SettingHandlerResponse): SettingHandlerResponse;
+    handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse;
 }
 
 export type SettingHandlerResponse = {
-    settingsManager: SettingsManager, 
+    settingsManager: SettingsManager,
     containerEl: HTMLElement,
     local: boolean,
     errors: Record<string, string[]>,
@@ -22,10 +22,10 @@ export abstract class AbstractSettingsHandler implements SettingHandler {
     protected addError(error: string): void {
         this.listOfErrors.push(error);
     }
-    
+
     public goNext(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         // add possible errors to response
-        if(this.listOfErrors.length > 0) {
+        if (this.listOfErrors.length > 0) {
             settingHandlerResponse.errors[this.settingTitle] = this.listOfErrors;
         }
         // Check next handler
@@ -41,5 +41,5 @@ export abstract class AbstractSettingsHandler implements SettingHandler {
     }
 
 
-    abstract handle(settingHandlerResponse:SettingHandlerResponse): SettingHandlerResponse;
+    abstract handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse;
 }

@@ -2,7 +2,7 @@ export function randomColor() {
   return `hsl(${Math.floor(Math.random() * 360)}, 95%, 90%)`;
 }
 
-export function grey(value: number){
+export function grey(value: number) {
   const reference = {
     50: '#fafafa',
     100: '#f5f5f5',

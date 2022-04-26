@@ -18,29 +18,29 @@ export default class DatabaseInfo {
     constructor(file: TFile) {
         this.file = file;
     }
-    
+
     /**
      * Obtain database configuration from file
      * @param file 
      * @returns 
      */
-    async initDatabaseconfigYaml(default_local_settings:LocalSettings):Promise<void> {
-        LOGGER.info(`=>initDatabaseconfigYaml`,`file:${this.file.path}`);
+    async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
+        LOGGER.info(`=>initDatabaseconfigYaml`, `file:${this.file.path}`);
         const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
-        if (!databaseRaw || !hasFrontmatterKey(databaseRaw))  throw new Error('No frontmatter found');
+        if (!databaseRaw || !hasFrontmatterKey(databaseRaw)) throw new Error('No frontmatter found');
 
         const match = databaseRaw.match(/<%%\s+([\w\W]+?)\s+%%>/);
 
         if (!match) {
             return null;
         }
-        
+
         const frontmatterRaw = match[1];
         const response = DatabaseStringToYamlParser(frontmatterRaw);
         if (Object.keys(response.errors).length > 0) {
-             const errors = Object.keys(response.errors).map(e => e+': '+response.errors[e].join('\n')).join('\n')
+            const errors = Object.keys(response.errors).map(e => e + ': ' + response.errors[e].join('\n')).join('\n')
             new Notice(errors);
-            if(!response.yaml.config) response.yaml.config = default_local_settings;
+            if (!response.yaml.config) response.yaml.config = default_local_settings;
         }
 
         this.yaml = response.yaml;
@@ -51,12 +51,12 @@ export default class DatabaseInfo {
     /**
      * Save database configuration on disk
      */
-    async saveOnDisk():Promise<void> {
-        LOGGER.debug(`=>setDatabaseconfigYaml`,`file:${this.file.path}`);
-        const configRegex = new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`,"g");
+    async saveOnDisk(): Promise<void> {
+        LOGGER.debug(`=>setDatabaseconfigYaml`, `file:${this.file.path}`);
+        const configRegex = new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`, "g");
         const databaseFilePath = this.file.path;
         const databaseConfigUpdated = DatabaseYamlToStringParser(this.yaml).join("\n");
-        const noteObject:NoteContentAction = {
+        const noteObject: NoteContentAction = {
             action: 'replace',
             file: this.file,
             regexp: configRegex,
@@ -64,15 +64,15 @@ export default class DatabaseInfo {
         };
         // Update configuration file
         await VaultManagerDB.editNoteContent(noteObject);
-        LOGGER.debug(`<=setDatabaseconfigYaml`,`set file ${databaseFilePath} with ${databaseConfigUpdated}`);
+        LOGGER.debug(`<=setDatabaseconfigYaml`, `set file ${databaseFilePath} with ${databaseConfigUpdated}`);
     }
-    
+
     /**
      * modify column key
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(oldColumnId:string, newColumnId:string):Promise<void>{
+    async updateColumnKey(oldColumnId: string, newColumnId: string): Promise<void> {
         // clone current column configuration
         const currentCol = this.yaml.columns[oldColumnId];
         // update column id
@@ -89,17 +89,17 @@ export default class DatabaseInfo {
      * @param columnId 
      * @param properties 
      */
-    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId:string, properties:Record<string,P>,rows?:TableRow[]):Promise<void>{
+    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId: string, properties: Record<string, P>, rows?: TableRow[]): Promise<void> {
         const colToUpdate = this.yaml.columns[columnId];
         const currentKey = colToUpdate.key;
         for (const key in properties) {
             colToUpdate[key] = properties[key];
         }
         this.yaml.columns[columnId] = colToUpdate;
-        if(rows){
-        await this.updateColumnKey(columnId, colToUpdate.accessor);
-        // Once the column is updated, update the rows in case the key is changed
-        await Promise.all(rows.map(async (row:TableRow) => {
+        if (rows) {
+            await this.updateColumnKey(columnId, colToUpdate.accessor);
+            // Once the column is updated, update the rows in case the key is changed
+            await Promise.all(rows.map(async (row: TableRow) => {
                 updateRowFile(
                     row.note.getFile(),
                     currentKey,
@@ -110,28 +110,28 @@ export default class DatabaseInfo {
         }
         await this.saveOnDisk();
     }
-    
+
     /**
      * Given an array of column ids, reorder yaml columns to match the order of the array
      * @param columnIds 
      */
-    async reorderColumns(columnIds:string[]):Promise<void>{
+    async reorderColumns(columnIds: string[]): Promise<void> {
         let id = 0;
         columnIds.forEach((columnId) => {
             // Filter out columns that are not in the list
-            if(this.yaml.columns[columnId]){
+            if (this.yaml.columns[columnId]) {
                 this.yaml.columns[columnId].position = ++id;
             }
         });
         await this.saveOnDisk();
     }
 
-    async removeColumn(columnId:string):Promise<void>{
+    async removeColumn(columnId: string): Promise<void> {
         delete this.yaml.columns[columnId];
         await this.saveOnDisk();
     }
 
-    async addColumn(columnId:string, properties:DatabaseColumn):Promise<void>{
+    async addColumn(columnId: string, properties: DatabaseColumn): Promise<void> {
         this.yaml.columns[columnId] = properties;
         await this.saveOnDisk();
     }
@@ -139,5 +139,5 @@ export default class DatabaseInfo {
     async updateConfig<K extends keyof LocalSettings>(key: K, value: LocalSettings[K]): Promise<void> {
         this.yaml.config[key] = value;
         await this.saveOnDisk();
-      }
+    }
 }

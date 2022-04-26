@@ -6,23 +6,23 @@ import { VaultManagerDB } from "services/FileManagerService";
  * Keep info about a note and offer methods to manipulate it
  */
 export default class NoteInfo {
-    private filepath:string;
+    private filepath: string;
     private page: Record<string, any>;
-    private id:number;
-    constructor(page: Record<string, any>, id:number) {
+    private id: number;
+    constructor(page: Record<string, any>, id: number) {
         this.page = page;
         this.filepath = page.file.path;
         this.id = id;
     }
 
-    getTableRow():TableRow{
+    getTableRow(): TableRow {
         /** Mandatory fields */
         const aFile: TableRow = {
             id: this.id,
             note: this
         }
         /** Metadata fields */
-        aFile[MetadataColumns.FILE]=`${this.page.file.link.markdown()}`
+        aFile[MetadataColumns.FILE] = `${this.page.file.link.markdown()}`
         /** Optional fields */
         Object.keys(this.page).forEach(property => {
             const value = this.page[property];
@@ -33,7 +33,7 @@ export default class NoteInfo {
         return aFile;
     }
 
-    getFile():TFile{
+    getFile(): TFile {
         return VaultManagerDB.obtainTfileFromFilePath(this.filepath);
     }
 }

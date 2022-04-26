@@ -5,8 +5,8 @@ import { add_dropdown } from "settings/SettingsComponents";
 export class LoggerLevelInfoDropDownHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Enable debug mode';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, local} = settingHandlerResponse;
-        if(!local && settingsManager.plugin.settings.global_settings.enable_debug_mode){
+        const { settingsManager, containerEl, local } = settingHandlerResponse;
+        if (!local && settingsManager.plugin.settings.global_settings.enable_debug_mode) {
             const logger_level_info_dropdown = async (value: string): Promise<void> => {
                 // set dropdown value
                 const update_global_settings = settingsManager.plugin.settings.global_settings;

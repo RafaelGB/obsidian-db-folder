@@ -1,16 +1,16 @@
 import { DataTypes } from 'helpers/Constants';
-import {AbstractYamlHandler, YamlHandlerResponse} from 'parsers/handlers/AbstractYamlPropertyHandler';
+import { AbstractYamlHandler, YamlHandlerResponse } from 'parsers/handlers/AbstractYamlPropertyHandler';
 
 export class ColumnsHandler extends AbstractYamlHandler {
     handlerName: string = 'columns';
 
-    public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse{
-        const {yaml} = handlerResponse;
+    public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse {
+        const { yaml } = handlerResponse;
         if (!yaml.columns) {
             // if columns is not defined, load default
             this.addError(`There was not column key in yaml. Default will be loaded`);
-            this.localYaml.columns = {  
-                Column1:{
+            this.localYaml.columns = {
+                Column1: {
                     input: DataTypes.TEXT,
                     accessor: 'Column1',
                     key: 'Column1',

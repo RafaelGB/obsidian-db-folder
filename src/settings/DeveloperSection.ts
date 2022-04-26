@@ -11,9 +11,9 @@ import { StyleVariables } from 'helpers/Constants';
  * developer settings section
  */
 export function developer_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
-    const sectionContainer = containerEl .createDiv("configuration-section-container-developer");
+    const sectionContainer = containerEl.createDiv("configuration-section-container-developer");
     // title of the section
-    add_setting_header(sectionContainer,"Developer section",'h3');
+    add_setting_header(sectionContainer, "Developer section", 'h3');
     // add soft red background color to the section
     sectionContainer.style.backgroundColor = StyleVariables.BACKGROUND_MODIFIER_ERROR;
     // section settings
@@ -30,13 +30,13 @@ export function developer_settings_section(settingsManager: SettingsManager, con
         errors: {},
         view: view,
     };
-  handlers[0].handle(settingHandlerResponse);
+    handlers[0].handle(settingHandlerResponse);
 }
 
 /**
  * Obtain all classes than extends from AbstractHandler
  */
- function getHandlers(): SettingHandler[] {
+function getHandlers(): SettingHandler[] {
     return [
         new LoggerToggleHandler(),
         new LoggerLevelInfoDropDownHandler(),

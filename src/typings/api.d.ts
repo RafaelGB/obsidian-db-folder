@@ -1,5 +1,5 @@
 import {
-	App
+    App
 } from 'obsidian';
 
 import {

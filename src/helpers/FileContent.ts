@@ -1,25 +1,25 @@
-export class FileContent{
+export class FileContent {
     public value: string;
-    constructor(string: string){
+    constructor(string: string) {
         this.value = string;
     }
 
-    object(): string[]{
+    object(): string[] {
         return this.real_array(this.value.split('\n'));
     }
 
-    replaceAll(pattern_to_replace:RegExp, input:string): FileContent{
-        if(input!==''){
-            if(Array.isArray(pattern_to_replace)){
+    replaceAll(pattern_to_replace: RegExp, input: string): FileContent {
+        if (input !== '') {
+            if (Array.isArray(pattern_to_replace)) {
                 pattern_to_replace.forEach(
-                    (regex,index) =>  {
+                    (regex, index) => {
                         this.value = this.value.replaceAll(
-                        regex,
-                        input[index]
+                            regex,
+                            input[index]
                         );
                     }
                 );
-            }else{
+            } else {
                 this.value = this.value.replaceAll(
                     pattern_to_replace,
                     input
@@ -29,10 +29,10 @@ export class FileContent{
         return this;
     }
 
-    remove(pattern_to_be_removed:RegExp): FileContent{
+    remove(pattern_to_be_removed: RegExp): FileContent {
         const _object = this.object();
-        _object.forEach((value,index) => {
-            if (value.match(pattern_to_be_removed)){
+        _object.forEach((value, index) => {
+            if (value.match(pattern_to_be_removed)) {
                 delete _object[index];
             }
         });
@@ -40,10 +40,10 @@ export class FileContent{
         return this;
     }
 
-    removeAll(string_to_be_removed:string): FileContent{
+    removeAll(string_to_be_removed: string): FileContent {
         const _object = this.object();
-        _object.forEach((value,index) => {
-            if (value.trim().indexOf(string_to_be_removed)!=-1){
+        _object.forEach((value, index) => {
+            if (value.trim().indexOf(string_to_be_removed) != -1) {
                 delete _object[index];
             }
         });
@@ -51,26 +51,26 @@ export class FileContent{
         return this;
     }
 
-    fetch(line_number:number){
+    fetch(line_number: number) {
         const _object = this.object();
-        for (let i=0;i<_object.length;i++){
-            if (i+1===line_number){
+        for (let i = 0; i < _object.length; i++) {
+            if (i + 1 === line_number) {
                 return _object[i];
             }
         }
         return null;
     }
 
-    edit(content:string,line_number:number): FileContent{
+    edit(content: string, line_number: number): FileContent {
         const _object = this.object();
-        _object[line_number-1] = content;
-         this.value = this.real_array(_object).join('\n');
-         return this;
-     }
+        _object[line_number - 1] = content;
+        this.value = this.real_array(_object).join('\n');
+        return this;
+    }
 
-    real_array(array:string[]):string[]{
-        const output:string[] = [];
-        array.forEach(element=>{
+    real_array(array: string[]): string[] {
+        const output: string[] = [];
+        array.forEach(element => {
             output.push(element);
         });
         return output;

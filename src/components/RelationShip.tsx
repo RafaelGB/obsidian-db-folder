@@ -1,9 +1,9 @@
 import React from "react";
-import {grey} from "helpers/Colors";
+import { grey } from "helpers/Colors";
 import { RelationshipProps } from "cdm/FolderModel";
 
-export default function Relationship(relationShipProps:RelationshipProps) {
-const {value, backgroundColor} = relationShipProps;
+export default function Relationship(relationShipProps: RelationshipProps) {
+  const { value, backgroundColor } = relationShipProps;
   return (
     <span
       style={{
@@ -14,8 +14,9 @@ const {value, backgroundColor} = relationShipProps;
         padding: "2px 6px",
         borderRadius: 4,
         textTransform: "capitalize",
-        display: "inline-block"
-      }}>
+        display: "inline-block",
+      }}
+    >
       {value}
     </span>
   );

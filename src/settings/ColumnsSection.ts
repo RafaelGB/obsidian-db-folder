@@ -8,9 +8,9 @@ import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/Grou
  * developer settings section
  */
 export function columns_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
-    const sectionContainer = containerEl .createDiv("configuration-section-container-columns");
+    const sectionContainer = containerEl.createDiv("configuration-section-container-columns");
     // title of the section
-    add_setting_header(sectionContainer,"Configuration about columns",'h3');
+    add_setting_header(sectionContainer, "Configuration about columns", 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;
@@ -32,7 +32,7 @@ export function columns_settings_section(settingsManager: SettingsManager, conta
 /**
  * Obtain all classes than extends from AbstractHandler
  */
- function getHandlers(): SettingHandler[] {
+function getHandlers(): SettingHandler[] {
     return [
         new GroupFolderColumnDropDownHandler()
     ];
