@@ -11,10 +11,11 @@ import { StyleVariables } from 'helpers/Constants';
  * developer settings section
  */
 export function developer_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
+    const sectionContainer = containerEl .createDiv("configuration-section-container-developer");
     // title of the section
-    add_setting_header(containerEl,"Developer section",'h3');
+    add_setting_header(sectionContainer,"Developer section",'h3');
     // add soft red background color to the section
-    containerEl.style.backgroundColor = StyleVariables.BACKGROUND_MODIFIER_ERROR;
+    sectionContainer.style.backgroundColor = StyleVariables.BACKGROUND_MODIFIER_ERROR;
     // section settings
     const handlers = getHandlers();
     let i = 1;
@@ -24,7 +25,7 @@ export function developer_settings_section(settingsManager: SettingsManager, con
     }
     const settingHandlerResponse: SettingHandlerResponse = {
         settingsManager: settingsManager,
-        containerEl: containerEl,
+        containerEl: sectionContainer,
         local: local,
         errors: {},
         view: view,

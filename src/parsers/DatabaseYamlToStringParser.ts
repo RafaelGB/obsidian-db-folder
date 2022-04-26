@@ -32,6 +32,7 @@ const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml):string[] =>{
     // Database config
     databaseConfigString.push(`config:`);
     databaseConfigString.push(`${yamlIndent.repeat(1)}enable_show_state: ${databaseConfig.config.enable_show_state}`);
+    databaseConfigString.push(`${yamlIndent.repeat(1)}group_folder_column: ${databaseConfig.config.group_folder_column}`);
     return databaseConfigString;
 }
 
