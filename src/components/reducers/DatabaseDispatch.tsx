@@ -336,14 +336,27 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           ...state.columns.slice(deleteIndex + 1, state.columns.length),
         ],
       };
-    case ActionTypes.UPDATE_OPTION_CELL:
+    case ActionTypes.UPDATE_OPTION_CELL: // save on disk
       if (dbconfig.group_folder_column === action.key) {
-        const newFilePath = `${state.view.file.parent.path}/${action.value}/${action.file.basename}.md`;
-        moveFile(action.file, newFilePath);
+        console.log("asdasdasd");
+        const rowIndex = state.data.findIndex((row) => row.id === action.rowId);
+        moveFile(`${state.view.file.parent.path}/${action.value}`, action);
+        state.data[rowIndex][
+          MetadataColumns.FILE
+        ] = `[[${action.file.parent.path}/${action.value}/${action.file.name}]]`;
+        state.data[rowIndex].note = new NoteInfo(
+          {
+            ...state.data[rowIndex],
+            file: {
+              path: `${state.view.file.parent.path}/${action.value}/${action.file.name}`,
+            },
+          },
+          rowIndex
+        );
+        // Else go UPDATE_CELL
+        return state;
       }
-    /** Continues behind
-     * vvvvvvvvvvvvvvvvv
-     */
+
     case ActionTypes.UPDATE_CELL:
       // save on disk
       updateRowFile(

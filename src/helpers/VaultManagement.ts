@@ -1,6 +1,7 @@
 import { TableRow, NoteContentAction } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { getAPI } from "obsidian-dataview"
+import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
@@ -165,9 +166,16 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
 }
 
-export async function moveFile(note: TFile, newPath: string): Promise<void> {
-  console.log(`move file from ${note.path} to ${newPath}`);
-  await app.fileManager.renameFile(note, newPath);
+export async function moveFile(folderPath: string, action: ActionType): Promise<void> {
+  await updateRowFile(
+    action.file,
+    action.key,
+    action.value,
+    UpdateRowOptions.COLUMN_VALUE
+  );
+  const filePath = `${folderPath}/${action.file.name}`;
+  console.log(`move file from ${action.file.path} |||| to |||| ${filePath}`);
+  await app.fileManager.renameFile(action.file, filePath);
 }
 
 /**

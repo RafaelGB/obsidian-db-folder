@@ -112,6 +112,7 @@ export default function DefaultCell(cellProperties: Cell) {
       file: note.getFile(),
       key: (cellProperties.column as any).key,
       value: option.label,
+      rowId: cellProperties.row.index,
     });
   }
 
