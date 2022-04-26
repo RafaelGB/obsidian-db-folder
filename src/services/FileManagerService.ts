@@ -64,7 +64,6 @@ export class VaultManager {
    * @returns 
    */
   obtainTfileFromFilePath(filePath: string): TFile {
-    console.log(`obtainTfileFromFilePath. filePath: ${filePath}`);
     return app.vault.getMarkdownFiles().find(tfile => tfile.path === filePath);
   }
 
