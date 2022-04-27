@@ -1,4 +1,11 @@
 ## 0.0.7
+### Shiny new things
+- New local property `group_folder_column` to specify a select column type column. This column will be used to group the notes into subfolders with the same cell value. The subfolder will be created if it does not exist. [ISSUE#11](https://github.com/RafaelGB/obsidian-bd-folder/issues/11)
+
+### Improved
+- Sustancial improvements with error handling.
+- Beta of an error page if Config yaml is not parsed correctly with the details.
+- Now if some core config is missing, the database will be created with the default values.
 ### No longer broken
 - Now before render a database, it will check if dataview plugin is installed. Showing a warning message if not. [ISSUE#13](https://github.com/RafaelGB/obsidian-bd-folder/issues/13)
 ## 0.0.6
