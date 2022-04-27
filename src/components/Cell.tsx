@@ -10,6 +10,7 @@ import { usePopper } from "react-popper";
 import Relationship from "components/RelationShip";
 import ReactDOM from "react-dom";
 import NoteInfo from "services/NoteInfo";
+import { PopperSelect } from "./portals/PopperSelectPortal";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -35,8 +36,6 @@ export default function DefaultCell(cellProperties: Cell) {
   const columns = (cellProperties as any).columns;
   /** Type of cell */
   const dataType = (cellProperties.column as any).dataType;
-  /** Column options */
-  const options = (cellProperties.column as any).options;
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
   /** state of cell value */
@@ -44,21 +43,10 @@ export default function DefaultCell(cellProperties: Cell) {
   /** state for keeping the timeout to trigger the editior */
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   /** states for selector option  */
-  // Selector reference state
-  const [selectRef, setSelectRef] = useState(null);
-  // Selector popper state
-  const [selectPop, setSelectPop] = useState(null);
-  const [domReady, setDomReady] = useState(false);
-  const [showSelect, setShowSelect] = useState(false);
-  const [showAdd, setShowAdd] = useState(false);
-  const [addSelectRef, setAddSelectRef] = useState(null);
-  const { styles, attributes } = usePopper(selectRef, selectPop);
   LOGGER.debug(
     `<=> Cell.rendering dataType: ${dataType}. value: ${value.value}`
   );
-  React.useEffect(() => {
-    setDomReady(true);
-  });
+
   // onChange handler
   const handleOnChange = (event: ContentEditableEvent) => {
     // cancelling previous timeouts
@@ -77,7 +65,7 @@ export default function DefaultCell(cellProperties: Cell) {
   };
 
   function getColor() {
-    let match = options.find(
+    let match = (cellProperties.column as any).options.find(
       (option: { label: any }) => option.label === value.value
     );
     return (match && match.backgroundColor) || grey(200);
@@ -91,137 +79,6 @@ export default function DefaultCell(cellProperties: Cell) {
       key: (cellProperties.column as any).key,
       value: event.target.value,
     });
-  }
-
-  function handleAddOption(e: any) {
-    setShowAdd(true);
-  }
-
-  function handleOptionClick(option: { label: string; backgroundColor?: any }) {
-    setValue({ value: option.label, update: true });
-    setShowSelect(false);
-    // save on disk & move file if its configured on the column
-    dataDispatch({
-      type: ActionTypes.UPDATE_OPTION_CELL,
-      file: note.getFile(),
-      key: (cellProperties.column as any).key,
-      value: option.label,
-      row: cellProperties.row,
-    });
-  }
-
-  function handleOptionBlur(e: any) {
-    if (e.target.value !== "") {
-      dataDispatch({
-        type: ActionTypes.ADD_OPTION_TO_COLUMN,
-        option: e.target.value,
-        backgroundColor: randomColor(),
-        columnId: (cellProperties.column as any).id,
-      });
-    }
-    setShowAdd(false);
-  }
-
-  /**
-   *
-   * @param e Handler for click event on cell
-   */
-  function handleOptionKeyDown(e: any) {
-    if (e.key === "Enter") {
-      if (e.target.value !== "") {
-        dataDispatch({
-          columns: columns,
-          option: e.target.value,
-          backgroundColor: randomColor(),
-          columnId: (cellProperties.column as any).id,
-          type: ActionTypes.ADD_OPTION_TO_COLUMN,
-        });
-      }
-      setShowAdd(false);
-    }
-  }
-  /**
-   * Popper for selector
-   * @returns
-   */
-  function PopperSelect() {
-    return (
-      <div>
-        {/* hide selector if click outside of it */}
-        {showSelect && (
-          <div className="overlay" onClick={() => setShowSelect(false)} />
-        )}
-        {/* show selector if click on the current value */}
-        {showSelect && (
-          <div
-            className="shadow-5 border-radius-md"
-            ref={setSelectPop}
-            {...attributes.popper}
-            style={{
-              ...styles.popper,
-              zIndex: 4,
-              minWidth: 200,
-              maxWidth: 320,
-              padding: "0.75rem",
-              background: StyleVariables.BACKGROUND_SECONDARY,
-            }}
-          >
-            <div
-              className="d-flex flex-wrap-wrap"
-              style={{ marginTop: "-0.5rem" }}
-            >
-              {options.map((option: any) => (
-                <div
-                  key={option.label}
-                  className="cursor-pointer"
-                  style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                  onClick={() => handleOptionClick(option)}
-                >
-                  <Relationship
-                    value={option.label}
-                    backgroundColor={option.backgroundColor}
-                  />
-                </div>
-              ))}
-              {showAdd && (
-                <div
-                  style={{
-                    marginRight: "0.5rem",
-                    marginTop: "0.5rem",
-                    width: 120,
-                    padding: "2px 4px",
-                    backgroundColor: grey(200),
-                    borderRadius: 4,
-                  }}
-                >
-                  <input
-                    type="text"
-                    className="option-input"
-                    onBlur={handleOptionBlur}
-                    ref={setAddSelectRef}
-                    onKeyDown={handleOptionKeyDown}
-                  />
-                </div>
-              )}
-              <div
-                className="cursor-pointer"
-                style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                onClick={handleAddOption}
-              >
-                <Relationship
-                  value={
-                    <span className="svg-icon-sm svg-text">
-                      <PlusIcon />
-                    </span>
-                  }
-                  backgroundColor={grey(200)}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
   }
 
   function getCellElement() {
@@ -267,28 +124,16 @@ export default function DefaultCell(cellProperties: Cell) {
       /** Selector option */
       case DataTypes.SELECT:
         return (
-          <>
-            {/* Current value of the select */}
-            <div
-              ref={setSelectRef}
-              className="cell-padding d-flex cursor-default align-items-center flex-1"
-              onClick={() => setShowSelect(true)}
-            >
-              {value.value && (
-                <Relationship
-                  value={value.value}
-                  backgroundColor={getColor()}
-                />
-              )}
-            </div>
-            {domReady
-              ? ReactDOM.createPortal(
-                  PopperSelect(),
-                  document.getElementById("popper-container")
-                )
-              : null}
-          </>
+          <PopperSelect
+            initialValue={initialValue}
+            dispatch={dataDispatch}
+            row={cellProperties.row}
+            column={cellProperties.column}
+            columns={columns}
+            note={note}
+          />
         );
+
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);
