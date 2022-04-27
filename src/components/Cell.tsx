@@ -1,16 +1,12 @@
-import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
+import { ActionTypes, DataTypes } from "helpers/Constants";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { LOGGER } from "services/Logger";
 import { Cell } from "react-table";
 import { MarkdownRenderer } from "obsidian";
-import PlusIcon from "components/img/Plus";
-import { grey, randomColor } from "helpers/Colors";
-import { usePopper } from "react-popper";
-import Relationship from "components/RelationShip";
-import ReactDOM from "react-dom";
+import { grey } from "helpers/Colors";
 import NoteInfo from "services/NoteInfo";
-import { PopperSelect } from "./portals/PopperSelectPortal";
+import PopperSelectPortal from "components/portals/PopperSelectPortal";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -124,7 +120,7 @@ export default function DefaultCell(cellProperties: Cell) {
       /** Selector option */
       case DataTypes.SELECT:
         return (
-          <PopperSelect
+          <PopperSelectPortal
             initialValue={initialValue}
             dispatch={dataDispatch}
             row={cellProperties.row}

@@ -17,7 +17,7 @@ type PopperProps = {
   note: NoteInfo;
 };
 
-export function PopperSelect(popperProps: PopperProps) {
+const PopperSelectPortal = (popperProps: PopperProps) => {
   const { initialValue, dispatch, row, column, columns, note } = popperProps;
   /** state of cell value */
   const [value, setValue] = useState({ value: initialValue, update: false });
@@ -190,4 +190,6 @@ export function PopperSelect(popperProps: PopperProps) {
         : null}
     </>
   );
-}
+};
+
+export default PopperSelectPortal;
