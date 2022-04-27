@@ -19,12 +19,9 @@ const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
     try {
         const yaml = parseYaml(yamlText);
         return validateYaml(yaml);
-    } catch (e) {
-        throw new DbFolderError(
-            new ParserError("Error parsing yaml",
-                { exception: [e] }
-            )
-        );
+    } catch (e: any) {
+        throw new ParserError("Error parsing yaml",
+            { exception: [e] });
     }
 }
 

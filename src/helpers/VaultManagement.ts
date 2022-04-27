@@ -190,7 +190,7 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
  * @throws Error if plugin is not installed
  */
 function dataviewIsLoaded(): boolean {
-  if (!!getAPI()) {
+  if (getAPI()) {
     return true;
   } else {
     new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
