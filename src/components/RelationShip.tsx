@@ -13,7 +13,6 @@ export default function Relationship(relationShipProps: RelationshipProps) {
         fontWeight: 400,
         padding: "2px 6px",
         borderRadius: 4,
-        textTransform: "capitalize",
         display: "inline-block",
       }}
     >

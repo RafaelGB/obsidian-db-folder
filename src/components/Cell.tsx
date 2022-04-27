@@ -87,7 +87,7 @@ export default function DefaultCell(cellProperties: Cell) {
     // save on disk
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
-      note: note.getFile(),
+      file: note.getFile(),
       key: (cellProperties.column as any).key,
       value: event.target.value,
     });
@@ -144,7 +144,7 @@ export default function DefaultCell(cellProperties: Cell) {
    * Popper for selector
    * @returns
    */
-  function renderPopperSelect() {
+  function PopperSelect() {
     return (
       <div>
         {/* hide selector if click outside of it */}
@@ -283,7 +283,7 @@ export default function DefaultCell(cellProperties: Cell) {
             </div>
             {domReady
               ? ReactDOM.createPortal(
-                  renderPopperSelect(),
+                  PopperSelect(),
                   document.getElementById("popper-container")
                 )
               : null}

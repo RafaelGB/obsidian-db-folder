@@ -77,7 +77,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           { ...rowRecord, file: { path: filename } },
           state.data.length + 1
         ),
-        [MetadataColumns.FILE]: `[[${filename}]]`,
+        [MetadataColumns.FILE]: `[[${filename}|${action.filename}]]`,
       };
       // TODO add typing
       return update(state as any, {
@@ -341,7 +341,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);
         action.row[
           MetadataColumns.FILE
-        ] = `[[${action.file.parent.path}/${action.value}/${action.file.name}]]`;
+        ] = `[[${action.file.parent.path}/${action.value}/${action.file.name}|${action.file.basename}]]`;
         action.row.original.note = new NoteInfo(
           {
             ...action.row,
@@ -368,6 +368,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
     // Else go UPDATE_CELL
 
     case ActionTypes.UPDATE_CELL:
+      console.log("ActionTypes UPDATE_CELL");
       // save on disk
       updateRowFile(
         action.file,

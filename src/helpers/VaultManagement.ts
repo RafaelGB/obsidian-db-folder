@@ -173,8 +173,15 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
     action.value,
     UpdateRowOptions.COLUMN_VALUE
   );
-  const filePath = `${folderPath}/${action.file.name}`;
-  await app.fileManager.renameFile(action.file, filePath);
+  try {
+    createFolder(folderPath);
+  } catch (error) {
+    // Handle error
+    throw error;
+  } finally {
+    const filePath = `${folderPath}/${action.file.name}`;
+    await app.fileManager.renameFile(action.file, filePath);
+  }
 }
 
 /**
@@ -189,4 +196,12 @@ function dataviewIsLoaded(): boolean {
     new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
     throw new Error('Dataview plugin is not installed');
   }
+}
+
+export async function createFolder(folderPath: string): Promise<void> {
+  await app.vault.adapter.exists(folderPath).then(async exists => {
+    if (!exists) {
+      await app.vault.createFolder(`${folderPath}/`);
+    }
+  });
 }
