@@ -23,6 +23,10 @@ The information you add or edit will be saved into the target obsidian note.
 - Global filters
 ![GlobalFilter.gif](docs/resources/GlobalFilter.gif)
 
+#### Event Driven
+- (*NEW*) Configurable select column with `group_folder_column` property. This column will be used to group the notes into subfolders with the same cell value. The subfolder will be created if it does not exist.
+![GroupFolderColumn.gif](docs/resources/GroupFolderColumn.gif)
+
 ### Whats inside the database view?
 Database view read the yaml configuration inside .md file and render a react DOM.
 
@@ -40,8 +44,11 @@ Mandatory:
 - **label**: name of the column
 Optional:
 - **position**: order of the columns
-#### Local configuration
 
+
+#### Local configuration
+- **enable_show_state**: show react table state at bottom of the page. It has a default value & local value of each database.
+- **group_folder_column**: name of the column used to group the notes into subfolders with the same cell value. The subfolder will be created if it does not exist. It must be a select column type.
 ```markdown
 ---
 
@@ -75,9 +82,16 @@ columns:
     accessor: Calification
     label: Calification
     key: Calification
+    position: 5
+  view_state:
+    input: select
+    accessor: view_state
+    key: view_state
+    label: view_state
     position: 4
 config:
   enable_show_state: false
+  group_folder_column: view_state
 %%>
 ```
 
