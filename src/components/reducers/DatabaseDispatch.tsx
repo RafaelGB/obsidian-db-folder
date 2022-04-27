@@ -351,7 +351,6 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           action.row.index
         );
-        action.row.id = action.row.index + 1;
         return update(state, {
           data: {
             [action.row.index]: {
