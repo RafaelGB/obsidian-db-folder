@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Arrow() {
+export default function MarkdownObsidian() {
   return (
     <svg
       width="44"
@@ -13,9 +13,9 @@ export default function Arrow() {
       strokeLinejoin="round"
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <line x1="5" y1="12" x2="19" y2="12" />
-      <line x1="13" y1="18" x2="19" y2="12" />
-      <line x1="13" y1="6" x2="19" y2="12" />
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M7 15v-6l2 2l2 -2v6" />
+      <path d="M14 13l2 2l2 -2m-2 2v-6" />
     </svg>
   );
 }

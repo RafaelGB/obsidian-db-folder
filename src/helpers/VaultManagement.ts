@@ -1,6 +1,7 @@
 import { TableRow, NoteContentAction } from 'cdm/FolderModel';
-import { TFile } from 'obsidian';
-import { getAPI} from "obsidian-dataview"
+import { Notice, TFile } from 'obsidian';
+import { getAPI } from "obsidian-dataview"
+import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
@@ -8,30 +9,45 @@ import { DatabaseCore, UpdateRowOptions } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
 interface NormalizedPath {
-    root: string;
-    subpath: string;
-    alias: string;
+  root: string;
+  subpath: string;
+  alias: string;
+}
+
+/** Check if file has frontmatter */
+export function hasFrontmatterKey(data: string): boolean {
+  if (!data) return false;
+  const match = data.match(/---\s+([\w\W]+?)\s+---/);
+
+  if (!match) {
+    return false;
   }
-  
+
+  if (!match[1].contains(DatabaseCore.FRONTMATTER_KEY)) {
+    return false;
+  }
+  return true;
+}
+
 export function getNormalizedPath(path: string): NormalizedPath {
-    const stripped = path.replace(noBreakSpace, ' ').normalize('NFC');
-  
-    // split on first occurance of '|'
-    // "root#subpath##subsubpath|alias with |# chars"
-    //             0            ^        1
-    const splitOnAlias = stripped.split(/\|(.*)/);
-  
-    // split on first occurance of '#' (in substring)
-    // "root#subpath##subsubpath"
-    //   0  ^        1
-    const splitOnHash = splitOnAlias[0].split(/#(.*)/);
-  
-    return {
-      root: splitOnHash[0],
-      subpath: splitOnHash[1] ? '#' + splitOnHash[1] : '',
-      alias: splitOnAlias[1] || '',
-    };
-  }
+  const stripped = path.replace(noBreakSpace, ' ').normalize('NFC');
+
+  // split on first occurance of '|'
+  // "root#subpath##subsubpath|alias with |# chars"
+  //             0            ^        1
+  const splitOnAlias = stripped.split(/\|(.*)/);
+
+  // split on first occurance of '#' (in substring)
+  // "root#subpath##subsubpath"
+  //   0  ^        1
+  const splitOnHash = splitOnAlias[0].split(/#(.*)/);
+
+  return {
+    root: splitOnHash[0],
+    subpath: splitOnHash[1] ? '#' + splitOnHash[1] : '',
+    alias: splitOnAlias[1] || '',
+  };
+}
 
 /**
  * With the use of Dataview and the folder path, we can obtain an array of rows
@@ -39,28 +55,29 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @returns 
  */
 export async function adapterTFilesToRows(folderPath: string): Promise<Array<TableRow>> {
-    LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
-    const rows: Array<TableRow> = [];
-    let id = 0;
+  dataviewIsLoaded();
+  LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
+  const rows: Array<TableRow> = [];
+  let id = 0;
 
-    const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p=>!p[DatabaseCore.FRONTMATTER_KEY]);
-    await Promise.all(folderFiles.map(async (page) => {
-        const noteInfo = new NoteInfo(page,++id);
-        rows.push(noteInfo.getTableRow());
-    }));
-    LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
-    return rows;
+  const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  await Promise.all(folderFiles.map(async (page) => {
+    const noteInfo = new NoteInfo(page, ++id);
+    rows.push(noteInfo.getTableRow());
+  }));
+  LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
+  return rows;
 }
 
-export function adapterRowToDatabaseYaml(rowInfo:any):string{
-    const yaml = [];
-    yaml.push('---');
-    Object.entries(rowInfo).forEach(entry => {
-        const [key, value] = entry;
-        yaml.push(`${key}: ${value??''}`);
-      });
-    yaml.push('---');
-    return yaml.join('\n');
+export function adapterRowToDatabaseYaml(rowInfo: any): string {
+  const yaml = [];
+  yaml.push('---');
+  Object.entries(rowInfo).forEach(entry => {
+    const [key, value] = entry;
+    yaml.push(`${key}: ${value ?? ''}`);
+  });
+  yaml.push('---');
+  return yaml.join('\n');
 }
 
 /**
@@ -70,10 +87,10 @@ export function adapterRowToDatabaseYaml(rowInfo:any):string{
  * @param newColumnValue 
  * @param option 
  */
-export async function updateRowFile(file:TFile, columnId:string, newValue:string, option:string):Promise<void> {
+export async function updateRowFile(file: TFile, columnId: string, newValue: string, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   // Modify value of a column
-  function columnValue():NoteContentAction{
+  function columnValue(): NoteContentAction {
     /* Regex explanation
     * group 1 is frontmatter centinel until current column
     * group 2 is key of current column
@@ -89,7 +106,7 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
     };
   }
   // Modify key of a column
-  function columnKey():NoteContentAction{
+  function columnKey(): NoteContentAction {
     /* Regex explanation
     * group 1 is the frontmatter centinel until previous to current column
     * group 2 is the column we want to replace
@@ -104,7 +121,7 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
     };
   }
   // Remove a column
-  function removeColumn():NoteContentAction{
+  function removeColumn(): NoteContentAction {
     /* Regex explanation
     * group 1 is the frontmatter centinel until previous to current column
     * group 2 is the column we want to remove
@@ -120,7 +137,7 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
   }
 
   // Add a column
-  function addColumn():NoteContentAction{
+  function addColumn(): NoteContentAction {
     /* Regex explanation
     * group 1 the entire frontmatter until flag ---
     * group 2 is the rest of the frontmatter
@@ -140,11 +157,51 @@ export async function updateRowFile(file:TFile, columnId:string, newValue:string
   updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
   updateOptions[UpdateRowOptions.ADD_COLUMN] = addColumn;
   // Execute action
-  if(updateOptions[option]){
+  if (updateOptions[option]) {
     const noteObject = updateOptions[option]();
     await VaultManagerDB.editNoteContent(noteObject);
-  }else{
+  } else {
     throw `Error: option ${option} not supported yet`;
   }
   LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
+}
+
+export async function moveFile(folderPath: string, action: ActionType): Promise<void> {
+  await updateRowFile(
+    action.file,
+    action.key,
+    action.value,
+    UpdateRowOptions.COLUMN_VALUE
+  );
+  try {
+    createFolder(folderPath);
+  } catch (error) {
+    // Handle error
+    throw error;
+  } finally {
+    const filePath = `${folderPath}/${action.file.name}`;
+    await app.fileManager.renameFile(action.file, filePath);
+  }
+}
+
+/**
+ * Check if dataview plugin is installed
+ * @returns true if installed, false otherwise
+ * @throws Error if plugin is not installed
+ */
+function dataviewIsLoaded(): boolean {
+  if (!!getAPI()) {
+    return true;
+  } else {
+    new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
+    throw new Error('Dataview plugin is not installed');
+  }
+}
+
+export async function createFolder(folderPath: string): Promise<void> {
+  await app.vault.adapter.exists(folderPath).then(async exists => {
+    if (!exists) {
+      await app.vault.createFolder(`${folderPath}/`);
+    }
+  });
 }

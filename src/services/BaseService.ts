@@ -2,39 +2,39 @@ import {
     Models,
     FolderModel,
     Group
-}from 'cdm/FolderModel';
+} from 'cdm/FolderModel';
 
-export class Schema{
+export class Schema {
     private static instance: Schema;
     models: Models;
 
-    constructor(models: Models){
-        this.models = models===undefined ? {} : models;
+    constructor(models: Models) {
+        this.models = models === undefined ? {} : models;
     }
 
     /**
     * Obtain property inside of input group
     */
-    getProperty(group: Group ,keypath: string){
-      const s = keypath.split('.');
-      group = group[s.shift() as keyof Group];
-      while(group && s.length) group = group[s.shift()];
-      return group;
+    getProperty(group: Group, keypath: string) {
+        const s = keypath.split('.');
+        group = group[s.shift() as keyof Group];
+        while (group && s.length) group = group[s.shift()];
+        return group;
     }
-    
-    addModel(name:string, model: FolderModel){
+
+    addModel(name: string, model: FolderModel) {
         this.models[name] = model;
     }
-    
+
     /**
      * Obtain model object
      */
-    getModel(key: string){
+    getModel(key: string) {
         // Error handling if key contains '.'
-        if(key.indexOf('.') !== -1){
+        if (key.indexOf('.') !== -1) {
             throw new Error('Keypath cannot contain "."');
         }
-      return this.getProperty(this.models, key);
+        return this.getProperty(this.models, key);
     }
 
     /**
@@ -43,8 +43,8 @@ export class Schema{
      * @param property 
      * @returns 
      */
-    getModelProperty(key: string, property: string){
-       // Concatenate key and property to obtain full keypath
+    getModelProperty(key: string, property: string) {
+        // Concatenate key and property to obtain full keypath
         const keypath = key + '.' + property;
         return this.getProperty(this.models, keypath);
     }
@@ -52,7 +52,7 @@ export class Schema{
     /**
      * Obtain list of models available
      */
-    avaliableModels(){
+    avaliableModels() {
         return Object.keys(this.models);
     }
 
@@ -61,9 +61,9 @@ export class Schema{
      * @returns {Schema}
      */
     public static getInstance(models?: Models): Schema {
-    if (!Schema.instance) {
-        Schema.instance = new Schema(models);
-    }
+        if (!Schema.instance) {
+            Schema.instance = new Schema(models);
+        }
         return Schema.instance;
     }
 }

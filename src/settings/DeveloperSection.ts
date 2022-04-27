@@ -1,19 +1,16 @@
 import { add_setting_header } from 'settings/SettingsComponents';
-import { SettingHandler } from 'settings/handlers/AbstractSettingHandler';
+import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
 import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateToggleHandler';
-import { SettingsManager } from 'Settings';
 import { LoggerLevelInfoDropDownHandler } from 'settings/handlers/developer/LoggerLevelInfoDropDownHandler';
-import { DatabaseView } from 'DatabaseView';
 
 /**
  * developer settings section
  */
-export function developer_settings_section(settingsManager: SettingsManager, containerEl: HTMLElement, local: boolean, view?: DatabaseView): void {
+export function developer_settings_section(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
+    const developer_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-developer");
     // title of the section
-    add_setting_header(containerEl,"Developer section",'h3');
-    // add soft red background color to the section
-    containerEl.style.backgroundColor = "var(--background-modifier-error)";
+    add_setting_header(developer_section, "Developer section", 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;
@@ -21,13 +18,15 @@ export function developer_settings_section(settingsManager: SettingsManager, con
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-  handlers[0].handle(settingsManager, containerEl, local, view);
+
+    settingHandlerResponse.containerEl = developer_section;
+    return handlers[0].handle(settingHandlerResponse);
 }
 
 /**
  * Obtain all classes than extends from AbstractHandler
  */
- function getHandlers(): SettingHandler[] {
+function getHandlers(): SettingHandler[] {
     return [
         new LoggerToggleHandler(),
         new LoggerLevelInfoDropDownHandler(),

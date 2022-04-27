@@ -1,23 +1,26 @@
-import {ErrorImplementation} from 'errors/AbstractError';
+import { ErrorImplementation } from 'errors/AbstractError';
 
 /**
  * Custom error for parser yaml of dbfolder
  */
 export class ParserError implements ErrorImplementation {
     message: string;
-    errorsList: [string, string][];
+    recordError: Record<string, string[]>;
 
-    constructor(message: string, public errors: [string, string][]) {
+    constructor(message: string, public errors: Record<string, string[]>) {
         this.message = message;
-        this.errorsList = errors;
+        this.recordError = errors;
     }
 
-    public getErrorsList(): [string, string][] {
-        return this.errorsList;
+    public getErrorsList(): Record<string, string[]> {
+        return this.recordError;
     }
 
+    /**
+     * Get the error message iterating over recordError
+     */
     public getMessage(): string {
-        return this.message+'\n'+this.errorsList.map(e => e[0]+': '+e[1]).join('\n')
+        return this.message + '\n' + Object.keys(this.recordError).map(e => e + ': ' + this.recordError[e].join('\n')).join('\n')
     }
 }
 
