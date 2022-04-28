@@ -37,13 +37,14 @@ export type TableColumn = {
     position: number,
     accessor: any,
     minWidth?: number,
-    width?:number
+    width?: number
     dataType?: string,
     options?: RowSelectOption[]
     Cell?: any,
     getHeaderProps?: any,
     getResizerProps?: any,
     isMetadata?: boolean
+    csvCandidate: boolean
 }
 
 export type TableRow = {
@@ -52,67 +53,67 @@ export type TableRow = {
     [key: string]: RowType
 }
 
-export type TableDataType={
+export type TableDataType = {
     columns: TableColumn[],
     metadataColumns: TableColumn[],
-    data: Array<TableRow>, 
+    data: Array<TableRow>,
     skipReset: boolean,
     view: DatabaseView,
     stateManager?: StateManager,
     dispatch?: Dispatch<any>
 }
-export interface DatabaseHeaderProps{
-    columns:any,
-    data:any,
-    initialState:any,
-    defaultColumn:any,
-    getSubRows:any,
-    getRowId:any,
-    stateReducer:any,
-    useControlledState:any,
-    plugins:any,
-    getHooks:any,
-    state:any,
-    dispatch:any,
-    allColumns:any,
-    rows:any,
-    initialRows:any,
-    flatRows:any,
-    rowsById:any,
-    headerGroups:any,
-    headers:any,flatHeaders:any,
-    visibleColumns:any,
-    totalColumnsMinWidth:any,
-    totalColumnsWidth:any,
-    totalColumnsMaxWidth:any,
-    allColumnsHidden:any,
-    toggleHideColumn:any,
-    setHiddenColumns:any,
-    toggleHideAllColumns:any,
-    getToggleHideAllColumnsProps:any,
-    resetResizing:any,
-    preSortedRows:any,
-    preSortedFlatRows:any,
-    sortedRows:any,
-    sortedFlatRows:any,
-    setSortBy:any,
-    toggleSortBy:any,
-    rowSpanHeaders:any,
-    footerGroups:any,
-    prepareRow:any,
-    getTableProps:any,
-    getTableBodyProps:any,
+export interface DatabaseHeaderProps {
+    columns: any,
+    data: any,
+    initialState: any,
+    defaultColumn: any,
+    getSubRows: any,
+    getRowId: any,
+    stateReducer: any,
+    useControlledState: any,
+    plugins: any,
+    getHooks: any,
+    state: any,
+    dispatch: any,
+    allColumns: any,
+    rows: any,
+    initialRows: any,
+    flatRows: any,
+    rowsById: any,
+    headerGroups: any,
+    headers: any, flatHeaders: any,
+    visibleColumns: any,
+    totalColumnsMinWidth: any,
+    totalColumnsWidth: any,
+    totalColumnsMaxWidth: any,
+    allColumnsHidden: any,
+    toggleHideColumn: any,
+    setHiddenColumns: any,
+    toggleHideAllColumns: any,
+    getToggleHideAllColumnsProps: any,
+    resetResizing: any,
+    preSortedRows: any,
+    preSortedFlatRows: any,
+    sortedRows: any,
+    sortedFlatRows: any,
+    setSortBy: any,
+    toggleSortBy: any,
+    rowSpanHeaders: any,
+    footerGroups: any,
+    prepareRow: any,
+    getTableProps: any,
+    getTableBodyProps: any,
     column: TableColumn
 }
 
 export type RelationshipProps = {
-    value:any,
-    backgroundColor:string
+    value: any,
+    backgroundColor: string
 }
 
 export type NoteContentAction = {
-    file:TFile,
-    action:string,
-    regexp:RegExp,
-    newValue:string
+    file: TFile,
+    action: string,
+    regexp: RegExp,
+    newValue: string
 }

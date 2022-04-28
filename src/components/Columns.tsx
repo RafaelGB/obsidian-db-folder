@@ -20,6 +20,7 @@ export async function obtainMetadataColumns(): Promise<TableColumn[]> {
     label: MetadataLabels.FILE,
     accessor: MetadataColumns.FILE,
     isMetadata: true,
+    csvCandidate: true,
   };
 
   metadataColumns[MetadataColumns.ADD_COLUMN] = {
@@ -28,9 +29,10 @@ export async function obtainMetadataColumns(): Promise<TableColumn[]> {
     input: DataTypes.NEW_COLUMN,
     width: 20,
     disableResizing: true,
-    label: "+",
+    label: MetadataLabels.ADD_COLUMN,
     accessor: MetadataColumns.ADD_COLUMN,
     isMetadata: true,
+    csvCandidate: false,
   };
 
   await Promise.all(
@@ -75,6 +77,7 @@ async function columnOptions(
     key: column.key ?? columnKey,
     accessor: column.accessor ?? dbTrim(column.label),
     isMetadata: column.isMetadata ?? false,
+    csvCandidate: column.csvCandidate ?? true,
   };
   /**
    * return plain text

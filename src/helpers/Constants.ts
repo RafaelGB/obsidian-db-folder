@@ -24,13 +24,13 @@ export const DataTypes = Object.freeze({
 export const MAX_CAPACITY_DATABASE = 999999;
 
 export const MetadataColumns = Object.freeze({
-  FILE: `${MAX_CAPACITY_DATABASE - 1}`,
-  ADD_COLUMN: `${MAX_CAPACITY_DATABASE}`
+  FILE: `__file__`,
+  ADD_COLUMN: `__add_column__`,
 });
 
 export const MetadataLabels = Object.freeze({
   FILE: 'File',
-  ADD_COLUMN: 'Add Column'
+  ADD_COLUMN: '+'
 });
 
 export const DatabaseCore = Object.freeze({

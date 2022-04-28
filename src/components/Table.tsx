@@ -8,8 +8,8 @@ import {
   useGlobalFilter,
   useColumnOrder,
   useFilters,
-  Cell,
 } from "react-table";
+import { CSVLink } from "react-csv";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import clsx from "clsx";
 import { TableDataType, TableRow, TableColumn } from "cdm/FolderModel";
@@ -23,6 +23,11 @@ import DefaultCell from "components/Cell";
 import Header from "components/Header";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
+import {
+  normalizeRowsToCsvData,
+  normalizeColumnsToCsvHeader,
+} from "parsers/NormalizeRowsToCSV";
+import Button from "@material-ui/core/Button";
 
 const defaultColumn = {
   minWidth: 50,
@@ -215,9 +220,35 @@ export function Table(initialState: TableDataType) {
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
+  // Manage CSV
+  const [dataForDownload, setDataForDownload] = React.useState([]);
+  const [headersForDownload, setHeadersForDownload] = React.useState([]);
+  const csvLink = React.useRef(null);
+
+  const getTransactionData = async () => {
+    const csvHeaders = await normalizeColumnsToCsvHeader(columns);
+    const csvRows = await normalizeRowsToCsvData(rows);
+    setDataForDownload(csvRows);
+    setHeadersForDownload(csvHeaders);
+    console.log(`${JSON.stringify(csvHeaders)}`);
+    csvLink.current.link.click();
+  };
   LOGGER.debug(`<= Table`);
   return (
     <>
+      <div>
+        <Button onClick={getTransactionData}>
+          Download transactions to csv
+        </Button>
+        <CSVLink
+          data={dataForDownload}
+          headers={headersForDownload}
+          filename="pruebas.csv"
+          className="hidden"
+          ref={csvLink}
+          target="_blank"
+        />
+      </div>
       <div
         {...getTableProps()}
         className={clsx("table", isTableResizing() && "noselect")}

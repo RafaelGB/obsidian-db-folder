@@ -29,6 +29,7 @@ export function makeData(count: number): TableDataType {
       minWidth: 100,
       dataType: DataTypes.TEXT,
       options: options,
+      csvCandidate: true,
       Cell: ({ cell }: any) => {
         const { value } = cell;
         const containerRef = useRef<HTMLElement>();
@@ -54,6 +55,7 @@ export function makeData(count: number): TableDataType {
       minWidth: 100,
       dataType: DataTypes.TEXT,
       options: options,
+      csvCandidate: true,
     },
   ];
   return {
