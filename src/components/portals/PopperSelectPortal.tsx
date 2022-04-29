@@ -5,17 +5,7 @@ import { ActionTypes, StyleVariables } from "helpers/Constants";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
-import { ActionType } from "react-table";
-import NoteInfo from "services/NoteInfo";
-
-type PopperProps = {
-  initialValue: string;
-  dispatch: (action: ActionType) => void;
-  row: any;
-  column: any;
-  columns: any;
-  note: NoteInfo;
-};
+import { PopperProps } from "cdm/RowSelectModel";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
   const { initialValue, dispatch, row, column, columns, note } = popperProps;
