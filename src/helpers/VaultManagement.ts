@@ -145,14 +145,22 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     * group 3 is the rest of the frontmatter
     */
     const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\n]{1}${columnId}[:]{1})+([\\w\\W]*?\\s---)`, 'g');
-
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterRegex,
-      newValue: `$1$2 ${newValue}$3`
-    };
-    await VaultManagerDB.editNoteContent(noteObject);
+    // Check if the column is already in the frontmatter
+    if (!frontmatterRegex.test(content)) {
+      // if the column is not in the frontmatter, add it with the already updated key
+      columnId = newValue;
+      // then assign an empty value to the new key
+      newValue = '';
+      await addColumn();
+    } else {
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: frontmatterRegex,
+        newValue: `$1$2 ${newValue}$3`
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
+    }
   }
   // Remove a column
   async function removeColumn(): Promise<void> {
