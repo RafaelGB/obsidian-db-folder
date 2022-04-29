@@ -202,7 +202,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    */
   function handleBlur(e: any) {
     e.preventDefault();
-    persistLabelChange();
   }
 
   return (

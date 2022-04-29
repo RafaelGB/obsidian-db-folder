@@ -114,6 +114,11 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           ...state.columns.slice(index + 1, state.columns.length),
         ],
+        data: state.data.map((row: TableRow) => {
+          row[update_col_key] = row[action.columnId];
+          delete row[action.columnId];
+          return row;
+        }),
       };
 
     /**

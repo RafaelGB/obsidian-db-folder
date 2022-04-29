@@ -156,7 +156,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
         action: 'replace',
         file: file,
         regexp: frontmatterRegex,
-        newValue: `$1$2 ${newValue}$3`
+        newValue: `$1\n${newValue}:$3`
       };
       await VaultManagerDB.editNoteContent(noteObject);
     }
