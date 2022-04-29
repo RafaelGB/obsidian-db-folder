@@ -365,9 +365,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         });
       }
     // Else go UPDATE_CELL
-
     case ActionTypes.UPDATE_CELL:
-      console.log("ActionTypes UPDATE_CELL");
       // save on disk
       updateRowFile(
         action.file,

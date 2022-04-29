@@ -6,7 +6,6 @@ export type DatabaseColumn = {
     input: string,
     accessor: string,
     label: string,
-    Header?: string,
     key?: string,
     position?: number,
     isMetadata?: boolean,

@@ -14,6 +14,11 @@ type Parameter = {
     optional?: boolean;
 }
 
+export interface NormalizedPath {
+    root: string;
+    subpath: string;
+    alias: string;
+}
 export type Parameters = {
     [key: string]: Parameter;
 }

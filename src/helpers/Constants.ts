@@ -33,6 +33,30 @@ export const MetadataLabels = Object.freeze({
   ADD_COLUMN: '+'
 });
 
+export const MetadataDatabaseColumns = Object.freeze({
+  FILE:
+  {
+    key: MetadataColumns.FILE,
+    input: DataTypes.MARKDOWN,
+    Header: MetadataColumns.FILE,
+    label: MetadataLabels.FILE,
+    accessor: MetadataColumns.FILE,
+    isMetadata: true,
+    csvCandidate: true,
+  },
+  ADD_COLUMN: {
+    key: MetadataColumns.ADD_COLUMN,
+    Header: MetadataColumns.ADD_COLUMN,
+    input: DataTypes.NEW_COLUMN,
+    width: 20,
+    disableResizing: true,
+    label: MetadataLabels.ADD_COLUMN,
+    accessor: MetadataColumns.ADD_COLUMN,
+    isMetadata: true,
+    csvCandidate: false,
+  }
+});
+
 export const DatabaseCore = Object.freeze({
   FRONTMATTER_KEY: 'database-plugin'
 });

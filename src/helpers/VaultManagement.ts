@@ -1,4 +1,4 @@
-import { TableRow, NoteContentAction } from 'cdm/FolderModel';
+import { TableRow, NoteContentAction, NormalizedPath } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { getAPI } from "obsidian-dataview"
 import { ActionType } from 'react-table';
@@ -8,11 +8,6 @@ import NoteInfo from 'services/NoteInfo';
 import { DatabaseCore, UpdateRowOptions } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
-interface NormalizedPath {
-  root: string;
-  subpath: string;
-  alias: string;
-}
 
 /** Check if file has frontmatter */
 export function hasFrontmatterKey(data: string): boolean {
@@ -30,7 +25,7 @@ export function hasFrontmatterKey(data: string): boolean {
 }
 
 export function getNormalizedPath(path: string): NormalizedPath {
-  const stripped = path.replace(noBreakSpace, ' ').normalize('NFC');
+  const stripped = path.replaceAll("[", "").replaceAll("]", "").replace(noBreakSpace, ' ').normalize('NFC');
 
   // split on first occurance of '|'
   // "root#subpath##subsubpath|alias with |# chars"
@@ -189,7 +184,7 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
  * @returns true if installed, false otherwise
  * @throws Error if plugin is not installed
  */
-function dataviewIsLoaded(): boolean {
+export function dataviewIsLoaded(): boolean {
   if (getAPI()) {
     return true;
   } else {
