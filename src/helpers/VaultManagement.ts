@@ -225,6 +225,7 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
   try {
     createFolder(folderPath);
   } catch (error) {
+    LOGGER.error(` moveFile Error: ${error.message}`);
     // Handle error
     throw error;
   }
