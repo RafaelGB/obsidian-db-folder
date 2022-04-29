@@ -1,4 +1,4 @@
-import { TableRow, NoteContentAction } from 'cdm/FolderModel';
+import { TableRow, NormalizedPath } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { getAPI } from "obsidian-dataview"
 import { ActionType } from 'react-table';
@@ -8,14 +8,19 @@ import NoteInfo from 'services/NoteInfo';
 import { DatabaseCore, UpdateRowOptions } from "./Constants";
 
 const noBreakSpace = /\u00A0/g;
-interface NormalizedPath {
-  root: string;
-  subpath: string;
-  alias: string;
+
+/**
+ * Check if content has frontmatter
+ * @param data 
+ * @returns 
+ */
+function hasFrontmatterKey(data: string): boolean {
+  const frontmatterRegex = /---\s+([\w\W]+?)\s+---/
+  return frontmatterRegex.test(data);
 }
 
-/** Check if file has frontmatter */
-export function hasFrontmatterKey(data: string): boolean {
+/** Check if file is a database note */
+export function isDatabaseNote(data: string): boolean {
   if (!data) return false;
   const match = data.match(/---\s+([\w\W]+?)\s+---/);
 
@@ -30,7 +35,7 @@ export function hasFrontmatterKey(data: string): boolean {
 }
 
 export function getNormalizedPath(path: string): NormalizedPath {
-  const stripped = path.replace(noBreakSpace, ' ').normalize('NFC');
+  const stripped = path.replaceAll("[", "").replaceAll("]", "").replace(noBreakSpace, ' ').normalize('NFC');
 
   // split on first occurance of '|'
   // "root#subpath##subsubpath|alias with |# chars"
@@ -88,9 +93,27 @@ export function adapterRowToDatabaseYaml(rowInfo: any): string {
  * @param option 
  */
 export async function updateRowFile(file: TFile, columnId: string, newValue: string, option: string): Promise<void> {
+  console.log("updateRowFile");
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
+  let content = await VaultManagerDB.obtainContentFromTfile(file);
+
+  // Adds an empty frontmatter at the beginning of the file
+  async function addFrontmatter(): Promise<void> {
+    /* Regex explanation
+    * group 1 all content
+    */
+    const frontmatterRegex = new RegExp(`(^.*$)`, 'g');
+    const noteObject = {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterRegex,
+      newValue: `---\n---\n$1`
+    };
+    // update content on disk and in memory
+    content = await VaultManagerDB.editNoteContent(noteObject);
+  }
   // Modify value of a column
-  function columnValue(): NoteContentAction {
+  async function columnValue(): Promise<void> {
     /* Regex explanation
     * group 1 is frontmatter centinel until current column
     * group 2 is key of current column
@@ -98,57 +121,78 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     * group 4 is the rest of the frontmatter
     */
     const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\s]*${columnId}[:]{1})+(.*)+([\\w\\W]*?\\s---)`, 'g');
-    return {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterRegex,
-      newValue: `$1$2 ${newValue}$4`
-    };
+    // Check if the column is already in the frontmatter
+    if (!frontmatterRegex.test(content)) {
+      // if the column is not in the frontmatter, add it
+      await addColumn();
+    } else {
+      // If it is, replace the value
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: frontmatterRegex,
+        newValue: `$1$2 ${newValue}$4`
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
+    }
   }
   // Modify key of a column
-  function columnKey(): NoteContentAction {
+  async function columnKey(): Promise<void> {
+    // If it is, replace the value
     /* Regex explanation
     * group 1 is the frontmatter centinel until previous to current column
     * group 2 is the column we want to replace
     * group 3 is the rest of the frontmatter
     */
     const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\n]{1}${columnId}[:]{1})+([\\w\\W]*?\\s---)`, 'g');
-    return {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterRegex,
-      newValue: `$1\n${newValue}:$3`
-    };
+    // Check if the column is already in the frontmatter
+    if (!frontmatterRegex.test(content)) {
+      // if the column is not in the frontmatter, add it with the already updated key
+      columnId = newValue;
+      // then assign an empty value to the new key
+      newValue = '';
+      await addColumn();
+    } else {
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: frontmatterRegex,
+        newValue: `$1$2 ${newValue}$3`
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
+    }
   }
   // Remove a column
-  function removeColumn(): NoteContentAction {
+  async function removeColumn(): Promise<void> {
     /* Regex explanation
     * group 1 is the frontmatter centinel until previous to current column
     * group 2 is the column we want to remove
     * group 3 is the rest of the frontmatter
     */
     const frontmatterRegex = new RegExp(`(^---[\\w\\W]*?)+([\\s]*${columnId}[:]{1}.+)+([\\s]*[\\w\\W]*?\\s---)`, 'g');
-    return {
+    const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterRegex,
       newValue: `$1$3`
     };
+    await VaultManagerDB.editNoteContent(noteObject);
   }
 
   // Add a column
-  function addColumn(): NoteContentAction {
+  async function addColumn(): Promise<void> {
     /* Regex explanation
     * group 1 the entire frontmatter until flag ---
     * group 2 is the rest of the frontmatter
     */
     const frontmatterRegex = new RegExp(`(^---[\\w\\W]*?)+([\\s]*---)`, 'g');
-    return {
+    const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterRegex,
       newValue: `$1\n${columnId}: ${newValue}$2`
     };
+    await VaultManagerDB.editNoteContent(noteObject);
   }
   // Record of options
   const updateOptions: Record<string, any> = {};
@@ -158,8 +202,13 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   updateOptions[UpdateRowOptions.ADD_COLUMN] = addColumn;
   // Execute action
   if (updateOptions[option]) {
-    const noteObject = updateOptions[option]();
-    await VaultManagerDB.editNoteContent(noteObject);
+    // Check if file has frontmatter
+    if (!hasFrontmatterKey(content)) {
+      // If not, add it
+      await addFrontmatter();
+    }
+    // Then execute the action
+    await updateOptions[option]();
   } else {
     throw `Error: option ${option} not supported yet`;
   }
@@ -178,10 +227,9 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
   } catch (error) {
     // Handle error
     throw error;
-  } finally {
-    const filePath = `${folderPath}/${action.file.name}`;
-    await app.fileManager.renameFile(action.file, filePath);
   }
+  const filePath = `${folderPath}/${action.file.name}`;
+  await app.fileManager.renameFile(action.file, filePath);
 }
 
 /**
@@ -189,8 +237,8 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
  * @returns true if installed, false otherwise
  * @throws Error if plugin is not installed
  */
-function dataviewIsLoaded(): boolean {
-  if (!!getAPI()) {
+export function dataviewIsLoaded(): boolean {
+  if (getAPI()) {
     return true;
   } else {
     new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);

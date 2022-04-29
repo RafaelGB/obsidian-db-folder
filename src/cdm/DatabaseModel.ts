@@ -4,12 +4,12 @@ import { LocalSettings } from "Settings"
 /** database column */
 export type DatabaseColumn = {
     input: string,
-    Header?: string,
-    key?: string,
-    position?: number,
     accessor: string,
     label: string,
+    key?: string,
+    position?: number,
     isMetadata?: boolean,
+    csvCandidate?: boolean,
     [key: string]: RowType
 }
 

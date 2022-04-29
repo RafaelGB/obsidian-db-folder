@@ -4,7 +4,6 @@ import { TableDataType } from "cdm/FolderModel";
 import { DatabaseContext } from "context/context";
 import { databaseReducer } from "components/reducers/DatabaseDispatch";
 import { ActionTypes } from "helpers/Constants";
-
 export function createDatabase(tableProps: TableDataType): JSX.Element {
   return (
     <DatabaseContext.Provider value={app}>

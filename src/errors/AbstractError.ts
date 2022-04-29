@@ -2,25 +2,29 @@ import { Notice } from "obsidian";
 import { generateErrorComponent } from "components/ErrorComponents"
 import ReactDOM from 'react-dom';
 
-export class DbFolderError extends Error {
+export abstract class DbFolderError extends Error {
+    protected messageErrors: Record<string, string[]> = {};
 
-    protected errorType: ErrorImplementation;
-
-    constructor(error: ErrorImplementation) {
-        super(error.getMessage());
-        this.errorType = error;
+    constructor(message: string, errors: Record<string, string[]>) {
+        super(message);
+        if (Object.keys(errors).length > 0) {
+            this.messageErrors = errors;
+        }
         Object.setPrototypeOf(this, DbFolderError.prototype);
     }
 
+    /**
+     * Get the error message iterating over recordError
+     */
+    public getMessage(): string {
+        return this.message + '\n' + Object.keys(this.messageErrors).map(e => e + ': ' + this.messageErrors[e].join('\n')).join('\n')
+    }
+
     public render(container: HTMLElement): void {
-        new Notice(this.errorType.getMessage());
+        new Notice(this.getMessage());
 
         const errorContainer = container.createDiv("dbfolder-error-container");
-        const errorComponent = generateErrorComponent(this.errorType.getMessage());
+        const errorComponent = generateErrorComponent(this.messageErrors);
         ReactDOM.render(errorComponent, errorContainer);
     }
-}
-
-export interface ErrorImplementation {
-    getMessage(): string;
 }

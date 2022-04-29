@@ -6,10 +6,7 @@ import {
 import { createDatabase } from "components/index/Database";
 import { DbFolderError } from "errors/AbstractError";
 import { DatabaseCore, DataTypes, StyleClasses } from "helpers/Constants";
-import {
-  adapterTFilesToRows,
-  hasFrontmatterKey,
-} from "helpers/VaultManagement";
+import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import DBFolderPlugin from "main";
 
 import {
@@ -48,7 +45,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   }
 
   setViewData(data: string, clear: boolean): void {
-    if (!hasFrontmatterKey(data)) {
+    if (!isDatabaseNote(data)) {
       this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
         DataTypes.MARKDOWN;
       this.plugin.removeView(this);

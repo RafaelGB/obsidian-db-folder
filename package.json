@@ -31,6 +31,7 @@
 		"@types/react-table": "7.7.10",
 		"@types/react-window": "1.8.5",
 		"@types/react-beautiful-dnd": "13.1.2",
+		"@types/react-csv": "1.1.2",
 		"@typescript-eslint/eslint-plugin": "5.20.0",
 		"@typescript-eslint/parser": "5.20.0",
 		"eslint": "8.13.0",
@@ -43,10 +44,10 @@
 		"svelte-preprocess": "4.10.6",
 		"ts-jest": "27.1.4",
 		"tslib": "2.3.1",
-		"typescript": "4.6.3"
+		"typescript": "4.6.3",
+		"@faker-js/faker": "6.2.0"
 	},
 	"dependencies": {
-		"@faker-js/faker": "6.1.2",
 		"@material-ui/core": "4.12.4",
 		"@material-ui/icons": "4.11.3",
 		"@popperjs/core": "2.11.5",
@@ -57,6 +58,7 @@
 		"react-beautiful-dnd": "13.1.0",
 		"react-contenteditable": "3.3.6",
 		"react-dom": "17.0.2",
+		"react-csv": "2.2.2",
 		"react-popper": "2.2.5",
 		"react-table": "7.7.0",
 		"react-window": "1.8.7",

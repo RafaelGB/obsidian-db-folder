@@ -26,7 +26,7 @@ export class VaultManager {
   * Edit file content
   * @param note 
   */
-  async editNoteContent(note: NoteContentAction): Promise<void> {
+  async editNoteContent(note: NoteContentAction): Promise<string> {
     LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.file.path}`);
     try {
       const tfileContent = await this.obtainContentFromTfile(note.file);
@@ -40,12 +40,14 @@ export class VaultManager {
           releasedContent = line_string.replaceAll(note.regexp, note.newValue).value;
           break;
         default:
-          throw "Error: Option " + note.action + " is not supported yet";
+          throw "Error: Option " + note.action + " is not supported";
       }
       await app.vault.modify(note.file, releasedContent);
       LOGGER.debug(`<= editNoteContent. file '${note.file.path}' edited`);
+      return releasedContent;
     } catch (err) {
       LOGGER.error(`<= editNoteContent exit with errors`, err);
+      throw err;
     }
   }
 

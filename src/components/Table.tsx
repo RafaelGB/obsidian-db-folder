@@ -8,7 +8,6 @@ import {
   useGlobalFilter,
   useColumnOrder,
   useFilters,
-  Cell,
 } from "react-table";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import clsx from "clsx";
@@ -23,6 +22,7 @@ import DefaultCell from "components/Cell";
 import Header from "components/Header";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
+import CsvButton from "components/CsvButton";
 
 const defaultColumn = {
   minWidth: 50,
@@ -215,9 +215,15 @@ export function Table(initialState: TableDataType) {
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
+
   LOGGER.debug(`<= Table`);
   return (
     <>
+      <CsvButton
+        columns={columns}
+        rows={rows}
+        name={initialState.view.diskConfig.yaml.name}
+      />
       <div
         {...getTableProps()}
         className={clsx("table", isTableResizing() && "noselect")}

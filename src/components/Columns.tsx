@@ -1,4 +1,8 @@
-import { DataTypes, MetadataColumns, MetadataLabels } from "helpers/Constants";
+import {
+  DataTypes,
+  MetadataColumns,
+  MetadataDatabaseColumns,
+} from "helpers/Constants";
 import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
@@ -13,25 +17,9 @@ import { dbTrim } from "helpers/StylesHelper";
 export async function obtainMetadataColumns(): Promise<TableColumn[]> {
   const columns: TableColumn[] = [];
   const metadataColumns: Record<string, DatabaseColumn> = {};
-  metadataColumns[MetadataColumns.FILE] = {
-    key: MetadataColumns.FILE,
-    input: DataTypes.MARKDOWN,
-    Header: MetadataColumns.FILE,
-    label: MetadataLabels.FILE,
-    accessor: MetadataColumns.FILE,
-    isMetadata: true,
-  };
-
-  metadataColumns[MetadataColumns.ADD_COLUMN] = {
-    key: MetadataColumns.ADD_COLUMN,
-    Header: MetadataColumns.ADD_COLUMN,
-    input: DataTypes.NEW_COLUMN,
-    width: 20,
-    disableResizing: true,
-    label: "+",
-    accessor: MetadataColumns.ADD_COLUMN,
-    isMetadata: true,
-  };
+  metadataColumns[MetadataColumns.FILE] = MetadataDatabaseColumns.FILE;
+  metadataColumns[MetadataColumns.ADD_COLUMN] =
+    MetadataDatabaseColumns.ADD_COLUMN;
 
   await Promise.all(
     Object.keys(metadataColumns).map(async (columnKey, index) => {
@@ -75,6 +63,7 @@ async function columnOptions(
     key: column.key ?? columnKey,
     accessor: column.accessor ?? dbTrim(column.label),
     isMetadata: column.isMetadata ?? false,
+    csvCandidate: column.csvCandidate ?? true,
   };
   /**
    * return plain text
