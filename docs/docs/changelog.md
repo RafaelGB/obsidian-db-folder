@@ -1,4 +1,4 @@
-## 0.0.8
+## 0.0.8 (on progress)
 ### Shiny new things
 - New button to download a CSV file with the current data (supports filtering!)
 ### Improved
