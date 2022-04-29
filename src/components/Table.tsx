@@ -23,6 +23,7 @@ import Header from "components/Header";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import CsvButton from "components/CsvButton";
+import { c } from "helpers/StylesHelper";
 
 const defaultColumn = {
   minWidth: 50,
@@ -272,7 +273,7 @@ export function Table(initialState: TableDataType) {
                     key={`div-Droppable-${i}`}
                     {...headerGroup.getHeaderGroupProps()}
                     ref={droppableProvided.innerRef}
-                    className="tr header-group"
+                    className={`${c("tr")} header-group`}
                   >
                     {headerGroup.headers.map((column, index) => (
                       <Draggable
@@ -285,7 +286,7 @@ export function Table(initialState: TableDataType) {
                           return (
                             <div
                               {...column.getHeaderProps()}
-                              className="th noselect header"
+                              className={`${c("th noselect")} header`}
                             >
                               <div
                                 key={`div-Draggable-${column.id}`}
@@ -318,9 +319,9 @@ export function Table(initialState: TableDataType) {
             </DragDropContext>
           ))}
           {/** Global filter */}
-          <div className="tr">
+          <div className={`${c("tr")}`}>
             <div
-              className="th"
+              className={`${c("th")}`}
               key="global-filter"
               style={{
                 textAlign: "left",
@@ -339,16 +340,16 @@ export function Table(initialState: TableDataType) {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <div {...row.getRowProps()} className="tr" key={row.id}>
+              <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
                 {row.cells.map((cell) => (
-                  <div {...cell.getCellProps()} className="td">
+                  <div {...cell.getCellProps()} className={`${c("td")}`}>
                     {cell.render("Cell")}
                   </div>
                 ))}
               </div>
             );
           })}
-          <div className="tr add-row">
+          <div className={`${c("tr add-row")}`}>
             <input
               type="text"
               ref={newRowRef}

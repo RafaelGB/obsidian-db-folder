@@ -10,6 +10,7 @@ import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import HeaderMenu from "./HeaderMenu";
+import { c } from "helpers/StylesHelper";
 
 function setOptionsOfSelectDataType(
   options: any[],
@@ -86,7 +87,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   return id !== MetadataColumns.ADD_COLUMN ? (
     <>
       <div
-        className="th-content"
+        className={`${c("th-content")}`}
         onClick={() => setExpanded(true)}
         ref={setReferenceElement}
       >
@@ -114,7 +115,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     </>
   ) : (
     <div
-      className="th-content"
+      className={`${c("th-content")}`}
       style={{ display: "flex", justifyContent: "center" }}
       onClick={handlerAddColumnToLeft}
     >
