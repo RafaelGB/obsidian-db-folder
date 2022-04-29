@@ -1,10 +1,5 @@
 import { TableColumn } from "cdm/FolderModel";
-import {
-  ActionTypes,
-  DataTypes,
-  MetadataColumns,
-  StyleVariables,
-} from "helpers/Constants";
+import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
@@ -130,6 +125,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
   ];
 
+  /**
+   * Array of type headers available to change the data type of the column
+   */
   const types = [
     {
       onClick: (e: any) => {
@@ -177,16 +175,20 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     strategy: "fixed",
   });
 
+  function persistLabelChange() {
+    dispatch({
+      type: ActionTypes.UPDATE_COLUMN_LABEL,
+      columnId: id,
+      accessor: keyState,
+      label: labelState,
+    });
+    setExpanded(false);
+    setkeyState(dbTrim(labelState));
+  }
+
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
-      dispatch({
-        type: ActionTypes.UPDATE_COLUMN_LABEL,
-        columnId: id,
-        accessor: keyState,
-        label: labelState,
-      });
-      setExpanded(false);
-      setkeyState(dbTrim(labelState));
+      persistLabelChange();
     }
   }
 
@@ -200,7 +202,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    */
   function handleBlur(e: any) {
     e.preventDefault();
-    //dataDispatch({type: ActionTypes.UPDATE_COLUMN_LABEL, columnId: id, label: header});
+    persistLabelChange();
   }
 
   return (

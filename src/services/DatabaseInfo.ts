@@ -8,7 +8,7 @@ import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
 import { NoteContentAction, TableRow } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
-import { hasFrontmatterKey, updateRowFile } from 'helpers/VaultManagement';
+import { isDatabaseNote, updateRowFile } from 'helpers/VaultManagement';
 import { UpdateRowOptions } from 'helpers/Constants';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
 
@@ -27,7 +27,7 @@ export default class DatabaseInfo {
     async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
         LOGGER.info(`=>initDatabaseconfigYaml`, `file:${this.file.path}`);
         const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
-        if (!databaseRaw || !hasFrontmatterKey(databaseRaw)) throw new Error('No frontmatter found');
+        if (!databaseRaw || !isDatabaseNote(databaseRaw)) throw new Error('No frontmatter found');
 
         const match = databaseRaw.match(/<%%\s+([\w\W]+?)\s+%%>/);
 

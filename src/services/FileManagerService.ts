@@ -26,7 +26,7 @@ export class VaultManager {
   * Edit file content
   * @param note 
   */
-  async editNoteContent(note: NoteContentAction): Promise<void> {
+  async editNoteContent(note: NoteContentAction): Promise<string> {
     LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.file.path}`);
     try {
       const tfileContent = await this.obtainContentFromTfile(note.file);
@@ -44,8 +44,10 @@ export class VaultManager {
       }
       await app.vault.modify(note.file, releasedContent);
       LOGGER.debug(`<= editNoteContent. file '${note.file.path}' edited`);
+      return releasedContent;
     } catch (err) {
       LOGGER.error(`<= editNoteContent exit with errors`, err);
+      throw err;
     }
   }
 
