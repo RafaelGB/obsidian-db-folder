@@ -60,13 +60,6 @@ export default function DefaultCell(cellProperties: Cell) {
     );
   };
 
-  function getColor() {
-    let match = (cellProperties.column as any).options.find(
-      (option: { label: any }) => option.label === value.value
-    );
-    return (match && match.backgroundColor) || grey(200);
-  }
-
   function onChange(event: ContentEditableEvent) {
     // save on disk
     dataDispatch({
