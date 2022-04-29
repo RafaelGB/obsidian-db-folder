@@ -1,15 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-html {
+.database-plugin__html {
   box-sizing: border-box;
 }
 
-*,
-*:before,
-*:after {
+.database-plugin,
+.database-plugin:before,
+.database-plugin:after {
   box-sizing: inherit;
 }
 
-* {
+.database-plugin {
   margin: 0px;
   padding: 0px;
   font-family: "Inter", sans-serif;
@@ -112,7 +112,7 @@ html {
   outline: none;
 }
 
-.noselect {
+.database-plugin__noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -149,11 +149,11 @@ html {
   color: var(--text-normal);
 }
 
-.tr:last-child .td {
+.database-plugin__tr:last-child .database-plugin__td {
   border-bottom: 0;
 }
 
-.add-row {
+.database-plugin__add-row {
   color: var(--text-accent);
   padding: 0.5rem;
   display: flex;
@@ -162,24 +162,24 @@ html {
   cursor: pointer;
 }
 
-.add-row:hover {
+.database-plugin__add-row:hover {
   background-color: var(--background-modifier-box-shadow);
   color: var(--text-accent-hover);
 }
 
-.th {
+.database-plugin__th {
   color: var(--text-faint);
   font-weight: 500;
   font-size: 0.875rem;
   cursor: pointer;
 }
 
-.th:hover {
+.database-plugin__th:hover {
   /* background-color: var(--background-secondary); */
   color: var(--text-normal);
 }
 
-.th-content {
+.database-plugin__th-content {
   overflow-x: hidden;
   text-overflow: ellipsis;
   padding: 0.5rem;
@@ -187,7 +187,7 @@ html {
   align-items: center;
 }
 
-.td {
+.database-plugin__td {
   overflow: hidden;
   color: var(--text-normal);
   background-color: var(--background-primary);
@@ -208,11 +208,11 @@ html {
   border-bottom: 1px solid var(--background-modifier-border);
 }
 
-.th:last-child {
+.database-plugin__th:last-child {
   border-right: 0;
 }
 
-.td:last-child {
+.database-plugin__td:last-child {
   border-right: 0;
 }
 
@@ -234,8 +234,8 @@ html {
   background-color: #8ecae6;
 }
 
-.th,
-.td {
+.database-plugin__th,
+.database-plugin__td {
   white-space: nowrap;
   margin: 0;
   border-bottom: 1px solid var(--background-modifier-border);
@@ -293,7 +293,7 @@ html {
 
 
 /**
-*  Custom Styles
+*  Database Styles
 */
 .dbfolder-table-container tr input {
   background: var(--background-modifier-box-shadow);
