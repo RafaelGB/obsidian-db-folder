@@ -9,7 +9,6 @@ export const normalizeRowsToCsvData = (rows: Row<object>[]): object[] => {
     return sanitizeDataCSV(rows);
 }
 function sanitizeDataCSV(rows: Row<object>[]): object[] {
-    console.log("sanitizeDataCSV");
     const originalData: object[] = rows.map(row => row.original);
     const sanitizedData: object[] = [];
     Object.values(originalData).map(rowObject => {

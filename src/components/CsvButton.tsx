@@ -20,7 +20,6 @@ const CsvButton = (CsvButtonProps: CsvButtonProps) => {
     const csvRows = await normalizeRowsToCsvData(rows);
     setDataForDownload(csvRows);
     setHeadersForDownload(csvHeaders);
-    console.log(`${JSON.stringify(csvHeaders)}`);
     csvLink.current.link.click();
   };
 

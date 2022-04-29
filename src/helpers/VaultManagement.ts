@@ -93,7 +93,6 @@ export function adapterRowToDatabaseYaml(rowInfo: any): string {
  * @param option 
  */
 export async function updateRowFile(file: TFile, columnId: string, newValue: string, option: string): Promise<void> {
-  console.log("updateRowFile");
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   let content = await VaultManagerDB.obtainContentFromTfile(file);
 
