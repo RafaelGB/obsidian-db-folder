@@ -96,6 +96,8 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   console.log("updateRowFile");
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   let content = await VaultManagerDB.obtainContentFromTfile(file);
+
+  // Adds an empty frontmatter at the beginning of the file
   async function addFrontmatter(): Promise<void> {
     /* Regex explanation
     * group 1 all content
@@ -107,6 +109,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       regexp: frontmatterRegex,
       newValue: `---\n---\n$1`
     };
+    // update content on disk and in memory
     content = await VaultManagerDB.editNoteContent(noteObject);
   }
   // Modify value of a column
@@ -142,6 +145,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     * group 3 is the rest of the frontmatter
     */
     const frontmatterRegex = new RegExp(`(^---\\s[\\w\\W]*?)+([\\n]{1}${columnId}[:]{1})+([\\w\\W]*?\\s---)`, 'g');
+
     const noteObject = {
       action: 'replace',
       file: file,

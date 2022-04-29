@@ -40,7 +40,7 @@ export class VaultManager {
           releasedContent = line_string.replaceAll(note.regexp, note.newValue).value;
           break;
         default:
-          throw "Error: Option " + note.action + " is not supported yet";
+          throw "Error: Option " + note.action + " is not supported";
       }
       await app.vault.modify(note.file, releasedContent);
       LOGGER.debug(`<= editNoteContent. file '${note.file.path}' edited`);
