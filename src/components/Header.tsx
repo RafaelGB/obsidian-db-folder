@@ -4,12 +4,12 @@ import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
 import PlusIcon from "components/img/Plus";
+import HeaderMenu from "components/HeaderMenu";
 import MarkdownObsidian from "components/img/Markdown";
 import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
-import HeaderMenu from "./HeaderMenu";
 import { c } from "helpers/StylesHelper";
 
 function setOptionsOfSelectDataType(
@@ -20,7 +20,7 @@ function setOptionsOfSelectDataType(
   rows.forEach((row: any) => {
     const rowValue = row.values[columnId];
     let match = options.find(
-      (option: { label: any }) => option.label === rowValue
+      (option: { label: string }) => option.label === rowValue
     );
     if (!match) {
       options.push({ label: rowValue, backgroundColor: randomColor() });

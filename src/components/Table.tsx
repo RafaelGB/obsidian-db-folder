@@ -30,7 +30,6 @@ import NavBar from "./NavBar";
 
 const defaultColumn = {
   minWidth: 50,
-  width: 150,
   maxWidth: 400,
   Cell: DefaultCell,
   Header: Header,
@@ -223,10 +222,6 @@ export function Table(initialState: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
-      <NavBar
-        csvButtonProps={csvButtonProps}
-        globalFilterRows={globalFilterRows}
-      />
       <MaUTable
         stickyHeader={true}
         {...getTableProps()}
@@ -242,6 +237,20 @@ export function Table(initialState: TableDataType) {
             zIndex: 1,
           }}
         >
+          <TableRow
+            key="div-navbar-header-row"
+            className={`${c("tr")} header-group`}
+          >
+            <TableCell
+              className={`${c("th noselect")} header`}
+              key="div-navbar-header-cell"
+            >
+              <NavBar
+                csvButtonProps={csvButtonProps}
+                globalFilterRows={globalFilterRows}
+              />
+            </TableCell>
+          </TableRow>
           {/** Headers */}
           {headerGroups.map((headerGroup, i) => (
             <DragDropContext

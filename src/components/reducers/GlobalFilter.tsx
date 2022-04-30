@@ -2,12 +2,8 @@ import React from "react";
 import "regenerator-runtime/runtime";
 import { useAsyncDebounce } from "react-table";
 import { StyleVariables } from "helpers/Constants";
+import { GlobalFilterProps } from "cdm/MenuBarModel";
 
-type GlobalFilterProps = {
-  preGlobalFilteredRows: any;
-  setGlobalFilter: any;
-  globalFilter: any;
-};
 /**
  * Filter component based on react-table.
  * used to filter the data based on the search text.

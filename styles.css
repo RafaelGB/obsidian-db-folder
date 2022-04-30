@@ -175,7 +175,7 @@
 }
 
 .database-plugin__th:hover {
-  /* background-color: var(--background-secondary); */
+  background-color: var(--background-secondary);
   color: var(--text-normal);
 }
 
@@ -236,7 +236,7 @@
 
 .database-plugin__th,
 .database-plugin__td {
-  white-space: nowrap;
+  white-space: pre-wrap;
   margin: 0;
   border-bottom: 1px solid var(--background-modifier-border);
   border-right: 1px solid var(--background-modifier-border);
