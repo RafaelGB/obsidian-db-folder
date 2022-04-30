@@ -199,14 +199,15 @@
   flex-direction: column;
 }
 
-.td-content {
+.database-plugin__td-content {
   display: block;
 }
 
-.table {
+.database-plugin__table {
   border-spacing: 0;
   border-top: 1px solid var(--background-modifier-border);
   border-bottom: 1px solid var(--background-modifier-border);
+  display: "flex";
 }
 
 .database-plugin__th:last-child {

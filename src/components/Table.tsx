@@ -223,7 +223,7 @@ export function Table(initialState: TableDataType) {
     <>
       <div
         {...getTableProps()}
-        style={{ display: "flex", flexDirection: "column" }}
+        className={`${c("table noselect")}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
       >
@@ -284,7 +284,7 @@ export function Table(initialState: TableDataType) {
                     key={`div-Droppable-${i}`}
                     {...headerGroup.getHeaderGroupProps()}
                     ref={droppableProvided.innerRef}
-                    className={`${c("tr")} header-group`}
+                    className={`${c("tr header-group")}`}
                   >
                     {headerGroup.headers.map((column, index) => (
                       <Draggable
