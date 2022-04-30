@@ -77,14 +77,14 @@ export function NavBar(navBarProps: NavBarProps) {
 }
 export function HeaderNavBar(props: NavBarProps) {
   return (
-    <TableRow
+    <div
       key="div-navbar-header-row"
       className={`${c("tr navbar")}`}
       {...props.headerGroupProps}
     >
-      <TableCell className={`${c("th navbar")}`} key="div-navbar-header-cell">
+      <div className={`${c("th navbar")}`} key="div-navbar-header-cell">
         <NavBar {...props} />
-      </TableCell>
-    </TableRow>
+      </div>
+    </div>
   );
 }

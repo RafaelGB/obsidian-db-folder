@@ -3,12 +3,12 @@ import { Row } from "react-table";
 
 const getColumnWidthStyle = (rows: Array<Row<object>>, accessor: string, headerText: string, customMaxWidth?: number): number => {
   const maxWidth = (customMaxWidth ?? 400)
-  const paddingAndIcons = 16;
+  const IconsSpacing = 24;
   const magicSpacing = 10;
 
   const cellLength = Math.max(
     ...rows.map((row: any) => (`${row.original[accessor]}` || '').length),
-    headerText.length, paddingAndIcons
+    headerText.length, IconsSpacing
   )
   return Math.min(maxWidth, cellLength * magicSpacing)
 }

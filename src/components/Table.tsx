@@ -10,11 +10,6 @@ import {
 } from "react-table";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
-import MaUTable from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
@@ -29,7 +24,7 @@ import { HeaderNavBar } from "components/NavBar";
 import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
 
 const defaultColumn = {
-  minWidth: 50,
+  minWidth: 25,
   maxWidth: 400,
   Cell: DefaultCell,
   Header: Header,
@@ -226,14 +221,13 @@ export function Table(initialState: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
-      <MaUTable
-        stickyHeader={true}
+      <div
         {...getTableProps()}
         style={{ display: "flex", flexDirection: "column" }}
         onMouseOver={onMouseOver}
         onClick={onClick}
       >
-        <TableHead
+        <div
           style={{
             position: "sticky",
             top: 0,
@@ -286,7 +280,7 @@ export function Table(initialState: TableDataType) {
                 direction="horizontal"
               >
                 {(droppableProvided, snapshot) => (
-                  <TableRow
+                  <div
                     key={`div-Droppable-${i}`}
                     {...headerGroup.getHeaderGroupProps()}
                     ref={droppableProvided.innerRef}
@@ -318,30 +312,26 @@ export function Table(initialState: TableDataType) {
                                 },
                               };
                           return (
-                            <TableCell {...tableCellProps}>
+                            <div {...tableCellProps}>
                               {column.render("Header")}
-                            </TableCell>
+                            </div>
                           );
                         })}
                       </Draggable>
                     ))}
                     {droppableProvided.placeholder}
-                  </TableRow>
+                  </div>
                 )}
               </Droppable>
             </DragDropContext>
           ))}
-        </TableHead>
+        </div>
         {/** Body */}
-        <TableBody {...getTableBodyProps()}>
+        <div {...getTableBodyProps()}>
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <TableRow
-                {...row.getRowProps()}
-                className={`${c("tr")}`}
-                key={row.id}
-              >
+              <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
                 {row.cells.map((cell) => {
                   const tableCellBaseProps = {
                     ...cell.getCellProps(),
@@ -355,17 +345,13 @@ export function Table(initialState: TableDataType) {
                           width: columnsWidthStyle[cell.column.id],
                         },
                       };
-                  return (
-                    <TableCell {...tableCellProps}>
-                      {cell.render("Cell")}
-                    </TableCell>
-                  );
+                  return <div {...tableCellProps}>{cell.render("Cell")}</div>;
                 })}
-              </TableRow>
+              </div>
             );
           })}
-          <TableRow className={`${c("tr add-row")}`}>
-            <TableCell className={`${c("td")}`}>
+          <div className={`${c("tr add-row")}`}>
+            <div className={`${c("td")}`}>
               <input
                 type="text"
                 ref={newRowRef}
@@ -374,8 +360,8 @@ export function Table(initialState: TableDataType) {
                 }}
                 placeholder="filename of new row"
               />
-            </TableCell>
-            <TableCell className={`${c("td")}`}>
+            </div>
+            <div className={`${c("td")}`}>
               <div
                 onClick={() => {
                   dataDispatch({
@@ -391,15 +377,15 @@ export function Table(initialState: TableDataType) {
                 </span>
                 New
               </div>
-            </TableCell>
-          </TableRow>
-        </TableBody>
+            </div>
+          </div>
+        </div>
         {initialState.view.diskConfig.yaml.config.enable_show_state && (
           <pre>
             <code>{JSON.stringify(state, null, 2)}</code>
           </pre>
         )}
-      </MaUTable>
+      </div>
     </>
   );
 }
