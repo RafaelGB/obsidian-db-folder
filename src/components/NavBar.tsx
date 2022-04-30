@@ -2,7 +2,7 @@ import * as React from "react";
 import CsvButton from "components/CsvButton";
 import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import { AppBar, Box, TableCell, TableRow, Toolbar } from "@material-ui/core";
+import { AppBar, Box, Toolbar } from "@material-ui/core";
 import { TableHeaderProps } from "react-table";
 import { c } from "helpers/StylesHelper";
 

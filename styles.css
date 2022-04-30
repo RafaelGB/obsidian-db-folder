@@ -172,6 +172,7 @@
   font-weight: 500;
   font-size: 0.875rem;
   cursor: pointer;
+  background-color: var(--background-primary);
 }
 
 .database-plugin__th:hover {
@@ -214,24 +215,6 @@
 
 .database-plugin__td:last-child {
   border-right: 0;
-}
-
-.resizer {
-  display: inline-block;
-  background: transparent;
-  width: 8px;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translateX(50%);
-  z-index: 1;
-  cursor: col-resize;
-  touch-action: none;
-}
-
-.resizer:hover {
-  background-color: #8ecae6;
 }
 
 .database-plugin__th,
