@@ -1,4 +1,4 @@
-import { TableRow, NormalizedPath } from 'cdm/FolderModel';
+import { RowDataType, NormalizedPath } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { getAPI } from "obsidian-dataview"
 import { ActionType } from 'react-table';
@@ -59,16 +59,16 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string): Promise<Array<TableRow>> {
+export async function adapterTFilesToRows(folderPath: string): Promise<Array<RowDataType>> {
   dataviewIsLoaded();
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
-  const rows: Array<TableRow> = [];
+  const rows: Array<RowDataType> = [];
   let id = 0;
 
   const folderFiles = getAPI(app).pages(`"${folderPath}"`).where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   await Promise.all(folderFiles.map(async (page) => {
     const noteInfo = new NoteInfo(page, ++id);
-    rows.push(noteInfo.getTableRow());
+    rows.push(noteInfo.getRowDataType());
   }));
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
   return rows;

@@ -3,13 +3,18 @@ import "regenerator-runtime/runtime";
 import { useAsyncDebounce } from "react-table";
 import { StyleVariables } from "helpers/Constants";
 
+type GlobalFilterProps = {
+  preGlobalFilteredRows: any;
+  setGlobalFilter: any;
+  globalFilter: any;
+};
 /**
  * Filter component based on react-table.
  * used to filter the data based on the search text.
  * @param globalFilterProps
  * @returns
  */
-export default function GlobalFilter(globalFilterProps: any) {
+export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
   // TODO add typing to props
   const { preGlobalFilteredRows, globalFilter, setGlobalFilter } =
     globalFilterProps;

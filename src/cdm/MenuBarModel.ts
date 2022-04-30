@@ -6,3 +6,9 @@ export type CsvButtonProps = {
     rows: Row<object>[];
     name: string;
 };
+
+export type GlobalFilterProps = {
+    preGlobalFilteredRows: any;
+    setGlobalFilter: any;
+    globalFilter: any;
+};
