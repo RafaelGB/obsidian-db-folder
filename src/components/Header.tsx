@@ -41,7 +41,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   /** Properties of header */
   const { setSortBy, rows } = headerProps;
   /** Column values */
-  const { id, dataType, options, getResizerProps } = headerProps.column;
+  const { id, dataType, options } = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -94,7 +94,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
       </div>
-      <div {...getResizerProps()} className="resizer" />
       {!isMetadata && domReady
         ? ReactDOM.createPortal(
             <HeaderMenu

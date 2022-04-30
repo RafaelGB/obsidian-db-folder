@@ -3,7 +3,6 @@ import {
   useTable,
   TableInstance,
   useFlexLayout,
-  useResizeColumns,
   useSortBy,
   useGlobalFilter,
   useColumnOrder,
@@ -27,6 +26,7 @@ import Header from "components/Header";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import { c } from "helpers/StylesHelper";
 import NavBar from "./NavBar";
+import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
 
 const defaultColumn = {
   minWidth: 50,
@@ -192,7 +192,6 @@ export function Table(initialState: TableDataType) {
     propsUseTable,
     // React hooks
     useFlexLayout,
-    useResizeColumns,
     useFilters,
     useGlobalFilter,
     useSortBy,
@@ -201,6 +200,11 @@ export function Table(initialState: TableDataType) {
       hooks.useInstance.push(useInstance);
     }
   );
+  // Manage column width
+  const [columnsWidthStyle, setColumnsWidthStyle] = React.useState(
+    getColumnsWidthStyle(rows, columns)
+  );
+  const [isDragUpdate, setDragUpdate] = React.useState(false);
   // Manage DnD
   const currentColOrder = React.useRef(null);
   const renderDraggable = useDraggableInPortal();
@@ -233,16 +237,15 @@ export function Table(initialState: TableDataType) {
           style={{
             position: "sticky",
             top: 0,
-            alignSelf: "flex-start",
             zIndex: 1,
           }}
         >
           <TableRow
             key="div-navbar-header-row"
-            className={`${c("tr")} header-group`}
+            className={`${c("tr header-group")}`}
           >
             <TableCell
-              className={`${c("th noselect")} header`}
+              className={`${c("th noselect header")}`}
               key="div-navbar-header-cell"
             >
               <NavBar
@@ -259,6 +262,9 @@ export function Table(initialState: TableDataType) {
                 currentColOrder.current = allColumns.map((o: any) => o.id);
               }}
               onDragUpdate={(dragUpdateObj, b) => {
+                if (!isDragUpdate) {
+                  setDragUpdate(true);
+                }
                 const colOrder = [...currentColOrder.current];
                 const sIndex = dragUpdateObj.source.index;
                 const dIndex =
@@ -280,6 +286,7 @@ export function Table(initialState: TableDataType) {
 
                 // clear the current order
                 currentColOrder.current = null;
+                setDragUpdate(false);
               }}
             >
               <Droppable
@@ -302,25 +309,26 @@ export function Table(initialState: TableDataType) {
                         isDragDisabled={(column as any).isMetadata}
                       >
                         {renderDraggable((provided) => {
+                          const tableCellBaseProps = {
+                            ...column.getHeaderProps(),
+                            className: `${c("th noselect")} header`,
+                            key: `div-Draggable-${column.id}`,
+                            ...provided.draggableProps,
+                            ...provided.dragHandleProps,
+                            // {...extraProps}
+                            ref: provided.innerRef,
+                          };
+                          const tableCellProps = isDragUpdate
+                            ? tableCellBaseProps
+                            : {
+                                ...tableCellBaseProps,
+                                style: {
+                                  width: `${columnsWidthStyle[column.id]}px`,
+                                },
+                              };
                           return (
-                            <TableCell
-                              {...column.getHeaderProps()}
-                              className={`${c("th noselect")} header`}
-                              key={`div-Draggable-${column.id}`}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              // {...extraProps}
-                              ref={provided.innerRef}
-                            >
+                            <TableCell {...tableCellProps}>
                               {column.render("Header")}
-                              {/* Use column.getResizerProps to hook up the events correctly */}
-                              <div
-                                {...(column as any).getResizerProps()}
-                                key={`resizer-${column.id}`}
-                                className={`resizer ${
-                                  (column as any).isResizing ? "isResizing" : ""
-                                }`}
-                              />
                             </TableCell>
                           );
                         })}
@@ -343,11 +351,25 @@ export function Table(initialState: TableDataType) {
                 className={`${c("tr")}`}
                 key={row.id}
               >
-                {row.cells.map((cell) => (
-                  <TableCell {...cell.getCellProps()} className={`${c("td")}`}>
-                    {cell.render("Cell")}
-                  </TableCell>
-                ))}
+                {row.cells.map((cell) => {
+                  const tableCellBaseProps = {
+                    ...cell.getCellProps(),
+                    className: `${c("td")}`,
+                  };
+                  const tableCellProps = isDragUpdate
+                    ? tableCellBaseProps
+                    : {
+                        ...tableCellBaseProps,
+                        style: {
+                          width: columnsWidthStyle[cell.column.id],
+                        },
+                      };
+                  return (
+                    <TableCell {...tableCellProps}>
+                      {cell.render("Cell")}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             );
           })}
