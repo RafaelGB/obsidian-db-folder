@@ -243,13 +243,18 @@
   position: relative;
 }
 
-.database-plugin__header-group {
+.database-plugin__header-group ,
+.database-plugin__header{
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem;
   background-color: var(--background-secondary);
-  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.database-plugin__navbar {
+  display: flex;
+  flex: 1 0 auto;
 }
 
 .text-align-right {
@@ -324,6 +329,7 @@
 .isResizing {
   background: rgb(182, 119, 119);
 }
+
 
 .draggable {
   top: auto !important;

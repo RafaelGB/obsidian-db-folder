@@ -2,7 +2,9 @@ import * as React from "react";
 import CsvButton from "components/CsvButton";
 import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import { AppBar, Box, Toolbar } from "@material-ui/core";
+import { AppBar, Box, TableCell, TableRow, Toolbar } from "@material-ui/core";
+import { TableHeaderProps } from "react-table";
+import { c } from "helpers/StylesHelper";
 
 // const Search = styled("div")(({ theme }) => ({
 //   position: "relative",
@@ -49,8 +51,9 @@ import { AppBar, Box, Toolbar } from "@material-ui/core";
 type NavBarProps = {
   csvButtonProps: CsvButtonProps;
   globalFilterRows: GlobalFilterProps;
+  headerGroupProps?: TableHeaderProps;
 };
-export default function NavBar(navBarProps: NavBarProps) {
+export function NavBar(navBarProps: NavBarProps) {
   return (
     <Box
       sx={{ flexGrow: 1 }}
@@ -70,5 +73,18 @@ export default function NavBar(navBarProps: NavBarProps) {
         </Toolbar>
       </AppBar>
     </Box>
+  );
+}
+export function HeaderNavBar(props: NavBarProps) {
+  return (
+    <TableRow
+      key="div-navbar-header-row"
+      className={`${c("tr navbar")}`}
+      {...props.headerGroupProps}
+    >
+      <TableCell className={`${c("th navbar")}`} key="div-navbar-header-cell">
+        <NavBar {...props} />
+      </TableCell>
+    </TableRow>
   );
 }

@@ -25,7 +25,7 @@ import DefaultCell from "components/Cell";
 import Header from "components/Header";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import { c } from "helpers/StylesHelper";
-import NavBar from "./NavBar";
+import { HeaderNavBar } from "components/NavBar";
 import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
 
 const defaultColumn = {
@@ -240,20 +240,11 @@ export function Table(initialState: TableDataType) {
             zIndex: 1,
           }}
         >
-          <TableRow
-            key="div-navbar-header-row"
-            className={`${c("tr header-group")}`}
-          >
-            <TableCell
-              className={`${c("th noselect header")}`}
-              key="div-navbar-header-cell"
-            >
-              <NavBar
-                csvButtonProps={csvButtonProps}
-                globalFilterRows={globalFilterRows}
-              />
-            </TableCell>
-          </TableRow>
+          <HeaderNavBar
+            csvButtonProps={csvButtonProps}
+            globalFilterRows={globalFilterRows}
+            headerGroupProps={headerGroups[0].getHeaderGroupProps()}
+          />
           {/** Headers */}
           {headerGroups.map((headerGroup, i) => (
             <DragDropContext
