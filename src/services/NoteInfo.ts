@@ -1,4 +1,4 @@
-import { TableRow } from "cdm/FolderModel";
+import { RowDataType } from "cdm/FolderModel";
 import { MetadataColumns } from "helpers/Constants";
 import { TFile } from "obsidian";
 import { VaultManagerDB } from "services/FileManagerService";
@@ -15,9 +15,9 @@ export default class NoteInfo {
         this.id = id;
     }
 
-    getTableRow(): TableRow {
+    getRowDataType(): RowDataType {
         /** Mandatory fields */
-        const aFile: TableRow = {
+        const aFile: RowDataType = {
             id: this.id,
             note: this
         }

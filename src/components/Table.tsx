@@ -3,15 +3,13 @@ import {
   useTable,
   TableInstance,
   useFlexLayout,
-  useResizeColumns,
   useSortBy,
   useGlobalFilter,
   useColumnOrder,
   useFilters,
 } from "react-table";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import clsx from "clsx";
-import { TableDataType, TableRow, TableColumn } from "cdm/FolderModel";
+import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { StateManager } from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
@@ -20,14 +18,13 @@ import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
 import Header from "components/Header";
-import GlobalFilter from "components/reducers/GlobalFilter";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
-import CsvButton from "components/CsvButton";
 import { c } from "helpers/StylesHelper";
+import { HeaderNavBar } from "components/NavBar";
+import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
 
 const defaultColumn = {
-  minWidth: 50,
-  width: 150,
+  minWidth: 25,
   maxWidth: 400,
   Cell: DefaultCell,
   Header: Header,
@@ -62,7 +59,7 @@ export function Table(initialState: TableDataType) {
   /** Columns information */
   const columns: TableColumn[] = initialState.columns;
   /** Rows information */
-  const data: Array<TableRow> = initialState.data;
+  const data: Array<RowDataType> = initialState.data;
   /** Reducer */
   const dataDispatch = initialState.dispatch;
   /** Database information  */
@@ -190,7 +187,6 @@ export function Table(initialState: TableDataType) {
     propsUseTable,
     // React hooks
     useFlexLayout,
-    useResizeColumns,
     useFilters,
     useGlobalFilter,
     useSortBy,
@@ -199,39 +195,50 @@ export function Table(initialState: TableDataType) {
       hooks.useInstance.push(useInstance);
     }
   );
-  function isTableResizing() {
-    for (let headerGroup of headerGroups) {
-      for (let column of headerGroup.headers) {
-        if ((column as any).isResizing) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
+  // Manage column width
+  const [columnsWidthStyle, setColumnsWidthStyle] = React.useState(
+    getColumnsWidthStyle(rows, columns)
+  );
+  const [isDragUpdate, setDragUpdate] = React.useState(false);
   // Manage DnD
   const currentColOrder = React.useRef(null);
   const renderDraggable = useDraggableInPortal();
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
+  // Manage NavBar
+  const csvButtonProps = {
+    columns: columns,
+    rows: rows,
+    name: initialState.view.diskConfig.yaml.name,
+  };
 
+  const globalFilterRows = {
+    preGlobalFilteredRows: preGlobalFilteredRows,
+    globalFilter: (state as any).globalFilter,
+    setGlobalFilter: setGlobalFilter,
+  };
   LOGGER.debug(`<= Table`);
   return (
     <>
-      <CsvButton
-        columns={columns}
-        rows={rows}
-        name={initialState.view.diskConfig.yaml.name}
-      />
       <div
         {...getTableProps()}
-        className={clsx("table", isTableResizing() && "noselect")}
+        className={`${c("table noselect")}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
       >
-        <div>
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+          }}
+        >
+          <HeaderNavBar
+            csvButtonProps={csvButtonProps}
+            globalFilterRows={globalFilterRows}
+            headerGroupProps={headerGroups[0].getHeaderGroupProps()}
+          />
           {/** Headers */}
           {headerGroups.map((headerGroup, i) => (
             <DragDropContext
@@ -240,6 +247,9 @@ export function Table(initialState: TableDataType) {
                 currentColOrder.current = allColumns.map((o: any) => o.id);
               }}
               onDragUpdate={(dragUpdateObj, b) => {
+                if (!isDragUpdate) {
+                  setDragUpdate(true);
+                }
                 const colOrder = [...currentColOrder.current];
                 const sIndex = dragUpdateObj.source.index;
                 const dIndex =
@@ -261,6 +271,7 @@ export function Table(initialState: TableDataType) {
 
                 // clear the current order
                 currentColOrder.current = null;
+                setDragUpdate(false);
               }}
             >
               <Droppable
@@ -273,7 +284,7 @@ export function Table(initialState: TableDataType) {
                     key={`div-Droppable-${i}`}
                     {...headerGroup.getHeaderGroupProps()}
                     ref={droppableProvided.innerRef}
-                    className={`${c("tr")} header-group`}
+                    className={`${c("tr header-group")}`}
                   >
                     {headerGroup.headers.map((column, index) => (
                       <Draggable
@@ -283,30 +294,26 @@ export function Table(initialState: TableDataType) {
                         isDragDisabled={(column as any).isMetadata}
                       >
                         {renderDraggable((provided) => {
+                          const tableCellBaseProps = {
+                            ...column.getHeaderProps(),
+                            className: `${c("th noselect")} header`,
+                            key: `div-Draggable-${column.id}`,
+                            ...provided.draggableProps,
+                            ...provided.dragHandleProps,
+                            // {...extraProps}
+                            ref: provided.innerRef,
+                          };
+                          const tableCellProps = isDragUpdate
+                            ? tableCellBaseProps
+                            : {
+                                ...tableCellBaseProps,
+                                style: {
+                                  width: `${columnsWidthStyle[column.id]}px`,
+                                },
+                              };
                           return (
-                            <div
-                              {...column.getHeaderProps()}
-                              className={`${c("th noselect")} header`}
-                            >
-                              <div
-                                key={`div-Draggable-${column.id}`}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                // {...extraProps}
-                                ref={provided.innerRef}
-                              >
-                                {column.render("Header")}
-                                {/* Use column.getResizerProps to hook up the events correctly */}
-                                <div
-                                  {...(column as any).getResizerProps()}
-                                  key={`resizer-${column.id}`}
-                                  className={`resizer ${
-                                    (column as any).isResizing
-                                      ? "isResizing"
-                                      : ""
-                                  }`}
-                                />
-                              </div>
+                            <div {...tableCellProps}>
+                              {column.render("Header")}
                             </div>
                           );
                         })}
@@ -318,22 +325,6 @@ export function Table(initialState: TableDataType) {
               </Droppable>
             </DragDropContext>
           ))}
-          {/** Global filter */}
-          <div className={`${c("tr")}`}>
-            <div
-              className={`${c("th")}`}
-              key="global-filter"
-              style={{
-                textAlign: "left",
-              }}
-            >
-              <GlobalFilter
-                preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={(state as any).globalFilter}
-                setGlobalFilter={setGlobalFilter}
-              />
-            </div>
-          </div>
         </div>
         {/** Body */}
         <div {...getTableBodyProps()}>
@@ -341,37 +332,51 @@ export function Table(initialState: TableDataType) {
             prepareRow(row);
             return (
               <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
-                {row.cells.map((cell) => (
-                  <div {...cell.getCellProps()} className={`${c("td")}`}>
-                    {cell.render("Cell")}
-                  </div>
-                ))}
+                {row.cells.map((cell) => {
+                  const tableCellBaseProps = {
+                    ...cell.getCellProps(),
+                    className: `${c("td")}`,
+                  };
+                  const tableCellProps = isDragUpdate
+                    ? tableCellBaseProps
+                    : {
+                        ...tableCellBaseProps,
+                        style: {
+                          width: columnsWidthStyle[cell.column.id],
+                        },
+                      };
+                  return <div {...tableCellProps}>{cell.render("Cell")}</div>;
+                })}
               </div>
             );
           })}
           <div className={`${c("tr add-row")}`}>
-            <input
-              type="text"
-              ref={newRowRef}
-              onChange={(e) => {
-                setInputNewRow(e.target.value);
-              }}
-              placeholder="filename of new row"
-            />
-            <div
-              onClick={() => {
-                dataDispatch({
-                  type: ActionTypes.ADD_ROW,
-                  filename: inputNewRow,
-                });
-                setInputNewRow("");
-                newRowRef.current.value = "";
-              }}
-            >
-              <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
-                <PlusIcon />
-              </span>
-              New
+            <div className={`${c("td")}`}>
+              <input
+                type="text"
+                ref={newRowRef}
+                onChange={(e) => {
+                  setInputNewRow(e.target.value);
+                }}
+                placeholder="filename of new row"
+              />
+            </div>
+            <div className={`${c("td")}`}>
+              <div
+                onClick={() => {
+                  dataDispatch({
+                    type: ActionTypes.ADD_ROW,
+                    filename: inputNewRow,
+                  });
+                  setInputNewRow("");
+                  newRowRef.current.value = "";
+                }}
+              >
+                <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+                  <PlusIcon />
+                </span>
+                New
+              </div>
             </div>
           </div>
         </div>

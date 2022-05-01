@@ -1,10 +1,8 @@
 import { DatabaseView } from "DatabaseView";
 import { Dispatch } from "react";
 import { StateManager } from "StateManager";
-import { DatabaseYaml } from "cdm/DatabaseModel";
 import { RowType } from "cdm/RowTypeModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
-import DatabaseInfo from "services/DatabaseInfo";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
 
@@ -52,7 +50,7 @@ export type TableColumn = {
     csvCandidate: boolean
 }
 
-export type TableRow = {
+export type RowDataType = {
     id: number,
     note: NoteInfo,
     [key: string]: RowType
@@ -61,7 +59,7 @@ export type TableRow = {
 export type TableDataType = {
     columns: TableColumn[],
     metadataColumns: TableColumn[],
-    data: Array<TableRow>,
+    data: Array<RowDataType>,
     skipReset: boolean,
     view: DatabaseView,
     stateManager?: StateManager,

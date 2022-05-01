@@ -172,10 +172,11 @@
   font-weight: 500;
   font-size: 0.875rem;
   cursor: pointer;
+  background-color: var(--background-primary);
 }
 
 .database-plugin__th:hover {
-  /* background-color: var(--background-secondary); */
+  background-color: var(--background-secondary);
   color: var(--text-normal);
 }
 
@@ -198,14 +199,15 @@
   flex-direction: column;
 }
 
-.td-content {
+.database-plugin__td-content {
   display: block;
 }
 
-.table {
+.database-plugin__table {
   border-spacing: 0;
   border-top: 1px solid var(--background-modifier-border);
   border-bottom: 1px solid var(--background-modifier-border);
+  display: "flex";
 }
 
 .database-plugin__th:last-child {
@@ -216,31 +218,27 @@
   border-right: 0;
 }
 
-.resizer {
-  display: inline-block;
-  background: transparent;
-  width: 8px;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translateX(50%);
-  z-index: 1;
-  cursor: col-resize;
-  touch-action: none;
-}
-
-.resizer:hover {
-  background-color: #8ecae6;
-}
-
 .database-plugin__th,
 .database-plugin__td {
-  white-space: nowrap;
+  white-space: pre-wrap;
   margin: 0;
   border-bottom: 1px solid var(--background-modifier-border);
   border-right: 1px solid var(--background-modifier-border);
   position: relative;
+}
+
+.database-plugin__header-group ,
+.database-plugin__header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background-color: var(--background-secondary);
+}
+
+.database-plugin__navbar {
+  display: flex;
+  flex: 1 0 auto;
 }
 
 .text-align-right {
@@ -291,29 +289,11 @@
   flex: 1;
 }
 
-
 /**
 *  Database Styles
 */
 .dbfolder-table-container tr input {
   background: var(--background-modifier-box-shadow);
-}
-
-.resizer {
-  display: inline-block;
-  width: 10px;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translateX(50%);
-  z-index: 1;
-  /* prevents from scrolling while dragging on touch devices */
-  touch-action:none;
-}
-
-.isResizing {
-  background: rgb(182, 119, 119);
 }
 
 .draggable {

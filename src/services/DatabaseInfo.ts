@@ -6,7 +6,7 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
-import { NoteContentAction, TableRow } from 'cdm/FolderModel';
+import { NoteContentAction, RowDataType } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
 import { isDatabaseNote, updateRowFile } from 'helpers/VaultManagement';
 import { UpdateRowOptions } from 'helpers/Constants';
@@ -89,7 +89,7 @@ export default class DatabaseInfo {
      * @param columnId 
      * @param properties 
      */
-    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId: string, properties: Record<string, P>, rows?: TableRow[]): Promise<void> {
+    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId: string, properties: Record<string, P>, rows?: RowDataType[]): Promise<void> {
         const colToUpdate = this.yaml.columns[columnId];
         const currentKey = colToUpdate.key;
         for (const key in properties) {
@@ -99,7 +99,7 @@ export default class DatabaseInfo {
         if (rows) {
             await this.updateColumnKey(columnId, colToUpdate.accessor);
             // Once the column is updated, update the rows in case the key is changed
-            await Promise.all(rows.map(async (row: TableRow) => {
+            await Promise.all(rows.map(async (row: RowDataType) => {
                 updateRowFile(
                     row.note.getFile(),
                     currentKey,

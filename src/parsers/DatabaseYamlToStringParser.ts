@@ -2,16 +2,6 @@ import { DatabaseYaml } from "cdm/DatabaseModel";
 
 /**
  * Given a database config, obtain the string on yaml format
- * example:
- * "name": "database-name",
- * "description": "database description",
- * columns:
- *   column1:
- *     key1: value1
- *     key2: value2
- *   column2:
- *     key1: value1
- *     key2: value2
  * @param databaseConfig 
  */
 // TODO could be more generic?

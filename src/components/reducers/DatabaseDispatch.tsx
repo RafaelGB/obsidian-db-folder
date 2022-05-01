@@ -6,7 +6,7 @@ import {
   MetadataColumns,
   UpdateRowOptions,
 } from "helpers/Constants";
-import { TableColumn, TableDataType, TableRow } from "cdm/FolderModel";
+import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
@@ -70,7 +70,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         adapterRowToDatabaseYaml(rowRecord)
       );
 
-      const row: TableRow = {
+      const row: RowDataType = {
         ...rowRecord,
         id: state.data.length + 1,
         note: new NoteInfo(
@@ -114,7 +114,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           ...state.columns.slice(index + 1, state.columns.length),
         ],
-        data: state.data.map((row: TableRow) => {
+        data: state.data.map((row: RowDataType) => {
           row[update_col_key] = row[action.columnId];
           delete row[action.columnId];
           return row;
@@ -241,7 +241,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       state.view.diskConfig.addColumn(`newColumn${leftId}`, newLeftColumn);
 
       Promise.all(
-        state.data.map(async (row: TableRow) => {
+        state.data.map(async (row: RowDataType) => {
           updateRowFile(
             row.note.getFile(),
             newLeftColumn.key,
@@ -290,7 +290,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       state.view.diskConfig.addColumn(rightId, newRIghtColumn);
 
       Promise.all(
-        state.data.map(async (row: TableRow) => {
+        state.data.map(async (row: RowDataType) => {
           updateRowFile(
             row.note.getFile(),
             newRIghtColumn.key,
@@ -323,7 +323,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       // Update configuration on disk
       state.view.diskConfig.removeColumn(action.columnId);
       Promise.all(
-        state.data.map(async (row: TableRow) => {
+        state.data.map(async (row: RowDataType) => {
           updateRowFile(
             row.note.getFile(),
             action.key,

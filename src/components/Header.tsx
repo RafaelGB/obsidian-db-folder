@@ -4,12 +4,12 @@ import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
 import PlusIcon from "components/img/Plus";
+import HeaderMenu from "components/HeaderMenu";
 import MarkdownObsidian from "components/img/Markdown";
 import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
-import HeaderMenu from "./HeaderMenu";
 import { c } from "helpers/StylesHelper";
 
 function setOptionsOfSelectDataType(
@@ -20,7 +20,7 @@ function setOptionsOfSelectDataType(
   rows.forEach((row: any) => {
     const rowValue = row.values[columnId];
     let match = options.find(
-      (option: { label: any }) => option.label === rowValue
+      (option: { label: string }) => option.label === rowValue
     );
     if (!match) {
       options.push({ label: rowValue, backgroundColor: randomColor() });
@@ -41,7 +41,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   /** Properties of header */
   const { setSortBy, rows } = headerProps;
   /** Column values */
-  const { id, dataType, options, getResizerProps } = headerProps.column;
+  const { id, dataType, options } = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -94,7 +94,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
       </div>
-      <div {...getResizerProps()} className="resizer" />
       {!isMetadata && domReady
         ? ReactDOM.createPortal(
             <HeaderMenu

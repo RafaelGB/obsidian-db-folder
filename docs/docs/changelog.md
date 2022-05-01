@@ -3,6 +3,10 @@
 - New button to download a CSV file with the current data (supports filtering!)
 ### Improved
 - Now when you add some cell, the plugin will check if the note has frontmatter and if the current column. If not it will be added.
+- Headers are now static when you scroll down.
+### No longer broken
+- Now when you create a new note, the label of the file shows just the basename, not the full path.
+- Add prefix to the className of components, so interference with other plugins is less probable. [ISSUE#19](https://github.com/RafaelGB/obsidian-bd-folder/issues/19)
 ## 0.0.7
 ### Shiny new things
 - New local property `group_folder_column` to specify a select column type column. This column will be used to group the notes into subfolders with the same cell value. The subfolder will be created if it does not exist. [ISSUE#11](https://github.com/RafaelGB/obsidian-bd-folder/issues/11)

@@ -3,10 +3,10 @@ import { MarkdownRenderer } from "obsidian";
 import React, { useRef, useLayoutEffect } from "react";
 import { randomColor } from "helpers/Colors";
 import { DataTypes } from "helpers/Constants";
-import { TableDataType, TableColumn, TableRow } from "cdm/FolderModel";
+import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 export function makeData(count: number): TableDataType {
-  const data: Array<TableRow> = [];
+  const data: Array<RowDataType> = [];
   const options = [];
   const note: any = null;
   for (let i = 0; i < count; i++) {

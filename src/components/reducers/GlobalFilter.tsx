@@ -2,6 +2,7 @@ import React from "react";
 import "regenerator-runtime/runtime";
 import { useAsyncDebounce } from "react-table";
 import { StyleVariables } from "helpers/Constants";
+import { GlobalFilterProps } from "cdm/MenuBarModel";
 
 /**
  * Filter component based on react-table.
@@ -9,7 +10,7 @@ import { StyleVariables } from "helpers/Constants";
  * @param globalFilterProps
  * @returns
  */
-export default function GlobalFilter(globalFilterProps: any) {
+export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
   // TODO add typing to props
   const { preGlobalFilteredRows, globalFilter, setGlobalFilter } =
     globalFilterProps;
