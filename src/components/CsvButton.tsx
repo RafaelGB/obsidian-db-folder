@@ -6,6 +6,7 @@ import {
 } from "parsers/NormalizeRowsToCSV";
 import React from "react";
 import { CSVLink } from "react-csv";
+import DownloadIcon from "components/img/DownloadIcon";
 
 const CsvButton = (CsvButtonProps: CsvButtonProps) => {
   const { columns, rows, name } = CsvButtonProps;
@@ -25,7 +26,10 @@ const CsvButton = (CsvButtonProps: CsvButtonProps) => {
 
   return (
     <>
-      <Button onClick={getTransactionData}>Download CSV</Button>
+      <Button onClick={getTransactionData}>
+        <DownloadIcon />
+        CSV
+      </Button>
       <CSVLink
         data={dataForDownload}
         headers={headersForDownload}

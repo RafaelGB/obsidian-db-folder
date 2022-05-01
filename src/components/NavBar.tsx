@@ -2,72 +2,72 @@ import * as React from "react";
 import CsvButton from "components/CsvButton";
 import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import { AppBar, Box, Toolbar } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+} from "@material-ui/core";
 import { TableHeaderProps } from "react-table";
 import { c } from "helpers/StylesHelper";
-
-// const Search = styled("div")(({ theme }) => ({
-//   position: "relative",
-//   borderRadius: theme.shape.borderRadius,
-//   backgroundColor: alpha(theme.palette.common.white, 0.15),
-//   "&:hover": {
-//     backgroundColor: alpha(theme.palette.common.white, 0.25),
-//   },
-//   marginLeft: 0,
-//   width: "100%",
-//   [theme.breakpoints.up("sm")]: {
-//     marginLeft: theme.spacing(1),
-//     width: "auto",
-//   },
-// }));
-
-// const SearchIconWrapper = styled("div")(({ theme }) => ({
-//   padding: theme.spacing(0, 2),
-//   height: "100%",
-//   position: "absolute",
-//   pointerEvents: "none",
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "center",
-// }));
-
-// const StyledInputBase = styled(InputBase)(({ theme }) => ({
-//   color: "inherit",
-//   "& .MuiInputBase-input": {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     // vertical padding + font size from searchIcon
-//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-//     transition: theme.transitions.create("width"),
-//     width: "100%",
-//     [theme.breakpoints.up("sm")]: {
-//       width: "12ch",
-//       "&:focus": {
-//         width: "20ch",
-//       },
-//     },
-//   },
-// }));
+import MenuIcon from "components/img/MenuIcon";
 
 type NavBarProps = {
   csvButtonProps: CsvButtonProps;
   globalFilterRows: GlobalFilterProps;
   headerGroupProps?: TableHeaderProps;
 };
+
 export function NavBar(navBarProps: NavBarProps) {
+  const [menuEl, setMenuEl] = React.useState<null | HTMLElement>(null);
+  const isMenuOpen = Boolean(menuEl);
+  const handleMenuClose = () => {
+    setMenuEl(null);
+  };
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuEl(event.currentTarget);
+  };
   return (
     <Box
       sx={{ flexGrow: 1 }}
       style={{
-        position: "sticky",
         top: 0,
         alignSelf: "flex-start",
         zIndex: 1,
       }}
     >
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        style={{ backgroundColor: "var(--background-modifier-box-shadow)" }}
+      >
         <Toolbar>
-          {/* CSV buttton download */}
-          <CsvButton {...navBarProps.csvButtonProps} />
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleMenuClick}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={menuEl}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+            onClick={handleMenuClose}
+            onBlur={handleMenuClose}
+            PaperProps={{
+              elevation: 0,
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+          >
+            <MenuItem>
+              {/* CSV buttton download */}
+              <CsvButton {...navBarProps.csvButtonProps} />
+            </MenuItem>
+          </Menu>
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
         </Toolbar>
