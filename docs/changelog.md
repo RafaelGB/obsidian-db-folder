@@ -1,13 +1,19 @@
-## 0.0.8 (on progress)
+## 0.1.0
 ### Shiny new things
-- New button to download a CSV file with the current data (supports filtering!)
+- New button to download a CSV file with the current data (supports filtering!). Temporally this feature is inside menu bar. We are working on move it into the actual file options of Obsidian [ISSUE#15](https://github.com/RafaelGB/obsidian-db-folder/issues/15)
 ### Improved
-- Now when you add some cell, the plugin will check if the note has frontmatter and if the current column. If not it will be added.
+- Now when you edit some cell, the plugin will check if the note has frontmatter and if the current column exist. If not it will be added automatically
 - Headers are now static when you scroll down.
+
+### Visual changes
+- The search bar has been moved to a static menu bar
+
 ### No longer broken
 - Now when you create a new note, the label of the file shows just the basename, not the full path.
 - Add prefix to the className of components, so interference with other plugins is less probable. [ISSUE#19](https://github.com/RafaelGB/obsidian-bd-folder/issues/19)
+- When column folder is activated and a file is moved, now link is updated correctly
 ## 0.0.7
+*Published on 04/27/2022*
 ### Shiny new things
 - New local property `group_folder_column` to specify a select column type column. This column will be used to group the notes into subfolders with the same cell value. The subfolder will be created if it does not exist. [ISSUE#11](https://github.com/RafaelGB/obsidian-bd-folder/issues/11)
 

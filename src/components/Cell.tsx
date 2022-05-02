@@ -6,7 +6,7 @@ import { Cell } from "react-table";
 import { MarkdownRenderer } from "obsidian";
 import NoteInfo from "services/NoteInfo";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
-import { CellContext } from "./contexts/CellContext";
+import { CellContext } from "components/contexts/CellContext";
 
 /**
  * Obtain the path of the file inside cellValue
