@@ -99,11 +99,6 @@ export default function DefaultCell(cellProperties: Cell) {
         );
       /** Markdown option */
       case DataTypes.MARKDOWN:
-        console.log(
-          "PopperSelectPortal.value",
-          value,
-          (cellProperties.row.original as any)["__file__"]
-        );
         const containerRef = useRef<HTMLElement>();
         useLayoutEffect(() => {
           //TODO - this is a hack. find why is layout effect called twice
