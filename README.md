@@ -9,11 +9,8 @@ Database has its own type of view. It will search all notes into the same folder
 The information you add or edit will be saved into the target obsidian note.
 
 ## Index
-- [Whats inside database view](docs/docs/Whats inside database view.md)
-- [Obsidian dbfolder Features|Features](docs/docs/Obsidian dbfolder Features.md)
-	- [Obsidian dbfolder Features#Rows|Rows]
-	- [Obsidian dbfolder Features#Headers|Headers]
-	- [Obsidian dbfolder Features#Filters|Filters]
+- [Whats inside database view](../docs/docs/Whats inside database view.md)
+- [Obsidian dbfolder Features](../docs/docs/Obsidian dbfolder Features.md)
 - [changelog](docs/changelog.md)
 
 ## Sources
