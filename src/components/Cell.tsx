@@ -7,6 +7,7 @@ import { MarkdownRenderer } from "obsidian";
 import { grey } from "helpers/Colors";
 import NoteInfo from "services/NoteInfo";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
+import { CellContext } from "./contexts/CellContext";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -103,9 +104,9 @@ export default function DefaultCell(cellProperties: Cell) {
           //TODO - this is a hack. find why is layout effect called twice
           containerRef.current.innerHTML = "";
           MarkdownRenderer.renderMarkdown(
-            value.value,
+            initialValue,
             containerRef.current,
-            getFilePath(value.value),
+            getFilePath(initialValue),
             null
           );
         });
@@ -113,14 +114,15 @@ export default function DefaultCell(cellProperties: Cell) {
       /** Selector option */
       case DataTypes.SELECT:
         return (
-          <PopperSelectPortal
-            initialValue={initialValue}
-            dispatch={dataDispatch}
-            row={cellProperties.row}
-            column={cellProperties.column}
-            columns={columns}
-            note={note}
-          />
+          <CellContext.Provider value={{ value, setValue }}>
+            <PopperSelectPortal
+              dispatch={dataDispatch}
+              row={cellProperties.row}
+              column={cellProperties.column}
+              columns={columns}
+              note={note}
+            />
+          </CellContext.Provider>
         );
 
       /** Default option */

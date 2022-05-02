@@ -2,15 +2,16 @@ import PlusIcon from "components/img/Plus";
 import Relationship from "components/RelationShip";
 import { grey, randomColor } from "helpers/Colors";
 import { ActionTypes, StyleVariables } from "helpers/Constants";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { PopperProps } from "cdm/RowSelectModel";
+import { CellContext } from "components/contexts/CellContext";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { initialValue, dispatch, row, column, columns, note } = popperProps;
+  const { dispatch, row, column, columns, note } = popperProps;
   /** state of cell value */
-  const [value, setValue] = useState({ value: initialValue, update: false });
+  const { value, setValue } = useContext(CellContext);
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
