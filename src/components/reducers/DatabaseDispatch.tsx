@@ -346,7 +346,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);
         action.row[
           MetadataColumns.FILE
-        ] = `[[${action.file.parent.path}/${action.value}/${action.file.name}|${action.file.basename}]]`;
+        ] = `[[${state.view.file.parent.path}/${action.value}/${action.file.name}|${action.file.basename}]]`;
         action.row.original.note = new NoteInfo(
           {
             ...action.row,
@@ -359,11 +359,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         return update(state, {
           data: {
             [action.row.index]: {
-              note: {
-                $set: action.row.original.note,
-              },
-              [MetadataColumns.FILE]: {
-                $set: action.row[MetadataColumns.FILE],
+              $merge: {
+                [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
+                note: action.row.original.note,
+                view_state: action.value,
               },
             },
           },

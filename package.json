@@ -37,7 +37,7 @@
 		"eslint": "8.14.0",
 		"jest": "27.5.1",
 		"obsidian": "0.14.6",
-		"obsidian-dataview": "0.5.16",
+		"obsidian-dataview": "0.5.17",
 		"rollup": "2.70.2",
 		"svelte-check": "2.7.0",
 		"svelte-jester": "2.3.2",
