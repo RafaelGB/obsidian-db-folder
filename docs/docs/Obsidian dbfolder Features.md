@@ -1,6 +1,6 @@
 #### Rows
 - Add new row
-![AddNewRow.gif](resources/AddNewRow.gif)
+![AddNewRow.gif](../resources/AddNewRow.gif)
 - Edit cells directly on table
 
 #### Headers
@@ -12,9 +12,9 @@
 
 #### Filters
 - Global filters
-![GlobalFilter.gif](resources/GlobalFilter.gif)
+![GlobalFilter.gif](../resources/GlobalFilter.gif)
 
 #### Event Driven
 - Configurable select column with `group_folder_column` property. This column will be used to group the notes into subfolders with the same cell value. The subfolder will be created if it does not exist.
-![GroupFolderColumn.gif](resources/GroupFolderColumn.gif)
+![GroupFolderColumn.gif](../resources/GroupFolderColumn.gif)
 
