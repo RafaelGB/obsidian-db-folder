@@ -1,5 +1,8 @@
 ## Database folder plugin
 This plugin is a Notion like database based on folders.
+### How can I add a database?
+This plugin is based on folders. You can add a folder database y by right clicking on the folder where you want to store your table
+![AddDatabase.gif](docs/resources/AddDatabase.gif)
 
 ### How to use?
 Database has its own type of view. It will search all notes into the same folder of the database and show the columns that you specify
