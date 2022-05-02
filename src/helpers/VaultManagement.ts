@@ -5,7 +5,7 @@ import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, UpdateRowOptions } from "./Constants";
+import { DatabaseCore, UpdateRowOptions } from "helpers/Constants";
 
 const noBreakSpace = /\u00A0/g;
 

@@ -4,7 +4,6 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { LOGGER } from "services/Logger";
 import { Cell } from "react-table";
 import { MarkdownRenderer } from "obsidian";
-import { grey } from "helpers/Colors";
 import NoteInfo from "services/NoteInfo";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "./contexts/CellContext";

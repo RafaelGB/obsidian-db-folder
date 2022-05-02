@@ -219,7 +219,6 @@ export function Table(initialState: TableDataType) {
     setGlobalFilter: setGlobalFilter,
   };
   LOGGER.debug(`<= Table`);
-  console.log("debugging");
   return (
     <>
       <div
