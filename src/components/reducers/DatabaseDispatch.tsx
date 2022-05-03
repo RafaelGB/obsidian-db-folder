@@ -356,6 +356,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           action.row.index
         );
+        // Update original cell value
         const update_option_cell_index = state.columns.findIndex(
           (column) => column.id === action.columnId
         );
@@ -382,6 +383,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.value,
         UpdateRowOptions.COLUMN_VALUE
       );
+      // Update original cell value
       const update_cell_index = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
