@@ -95,6 +95,11 @@ export function Table(initialState: TableDataType) {
     }),
     []
   );
+
+  function useTableDataInstance(instance: TableInstance<TableDataType>) {
+    Object.assign(instance, { initialState });
+  }
+
   const propsUseTable: any = {
     columns,
     data,
@@ -194,6 +199,7 @@ export function Table(initialState: TableDataType) {
     useColumnOrder,
     (hooks) => {
       hooks.useInstance.push(useInstance);
+      hooks.useInstance.push(useTableDataInstance);
     }
   );
   // Manage column width
