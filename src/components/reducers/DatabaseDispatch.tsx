@@ -356,13 +356,18 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           action.row.index
         );
+        const update_option_cell_index = state.columns.findIndex(
+          (column) => column.id === action.columnId
+        );
+        const update_option_cell_column_key =
+          state.columns[update_option_cell_index].key;
         return update(state, {
           data: {
             [action.row.index]: {
               $merge: {
                 [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
                 note: action.row.original.note,
-                view_state: action.value,
+                [update_option_cell_column_key]: action.value,
               },
             },
           },
@@ -377,7 +382,20 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.value,
         UpdateRowOptions.COLUMN_VALUE
       );
-      break;
+      const update_cell_index = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      const update_option_cell_column_key =
+        state.columns[update_cell_index].key;
+      return update(state, {
+        data: {
+          [action.row.index]: {
+            $merge: {
+              [update_option_cell_column_key]: action.value,
+            },
+          },
+        },
+      });
     /**
      * Enable reset
      */

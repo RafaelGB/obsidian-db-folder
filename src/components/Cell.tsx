@@ -67,6 +67,8 @@ export default function DefaultCell(cellProperties: Cell) {
       file: note.getFile(),
       key: (cellProperties.column as any).key,
       value: event.target.value,
+      row: cellProperties.row,
+      columnId: (cellProperties.column as any).id,
     });
   }
 
