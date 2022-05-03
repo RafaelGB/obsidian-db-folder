@@ -182,7 +182,6 @@ export function Table(initialState: TableDataType) {
     setGlobalFilter,
     allColumns,
     setColumnOrder,
-    totalColumnsWidth,
   } = useTable(
     // Table properties
     propsUseTable,
@@ -197,9 +196,10 @@ export function Table(initialState: TableDataType) {
     }
   );
   // Manage column width
-  const [columnsWidthStyle, setColumnsWidthStyle] = React.useState(
+  const [columnsWidthState, setColumnsWidthState] = React.useState(
     getColumnsWidthStyle(rows, columns)
   );
+
   const [isDragUpdate, setDragUpdate] = React.useState(false);
   // Manage DnD
   const currentColOrder = React.useRef(null);
@@ -285,7 +285,7 @@ export function Table(initialState: TableDataType) {
                     key={`div-Droppable-${i}`}
                     {...headerGroup.getHeaderGroupProps({
                       style: {
-                        width: totalColumnsWidth /* also important */,
+                        width: columnsWidthState.totalWidth,
                       },
                     })}
                     ref={droppableProvided.innerRef}
@@ -313,7 +313,9 @@ export function Table(initialState: TableDataType) {
                             : {
                                 ...tableCellBaseProps,
                                 style: {
-                                  width: `${columnsWidthStyle[column.id]}px`,
+                                  width: `${
+                                    columnsWidthState.widthRecord[column.id]
+                                  }px`,
                                 },
                               };
                           return (
@@ -339,7 +341,7 @@ export function Table(initialState: TableDataType) {
               <div
                 {...row.getRowProps({
                   style: {
-                    width: totalColumnsWidth /* also important */,
+                    width: columnsWidthState.totalWidth /* also important */,
                   },
                 })}
                 className={`${c("tr")}`}
@@ -355,7 +357,7 @@ export function Table(initialState: TableDataType) {
                     : {
                         ...tableCellBaseProps,
                         style: {
-                          width: columnsWidthStyle[cell.column.id],
+                          width: columnsWidthState.widthRecord[cell.column.id],
                         },
                       };
                   return <div {...tableCellProps}>{cell.render("Cell")}</div>;
