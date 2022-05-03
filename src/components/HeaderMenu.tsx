@@ -9,13 +9,15 @@ import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ActionType } from "react-table";
 import { usePopper } from "react-popper";
+import { HeaderContext } from "components/contexts/HeaderContext";
 type HeaderMenuProps = {
   dispatch: (action: ActionType) => void;
   setSortBy: any;
   column: TableColumn;
+  columns: TableColumn[];
   propertyIcon: any;
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
@@ -36,6 +38,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     labelState,
     setLabelState,
   } = headerMenuProps;
+  /** state of width columns */
+  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   /** Column values */
   const { id, key, dataType } = headerMenuProps.column;
   const [keyState, setkeyState] = useState(dbTrim(key));
@@ -89,24 +93,28 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
+        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
           columnId: id,
           focus: false,
         });
         setExpanded(false);
+        adjustWidthOfTheColumn();
       },
       icon: <ArrowLeftIcon />,
       label: "Insert left",
     },
     {
       onClick: (e: any) => {
+        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
           columnId: id,
           focus: false,
         });
         setExpanded(false);
+        adjustWidthOfTheColumn();
       },
       icon: <ArrowRightIcon />,
       label: "Insert right",
@@ -119,6 +127,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           key: keyState,
         });
         setExpanded(false);
+        // Adjust the width of the columns
+        columnWidthState.totalWidth =
+          columnWidthState.totalWidth - columnWidthState.widthRecord[id];
+        delete columnWidthState.widthRecord[id];
+        setColumnWidthState(columnWidthState);
       },
       icon: <TrashIcon />,
       label: "Delete",
@@ -202,6 +215,13 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    */
   function handleBlur(e: any) {
     e.preventDefault();
+  }
+
+  function adjustWidthOfTheColumn() {
+    // Adjust the width of the columns
+    columnWidthState.widthRecord[id] = (12 + 24) * 10;
+    columnWidthState.totalWidth = columnWidthState.totalWidth + (8 + 24) * 10;
+    setColumnWidthState(columnWidthState);
   }
 
   return (

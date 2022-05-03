@@ -22,6 +22,7 @@ import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
+import { HeaderContext } from "./contexts/HeaderContext";
 
 const defaultColumn = {
   minWidth: 50,
@@ -319,9 +320,17 @@ export function Table(initialState: TableDataType) {
                                   }px`,
                                 },
                               };
+
                           return (
                             <div {...tableCellProps}>
-                              {column.render("Header")}
+                              <HeaderContext.Provider
+                                value={{
+                                  columnWidthState: columnsWidthState,
+                                  setColumnWidthState: setColumnsWidthState,
+                                }}
+                              >
+                                {column.render("Header")}
+                              </HeaderContext.Provider>
                             </div>
                           );
                         })}

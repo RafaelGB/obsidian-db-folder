@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { randomColor } from "helpers/Colors";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
@@ -50,7 +50,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   const [referenceElement, setReferenceElement] = useState(null);
   const [isMetadata, setIsMetadata] = useState(headerProps.column.isMetadata);
   const [labelState, setLabelState] = useState(headerProps.column.label);
-
   React.useEffect(() => {
     setDomReady(true);
   });
@@ -98,6 +97,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
         ? ReactDOM.createPortal(
             <HeaderMenu
               column={headerProps.column}
+              columns={headerProps.columns}
               dispatch={dataDispatch}
               setSortBy={setSortBy}
               propertyIcon={propertyIcon}
