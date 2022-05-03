@@ -182,6 +182,7 @@ export function Table(initialState: TableDataType) {
     setGlobalFilter,
     allColumns,
     setColumnOrder,
+    totalColumnsWidth,
   } = useTable(
     // Table properties
     propsUseTable,
@@ -282,7 +283,11 @@ export function Table(initialState: TableDataType) {
                 {(droppableProvided, snapshot) => (
                   <div
                     key={`div-Droppable-${i}`}
-                    {...headerGroup.getHeaderGroupProps()}
+                    {...headerGroup.getHeaderGroupProps({
+                      style: {
+                        width: totalColumnsWidth /* also important */,
+                      },
+                    })}
                     ref={droppableProvided.innerRef}
                     className={`${c("tr header-group")}`}
                   >
@@ -331,7 +336,15 @@ export function Table(initialState: TableDataType) {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
+              <div
+                {...row.getRowProps({
+                  style: {
+                    width: totalColumnsWidth /* also important */,
+                  },
+                })}
+                className={`${c("tr")}`}
+                key={row.id}
+              >
                 {row.cells.map((cell) => {
                   const tableCellBaseProps = {
                     ...cell.getCellProps(),

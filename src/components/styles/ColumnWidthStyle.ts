@@ -5,7 +5,7 @@ import { Row } from "react-table";
 
 const getColumnWidthStyle = (rows: Array<Row<object>>, accessor: string, headerText: string, customMaxWidth?: number): number => {
   const maxWidth = (customMaxWidth ?? 400)
-  const IconsSpacing = 24;
+  const IconsSpacing = 28;
   const magicSpacing = 10;
 
   const cellLength = Math.max(

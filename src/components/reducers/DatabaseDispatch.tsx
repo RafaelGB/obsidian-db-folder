@@ -103,6 +103,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       return {
         ...state,
         skipReset: true,
+        // Add column visually into the new label
         columns: [
           ...state.columns.slice(0, index),
           {
@@ -114,6 +115,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           ...state.columns.slice(index + 1, state.columns.length),
         ],
+        // Add data visually into the new label
         data: state.data.map((row: RowDataType) => {
           row[update_col_key] = row[action.columnId];
           delete row[action.columnId];
@@ -302,6 +304,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       return {
         ...state,
         skipReset: true,
+        // Add column visually to the right of the column with the given id
         columns: [
           ...state.columns.slice(0, rightIndex + 1),
           {
