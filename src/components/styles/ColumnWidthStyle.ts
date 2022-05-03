@@ -4,7 +4,7 @@ import { getNormalizedPath } from "helpers/VaultManagement";
 import { Row } from "react-table";
 
 const getColumnWidthStyle = (rows: Array<Row<object>>, accessor: string, headerText: string, customMaxWidth?: number): number => {
-  const maxWidth = (customMaxWidth ?? 400)
+  const maxWidth = (customMaxWidth ?? 600)
   const IconsSpacing = 28;
   const magicSpacing = 10;
 
