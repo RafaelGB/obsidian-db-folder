@@ -24,7 +24,7 @@ import { HeaderNavBar } from "components/NavBar";
 import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
 
 const defaultColumn = {
-  minWidth: 25,
+  minWidth: 50,
   maxWidth: 400,
   Cell: DefaultCell,
   Header: Header,
@@ -285,7 +285,8 @@ export function Table(initialState: TableDataType) {
                     key={`div-Droppable-${i}`}
                     {...headerGroup.getHeaderGroupProps({
                       style: {
-                        width: columnsWidthState.totalWidth,
+                        ...headerGroup.getHeaderGroupProps().style,
+                        maxWidth: `${columnsWidthState.totalWidth}px`,
                       },
                     })}
                     ref={droppableProvided.innerRef}
@@ -338,18 +339,15 @@ export function Table(initialState: TableDataType) {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <div
-                {...row.getRowProps({
-                  style: {
-                    width: columnsWidthState.totalWidth /* also important */,
-                  },
-                })}
-                className={`${c("tr")}`}
-                key={row.id}
-              >
+              <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
                 {row.cells.map((cell) => {
                   const tableCellBaseProps = {
-                    ...cell.getCellProps(),
+                    ...cell.getCellProps({
+                      style: {
+                        ...cell.getCellProps().style,
+                        maxWidth: `${columnsWidthState.totalWidth}px`,
+                      },
+                    }),
                     className: `${c("td")}`,
                   };
                   const tableCellProps = isDragUpdate
