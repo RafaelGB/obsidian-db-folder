@@ -84,7 +84,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
 
   function adjustWidthOfTheColumn() {
     const columnNumber =
-      initialState.columns.length + 1 - initialState.metadataColumns.length;
+      initialState.columns.length + 1 - initialState.shadowColumns.length;
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
     // Add width of the new column

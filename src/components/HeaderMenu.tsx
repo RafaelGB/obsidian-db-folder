@@ -100,7 +100,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
-        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
           columnId: id,
@@ -114,7 +113,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
-        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
           columnId: id,
@@ -226,7 +224,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
 
   function adjustWidthOfTheColumn() {
     const columnNumber =
-      initialState.columns.length + 1 - initialState.metadataColumns.length;
+      initialState.columns.length + 1 - initialState.shadowColumns.length;
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
     // Add width of the new column

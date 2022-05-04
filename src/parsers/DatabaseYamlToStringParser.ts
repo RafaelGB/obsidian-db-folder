@@ -14,6 +14,7 @@ const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml): string[] => {
   // Table Columns
   databaseConfigString.push(`columns:`);
   for (const columnName in databaseConfig.columns) {
+    if (databaseConfig.columns[columnName].skipPersist) continue;
     databaseConfigString.push(`${yamlIndent.repeat(1)}${columnName}:`);
     for (const columnKey in databaseConfig.columns[columnName]) {
       databaseConfigString.push(`${yamlIndent.repeat(2)}${columnKey}: ${databaseConfig.columns[columnName][columnKey]}`);

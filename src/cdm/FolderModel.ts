@@ -5,6 +5,7 @@ import { RowType } from "cdm/RowTypeModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
+import { DatabaseColumn } from "cdm/DatabaseModel";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -46,7 +47,8 @@ export type TableColumn = {
     Cell?: any,
     getHeaderProps?: any,
     getResizerProps?: any,
-    isMetadata?: boolean
+    isMetadata?: boolean,
+    skipPersist?: boolean,
     csvCandidate: boolean
 }
 
@@ -58,7 +60,7 @@ export type RowDataType = {
 
 export type TableDataType = {
     columns: TableColumn[],
-    metadataColumns: TableColumn[],
+    shadowColumns: TableColumn[],
     data: Array<RowDataType>,
     skipReset: boolean,
     view: DatabaseView,

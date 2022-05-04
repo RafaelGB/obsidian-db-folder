@@ -14,20 +14,17 @@ import { dbTrim } from "helpers/StylesHelper";
  * @param columns
  * @returns
  */
-export async function obtainMetadataColumns(): Promise<TableColumn[]> {
-  const columns: TableColumn[] = [];
-  const metadataColumns: Record<string, DatabaseColumn> = {};
-  metadataColumns[MetadataColumns.FILE] = MetadataDatabaseColumns.FILE;
-  metadataColumns[MetadataColumns.ADD_COLUMN] =
-    MetadataDatabaseColumns.ADD_COLUMN;
+export async function obtainMetadataColumns(
+  yamlColumns: Record<string, DatabaseColumn>
+): Promise<Record<string, DatabaseColumn>> {
+  // If File is not already in the table, add it
+  yamlColumns[MetadataColumns.FILE] = {
+    ...MetadataDatabaseColumns.FILE,
+    ...(yamlColumns[MetadataColumns.FILE] ?? {}),
+  };
 
-  await Promise.all(
-    Object.keys(metadataColumns).map(async (columnKey, index) => {
-      const column = metadataColumns[columnKey];
-      columns.push(await columnOptions(columnKey, index, column));
-    })
-  );
-  return columns;
+  yamlColumns[MetadataColumns.ADD_COLUMN] = MetadataDatabaseColumns.ADD_COLUMN;
+  return yamlColumns;
 }
 
 export async function obtainColumnsFromFolder(
@@ -63,6 +60,7 @@ async function columnOptions(
     key: column.key ?? columnKey,
     accessor: column.accessor ?? dbTrim(column.label),
     isMetadata: column.isMetadata ?? false,
+    skipPersist: column.skipPersist ?? false,
     csvCandidate: column.csvCandidate ?? true,
   };
   /**
