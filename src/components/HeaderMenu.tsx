@@ -100,7 +100,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
-        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
           columnId: id,
@@ -114,7 +113,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
-        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
           columnId: id,

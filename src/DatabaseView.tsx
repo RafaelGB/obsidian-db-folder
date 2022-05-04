@@ -121,8 +121,9 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       let yamlColumns: Record<string, DatabaseColumn> =
         this.diskConfig.yaml.columns;
+      // Complete the columns with the metadata columns
       yamlColumns = await obtainMetadataColumns(yamlColumns);
-      // Obtain base information about the database
+      // Obtain base information about columns
       const columns = await obtainColumnsFromFolder(yamlColumns);
       const rows = await adapterTFilesToRows(this.file.parent.path);
       // Define table properties
