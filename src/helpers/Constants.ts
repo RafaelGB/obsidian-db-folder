@@ -42,6 +42,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     label: MetadataLabels.FILE,
     accessor: MetadataColumns.FILE,
     isMetadata: true,
+    skipPersist: false,
     csvCandidate: true,
   },
   ADD_COLUMN: {
@@ -53,6 +54,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     label: MetadataLabels.ADD_COLUMN,
     accessor: MetadataColumns.ADD_COLUMN,
     isMetadata: true,
+    skipPersist: true,
     csvCandidate: false,
   }
 });

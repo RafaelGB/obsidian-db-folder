@@ -60,7 +60,7 @@ export function makeData(count: number): TableDataType {
   ];
   return {
     columns: columns,
-    metadataColumns: [],
+    shadowColumns: [],
     data: data,
     skipReset: false,
     view: null,

@@ -1,3 +1,4 @@
+import { DatabaseColumn } from "cdm/DatabaseModel";
 import { TableDataType } from "cdm/FolderModel";
 import {
   obtainColumnsFromFolder,
@@ -118,17 +119,16 @@ export class DatabaseView extends TextFileView implements HoverParent {
       await this.diskConfig.initDatabaseconfigYaml(
         this.plugin.settings.local_settings
       );
+      let yamlColumns: Record<string, DatabaseColumn> =
+        this.diskConfig.yaml.columns;
+      yamlColumns = await obtainMetadataColumns(yamlColumns);
       // Obtain base information about the database
-      const columns = await obtainColumnsFromFolder(
-        this.diskConfig.yaml.columns
-      );
-      const metatadaColumns = await obtainMetadataColumns();
-      columns.push(...metatadaColumns);
+      const columns = await obtainColumnsFromFolder(yamlColumns);
       const rows = await adapterTFilesToRows(this.file.parent.path);
       // Define table properties
       const tableProps: TableDataType = {
         columns: columns,
-        metadataColumns: metatadaColumns,
+        shadowColumns: columns.filter((col) => col.skipPersist),
         data: rows,
         skipReset: false,
         view: this,

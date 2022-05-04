@@ -9,6 +9,7 @@ export type DatabaseColumn = {
     key?: string,
     position?: number,
     isMetadata?: boolean,
+    skipPersist?: boolean,
     csvCandidate?: boolean,
     [key: string]: RowType
 }

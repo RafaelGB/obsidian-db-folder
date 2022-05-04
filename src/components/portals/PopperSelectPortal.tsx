@@ -40,6 +40,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       key: (column as any).key,
       value: option.label,
       row: row,
+      columnId: column.id,
     });
   }
 
