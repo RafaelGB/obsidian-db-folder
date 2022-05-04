@@ -1,3 +1,9 @@
+## 0.1.2
+### Improved
+- Now DnD of file column and persist order are supported.
+
+### No longer broken
+- Change select cell type no crash the view anymore. This is a but introduced in 0.1.1.
 ## 0.1.1
 ### Improved
 - The width of columns are adjusted when a column is added of removed
