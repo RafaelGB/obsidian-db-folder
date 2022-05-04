@@ -230,17 +230,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const leftIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
-      const leftId = state.columns.length + 1 - state.metadataColumns.length;
 
       const newLeftColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: `newColumn${leftId}`,
-        key: `newColumn${leftId}`,
-        label: `new Column ${leftId}`,
-        position: leftId,
+        accessor: action.columnInfo.name,
+        key: action.columnInfo.name,
+        label: action.columnInfo.label,
+        position: action.columnInfo.position,
       };
       // Update configuration on disk
-      state.view.diskConfig.addColumn(`newColumn${leftId}`, newLeftColumn);
+      state.view.diskConfig.addColumn(action.columnInfo.name, newLeftColumn);
 
       Promise.all(
         state.data.map(async (row: RowDataType) => {
@@ -278,18 +277,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const rightIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
-      const rightId = `${
-        state.columns.length + 1 - state.metadataColumns.length
-      }`;
 
       const newRIghtColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: rightId,
-        key: `newColumn${rightId}`,
-        label: `new Column ${rightId}`,
+        accessor: action.columnInfo.name,
+        key: action.columnInfo.name,
+        label: action.columnInfo.label,
+        position: action.columnInfo.position,
       };
       // Update configuration on disk
-      state.view.diskConfig.addColumn(rightId, newRIghtColumn);
+      state.view.diskConfig.addColumn(action.columnInfo.name, newRIghtColumn);
 
       Promise.all(
         state.data.map(async (row: RowDataType) => {
@@ -301,6 +298,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           );
         })
       );
+
       return {
         ...state,
         skipReset: true,

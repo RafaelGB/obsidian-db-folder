@@ -1,19 +1,17 @@
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnWidthState } from "cdm/StyleModel";
-import { MetadataColumns } from "helpers/Constants";
+import { MetadataColumns, WidthVariables } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { Row } from "react-table";
 
 const getColumnWidthStyle = (rows: Array<Row<object>>, accessor: string, headerText: string, customMaxWidth?: number): number => {
   const maxWidth = (customMaxWidth ?? 400)
-  const IconsSpacing = 15;
-  const magicSpacing = 10;
 
   const cellLength = Math.max(
     ...rows.map((row: any) => lengthOfNormalizeCellValue(row, accessor)),
-    headerText.length, IconsSpacing
+    headerText.length, WidthVariables.ICON_SPACING
   )
-  return Math.min(maxWidth, cellLength * magicSpacing)
+  return Math.min(maxWidth, cellLength * WidthVariables.MAGIC_SPACING)
 }
 
 const lengthOfNormalizeCellValue = (row: any, accessor: string): number => {

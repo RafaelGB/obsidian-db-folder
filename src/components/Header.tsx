@@ -6,11 +6,17 @@ import HashIcon from "components/img/Hash";
 import PlusIcon from "components/img/Plus";
 import HeaderMenu from "components/HeaderMenu";
 import MarkdownObsidian from "components/img/Markdown";
-import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
+import {
+  ActionTypes,
+  DataTypes,
+  MetadataColumns,
+  WidthVariables,
+} from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
+import { HeaderContext } from "components/contexts/HeaderContext";
 
 function setOptionsOfSelectDataType(
   options: any[],
@@ -36,10 +42,12 @@ function setOptionsOfSelectDataType(
  */
 export default function Header(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.label}`);
+  /** state of width columns */
+  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   // TODO : add a tooltip to the header
   const created: boolean = false;
   /** Properties of header */
-  const { setSortBy, rows } = headerProps;
+  const { setSortBy, rows, initialState } = headerProps;
   /** Column values */
   const { id, dataType, options } = headerProps.column;
   /** reducer asociated to database */
@@ -74,11 +82,30 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       break;
   }
 
+  function adjustWidthOfTheColumn() {
+    const columnNumber =
+      initialState.columns.length + 1 - initialState.metadataColumns.length;
+    const columnName = `newColumn${columnNumber}`;
+    const columnLabel = `New Column ${columnNumber}`;
+    // Add width of the new column
+    columnWidthState.widthRecord[columnName] =
+      (columnLabel.length + WidthVariables.ICON_SPACING) *
+      WidthVariables.MAGIC_SPACING;
+    // Add new width to the total width
+    columnWidthState.totalWidth =
+      columnWidthState.totalWidth +
+      (columnLabel.length + WidthVariables.ICON_SPACING) *
+        WidthVariables.MAGIC_SPACING;
+    setColumnWidthState(columnWidthState);
+    return { name: columnName, position: columnNumber, label: columnLabel };
+  }
+
   function handlerAddColumnToLeft(e: any) {
     dataDispatch({
       type: ActionTypes.ADD_COLUMN_TO_LEFT,
       columnId: MetadataColumns.ADD_COLUMN,
       focus: true,
+      columnInfo: adjustWidthOfTheColumn(),
     });
   }
 
@@ -107,6 +134,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
               referenceElement={referenceElement}
               labelState={labelState}
               setLabelState={setLabelState}
+              initialState={initialState}
             />,
             document.getElementById("popper-container")
           )

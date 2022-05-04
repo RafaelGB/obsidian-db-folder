@@ -1,5 +1,10 @@
-import { TableColumn } from "cdm/FolderModel";
-import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
+import {
+  ActionTypes,
+  DataTypes,
+  StyleVariables,
+  WidthVariables,
+} from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
@@ -25,6 +30,7 @@ type HeaderMenuProps = {
   referenceElement: any;
   labelState: string;
   setLabelState: (label: string) => void;
+  initialState: TableDataType;
 };
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const {
@@ -37,6 +43,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     referenceElement,
     labelState,
     setLabelState,
+    initialState,
   } = headerMenuProps;
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
@@ -98,9 +105,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
           columnId: id,
           focus: false,
+          columnInfo: adjustWidthOfTheColumn(),
         });
         setExpanded(false);
-        adjustWidthOfTheColumn();
       },
       icon: <ArrowLeftIcon />,
       label: "Insert left",
@@ -112,9 +119,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
           columnId: id,
           focus: false,
+          columnInfo: adjustWidthOfTheColumn(),
         });
         setExpanded(false);
-        adjustWidthOfTheColumn();
       },
       icon: <ArrowRightIcon />,
       label: "Insert right",
@@ -218,10 +225,21 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   }
 
   function adjustWidthOfTheColumn() {
-    // Adjust the width of the columns
-    columnWidthState.widthRecord[id] = (12 + 24) * 10;
-    columnWidthState.totalWidth = columnWidthState.totalWidth + (8 + 24) * 10;
+    const columnNumber =
+      initialState.columns.length + 1 - initialState.metadataColumns.length;
+    const columnName = `newColumn${columnNumber}`;
+    const columnLabel = `New Column ${columnNumber}`;
+    // Add width of the new column
+    columnWidthState.widthRecord[columnName] =
+      (columnLabel.length + WidthVariables.ICON_SPACING) *
+      WidthVariables.MAGIC_SPACING;
+    // Add new width to the total width
+    columnWidthState.totalWidth =
+      columnWidthState.totalWidth +
+      (columnLabel.length + WidthVariables.ICON_SPACING) *
+        WidthVariables.MAGIC_SPACING;
     setColumnWidthState(columnWidthState);
+    return { name: columnName, position: columnNumber, label: columnLabel };
   }
 
   return (

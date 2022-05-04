@@ -68,7 +68,7 @@ export type TableDataType = {
 export interface DatabaseHeaderProps {
     columns: any,
     data: any,
-    initialState: any,
+    initialState: TableDataType,
     defaultColumn: any,
     getSubRows: any,
     getRowId: any,

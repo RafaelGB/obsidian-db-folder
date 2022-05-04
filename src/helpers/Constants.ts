@@ -101,3 +101,8 @@ export const StyleVariables = Object.freeze({
   TEXT_FAINT: 'var(--text-faint)',
   TEXT_NORMAL: 'var(--text-normal)',
 });
+
+export const WidthVariables = Object.freeze({
+  ICON_SPACING: 15,
+  MAGIC_SPACING: 10
+});

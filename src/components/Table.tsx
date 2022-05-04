@@ -32,22 +32,6 @@ const defaultColumn = {
   sortType: "alphanumericFalsyLast",
 };
 
-function useInstance(instance: TableInstance<any>) {
-  const { allColumns } = instance;
-
-  let rowSpanHeaders: any = [];
-
-  allColumns.forEach((column: any, i: any) => {
-    const { id } = column;
-    rowSpanHeaders = [
-      ...rowSpanHeaders,
-      { id, topCellValue: null, topCellIndex: 0 },
-    ];
-  });
-
-  Object.assign(instance, { rowSpanHeaders });
-}
-
 /**
  * Table component based on react-table
  * @param initialState
@@ -198,7 +182,6 @@ export function Table(initialState: TableDataType) {
     useSortBy,
     useColumnOrder,
     (hooks) => {
-      hooks.useInstance.push(useInstance);
       hooks.useInstance.push(useTableDataInstance);
     }
   );
