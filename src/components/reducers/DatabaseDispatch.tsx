@@ -103,6 +103,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       return {
         ...state,
         skipReset: true,
+        // Add column visually into the new label
         columns: [
           ...state.columns.slice(0, index),
           {
@@ -114,6 +115,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           ...state.columns.slice(index + 1, state.columns.length),
         ],
+        // Add data visually into the new label
         data: state.data.map((row: RowDataType) => {
           row[update_col_key] = row[action.columnId];
           delete row[action.columnId];
@@ -228,17 +230,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const leftIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
-      const leftId = state.columns.length + 1 - state.metadataColumns.length;
 
       const newLeftColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: `newColumn${leftId}`,
-        key: `newColumn${leftId}`,
-        label: `new Column ${leftId}`,
-        position: leftId,
+        accessor: action.columnInfo.name,
+        key: action.columnInfo.name,
+        label: action.columnInfo.label,
+        position: action.columnInfo.position,
       };
       // Update configuration on disk
-      state.view.diskConfig.addColumn(`newColumn${leftId}`, newLeftColumn);
+      state.view.diskConfig.addColumn(action.columnInfo.name, newLeftColumn);
 
       Promise.all(
         state.data.map(async (row: RowDataType) => {
@@ -276,18 +277,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const rightIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
-      const rightId = `${
-        state.columns.length + 1 - state.metadataColumns.length
-      }`;
 
       const newRIghtColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: rightId,
-        key: `newColumn${rightId}`,
-        label: `new Column ${rightId}`,
+        accessor: action.columnInfo.name,
+        key: action.columnInfo.name,
+        label: action.columnInfo.label,
+        position: action.columnInfo.position,
       };
       // Update configuration on disk
-      state.view.diskConfig.addColumn(rightId, newRIghtColumn);
+      state.view.diskConfig.addColumn(action.columnInfo.name, newRIghtColumn);
 
       Promise.all(
         state.data.map(async (row: RowDataType) => {
@@ -299,9 +298,11 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           );
         })
       );
+
       return {
         ...state,
         skipReset: true,
+        // Add column visually to the right of the column with the given id
         columns: [
           ...state.columns.slice(0, rightIndex + 1),
           {
@@ -356,13 +357,19 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
           action.row.index
         );
+        // Update original cell value
+        const update_option_cell_index = state.columns.findIndex(
+          (column) => column.id === action.columnId
+        );
+        const update_option_cell_column_key =
+          state.columns[update_option_cell_index].key;
         return update(state, {
           data: {
             [action.row.index]: {
               $merge: {
                 [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
                 note: action.row.original.note,
-                view_state: action.value,
+                [update_option_cell_column_key]: action.value,
               },
             },
           },
@@ -377,7 +384,21 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.value,
         UpdateRowOptions.COLUMN_VALUE
       );
-      break;
+      // Update original cell value
+      const update_cell_index = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      const update_option_cell_column_key =
+        state.columns[update_cell_index].key;
+      return update(state, {
+        data: {
+          [action.row.index]: {
+            $merge: {
+              [update_option_cell_column_key]: action.value,
+            },
+          },
+        },
+      });
     /**
      * Enable reset
      */

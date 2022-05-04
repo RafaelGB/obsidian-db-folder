@@ -1,3 +1,6 @@
+## 0.1.1
+### No longer broken
+- Now if you update a cell and then use global filter, the value is updated correctly
 ## 0.1.0
 ### Shiny new things
 - New button to download a CSV file with the current data (supports filtering!). Temporally this feature is inside menu bar. We are working on move it into the actual file options of Obsidian [ISSUE#15](https://github.com/RafaelGB/obsidian-db-folder/issues/15)

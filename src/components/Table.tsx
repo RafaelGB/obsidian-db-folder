@@ -22,30 +22,15 @@ import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
+import { HeaderContext } from "./contexts/HeaderContext";
 
 const defaultColumn = {
-  minWidth: 25,
+  minWidth: 50,
   maxWidth: 400,
   Cell: DefaultCell,
   Header: Header,
   sortType: "alphanumericFalsyLast",
 };
-
-function useInstance(instance: TableInstance<any>) {
-  const { allColumns } = instance;
-
-  let rowSpanHeaders: any = [];
-
-  allColumns.forEach((column: any, i: any) => {
-    const { id } = column;
-    rowSpanHeaders = [
-      ...rowSpanHeaders,
-      { id, topCellValue: null, topCellIndex: 0 },
-    ];
-  });
-
-  Object.assign(instance, { rowSpanHeaders });
-}
 
 /**
  * Table component based on react-table
@@ -94,6 +79,11 @@ export function Table(initialState: TableDataType) {
     }),
     []
   );
+
+  function useTableDataInstance(instance: TableInstance<TableDataType>) {
+    Object.assign(instance, { initialState });
+  }
+
   const propsUseTable: any = {
     columns,
     data,
@@ -192,13 +182,14 @@ export function Table(initialState: TableDataType) {
     useSortBy,
     useColumnOrder,
     (hooks) => {
-      hooks.useInstance.push(useInstance);
+      hooks.useInstance.push(useTableDataInstance);
     }
   );
   // Manage column width
-  const [columnsWidthStyle, setColumnsWidthStyle] = React.useState(
+  const [columnsWidthState, setColumnsWidthState] = React.useState(
     getColumnsWidthStyle(rows, columns)
   );
+
   const [isDragUpdate, setDragUpdate] = React.useState(false);
   // Manage DnD
   const currentColOrder = React.useRef(null);
@@ -282,7 +273,12 @@ export function Table(initialState: TableDataType) {
                 {(droppableProvided, snapshot) => (
                   <div
                     key={`div-Droppable-${i}`}
-                    {...headerGroup.getHeaderGroupProps()}
+                    {...headerGroup.getHeaderGroupProps({
+                      style: {
+                        ...headerGroup.getHeaderGroupProps().style,
+                        maxWidth: `${columnsWidthState.totalWidth}px`,
+                      },
+                    })}
                     ref={droppableProvided.innerRef}
                     className={`${c("tr header-group")}`}
                   >
@@ -308,12 +304,22 @@ export function Table(initialState: TableDataType) {
                             : {
                                 ...tableCellBaseProps,
                                 style: {
-                                  width: `${columnsWidthStyle[column.id]}px`,
+                                  width: `${
+                                    columnsWidthState.widthRecord[column.id]
+                                  }px`,
                                 },
                               };
+
                           return (
                             <div {...tableCellProps}>
-                              {column.render("Header")}
+                              <HeaderContext.Provider
+                                value={{
+                                  columnWidthState: columnsWidthState,
+                                  setColumnWidthState: setColumnsWidthState,
+                                }}
+                              >
+                                {column.render("Header")}
+                              </HeaderContext.Provider>
                             </div>
                           );
                         })}
@@ -334,7 +340,12 @@ export function Table(initialState: TableDataType) {
               <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
                 {row.cells.map((cell) => {
                   const tableCellBaseProps = {
-                    ...cell.getCellProps(),
+                    ...cell.getCellProps({
+                      style: {
+                        ...cell.getCellProps().style,
+                        maxWidth: `${columnsWidthState.totalWidth}px`,
+                      },
+                    }),
                     className: `${c("td")}`,
                   };
                   const tableCellProps = isDragUpdate
@@ -342,7 +353,7 @@ export function Table(initialState: TableDataType) {
                     : {
                         ...tableCellBaseProps,
                         style: {
-                          width: columnsWidthStyle[cell.column.id],
+                          width: columnsWidthState.widthRecord[cell.column.id],
                         },
                       };
                   return <div {...tableCellProps}>{cell.render("Cell")}</div>;

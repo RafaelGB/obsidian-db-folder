@@ -1,18 +1,17 @@
 import { TableColumn } from "cdm/FolderModel";
-import { MetadataColumns } from "helpers/Constants";
+import { ColumnWidthState } from "cdm/StyleModel";
+import { MetadataColumns, WidthVariables } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { Row } from "react-table";
 
 const getColumnWidthStyle = (rows: Array<Row<object>>, accessor: string, headerText: string, customMaxWidth?: number): number => {
   const maxWidth = (customMaxWidth ?? 400)
-  const IconsSpacing = 24;
-  const magicSpacing = 10;
 
   const cellLength = Math.max(
     ...rows.map((row: any) => lengthOfNormalizeCellValue(row, accessor)),
-    headerText.length, IconsSpacing
+    headerText.length, WidthVariables.ICON_SPACING
   )
-  return Math.min(maxWidth, cellLength * magicSpacing)
+  return Math.min(maxWidth, cellLength * WidthVariables.MAGIC_SPACING)
 }
 
 const lengthOfNormalizeCellValue = (row: any, accessor: string): number => {
@@ -24,10 +23,14 @@ const lengthOfNormalizeCellValue = (row: any, accessor: string): number => {
   return value.length
 }
 
-const getColumnsWidthStyle = (rows: Array<Row<object>>, columns: TableColumn[]): Record<string, number> => {
-  const columnWidthStyle: Record<string, number> = {}
+const getColumnsWidthStyle = (rows: Array<Row<object>>, columns: TableColumn[]): ColumnWidthState => {
+  const columnWidthStyle: ColumnWidthState = {
+    widthRecord: {},
+    totalWidth: 0
+  }
   columns.forEach((column: TableColumn) => {
-    columnWidthStyle[column.id] = getColumnWidthStyle(rows, column.key, column.label)
+    columnWidthStyle.widthRecord[column.id] = getColumnWidthStyle(rows, column.key, column.label);
+    columnWidthStyle.totalWidth += columnWidthStyle.widthRecord[column.id];
   })
   return columnWidthStyle
 }

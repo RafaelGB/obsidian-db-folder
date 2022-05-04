@@ -1,5 +1,10 @@
-import { TableColumn } from "cdm/FolderModel";
-import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
+import {
+  ActionTypes,
+  DataTypes,
+  StyleVariables,
+  WidthVariables,
+} from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
@@ -9,13 +14,15 @@ import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ActionType } from "react-table";
 import { usePopper } from "react-popper";
+import { HeaderContext } from "components/contexts/HeaderContext";
 type HeaderMenuProps = {
   dispatch: (action: ActionType) => void;
   setSortBy: any;
   column: TableColumn;
+  columns: TableColumn[];
   propertyIcon: any;
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
@@ -23,6 +30,7 @@ type HeaderMenuProps = {
   referenceElement: any;
   labelState: string;
   setLabelState: (label: string) => void;
+  initialState: TableDataType;
 };
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const {
@@ -35,7 +43,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     referenceElement,
     labelState,
     setLabelState,
+    initialState,
   } = headerMenuProps;
+  /** state of width columns */
+  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   /** Column values */
   const { id, key, dataType } = headerMenuProps.column;
   const [keyState, setkeyState] = useState(dbTrim(key));
@@ -89,10 +100,12 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
+        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
           columnId: id,
           focus: false,
+          columnInfo: adjustWidthOfTheColumn(),
         });
         setExpanded(false);
       },
@@ -101,10 +114,12 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
+        console.log("columnWidthState");
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
           columnId: id,
           focus: false,
+          columnInfo: adjustWidthOfTheColumn(),
         });
         setExpanded(false);
       },
@@ -119,6 +134,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           key: keyState,
         });
         setExpanded(false);
+        // Adjust the width of the columns
+        columnWidthState.totalWidth =
+          columnWidthState.totalWidth - columnWidthState.widthRecord[id];
+        delete columnWidthState.widthRecord[id];
+        setColumnWidthState(columnWidthState);
       },
       icon: <TrashIcon />,
       label: "Delete",
@@ -202,6 +222,24 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    */
   function handleBlur(e: any) {
     e.preventDefault();
+  }
+
+  function adjustWidthOfTheColumn() {
+    const columnNumber =
+      initialState.columns.length + 1 - initialState.metadataColumns.length;
+    const columnName = `newColumn${columnNumber}`;
+    const columnLabel = `New Column ${columnNumber}`;
+    // Add width of the new column
+    columnWidthState.widthRecord[columnName] =
+      (columnLabel.length + WidthVariables.ICON_SPACING) *
+      WidthVariables.MAGIC_SPACING;
+    // Add new width to the total width
+    columnWidthState.totalWidth =
+      columnWidthState.totalWidth +
+      (columnLabel.length + WidthVariables.ICON_SPACING) *
+        WidthVariables.MAGIC_SPACING;
+    setColumnWidthState(columnWidthState);
+    return { name: columnName, position: columnNumber, label: columnLabel };
   }
 
   return (
