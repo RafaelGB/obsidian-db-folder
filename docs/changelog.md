@@ -1,7 +1,6 @@
 ## 0.1.2
 ### Improved
-- Now DnD of file column and persist order are supported.
-
+- Now DnD of file column and persist order are supported. [ISSUE#18](https://github.com/RafaelGB/obsidian-db-folder/issues/18)
 ### No longer broken
 - Change select cell type no crash the view anymore. This is a but introduced in 0.1.1.
 ## 0.1.1
