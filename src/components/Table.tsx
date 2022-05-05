@@ -11,7 +11,7 @@ import {
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
-import { StateManager } from "StateManager";
+import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { ActionTypes, DatabaseCore } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";

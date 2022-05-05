@@ -1,6 +1,6 @@
 import { DatabaseView } from "DatabaseView";
 import { Dispatch } from "react";
-import { StateManager } from "StateManager";
+import StateManager from "StateManager";
 import { RowType } from "cdm/RowTypeModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
 import NoteInfo from "services/NoteInfo";

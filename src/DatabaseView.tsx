@@ -23,7 +23,7 @@ import ReactDOM from "react-dom";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
-import { StateManager } from "StateManager";
+import StateManager from "StateManager";
 export const databaseIcon = "blocks";
 
 export class DatabaseView extends TextFileView implements HoverParent {

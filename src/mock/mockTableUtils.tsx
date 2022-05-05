@@ -1,11 +1,9 @@
 // ts
 import faker from "@faker-js/faker";
-import { MarkdownRenderer } from "obsidian";
 import React, { useRef, useLayoutEffect } from "react";
 import { randomColor } from "helpers/Colors";
 import { DataTypes } from "helpers/Constants";
 import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
-import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromFolder } from "components/Columns";
 

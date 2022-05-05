@@ -2,13 +2,13 @@ import { MockProxy, mock, mockDeep, DeepMockProxy } from 'jest-mock-extended';
 import { labTest1 } from 'mock/labTest';
 import { App, TFile } from 'obsidian';
 test('test', () => {
-    const tfileArrayMock: MockProxy<TFile[]> = mock<TFile[]>();
-    tfileArrayMock
-    // @ts-ignore
-    const mockObj: DeepMockProxy<App> = mockDeep<App>();
-    global.app = mockObj;
-    mockObj.vault.getFiles.mockReturnValue(fakeGetFilesResponse);
-    expect(labTest1()).toEqual(fakeGetFilesResponse);
+    // const tfileArrayMock: MockProxy<TFile[]> = mock<TFile[]>();
+    // tfileArrayMock
+    // // @ts-ignore
+    // const mockObj: DeepMockProxy<App> = mockDeep<App>();
+    // global.app = mockObj;
+    // mockObj.vault.getFiles.mockReturnValue(fakeGetFilesResponse);
+    // expect(labTest1()).toEqual(fakeGetFilesResponse);
 });
 
 const fakeGetFilesResponse: TFile[] = [

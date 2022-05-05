@@ -29,7 +29,7 @@ import {
 	DBFolderAPI
 } from 'api/plugin-api';
 
-import { StateManager } from 'StateManager';
+import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
 import { DatabaseCore, DatabaseFrontmatterOptions } from 'helpers/Constants';
