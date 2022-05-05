@@ -5,6 +5,6 @@ module.exports = {
     transform: {
         '^.+\\.ts$': 'ts-jest',
     },
-    moduleFileExtensions: ['js', 'ts'],
+    moduleFileExtensions: ['js', 'ts', 'tsx'],
     testEnvironment: 'jsdom',
 };
