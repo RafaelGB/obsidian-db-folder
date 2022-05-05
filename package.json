@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "rollup --config rollup.config.js -w",
 		"build": "rollup --config rollup.config.js",
-		"test": "jest --env=node --colors --coverage test",
+		"test": "jest --colors --coverage test",
 		"pretest": "eslint --ignore-path .gitignore src/**/*.ts"
 	},
 	"keywords": [
