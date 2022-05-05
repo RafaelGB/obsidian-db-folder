@@ -64,7 +64,7 @@ export type TableDataType = {
     data: Array<RowDataType>,
     skipReset: boolean,
     view: DatabaseView,
-    stateManager?: StateManager,
+    stateManager: StateManager,
     dispatch?: Dispatch<any>
 }
 export interface DatabaseHeaderProps {

@@ -7,13 +7,14 @@ import { DataTypes } from "helpers/Constants";
 import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
+import { obtainColumnsFromFolder } from "components/Columns";
 
 /**
  * Generate a random initialState table with the given number of rows.
  * @param count number of rows to generate
  * @returns
  */
-export function makeData(count: number): TableDataType {
+export async function makeData(count: number): Promise<TableDataType> {
   const data: Array<RowDataType> = [];
   const options = [];
   const note: any = null;
@@ -27,54 +28,25 @@ export function makeData(count: number): TableDataType {
 
     data.push(row);
   }
-  const columns: TableColumn[] = [
-    {
-      id: "title",
-      label: "File Name",
-      key: "title",
-      accessor: "title",
-      position: 0,
-      minWidth: 100,
-      dataType: DataTypes.TEXT,
-      options: options,
-      csvCandidate: true,
-      Cell: ({ cell }: any) => {
-        const { value } = cell;
-        const containerRef = useRef<HTMLElement>();
-        LOGGER.info("containerRef: " + containerRef);
-        useLayoutEffect(() => {
-          MarkdownRenderer.renderMarkdown(
-            "[[readme]]",
-            containerRef.current,
-            "readme.md",
-            null
-          );
-        });
 
-        return <span ref={containerRef}></span>;
-      },
-    },
-    {
-      id: "status",
-      label: "Status",
-      key: "Status",
-      accessor: "Status",
-      position: 1,
-      minWidth: 100,
-      dataType: DataTypes.TEXT,
-      options: options,
-      csvCandidate: true,
-    },
-  ];
+  const columns: TableColumn[] = await obtainColumnsFromFolder(
+    generateYamlColumns(5)
+  );
   return {
     columns: columns,
     shadowColumns: [],
     data: data,
     skipReset: false,
     view: null,
+    stateManager: null,
   };
 }
 
+/**
+ * Generate random columns
+ * @param count number of columns to generate
+ * @returns
+ */
 export const generateYamlColumns = (
   count: number
 ): Record<string, DatabaseColumn> => {
@@ -95,7 +67,12 @@ export const generateYamlColumns = (
   return yamlColumns;
 };
 
-function getRandomEnumValue<T>(anEnum: T): T[keyof T] {
+/**
+ * Given a Enum, return a random valueß
+ * @param anEnum
+ * @returns
+ */
+export function getRandomEnumValue<T>(anEnum: T): T[keyof T] {
   //save enums inside array
   const enumValues = Object.keys(anEnum) as Array<keyof T>;
 
