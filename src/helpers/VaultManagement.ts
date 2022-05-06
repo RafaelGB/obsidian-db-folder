@@ -146,11 +146,26 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     * group 2 is the current value of inline field
     */
     const frontmatterRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
+    if (!frontmatterRegex.test(content)) {
+      await addInlineColumn();
+      return;
+    }
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterRegex,
       newValue: `$1${newValue} `
+    };
+    await VaultManagerDB.editNoteContent(noteObject);
+  }
+
+  async function addInlineColumn(): Promise<void> {
+    const inlineAddRegex = new RegExp(`(^---\\s+[\\w\\W]+?\\s+---\\s)+(.[\\w\\W]+)`, 'g');
+    const noteObject = {
+      action: 'replace',
+      file: file,
+      regexp: inlineAddRegex,
+      newValue: `$1${columnId}:: ${newValue}\n$2`
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
