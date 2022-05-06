@@ -10,15 +10,12 @@ import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
-import {
-  adapterRowToDatabaseYaml,
-  moveFile,
-  updateRowFile,
-} from "helpers/VaultManagement";
+import { moveFile, updateRowFile } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { dbTrim } from "helpers/StylesHelper";
+import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -67,7 +64,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       VaultManagerDB.create_markdown_file(
         state.view.file.parent,
         action.filename,
-        adapterRowToDatabaseYaml(rowRecord)
+        parseFrontmatterFieldsToString(rowRecord)
       );
 
       const row: RowDataType = {
