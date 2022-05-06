@@ -248,13 +248,13 @@ export async function moveFile(folderPath: string, action: ActionType): Promise<
     UpdateRowOptions.COLUMN_VALUE
   );
   try {
-    createFolder(folderPath);
+    await createFolder(folderPath);
   } catch (error) {
     LOGGER.error(` moveFile Error: ${error.message} `);
     // Handle error
     throw error;
   }
-  const filePath = `${folderPath} /${action.file.name}`;
+  const filePath = `${folderPath}/${action.file.name}`;
   await app.fileManager.renameFile(action.file, filePath);
 }
 

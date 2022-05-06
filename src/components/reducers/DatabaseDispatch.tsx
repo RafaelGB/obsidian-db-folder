@@ -342,7 +342,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           ...state.columns.slice(deleteIndex + 1, state.columns.length),
         ],
       };
-    case ActionTypes.UPDATE_OPTION_CELL: // save on disk
+    case ActionTypes.UPDATE_OPTION_CELL:
       // check if this column is configured as a group folder
       if (dbconfig.group_folder_column === action.key) {
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);

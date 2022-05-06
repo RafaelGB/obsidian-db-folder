@@ -19,6 +19,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActionType } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
+import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
 type HeaderMenuProps = {
   dispatch: (action: ActionType) => void;
   setSortBy: any;
@@ -199,6 +200,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     strategy: "fixed",
   });
 
+  const settingsPopper = usePopper(
+    settingsReferenceElement,
+    settingsPopperElement,
+    {
+      placement: "right",
+      strategy: "fixed",
+    }
+  );
+
   function persistLabelChange() {
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,
@@ -294,7 +304,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 Property Type
               </span>
             </div>
-            {/** Edit header label section */}
+            {/** Type of column section */}
             <div style={{ padding: "4px 0px" }}>
               <button
                 className="sort-button"
@@ -336,6 +346,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 </div>
               )}
             </div>
+            {/** Action buttons section */}
             <div
               style={{
                 borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
@@ -362,7 +373,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 padding: "4px 0px",
               }}
             >
-              {/** Column settings */}
+              {/** Column settings section */}
               <div style={{ padding: "4px 0px" }}>
                 <button
                   className="sort-button"
@@ -376,7 +387,31 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   </span>
                   <span>Settings</span>
                 </button>
-                {showSettings && <span>pruebas</span>}
+                {showSettings && (
+                  <div
+                    className="shadow-5 border-radius-m"
+                    ref={setSettingsPopperElement}
+                    onMouseEnter={() => setShowSettings(true)}
+                    onMouseLeave={() => setShowSettings(false)}
+                    {...settingsPopper.attributes.popper}
+                    style={{
+                      ...settingsPopper.styles.popper,
+                      width: 200,
+                      backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+                      zIndex: 4,
+                      padding: "4px 0px",
+                    }}
+                  >
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox checked={headerMenuProps.column.isInline} />
+                        }
+                        label="Inline"
+                      />
+                    </FormGroup>
+                  </div>
+                )}
               </div>
             </div>
           </div>
