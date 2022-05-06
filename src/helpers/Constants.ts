@@ -10,6 +10,7 @@ export const ActionTypes = Object.freeze({
   ADD_COLUMN_TO_RIGHT: 'add_column_to_right',
   DELETE_COLUMN: 'delete_column',
   ENABLE_RESET: 'enable_reset',
+  SETTINGS_COLUMN: 'settings_column',
 });
 
 /** Flavours of data types */

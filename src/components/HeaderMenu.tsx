@@ -14,6 +14,7 @@ import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
+import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
 import { ActionType } from "react-table";
 import { usePopper } from "react-popper";
@@ -56,11 +57,16 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     placement: "bottom",
     strategy: "absolute",
   });
+  // Manage type of data
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
-
   const [showType, setShowType] = useState(false);
 
+  // Manage settings
+  const [settingsReferenceElement, setSettingsReferenceElement] =
+    useState(null);
+  const [settingsPopperElement, setSettingsPopperElement] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   useEffect(() => {
     if (created) {
       setExpanded(true);
@@ -349,6 +355,29 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   {button.label}
                 </button>
               ))}
+            </div>
+            <div
+              style={{
+                borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                padding: "4px 0px",
+              }}
+            >
+              {/** Column settings */}
+              <div style={{ padding: "4px 0px" }}>
+                <button
+                  className="sort-button"
+                  type="button"
+                  onMouseEnter={() => setShowSettings(true)}
+                  onMouseLeave={() => setShowSettings(false)}
+                  ref={setSettingsReferenceElement}
+                >
+                  <span className="svg-icon svg-text icon-margin">
+                    <AdjustmentsIcon />
+                  </span>
+                  <span>Settings</span>
+                </button>
+                {showSettings && <span>pruebas</span>}
+              </div>
             </div>
           </div>
         </div>
