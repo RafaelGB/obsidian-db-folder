@@ -68,6 +68,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     useState(null);
   const [settingsPopperElement, setSettingsPopperElement] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [toggleInlineFrontmatter, setToggleInlineFrontmatter] = useState(
+    headerMenuProps.column.isInline
+  );
+
   useEffect(() => {
     if (created) {
       setExpanded(true);
@@ -256,6 +260,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     return { name: columnName, position: columnNumber, label: columnLabel };
   }
 
+  function handleChangeToggleInlineFrontmatter(e: any) {
+    setToggleInlineFrontmatter(e.target.checked);
+    dispatch({
+      type: ActionTypes.TOGGLE_INLINE_FRONTMATTER,
+      columnId: id,
+      isInline: e.target.checked,
+    });
+  }
+
   return (
     <div>
       {expanded && (
@@ -405,7 +418,12 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     <FormGroup>
                       <FormControlLabel
                         control={
-                          <Checkbox checked={headerMenuProps.column.isInline} />
+                          <Checkbox
+                            checked={toggleInlineFrontmatter}
+                            onChange={(event) => {
+                              handleChangeToggleInlineFrontmatter(event);
+                            }}
+                          />
                         }
                         label="Inline"
                       />

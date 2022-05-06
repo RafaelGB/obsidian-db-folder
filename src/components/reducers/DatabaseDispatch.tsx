@@ -406,6 +406,13 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
      */
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
+
+    case ActionTypes.TOGGLE_INLINE_FRONTMATTER:
+      // Update configuration & row files on disk
+      state.view.diskConfig.updateColumnProperties(action.columnId, {
+        isInline: action.isInline,
+      });
+      return state;
     default:
       LOGGER.warn(`<=> databaseReducer: unknown action ${action.type}`);
   }
