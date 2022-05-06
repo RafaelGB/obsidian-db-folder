@@ -11,6 +11,7 @@ export type DatabaseColumn = {
     isMetadata?: boolean,
     skipPersist?: boolean,
     csvCandidate?: boolean,
+    isInline?: boolean,
     [key: string]: RowType
 }
 
@@ -24,4 +25,9 @@ export type DatabaseYaml = {
     columns: Record<string, DatabaseColumn>
     /** database local configuration */
     config?: LocalSettings
+}
+
+export type RowDatabaseFields = {
+    frontmatter: Record<string, any>;
+    inline: Record<string, any>;
 }

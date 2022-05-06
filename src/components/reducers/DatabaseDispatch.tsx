@@ -10,15 +10,12 @@ import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
-import {
-  adapterRowToDatabaseYaml,
-  moveFile,
-  updateRowFile,
-} from "helpers/VaultManagement";
+import { moveFile, updateRowFile } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { dbTrim } from "helpers/StylesHelper";
+import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -67,7 +64,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       VaultManagerDB.create_markdown_file(
         state.view.file.parent,
         action.filename,
-        adapterRowToDatabaseYaml(rowRecord)
+        parseFrontmatterFieldsToString(rowRecord)
       );
 
       const row: RowDataType = {
@@ -97,7 +94,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       state.view.diskConfig.updateColumnProperties(
         action.columnId,
         { label: action.label, accessor: update_col_key, key: update_col_key },
-        state.data // Update all rows with new key
+        state // Update all rows with new key
       );
       // Update state
       return {
@@ -247,7 +244,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             row.note.getFile(),
             newLeftColumn.key,
             "",
-            UpdateRowOptions.ADD_COLUMN
+            state,
+            UpdateRowOptions.COLUMN_VALUE
           );
         })
       );
@@ -294,7 +292,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             row.note.getFile(),
             newRIghtColumn.key,
             "",
-            UpdateRowOptions.ADD_COLUMN
+            state,
+            UpdateRowOptions.COLUMN_VALUE
           );
         })
       );
@@ -329,6 +328,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             row.note.getFile(),
             action.key,
             undefined, // delete does not need this field
+            state,
             UpdateRowOptions.REMOVE_COLUMN
           );
         })
@@ -343,6 +343,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ],
       };
     case ActionTypes.UPDATE_OPTION_CELL: // save on disk
+      // check if this column is configured as a group folder
       if (dbconfig.group_folder_column === action.key) {
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);
         action.row[
@@ -375,18 +376,19 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
         });
       }
-    // Else go UPDATE_CELL
+    // otherwise go UPDATE_CELL
     case ActionTypes.UPDATE_CELL:
-      // save on disk
+      // Obtain current column index
+      const update_cell_index = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      // Save on disk
       updateRowFile(
         action.file,
         action.key,
         action.value,
+        state,
         UpdateRowOptions.COLUMN_VALUE
-      );
-      // Update original cell value
-      const update_cell_index = state.columns.findIndex(
-        (column) => column.id === action.columnId
       );
       const update_option_cell_column_key =
         state.columns[update_cell_index].key;

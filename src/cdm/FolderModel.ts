@@ -1,6 +1,6 @@
 import { DatabaseView } from "DatabaseView";
 import { Dispatch } from "react";
-import { StateManager } from "StateManager";
+import StateManager from "StateManager";
 import { RowType } from "cdm/RowTypeModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
 import NoteInfo from "services/NoteInfo";
@@ -49,6 +49,7 @@ export type TableColumn = {
     getResizerProps?: any,
     isMetadata?: boolean,
     skipPersist?: boolean,
+    isInline?: boolean,
     csvCandidate: boolean
 }
 
@@ -64,7 +65,7 @@ export type TableDataType = {
     data: Array<RowDataType>,
     skipReset: boolean,
     view: DatabaseView,
-    stateManager?: StateManager,
+    stateManager: StateManager,
     dispatch?: Dispatch<any>
 }
 export interface DatabaseHeaderProps {

@@ -1,14 +1,17 @@
 ## 0.1.2
+*Published on 2022/05/04*
 ### Improved
 - Now DnD of file column and persist order are supported. [ISSUE#18](https://github.com/RafaelGB/obsidian-db-folder/issues/18)
 ### No longer broken
 - Change select cell type no crash the view anymore. This is a but introduced in 0.1.1.
 ## 0.1.1
+*Published on 2022/05/03*
 ### Improved
 - The width of columns are adjusted when a column is added of removed
 ### No longer broken
 - Now if you update a cell and then use global filter, the value is updated correctly [ISSUE#23](https://github.com/RafaelGB/obsidian-db-folder/issues/23)
 ## 0.1.0
+*Published on 2022/05/02*
 ### Shiny new things
 - New button to download a CSV file with the current data (supports filtering!). Temporally this feature is inside menu bar. We are working on move it into the actual file options of Obsidian [ISSUE#15](https://github.com/RafaelGB/obsidian-db-folder/issues/15)
 ### Improved
@@ -23,7 +26,7 @@
 - Add prefix to the className of components, so interference with other plugins is less probable. [ISSUE#19](https://github.com/RafaelGB/obsidian-bd-folder/issues/19)
 - When column folder is activated and a file is moved, now link is updated correctly
 ## 0.0.7
-*Published on 04/27/2022*
+*Published on 2022/04/27*
 ### Shiny new things
 - New local property `group_folder_column` to specify a select column type column. This column will be used to group the notes into subfolders with the same cell value. The subfolder will be created if it does not exist. [ISSUE#11](https://github.com/RafaelGB/obsidian-bd-folder/issues/11)
 

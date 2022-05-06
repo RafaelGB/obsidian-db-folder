@@ -2,7 +2,7 @@ import { DatabaseView } from "DatabaseView";
 import { App, TFile } from 'obsidian';
 import { LOGGER } from "services/Logger";
 import { DatabaseSettings } from 'Settings';
-export class StateManager {
+export default class StateManager {
   private onEmpty: () => void;
   private getGlobalSettings: () => DatabaseSettings;
   private viewSet: Set<DatabaseView> = new Set();
