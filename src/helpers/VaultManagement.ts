@@ -193,10 +193,22 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
+
+  async function inlineColumnEdit(): Promise<void> {
+    const frontmatterRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
+    const noteObject = {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterRegex,
+      newValue: `$1${newValue}`
+    };
+    await VaultManagerDB.editNoteContent(noteObject);
+  }
   // Record of options
   const updateOptions: Record<string, any> = {};
   updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
   updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
+  updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
   updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
   updateOptions[UpdateRowOptions.ADD_COLUMN] = addColumn;
   // Execute action
@@ -214,6 +226,11 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   LOGGER.info(`<=updateRowFile. asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
 }
 
+/**
+ * After update a row value, move the file to the new folder path
+ * @param folderPath 
+ * @param action 
+ */
 export async function moveFile(folderPath: string, action: ActionType): Promise<void> {
   await updateRowFile(
     action.file,

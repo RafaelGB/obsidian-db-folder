@@ -49,6 +49,7 @@ export type TableColumn = {
     getResizerProps?: any,
     isMetadata?: boolean,
     skipPersist?: boolean,
+    isInline?: boolean,
     csvCandidate: boolean
 }
 

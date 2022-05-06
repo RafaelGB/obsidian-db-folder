@@ -11,6 +11,7 @@ export type DatabaseColumn = {
     isMetadata?: boolean,
     skipPersist?: boolean,
     csvCandidate?: boolean,
+    isInline?: boolean,
     [key: string]: RowType
 }
 

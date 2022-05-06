@@ -62,6 +62,7 @@ async function columnOptions(
     isMetadata: column.isMetadata ?? false,
     skipPersist: column.skipPersist ?? false,
     csvCandidate: column.csvCandidate ?? true,
+    isInline: column.isInline ?? false,
   };
   /**
    * return plain text

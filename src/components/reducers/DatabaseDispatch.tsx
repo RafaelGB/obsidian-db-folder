@@ -343,6 +343,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ],
       };
     case ActionTypes.UPDATE_OPTION_CELL: // save on disk
+      // check if this column is configured as a group folder
       if (dbconfig.group_folder_column === action.key) {
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);
         action.row[
@@ -375,18 +376,20 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
         });
       }
-    // Else go UPDATE_CELL
+    // otherwise go UPDATE_CELL
     case ActionTypes.UPDATE_CELL:
-      // save on disk
+      // Obtain current column index
+      const update_cell_index = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      // Save on disk
       updateRowFile(
         action.file,
         action.key,
         action.value,
-        UpdateRowOptions.COLUMN_VALUE
-      );
-      // Update original cell value
-      const update_cell_index = state.columns.findIndex(
-        (column) => column.id === action.columnId
+        state.columns[update_cell_index].isInline
+          ? UpdateRowOptions.INLINE_VALUE
+          : UpdateRowOptions.COLUMN_VALUE
       );
       const update_option_cell_column_key =
         state.columns[update_cell_index].key;
