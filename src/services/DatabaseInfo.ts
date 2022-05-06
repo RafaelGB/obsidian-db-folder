@@ -68,23 +68,6 @@ export default class DatabaseInfo {
     }
 
     /**
-     * modify column key
-     * @param oldColumnId 
-     * @param newColumnId 
-     */
-    async updateColumnKey(oldColumnId: string, newColumnId: string): Promise<void> {
-        // clone current column configuration
-        const currentCol = this.yaml.columns[oldColumnId];
-        // update column id
-        currentCol.label = newColumnId;
-        currentCol.accessor = newColumnId;
-        delete this.yaml.columns[oldColumnId];
-        this.yaml.columns[newColumnId] = currentCol;
-        // save on disk
-        await this.saveOnDisk();
-    }
-
-    /**
      * Modify or add properties to a column
      * @param columnId 
      * @param properties 
@@ -97,7 +80,6 @@ export default class DatabaseInfo {
         }
         this.yaml.columns[columnId] = colToUpdate;
         if (state !== undefined) {
-            await this.updateColumnKey(columnId, colToUpdate.accessor);
             // Once the column is updated, update the rows in case the key is changed
             await Promise.all(state.data.map(async (row: RowDataType) => {
                 updateRowFile(

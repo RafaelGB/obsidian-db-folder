@@ -116,6 +116,10 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
 
   // Modify key of a column
   async function columnKey(): Promise<void> {
+    if (column.isInline) {
+      await inlineColumnKey();
+      return;
+    }
     // Check if the column is already in the frontmatter
     // assign an empty value to the new key
     rowFields.frontmatter[newValue] = rowFields.frontmatter[columnId] ?? "";
@@ -154,7 +158,25 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       action: 'replace',
       file: file,
       regexp: frontmatterRegex,
-      newValue: `$1${newValue} `
+      newValue: `$1${newValue}`
+    };
+    await VaultManagerDB.editNoteContent(noteObject);
+  }
+
+  async function inlineColumnKey(): Promise<void> {
+    /* Regex explanation
+    * group 1 is inline field checking that starts in new line
+    * group 2 is the current value of inline field
+    */
+    const frontmatterRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
+    if (!frontmatterRegex.test(content)) {
+      return;
+    }
+    const noteObject = {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterRegex,
+      newValue: `${newValue}:: $2`
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
