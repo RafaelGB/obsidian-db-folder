@@ -97,7 +97,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       state.view.diskConfig.updateColumnProperties(
         action.columnId,
         { label: action.label, accessor: update_col_key, key: update_col_key },
-        state.data // Update all rows with new key
+        state // Update all rows with new key
       );
       // Update state
       return {
@@ -247,7 +247,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             row.note.getFile(),
             newLeftColumn.key,
             "",
-            UpdateRowOptions.ADD_COLUMN
+            state,
+            UpdateRowOptions.COLUMN_VALUE
           );
         })
       );
@@ -294,7 +295,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             row.note.getFile(),
             newRIghtColumn.key,
             "",
-            UpdateRowOptions.ADD_COLUMN
+            state,
+            UpdateRowOptions.COLUMN_VALUE
           );
         })
       );
@@ -329,6 +331,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             row.note.getFile(),
             action.key,
             undefined, // delete does not need this field
+            state,
             UpdateRowOptions.REMOVE_COLUMN
           );
         })
@@ -387,9 +390,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.file,
         action.key,
         action.value,
-        state.columns[update_cell_index].isInline
-          ? UpdateRowOptions.INLINE_VALUE
-          : UpdateRowOptions.COLUMN_VALUE
+        state,
+        UpdateRowOptions.COLUMN_VALUE
       );
       const update_option_cell_column_key =
         state.columns[update_cell_index].key;

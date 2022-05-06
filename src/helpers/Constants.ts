@@ -86,8 +86,7 @@ export const UpdateRowOptions = Object.freeze({
   COLUMN_VALUE: 'column_value',
   COLUMN_KEY: 'column_key',
   INLINE_VALUE: 'inline_value',
-  REMOVE_COLUMN: 'remove_column',
-  ADD_COLUMN: 'add_column'
+  REMOVE_COLUMN: 'remove_column'
 });
 
 export const StyleClasses = Object.freeze({

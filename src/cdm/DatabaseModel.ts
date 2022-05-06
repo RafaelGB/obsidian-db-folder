@@ -26,3 +26,8 @@ export type DatabaseYaml = {
     /** database local configuration */
     config?: LocalSettings
 }
+
+export type RowDatabaseFields = {
+    frontmatter: Record<string, any>;
+    inline: Record<string, any>;
+}
