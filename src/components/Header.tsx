@@ -92,11 +92,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     columnWidthState.widthRecord[columnName] =
       (columnLabel.length + WidthVariables.ICON_SPACING) *
       WidthVariables.MAGIC_SPACING;
-    // Add new width to the total width
-    columnWidthState.totalWidth =
-      columnWidthState.totalWidth +
-      (columnLabel.length + WidthVariables.ICON_SPACING) *
-        WidthVariables.MAGIC_SPACING;
     setColumnWidthState(columnWidthState);
     return { name: columnName, position: columnNumber, label: columnLabel };
   }

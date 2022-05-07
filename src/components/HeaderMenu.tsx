@@ -144,9 +144,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           key: keyState,
         });
         setExpanded(false);
-        // Adjust the width of the columns
-        columnWidthState.totalWidth =
-          columnWidthState.totalWidth - columnWidthState.widthRecord[id];
         delete columnWidthState.widthRecord[id];
         setColumnWidthState(columnWidthState);
       },

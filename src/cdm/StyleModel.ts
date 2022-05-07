@@ -1,6 +1,5 @@
 export type ColumnWidthState = {
-    widthRecord: Record<string, number>,
-    totalWidth: number
+    widthRecord: Record<string, number>
 }
 
 export type HeaderContextType = {

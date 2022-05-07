@@ -32,10 +32,5 @@ export function recalculateColumnWidth(columnWidthState: ColumnWidthState, colum
     columnWidthState.widthRecord[columnName] =
         (columnLabel.length + WidthVariables.ICON_SPACING) *
         WidthVariables.MAGIC_SPACING;
-    // Add new width to the total width
-    columnWidthState.totalWidth =
-        columnWidthState.totalWidth +
-        (columnLabel.length + WidthVariables.ICON_SPACING) *
-        WidthVariables.MAGIC_SPACING;
     return columnWidthState;
 }

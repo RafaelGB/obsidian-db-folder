@@ -234,7 +234,9 @@ export function Table(initialState: TableDataType) {
           <HeaderNavBar
             csvButtonProps={csvButtonProps}
             globalFilterRows={globalFilterRows}
-            headerGroupProps={headerGroups[0].getHeaderGroupProps()}
+            headerGroupProps={headerGroups[0].getHeaderGroupProps({
+              style: { width: totalColumnsWidth },
+            })}
           />
           {/** Headers */}
           {headerGroups.map((headerGroup, i) => (
@@ -282,7 +284,7 @@ export function Table(initialState: TableDataType) {
                     {...headerGroup.getHeaderGroupProps({
                       style: {
                         ...headerGroup.getHeaderGroupProps().style,
-                        maxWidth: `${columnsWidthState.totalWidth}px`,
+                        maxWidth: `${totalColumnsWidth}px`,
                       },
                     })}
                     ref={droppableProvided.innerRef}
@@ -350,7 +352,7 @@ export function Table(initialState: TableDataType) {
                     ...cell.getCellProps({
                       style: {
                         ...cell.getCellProps().style,
-                        maxWidth: `${columnsWidthState.totalWidth}px`,
+                        maxWidth: `${totalColumnsWidth}px`,
                       },
                     }),
                     className: `${c("td")}`,

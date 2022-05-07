@@ -25,12 +25,10 @@ const lengthOfNormalizeCellValue = (row: any, accessor: string): number => {
 
 const getColumnsWidthStyle = (rows: Array<Row<object>>, columns: TableColumn[]): ColumnWidthState => {
   const columnWidthStyle: ColumnWidthState = {
-    widthRecord: {},
-    totalWidth: 0
+    widthRecord: {}
   }
   columns.forEach((column: TableColumn) => {
     columnWidthStyle.widthRecord[column.id] = getColumnWidthStyle(rows, column.key, column.label);
-    columnWidthStyle.totalWidth += columnWidthStyle.widthRecord[column.id];
   })
   return columnWidthStyle
 }
