@@ -5,7 +5,7 @@ export class FileContent {
     }
 
     object(): string[] {
-        return this.real_array(this.value.split('\n'));
+        return this.value.split('\n');
     }
 
     replaceAll(pattern_to_replace: RegExp, input: string): FileContent {
@@ -36,7 +36,7 @@ export class FileContent {
                 delete _object[index];
             }
         });
-        this.value = this.real_array(_object).join('\n');
+        this.value = _object.join('\n');
         return this;
     }
 
@@ -47,7 +47,7 @@ export class FileContent {
                 delete _object[index];
             }
         });
-        this.value = this.real_array(_object).join('\n');
+        this.value = _object.join('\n');
         return this;
     }
 
@@ -64,15 +64,7 @@ export class FileContent {
     edit(content: string, line_number: number): FileContent {
         const _object = this.object();
         _object[line_number - 1] = content;
-        this.value = this.real_array(_object).join('\n');
+        this.value = _object.join('\n');
         return this;
-    }
-
-    real_array(array: string[]): string[] {
-        const output: string[] = [];
-        array.forEach(element => {
-            output.push(element);
-        });
-        return output;
     }
 }
