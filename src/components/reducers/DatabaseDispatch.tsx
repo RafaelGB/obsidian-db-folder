@@ -16,7 +16,6 @@ import { randomColor } from "helpers/Colors";
 import { DatabaseColumn, RowDatabaseFields } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { dbTrim } from "helpers/StylesHelper";
-import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
