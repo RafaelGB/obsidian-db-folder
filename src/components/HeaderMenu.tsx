@@ -5,7 +5,7 @@ import {
   StyleVariables,
   WidthVariables,
 } from "helpers/Constants";
-import { dbTrim } from "helpers/StylesHelper";
+import { dbTrim, recalculateColumnWidth } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import ArrowLeftIcon from "components/img/ArrowLeft";
@@ -220,6 +220,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       columnId: id,
       accessor: keyState,
       label: labelState,
+      columnInfo: adjustWidthOfTheColumn(),
     });
     setExpanded(false);
     setkeyState(dbTrim(labelState));
@@ -248,16 +249,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       initialState.columns.length + 1 - initialState.shadowColumns.length;
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
-    // Add width of the new column
-    columnWidthState.widthRecord[columnName] =
-      (columnLabel.length + WidthVariables.ICON_SPACING) *
-      WidthVariables.MAGIC_SPACING;
-    // Add new width to the total width
-    columnWidthState.totalWidth =
-      columnWidthState.totalWidth +
-      (columnLabel.length + WidthVariables.ICON_SPACING) *
-        WidthVariables.MAGIC_SPACING;
-    setColumnWidthState(columnWidthState);
+    setColumnWidthState(
+      recalculateColumnWidth(columnWidthState, columnName, columnLabel)
+    );
     return { name: columnName, position: columnNumber, label: columnLabel };
   }
 

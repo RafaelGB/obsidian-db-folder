@@ -1,4 +1,5 @@
-import { DatabaseCore } from "helpers/Constants";
+import { ColumnWidthState } from "cdm/StyleModel";
+import { DatabaseCore, WidthVariables } from "helpers/Constants";
 
 /**
  * Wrap the classname of css elements
@@ -25,4 +26,16 @@ export function shortId() {
  */
 export function dbTrim(str: string) {
     return str.trim().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "_");
+}
+
+export function recalculateColumnWidth(columnWidthState: ColumnWidthState, columnName: string, columnLabel: string): ColumnWidthState {
+    columnWidthState.widthRecord[columnName] =
+        (columnLabel.length + WidthVariables.ICON_SPACING) *
+        WidthVariables.MAGIC_SPACING;
+    // Add new width to the total width
+    columnWidthState.totalWidth =
+        columnWidthState.totalWidth +
+        (columnLabel.length + WidthVariables.ICON_SPACING) *
+        WidthVariables.MAGIC_SPACING;
+    return columnWidthState;
 }

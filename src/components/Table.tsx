@@ -172,6 +172,7 @@ export function Table(initialState: TableDataType) {
     setGlobalFilter,
     allColumns,
     setColumnOrder,
+    totalColumnsWidth,
   } = useTable(
     // Table properties
     propsUseTable,
@@ -213,7 +214,12 @@ export function Table(initialState: TableDataType) {
   return (
     <>
       <div
-        {...getTableProps()}
+        {...getTableProps({
+          style: {
+            ...getTableProps().style,
+            width: totalColumnsWidth,
+          },
+        })}
         className={`${c("table noselect")}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
