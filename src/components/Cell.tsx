@@ -122,6 +122,7 @@ export default function DefaultCell(cellProperties: Cell) {
               column={cellProperties.column}
               columns={columns}
               note={note}
+              state={(cellProperties as any).initialState}
             />
           </CellContext.Provider>
         );

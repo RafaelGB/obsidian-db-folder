@@ -4,6 +4,7 @@ import {
   ActionTypes,
   DataTypes,
   MetadataColumns,
+  TableColumnsTemplate,
   UpdateRowOptions,
 } from "helpers/Constants";
 import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
@@ -12,7 +13,7 @@ import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import { moveFile, updateRowFile } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
-import { DatabaseColumn } from "cdm/DatabaseModel";
+import { DatabaseColumn, RowDatabaseFields } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { dbTrim } from "helpers/StylesHelper";
 import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
@@ -54,24 +55,33 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
      */
     case ActionTypes.ADD_ROW:
       const filename = `${state.view.file.parent.path}/${action.filename}.md`;
-      const rowRecord: Record<string, any> = {};
+      const rowRecord: RowDatabaseFields = { inline: {}, frontmatter: {} };
       state.columns
         .filter((column: TableColumn) => !column.isMetadata)
         .forEach((column: TableColumn) => {
-          rowRecord[column.key] = "";
+          if (column.isInline) {
+            rowRecord.inline[column.key] = "";
+          } else {
+            rowRecord.frontmatter[column.key] = "";
+          }
         });
       // Add note to persist row
       VaultManagerDB.create_markdown_file(
         state.view.file.parent,
         action.filename,
-        parseFrontmatterFieldsToString(rowRecord)
+        rowRecord
       );
 
       const row: RowDataType = {
-        ...rowRecord,
+        ...rowRecord.frontmatter,
+        ...rowRecord.inline,
         id: state.data.length + 1,
         note: new NoteInfo(
-          { ...rowRecord, file: { path: filename } },
+          {
+            ...rowRecord.frontmatter,
+            ...rowRecord.inline,
+            file: { path: filename },
+          },
           state.data.length + 1
         ),
         [MetadataColumns.FILE]: `[[${filename}|${action.filename}]]`,
@@ -85,16 +95,28 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
      * Update key of column in all rows
      */
     case ActionTypes.UPDATE_COLUMN_LABEL:
-      const index = state.columns.findIndex(
+      const update_column_label_index = state.columns.findIndex(
         (column: any) => column.id === action.columnId
       );
       // trim label will get a valid yaml key
       const update_col_key: string = dbTrim(action.label);
       // Update configuration & row files on disk
-      state.view.diskConfig.updateColumnProperties(
-        action.columnId,
-        { label: action.label, accessor: update_col_key, key: update_col_key },
-        state // Update all rows with new key
+      state.view.diskConfig.updateColumnProperties(action.columnId, {
+        label: action.label,
+        accessor: update_col_key,
+        key: update_col_key,
+      });
+      // Once the column is updated, update the rows in case the key is changed
+      Promise.all(
+        state.data.map(async (row: RowDataType) => {
+          updateRowFile(
+            row.note.getFile(),
+            state.columns[update_column_label_index].key,
+            update_col_key,
+            state,
+            UpdateRowOptions.COLUMN_KEY
+          );
+        })
       );
       // Update state
       return {
@@ -102,15 +124,18 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         skipReset: true,
         // Add column visually into the new label
         columns: [
-          ...state.columns.slice(0, index),
+          ...state.columns.slice(0, update_column_label_index),
           {
-            ...state.columns[index],
+            ...state.columns[update_column_label_index],
             label: action.label,
             id: update_col_key,
             key: update_col_key,
             accessor: update_col_key,
           },
-          ...state.columns.slice(index + 1, state.columns.length),
+          ...state.columns.slice(
+            update_column_label_index + 1,
+            state.columns.length
+          ),
         ],
         // Add data visually into the new label
         data: state.data.map((row: RowDataType) => {
@@ -237,36 +262,25 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newLeftColumn);
-
-      Promise.all(
-        state.data.map(async (row: RowDataType) => {
-          updateRowFile(
-            row.note.getFile(),
-            newLeftColumn.key,
-            "",
-            state,
-            UpdateRowOptions.COLUMN_VALUE
-          );
-        })
-      );
       // Update state
-      return {
-        ...state,
-        skipReset: true,
-        columns: [
-          ...state.columns.slice(0, leftIndex),
-          {
-            id: newLeftColumn.accessor,
-            label: newLeftColumn.label,
-            key: newLeftColumn.key,
-            accessor: newLeftColumn.accessor,
-            dataType: DataTypes.TEXT,
-            created: action.focus && true,
-            options: [],
-          },
-          ...state.columns.slice(leftIndex, state.columns.length),
-        ],
-      };
+      return update(state, {
+        skipReset: { $set: true },
+        columns: {
+          $set: [
+            ...state.columns.slice(0, leftIndex),
+            {
+              ...TableColumnsTemplate,
+              id: newLeftColumn.accessor,
+              label: newLeftColumn.label,
+              key: newLeftColumn.key,
+              accessor: newLeftColumn.accessor,
+              position: newLeftColumn.position,
+              csvCandidate: true,
+            },
+            ...state.columns.slice(leftIndex, state.columns.length),
+          ],
+        },
+      });
     /**
      * Add new column to the table to the right of the column with the given id
      * and save it on disk
@@ -286,36 +300,25 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newRIghtColumn);
 
-      Promise.all(
-        state.data.map(async (row: RowDataType) => {
-          updateRowFile(
-            row.note.getFile(),
-            newRIghtColumn.key,
-            "",
-            state,
-            UpdateRowOptions.COLUMN_VALUE
-          );
-        })
-      );
-
-      return {
-        ...state,
-        skipReset: true,
+      return update(state, {
+        skipReset: { $set: true },
         // Add column visually to the right of the column with the given id
-        columns: [
-          ...state.columns.slice(0, rightIndex + 1),
-          {
-            id: newRIghtColumn.accessor,
-            label: newRIghtColumn.label,
-            key: newRIghtColumn.key,
-            accessor: newRIghtColumn.accessor,
-            dataType: DataTypes.TEXT,
-            created: action.focus && true,
-            options: [],
-          },
-          ...state.columns.slice(rightIndex + 1, state.columns.length),
-        ],
-      };
+        columns: {
+          $set: [
+            ...state.columns.slice(0, rightIndex + 1),
+            {
+              ...TableColumnsTemplate,
+              id: newRIghtColumn.accessor,
+              label: newRIghtColumn.label,
+              key: newRIghtColumn.key,
+              accessor: newRIghtColumn.accessor,
+              position: newRIghtColumn.position,
+              csvCandidate: true,
+            },
+            ...state.columns.slice(rightIndex + 1, state.columns.length),
+          ],
+        },
+      });
     case ActionTypes.DELETE_COLUMN:
       const deleteIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
@@ -334,15 +337,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         })
       );
       // Update state
-      return {
-        ...state,
-        skipReset: true,
-        columns: [
-          ...state.columns.slice(0, deleteIndex),
-          ...state.columns.slice(deleteIndex + 1, state.columns.length),
-        ],
-      };
-    case ActionTypes.UPDATE_OPTION_CELL: // save on disk
+      return update(state, {
+        skipReset: { $set: true },
+        columns: {
+          $set: [
+            ...state.columns.slice(0, deleteIndex),
+            ...state.columns.slice(deleteIndex + 1, state.columns.length),
+          ],
+        },
+      });
+    case ActionTypes.UPDATE_OPTION_CELL:
       // check if this column is configured as a group folder
       if (dbconfig.group_folder_column === action.key) {
         moveFile(`${state.view.file.parent.path}/${action.value}`, action);
@@ -406,6 +410,25 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
      */
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
+
+    case ActionTypes.TOGGLE_INLINE_FRONTMATTER:
+      // Altern between inline & frontmatter mode
+      state.view.diskConfig.updateColumnProperties(action.columnId, {
+        isInline: action.isInline,
+      });
+      const toggleInlineIndex = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+
+      return update(state, {
+        columns: {
+          [toggleInlineIndex]: {
+            $merge: {
+              isInline: action.isInline,
+            },
+          },
+        },
+      });
     default:
       LOGGER.warn(`<=> databaseReducer: unknown action ${action.type}`);
   }

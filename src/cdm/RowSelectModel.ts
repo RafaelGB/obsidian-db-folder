@@ -1,5 +1,6 @@
 import { ActionType } from "react-table";
 import NoteInfo from "services/NoteInfo";
+import { TableDataType } from "cdm/FolderModel";
 
 export type RowSelectOption = {
     backgroundColor: string,
@@ -11,4 +12,5 @@ export type PopperProps = {
     column: any;
     columns: any;
     note: NoteInfo;
+    state: TableDataType;
 };

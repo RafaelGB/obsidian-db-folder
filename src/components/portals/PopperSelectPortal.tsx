@@ -9,7 +9,7 @@ import { PopperProps } from "cdm/RowSelectModel";
 import { CellContext } from "components/contexts/CellContext";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { dispatch, row, column, columns, note } = popperProps;
+  const { dispatch, row, column, columns, note, state } = popperProps;
   /** state of cell value */
   const { value, setValue } = useContext(CellContext);
   // Selector reference state
@@ -41,6 +41,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       value: option.label,
       row: row,
       columnId: column.id,
+      state: state,
     });
   }
 
