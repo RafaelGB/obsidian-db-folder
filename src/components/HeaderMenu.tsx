@@ -54,7 +54,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   /** Column values */
-  const { id, key, dataType } = headerMenuProps.column;
+  const { id, key, dataType, position } = headerMenuProps.column;
   const [keyState, setkeyState] = useState(dbTrim(key));
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
@@ -116,7 +116,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
           columnId: id,
           focus: false,
-          columnInfo: adjustWidthOfTheColumn(),
+          columnInfo: adjustWidthOfTheColumn(position - 1),
         });
         setExpanded(false);
       },
@@ -129,7 +129,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
           columnId: id,
           focus: false,
-          columnInfo: adjustWidthOfTheColumn(),
+          columnInfo: adjustWidthOfTheColumn(position + 1),
         });
         setExpanded(false);
       },
@@ -217,7 +217,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       columnId: id,
       accessor: keyState,
       label: labelState,
-      columnInfo: adjustWidthOfTheColumn(),
+      columnInfo: adjustWidthOfTheColumn(position),
     });
     setExpanded(false);
     setkeyState(dbTrim(labelState));
@@ -241,15 +241,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     e.preventDefault();
   }
 
-  function adjustWidthOfTheColumn() {
+  function adjustWidthOfTheColumn(wantedPosition: number) {
     const columnNumber =
-      initialState.columns.length + 1 - initialState.shadowColumns.length;
+      initialState.columns.length - initialState.shadowColumns.length;
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
     setColumnWidthState(
       recalculateColumnWidth(columnWidthState, columnName, columnLabel)
     );
-    return { name: columnName, position: columnNumber, label: columnLabel };
+    return { name: columnName, position: wantedPosition, label: columnLabel };
   }
 
   function handleChangeToggleInlineFrontmatter(e: any) {
