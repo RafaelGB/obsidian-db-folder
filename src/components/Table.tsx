@@ -310,6 +310,7 @@ export function Table(initialState: TableDataType) {
                             : {
                                 ...tableCellBaseProps,
                                 style: {
+                                  ...column.getHeaderProps().style,
                                   width: `${
                                     columnsWidthState.widthRecord[column.id]
                                   }px`,
@@ -359,6 +360,7 @@ export function Table(initialState: TableDataType) {
                     : {
                         ...tableCellBaseProps,
                         style: {
+                          ...tableCellBaseProps.style,
                           width: columnsWidthState.widthRecord[cell.column.id],
                         },
                       };
