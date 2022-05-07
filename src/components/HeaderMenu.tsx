@@ -19,7 +19,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActionType } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
-import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
+import { FormControlLabel, FormGroup, Switch } from "@material-ui/core";
 type HeaderMenuProps = {
   dispatch: (action: ActionType) => void;
   setSortBy: any;
@@ -33,6 +33,8 @@ type HeaderMenuProps = {
   labelState: string;
   setLabelState: (label: string) => void;
   initialState: TableDataType;
+  isInline: boolean;
+  setIsInline: (isInline: boolean) => void;
 };
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const {
@@ -46,6 +48,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     labelState,
     setLabelState,
     initialState,
+    isInline,
+    setIsInline,
   } = headerMenuProps;
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
@@ -68,9 +72,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     useState(null);
   const [settingsPopperElement, setSettingsPopperElement] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [toggleInlineFrontmatter, setToggleInlineFrontmatter] = useState(
-    headerMenuProps.column.isInline
-  );
 
   useEffect(() => {
     if (created) {
@@ -261,7 +262,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   }
 
   function handleChangeToggleInlineFrontmatter(e: any) {
-    setToggleInlineFrontmatter(e.target.checked);
+    setIsInline(e.target.checked);
     dispatch({
       type: ActionTypes.TOGGLE_INLINE_FRONTMATTER,
       columnId: id,
@@ -418,8 +419,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     <FormGroup>
                       <FormControlLabel
                         control={
-                          <Checkbox
-                            checked={toggleInlineFrontmatter}
+                          <Switch
+                            checked={isInline}
                             onChange={(event) => {
                               handleChangeToggleInlineFrontmatter(event);
                             }}

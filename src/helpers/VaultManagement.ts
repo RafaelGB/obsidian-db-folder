@@ -145,7 +145,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       action: 'replace',
       file: file,
       regexp: frontmatterGroupRegex,
-      newValue: parseFrontmatterFieldsToString(rowFields.frontmatter, content, deletedColumn)
+      newValue: parseFrontmatterFieldsToString(rowFields, content, deletedColumn)
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }

@@ -12,7 +12,7 @@ import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import { moveFile, updateRowFile } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
-import { DatabaseColumn } from "cdm/DatabaseModel";
+import { DatabaseColumn, RowDatabaseFields } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { dbTrim } from "helpers/StylesHelper";
 import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
@@ -54,24 +54,33 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
      */
     case ActionTypes.ADD_ROW:
       const filename = `${state.view.file.parent.path}/${action.filename}.md`;
-      const rowRecord: Record<string, any> = {};
+      const rowRecord: RowDatabaseFields = { inline: {}, frontmatter: {} };
       state.columns
         .filter((column: TableColumn) => !column.isMetadata)
         .forEach((column: TableColumn) => {
-          rowRecord[column.key] = "";
+          if (column.isInline) {
+            rowRecord.inline[column.key] = "";
+          } else {
+            rowRecord.frontmatter[column.key] = "";
+          }
         });
       // Add note to persist row
       VaultManagerDB.create_markdown_file(
         state.view.file.parent,
         action.filename,
-        parseFrontmatterFieldsToString(rowRecord)
+        rowRecord
       );
 
       const row: RowDataType = {
-        ...rowRecord,
+        ...rowRecord.frontmatter,
+        ...rowRecord.inline,
         id: state.data.length + 1,
         note: new NoteInfo(
-          { ...rowRecord, file: { path: filename } },
+          {
+            ...rowRecord.frontmatter,
+            ...rowRecord.inline,
+            file: { path: filename },
+          },
           state.data.length + 1
         ),
         [MetadataColumns.FILE]: `[[${filename}|${action.filename}]]`,
@@ -408,7 +417,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       return update(state, { skipReset: { $set: false } });
 
     case ActionTypes.TOGGLE_INLINE_FRONTMATTER:
-      // Update configuration & row files on disk
+      // Altern between inline & frontmatter mode
       state.view.diskConfig.updateColumnProperties(action.columnId, {
         isInline: action.isInline,
       });
