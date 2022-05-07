@@ -157,7 +157,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     * group 1 is inline field checking that starts in new line
     * group 2 is the current value of inline field
     */
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
+    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
     if (!inlineFieldRegex.test(content)) {
       await inlineAddColumn();
       return;
@@ -166,9 +166,10 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `$1${newValue}`
+      newValue: `$1 ${newValue}`
     };
     await VaultManagerDB.editNoteContent(noteObject);
+    await persistFrontmatter();
   }
 
   async function inlineColumnKey(): Promise<void> {
@@ -176,7 +177,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     * group 1 is inline field checking that starts in new line
     * group 2 is the current value of inline field
     */
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
+    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
     if (!inlineFieldRegex.test(content)) {
       return;
     }
@@ -184,9 +185,10 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `${newValue}:: $2`
+      newValue: `${newValue}::$2`
     };
     await VaultManagerDB.editNoteContent(noteObject);
+    await persistFrontmatter();
   }
 
   async function inlineAddColumn(): Promise<void> {
@@ -198,6 +200,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       newValue: `$1${columnId}:: ${newValue}\n$2`
     };
     await VaultManagerDB.editNoteContent(noteObject);
+    await persistFrontmatter();
   }
 
   async function inlineRemoveColumn(): Promise<void> {
@@ -212,6 +215,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       regexp: inlineFieldRegex
     };
     await VaultManagerDB.editNoteContent(noteObject);
+    await persistFrontmatter(columnId);
   }
   // Record of options
   const updateOptions: Record<string, any> = {};

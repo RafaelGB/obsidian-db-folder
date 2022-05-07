@@ -1,3 +1,5 @@
+import { TableColumn } from "cdm/FolderModel";
+
 /** Table Actions */
 export const ActionTypes = Object.freeze({
   ADD_OPTION_TO_COLUMN: 'add_option_to_column',
@@ -46,20 +48,31 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
+    isInline: false
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
     Header: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
-    width: 20,
     disableResizing: true,
     label: MetadataLabels.ADD_COLUMN,
     accessor: MetadataColumns.ADD_COLUMN,
     isMetadata: true,
     skipPersist: true,
     csvCandidate: false,
+    isInline: false
   }
 });
+
+export const TableColumnsTemplate: Partial<TableColumn> =
+{
+  dataType: DataTypes.TEXT,
+  isMetadata: false,
+  skipPersist: false,
+  isInline: false,
+  options: [],
+  csvCandidate: true,
+}
 
 export const DatabaseCore = Object.freeze({
   FRONTMATTER_KEY: 'database-plugin'
@@ -107,6 +120,6 @@ export const StyleVariables = Object.freeze({
 });
 
 export const WidthVariables = Object.freeze({
-  ICON_SPACING: 15,
+  ICON_SPACING: 17,
   MAGIC_SPACING: 10
 });

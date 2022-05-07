@@ -72,25 +72,12 @@ export default class DatabaseInfo {
      * @param columnId 
      * @param properties 
      */
-    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId: string, properties: Record<string, P>, state?: TableDataType): Promise<void> {
+    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId: string, properties: Record<string, P>): Promise<void> {
         const colToUpdate = this.yaml.columns[columnId];
-        const currentKey = colToUpdate.key;
         for (const key in properties) {
             colToUpdate[key] = properties[key];
         }
         this.yaml.columns[columnId] = colToUpdate;
-        if (state !== undefined) {
-            // Once the column is updated, update the rows in case the key is changed
-            await Promise.all(state.data.map(async (row: RowDataType) => {
-                updateRowFile(
-                    row.note.getFile(),
-                    currentKey,
-                    colToUpdate.key,
-                    state,
-                    UpdateRowOptions.COLUMN_KEY
-                );
-            }));
-        }
         await this.saveOnDisk();
     }
 

@@ -6,10 +6,7 @@ export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields
     const array: string[] = [];
     array.push(`---`);
     Object.keys(frontmatterFields).forEach(key => {
-        // check if frontmatter field is inside inline fields
-        if (!inlineFields.hasOwnProperty(key)) {
-            array.push(`${key}: ${frontmatterFields[key]}`);
-        }
+        array.push(`${key}: ${frontmatterFields[key]}`);
     });
     if (original !== undefined) {
         const match = original.match(/^---\s+([\w\W]+?)\s+---/);
@@ -18,7 +15,8 @@ export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields
             const yaml = parseYaml(frontmatterRaw);
             Object.keys(yaml).forEach(key => {
                 // add frontmatter fields that are not specified as database fields
-                if (!frontmatterFields[key] && key !== deletedColumn) {
+                // check if frontmatter field is inside inline fields
+                if (!inlineFields.hasOwnProperty(key) && !frontmatterFields[key] && key !== deletedColumn) {
                     array.push(`${key}: ${yaml[key]}`);
                 }
             });
