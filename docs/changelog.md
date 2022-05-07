@@ -1,9 +1,9 @@
 ## 0.2.0
+*Published on 2022/05/07*
 ### Shiny new things
 - Edit inline fields are now supported! [ISSUE#25](https://github.com/RafaelGB/obsidian-db-folder/issues/25)
 - Big refactor about edit engine to improve resiliency and performance
 - new adjsutment section in column menu where, at the moment, you can select if column is of inline type or not
-
 ### Improved
 - Now when you create a column, the field asociated is not inserted into all the rows. Just will be inserted when you edit the cell asociated.
 ## 0.1.2
