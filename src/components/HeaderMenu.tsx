@@ -15,7 +15,7 @@ import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
-import { ActionType } from "react-table";
+import { ActionType, Column } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { FormControlLabel, FormGroup, Switch } from "@material-ui/core";
@@ -49,7 +49,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     isInline,
     setIsInline,
   } = headerMenuProps;
-  const { column, columns, rows, initialState } = headerMenuProps.headerProps;
+  const { column, rows, initialState } = headerMenuProps.headerProps;
   const dispatch = (headerMenuProps.headerProps as any).dataDispatch;
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(column.key));
@@ -211,6 +211,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   function persistLabelChange() {
     // trim label will get a valid yaml key
     const newKey = dbTrim(labelState);
+    const futureOrder = headerMenuProps.headerProps.allColumns.map(
+      (o: Column) => (o.id === column.id ? newKey : o.id)
+    );
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,
       columnId: column.id,
@@ -225,10 +228,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       newKey,
       labelState
     );
+
+    /*
+      To adjust column settings to the new key, we need to update the order 
+      of the columns with it and calculate the new width
+     */
     delete columnWidthState.widthRecord[column.id];
     setColumnWidthState(columnWidthState);
+    headerMenuProps.headerProps.setColumnOrder(futureOrder);
   }
-
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
       persistLabelChange();
