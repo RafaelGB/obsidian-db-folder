@@ -162,7 +162,7 @@
 }
 
 .database-plugin__add-row:hover {
-  background-color: var(--background-modifier-box-shadow);
+  background-color: var(--background-secondary);
   color: var(--text-accent-hover);
 }
 
