@@ -120,9 +120,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       {!isMetadata && domReady
         ? ReactDOM.createPortal(
             <HeaderMenu
-              column={headerProps.column}
-              columns={headerProps.columns}
-              dispatch={dataDispatch}
+              headerProps={headerProps}
               setSortBy={setSortBy}
               propertyIcon={propertyIcon}
               expanded={expanded}
@@ -133,7 +131,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
               setLabelState={setLabelState}
               isInline={isInline}
               setIsInline={setIsInline}
-              initialState={initialState}
             />,
             document.getElementById("popper-container")
           )

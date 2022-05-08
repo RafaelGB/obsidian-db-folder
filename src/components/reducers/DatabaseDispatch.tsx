@@ -97,12 +97,9 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const update_column_label_index = state.columns.findIndex(
         (column: any) => column.id === action.columnId
       );
-      // trim label will get a valid yaml key
-      const update_col_key: string = dbTrim(action.label);
       // Update configuration & row files on disk
-      console.log("option label", action.label);
       state.view.diskConfig
-        .updateColumnKey(action.columnId, update_col_key, action.label)
+        .updateColumnKey(action.columnId, action.newKey, action.label)
         .then(async () => {
           // Once the column is updated, update the rows in case the key is changed
 
@@ -111,31 +108,30 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               await updateRowFile(
                 row.note.getFile(),
                 action.columnId,
-                update_col_key,
+                action.newKey,
                 state,
                 UpdateRowOptions.COLUMN_KEY
               );
             })
           );
         });
-      // Update state
       return update(state, {
         skipReset: { $set: true },
-        // Add column visually into the new label
+        // Modify column visually with the new label
         columns: {
           [update_column_label_index]: {
             $merge: {
               label: action.label,
-              id: update_col_key,
-              key: update_col_key,
-              accessor: update_col_key,
+              id: action.newKey,
+              key: action.newKey,
+              accessor: action.newKey,
             },
           },
         },
-        // Add data visually into the new label
+        // Modify data visually with the new key
         data: {
           $set: state.data.map((row: RowDataType) => {
-            row[update_col_key] = row[action.columnId];
+            row[action.newKey] = row[action.columnId];
             delete row[action.columnId];
             return row;
           }),
@@ -343,6 +339,9 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           ],
         },
       });
+    /**
+     * Check if the given option cell is a candidate for moving the file into a subfolder
+     */
     case ActionTypes.UPDATE_OPTION_CELL:
       // check if this column is configured as a group folder
       if (dbconfig.group_folder_column === action.key) {
@@ -377,7 +376,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
         });
       }
-    // otherwise go UPDATE_CELL
+    // Otherwise, update the value of the cell using the normal update method
+    /**
+     * Update the value of a cell in the table and save it on disk
+     */
     case ActionTypes.UPDATE_CELL:
       // Obtain current column index
       const update_cell_index = state.columns.findIndex(

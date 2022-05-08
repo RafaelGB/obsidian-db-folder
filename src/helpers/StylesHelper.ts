@@ -27,10 +27,3 @@ export function shortId() {
 export function dbTrim(str: string) {
     return str.trim().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "_");
 }
-
-export function recalculateColumnWidth(columnWidthState: ColumnWidthState, columnName: string, columnLabel: string): ColumnWidthState {
-    columnWidthState.widthRecord[columnName] =
-        (columnLabel.length + WidthVariables.ICON_SPACING) *
-        WidthVariables.MAGIC_SPACING;
-    return columnWidthState;
-}

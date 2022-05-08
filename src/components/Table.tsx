@@ -21,7 +21,7 @@ import Header from "components/Header";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
-import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
+import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
 
 const defaultColumn = {

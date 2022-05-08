@@ -45,7 +45,6 @@ export default function DefaultCell(cellProperties: Cell) {
 
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
-      console.log("blur on enter");
       event.target.blur();
     }
   };
