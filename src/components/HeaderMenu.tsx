@@ -206,7 +206,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     settingsReferenceElement,
     settingsPopperElement,
     {
-      placement: "right",
+      placement: "auto",
       strategy: "fixed",
     }
   );

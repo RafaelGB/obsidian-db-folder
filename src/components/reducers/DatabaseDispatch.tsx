@@ -100,49 +100,50 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       // trim label will get a valid yaml key
       const update_col_key: string = dbTrim(action.label);
       // Update configuration & row files on disk
-      state.view.diskConfig.updateColumnProperties(action.columnId, {
-        label: action.label,
-        accessor: update_col_key,
-        key: update_col_key,
-      });
-      // Once the column is updated, update the rows in case the key is changed
-      Promise.all(
-        state.data.map(async (row: RowDataType) => {
-          updateRowFile(
-            row.note.getFile(),
-            state.columns[update_column_label_index].key,
-            update_col_key,
-            state,
-            UpdateRowOptions.COLUMN_KEY
+
+      state.view.diskConfig
+        .updateColumnKey(action.columnId, update_col_key, action.label)
+        .then(async () => {
+          // Once the column is updated, update the rows in case the key is changed
+
+          await Promise.all(
+            state.data.map(async (row: RowDataType) => {
+              await updateRowFile(
+                row.note.getFile(),
+                action.columnId,
+                update_col_key,
+                state,
+                UpdateRowOptions.COLUMN_KEY
+              );
+            })
           );
-        })
-      );
-      // Update state
-      return {
-        ...state,
-        skipReset: true,
-        // Add column visually into the new label
-        columns: [
-          ...state.columns.slice(0, update_column_label_index),
-          {
-            ...state.columns[update_column_label_index],
-            label: action.label,
-            id: update_col_key,
-            key: update_col_key,
-            accessor: update_col_key,
-          },
-          ...state.columns.slice(
-            update_column_label_index + 1,
-            state.columns.length
-          ),
-        ],
-        // Add data visually into the new label
-        data: state.data.map((row: RowDataType) => {
-          row[update_col_key] = row[action.columnId];
-          delete row[action.columnId];
-          return row;
-        }),
-      };
+          // Update state
+          return {
+            ...state,
+            skipReset: true,
+            // Add column visually into the new label
+            columns: [
+              ...state.columns.slice(0, update_column_label_index),
+              {
+                ...state.columns[update_column_label_index],
+                label: action.label,
+                id: update_col_key,
+                key: update_col_key,
+                accessor: update_col_key,
+              },
+              ...state.columns.slice(
+                update_column_label_index + 1,
+                state.columns.length
+              ),
+            ],
+            // Add data visually into the new label
+            data: state.data.map((row: RowDataType) => {
+              row[update_col_key] = row[action.columnId];
+              delete row[action.columnId];
+              return row;
+            }),
+          };
+        });
 
     /**
      * Modify type of column and adapt the data.

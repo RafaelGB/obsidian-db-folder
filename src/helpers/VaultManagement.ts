@@ -129,7 +129,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     // assign an empty value to the new key
     rowFields.frontmatter[newValue] = rowFields.frontmatter[columnId] ?? "";
     delete rowFields.frontmatter[columnId];
-    await persistFrontmatter();
+    await persistFrontmatter(columnId);
   }
 
   // Remove a column

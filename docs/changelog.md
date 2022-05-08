@@ -1,3 +1,9 @@
+## 0.2.1
+### Improved
+- Now when you press enter inside a text cell, it will ends the modification with onBlur event.
+### No longer broken
+- Create a column now adjust width automatically.
+- total width of columns not broken anymore. This bug was introduced in 0.2.0
 ## 0.2.0
 *Published on 2022/05/07*
 ### Shiny new things
