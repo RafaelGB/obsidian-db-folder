@@ -142,6 +142,10 @@
   color: var(--text-muted);
   cursor: pointer;
   text-align: left;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .database-plugin__tr:last-child .database-plugin__td {
