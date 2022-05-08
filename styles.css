@@ -93,6 +93,16 @@
   outline: none;
 }
 
+
+.database-plugin__md_cell {
+  padding: 0.5rem;
+}
+
+.database-plugin__md_cell p {
+  display: inline;
+}
+
+
 .svg-icon-sm svg {
   position: relative;
   height: 1.25em;
