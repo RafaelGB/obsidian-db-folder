@@ -1,4 +1,5 @@
-import { DatabaseCore } from "helpers/Constants";
+import { ColumnWidthState } from "cdm/StyleModel";
+import { DatabaseCore, WidthVariables } from "helpers/Constants";
 
 /**
  * Wrap the classname of css elements

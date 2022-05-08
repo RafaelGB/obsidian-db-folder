@@ -69,7 +69,12 @@ export class VaultManager {
    * @returns 
    */
   obtainTfileFromFilePath(filePath: string): TFile {
-    return app.vault.getMarkdownFiles().find(tfile => tfile.path === filePath);
+    const abstractFile = app.vault.getAbstractFileByPath(filePath);
+    if (abstractFile instanceof TFile) {
+      return abstractFile;
+    } else {
+      throw "Error: File " + filePath + " is not a TFile";
+    }
   }
 
   /**

@@ -1,10 +1,9 @@
-import { TableColumn, TableDataType } from "cdm/FolderModel";
 import {
-  ActionTypes,
-  DataTypes,
-  StyleVariables,
-  WidthVariables,
-} from "helpers/Constants";
+  DatabaseHeaderProps,
+  TableColumn,
+  TableDataType,
+} from "cdm/FolderModel";
+import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
@@ -20,11 +19,10 @@ import { ActionType } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { FormControlLabel, FormGroup, Switch } from "@material-ui/core";
+import { getColumnWidthStyle } from "./styles/ColumnWidthStyle";
 type HeaderMenuProps = {
-  dispatch: (action: ActionType) => void;
+  headerProps: DatabaseHeaderProps;
   setSortBy: any;
-  column: TableColumn;
-  columns: TableColumn[];
   propertyIcon: any;
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
@@ -32,13 +30,14 @@ type HeaderMenuProps = {
   referenceElement: any;
   labelState: string;
   setLabelState: (label: string) => void;
-  initialState: TableDataType;
   isInline: boolean;
   setIsInline: (isInline: boolean) => void;
 };
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
+  /** state of width columns */
+  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
+  /** Header props */
   const {
-    dispatch,
     setSortBy,
     propertyIcon,
     expanded,
@@ -47,15 +46,13 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     referenceElement,
     labelState,
     setLabelState,
-    initialState,
     isInline,
     setIsInline,
   } = headerMenuProps;
-  /** state of width columns */
-  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
+  const { column, columns, rows, initialState } = headerMenuProps.headerProps;
+  const dispatch = (headerMenuProps.headerProps as any).dataDispatch;
   /** Column values */
-  const { id, key, dataType } = headerMenuProps.column;
-  const [keyState, setkeyState] = useState(dbTrim(key));
+  const [keyState, setkeyState] = useState(dbTrim(column.key));
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -96,7 +93,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const buttons = [
     {
       onClick: (e: any) => {
-        setSortBy([{ id: id, desc: false }]);
+        setSortBy([{ id: column.id, desc: false }]);
         setExpanded(false);
       },
       icon: <ArrowUpIcon />,
@@ -104,7 +101,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     },
     {
       onClick: (e: any) => {
-        setSortBy([{ id: id, desc: true }]);
+        setSortBy([{ id: column.id, desc: true }]);
         setExpanded(false);
       },
       icon: <ArrowDownIcon />,
@@ -114,9 +111,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
-          columnId: id,
+          columnId: column.id,
           focus: false,
-          columnInfo: adjustWidthOfTheColumn(),
+          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position - 1),
         });
         setExpanded(false);
       },
@@ -127,9 +124,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
-          columnId: id,
+          columnId: column.id,
           focus: false,
-          columnInfo: adjustWidthOfTheColumn(),
+          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position + 1),
         });
         setExpanded(false);
       },
@@ -140,14 +137,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.DELETE_COLUMN,
-          columnId: id,
+          columnId: column.id,
           key: keyState,
         });
         setExpanded(false);
-        // Adjust the width of the columns
-        columnWidthState.totalWidth =
-          columnWidthState.totalWidth - columnWidthState.widthRecord[id];
-        delete columnWidthState.widthRecord[id];
+        delete columnWidthState.widthRecord[column.id];
         setColumnWidthState(columnWidthState);
       },
       icon: <TrashIcon />,
@@ -163,7 +157,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: id,
+          columnId: column.id,
           dataType: DataTypes.SELECT,
         });
         setShowType(false);
@@ -176,7 +170,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: id,
+          columnId: column.id,
           dataType: DataTypes.TEXT,
         });
         setShowType(false);
@@ -189,7 +183,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: id,
+          columnId: column.id,
           dataType: DataTypes.NUMBER,
         });
         setShowType(false);
@@ -209,20 +203,30 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     settingsReferenceElement,
     settingsPopperElement,
     {
-      placement: "right",
+      placement: "auto",
       strategy: "fixed",
     }
   );
 
   function persistLabelChange() {
+    // trim label will get a valid yaml key
+    const newKey = dbTrim(labelState);
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,
-      columnId: id,
-      accessor: keyState,
+      columnId: column.id,
+      accessor: newKey,
+      newKey: newKey,
       label: labelState,
     });
     setExpanded(false);
-    setkeyState(dbTrim(labelState));
+    setkeyState(newKey);
+    columnWidthState.widthRecord[newKey] = getColumnWidthStyle(
+      rows,
+      newKey,
+      labelState
+    );
+    delete columnWidthState.widthRecord[column.id];
+    setColumnWidthState(columnWidthState);
   }
 
   function handleKeyDown(e: any) {
@@ -243,29 +247,25 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     e.preventDefault();
   }
 
-  function adjustWidthOfTheColumn() {
+  function adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
     const columnNumber =
-      initialState.columns.length + 1 - initialState.shadowColumns.length;
+      initialState.columns.length - initialState.shadowColumns.length;
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
-    // Add width of the new column
-    columnWidthState.widthRecord[columnName] =
-      (columnLabel.length + WidthVariables.ICON_SPACING) *
-      WidthVariables.MAGIC_SPACING;
-    // Add new width to the total width
-    columnWidthState.totalWidth =
-      columnWidthState.totalWidth +
-      (columnLabel.length + WidthVariables.ICON_SPACING) *
-        WidthVariables.MAGIC_SPACING;
+    columnWidthState.widthRecord[columnName] = getColumnWidthStyle(
+      rows,
+      columnName,
+      columnLabel
+    );
     setColumnWidthState(columnWidthState);
-    return { name: columnName, position: columnNumber, label: columnLabel };
+    return { name: columnName, position: wantedPosition, label: columnLabel };
   }
 
   function handleChangeToggleInlineFrontmatter(e: any) {
     setIsInline(e.target.checked);
     dispatch({
       type: ActionTypes.TOGGLE_INLINE_FRONTMATTER,
-      columnId: id,
+      columnId: column.id,
       isInline: e.target.checked,
     });
   }
@@ -330,7 +330,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <span className="svg-icon svg-text icon-margin">
                   {propertyIcon}
                 </span>
-                <span style={{ textTransform: "capitalize" }}>{dataType}</span>
+                <span style={{ textTransform: "capitalize" }}>
+                  {column.dataType}
+                </span>
               </button>
               {showType && (
                 <div

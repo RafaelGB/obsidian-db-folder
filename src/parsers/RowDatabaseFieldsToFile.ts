@@ -17,7 +17,7 @@ export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields
                 // add frontmatter fields that are not specified as database fields
                 // check if frontmatter field is inside inline fields
                 if (!inlineFields.hasOwnProperty(key) && !frontmatterFields[key] && key !== deletedColumn) {
-                    array.push(`${key}: ${yaml[key]}`);
+                    array.push(`${key}: ${yaml[key] ?? ''}`);
                 }
             });
         }

@@ -6,10 +6,9 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
-import { NoteContentAction, RowDataType, TableDataType } from 'cdm/FolderModel';
+import { NoteContentAction } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
-import { isDatabaseNote, updateRowFile } from 'helpers/VaultManagement';
-import { UpdateRowOptions } from 'helpers/Constants';
+import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
 
 export default class DatabaseInfo {
@@ -68,6 +67,24 @@ export default class DatabaseInfo {
     }
 
     /**
+     * modify column key
+     * @param oldColumnId 
+     * @param newColumnId 
+     */
+    async updateColumnKey(oldColumnId: string, newColumnId: string, newLabel: string): Promise<void> {
+        // clone current column configuration
+        const currentCol = this.yaml.columns[oldColumnId];
+        // update column id
+        currentCol.label = newColumnId;
+        currentCol.accessor = newColumnId;
+        currentCol.key = newColumnId;
+        delete this.yaml.columns[oldColumnId];
+        this.yaml.columns[newColumnId] = currentCol;
+        // save on disk
+        await this.saveOnDisk();
+    }
+
+    /**
      * Modify or add properties to a column
      * @param columnId 
      * @param properties 
@@ -80,6 +97,7 @@ export default class DatabaseInfo {
         this.yaml.columns[columnId] = colToUpdate;
         await this.saveOnDisk();
     }
+
 
     /**
      * Given an array of column ids, reorder yaml columns to match the order of the array

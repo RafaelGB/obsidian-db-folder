@@ -21,7 +21,7 @@ import Header from "components/Header";
 import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
-import getColumnsWidthStyle from "components/styles/ColumnWidthStyle";
+import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
 
 const defaultColumn = {
@@ -172,6 +172,7 @@ export function Table(initialState: TableDataType) {
     setGlobalFilter,
     allColumns,
     setColumnOrder,
+    totalColumnsWidth,
   } = useTable(
     // Table properties
     propsUseTable,
@@ -213,7 +214,12 @@ export function Table(initialState: TableDataType) {
   return (
     <>
       <div
-        {...getTableProps()}
+        {...getTableProps({
+          style: {
+            ...getTableProps().style,
+            width: totalColumnsWidth,
+          },
+        })}
         className={`${c("table noselect")}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
@@ -228,7 +234,9 @@ export function Table(initialState: TableDataType) {
           <HeaderNavBar
             csvButtonProps={csvButtonProps}
             globalFilterRows={globalFilterRows}
-            headerGroupProps={headerGroups[0].getHeaderGroupProps()}
+            headerGroupProps={headerGroups[0].getHeaderGroupProps({
+              style: { width: totalColumnsWidth },
+            })}
           />
           {/** Headers */}
           {headerGroups.map((headerGroup, i) => (
@@ -276,7 +284,7 @@ export function Table(initialState: TableDataType) {
                     {...headerGroup.getHeaderGroupProps({
                       style: {
                         ...headerGroup.getHeaderGroupProps().style,
-                        maxWidth: `${columnsWidthState.totalWidth}px`,
+                        maxWidth: `${totalColumnsWidth}px`,
                       },
                     })}
                     ref={droppableProvided.innerRef}
@@ -304,6 +312,7 @@ export function Table(initialState: TableDataType) {
                             : {
                                 ...tableCellBaseProps,
                                 style: {
+                                  ...column.getHeaderProps().style,
                                   width: `${
                                     columnsWidthState.widthRecord[column.id]
                                   }px`,
@@ -343,7 +352,7 @@ export function Table(initialState: TableDataType) {
                     ...cell.getCellProps({
                       style: {
                         ...cell.getCellProps().style,
-                        maxWidth: `${columnsWidthState.totalWidth}px`,
+                        maxWidth: `${totalColumnsWidth}px`,
                       },
                     }),
                     className: `${c("td")}`,
@@ -353,6 +362,7 @@ export function Table(initialState: TableDataType) {
                     : {
                         ...tableCellBaseProps,
                         style: {
+                          ...tableCellBaseProps.style,
                           width: columnsWidthState.widthRecord[cell.column.id],
                         },
                       };

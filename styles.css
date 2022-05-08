@@ -7,6 +7,7 @@
 .database-plugin:before,
 .database-plugin:after {
   box-sizing: inherit;
+  overflow-x: auto;
 }
 
 .database-plugin {
@@ -196,11 +197,13 @@
   justify-content: center;
   padding: 0;
   display: flex;
+  padding: 0.5rem;
   flex-direction: column;
 }
 
 .database-plugin__td-content {
   display: block;
+  align-items: center;
 }
 
 .database-plugin__table {

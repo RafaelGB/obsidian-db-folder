@@ -16,7 +16,6 @@ import { randomColor } from "helpers/Colors";
 import { DatabaseColumn, RowDatabaseFields } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { dbTrim } from "helpers/StylesHelper";
-import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -98,52 +97,52 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const update_column_label_index = state.columns.findIndex(
         (column: any) => column.id === action.columnId
       );
-      // trim label will get a valid yaml key
-      const update_col_key: string = dbTrim(action.label);
       // Update configuration & row files on disk
-      state.view.diskConfig.updateColumnProperties(action.columnId, {
-        label: action.label,
-        accessor: update_col_key,
-        key: update_col_key,
-      });
-      // Once the column is updated, update the rows in case the key is changed
-      Promise.all(
-        state.data.map(async (row: RowDataType) => {
-          updateRowFile(
-            row.note.getFile(),
-            state.columns[update_column_label_index].key,
-            update_col_key,
-            state,
-            UpdateRowOptions.COLUMN_KEY
+      state.view.diskConfig
+        .updateColumnKey(action.columnId, action.newKey, action.label)
+        .then(async () => {
+          // Once the column is updated, update the rows in case the key is changed
+
+          await Promise.all(
+            state.data.map(async (row: RowDataType) => {
+              await updateRowFile(
+                row.note.getFile(),
+                action.columnId,
+                action.newKey,
+                state,
+                UpdateRowOptions.COLUMN_KEY
+              );
+            })
           );
-        })
-      );
-      // Update state
-      return {
-        ...state,
-        skipReset: true,
-        // Add column visually into the new label
-        columns: [
-          ...state.columns.slice(0, update_column_label_index),
-          {
-            ...state.columns[update_column_label_index],
-            label: action.label,
-            id: update_col_key,
-            key: update_col_key,
-            accessor: update_col_key,
-          },
-          ...state.columns.slice(
-            update_column_label_index + 1,
-            state.columns.length
-          ),
-        ],
-        // Add data visually into the new label
-        data: state.data.map((row: RowDataType) => {
-          row[update_col_key] = row[action.columnId];
-          delete row[action.columnId];
-          return row;
-        }),
-      };
+        });
+      return update(state, {
+        skipReset: { $set: true },
+        // Modify column visually with the new label
+        columns: {
+          $set: [
+            ...state.columns.slice(0, update_column_label_index),
+            {
+              ...state.columns[update_column_label_index],
+              label: action.label,
+              id: action.newKey,
+              key: action.newKey,
+              accessor: action.newKey,
+            },
+            ...state.columns.slice(
+              update_column_label_index + 1,
+              state.columns.length
+            ),
+          ],
+        },
+        // Modify data visually with the new key
+        data: {
+          $set: state.data.map((row: RowDataType) => {
+            row[action.newKey] = row[action.columnId];
+            delete row[action.columnId];
+            return row;
+          }),
+        },
+      });
 
     /**
      * Modify type of column and adapt the data.
@@ -346,6 +345,9 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           ],
         },
       });
+    /**
+     * Check if the given option cell is a candidate for moving the file into a subfolder
+     */
     case ActionTypes.UPDATE_OPTION_CELL:
       // check if this column is configured as a group folder
       if (dbconfig.group_folder_column === action.key) {
@@ -380,7 +382,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
         });
       }
-    // otherwise go UPDATE_CELL
+    // Otherwise, update the value of the cell using the normal update method
+    /**
+     * Update the value of a cell in the table and save it on disk
+     */
     case ActionTypes.UPDATE_CELL:
       // Obtain current column index
       const update_cell_index = state.columns.findIndex(

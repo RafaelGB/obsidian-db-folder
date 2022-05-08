@@ -43,6 +43,11 @@ export default function DefaultCell(cellProperties: Cell) {
     `<=> Cell.rendering dataType: ${dataType}. value: ${value.value}`
   );
 
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      event.target.blur();
+    }
+  };
   // onChange handler
   const handleOnChange = (event: ContentEditableEvent) => {
     // cancelling previous timeouts
@@ -54,19 +59,19 @@ export default function DefaultCell(cellProperties: Cell) {
     // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
     setEditNoteTimeout(
       setTimeout(() => {
-        onChange(event);
+        onChange(event.target.value);
         // timeout until event is triggered after user has stopped typing
       }, 1500)
     );
   };
 
-  function onChange(event: ContentEditableEvent) {
+  function onChange(changedValue: string) {
     // save on disk
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
       key: (cellProperties.column as any).key,
-      value: event.target.value,
+      value: changedValue,
       row: cellProperties.row,
       columnId: (cellProperties.column as any).id,
     });
@@ -80,6 +85,7 @@ export default function DefaultCell(cellProperties: Cell) {
           <ContentEditable
             html={(value.value && value.value.toString()) || ""}
             onChange={handleOnChange}
+            onKeyDown={handleKeyDown}
             onBlur={() =>
               setValue((old) => ({ value: old.value, update: true }))
             }

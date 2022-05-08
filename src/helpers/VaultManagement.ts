@@ -122,11 +122,14 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       await inlineColumnKey();
       return;
     }
+    if (!rowFields.frontmatter.hasOwnProperty(columnId)) {
+      return;
+    }
     // Check if the column is already in the frontmatter
     // assign an empty value to the new key
     rowFields.frontmatter[newValue] = rowFields.frontmatter[columnId] ?? "";
     delete rowFields.frontmatter[columnId];
-    await persistFrontmatter();
+    await persistFrontmatter(columnId);
   }
 
   // Remove a column
