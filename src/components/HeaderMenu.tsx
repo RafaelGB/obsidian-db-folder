@@ -284,8 +284,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           <div
             className={`menu ${c("popper")}`}
             style={{
-              width: 240,
-              backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+              width: 240
             }}
           >
             {/** Edit header label section */}
@@ -321,7 +320,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             {/** Type of column section */}
             <div style={{ padding: "4px 0px" }}>
               <button
-                className="sort-button"
+                className="menu-item sort-button"
                 type="button"
                 onMouseEnter={() => setShowType(true)}
                 onMouseLeave={() => setShowType(false)}
@@ -336,7 +335,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
               </button>
               {showType && (
                 <div
-                  className="shadow-5 border-radius-m"
+                  className={`menu ${c("popper")}`}
                   ref={setTypePopperElement}
                   onMouseEnter={() => setShowType(true)}
                   onMouseLeave={() => setShowType(false)}
@@ -344,14 +343,13 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   style={{
                     ...typePopper.styles.popper,
                     width: 200,
-                    backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
                     zIndex: 4,
                     padding: "4px 0px",
                   }}
                 >
                   {types.map((type) => (
                     <div key={type.label}>
-                      <button className="sort-button" onClick={type.onClick}>
+                      <button className="menu-item sort-button" onClick={type.onClick}>
                         <span className="svg-icon svg-text icon-margin">
                           {type.icon}
                         </span>
@@ -373,7 +371,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <button
                   key={button.label}
                   type="button"
-                  className="sort-button"
+                  className="menu-item sort-button"
                   onMouseDown={button.onClick}
                 >
                   <span className="svg-icon svg-text icon-margin">
@@ -392,7 +390,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
               {/** Column settings section */}
               <div style={{ padding: "4px 0px" }}>
                 <button
-                  className="sort-button"
+                  className="menu-item sort-button"
                   type="button"
                   onMouseEnter={() => setShowSettings(true)}
                   onMouseLeave={() => setShowSettings(false)}
@@ -405,7 +403,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 </button>
                 {showSettings && (
                   <div
-                    className="shadow-5 border-radius-m"
+                    className={`menu ${c("popper")}`}
                     ref={setSettingsPopperElement}
                     onMouseEnter={() => setShowSettings(true)}
                     onMouseLeave={() => setShowSettings(false)}
@@ -413,7 +411,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     style={{
                       ...settingsPopper.styles.popper,
                       width: 200,
-                      backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
                       zIndex: 4,
                       padding: "4px 0px",
                     }}

@@ -46,6 +46,10 @@
   stroke: var(--text-faint);
 }
 
+.sort-button .svg-text svg {
+  stroke: var(--text-muted);
+}
+
 .svg-180 svg {
   transform: rotate(180deg);
 }
@@ -137,20 +141,13 @@
 
 .sort-button {
   padding: 0.25rem 0.75rem;
+  margin: 0;
   width: 100%;
   background-color: transparent;
-  border: 0;
   font-size: 0.875rem;
-  color: var(--text-faint);
+  color: var(--text-muted);
   cursor: pointer;
   text-align: left;
-  display: flex;
-  align-items: center;
-}
-
-.sort-button:hover {
-  background-color: var(--background-modifier-box-shadow);
-  color: var(--text-normal);
 }
 
 .database-plugin__tr:last-child .database-plugin__td {
