@@ -166,6 +166,7 @@
   border: none;
   background-color: transparent;
   color: var(--text-muted);
+  flex-direction: row;
 }
 
 .database-plugin__th {
