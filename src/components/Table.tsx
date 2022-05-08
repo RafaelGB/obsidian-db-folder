@@ -229,6 +229,7 @@ export function Table(initialState: TableDataType) {
             position: "sticky",
             top: 0,
             zIndex: 1,
+            borderTop: "1px solid var(--background-modifier-border)",
           }}
         >
           <HeaderNavBar
