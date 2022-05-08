@@ -129,7 +129,6 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
                     marginTop: "0.5rem",
                     width: 120,
                     padding: "2px 4px",
-                    backgroundColor: grey(200),
                     borderRadius: 4,
                   }}
                 >
