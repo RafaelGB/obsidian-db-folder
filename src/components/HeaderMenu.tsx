@@ -319,9 +319,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             </div>
             {/** Type of column section */}
             <div style={{ padding: "4px 0px" }}>
-              <button
+              <div
                 className="menu-item sort-button"
-                type="button"
                 onMouseEnter={() => setShowType(true)}
                 onMouseLeave={() => setShowType(false)}
                 ref={setTypeReferenceElement}
@@ -332,7 +331,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <span style={{ textTransform: "capitalize" }}>
                   {column.dataType}
                 </span>
-              </button>
+              </div>
               {showType && (
                 <div
                   className={`menu ${c("popper")}`}
@@ -349,12 +348,12 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 >
                   {types.map((type) => (
                     <div key={type.label}>
-                      <button className="menu-item sort-button" onClick={type.onClick}>
+                      <div className="menu-item sort-button" onClick={type.onClick}>
                         <span className="svg-icon svg-text icon-margin">
                           {type.icon}
                         </span>
                         {type.label}
-                      </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -368,9 +367,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
               }}
             >
               {buttons.map((button) => (
-                <button
+                <div
                   key={button.label}
-                  type="button"
                   className="menu-item sort-button"
                   onMouseDown={button.onClick}
                 >
@@ -378,7 +376,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     {button.icon}
                   </span>
                   {button.label}
-                </button>
+                </div>
               ))}
             </div>
             <div
@@ -389,9 +387,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             >
               {/** Column settings section */}
               <div style={{ padding: "4px 0px" }}>
-                <button
+                <div
                   className="menu-item sort-button"
-                  type="button"
                   onMouseEnter={() => setShowSettings(true)}
                   onMouseLeave={() => setShowSettings(false)}
                   ref={setSettingsReferenceElement}
@@ -400,7 +397,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     <AdjustmentsIcon />
                   </span>
                   <span>Settings</span>
-                </button>
+                </div>
                 {showSettings && (
                   <div
                     className={`menu ${c("popper")}`}
