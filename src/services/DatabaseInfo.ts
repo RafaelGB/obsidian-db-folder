@@ -78,7 +78,6 @@ export default class DatabaseInfo {
         currentCol.label = newColumnId;
         currentCol.accessor = newColumnId;
         currentCol.key = newColumnId;
-        currentCol.id = newColumnId;
         delete this.yaml.columns[oldColumnId];
         this.yaml.columns[newColumnId] = currentCol;
         // save on disk

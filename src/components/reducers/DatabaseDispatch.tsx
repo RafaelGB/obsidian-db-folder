@@ -100,7 +100,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       // trim label will get a valid yaml key
       const update_col_key: string = dbTrim(action.label);
       // Update configuration & row files on disk
-
+      console.log("option label", action.label);
       state.view.diskConfig
         .updateColumnKey(action.columnId, update_col_key, action.label)
         .then(async () => {
@@ -117,33 +117,30 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               );
             })
           );
-          // Update state
-          return {
-            ...state,
-            skipReset: true,
-            // Add column visually into the new label
-            columns: [
-              ...state.columns.slice(0, update_column_label_index),
-              {
-                ...state.columns[update_column_label_index],
-                label: action.label,
-                id: update_col_key,
-                key: update_col_key,
-                accessor: update_col_key,
-              },
-              ...state.columns.slice(
-                update_column_label_index + 1,
-                state.columns.length
-              ),
-            ],
-            // Add data visually into the new label
-            data: state.data.map((row: RowDataType) => {
-              row[update_col_key] = row[action.columnId];
-              delete row[action.columnId];
-              return row;
-            }),
-          };
         });
+      // Update state
+      return update(state, {
+        skipReset: { $set: true },
+        // Add column visually into the new label
+        columns: {
+          [update_column_label_index]: {
+            $merge: {
+              label: action.label,
+              id: update_col_key,
+              key: update_col_key,
+              accessor: update_col_key,
+            },
+          },
+        },
+        // Add data visually into the new label
+        data: {
+          $set: state.data.map((row: RowDataType) => {
+            row[update_col_key] = row[action.columnId];
+            delete row[action.columnId];
+            return row;
+          }),
+        },
+      });
 
     /**
      * Modify type of column and adapt the data.
