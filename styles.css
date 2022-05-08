@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 .database-plugin__html {
   box-sizing: border-box;
 }
@@ -36,6 +37,7 @@
 
 .svg-icon svg {
   position: relative;
+  vertical-align: bottom;
   height: 1.5em;
   width: 1.5em;
 }
@@ -78,6 +80,7 @@
   box-sizing: border-box;
   flex: 1 1 auto;
 }
+
 .data-input:hover {
   background-color: var(--background-modifier-box-shadow);
 }
@@ -230,12 +233,9 @@
   position: relative;
 }
 
-.database-plugin__header-group ,
-.database-plugin__header{
-  display: flex;
-  align-items: center;
+.database-plugin__header-group,
+.database-plugin__header {
   justify-content: space-between;
-  padding: 0.5rem;
   background-color: var(--background-secondary);
 }
 
