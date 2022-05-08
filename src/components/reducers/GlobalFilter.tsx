@@ -30,12 +30,7 @@ export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
           onChange(e.target.value);
         }}
         placeholder={`${count} records...`}
-        style={{
-          fontSize: "1.1rem",
-          border: "0",
-          background: StyleVariables.BACKGROUND_PRIMARY,
-          color: StyleVariables.TEXT_NORMAL,
-        }}
+        type={"search"}
       />
     </span>
   );
