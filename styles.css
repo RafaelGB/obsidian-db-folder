@@ -165,6 +165,7 @@
 .database-plugin__add-row .database-plugin__td {
   border: none;
   background-color: transparent;
+  color: var(--text-muted);
 }
 
 .database-plugin__th {
