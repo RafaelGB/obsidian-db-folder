@@ -2,6 +2,7 @@ import * as React from "react";
 import CsvButton from "components/CsvButton";
 import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
+import { StyleVariables } from "helpers/Constants";
 import {
   AppBar,
   Box,
@@ -41,7 +42,7 @@ export function NavBar(navBarProps: NavBarProps) {
     >
       <AppBar
         position="static"
-        style={{ backgroundColor: "var(--background-modifier-box-shadow)" }}
+        style={{ color: StyleVariables.TEXT_MUTED, backgroundColor: StyleVariables.BACKGROUND_SECONDARY, boxShadow: "none" }}
       >
         <Toolbar>
           <IconButton

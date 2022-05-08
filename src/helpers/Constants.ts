@@ -116,6 +116,7 @@ export const StyleVariables = Object.freeze({
   BACKGROUND_SECONDARY: 'var(--background-secondary)',
   BACKGROUND_DIVIDER: 'var(--background-divider)',
   TEXT_FAINT: 'var(--text-faint)',
+  TEXT_MUTED: 'var(--text-muted)',
   TEXT_NORMAL: 'var(--text-normal)',
 });
 
