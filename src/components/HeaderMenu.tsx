@@ -4,7 +4,7 @@ import {
   TableDataType,
 } from "cdm/FolderModel";
 import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
-import { dbTrim } from "helpers/StylesHelper";
+import { dbTrim, c } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import ArrowLeftIcon from "components/img/ArrowLeft";
@@ -290,10 +290,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           {...attributes.popper}
         >
           <div
-            className="shadow-5 border-radius-md"
+            className={`menu ${c("popper")}`}
             style={{
-              width: 240,
-              backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+              width: 240
             }}
           >
             {/** Edit header label section */}
@@ -328,9 +327,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             </div>
             {/** Type of column section */}
             <div style={{ padding: "4px 0px" }}>
-              <button
-                className="sort-button"
-                type="button"
+              <div
+                className="menu-item sort-button"
                 onMouseEnter={() => setShowType(true)}
                 onMouseLeave={() => setShowType(false)}
                 ref={setTypeReferenceElement}
@@ -341,10 +339,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <span style={{ textTransform: "capitalize" }}>
                   {column.dataType}
                 </span>
-              </button>
+              </div>
               {showType && (
                 <div
-                  className="shadow-5 border-radius-m"
+                  className={`menu ${c("popper")}`}
                   ref={setTypePopperElement}
                   onMouseEnter={() => setShowType(true)}
                   onMouseLeave={() => setShowType(false)}
@@ -352,19 +350,18 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   style={{
                     ...typePopper.styles.popper,
                     width: 200,
-                    backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
                     zIndex: 4,
                     padding: "4px 0px",
                   }}
                 >
                   {types.map((type) => (
                     <div key={type.label}>
-                      <button className="sort-button" onClick={type.onClick}>
+                      <div className="menu-item sort-button" onClick={type.onClick}>
                         <span className="svg-icon svg-text icon-margin">
                           {type.icon}
                         </span>
                         {type.label}
-                      </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -373,35 +370,33 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             {/** Action buttons section */}
             <div
               style={{
-                borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
                 padding: "4px 0px",
               }}
             >
               {buttons.map((button) => (
-                <button
+                <div
                   key={button.label}
-                  type="button"
-                  className="sort-button"
+                  className="menu-item sort-button"
                   onMouseDown={button.onClick}
                 >
                   <span className="svg-icon svg-text icon-margin">
                     {button.icon}
                   </span>
                   {button.label}
-                </button>
+                </div>
               ))}
             </div>
             <div
               style={{
-                borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
                 padding: "4px 0px",
               }}
             >
               {/** Column settings section */}
               <div style={{ padding: "4px 0px" }}>
-                <button
-                  className="sort-button"
-                  type="button"
+                <div
+                  className="menu-item sort-button"
                   onMouseEnter={() => setShowSettings(true)}
                   onMouseLeave={() => setShowSettings(false)}
                   ref={setSettingsReferenceElement}
@@ -410,10 +405,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     <AdjustmentsIcon />
                   </span>
                   <span>Settings</span>
-                </button>
+                </div>
                 {showSettings && (
                   <div
-                    className="shadow-5 border-radius-m"
+                    className={`menu ${c("popper")}`}
                     ref={setSettingsPopperElement}
                     onMouseEnter={() => setShowSettings(true)}
                     onMouseLeave={() => setShowSettings(false)}
@@ -421,7 +416,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     style={{
                       ...settingsPopper.styles.popper,
                       width: 200,
-                      backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
                       zIndex: 4,
                       padding: "4px 0px",
                     }}
@@ -445,8 +439,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 

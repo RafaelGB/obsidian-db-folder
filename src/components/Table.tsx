@@ -230,6 +230,7 @@ export function Table(initialState: TableDataType) {
             position: "sticky",
             top: 0,
             zIndex: 1,
+            borderTop: "1px solid var(--background-modifier-border)",
           }}
         >
           <HeaderNavBar
@@ -311,14 +312,13 @@ export function Table(initialState: TableDataType) {
                           const tableCellProps = isDragUpdate
                             ? tableCellBaseProps
                             : {
-                                ...tableCellBaseProps,
-                                style: {
-                                  ...column.getHeaderProps().style,
-                                  width: `${
-                                    columnsWidthState.widthRecord[column.id]
+                              ...tableCellBaseProps,
+                              style: {
+                                ...column.getHeaderProps().style,
+                                width: `${columnsWidthState.widthRecord[column.id]
                                   }px`,
-                                },
-                              };
+                              },
+                            };
 
                           return (
                             <div {...tableCellProps}>
@@ -361,12 +361,12 @@ export function Table(initialState: TableDataType) {
                   const tableCellProps = isDragUpdate
                     ? tableCellBaseProps
                     : {
-                        ...tableCellBaseProps,
-                        style: {
-                          ...tableCellBaseProps.style,
-                          width: columnsWidthState.widthRecord[cell.column.id],
-                        },
-                      };
+                      ...tableCellBaseProps,
+                      style: {
+                        ...tableCellBaseProps.style,
+                        width: columnsWidthState.widthRecord[cell.column.id],
+                      },
+                    };
                   return <div {...tableCellProps}>{cell.render("Cell")}</div>;
                 })}
               </div>
@@ -383,22 +383,18 @@ export function Table(initialState: TableDataType) {
                 placeholder="filename of new row"
               />
             </div>
-            <div className={`${c("td")}`}>
-              <div
-                onClick={() => {
-                  dataDispatch({
-                    type: ActionTypes.ADD_ROW,
-                    filename: inputNewRow,
-                  });
-                  setInputNewRow("");
-                  newRowRef.current.value = "";
-                }}
-              >
-                <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
-                  <PlusIcon />
-                </span>
-                New
-              </div>
+            <div className={`${c("td")}`} onClick={() => {
+              dataDispatch({
+                type: ActionTypes.ADD_ROW,
+                filename: inputNewRow,
+              });
+              setInputNewRow("");
+              newRowRef.current.value = "";
+            }}>
+              <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+                <PlusIcon />
+              </span>
+              New
             </div>
           </div>
         </div>

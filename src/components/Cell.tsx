@@ -7,6 +7,7 @@ import { MarkdownRenderer } from "obsidian";
 import NoteInfo from "services/NoteInfo";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
+import { c } from "helpers/StylesHelper";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -117,7 +118,8 @@ export default function DefaultCell(cellProperties: Cell) {
             null
           );
         });
-        return <span ref={containerRef}></span>;
+
+        return <span ref={containerRef} className={`${c("md_cell")}`} ></span>;
       /** Selector option */
       case DataTypes.SELECT:
         return (
