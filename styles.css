@@ -93,12 +93,6 @@
   outline: none;
 }
 
-.shadow-5 {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.12),
-    0 4px 6px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.12),
-    0 16px 32px rgba(0, 0, 0, 0.12);
-}
-
 .svg-icon-sm svg {
   position: relative;
   height: 1.25em;
@@ -268,10 +262,6 @@
 
 .flex-wrap-wrap {
   flex-wrap: wrap;
-}
-
-.border-radius-md {
-  border-radius: 5px;
 }
 
 .menu.database-plugin__popper {

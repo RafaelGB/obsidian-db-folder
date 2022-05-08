@@ -77,7 +77,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   }
 
   function getColor() {
-    let match = (column as any).options.find(
+    const match = (column as any).options.find(
       (option: { label: any }) => option.label === value.value
     );
     return (match && match.backgroundColor) || grey(200);
@@ -93,7 +93,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
         {/* show selector if click on the current value */}
         {showSelect && (
           <div
-            className="shadow-5 border-radius-md"
+            className="menu"
             ref={setSelectPop}
             {...attributes.popper}
             style={{
@@ -177,9 +177,9 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       </div>
       {domReady
         ? ReactDOM.createPortal(
-            PortalSelect(),
-            document.getElementById("popper-container")
-          )
+          PortalSelect(),
+          document.getElementById("popper-container")
+        )
         : null}
     </>
   );
