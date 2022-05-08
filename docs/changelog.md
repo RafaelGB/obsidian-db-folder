@@ -1,6 +1,6 @@
 ## 0.2.2
 ### No longer broken
-- When you DnD a column and then edit the label, the column is not moved to the final. It mantains the same position.
+- When you DnD a column and then edit the label, the column is not moved to the final. It mantains the same position. [ISSUE#30](https://github.com/RafaelGB/obsidian-db-folder/issues/30)
 ## 0.2.1
 *Published on 2022/05/08*
 ### Improved
