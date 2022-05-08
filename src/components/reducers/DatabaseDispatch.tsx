@@ -119,14 +119,20 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         skipReset: { $set: true },
         // Modify column visually with the new label
         columns: {
-          [update_column_label_index]: {
-            $merge: {
+          $set: [
+            ...state.columns.slice(0, update_column_label_index),
+            {
+              ...state.columns[update_column_label_index],
               label: action.label,
               id: action.newKey,
               key: action.newKey,
               accessor: action.newKey,
             },
-          },
+            ...state.columns.slice(
+              update_column_label_index + 1,
+              state.columns.length
+            ),
+          ],
         },
         // Modify data visually with the new key
         data: {

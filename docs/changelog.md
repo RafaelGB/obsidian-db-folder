@@ -1,9 +1,11 @@
 ## 0.2.1
+*Published on 2022/05/08*
 ### Improved
 - Now when you press enter inside a text cell, it will ends the modification with onBlur event.
 ### No longer broken
 - Create a column now adjust width automatically.
 - total width of columns not broken anymore. This bug was introduced in 0.2.0
+- Frontmatter fields that are not in the schema and were empty will not be insert a null value if a database field is updated. [ISSUE#29](https://github.com/RafaelGB/obsidian-db-folder/issues/29)
 ## 0.2.0
 *Published on 2022/05/07*
 ### Shiny new things
