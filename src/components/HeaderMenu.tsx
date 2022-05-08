@@ -4,7 +4,7 @@ import {
   TableDataType,
 } from "cdm/FolderModel";
 import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
-import { dbTrim } from "helpers/StylesHelper";
+import { dbTrim, c } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import ArrowLeftIcon from "components/img/ArrowLeft";
@@ -282,7 +282,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           {...attributes.popper}
         >
           <div
-            className="shadow-5 border-radius-md"
+            className={`menu ${c("popper")}`}
             style={{
               width: 240,
               backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
@@ -365,7 +365,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             {/** Action buttons section */}
             <div
               style={{
-                borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
                 padding: "4px 0px",
               }}
             >
@@ -385,7 +385,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             </div>
             <div
               style={{
-                borderTop: `2px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
                 padding: "4px 0px",
               }}
             >
@@ -437,8 +437,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 

@@ -277,6 +277,10 @@
   border-radius: 5px;
 }
 
+.menu.database-plugin__popper {
+  position: relative;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
