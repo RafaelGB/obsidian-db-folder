@@ -171,6 +171,11 @@
   color: var(--text-accent-hover);
 }
 
+.database-plugin__add-row .database-plugin__td {
+  border: none;
+  background-color: transparent;
+}
+
 .database-plugin__th {
   color: var(--text-faint);
   font-weight: 500;
