@@ -266,6 +266,7 @@
 
 .menu.database-plugin__popper {
   position: relative;
+  padding: 0;
 }
 
 .cursor-pointer {
