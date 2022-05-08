@@ -17,7 +17,7 @@ const noBreakSpace = /\u00A0/g;
  * @returns 
  */
 function hasFrontmatterKey(data: string): boolean {
-  const frontmatterRegex = /---\s+([\w\W]+?)\s+---/
+  const frontmatterRegex = /^---\n+.*---\n/g
   return frontmatterRegex.test(data);
 }
 
@@ -114,6 +114,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     }
     rowFields.frontmatter[columnId] = newValue;
     await persistFrontmatter();
+    await inlineRemoveColumn();
   }
 
   // Modify key of a column
