@@ -113,7 +113,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           type: ActionTypes.ADD_COLUMN_TO_LEFT,
           columnId: column.id,
           focus: false,
-          columnInfo: adjustWidthOfTheColumn(column.position - 1),
+          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position - 1),
         });
         setExpanded(false);
       },
@@ -126,7 +126,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           type: ActionTypes.ADD_COLUMN_TO_RIGHT,
           columnId: column.id,
           focus: false,
-          columnInfo: adjustWidthOfTheColumn(column.position + 1),
+          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position + 1),
         });
         setExpanded(false);
       },
@@ -247,7 +247,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     e.preventDefault();
   }
 
-  function adjustWidthOfTheColumn(wantedPosition: number) {
+  function adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
     const columnNumber =
       initialState.columns.length - initialState.shadowColumns.length;
     const columnName = `newColumn${columnNumber}`;
