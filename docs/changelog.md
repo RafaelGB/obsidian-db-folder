@@ -1,3 +1,6 @@
+## 0.2.2
+### No longer broken
+- When you DnD a column and then edit the label, the column is not moved to the final. It mantains the same position.
 ## 0.2.1
 *Published on 2022/05/08*
 ### Improved
