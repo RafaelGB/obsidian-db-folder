@@ -6,6 +6,7 @@ import { RowSelectOption } from "cdm/RowSelectModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
 import { DatabaseColumn } from "cdm/DatabaseModel";
+import { Column } from "react-table";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -81,7 +82,8 @@ export interface DatabaseHeaderProps {
     getHooks: any,
     state: any,
     dispatch: any,
-    allColumns: any,
+    allColumns: Column[],
+    setColumnOrder: (cols: string[]) => void,
     rows: any,
     initialRows: any,
     flatRows: any,
