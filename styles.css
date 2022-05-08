@@ -37,7 +37,7 @@
 
 .svg-icon svg {
   position: relative;
-  vertical-align: bottom;
+  display: block;
   height: 1.5em;
   width: 1.5em;
 }
