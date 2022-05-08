@@ -7,6 +7,7 @@ import {
   useGlobalFilter,
   useColumnOrder,
   useFilters,
+  Column,
 } from "react-table";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
@@ -244,7 +245,7 @@ export function Table(initialState: TableDataType) {
             <DragDropContext
               key={`DragDropContext-${i}`}
               onDragStart={() => {
-                currentColOrder.current = allColumns.map((o: any) => o.id);
+                currentColOrder.current = allColumns.map((o: Column) => o.id);
               }}
               onDragUpdate={(dragUpdateObj, b) => {
                 if (!isDragUpdate) {

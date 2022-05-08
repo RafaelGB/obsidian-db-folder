@@ -15,6 +15,7 @@ The information you add or edit will be saved into the target obsidian note.
 ## Index
 - [Whats inside database view](docs/docs/Whats%20inside%20database%20view.md)
 - [Obsidian dbfolder Features](docs/docs/Obsidian%20dbfolder%20Features.md)
+- [Roadmap](https://github.com/RafaelGB/obsidian-db-folder/projects/1)
 - [changelog](docs/changelog.md)
 
 ## Sources
