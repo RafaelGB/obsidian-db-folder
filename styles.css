@@ -86,7 +86,7 @@
 }
 
 .data-input:hover {
-  background-color: var(--background-modifier-box-shadow);
+  background-color: var(--background-secondary);
 }
 
 .data-input:focus {
