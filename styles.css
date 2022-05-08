@@ -170,7 +170,9 @@
   border: none;
   background-color: transparent;
   color: var(--text-muted);
+
   flex-direction: row;
+  align-items: center;
 }
 
 .database-plugin__th {
