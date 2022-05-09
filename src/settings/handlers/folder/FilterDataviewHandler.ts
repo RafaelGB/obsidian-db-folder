@@ -47,30 +47,28 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         filters[index].operator = value;
                         // Persist changes
                         view.diskConfig.updateFilters(filters);
+                        // Force refresh of settings
+                        settingsManager.reset(settingHandlerResponse);
                     });
-                });
-            if (filter.value !== undefined) {
-                filterSetting.addText(text => {
+                }).addText(text => {
                     text.setPlaceholder("name of value")
-                        .setValue(filter.value)
+                        .setValue(`${filter.value}`)
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].value = value;
                             // Persist changes
                             view.diskConfig.updateFilters(filters);
                         });
-                })
-            }
-            filterSetting.addExtraButton((cb) => {
-                cb.setIcon("cross")
-                    .setTooltip("Delete")
-                    .onClick(async (): Promise<void> => {
-                        filters.splice(index, 1);
-                        // Persist changes
-                        await view.diskConfig.updateFilters(filters);
-                        // Force refresh of settings
-                        settingsManager.reset(settingHandlerResponse);
-                    });
-            });
+                }).addExtraButton((cb) => {
+                    cb.setIcon("cross")
+                        .setTooltip("Delete")
+                        .onClick(async (): Promise<void> => {
+                            filters.splice(index, 1);
+                            // Persist changes
+                            await view.diskConfig.updateFilters(filters);
+                            // Force refresh of settings
+                            settingsManager.reset(settingHandlerResponse);
+                        });
+                });
         });
         return this.goNext(settingHandlerResponse);
     }

@@ -19,7 +19,7 @@ export class FiltersHandler extends AbstractYamlHandler {
                 this.addError(`There was not operator key in filter.`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
-            if (filter.operator !== OperatorFilter.EXISTS && filter.value === undefined) {
+            if (filter.value === undefined) {
                 this.addError(`There was not value key in filter.`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }

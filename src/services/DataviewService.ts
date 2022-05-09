@@ -21,7 +21,6 @@ class DataviewProxy {
     }
 
     filter(condition: FilterCondition[], p: any): boolean {
-        console.log("debug");
         if (!condition || condition.length === 0) return true;
         for (const c of condition) {
             switch (getOperatorFilterValue(c.operator)) {
@@ -52,9 +51,6 @@ class DataviewProxy {
                 case OperatorFilter.ENDS_WITH:
                     if (!p[c.field].endsWith(c.value)) return false;
                     break;
-                case OperatorFilter.EXISTS:
-                    if (!p[c.field]) return false;
-                    break;
                 default:
                     throw new Error(`Unknown operator: ${c.operator}`);
             }
@@ -73,11 +69,4 @@ class DataviewProxy {
     }
 }
 
-function getKeyByValue(value: string, object: any): string {
-    const indexOfS = Object.values(object).indexOf(value as unknown as object);
-
-    const key = Object.keys(object)[indexOfS];
-
-    return key;
-}
 export const DataviewService = DataviewProxy.getInstance();
