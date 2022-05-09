@@ -1,12 +1,12 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
 import { TFile } from "obsidian";
-import { getDataviewAPI } from "services/DataviewService";
+import { DataviewService } from "services/DataviewService";
 
 
 const obtainRowDatabaseFields = (file: TFile, columns: TableColumn[]): RowDatabaseFields => {
     const columnsToPersist = columns.filter(c => !c.isMetadata);
-    const currentFileFields = getDataviewAPI().page(file.path);
+    const currentFileFields = DataviewService.getDataviewAPI().page(file.path);
     const filteredFields: RowDatabaseFields = { frontmatter: {}, inline: {} };
 
     columnsToPersist.forEach(column => {

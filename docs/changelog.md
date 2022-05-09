@@ -1,3 +1,8 @@
+## 0.3.0
+### Shiny new things
+- Improve css styling [ISSUE#31](https://github.com/RafaelGB/obsidian-db-folder/pull/31) [artisticat1](https://github.com/artisticat1)
+
+
 ## 0.2.2
 *Published on 2022/05/08*
 ### No longer broken

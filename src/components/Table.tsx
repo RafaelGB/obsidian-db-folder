@@ -19,11 +19,11 @@ import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
 import Header from "components/Header";
-import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
 import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
+import { getDndListStyle, getDndItemStyle } from "./styles/DnDStyle";
 
 const defaultColumn = {
   minWidth: 50,
@@ -191,11 +191,8 @@ export function Table(initialState: TableDataType) {
   const [columnsWidthState, setColumnsWidthState] = React.useState(
     getColumnsWidthStyle(rows, columns)
   );
-
-  const [isDragUpdate, setDragUpdate] = React.useState(false);
   // Manage DnD
   const currentColOrder = React.useRef(null);
-  const renderDraggable = useDraggableInPortal();
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
@@ -248,9 +245,6 @@ export function Table(initialState: TableDataType) {
                 currentColOrder.current = allColumns.map((o: Column) => o.id);
               }}
               onDragUpdate={(dragUpdateObj, b) => {
-                if (!isDragUpdate) {
-                  setDragUpdate(true);
-                }
                 const colOrder = [...currentColOrder.current];
                 const sIndex = dragUpdateObj.source.index;
                 const dIndex =
@@ -272,7 +266,6 @@ export function Table(initialState: TableDataType) {
 
                 // clear the current order
                 currentColOrder.current = null;
-                setDragUpdate(false);
               }}
             >
               <Droppable
@@ -280,16 +273,16 @@ export function Table(initialState: TableDataType) {
                 droppableId="droppable"
                 direction="horizontal"
               >
-                {(droppableProvided, snapshot) => (
+                {(provided, snapshot) => (
                   <div
                     key={`div-Droppable-${i}`}
+                    {...provided.droppableProps}
                     {...headerGroup.getHeaderGroupProps({
                       style: {
-                        ...headerGroup.getHeaderGroupProps().style,
-                        maxWidth: `${totalColumnsWidth}px`,
+                        ...getDndListStyle(snapshot.isDraggingOver),
                       },
                     })}
-                    ref={droppableProvided.innerRef}
+                    ref={provided.innerRef}
                     className={`${c("tr header-group")}`}
                   >
                     {headerGroup.headers.map((column, index) => (
@@ -299,29 +292,28 @@ export function Table(initialState: TableDataType) {
                         index={index}
                         isDragDisabled={(column as any).skipPersist}
                       >
-                        {renderDraggable((provided) => {
+                        {(provided, snapshot) => {
                           const tableCellBaseProps = {
-                            ...column.getHeaderProps(),
-                            className: `${c("th noselect")} header`,
-                            key: `div-Draggable-${column.id}`,
                             ...provided.draggableProps,
                             ...provided.dragHandleProps,
+                            ...column.getHeaderProps({
+                              style: {
+                                width: `${
+                                  columnsWidthState.widthRecord[column.id]
+                                }px`,
+                                ...getDndItemStyle(
+                                  snapshot.isDragging,
+                                  provided.draggableProps.style
+                                ),
+                              },
+                            }),
+                            className: `${c("th noselect")} header`,
+                            key: `div-Draggable-${column.id}`,
                             // {...extraProps}
                             ref: provided.innerRef,
                           };
-                          const tableCellProps = isDragUpdate
-                            ? tableCellBaseProps
-                            : {
-                              ...tableCellBaseProps,
-                              style: {
-                                ...column.getHeaderProps().style,
-                                width: `${columnsWidthState.widthRecord[column.id]
-                                  }px`,
-                              },
-                            };
-
                           return (
-                            <div {...tableCellProps}>
+                            <div {...tableCellBaseProps}>
                               <HeaderContext.Provider
                                 value={{
                                   columnWidthState: columnsWidthState,
@@ -332,10 +324,10 @@ export function Table(initialState: TableDataType) {
                               </HeaderContext.Provider>
                             </div>
                           );
-                        })}
+                        }}
                       </Draggable>
                     ))}
-                    {droppableProvided.placeholder}
+                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
@@ -347,27 +339,27 @@ export function Table(initialState: TableDataType) {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
+              <div
+                {...row.getRowProps({
+                  style: {
+                    maxWidth: `${totalColumnsWidth}px`,
+                  },
+                })}
+                className={`${c("tr")}`}
+                key={row.id}
+              >
                 {row.cells.map((cell) => {
                   const tableCellBaseProps = {
                     ...cell.getCellProps({
                       style: {
-                        ...cell.getCellProps().style,
-                        maxWidth: `${totalColumnsWidth}px`,
+                        width: columnsWidthState.widthRecord[cell.column.id],
                       },
                     }),
                     className: `${c("td")}`,
                   };
-                  const tableCellProps = isDragUpdate
-                    ? tableCellBaseProps
-                    : {
-                      ...tableCellBaseProps,
-                      style: {
-                        ...tableCellBaseProps.style,
-                        width: columnsWidthState.widthRecord[cell.column.id],
-                      },
-                    };
-                  return <div {...tableCellProps}>{cell.render("Cell")}</div>;
+                  return (
+                    <div {...tableCellBaseProps}>{cell.render("Cell")}</div>
+                  );
                 })}
               </div>
             );
@@ -383,14 +375,17 @@ export function Table(initialState: TableDataType) {
                 placeholder="filename of new row"
               />
             </div>
-            <div className={`${c("td")}`} onClick={() => {
-              dataDispatch({
-                type: ActionTypes.ADD_ROW,
-                filename: inputNewRow,
-              });
-              setInputNewRow("");
-              newRowRef.current.value = "";
-            }}>
+            <div
+              className={`${c("td")}`}
+              onClick={() => {
+                dataDispatch({
+                  type: ActionTypes.ADD_ROW,
+                  filename: inputNewRow,
+                });
+                setInputNewRow("");
+                newRowRef.current.value = "";
+              }}
+            >
               <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
                 <PlusIcon />
               </span>

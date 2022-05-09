@@ -23,7 +23,7 @@ export class GroupFolderColumnDropDownHandler extends AbstractSettingsHandler {
 
             add_dropdown(
                 containerEl,
-                'Choose column for group folder',
+                this.settingTitle,
                 'This setting assigns the column that will be used to group the files into subfolders',
                 current_group_folder,
                 options,
