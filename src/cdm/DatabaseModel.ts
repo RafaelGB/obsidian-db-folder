@@ -16,15 +16,15 @@ export type DatabaseColumn = {
 }
 
 /** database yaml */
-export type DatabaseYaml = {
+export interface DatabaseYaml {
     /** database name */
-    name: string,
+    name: string;
     /** database description */
-    description: string,
+    description: string;
     /** database columns */
-    columns: Record<string, DatabaseColumn>
+    columns: Record<string, DatabaseColumn>;
     /** database local configuration */
-    config?: LocalSettings
+    config?: LocalSettings;
 }
 
 export type RowDatabaseFields = {

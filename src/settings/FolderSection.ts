@@ -26,6 +26,6 @@ export function folder_settings_section(settingHandlerResponse: SettingHandlerRe
 function getHandlers(): SettingHandler[] {
     return [
         new DetailsFormHandler(),
-        new FilterDataviewHandler(),
+        //new FilterDataviewHandler(),
     ];
 }

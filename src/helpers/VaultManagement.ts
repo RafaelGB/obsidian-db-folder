@@ -66,7 +66,8 @@ export async function adapterTFilesToRows(folderPath: string): Promise<Array<Row
   const rows: Array<RowDataType> = [];
   let id = 0;
 
-  const folderFiles = getDataviewAPI().pages(`"${folderPath}"`).where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  const folderFiles = getDataviewAPI().pages(`"${folderPath}"`)
+    .where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   await Promise.all(folderFiles.map(async (page) => {
     const noteInfo = new NoteInfo(page, ++id);
     rows.push(noteInfo.getRowDataType());
@@ -75,6 +76,12 @@ export async function adapterTFilesToRows(folderPath: string): Promise<Array<Row
   return rows;
 }
 
+function filterWithDataviewCondition(condition: string, p: any): boolean {
+  if (condition === undefined || condition === "") return true;
+  condition.split(" AND ").forEach(c => {
+  });
+  return true;
+}
 /**
  * Modify the file asociated to the row in function of input options
  * @param asociatedCFilePathToCell 

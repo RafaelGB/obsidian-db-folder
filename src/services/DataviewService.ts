@@ -1,5 +1,5 @@
 import { Notice } from "obsidian";
-import { getAPI } from "obsidian-dataview";
+import { getAPI, isPluginEnabled } from "obsidian-dataview";
 import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
 
 /**
@@ -8,7 +8,7 @@ import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
  * @throws Error if plugin is not installed
  */
 export function getDataviewAPI(): DvAPIInterface {
-    if (getAPI()) {
+    if (isPluginEnabled(app)) {
         return getAPI(app);
     } else {
         new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);

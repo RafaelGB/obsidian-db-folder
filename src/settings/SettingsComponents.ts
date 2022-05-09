@@ -59,6 +59,38 @@ export function add_dropdown(
         });
     return dropdown;
 }
+
+/**
+ * Component that add a text input to the settings page.
+ * Returns it as a Setting object if you want to modify it.
+ * @param container 
+ * @param name 
+ * @param desc 
+ * @param placeholder 
+ * @param value 
+ * @param onChangePromise 
+ * @returns 
+ */
+export function add_text(
+    container: HTMLElement,
+    name: string,
+    desc: string,
+    placeholder: string,
+    value: string,
+    onChangePromise: (value: string) => Promise<void>
+): Setting {
+    const text = new Setting(container)
+        .setName(name)
+        .setDesc(desc)
+        .addText(text =>
+            text
+                .setPlaceholder(placeholder)
+                .setValue(value)
+                .onChange(onChangePromise)
+        );
+    return text;
+}
+
 /**
  * Add a header to the settings tab
  */
