@@ -196,6 +196,21 @@ export function Table(initialState: TableDataType) {
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
+  function handleKeyDown(e: any) {
+    if (e.key === "Enter") {
+      handleAddNewRow();
+    }
+  }
+
+  function handleAddNewRow() {
+    dataDispatch({
+      type: ActionTypes.ADD_ROW,
+      filename: inputNewRow,
+    });
+    setInputNewRow("");
+    newRowRef.current.value = "";
+  }
+
   // Manage NavBar
   const csvButtonProps = {
     columns: columns,
@@ -280,6 +295,7 @@ export function Table(initialState: TableDataType) {
                     {...headerGroup.getHeaderGroupProps({
                       style: {
                         ...getDndListStyle(snapshot.isDraggingOver),
+                        width: totalColumnsWidth,
                       },
                     })}
                     ref={provided.innerRef}
@@ -291,6 +307,9 @@ export function Table(initialState: TableDataType) {
                         draggableId={`${column.id}`}
                         index={index}
                         isDragDisabled={(column as any).skipPersist}
+                        disableInteractiveElementBlocking={
+                          (column as any).skipPersist
+                        }
                       >
                         {(provided, snapshot) => {
                           const tableCellBaseProps = {
@@ -372,20 +391,11 @@ export function Table(initialState: TableDataType) {
                 onChange={(e) => {
                   setInputNewRow(e.target.value);
                 }}
+                onKeyDown={handleKeyDown}
                 placeholder="filename of new row"
               />
             </div>
-            <div
-              className={`${c("td")}`}
-              onClick={() => {
-                dataDispatch({
-                  type: ActionTypes.ADD_ROW,
-                  filename: inputNewRow,
-                });
-                setInputNewRow("");
-                newRowRef.current.value = "";
-              }}
-            >
+            <div className={`${c("td")}`} onClick={handleAddNewRow}>
               <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
                 <PlusIcon />
               </span>
