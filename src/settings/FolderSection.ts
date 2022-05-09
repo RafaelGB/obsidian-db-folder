@@ -7,9 +7,9 @@ import { DetailsFormHandler } from './handlers/folder/DetailsFormHandler';
  * developer settings section
  */
 export function folder_settings_section(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-    settingHandlerResponse.containerEl = settingHandlerResponse.containerEl.createDiv("configuration-section-container-folder");
+    const folder_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-folder");
     // title of the section
-    add_setting_header(settingHandlerResponse.containerEl, "Folder adjustments", 'h3');
+    add_setting_header(folder_section, "Folder adjustments", 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;
@@ -17,6 +17,8 @@ export function folder_settings_section(settingHandlerResponse: SettingHandlerRe
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
+
+    settingHandlerResponse.containerEl = folder_section;
     return handlers[0].handle(settingHandlerResponse);
 }
 
@@ -26,6 +28,6 @@ export function folder_settings_section(settingHandlerResponse: SettingHandlerRe
 function getHandlers(): SettingHandler[] {
     return [
         new DetailsFormHandler(),
-        //new FilterDataviewHandler(),
+        new FilterDataviewHandler(),
     ];
 }

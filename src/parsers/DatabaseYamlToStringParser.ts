@@ -29,7 +29,7 @@ const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml): string[] => {
   if (databaseConfig.filters) {
     databaseConfigString.push(`filters:`);
     for (const filter of databaseConfig.filters) {
-      databaseConfigString.push(`${yamlIndent.repeat(1)}- {field: ${filter.field}, operator: ${filter.operator}${filter.value ? ",value: " + filter.value
+      databaseConfigString.push(`${yamlIndent.repeat(1)}- {field: ${filter.field}, operator: ${filter.operator}${filter.value !== undefined ? (",value: " + filter.value)
         : ""}}`);
     }
   }

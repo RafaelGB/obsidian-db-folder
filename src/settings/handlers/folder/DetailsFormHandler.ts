@@ -12,24 +12,23 @@ export class DetailsFormHandler extends AbstractSettingsHandler {
             view.diskConfig.updateYaml('description', value);
         }
         const { containerEl, local, view } = settingHandlerResponse;
-        if (local) {
-            add_text(
-                containerEl,
-                this.settingTitle.concat(' (name)'),
-                "name of the database",
-                "type title...",
-                view.diskConfig.yaml.name,
-                details_edit_name_promise
-            );
-            add_text(
-                containerEl,
-                this.settingTitle.concat(' (description)'),
-                "description of the database",
-                "type description...",
-                view.diskConfig.yaml.description,
-                details_edit_desciption_promise
-            );
-        }
+
+        add_text(
+            containerEl,
+            this.settingTitle.concat(' (name)'),
+            "name of the database",
+            "type title...",
+            view.diskConfig.yaml.name,
+            details_edit_name_promise
+        );
+        add_text(
+            containerEl,
+            this.settingTitle.concat(' (description)'),
+            "description of the database",
+            "type description...",
+            view.diskConfig.yaml.description,
+            details_edit_desciption_promise
+        );
         return this.goNext(settingHandlerResponse);
     }
 }

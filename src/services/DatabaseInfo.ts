@@ -133,4 +133,9 @@ export default class DatabaseInfo {
         this.yaml[key] = value;
         await this.saveOnDisk();
     }
+
+    async updateFilters(updatedFilters: FilterCondition[]): Promise<void> {
+        this.yaml.filters = updatedFilters;
+        await this.saveOnDisk();
+    }
 }

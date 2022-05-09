@@ -17,7 +17,6 @@ interface GlobalSettings {
 export interface LocalSettings {
   enable_show_state: boolean;
   group_folder_column: string;
-  dataview_query_filter: string;
 }
 export interface DatabaseSettings {
   global_settings: GlobalSettings;
@@ -31,8 +30,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
   },
   local_settings: {
     enable_show_state: false,
-    group_folder_column: '',
-    dataview_query_filter: ''
+    group_folder_column: ''
   }
 };
 
@@ -93,8 +91,10 @@ export class SettingsManager {
   }
 
   constructSettingBody(settingHandlerResponse: SettingHandlerResponse) {
-    /** Folder section */
-    folder_settings_section(settingHandlerResponse);
+    if (settingHandlerResponse.local) {
+      /** Folder section */
+      folder_settings_section(settingHandlerResponse);
+    }
     /** Columns section */
     columns_settings_section(settingHandlerResponse);
     /** Developer section */

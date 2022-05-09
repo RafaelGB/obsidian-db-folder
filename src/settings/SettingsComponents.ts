@@ -1,4 +1,5 @@
-import { Setting } from "obsidian";
+import { OperatorFilter } from "helpers/Constants";
+import { ButtonComponent, Setting } from "obsidian";
 
 /**
  * Component that add a toggle to the settings page.
@@ -91,6 +92,37 @@ export function add_text(
     return text;
 }
 
+/**
+ * Component that add a button to the settings page.
+ * @param container 
+ * @param name 
+ * @param desc 
+ * @param buttonText 
+ * @param toolTripText 
+ * @param onClickPromise 
+ * @returns 
+ */
+export function add_button(
+    container: HTMLElement,
+    name: string,
+    desc: string,
+    buttonText: string,
+    toolTripText: string,
+    onClickPromise: () => Promise<void>,
+
+): Setting {
+    const button = new Setting(container)
+        .setName(name)
+        .setDesc(desc)
+        .addButton((button: ButtonComponent) => {
+            button
+                .setTooltip(toolTripText)
+                .setButtonText(buttonText)
+                .setCta()
+                .onClick(onClickPromise);
+        });
+    return button;
+}
 /**
  * Add a header to the settings tab
  */
