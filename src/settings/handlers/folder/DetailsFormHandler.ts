@@ -11,7 +11,7 @@ export class DetailsFormHandler extends AbstractSettingsHandler {
         const details_edit_desciption_promise = async (value: string): Promise<void> => {
             view.diskConfig.updateYaml('description', value);
         }
-        const { containerEl, local, view } = settingHandlerResponse;
+        const { containerEl, view } = settingHandlerResponse;
 
         add_text(
             containerEl,

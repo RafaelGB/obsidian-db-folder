@@ -36,21 +36,17 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].field = value;
                             // Persist changes
-                            await view.diskConfig.updateFilters(filters);
-                            // Force refresh of settings
-                            settingsManager.reset(settingHandlerResponse);
+                            view.diskConfig.updateFilters(filters);
                         });
                 }).addDropdown((dropdown) => {
                     Object.entries(OperatorFilter).forEach(([key, value]) => {
-                        dropdown.addOption(value, key);
+                        dropdown.addOption(key, value);
                     });
                     dropdown.setValue(filter.operator);
                     dropdown.onChange(async (value: string): Promise<void> => {
                         filters[index].operator = value;
                         // Persist changes
-                        await view.diskConfig.updateFilters(filters);
-                        // Force refresh of settings
-                        settingsManager.reset(settingHandlerResponse);
+                        view.diskConfig.updateFilters(filters);
                     });
                 });
             if (filter.value !== undefined) {
@@ -60,9 +56,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].value = value;
                             // Persist changes
-                            await view.diskConfig.updateFilters(filters);
-                            // Force refresh of settings
-                            settingsManager.reset(settingHandlerResponse);
+                            view.diskConfig.updateFilters(filters);
                         });
                 })
             }

@@ -80,9 +80,12 @@ export class SettingsManager {
     containerEl.addClass(StyleClasses.SETTINGS_MODAL);
     add_setting_header(containerEl, heading, 'h2');
 
+    const settingBody = containerEl.createDiv();
+    settingBody.addClass(StyleClasses.SETTINGS_MODAL_BODY);
+    containerEl.setAttribute("id", StyleClasses.SETTINGS_MODAL_BODY);
     const settingHandlerResponse: SettingHandlerResponse = {
       settingsManager: this,
-      containerEl: containerEl,
+      containerEl: settingBody,
       local: local,
       errors: {},
       view: view,
@@ -102,12 +105,12 @@ export class SettingsManager {
   }
 
   reset(response: SettingHandlerResponse) {
-    const parentElement = response.containerEl.parentElement;
+    const settingsElement = document.getElementById(StyleClasses.SETTINGS_MODAL_BODY);
     // remove all sections
-    parentElement.empty();
+    settingsElement.empty();
 
     response.errors = {};
-    response.containerEl = parentElement;
+    response.containerEl = settingsElement;
     this.constructSettingBody(response);
   }
 

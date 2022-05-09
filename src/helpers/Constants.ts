@@ -135,5 +135,17 @@ export const OperatorFilter = Object.freeze({
   CONTAINS: 'contains',
   STARTS_WITH: 'starts_with',
   ENDS_WITH: 'ends_with',
-  EXISTS: 'exists'
+  EXISTS: 'exists',
 });
+
+export function getOperatorFilterValue(keyToFind: string): string {
+  let result: string = '';
+  Object.entries(OperatorFilter).find(([key, value]) => {
+    if (key === keyToFind) {
+      result = value;
+      return true;
+    }
+    return false;
+  });
+  return result;
+}

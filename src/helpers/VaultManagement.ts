@@ -80,12 +80,6 @@ export async function adapterTFilesToRows(folderPath: string, filters?: FilterCo
   return rows;
 }
 
-function filterWithDataviewCondition(condition: string, p: any): boolean {
-  if (condition === undefined || condition === "") return true;
-  condition.split(" AND ").forEach(c => {
-  });
-  return true;
-}
 /**
  * Modify the file asociated to the row in function of input options
  * @param asociatedCFilePathToCell 

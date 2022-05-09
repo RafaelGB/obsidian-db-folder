@@ -1,4 +1,5 @@
 import { RowType } from "cdm/RowTypeModel"
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "Settings"
 
 /** database column */
@@ -37,5 +38,5 @@ export type RowDatabaseFields = {
 export type FilterCondition = {
     field: string;
     operator: string;
-    value?: string;
+    value?: any;
 }

@@ -1,5 +1,5 @@
 import { FilterCondition } from "cdm/DatabaseModel";
-import { OperatorFilter } from "helpers/Constants";
+import { getOperatorFilterValue, OperatorFilter } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { getAPI, isPluginEnabled } from "obsidian-dataview";
 import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
@@ -21,9 +21,10 @@ class DataviewProxy {
     }
 
     filter(condition: FilterCondition[], p: any): boolean {
+        console.log("debug");
         if (!condition || condition.length === 0) return true;
         for (const c of condition) {
-            switch (c.operator) {
+            switch (getOperatorFilterValue(c.operator)) {
                 case OperatorFilter.EQUAL:
                     if (p[c.field] !== c.value) return false;
                     break;
@@ -72,4 +73,11 @@ class DataviewProxy {
     }
 }
 
+function getKeyByValue(value: string, object: any): string {
+    const indexOfS = Object.values(object).indexOf(value as unknown as object);
+
+    const key = Object.keys(object)[indexOfS];
+
+    return key;
+}
 export const DataviewService = DataviewProxy.getInstance();
