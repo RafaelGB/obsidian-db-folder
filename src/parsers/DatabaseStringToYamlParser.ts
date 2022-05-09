@@ -8,6 +8,7 @@ import { YamlHandler, YamlHandlerResponse } from "parsers/handlers/AbstractYamlP
 import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
 import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
 import { ConfigHandler } from "parsers/handlers/ConfigHandler";
+import { FiltersHandler } from "./handlers/FiltersHandler";
 
 /**
  * PUBLIC METHODS
@@ -54,7 +55,8 @@ function getHandlers(): YamlHandler[] {
     return [
         new BaseInfoHandler(),
         new ColumnsHandler(),
-        new ConfigHandler()
+        new ConfigHandler(),
+        new FiltersHandler()
     ];
 }
 

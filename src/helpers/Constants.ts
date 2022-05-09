@@ -124,3 +124,16 @@ export const WidthVariables = Object.freeze({
   ICON_SPACING: 17,
   MAGIC_SPACING: 10
 });
+
+export const OperatorFilter = Object.freeze({
+  EQUAL: '=',
+  NOT_EQUAL: '!=',
+  GREATER_THAN: '>',
+  LESS_THAN: '<',
+  GREATER_THAN_OR_EQUAL: '>=',
+  LESS_THAN_OR_EQUAL: '<=',
+  CONTAINS: 'contains',
+  STARTS_WITH: 'starts_with',
+  ENDS_WITH: 'ends_with',
+  EXISTS: 'exists'
+});

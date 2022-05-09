@@ -1,4 +1,4 @@
-import { DatabaseColumn, DatabaseYaml } from 'cdm/DatabaseModel';
+import { DatabaseColumn, DatabaseYaml, FilterCondition } from 'cdm/DatabaseModel';
 import {
     Notice,
     TFile

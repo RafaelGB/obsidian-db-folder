@@ -24,10 +24,18 @@ export interface DatabaseYaml {
     /** database columns */
     columns: Record<string, DatabaseColumn>;
     /** database local configuration */
-    config?: LocalSettings;
+    config: LocalSettings;
+    /** dataview filters */
+    filters?: FilterCondition[];
 }
 
 export type RowDatabaseFields = {
     frontmatter: Record<string, any>;
     inline: Record<string, any>;
+}
+
+export type FilterCondition = {
+    field: string;
+    operator: string;
+    value?: string;
 }

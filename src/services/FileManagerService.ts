@@ -4,7 +4,7 @@ import { FileContent } from "helpers/FileContent";
 import { TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
-export class VaultManager {
+class VaultManager {
   private static instance: VaultManager;
 
   /**
