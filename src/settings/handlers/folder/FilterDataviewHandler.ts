@@ -36,7 +36,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].field = value;
                             // Persist changes
-                            view.diskConfig.updateFilters(filters);
+                            await view.diskConfig.updateFilters(filters);
                             // Force refresh of settings
                             settingsManager.reset(settingHandlerResponse);
                         });
@@ -48,7 +48,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                     dropdown.onChange(async (value: string): Promise<void> => {
                         filters[index].operator = value;
                         // Persist changes
-                        view.diskConfig.updateFilters(filters);
+                        await view.diskConfig.updateFilters(filters);
                         // Force refresh of settings
                         settingsManager.reset(settingHandlerResponse);
                     });
@@ -60,7 +60,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].value = value;
                             // Persist changes
-                            view.diskConfig.updateFilters(filters);
+                            await view.diskConfig.updateFilters(filters);
                             // Force refresh of settings
                             settingsManager.reset(settingHandlerResponse);
                         });
@@ -72,7 +72,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                     .onClick(async (): Promise<void> => {
                         filters.splice(index, 1);
                         // Persist changes
-                        view.diskConfig.updateFilters(filters);
+                        await view.diskConfig.updateFilters(filters);
                         // Force refresh of settings
                         settingsManager.reset(settingHandlerResponse);
                     });

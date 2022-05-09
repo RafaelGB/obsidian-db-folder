@@ -7,20 +7,19 @@ export class FiltersHandler extends AbstractYamlHandler {
     public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse {
         const { yaml } = handlerResponse;
 
-        if (!yaml.filters) {
-            this.addError('filters key missing. Was added with default value');
+        if (yaml.filters === undefined || !yaml.filters) {
             yaml.filters = [];
         }
         for (const filter of yaml.filters) {
-            if (!filter.field) {
+            if (filter.field === undefined) {
                 this.addError(`There was not field key in filter.`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
-            if (!filter.operator) {
+            if (filter.operator === undefined) {
                 this.addError(`There was not operator key in filter.`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
-            if (filter.operator !== OperatorFilter.EXISTS && !filter.value) {
+            if (filter.operator !== OperatorFilter.EXISTS && filter.value === undefined) {
                 this.addError(`There was not value key in filter.`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
