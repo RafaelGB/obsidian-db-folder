@@ -5,6 +5,7 @@ import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 import { columns_settings_section } from "settings/ColumnsSection";
+import { folder_settings_section } from "settings/FolderSection";
 import { StyleClasses } from "helpers/Constants";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
@@ -90,6 +91,8 @@ export class SettingsManager {
   }
 
   constructSettingBody(settingHandlerResponse: SettingHandlerResponse) {
+    /** Folder section */
+    folder_settings_section(settingHandlerResponse);
     /** Columns section */
     columns_settings_section(settingHandlerResponse);
     /** Developer section */

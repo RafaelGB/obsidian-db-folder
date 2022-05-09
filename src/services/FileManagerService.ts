@@ -19,7 +19,7 @@ export class VaultManager {
       targetFolder,
       filename ?? "Untitled"
     );
-    const content = parseFrontmatterFieldsToString(databasefields).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    const content = parseFrontmatterFieldsToString(databasefields, "").concat("\n").concat(parseInlineFieldsToString(databasefields));
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;
