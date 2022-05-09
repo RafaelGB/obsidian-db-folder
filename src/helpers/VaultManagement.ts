@@ -123,7 +123,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       await inlineColumnKey();
       return;
     }
-    if (!rowFields.frontmatter.hasOwnProperty(columnId)) {
+    if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)) {
       return;
     }
     // Check if the column is already in the frontmatter

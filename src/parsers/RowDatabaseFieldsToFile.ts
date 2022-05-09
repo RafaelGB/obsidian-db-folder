@@ -16,7 +16,7 @@ export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields
         Object.keys(yaml).forEach(key => {
             // add frontmatter fields that are not specified as database fields
             // check if frontmatter field is inside inline fields
-            if (!inlineFields.hasOwnProperty(key) && !frontmatterFields[key] && key !== deletedColumn) {
+            if (!Object.prototype.hasOwnProperty.call(inlineFields, key) && !frontmatterFields[key] && key !== deletedColumn) {
                 array.push(`${key}: ${yaml[key] ?? ''}`);
             }
         });
