@@ -1,20 +1,20 @@
-import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
 import { parseYaml } from "obsidian";
 
 // Interface of handlers
-import { YamlHandler, YamlHandlerResponse } from "parsers/handlers/AbstractYamlPropertyHandler";
+import { YamlHandler, YamlHandlerResponse } from "cdm/MashallModel";
+
 // Handlers of yaml parse
-import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
-import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
-import { ConfigHandler } from "parsers/handlers/ConfigHandler";
-import { FiltersHandler } from "./handlers/FiltersHandler";
+import { MarshallDatabaseInfoHandler } from 'parsers/handlers/marshall/MarshallDatabaseInfoHandler';
+import { MarshallColumnsHandler } from "parsers/handlers/marshall/MarshallColumnsHandler";
+import { MarshallConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
+import { MarshallFiltersHandler } from "./handlers/marshall/MarshallFiltersHandler";
 
 /**
- * PUBLIC METHODS
+ * EXPOSED METHOD
  ****************/
 /**
- * Parse a string
+ * Parse the string inside database file and return a object with the information
  */
 const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
     try {
@@ -29,7 +29,6 @@ const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
 /**
  * PRIVATE METHODS
  *****************/
-
 
 /**
  * Validate yaml received from input using handlers of function getHandlers
@@ -47,16 +46,15 @@ function validateYaml(yaml: any): YamlHandlerResponse {
 }
 
 
-
 /**
  * Obtain all classes than extends from AbstractHandler
  */
 function getHandlers(): YamlHandler[] {
     return [
-        new BaseInfoHandler(),
-        new ColumnsHandler(),
-        new ConfigHandler(),
-        new FiltersHandler()
+        new MarshallDatabaseInfoHandler(),
+        new MarshallColumnsHandler(),
+        new MarshallConfigHandler(),
+        new MarshallFiltersHandler()
     ];
 }
 
