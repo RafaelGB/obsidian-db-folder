@@ -191,6 +191,7 @@ export function Table(initialState: TableDataType) {
   const [columnsWidthState, setColumnsWidthState] = React.useState(
     getColumnsWidthStyle(rows, columns)
   );
+  const totalWidth = getTotalWidth(columnsWidthState);
   // Manage DnD
   const currentColOrder = React.useRef(null);
   // Manage input of new row
@@ -230,7 +231,7 @@ export function Table(initialState: TableDataType) {
         {...getTableProps({
           style: {
             ...getTableProps().style,
-            minWidth: totalColumnsWidth,
+            width: totalWidth,
           },
         })}
         className={`${c("table noselect")}`}
@@ -296,7 +297,7 @@ export function Table(initialState: TableDataType) {
                       style: {
                         ...getDndListStyle(snapshot.isDraggingOver),
                         width:
-                          getTotalWidth(columnsWidthState) -
+                          totalWidth -
                           columnsWidthState.widthRecord[
                             MetadataColumns.ADD_COLUMN
                           ],
@@ -365,7 +366,7 @@ export function Table(initialState: TableDataType) {
               <div
                 {...row.getRowProps({
                   style: {
-                    minWidth: `${totalColumnsWidth}px`,
+                    width: `${totalWidth}px`,
                   },
                 })}
                 className={`${c("tr")}`}

@@ -26,7 +26,7 @@ export interface DatabaseYaml {
     /** database local configuration */
     config: LocalSettings;
     /** dataview filters */
-    filters?: FilterCondition[];
+    filters: FilterCondition[];
 }
 
 export type RowDatabaseFields = {
