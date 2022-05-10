@@ -1,7 +1,7 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
-export class ConfigHandler extends AbstractYamlHandler {
+export class MarshallConfigHandler extends AbstractYamlHandler {
     handlerName: string = 'configuration';
 
     public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse {

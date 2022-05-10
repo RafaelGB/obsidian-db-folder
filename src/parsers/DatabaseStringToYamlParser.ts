@@ -5,10 +5,10 @@ import { parseYaml } from "obsidian";
 import { YamlHandler, YamlHandlerResponse } from "cdm/MashallModel";
 
 // Handlers of yaml parse
-import { BaseInfoHandler } from 'parsers/handlers/marshall/MarshallDatabaseInfoHandler';
-import { ColumnsHandler } from "parsers/handlers/marshall/MarshallColumnsHandler";
-import { ConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
-import { FiltersHandler } from "./handlers/marshall/MarshallFiltersHandler";
+import { MarshallDatabaseInfoHandler } from 'parsers/handlers/marshall/MarshallDatabaseInfoHandler';
+import { MarshallColumnsHandler } from "parsers/handlers/marshall/MarshallColumnsHandler";
+import { MarshallConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
+import { MarshallFiltersHandler } from "./handlers/marshall/MarshallFiltersHandler";
 
 /**
  * EXPOSED METHOD
@@ -51,10 +51,10 @@ function validateYaml(yaml: any): YamlHandlerResponse {
  */
 function getHandlers(): YamlHandler[] {
     return [
-        new BaseInfoHandler(),
-        new ColumnsHandler(),
-        new ConfigHandler(),
-        new FiltersHandler()
+        new MarshallDatabaseInfoHandler(),
+        new MarshallColumnsHandler(),
+        new MarshallConfigHandler(),
+        new MarshallFiltersHandler()
     ];
 }
 
