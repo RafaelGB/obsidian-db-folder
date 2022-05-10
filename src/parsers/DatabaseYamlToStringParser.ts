@@ -24,6 +24,7 @@ const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml): string[] => {
   databaseConfigString.push(`config:`);
   databaseConfigString.push(`${yamlIndent.repeat(1)}enable_show_state: ${databaseConfig.config.enable_show_state}`);
   databaseConfigString.push(`${yamlIndent.repeat(1)}group_folder_column: ${databaseConfig.config.group_folder_column}`);
+  databaseConfigString.push(`${yamlIndent.repeat(1)}remove_field_when_delete_column: ${databaseConfig.config.remove_field_when_delete_column}`);
 
   // Database filters
   if (databaseConfig.filters) {

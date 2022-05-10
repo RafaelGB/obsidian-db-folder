@@ -18,6 +18,12 @@ export class ConfigHandler extends AbstractYamlHandler {
                 this.addError(`There was not group_folder_column key in yaml. Default will be loaded`);
                 this.localYaml.config.group_folder_column = '';
             }
+            // if remove_field_when_delete_column is not defined, load default
+            if (handlerResponse.yaml.config.remove_field_when_delete_column === undefined) {
+                this.addError(`There was not remove_field_when_delete_column key in yaml. Default will be loaded`);
+                this.localYaml.config.remove_field_when_delete_column = false;
+            }
+
         }
         return this.goNext(handlerResponse);
     }

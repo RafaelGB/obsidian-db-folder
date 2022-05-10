@@ -17,6 +17,7 @@ interface GlobalSettings {
 export interface LocalSettings {
   enable_show_state: boolean;
   group_folder_column: string;
+  remove_field_when_delete_column: boolean;
 }
 export interface DatabaseSettings {
   global_settings: GlobalSettings;
@@ -30,6 +31,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
   },
   local_settings: {
     enable_show_state: false,
+    remove_field_when_delete_column: false,
     group_folder_column: ''
   }
 };

@@ -1,6 +1,7 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/GroupFolderColumnDropDownHandler';
+import { RemoveFieldsWhenDeleteToggleHandler } from 'settings/handlers/columns/RemoveFieldsWhenDeleteToggleHandler';
 
 /**
  * developer settings section
@@ -25,6 +26,7 @@ export function columns_settings_section(settingHandlerResponse: SettingHandlerR
  */
 function getHandlers(): SettingHandler[] {
     return [
-        new GroupFolderColumnDropDownHandler()
+        new GroupFolderColumnDropDownHandler(),
+        new RemoveFieldsWhenDeleteToggleHandler()
     ];
 }
