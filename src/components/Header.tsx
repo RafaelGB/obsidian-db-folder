@@ -49,7 +49,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   /** Properties of header */
   const { setSortBy, rows, initialState } = headerProps;
   /** Column values */
-  const { id, dataType, options } = headerProps.column;
+  const { id, dataType, options, position } = headerProps.column;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
@@ -83,7 +83,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       break;
   }
 
-  function adjustWidthOfTheColumn() {
+  function adjustWidthOfTheColumn(position: number) {
     const columnNumber =
       initialState.columns.length + 1 - initialState.shadowColumns.length;
     const columnName = `newColumn${columnNumber}`;
@@ -93,7 +93,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       (columnLabel.length + WidthVariables.ICON_SPACING) *
       WidthVariables.MAGIC_SPACING;
     setColumnWidthState(columnWidthState);
-    return { name: columnName, position: columnNumber, label: columnLabel };
+    return { name: columnName, position: position, label: columnLabel };
   }
 
   function handlerAddColumnToLeft(e: any) {
@@ -101,7 +101,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       type: ActionTypes.ADD_COLUMN_TO_LEFT,
       columnId: MetadataColumns.ADD_COLUMN,
       focus: true,
-      columnInfo: adjustWidthOfTheColumn(),
+      columnInfo: adjustWidthOfTheColumn(position - 1),
     });
   }
 

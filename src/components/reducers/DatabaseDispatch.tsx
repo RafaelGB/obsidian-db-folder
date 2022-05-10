@@ -323,17 +323,19 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       );
       // Update configuration on disk
       state.view.diskConfig.removeColumn(action.columnId);
-      Promise.all(
-        state.data.map(async (row: RowDataType) => {
-          updateRowFile(
-            row.note.getFile(),
-            action.key,
-            undefined, // delete does not need this field
-            state,
-            UpdateRowOptions.REMOVE_COLUMN
-          );
-        })
-      );
+      if (state.view.diskConfig.yaml.config.remove_field_when_delete_column) {
+        Promise.all(
+          state.data.map(async (row: RowDataType) => {
+            updateRowFile(
+              row.note.getFile(),
+              action.key,
+              undefined, // delete does not need this field
+              state,
+              UpdateRowOptions.REMOVE_COLUMN
+            );
+          })
+        );
+      }
       // Update state
       return update(state, {
         skipReset: { $set: true },
