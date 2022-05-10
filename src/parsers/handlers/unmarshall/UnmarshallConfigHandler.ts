@@ -9,8 +9,9 @@ export class UnmarshallConfigHandler extends AbstractDiskHandler {
         const { config } = handlerResponse.yaml;
         // Lvl1: config
         this.localDisk.push(`${this.handlerName}:`);
-        Object.keys(config).forEach(key => {
-
+        Object.entries(config).forEach(([key, value]) => {
+            // Lvl2: config properties
+            this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${value}`);
         });
         return this.goNext(handlerResponse);
     }

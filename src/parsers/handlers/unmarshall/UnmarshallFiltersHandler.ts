@@ -10,7 +10,6 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
         // Lvl1: filters
         this.localDisk.push(`${this.handlerName}:`);
         if (filters) {
-            this.localDisk.push(`filters:`);
             for (const filter of filters) {
                 // Lvl2: Array of filters
                 this.localDisk.push(`${YAML_INDENT.repeat(1)}- {field: ${filter.field}, operator: ${filter.operator}${filter.value !== undefined ? (",value: " + filter.value)

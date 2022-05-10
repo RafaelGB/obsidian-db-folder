@@ -11,10 +11,10 @@ import { ConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
 import { FiltersHandler } from "./handlers/marshall/MarshallFiltersHandler";
 
 /**
- * PUBLIC METHODS
+ * EXPOSED METHOD
  ****************/
 /**
- * Parse a string
+ * Parse the string inside database file and return a object with the information
  */
 const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
     try {
@@ -30,7 +30,6 @@ const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
  * PRIVATE METHODS
  *****************/
 
-
 /**
  * Validate yaml received from input using handlers of function getHandlers
  */
@@ -45,7 +44,6 @@ function validateYaml(yaml: any): YamlHandlerResponse {
     const response: YamlHandlerResponse = { yaml: yaml, errors: {} };
     return handlers[0].handle(response);
 }
-
 
 
 /**
