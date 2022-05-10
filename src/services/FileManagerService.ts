@@ -4,7 +4,7 @@ import { FileContent } from "helpers/FileContent";
 import { TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
-export class VaultManager {
+class VaultManager {
   private static instance: VaultManager;
 
   /**
@@ -19,7 +19,7 @@ export class VaultManager {
       targetFolder,
       filename ?? "Untitled"
     );
-    const content = parseFrontmatterFieldsToString(databasefields).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    const content = parseFrontmatterFieldsToString(databasefields, "").concat("\n").concat(parseInlineFieldsToString(databasefields));
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;

@@ -1,3 +1,13 @@
+## 0.3.0
+*Published on 2022/05/10*
+### Shiny new things
+- Dataview filters added on settings modal! Now you can filter the initial data obtained from the folder [ISSUE#33](https://github.com/RafaelGB/obsidian-db-folder/issues/33)
+- Improve css styling [ISSUE#31](https://github.com/RafaelGB/obsidian-db-folder/pull/31) [artisticat1](https://github.com/artisticat1)
+- ### Improved
+- Added event of enter to create a new row [ISSUE#32](https://github.com/RafaelGB/obsidian-db-folder/issues/32)
+### No longer broken
+- Duplicated columns are now controled when you add it [ISSUE#32](https://github.com/RafaelGB/obsidian-db-folder/issues/32)
+- DnD of columns is now scaling well the width.
 ## 0.2.2
 *Published on 2022/05/08*
 ### No longer broken

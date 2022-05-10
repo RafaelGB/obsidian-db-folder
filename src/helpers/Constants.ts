@@ -42,7 +42,6 @@ export const MetadataDatabaseColumns = Object.freeze({
   {
     key: MetadataColumns.FILE,
     input: DataTypes.MARKDOWN,
-    Header: MetadataColumns.FILE,
     label: MetadataLabels.FILE,
     accessor: MetadataColumns.FILE,
     isMetadata: true,
@@ -52,7 +51,6 @@ export const MetadataDatabaseColumns = Object.freeze({
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
-    Header: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
     disableResizing: true,
     label: MetadataLabels.ADD_COLUMN,
@@ -116,6 +114,7 @@ export const StyleVariables = Object.freeze({
   BACKGROUND_SECONDARY: 'var(--background-secondary)',
   BACKGROUND_DIVIDER: 'var(--background-divider)',
   TEXT_FAINT: 'var(--text-faint)',
+  TEXT_MUTED: 'var(--text-muted)',
   TEXT_NORMAL: 'var(--text-normal)',
 });
 
@@ -123,3 +122,22 @@ export const WidthVariables = Object.freeze({
   ICON_SPACING: 17,
   MAGIC_SPACING: 10
 });
+
+export const OperatorFilter = Object.freeze({
+  EQUAL: '=',
+  NOT_EQUAL: '!=',
+  GREATER_THAN: '>',
+  LESS_THAN: '<',
+  GREATER_THAN_OR_EQUAL: '>=',
+  LESS_THAN_OR_EQUAL: '<=',
+  CONTAINS: 'contains',
+  STARTS_WITH: 'starts_with',
+  ENDS_WITH: 'ends_with',
+});
+
+export function getOperatorFilterValue(keyToFind: string): string {
+  const entry = Object.entries(OperatorFilter).find(([key]) =>
+    key === keyToFind
+  );
+  return entry[1];
+}

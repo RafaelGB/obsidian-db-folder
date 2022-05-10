@@ -1,4 +1,4 @@
-import { DatabaseColumn, DatabaseYaml } from 'cdm/DatabaseModel';
+import { DatabaseColumn, DatabaseYaml, FilterCondition } from 'cdm/DatabaseModel';
 import {
     Notice,
     TFile
@@ -126,6 +126,16 @@ export default class DatabaseInfo {
 
     async updateConfig<K extends keyof LocalSettings>(key: K, value: LocalSettings[K]): Promise<void> {
         this.yaml.config[key] = value;
+        await this.saveOnDisk();
+    }
+
+    async updateYaml<K extends keyof DatabaseYaml>(key: K, value: DatabaseYaml[K]): Promise<void> {
+        this.yaml[key] = value;
+        await this.saveOnDisk();
+    }
+
+    async updateFilters(updatedFilters: FilterCondition[]): Promise<void> {
+        this.yaml.filters = updatedFilters;
         await this.saveOnDisk();
     }
 }

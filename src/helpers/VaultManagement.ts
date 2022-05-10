@@ -7,7 +7,8 @@ import NoteInfo from 'services/NoteInfo';
 import { DatabaseCore, UpdateRowOptions } from "helpers/Constants";
 import obtainRowDatabaseFields from 'parsers/FileToRowDatabaseFields';
 import { parseFrontmatterFieldsToString } from 'parsers/RowDatabaseFieldsToFile';
-import { getDataviewAPI } from 'services/DataviewService';
+import { DataviewService } from 'services/DataviewService';
+import { FilterCondition } from 'cdm/DatabaseModel';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -61,12 +62,16 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string): Promise<Array<RowDataType>> {
+export async function adapterTFilesToRows(folderPath: string, filters?: FilterCondition[]): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
   let id = 0;
 
-  const folderFiles = getDataviewAPI().pages(`"${folderPath}"`).where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  let folderFiles = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
+    .where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  if (filters) {
+    folderFiles = folderFiles.where(p => DataviewService.filter(filters, p));
+  }
   await Promise.all(folderFiles.map(async (page) => {
     const noteInfo = new NoteInfo(page, ++id);
     rows.push(noteInfo.getRowDataType());

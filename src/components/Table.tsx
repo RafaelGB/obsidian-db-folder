@@ -14,16 +14,16 @@ import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import { ActionTypes, DatabaseCore } from "helpers/Constants";
+import { ActionTypes, DatabaseCore, MetadataColumns } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
 import Header from "components/Header";
-import { useDraggableInPortal } from "components/portals/UseDraggableInPortal";
-import { c } from "helpers/StylesHelper";
+import { c, getTotalWidth } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
+import { getDndListStyle, getDndItemStyle } from "./styles/DnDStyle";
 
 const defaultColumn = {
   minWidth: 50,
@@ -191,14 +191,26 @@ export function Table(initialState: TableDataType) {
   const [columnsWidthState, setColumnsWidthState] = React.useState(
     getColumnsWidthStyle(rows, columns)
   );
-
-  const [isDragUpdate, setDragUpdate] = React.useState(false);
   // Manage DnD
   const currentColOrder = React.useRef(null);
-  const renderDraggable = useDraggableInPortal();
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
+  function handleKeyDown(e: any) {
+    if (e.key === "Enter") {
+      handleAddNewRow();
+    }
+  }
+
+  function handleAddNewRow() {
+    dataDispatch({
+      type: ActionTypes.ADD_ROW,
+      filename: inputNewRow,
+    });
+    setInputNewRow("");
+    newRowRef.current.value = "";
+  }
+
   // Manage NavBar
   const csvButtonProps = {
     columns: columns,
@@ -218,7 +230,7 @@ export function Table(initialState: TableDataType) {
         {...getTableProps({
           style: {
             ...getTableProps().style,
-            width: totalColumnsWidth,
+            minWidth: totalColumnsWidth,
           },
         })}
         className={`${c("table noselect")}`}
@@ -230,13 +242,14 @@ export function Table(initialState: TableDataType) {
             position: "sticky",
             top: 0,
             zIndex: 1,
+            borderTop: "1px solid var(--background-modifier-border)",
           }}
         >
           <HeaderNavBar
             csvButtonProps={csvButtonProps}
             globalFilterRows={globalFilterRows}
             headerGroupProps={headerGroups[0].getHeaderGroupProps({
-              style: { width: totalColumnsWidth },
+              style: { width: getTotalWidth(columnsWidthState) },
             })}
           />
           {/** Headers */}
@@ -247,9 +260,6 @@ export function Table(initialState: TableDataType) {
                 currentColOrder.current = allColumns.map((o: Column) => o.id);
               }}
               onDragUpdate={(dragUpdateObj, b) => {
-                if (!isDragUpdate) {
-                  setDragUpdate(true);
-                }
                 const colOrder = [...currentColOrder.current];
                 const sIndex = dragUpdateObj.source.index;
                 const dIndex =
@@ -271,7 +281,6 @@ export function Table(initialState: TableDataType) {
 
                 // clear the current order
                 currentColOrder.current = null;
-                setDragUpdate(false);
               }}
             >
               <Droppable
@@ -279,16 +288,21 @@ export function Table(initialState: TableDataType) {
                 droppableId="droppable"
                 direction="horizontal"
               >
-                {(droppableProvided, snapshot) => (
+                {(provided, snapshot) => (
                   <div
                     key={`div-Droppable-${i}`}
+                    {...provided.droppableProps}
                     {...headerGroup.getHeaderGroupProps({
                       style: {
-                        ...headerGroup.getHeaderGroupProps().style,
-                        maxWidth: `${totalColumnsWidth}px`,
+                        ...getDndListStyle(snapshot.isDraggingOver),
+                        width:
+                          getTotalWidth(columnsWidthState) -
+                          columnsWidthState.widthRecord[
+                            MetadataColumns.ADD_COLUMN
+                          ],
                       },
                     })}
-                    ref={droppableProvided.innerRef}
+                    ref={provided.innerRef}
                     className={`${c("tr header-group")}`}
                   >
                     {headerGroup.headers.map((column, index) => (
@@ -297,31 +311,32 @@ export function Table(initialState: TableDataType) {
                         draggableId={`${column.id}`}
                         index={index}
                         isDragDisabled={(column as any).skipPersist}
+                        disableInteractiveElementBlocking={
+                          (column as any).skipPersist
+                        }
                       >
-                        {renderDraggable((provided) => {
+                        {(provided, snapshot) => {
                           const tableCellBaseProps = {
-                            ...column.getHeaderProps(),
-                            className: `${c("th noselect")} header`,
-                            key: `div-Draggable-${column.id}`,
                             ...provided.draggableProps,
                             ...provided.dragHandleProps,
+                            ...column.getHeaderProps({
+                              style: {
+                                width: `${
+                                  columnsWidthState.widthRecord[column.id]
+                                }px`,
+                                ...getDndItemStyle(
+                                  snapshot.isDragging,
+                                  provided.draggableProps.style
+                                ),
+                              },
+                            }),
+                            className: `${c("th noselect")} header`,
+                            key: `div-Draggable-${column.id}`,
                             // {...extraProps}
                             ref: provided.innerRef,
                           };
-                          const tableCellProps = isDragUpdate
-                            ? tableCellBaseProps
-                            : {
-                                ...tableCellBaseProps,
-                                style: {
-                                  ...column.getHeaderProps().style,
-                                  width: `${
-                                    columnsWidthState.widthRecord[column.id]
-                                  }px`,
-                                },
-                              };
-
                           return (
-                            <div {...tableCellProps}>
+                            <div {...tableCellBaseProps}>
                               <HeaderContext.Provider
                                 value={{
                                   columnWidthState: columnsWidthState,
@@ -332,10 +347,10 @@ export function Table(initialState: TableDataType) {
                               </HeaderContext.Provider>
                             </div>
                           );
-                        })}
+                        }}
                       </Draggable>
                     ))}
-                    {droppableProvided.placeholder}
+                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
@@ -347,27 +362,27 @@ export function Table(initialState: TableDataType) {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <div {...row.getRowProps()} className={`${c("tr")}`} key={row.id}>
+              <div
+                {...row.getRowProps({
+                  style: {
+                    minWidth: `${totalColumnsWidth}px`,
+                  },
+                })}
+                className={`${c("tr")}`}
+                key={row.id}
+              >
                 {row.cells.map((cell) => {
                   const tableCellBaseProps = {
                     ...cell.getCellProps({
                       style: {
-                        ...cell.getCellProps().style,
-                        maxWidth: `${totalColumnsWidth}px`,
+                        width: columnsWidthState.widthRecord[cell.column.id],
                       },
                     }),
                     className: `${c("td")}`,
                   };
-                  const tableCellProps = isDragUpdate
-                    ? tableCellBaseProps
-                    : {
-                        ...tableCellBaseProps,
-                        style: {
-                          ...tableCellBaseProps.style,
-                          width: columnsWidthState.widthRecord[cell.column.id],
-                        },
-                      };
-                  return <div {...tableCellProps}>{cell.render("Cell")}</div>;
+                  return (
+                    <div {...tableCellBaseProps}>{cell.render("Cell")}</div>
+                  );
                 })}
               </div>
             );
@@ -380,25 +395,15 @@ export function Table(initialState: TableDataType) {
                 onChange={(e) => {
                   setInputNewRow(e.target.value);
                 }}
+                onKeyDown={handleKeyDown}
                 placeholder="filename of new row"
               />
             </div>
-            <div className={`${c("td")}`}>
-              <div
-                onClick={() => {
-                  dataDispatch({
-                    type: ActionTypes.ADD_ROW,
-                    filename: inputNewRow,
-                  });
-                  setInputNewRow("");
-                  newRowRef.current.value = "";
-                }}
-              >
-                <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
-                  <PlusIcon />
-                </span>
-                New
-              </div>
+            <div className={`${c("td")}`} onClick={handleAddNewRow}>
+              <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+                <PlusIcon />
+              </span>
+              New
             </div>
           </div>
         </div>

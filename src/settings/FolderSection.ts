@@ -1,14 +1,15 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
-import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/GroupFolderColumnDropDownHandler';
+import { FilterDataviewHandler } from './handlers/folder/FilterDataviewHandler';
+import { DetailsFormHandler } from './handlers/folder/DetailsFormHandler';
 
 /**
  * developer settings section
  */
-export function columns_settings_section(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-    const columns_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-columns");
+export function folder_settings_section(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
+    const folder_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-folder");
     // title of the section
-    add_setting_header(columns_section, "Configuration about columns", 'h3');
+    add_setting_header(folder_section, "Folder adjustments", 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;
@@ -16,7 +17,8 @@ export function columns_settings_section(settingHandlerResponse: SettingHandlerR
         handlers[i - 1].setNext(handlers[i]);
         i++;
     }
-    settingHandlerResponse.containerEl = columns_section;
+
+    settingHandlerResponse.containerEl = folder_section;
     return handlers[0].handle(settingHandlerResponse);
 }
 
@@ -25,6 +27,7 @@ export function columns_settings_section(settingHandlerResponse: SettingHandlerR
  */
 function getHandlers(): SettingHandler[] {
     return [
-        new GroupFolderColumnDropDownHandler()
+        new DetailsFormHandler(),
+        new FilterDataviewHandler(),
     ];
 }

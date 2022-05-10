@@ -7,7 +7,7 @@ export class LoggerToggleHandler extends AbstractSettingsHandler {
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local } = settingHandlerResponse;
         // pass if modal opened from local settings
-        if (!settingHandlerResponse.local) {
+        if (!local) {
             const logger_togle_promise = async (value: boolean): Promise<void> => {
                 // set debug mode
                 const update_global_settings = settingsManager.plugin.settings.global_settings;

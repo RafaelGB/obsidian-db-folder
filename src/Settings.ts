@@ -5,6 +5,7 @@ import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 import { columns_settings_section } from "settings/ColumnsSection";
+import { folder_settings_section } from "settings/FolderSection";
 import { StyleClasses } from "helpers/Constants";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
@@ -79,9 +80,12 @@ export class SettingsManager {
     containerEl.addClass(StyleClasses.SETTINGS_MODAL);
     add_setting_header(containerEl, heading, 'h2');
 
+    const settingBody = containerEl.createDiv();
+    settingBody.addClass(StyleClasses.SETTINGS_MODAL_BODY);
+    containerEl.setAttribute("id", StyleClasses.SETTINGS_MODAL_BODY);
     const settingHandlerResponse: SettingHandlerResponse = {
       settingsManager: this,
-      containerEl: containerEl,
+      containerEl: settingBody,
       local: local,
       errors: {},
       view: view,
@@ -90,6 +94,10 @@ export class SettingsManager {
   }
 
   constructSettingBody(settingHandlerResponse: SettingHandlerResponse) {
+    if (settingHandlerResponse.local) {
+      /** Folder section */
+      folder_settings_section(settingHandlerResponse);
+    }
     /** Columns section */
     columns_settings_section(settingHandlerResponse);
     /** Developer section */
@@ -97,12 +105,12 @@ export class SettingsManager {
   }
 
   reset(response: SettingHandlerResponse) {
-    const parentElement = response.containerEl.parentElement;
+    const settingsElement = document.getElementById(StyleClasses.SETTINGS_MODAL_BODY);
     // remove all sections
-    parentElement.empty();
+    settingsElement.empty();
 
     response.errors = {};
-    response.containerEl = parentElement;
+    response.containerEl = settingsElement;
     this.constructSettingBody(response);
   }
 

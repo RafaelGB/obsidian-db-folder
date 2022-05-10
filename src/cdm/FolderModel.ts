@@ -34,24 +34,23 @@ export type Models = {
     [key: string]: FolderModel
 }
 
-export type TableColumn = {
-    id: string,
-    Header?: any,
-    label?: string,
-    key: string,
-    position: number,
-    accessor: any,
-    minWidth?: number,
-    width?: number
-    dataType?: string,
-    options?: RowSelectOption[]
-    Cell?: any,
-    getHeaderProps?: any,
-    getResizerProps?: any,
-    isMetadata?: boolean,
-    skipPersist?: boolean,
-    isInline?: boolean,
-    csvCandidate: boolean
+export interface TableColumn {
+    id: string;
+    label: string;
+    key: string;
+    position: number;
+    accessor: any;
+    minWidth?: number;
+    width?: number;
+    dataType?: string;
+    options?: RowSelectOption[];
+    Cell?: any;
+    getHeaderProps?: any;
+    getResizerProps?: any;
+    isMetadata?: boolean;
+    skipPersist?: boolean;
+    isInline?: boolean;
+    csvCandidate: boolean;
 }
 
 export type RowDataType = {

@@ -24,6 +24,15 @@ const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml): string[] => {
   databaseConfigString.push(`config:`);
   databaseConfigString.push(`${yamlIndent.repeat(1)}enable_show_state: ${databaseConfig.config.enable_show_state}`);
   databaseConfigString.push(`${yamlIndent.repeat(1)}group_folder_column: ${databaseConfig.config.group_folder_column}`);
+
+  // Database filters
+  if (databaseConfig.filters) {
+    databaseConfigString.push(`filters:`);
+    for (const filter of databaseConfig.filters) {
+      databaseConfigString.push(`${yamlIndent.repeat(1)}- {field: ${filter.field}, operator: ${filter.operator}${filter.value !== undefined ? (",value: " + filter.value)
+        : ""}}`);
+    }
+  }
   return databaseConfigString;
 }
 

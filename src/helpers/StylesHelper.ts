@@ -27,3 +27,16 @@ export function shortId() {
 export function dbTrim(str: string) {
     return str.trim().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "_");
 }
+
+/**
+ * Calculate summatory of column widths
+ * @param state 
+ * @returns 
+ */
+export function getTotalWidth(state: ColumnWidthState): number {
+    let totalWidth = 0;
+    Object.keys(state.widthRecord).forEach((key) => {
+        totalWidth += state.widthRecord[key];
+    });
+    return totalWidth;
+}
