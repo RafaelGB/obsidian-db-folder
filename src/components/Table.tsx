@@ -173,7 +173,6 @@ export function Table(initialState: TableDataType) {
     setGlobalFilter,
     allColumns,
     setColumnOrder,
-    totalColumnsWidth,
   } = useTable(
     // Table properties
     propsUseTable,
