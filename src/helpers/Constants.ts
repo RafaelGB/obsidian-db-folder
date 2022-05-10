@@ -42,7 +42,6 @@ export const MetadataDatabaseColumns = Object.freeze({
   {
     key: MetadataColumns.FILE,
     input: DataTypes.MARKDOWN,
-    Header: MetadataColumns.FILE,
     label: MetadataLabels.FILE,
     accessor: MetadataColumns.FILE,
     isMetadata: true,

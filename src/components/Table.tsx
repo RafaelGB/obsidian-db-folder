@@ -19,7 +19,7 @@ import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
 import Header from "components/Header";
-import { c } from "helpers/StylesHelper";
+import { c, getTotalWidth } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
@@ -230,7 +230,7 @@ export function Table(initialState: TableDataType) {
         {...getTableProps({
           style: {
             ...getTableProps().style,
-            width: totalColumnsWidth,
+            minWidth: totalColumnsWidth,
           },
         })}
         className={`${c("table noselect")}`}
@@ -249,7 +249,7 @@ export function Table(initialState: TableDataType) {
             csvButtonProps={csvButtonProps}
             globalFilterRows={globalFilterRows}
             headerGroupProps={headerGroups[0].getHeaderGroupProps({
-              style: { width: totalColumnsWidth },
+              style: { width: getTotalWidth(columnsWidthState) },
             })}
           />
           {/** Headers */}
@@ -295,7 +295,7 @@ export function Table(initialState: TableDataType) {
                     {...headerGroup.getHeaderGroupProps({
                       style: {
                         ...getDndListStyle(snapshot.isDraggingOver),
-                        width: totalColumnsWidth,
+                        width: getTotalWidth(columnsWidthState),
                       },
                     })}
                     ref={provided.innerRef}
@@ -361,7 +361,7 @@ export function Table(initialState: TableDataType) {
               <div
                 {...row.getRowProps({
                   style: {
-                    maxWidth: `${totalColumnsWidth}px`,
+                    minWidth: `${totalColumnsWidth}px`,
                   },
                 })}
                 className={`${c("tr")}`}
