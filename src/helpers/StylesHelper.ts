@@ -34,7 +34,7 @@ export function dbTrim(str: string) {
  * @returns 
  */
 export function getTotalWidth(state: ColumnWidthState): number {
-    let totalWidth: number = 0;
+    let totalWidth = 0;
     Object.keys(state.widthRecord).forEach((key) => {
         totalWidth += state.widthRecord[key];
     });

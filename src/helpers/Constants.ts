@@ -136,13 +136,8 @@ export const OperatorFilter = Object.freeze({
 });
 
 export function getOperatorFilterValue(keyToFind: string): string {
-  let result: string = '';
-  Object.entries(OperatorFilter).find(([key, value]) => {
-    if (key === keyToFind) {
-      result = value;
-      return true;
-    }
-    return false;
-  });
-  return result;
+  const entry = Object.entries(OperatorFilter).find(([key]) =>
+    key === keyToFind
+  );
+  return entry[1];
 }
