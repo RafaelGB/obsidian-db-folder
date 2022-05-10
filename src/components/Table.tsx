@@ -14,12 +14,12 @@ import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import { ActionTypes, DatabaseCore } from "helpers/Constants";
+import { ActionTypes, DatabaseCore, MetadataColumns } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
 import Header from "components/Header";
-import { c } from "helpers/StylesHelper";
+import { c, getTotalWidth } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
@@ -196,6 +196,21 @@ export function Table(initialState: TableDataType) {
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
+  function handleKeyDown(e: any) {
+    if (e.key === "Enter") {
+      handleAddNewRow();
+    }
+  }
+
+  function handleAddNewRow() {
+    dataDispatch({
+      type: ActionTypes.ADD_ROW,
+      filename: inputNewRow,
+    });
+    setInputNewRow("");
+    newRowRef.current.value = "";
+  }
+
   // Manage NavBar
   const csvButtonProps = {
     columns: columns,
@@ -215,7 +230,7 @@ export function Table(initialState: TableDataType) {
         {...getTableProps({
           style: {
             ...getTableProps().style,
-            width: totalColumnsWidth,
+            minWidth: totalColumnsWidth,
           },
         })}
         className={`${c("table noselect")}`}
@@ -234,7 +249,7 @@ export function Table(initialState: TableDataType) {
             csvButtonProps={csvButtonProps}
             globalFilterRows={globalFilterRows}
             headerGroupProps={headerGroups[0].getHeaderGroupProps({
-              style: { width: totalColumnsWidth },
+              style: { width: getTotalWidth(columnsWidthState) },
             })}
           />
           {/** Headers */}
@@ -280,6 +295,11 @@ export function Table(initialState: TableDataType) {
                     {...headerGroup.getHeaderGroupProps({
                       style: {
                         ...getDndListStyle(snapshot.isDraggingOver),
+                        width:
+                          getTotalWidth(columnsWidthState) -
+                          columnsWidthState.widthRecord[
+                            MetadataColumns.ADD_COLUMN
+                          ],
                       },
                     })}
                     ref={provided.innerRef}
@@ -291,6 +311,9 @@ export function Table(initialState: TableDataType) {
                         draggableId={`${column.id}`}
                         index={index}
                         isDragDisabled={(column as any).skipPersist}
+                        disableInteractiveElementBlocking={
+                          (column as any).skipPersist
+                        }
                       >
                         {(provided, snapshot) => {
                           const tableCellBaseProps = {
@@ -342,7 +365,7 @@ export function Table(initialState: TableDataType) {
               <div
                 {...row.getRowProps({
                   style: {
-                    maxWidth: `${totalColumnsWidth}px`,
+                    minWidth: `${totalColumnsWidth}px`,
                   },
                 })}
                 className={`${c("tr")}`}
@@ -372,20 +395,11 @@ export function Table(initialState: TableDataType) {
                 onChange={(e) => {
                   setInputNewRow(e.target.value);
                 }}
+                onKeyDown={handleKeyDown}
                 placeholder="filename of new row"
               />
             </div>
-            <div
-              className={`${c("td")}`}
-              onClick={() => {
-                dataDispatch({
-                  type: ActionTypes.ADD_ROW,
-                  filename: inputNewRow,
-                });
-                setInputNewRow("");
-                newRowRef.current.value = "";
-              }}
-            >
+            <div className={`${c("td")}`} onClick={handleAddNewRow}>
               <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
                 <PlusIcon />
               </span>

@@ -70,6 +70,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const [settingsPopperElement, setSettingsPopperElement] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
 
+  // Manage errors
+  const [labelStateInvalid, setLabelStateInvalid] = useState(false);
   useEffect(() => {
     if (created) {
       setExpanded(true);
@@ -208,9 +210,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     }
   );
 
-  function persistLabelChange() {
-    // trim label will get a valid yaml key
-    const newKey = dbTrim(labelState);
+  function persistLabelChange(newKey: string) {
     const futureOrder = headerMenuProps.headerProps.allColumns.map(
       (o: Column) => (o.id === column.id ? newKey : o.id)
     );
@@ -239,12 +239,26 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   }
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
-      persistLabelChange();
+      // trim label will get a valid yaml key
+      const newKey = dbTrim(labelState);
+      // Check if key already exists. If so, mark it as invalid
+      if (
+        headerMenuProps.headerProps.allColumns.find(
+          (o: Column) => o.id === newKey
+        )
+      ) {
+        setLabelStateInvalid(true);
+        return;
+      }
+      persistLabelChange(newKey);
     }
   }
 
   function handleChange(e: any) {
     setLabelState(e.target.value);
+    if (labelStateInvalid) {
+      setLabelStateInvalid(false);
+    }
   }
 
   /**
@@ -292,7 +306,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           <div
             className={`menu ${c("popper")}`}
             style={{
-              width: 240
+              width: 240,
             }}
           >
             {/** Edit header label section */}
@@ -305,7 +319,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             >
               <div className="is-fullwidth" style={{ marginBottom: 12 }}>
                 <input
-                  className="form-input"
+                  className={
+                    labelStateInvalid
+                      ? `${c("invalid-form")}`
+                      : `${c("form-input")}`
+                  }
                   ref={setInputRef}
                   type="text"
                   value={labelState}
@@ -356,7 +374,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 >
                   {types.map((type) => (
                     <div key={type.label}>
-                      <div className="menu-item sort-button" onClick={type.onClick}>
+                      <div
+                        className="menu-item sort-button"
+                        onClick={type.onClick}
+                      >
                         <span className="svg-icon svg-text icon-margin">
                           {type.icon}
                         </span>
@@ -439,9 +460,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             </div>
           </div>
         </div>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 };
 
