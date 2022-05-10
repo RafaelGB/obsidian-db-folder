@@ -1,6 +1,6 @@
+import { YamlHandlerResponse } from "cdm/MashallModel";
 import { parseYamlMock } from "mock/mockObsidianUtils";
 import DatabaseStringToYamlParser from "parsers/DatabaseStringToYamlParser";
-import { YamlHandlerResponse } from "parsers/handlers/AbstractYamlPropertyHandler";
 
 jest.mock("obsidian",
     () => {

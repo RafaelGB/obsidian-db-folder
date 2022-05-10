@@ -1,5 +1,6 @@
+import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { DataTypes } from 'helpers/Constants';
-import { AbstractYamlHandler, YamlHandlerResponse } from 'parsers/handlers/AbstractYamlPropertyHandler';
+import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class ColumnsHandler extends AbstractYamlHandler {
     handlerName: string = 'columns';

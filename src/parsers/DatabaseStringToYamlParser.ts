@@ -1,14 +1,14 @@
-import { DbFolderError } from "errors/AbstractError";
 import { ParserError } from "errors/ParserError";
 import { parseYaml } from "obsidian";
 
 // Interface of handlers
-import { YamlHandler, YamlHandlerResponse } from "parsers/handlers/AbstractYamlPropertyHandler";
+import { YamlHandler, YamlHandlerResponse } from "cdm/MashallModel";
+
 // Handlers of yaml parse
-import { BaseInfoHandler } from 'parsers/handlers/BaseInfoHandler';
-import { ColumnsHandler } from "parsers/handlers/ColumnsHandler";
-import { ConfigHandler } from "parsers/handlers/ConfigHandler";
-import { FiltersHandler } from "./handlers/FiltersHandler";
+import { BaseInfoHandler } from 'parsers/handlers/marshall/MarshallDatabaseInfoHandler';
+import { ColumnsHandler } from "parsers/handlers/marshall/MarshallColumnsHandler";
+import { ConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
+import { FiltersHandler } from "./handlers/marshall/MarshallFiltersHandler";
 
 /**
  * PUBLIC METHODS

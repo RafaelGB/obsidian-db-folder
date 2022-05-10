@@ -141,3 +141,5 @@ export function getOperatorFilterValue(keyToFind: string): string {
   );
   return entry[1];
 }
+
+export const YAML_INDENT = Object.freeze("  ");

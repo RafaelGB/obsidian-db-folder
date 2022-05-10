@@ -1,5 +1,6 @@
 import { DatabaseYaml } from "cdm/DatabaseModel";
 
+
 /**
  * Given a database config, obtain the string on yaml format
  * @param databaseConfig 

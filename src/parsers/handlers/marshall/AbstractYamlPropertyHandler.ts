@@ -1,13 +1,6 @@
 import { DatabaseYaml } from "cdm/DatabaseModel";
+import { YamlHandler, YamlHandlerResponse } from "cdm/MashallModel";
 
-export type YamlHandlerResponse = {
-    yaml: DatabaseYaml,
-    errors: Record<string, string[]>,
-};
-export interface YamlHandler {
-    setNext(handler: YamlHandler): YamlHandler;
-    handle(yaml: YamlHandlerResponse): YamlHandlerResponse;
-}
 
 export abstract class AbstractYamlHandler implements YamlHandler {
     abstract handlerName: string;
