@@ -1,3 +1,9 @@
+## 0.3.1
+*Published on 2022/05/10*
+### Shiny new things
+- Option to enable/disable delete fields asociated with a column when you delete the column [ISSUE#28](https://github.com/RafaelGB/obsidian-db-folder/issues/28)
+### No longer broken
+- Resize window now do not affect the width of the table [ISSUE#34](https://github.com/RafaelGB/obsidian-db-folder/issues/34)
 ## 0.3.0
 *Published on 2022/05/10*
 ### Shiny new things
