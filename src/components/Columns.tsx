@@ -22,7 +22,6 @@ export async function obtainMetadataColumns(
     ...MetadataDatabaseColumns.FILE,
     ...(yamlColumns[MetadataColumns.FILE] ?? {}),
   };
-
   yamlColumns[MetadataColumns.ADD_COLUMN] = MetadataDatabaseColumns.ADD_COLUMN;
   return yamlColumns;
 }
@@ -46,6 +45,23 @@ export async function obtainColumnsFromFolder(
   return sortColumnsByPosition(columns);
 }
 
+function parseDatabaseToTableColumn(
+  databaseColumn: DatabaseColumn,
+  columnKey: string,
+  index: number
+): TableColumn {
+  const tableColumn: TableColumn = {
+    ...(databaseColumn as Partial<TableColumn>),
+    id: columnKey,
+    position: databaseColumn.position ?? index,
+    key: databaseColumn.key ?? columnKey,
+    label: databaseColumn.label,
+    accessor: databaseColumn.accessor ?? dbTrim(databaseColumn.label),
+    csvCandidate: databaseColumn.csvCandidate ?? true,
+  };
+  return tableColumn;
+}
+
 async function columnOptions(
   columnKey: string,
   index: number,
@@ -53,17 +69,11 @@ async function columnOptions(
 ): Promise<TableColumn> {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = [];
-  const tableRow: TableColumn = {
-    id: columnKey,
-    position: column.position ?? index,
-    label: column.label,
-    key: column.key ?? columnKey,
-    accessor: column.accessor ?? dbTrim(column.label),
-    isMetadata: column.isMetadata ?? false,
-    skipPersist: column.skipPersist ?? false,
-    csvCandidate: column.csvCandidate ?? true,
-    isInline: column.isInline ?? false,
-  };
+  const tableRow: TableColumn = parseDatabaseToTableColumn(
+    column,
+    columnKey,
+    index
+  );
   /**
    * return plain text
    * @returns {TableColumn}

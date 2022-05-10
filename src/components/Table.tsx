@@ -14,7 +14,7 @@ import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import { ActionTypes, DatabaseCore } from "helpers/Constants";
+import { ActionTypes, DatabaseCore, MetadataColumns } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
@@ -295,7 +295,11 @@ export function Table(initialState: TableDataType) {
                     {...headerGroup.getHeaderGroupProps({
                       style: {
                         ...getDndListStyle(snapshot.isDraggingOver),
-                        width: getTotalWidth(columnsWidthState),
+                        width:
+                          getTotalWidth(columnsWidthState) -
+                          columnsWidthState.widthRecord[
+                            MetadataColumns.ADD_COLUMN
+                          ],
                       },
                     })}
                     ref={provided.innerRef}

@@ -51,7 +51,6 @@ export const MetadataDatabaseColumns = Object.freeze({
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
-    Header: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
     disableResizing: true,
     label: MetadataLabels.ADD_COLUMN,

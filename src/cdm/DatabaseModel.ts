@@ -1,19 +1,18 @@
 import { RowType } from "cdm/RowTypeModel"
-import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "Settings"
 
 /** database column */
-export type DatabaseColumn = {
-    input: string,
-    accessor: string,
-    label: string,
-    key?: string,
-    position?: number,
-    isMetadata?: boolean,
-    skipPersist?: boolean,
-    csvCandidate?: boolean,
-    isInline?: boolean,
-    [key: string]: RowType
+export interface DatabaseColumn {
+    input: string;
+    accessor: string;
+    label: string;
+    key: string;
+    position?: number;
+    isMetadata?: boolean;
+    skipPersist?: boolean;
+    csvCandidate?: boolean;
+    isInline?: boolean;
+    [key: string]: RowType;
 }
 
 /** database yaml */
