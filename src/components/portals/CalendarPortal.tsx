@@ -22,9 +22,12 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   /** state of cell value */
   const { value, setValue } = useContext(CellContext);
 
-  const [calendarState, setCalendarState] = useState(
-    DateTime.fromFormat(value.value, "yyyy-MM-dd").toJSDate()
-  );
+  let initialDate = new Date();
+  if (DateTime.isDateTime(value.value)) {
+    initialDate = DateTime.fromFormat(value.value, "yyyy-MM-dd").toJSDate();
+  }
+  const [calendarState, setCalendarState] = useState(initialDate);
+
   function handleCalendarChange(date: Date) {
     setCalendarState(date);
     setShowCalendar(false);
@@ -51,7 +54,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
           zIndex: 4,
           minWidth: 200,
           maxWidth: 320,
-          padding: "0.75rem",
+          padding: "0.5rem",
           background: StyleVariables.BACKGROUND_SECONDARY,
         }}
         onBlur={() => setShowCalendar(false)}

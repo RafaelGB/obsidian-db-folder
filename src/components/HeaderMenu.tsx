@@ -433,56 +433,59 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 </div>
               ))}
             </div>
-            <div
-              style={{
-                borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
-                padding: "4px 0px",
-              }}
-            >
-              {/** Column settings section */}
-              <div style={{ padding: "4px 0px" }}>
-                <div
-                  className="menu-item sort-button"
-                  onMouseEnter={() => setShowSettings(true)}
-                  onMouseLeave={() => setShowSettings(false)}
-                  ref={setSettingsReferenceElement}
-                >
-                  <span className="svg-icon svg-text icon-margin">
-                    <AdjustmentsIcon />
-                  </span>
-                  <span>Settings</span>
-                </div>
-                {showSettings && (
+            {!column.isMetadata && (
+              <div
+                style={{
+                  borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                  padding: "4px 0px",
+                }}
+              >
+                {/** Column settings section */}
+
+                <div style={{ padding: "4px 0px" }}>
                   <div
-                    className={`menu ${c("popper")}`}
-                    ref={setSettingsPopperElement}
+                    className="menu-item sort-button"
                     onMouseEnter={() => setShowSettings(true)}
                     onMouseLeave={() => setShowSettings(false)}
-                    {...settingsPopper.attributes.popper}
-                    style={{
-                      ...settingsPopper.styles.popper,
-                      width: 200,
-                      zIndex: 4,
-                      padding: "4px 0px",
-                    }}
+                    ref={setSettingsReferenceElement}
                   >
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={isInline}
-                            onChange={(event) => {
-                              handleChangeToggleInlineFrontmatter(event);
-                            }}
-                          />
-                        }
-                        label="Inline"
-                      />
-                    </FormGroup>
+                    <span className="svg-icon svg-text icon-margin">
+                      <AdjustmentsIcon />
+                    </span>
+                    <span>Settings</span>
                   </div>
-                )}
+                  {showSettings && (
+                    <div
+                      className={`menu ${c("popper")}`}
+                      ref={setSettingsPopperElement}
+                      onMouseEnter={() => setShowSettings(true)}
+                      onMouseLeave={() => setShowSettings(false)}
+                      {...settingsPopper.attributes.popper}
+                      style={{
+                        ...settingsPopper.styles.popper,
+                        width: 200,
+                        zIndex: 4,
+                        padding: "4px 0px",
+                      }}
+                    >
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={isInline}
+                              onChange={(event) => {
+                                handleChangeToggleInlineFrontmatter(event);
+                              }}
+                            />
+                          }
+                          label="Inline"
+                        />
+                      </FormGroup>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
