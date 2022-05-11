@@ -82,7 +82,9 @@ export default function DefaultCell(cellProperties: Cell) {
     switch (dataType) {
       /** Plain text option */
       case DataTypes.TEXT:
-        return (
+        return (cellProperties.column as any).isMetadata ? (
+          <span className="data-input">{value.value.toString()}</span>
+        ) : (
           <ContentEditable
             html={(value.value && value.value.toString()) || ""}
             onChange={handleOnChange}
@@ -119,7 +121,7 @@ export default function DefaultCell(cellProperties: Cell) {
           );
         });
 
-        return <span ref={containerRef} className={`${c("md_cell")}`} ></span>;
+        return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
       /** Selector option */
       case DataTypes.SELECT:
         return (
