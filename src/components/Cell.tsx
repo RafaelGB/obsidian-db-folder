@@ -9,6 +9,7 @@ import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
+import { TableColumn } from "cdm/FolderModel";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -141,7 +142,10 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.CALENDAR:
         return (
           <CellContext.Provider value={{ value, setValue }}>
-            <CalendarPortal state={(cellProperties as any).initialState} />
+            <CalendarPortal
+              intialState={(cellProperties as any).initialState}
+              column={cellProperties.column as unknown as TableColumn}
+            />
           </CellContext.Provider>
         );
       /** Default option */

@@ -1,8 +1,4 @@
-import {
-  DatabaseHeaderProps,
-  TableColumn,
-  TableDataType,
-} from "cdm/FolderModel";
+import { DatabaseHeaderProps } from "cdm/FolderModel";
 import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim, c } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
@@ -13,13 +9,15 @@ import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
+import CalendarIcon from "components/img/CalendarIcon";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
-import { ActionType, Column } from "react-table";
+import { Column } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
+import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { FormControlLabel, FormGroup, Switch } from "@material-ui/core";
-import { getColumnWidthStyle } from "./styles/ColumnWidthStyle";
+
 type HeaderMenuProps = {
   headerProps: DatabaseHeaderProps;
   setSortBy: any;
@@ -140,7 +138,12 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       icon: <ArrowRightIcon />,
       label: "Insert right",
     },
-    {
+  ];
+  /**
+   * Add extra buttons if column is not a metadata
+   */
+  if (!column.isMetadata) {
+    buttons.push({
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.DELETE_COLUMN,
@@ -153,9 +156,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <TrashIcon />,
       label: "Delete",
-    },
-  ];
-
+    });
+  }
   /**
    * Array of type headers available to change the data type of the column
    */
@@ -198,6 +200,19 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <HashIcon />,
       label: DataTypes.NUMBER,
+    },
+    {
+      onClick: (e: any) => {
+        dispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: column.id,
+          dataType: DataTypes.CALENDAR,
+        });
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <CalendarIcon />,
+      label: DataTypes.CALENDAR,
     },
   ];
 
@@ -315,84 +330,89 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             }}
           >
             {/** Edit header label section */}
-            <div
-              style={{
-                paddingTop: "0.75rem",
-                paddingLeft: "0.75rem",
-                paddingRight: "0.75rem",
-              }}
-            >
-              <div className="is-fullwidth" style={{ marginBottom: 12 }}>
-                <input
-                  className={
-                    labelStateInvalid
-                      ? `${c("invalid-form")}`
-                      : `${c("form-input")}`
-                  }
-                  ref={setInputRef}
-                  type="text"
-                  value={labelState}
-                  style={{ width: "100%" }}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-              <span
-                className="font-weight-600 font-size-75"
-                style={{
-                  textTransform: "uppercase",
-                  color: StyleVariables.TEXT_FAINT,
-                }}
-              >
-                Property Type
-              </span>
-            </div>
-            {/** Type of column section */}
-            <div style={{ padding: "4px 0px" }}>
-              <div
-                className="menu-item sort-button"
-                onMouseEnter={() => setShowType(true)}
-                onMouseLeave={() => setShowType(false)}
-                ref={setTypeReferenceElement}
-              >
-                <span className="svg-icon svg-text icon-margin">
-                  {propertyIcon}
-                </span>
-                <span style={{ textTransform: "capitalize" }}>
-                  {column.dataType}
-                </span>
-              </div>
-              {showType && (
+            {!column.isMetadata && (
+              <>
                 <div
-                  className={`menu ${c("popper")}`}
-                  ref={setTypePopperElement}
-                  onMouseEnter={() => setShowType(true)}
-                  onMouseLeave={() => setShowType(false)}
-                  {...typePopper.attributes.popper}
                   style={{
-                    ...typePopper.styles.popper,
-                    width: 200,
-                    zIndex: 4,
-                    padding: "4px 0px",
+                    paddingTop: "0.75rem",
+                    paddingLeft: "0.75rem",
+                    paddingRight: "0.75rem",
                   }}
                 >
-                  {types.map((type) => (
-                    <div key={type.label}>
-                      <div
-                        className="menu-item sort-button"
-                        onClick={type.onClick}
-                      >
-                        <span className="svg-icon svg-text icon-margin">
-                          {type.icon}
-                        </span>
-                        {type.label}
-                      </div>
-                    </div>
-                  ))}
+                  <div className="is-fullwidth" style={{ marginBottom: 12 }}>
+                    <input
+                      className={
+                        labelStateInvalid
+                          ? `${c("invalid-form")}`
+                          : `${c("form-input")}`
+                      }
+                      ref={setInputRef}
+                      type="text"
+                      value={labelState}
+                      style={{ width: "100%" }}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+
+                  <span
+                    className="font-weight-600 font-size-75"
+                    style={{
+                      textTransform: "uppercase",
+                      color: StyleVariables.TEXT_FAINT,
+                    }}
+                  >
+                    Property Type
+                  </span>
                 </div>
-              )}
-            </div>
+                {/** Type of column section */}
+                <div style={{ padding: "4px 0px" }}>
+                  <div
+                    className="menu-item sort-button"
+                    onMouseEnter={() => setShowType(true)}
+                    onMouseLeave={() => setShowType(false)}
+                    ref={setTypeReferenceElement}
+                  >
+                    <span className="svg-icon svg-text icon-margin">
+                      {propertyIcon}
+                    </span>
+                    <span style={{ textTransform: "capitalize" }}>
+                      {column.dataType}
+                    </span>
+                  </div>
+                  {showType && (
+                    <div
+                      className={`menu ${c("popper")}`}
+                      ref={setTypePopperElement}
+                      onMouseEnter={() => setShowType(true)}
+                      onMouseLeave={() => setShowType(false)}
+                      {...typePopper.attributes.popper}
+                      style={{
+                        ...typePopper.styles.popper,
+                        width: 200,
+                        zIndex: 4,
+                        padding: "4px 0px",
+                      }}
+                    >
+                      {types.map((type) => (
+                        <div key={type.label}>
+                          <div
+                            className="menu-item sort-button"
+                            onClick={type.onClick}
+                          >
+                            <span className="svg-icon svg-text icon-margin">
+                              {type.icon}
+                            </span>
+                            {type.label}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
             {/** Action buttons section */}
             <div
               style={{

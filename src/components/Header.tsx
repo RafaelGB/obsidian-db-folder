@@ -5,6 +5,7 @@ import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
 import PlusIcon from "components/img/Plus";
 import HeaderMenu from "components/HeaderMenu";
+import CalendarIcon from "components/img/CalendarIcon";
 import MarkdownObsidian from "components/img/Markdown";
 import {
   ActionTypes,
@@ -56,7 +57,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
-  const [isMetadata, setIsMetadata] = useState(headerProps.column.isMetadata);
   const [isInline, setIsInline] = useState(headerProps.column.isInline);
   const [labelState, setLabelState] = useState(headerProps.column.label);
   React.useEffect(() => {
@@ -74,6 +74,9 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     case DataTypes.SELECT:
       setOptionsOfSelectDataType(options, rows, id);
       propertyIcon = <MultiIcon />;
+      break;
+    case DataTypes.CALENDAR:
+      propertyIcon = <CalendarIcon />;
       break;
     case DataTypes.MARKDOWN:
       // TODO : add a markdown icon
@@ -117,7 +120,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
         {labelState}
         {isInline && <span>*</span>}
       </div>
-      {!isMetadata && domReady
+      {domReady
         ? ReactDOM.createPortal(
             <HeaderMenu
               headerProps={headerProps}
