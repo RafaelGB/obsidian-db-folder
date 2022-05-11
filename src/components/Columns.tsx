@@ -8,6 +8,7 @@ import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
 import { dbTrim } from "helpers/StylesHelper";
+import { LocalSettings } from "Settings";
 
 /**
  * Add mandatory columns to the table
@@ -15,13 +16,31 @@ import { dbTrim } from "helpers/StylesHelper";
  * @returns
  */
 export async function obtainMetadataColumns(
-  yamlColumns: Record<string, DatabaseColumn>
+  yamlColumns: Record<string, DatabaseColumn>,
+  localSetting: LocalSettings
 ): Promise<Record<string, DatabaseColumn>> {
   // If File is not already in the table, add it
   yamlColumns[MetadataColumns.FILE] = {
     ...MetadataDatabaseColumns.FILE,
     ...(yamlColumns[MetadataColumns.FILE] ?? {}),
   };
+
+  if (localSetting.show_metadata_created) {
+    // If Created is not already in the table, add it
+    yamlColumns[MetadataColumns.CREATED] = {
+      ...MetadataDatabaseColumns.CREATED,
+      ...(yamlColumns[MetadataColumns.CREATED] ?? {}),
+    };
+  }
+
+  if (localSetting.show_metadata_modified) {
+    // If Modified is not already in the table, add it
+    yamlColumns[MetadataColumns.MODIFIED] = {
+      ...MetadataDatabaseColumns.MODIFIED,
+      ...(yamlColumns[MetadataColumns.MODIFIED] ?? {}),
+    };
+  }
+
   yamlColumns[MetadataColumns.ADD_COLUMN] = MetadataDatabaseColumns.ADD_COLUMN;
   return yamlColumns;
 }

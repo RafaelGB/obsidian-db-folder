@@ -33,13 +33,14 @@
 		"@types/react-window": "1.8.5",
 		"@types/react-beautiful-dnd": "13.1.2",
 		"@types/react-csv": "1.1.2",
-		"@typescript-eslint/eslint-plugin": "5.22.0",
-		"@typescript-eslint/parser": "5.22.0",
-		"eslint": "8.14.0",
+		"@types/luxon": "2.3.2",
+		"@typescript-eslint/eslint-plugin": "5.23.0",
+		"@typescript-eslint/parser": "5.23.0",
+		"eslint": "8.15.0",
 		"jest": "27.5.1",
-		"jest-mock-extended": "2.0.5",
+		"jest-mock-extended": "2.0.6",
 		"obsidian": "0.14.6",
-		"obsidian-dataview": "0.5.18",
+		"obsidian-dataview": "0.5.20",
 		"rollup": "2.72.0",
 		"ts-jest": "27.1.4",
 		"tslib": "2.4.0",
@@ -61,6 +62,7 @@
 		"react-popper": "2.3.0",
 		"react-table": "7.7.0",
 		"react-window": "1.8.7",
-		"regenerator-runtime": "0.13.9"
+		"regenerator-runtime": "0.13.9",
+		"luxon": "2.4.0"
 	}
 }

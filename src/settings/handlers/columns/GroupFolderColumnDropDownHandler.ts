@@ -1,6 +1,4 @@
-import { Filter } from "@material-ui/icons";
 import { DataTypes } from "helpers/Constants";
-import { LOGGER } from "services/Logger";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown } from "settings/SettingsComponents";
 
