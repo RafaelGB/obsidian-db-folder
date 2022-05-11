@@ -72,17 +72,22 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
 
   // Manage errors
   const [labelStateInvalid, setLabelStateInvalid] = useState(false);
+
+  /** Event driven actions */
   useEffect(() => {
+    // Throw event if created changed to expand or collapse the menu
     if (created) {
       setExpanded(true);
     }
   }, [created]);
 
   useEffect(() => {
+    // Throw event if label is changed
     setLabelState(labelState);
   }, [labelState]);
 
   useEffect(() => {
+    // Throw event if inputRef changed to focus on when it exists
     if (inputRef) {
       inputRef.focus();
       inputRef.select();

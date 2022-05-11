@@ -176,9 +176,9 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       </div>
       {domReady
         ? ReactDOM.createPortal(
-          PortalSelect(),
-          document.getElementById("popper-container")
-        )
+            PortalSelect(),
+            document.getElementById("popper-container")
+          )
         : null}
     </>
   );

@@ -8,6 +8,7 @@ import NoteInfo from "services/NoteInfo";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
+import CalendarPortal from "./portals/CalendarPortal";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -136,7 +137,13 @@ export default function DefaultCell(cellProperties: Cell) {
             />
           </CellContext.Provider>
         );
-
+      /** Calendar option */
+      case DataTypes.CALENDAR:
+        return (
+          <CellContext.Provider value={{ value, setValue }}>
+            <CalendarPortal state={(cellProperties as any).initialState} />
+          </CellContext.Provider>
+        );
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);

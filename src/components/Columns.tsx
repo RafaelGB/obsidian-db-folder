@@ -157,6 +157,15 @@ async function columnOptions(
     };
   }
 
+  function isCalendar(): TableColumn {
+    LOGGER.debug(`<= columnOptions`, `return calendar column`);
+    return {
+      ...tableRow,
+      dataType: DataTypes.CALENDAR,
+      options: options,
+    };
+  }
+
   // Record of options
   let inputs: Record<string, any> = {};
   inputs[DataTypes.TEXT] = isText;
@@ -164,6 +173,7 @@ async function columnOptions(
   inputs[DataTypes.SELECT] = isSelect;
   inputs[DataTypes.MARKDOWN] = isMarkdown;
   inputs[DataTypes.NEW_COLUMN] = isNewColumn;
+  inputs[DataTypes.CALENDAR] = isCalendar;
   if (inputs.hasOwnProperty(column.input)) {
     return await inputs[column.input]();
   } else {
