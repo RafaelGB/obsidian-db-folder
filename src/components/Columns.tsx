@@ -31,6 +31,8 @@ export async function obtainMetadataColumns(
       ...MetadataDatabaseColumns.CREATED,
       ...(yamlColumns[MetadataColumns.CREATED] ?? {}),
     };
+  } else {
+    delete yamlColumns[MetadataColumns.CREATED];
   }
 
   if (localSetting.show_metadata_modified) {
@@ -39,6 +41,8 @@ export async function obtainMetadataColumns(
       ...MetadataDatabaseColumns.MODIFIED,
       ...(yamlColumns[MetadataColumns.MODIFIED] ?? {}),
     };
+  } else {
+    delete yamlColumns[MetadataColumns.MODIFIED];
   }
 
   yamlColumns[MetadataColumns.ADD_COLUMN] = MetadataDatabaseColumns.ADD_COLUMN;
