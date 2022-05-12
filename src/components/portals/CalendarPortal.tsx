@@ -1,7 +1,7 @@
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import ReactDOM from "react-dom";
 import { DateTime } from "luxon";
@@ -31,13 +31,16 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const note: NoteInfo = (cellProperties.row.original as any).note;
 
   const [calendarState, setCalendarState] = useState(
-    (
-      DataviewService.parseLiteral(
-        contextValue.value,
-        DataTypes.CALENDAR
-      ) as DateTime
-    ).toJSDate()
+    (contextValue.value as DateTime).toJSDate()
   );
+
+  useEffect(() => {
+    const portalActive = document.getElementById("unique-calendar-portal");
+    if (portalActive) {
+      // Hacky way to set focus on calendar
+      portalActive.focus();
+    }
+  }, [showCalendar]);
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);
@@ -64,6 +67,12 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     }
   }
 
+  function handleBlur(event: any) {
+    console.log("blur");
+    event.preventDefault();
+    setShowCalendar(false);
+  }
+
   function renderCalendar() {
     return (
       <div
@@ -79,18 +88,21 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
           background: StyleVariables.BACKGROUND_SECONDARY,
         }}
         onMouseLeave={() => setShowCalendar(false)}
+        onBlur={handleBlur}
+        id={"unique-calendar-portal"}
+        tabIndex={-1}
       >
         <Calendar onChange={handleCalendarChange} value={calendarState} />
       </div>
     );
   }
+
   return (
     <>
       <div
         className="data-input calendar"
         ref={setCalendarRef}
         onClick={handlerOnClick}
-        onBlur={() => setShowCalendar(false)}
       >
         <span>
           {DataviewService.parseLiteral(contextValue.value, DataTypes.TEXT)}
