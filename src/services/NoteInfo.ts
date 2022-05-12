@@ -24,15 +24,12 @@ export default class NoteInfo {
         }
         /** Metadata fields */
         aFile[MetadataColumns.FILE] = `${this.page.file.link.markdown()}`;
-        aFile[MetadataColumns.CREATED] = DateTime.fromISO(this.page.file.ctime).toFormat('yyyy-MM-dd');
-        aFile[MetadataColumns.MODIFIED] = DateTime.fromISO(this.page.file.mtime).toFormat('yyyy-MM-dd');
-
+        aFile[MetadataColumns.CREATED] = this.page.file.ctime;
+        aFile[MetadataColumns.MODIFIED] = this.page.file.mtime;
         /** Optional fields */
         Object.keys(this.page).forEach(property => {
             const value = this.page[property];
-            if (value && typeof value !== 'object') {
-                aFile[property] = value;
-            }
+            aFile[property] = value;
         });
         return aFile;
     }

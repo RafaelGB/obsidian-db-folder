@@ -1,18 +1,22 @@
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { CellContext } from "components/contexts/CellContext";
-import { StyleVariables } from "helpers/Constants";
+import { ActionTypes, StyleVariables } from "helpers/Constants";
 import React, { useContext, useState } from "react";
 import Calendar from "react-calendar";
 import ReactDOM from "react-dom";
 import { DateTime } from "luxon";
 import { usePopper } from "react-popper";
+import { Cell } from "react-table";
+import NoteInfo from "services/NoteInfo";
 
 type CalendarProps = {
   intialState: TableDataType;
   column: TableColumn;
+  cellProperties: Cell;
 };
 const CalendarPortal = (calendarProps: CalendarProps) => {
-  const { column } = calendarProps;
+  const { column, cellProperties } = calendarProps;
+  const dataDispatch = (cellProperties as any).dataDispatch;
   const [showCalendar, setShowCalendar] = useState(false);
   // Selector reference state
   const [calendarRef, setCalendarRef] = useState(null);
@@ -20,19 +24,32 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const [selectPop, setSelectPop] = useState(null);
   const { styles, attributes } = usePopper(calendarRef, selectPop);
   /** state of cell value */
-  const { value, setValue } = useContext(CellContext);
+  const { contextValue, setContextValue } = useContext(CellContext);
 
-  let initialDate = new Date();
-  if (DateTime.isDateTime(value.value)) {
-    initialDate = DateTime.fromFormat(value.value, "yyyy-MM-dd").toJSDate();
-  }
-  const [calendarState, setCalendarState] = useState(initialDate);
+  /** Note info of current Cell */
+  const note: NoteInfo = (cellProperties.row.original as any).note;
+
+  const [calendarState, setCalendarState] = useState(
+    DateTime.isDateTime(contextValue.value)
+      ? contextValue.value.toJSDate()
+      : new Date()
+  );
 
   function handleCalendarChange(date: Date) {
+    const newValue = DateTime.fromJSDate(date);
+    // save on disk
+    dataDispatch({
+      type: ActionTypes.UPDATE_CELL,
+      file: note.getFile(),
+      key: (cellProperties.column as any).key,
+      value: DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
+      row: cellProperties.row,
+      columnId: (cellProperties.column as any).id,
+    });
     setCalendarState(date);
     setShowCalendar(false);
-    setValue({
-      value: DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
+    setContextValue({
+      value: newValue,
       update: true,
     });
   }
@@ -57,7 +74,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
           padding: "0.5rem",
           background: StyleVariables.BACKGROUND_SECONDARY,
         }}
-        onBlur={() => setShowCalendar(false)}
+        onMouseLeave={() => setShowCalendar(false)}
       >
         <Calendar onChange={handleCalendarChange} value={calendarState} />
       </div>
@@ -69,8 +86,13 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
         className="data-input calendar"
         ref={setCalendarRef}
         onClick={handlerOnClick}
+        onBlur={() => setShowCalendar(false)}
       >
-        <span>{value.value}</span>
+        <span>
+          {DateTime.isDateTime(contextValue.value)
+            ? contextValue.value.toFormat("yyyy-MM-dd")
+            : ""}
+        </span>
       </div>
       {showCalendar &&
         ReactDOM.createPortal(

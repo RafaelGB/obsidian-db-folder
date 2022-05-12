@@ -76,6 +76,7 @@ function parseDatabaseToTableColumn(
   const tableColumn: TableColumn = {
     ...(databaseColumn as Partial<TableColumn>),
     id: columnKey,
+    dataType: databaseColumn.input,
     position: databaseColumn.position ?? index,
     key: databaseColumn.key ?? columnKey,
     label: databaseColumn.label,

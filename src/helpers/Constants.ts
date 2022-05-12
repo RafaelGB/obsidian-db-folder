@@ -88,7 +88,6 @@ export const MetadataDatabaseColumns = Object.freeze({
 
 export const TableColumnsTemplate: Partial<TableColumn> =
 {
-  dataType: DataTypes.TEXT,
   isMetadata: false,
   skipPersist: false,
   isInline: false,

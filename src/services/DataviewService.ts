@@ -2,6 +2,7 @@ import { FilterCondition } from "cdm/DatabaseModel";
 import { getOperatorFilterValue, OperatorFilter } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { getAPI, isPluginEnabled } from "obsidian-dataview";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
 class DataviewProxy {
 
@@ -56,6 +57,10 @@ class DataviewProxy {
             }
             return true;
         }
+    }
+
+    parseLiteral(literal: Literal): Literal {
+        return literal;
     }
     /**
      * Singleton instance

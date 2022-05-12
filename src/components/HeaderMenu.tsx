@@ -243,11 +243,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     });
     setExpanded(false);
     setkeyState(newKey);
-    columnWidthState.widthRecord[newKey] = getColumnWidthStyle(
-      rows,
-      newKey,
-      labelState
-    );
+    columnWidthState.widthRecord[newKey] = getColumnWidthStyle(rows, column);
 
     /*
       To adjust column settings to the new key, we need to update the order 
@@ -296,8 +292,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     const columnLabel = `New Column ${columnNumber}`;
     columnWidthState.widthRecord[columnName] = getColumnWidthStyle(
       rows,
-      columnName,
-      columnLabel
+      column
     );
     setColumnWidthState(columnWidthState);
     return { name: columnName, position: wantedPosition, label: columnLabel };

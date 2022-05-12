@@ -268,6 +268,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ...state.columns.slice(0, leftIndex),
             {
               ...TableColumnsTemplate,
+              dataType: newLeftColumn.input,
               id: newLeftColumn.accessor,
               label: newLeftColumn.label,
               key: newLeftColumn.key,
@@ -306,6 +307,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ...state.columns.slice(0, rightIndex + 1),
             {
               ...TableColumnsTemplate,
+              dataType: newRIghtColumn.input,
               id: newRIghtColumn.accessor,
               label: newRIghtColumn.label,
               key: newRIghtColumn.key,
