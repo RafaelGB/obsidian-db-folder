@@ -1,3 +1,10 @@
+## 0.4.0
+### Shiny new things
+- New type of column: Calendar
+- 2 new settings to show metadata file of created and modified using a toggle button
+### Improved
+- Type control using Literal of dataview. this will allow with futures versions the versatility of dataview plugin (images,links,...)
+- Refactor of settings to control errors in case of something is missing with a marshall and unmarshall
 ## 0.3.1
 *Published on 2022/05/10*
 ### Shiny new things
