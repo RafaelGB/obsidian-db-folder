@@ -129,7 +129,6 @@ export default function DefaultCell(cellProperties: Cell) {
         return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
       /** Selector option */
       case DataTypes.SELECT:
-        console.log("selector");
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal

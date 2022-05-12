@@ -5,7 +5,7 @@ import { getAPI, isPluginEnabled } from "obsidian-dataview";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
 import { DateTime } from "luxon";
-import NoteInfo from "./NoteInfo";
+import NoteInfo from "services/NoteInfo";
 class DataviewProxy {
 
     private static instance: DataviewProxy;
