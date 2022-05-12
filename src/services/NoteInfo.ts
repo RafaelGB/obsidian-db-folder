@@ -33,7 +33,7 @@ export default class NoteInfo {
             const value = this.page[property];
             aFile[property] = value;
         });
-        /** parse the data with the type of column */
+        /** Parse data with the type of column */
         columns.forEach(column => {
             if (aFile[column.key] !== undefined) {
                 aFile[column.key] = DataviewService.parseLiteral(aFile[column.key], column.dataType);

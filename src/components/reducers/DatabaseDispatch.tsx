@@ -209,7 +209,6 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
            * - NUMBER
            * - CALENDAR
            */
-          console.log("GENERIC update change");
           return update(state, {
             skipReset: { $set: true },
             columns: {

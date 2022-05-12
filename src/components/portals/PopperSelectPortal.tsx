@@ -172,7 +172,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       >
         {contextValue.value && (
           <Relationship
-            value={contextValue.value}
+            value={contextValue.value.toString()}
             backgroundColor={getColor()}
           />
         )}

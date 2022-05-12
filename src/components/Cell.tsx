@@ -10,7 +10,6 @@ import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
 import { TableColumn } from "cdm/FolderModel";
-import { DataviewService } from "services/DataviewService";
 
 /**
  * Obtain the path of the file inside cellValue
