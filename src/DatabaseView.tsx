@@ -130,6 +130,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       const columns = await obtainColumnsFromFolder(yamlColumns);
       const rows = await adapterTFilesToRows(
         this.file.parent.path,
+        columns,
         this.diskConfig.yaml.filters
       );
       // Define table properties

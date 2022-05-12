@@ -15,6 +15,7 @@ import { moveFile, updateRowFile } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
 import { DatabaseColumn, RowDatabaseFields } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
+import { DataviewService } from "services/DataviewService";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -151,55 +152,41 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const typeIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
+      /** Check if type is changed */
+      if (state.columns[typeIndex].dataType === action.dataType) {
+        return state;
+      }
+      /** If changed, then parsed information */
       // Update configuration on disk
       state.view.diskConfig.updateColumnProperties(action.columnId, {
         input: action.dataType,
       });
+      // Parse data
+      const parsedData = state.data.map((row: any) => ({
+        ...row,
+        [action.columnId]: DataviewService.parseLiteral(
+          row[action.columnId],
+          action.dataType // Destination type to parse
+        ),
+      }));
       // Update state
       switch (action.dataType) {
-        case DataTypes.NUMBER:
-          if (state.columns[typeIndex].dataType === DataTypes.NUMBER) {
-            return state;
-          } else {
-            return {
-              ...state,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
-                ...state.columns.slice(typeIndex + 1, state.columns.length),
-              ],
-              data: state.data.map((row: any) => ({
-                ...row,
-                [action.columnId]: isNaN(row[action.columnId])
-                  ? ""
-                  : Number.parseInt(row[action.columnId]),
-              })),
-            };
-          }
         case DataTypes.SELECT:
-          if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
-            return {
-              ...state,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
-                ...state.columns.slice(typeIndex + 1, state.columns.length),
-              ],
-              skipReset: true,
-            };
-          } else {
-            const options: any = [];
-            state.data.forEach((row) => {
-              if (row[action.columnId]) {
-                options.push({
-                  label: row[action.columnId],
-                  backgroundColor: randomColor(),
-                });
-              }
-            });
-            return {
-              ...state,
-              columns: [
+          const options: any = [];
+          // Generate selected options
+          parsedData.forEach((row) => {
+            if (row[action.columnId]) {
+              options.push({
+                label: row[action.columnId],
+                backgroundColor: randomColor(),
+              });
+            }
+          });
+          // Update column to SELECT type
+          return update(state, {
+            skipReset: { $set: true },
+            columns: {
+              $set: [
                 ...state.columns.slice(0, typeIndex),
                 {
                   ...state.columns[typeIndex],
@@ -208,39 +195,34 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
                 },
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
               ],
-              skipReset: true,
-            };
-          }
-        case DataTypes.TEXT:
-          if (state.columns[typeIndex].dataType === DataTypes.TEXT) {
-            return state;
-          } else if (state.columns[typeIndex].dataType === DataTypes.SELECT) {
-            return {
-              ...state,
-              skipReset: true,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
-                ...state.columns.slice(typeIndex + 1, state.columns.length),
-              ],
-            };
-          } else {
-            return {
-              ...state,
-              skipReset: true,
-              columns: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
-                ...state.columns.slice(typeIndex + 1, state.columns.length),
-              ],
-              data: state.data.map((row) => ({
-                ...row,
-                [action.columnId]: row[action.columnId] + "",
-              })),
-            };
-          }
+            },
+            data: {
+              $set: parsedData,
+            },
+          });
         default:
-          return state;
+          /**
+           * GENERIC update change
+           * Update column dataType & parsed data
+           * Aplied to:
+           * - TEXT
+           * - NUMBER
+           * - CALENDAR
+           */
+          console.log("GENERIC update change");
+          return update(state, {
+            skipReset: { $set: true },
+            columns: {
+              $set: [
+                ...state.columns.slice(0, typeIndex),
+                { ...state.columns[typeIndex], dataType: action.dataType },
+                ...state.columns.slice(typeIndex + 1, state.columns.length),
+              ],
+            },
+            data: {
+              $set: parsedData,
+            },
+          });
       }
     /**
      * Add new column to the table to the left of the column with the given id

@@ -1,6 +1,6 @@
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { CellContext } from "components/contexts/CellContext";
-import { ActionTypes, StyleVariables } from "helpers/Constants";
+import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import React, { useContext, useState } from "react";
 import Calendar from "react-calendar";
 import ReactDOM from "react-dom";
@@ -8,6 +8,7 @@ import { DateTime } from "luxon";
 import { usePopper } from "react-popper";
 import { Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
+import { DataviewService } from "services/DataviewService";
 
 type CalendarProps = {
   intialState: TableDataType;
@@ -30,9 +31,12 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const note: NoteInfo = (cellProperties.row.original as any).note;
 
   const [calendarState, setCalendarState] = useState(
-    DateTime.isDateTime(contextValue.value)
-      ? contextValue.value.toJSDate()
-      : new Date()
+    (
+      DataviewService.parseLiteral(
+        contextValue.value,
+        DataTypes.CALENDAR
+      ) as DateTime
+    ).toJSDate()
   );
 
   function handleCalendarChange(date: Date) {
@@ -89,9 +93,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
         onBlur={() => setShowCalendar(false)}
       >
         <span>
-          {DateTime.isDateTime(contextValue.value)
-            ? contextValue.value.toFormat("yyyy-MM-dd")
-            : ""}
+          {DataviewService.parseLiteral(contextValue.value, DataTypes.TEXT)}
         </span>
       </div>
       {showCalendar &&

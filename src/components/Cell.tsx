@@ -10,6 +10,7 @@ import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
 import { TableColumn } from "cdm/FolderModel";
+import { DataviewService } from "services/DataviewService";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -129,6 +130,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
       /** Selector option */
       case DataTypes.SELECT:
+        console.log("selector");
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal

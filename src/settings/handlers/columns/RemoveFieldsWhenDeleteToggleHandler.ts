@@ -22,7 +22,7 @@ export class RemoveFieldsWhenDeleteToggleHandler extends AbstractSettingsHandler
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Enable/disable remove fields when delete a column",
+            "Enable/disable remove fields when a column is deleted",
             local ? view.diskConfig.yaml.config.remove_field_when_delete_column : settingsManager.plugin.settings.local_settings.remove_field_when_delete_column,
             remove_fields_toggle_promise
         );

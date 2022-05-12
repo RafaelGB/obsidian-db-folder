@@ -1,8 +1,9 @@
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import React from "react";
+import NoteInfo from "services/NoteInfo";
 
 export type CellDataType = {
-  value: Literal;
+  value: Literal | NoteInfo;
   update: boolean;
 };
 
