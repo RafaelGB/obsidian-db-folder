@@ -11,7 +11,7 @@ import { CellContext } from "components/contexts/CellContext";
 const PopperSelectPortal = (popperProps: PopperProps) => {
   const { dispatch, row, column, columns, note, state } = popperProps;
   /** state of cell value */
-  const { value, setValue } = useContext(CellContext);
+  const { contextValue, setContextValue } = useContext(CellContext);
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -31,7 +31,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   }
 
   function handleOptionClick(option: { label: string; backgroundColor?: any }) {
-    setValue({ value: option.label, update: true });
+    setContextValue({ value: option.label, update: true });
     setShowSelect(false);
     // save on disk & move file if its configured on the column
     dispatch({
@@ -78,7 +78,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
 
   function getColor() {
     const match = (column as any).options.find(
-      (option: { label: any }) => option.label === value.value
+      (option: { label: any }) => option.label === contextValue.value
     );
     return (match && match.backgroundColor) || grey(200);
   }
@@ -170,15 +170,18 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
         className="cell-padding d-flex cursor-default align-items-center flex-1"
         onClick={() => setShowSelect(true)}
       >
-        {value.value && (
-          <Relationship value={value.value} backgroundColor={getColor()} />
+        {contextValue.value && (
+          <Relationship
+            value={contextValue.value.toString()}
+            backgroundColor={getColor()}
+          />
         )}
       </div>
       {domReady
         ? ReactDOM.createPortal(
-          PortalSelect(),
-          document.getElementById("popper-container")
-        )
+            PortalSelect(),
+            document.getElementById("popper-container")
+          )
         : null}
     </>
   );

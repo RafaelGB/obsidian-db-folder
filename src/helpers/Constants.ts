@@ -22,6 +22,7 @@ export const DataTypes = Object.freeze({
   TEXT: 'text',
   SELECT: 'select',
   MARKDOWN: 'markdown',
+  CALENDAR: 'calendar',
   NEW_COLUMN: 'new_column'
 });
 
@@ -29,12 +30,16 @@ export const MAX_CAPACITY_DATABASE = 999999;
 
 export const MetadataColumns = Object.freeze({
   FILE: `__file__`,
+  CREATED: `__created__`,
+  MODIFIED: `__modified__`,
   ADD_COLUMN: `__add_column__`,
 });
 
 export const MetadataLabels = Object.freeze({
   FILE: 'File',
-  ADD_COLUMN: '+'
+  ADD_COLUMN: '+',
+  CREATED: 'Created',
+  MODIFIED: 'Modified',
 });
 
 export const MetadataDatabaseColumns = Object.freeze({
@@ -52,19 +57,37 @@ export const MetadataDatabaseColumns = Object.freeze({
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
-    disableResizing: true,
     label: MetadataLabels.ADD_COLUMN,
     accessor: MetadataColumns.ADD_COLUMN,
     isMetadata: true,
     skipPersist: true,
     csvCandidate: false,
     isInline: false
+  },
+  CREATED: {
+    key: MetadataColumns.CREATED,
+    input: DataTypes.CALENDAR,
+    label: MetadataLabels.CREATED,
+    accessor: MetadataColumns.CREATED,
+    isMetadata: true,
+    skipPersist: false,
+    csvCandidate: true,
+    isInline: false
+  },
+  MODIFIED: {
+    key: MetadataColumns.MODIFIED,
+    input: DataTypes.CALENDAR,
+    label: MetadataLabels.MODIFIED,
+    accessor: MetadataColumns.MODIFIED,
+    isMetadata: true,
+    skipPersist: false,
+    csvCandidate: true,
+    isInline: false
   }
 });
 
 export const TableColumnsTemplate: Partial<TableColumn> =
 {
-  dataType: DataTypes.TEXT,
   isMetadata: false,
   skipPersist: false,
   isInline: false,

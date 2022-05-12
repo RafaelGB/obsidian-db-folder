@@ -8,6 +8,7 @@ import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
 import { dbTrim } from "helpers/StylesHelper";
+import { LocalSettings } from "Settings";
 
 /**
  * Add mandatory columns to the table
@@ -15,13 +16,35 @@ import { dbTrim } from "helpers/StylesHelper";
  * @returns
  */
 export async function obtainMetadataColumns(
-  yamlColumns: Record<string, DatabaseColumn>
+  yamlColumns: Record<string, DatabaseColumn>,
+  localSetting: LocalSettings
 ): Promise<Record<string, DatabaseColumn>> {
   // If File is not already in the table, add it
   yamlColumns[MetadataColumns.FILE] = {
     ...MetadataDatabaseColumns.FILE,
     ...(yamlColumns[MetadataColumns.FILE] ?? {}),
   };
+
+  if (localSetting.show_metadata_created) {
+    // If Created is not already in the table, add it
+    yamlColumns[MetadataColumns.CREATED] = {
+      ...MetadataDatabaseColumns.CREATED,
+      ...(yamlColumns[MetadataColumns.CREATED] ?? {}),
+    };
+  } else {
+    delete yamlColumns[MetadataColumns.CREATED];
+  }
+
+  if (localSetting.show_metadata_modified) {
+    // If Modified is not already in the table, add it
+    yamlColumns[MetadataColumns.MODIFIED] = {
+      ...MetadataDatabaseColumns.MODIFIED,
+      ...(yamlColumns[MetadataColumns.MODIFIED] ?? {}),
+    };
+  } else {
+    delete yamlColumns[MetadataColumns.MODIFIED];
+  }
+
   yamlColumns[MetadataColumns.ADD_COLUMN] = MetadataDatabaseColumns.ADD_COLUMN;
   return yamlColumns;
 }
@@ -53,6 +76,7 @@ function parseDatabaseToTableColumn(
   const tableColumn: TableColumn = {
     ...(databaseColumn as Partial<TableColumn>),
     id: columnKey,
+    dataType: databaseColumn.input,
     position: databaseColumn.position ?? index,
     key: databaseColumn.key ?? columnKey,
     label: databaseColumn.label,
@@ -134,6 +158,15 @@ async function columnOptions(
     };
   }
 
+  function isCalendar(): TableColumn {
+    LOGGER.debug(`<= columnOptions`, `return calendar column`);
+    return {
+      ...tableRow,
+      dataType: DataTypes.CALENDAR,
+      options: options,
+    };
+  }
+
   // Record of options
   let inputs: Record<string, any> = {};
   inputs[DataTypes.TEXT] = isText;
@@ -141,6 +174,7 @@ async function columnOptions(
   inputs[DataTypes.SELECT] = isSelect;
   inputs[DataTypes.MARKDOWN] = isMarkdown;
   inputs[DataTypes.NEW_COLUMN] = isNewColumn;
+  inputs[DataTypes.CALENDAR] = isCalendar;
   if (inputs.hasOwnProperty(column.input)) {
     return await inputs[column.input]();
   } else {

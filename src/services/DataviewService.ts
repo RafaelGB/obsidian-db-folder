@@ -1,8 +1,11 @@
 import { FilterCondition } from "cdm/DatabaseModel";
-import { getOperatorFilterValue, OperatorFilter } from "helpers/Constants";
+import { DataTypes, getOperatorFilterValue, OperatorFilter } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { getAPI, isPluginEnabled } from "obsidian-dataview";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
+import { DateTime } from "luxon";
+import NoteInfo from "services/NoteInfo";
 class DataviewProxy {
 
     private static instance: DataviewProxy;
@@ -56,6 +59,26 @@ class DataviewProxy {
             }
             return true;
         }
+    }
+
+    parseLiteral(literal: Literal | NoteInfo, dataTypeDst: string): Literal | NoteInfo {
+        let parsedLiteral: Literal | NoteInfo;
+        // Check empty or undefined literals
+        switch (dataTypeDst) {
+            case DataTypes.CALENDAR:
+                // Check if original literal is a date. If not convert to current date
+                parsedLiteral = DateTime.isDateTime(literal) ? literal : DateTime.now();
+                break;
+            case DataTypes.NUMBER:
+                parsedLiteral = isNaN(literal as any) ? ""
+                    : Number.parseInt(literal as string);
+                break;
+            default:
+                parsedLiteral = DateTime.isDateTime(literal) ? literal.toFormat("yyyy-MM-dd")
+                    : literal;
+
+        }
+        return parsedLiteral;
     }
     /**
      * Singleton instance

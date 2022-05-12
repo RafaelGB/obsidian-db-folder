@@ -7,6 +7,7 @@ import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { Column } from "react-table";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -42,7 +43,7 @@ export interface TableColumn {
     accessor: any;
     minWidth?: number;
     width?: number;
-    dataType?: string;
+    dataType: string;
     options?: RowSelectOption[];
     Cell?: any;
     getHeaderProps?: any;
@@ -56,7 +57,7 @@ export interface TableColumn {
 export type RowDataType = {
     id: number,
     note: NoteInfo,
-    [key: string]: RowType
+    [key: string]: Literal | NoteInfo
 }
 
 export type TableDataType = {

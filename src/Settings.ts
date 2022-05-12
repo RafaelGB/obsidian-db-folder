@@ -18,7 +18,10 @@ export interface LocalSettings {
   enable_show_state: boolean;
   group_folder_column: string;
   remove_field_when_delete_column: boolean;
+  show_metadata_created: boolean;
+  show_metadata_modified: boolean;
 }
+
 export interface DatabaseSettings {
   global_settings: GlobalSettings;
   local_settings: LocalSettings;
@@ -32,7 +35,9 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
   local_settings: {
     enable_show_state: false,
     remove_field_when_delete_column: false,
-    group_folder_column: ''
+    group_folder_column: '',
+    show_metadata_created: false,
+    show_metadata_modified: false
   }
 };
 

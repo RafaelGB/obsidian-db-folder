@@ -1,12 +1,14 @@
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 import React from "react";
+import NoteInfo from "services/NoteInfo";
 
 export type CellDataType = {
-  value: string;
+  value: Literal | NoteInfo;
   update: boolean;
 };
 
 type CellContextType = {
-  value: CellDataType;
-  setValue: (value: CellDataType) => void;
+  contextValue: CellDataType;
+  setContextValue: (value: CellDataType) => void;
 };
 export const CellContext = React.createContext<CellContextType | null>(null); //exporting context object

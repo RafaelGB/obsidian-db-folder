@@ -1,4 +1,4 @@
-import { RowDataType, NormalizedPath, TableDataType } from 'cdm/FolderModel';
+import { RowDataType, NormalizedPath, TableDataType, TableColumn } from 'cdm/FolderModel';
 import { TFile } from 'obsidian';
 import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
@@ -62,20 +62,23 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string, filters?: FilterCondition[]): Promise<Array<RowDataType>> {
+export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], filters: FilterCondition[]): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
   let id = 0;
 
   let folderFiles = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
     .where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  // Config filters asociated with the database
   if (filters) {
     folderFiles = folderFiles.where(p => DataviewService.filter(filters, p));
   }
-  await Promise.all(folderFiles.map(async (page) => {
+
+  folderFiles.map(async (page) => {
     const noteInfo = new NoteInfo(page, ++id);
-    rows.push(noteInfo.getRowDataType());
-  }));
+    rows.push(noteInfo.getRowDataType(columns));
+  });
+
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
   return rows;
 }

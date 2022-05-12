@@ -24,6 +24,17 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
                 this.localYaml.config.remove_field_when_delete_column = false;
             }
 
+            // if show_metadata_created is not defined, load default
+            if (handlerResponse.yaml.config.show_metadata_created === undefined) {
+                this.addError(`There was not show_metadata_created key in yaml. Default will be loaded`);
+                this.localYaml.config.show_metadata_created = false;
+            }
+
+            // if show_metadata_modified is not defined, load default
+            if (handlerResponse.yaml.config.show_metadata_modified === undefined) {
+                this.addError(`There was not show_metadata_modified key in yaml. Default will be loaded`);
+                this.localYaml.config.show_metadata_modified = false;
+            }
         }
         return this.goNext(handlerResponse);
     }

@@ -8,6 +8,8 @@ import NoteInfo from "services/NoteInfo";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
+import CalendarPortal from "./portals/CalendarPortal";
+import { TableColumn } from "cdm/FolderModel";
 
 /**
  * Obtain the path of the file inside cellValue
@@ -36,12 +38,15 @@ export default function DefaultCell(cellProperties: Cell) {
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
   /** state of cell value */
-  const [value, setValue] = useState({ value: initialValue, update: false });
+  const [contextValue, setContextValue] = useState({
+    value: initialValue,
+    update: false,
+  });
   /** state for keeping the timeout to trigger the editior */
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   /** states for selector option  */
   LOGGER.debug(
-    `<=> Cell.rendering dataType: ${dataType}. value: ${value.value}`
+    `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`
   );
 
   const handleKeyDown = (event: any) => {
@@ -56,7 +61,7 @@ export default function DefaultCell(cellProperties: Cell) {
       clearTimeout(editNoteTimeout);
     }
     // first update the input text as user type
-    setValue({ value: event.target.value, update: false });
+    setContextValue({ value: event.target.value, update: false });
     // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
     setEditNoteTimeout(
       setTimeout(() => {
@@ -82,13 +87,15 @@ export default function DefaultCell(cellProperties: Cell) {
     switch (dataType) {
       /** Plain text option */
       case DataTypes.TEXT:
-        return (
+        return (cellProperties.column as any).isMetadata ? (
+          <span className="data-input">{contextValue.value.toString()}</span>
+        ) : (
           <ContentEditable
-            html={(value.value && value.value.toString()) || ""}
+            html={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             onBlur={() =>
-              setValue((old) => ({ value: old.value, update: true }))
+              setContextValue((old) => ({ value: old.value, update: true }))
             }
             className="data-input"
           />
@@ -97,10 +104,10 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.NUMBER:
         return (
           <ContentEditable
-            html={(value.value && value.value.toString()) || ""}
+            html={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onBlur={() =>
-              setValue((old) => ({ value: old.value, update: true }))
+              setContextValue((old) => ({ value: old.value, update: true }))
             }
             className="data-input text-align-right"
           />
@@ -119,11 +126,11 @@ export default function DefaultCell(cellProperties: Cell) {
           );
         });
 
-        return <span ref={containerRef} className={`${c("md_cell")}`} ></span>;
+        return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
       /** Selector option */
       case DataTypes.SELECT:
         return (
-          <CellContext.Provider value={{ value, setValue }}>
+          <CellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal
               dispatch={dataDispatch}
               row={cellProperties.row}
@@ -134,7 +141,17 @@ export default function DefaultCell(cellProperties: Cell) {
             />
           </CellContext.Provider>
         );
-
+      /** Calendar option */
+      case DataTypes.CALENDAR:
+        return (
+          <CellContext.Provider value={{ contextValue, setContextValue }}>
+            <CalendarPortal
+              intialState={(cellProperties as any).initialState}
+              column={cellProperties.column as unknown as TableColumn}
+              cellProperties={cellProperties}
+            />
+          </CellContext.Provider>
+        );
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);

@@ -1,7 +1,9 @@
-import { RowDataType } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { MetadataColumns } from "helpers/Constants";
 import { TFile } from "obsidian";
 import { VaultManagerDB } from "services/FileManagerService";
+import { DateTime } from "luxon";
+import { DataviewService } from "./DataviewService";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
@@ -15,19 +17,26 @@ export default class NoteInfo {
         this.id = id;
     }
 
-    getRowDataType(): RowDataType {
+    getRowDataType(columns: TableColumn[]): RowDataType {
         /** Mandatory fields */
         const aFile: RowDataType = {
             id: this.id,
             note: this
         }
         /** Metadata fields */
-        aFile[MetadataColumns.FILE] = `${this.page.file.link.markdown()}`
+        aFile[MetadataColumns.FILE] = `${this.page.file.link.markdown()}`;
+        aFile[MetadataColumns.CREATED] = this.page.file.ctime;
+        aFile[MetadataColumns.MODIFIED] = this.page.file.mtime;
+
         /** Optional fields */
         Object.keys(this.page).forEach(property => {
             const value = this.page[property];
-            if (value && typeof value !== 'object') {
-                aFile[property] = value;
+            aFile[property] = value;
+        });
+        /** Parse data with the type of column */
+        columns.forEach(column => {
+            if (aFile[column.key] !== undefined) {
+                aFile[column.key] = DataviewService.parseLiteral(aFile[column.key], column.dataType);
             }
         });
         return aFile;
