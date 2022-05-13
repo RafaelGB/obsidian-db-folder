@@ -1,7 +1,7 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { NoteContentAction } from "cdm/FolderModel";
 import { FileContent } from "helpers/FileContent";
-import { TFile, TFolder } from "obsidian";
+import { parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 class VaultManager {
@@ -19,7 +19,7 @@ class VaultManager {
       targetFolder,
       filename ?? "Untitled"
     );
-    const content = parseFrontmatterFieldsToString(databasefields, "").concat("\n").concat(parseInlineFieldsToString(databasefields));
+    const content = parseFrontmatterFieldsToString(databasefields, {}).concat("\n").concat(parseInlineFieldsToString(databasefields));
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;
@@ -63,6 +63,24 @@ class VaultManager {
     return await app.vault.read(tfile);
   }
 
+  ontainCurrentFrontmatter(content: string): Record<string, string> {
+    const match = content.match(/^---\s+([\w\W]+?)\s+---/);
+    if (match) {
+      const frontmatterRaw = match[1];
+      const yaml = parseYaml(frontmatterRaw);
+      const frontmatter: Record<string, string> = {};
+      Object.keys(yaml)
+
+        .forEach(key => {
+          // add frontmatter fields that are not specified as database fields
+          frontmatter[key] = yaml[key];
+          return frontmatter;
+        });
+    }
+    else {
+      return undefined;
+    }
+  }
   /**
    * Obtain TFile from file path
    * @param filePath 

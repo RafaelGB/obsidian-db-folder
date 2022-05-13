@@ -3,7 +3,7 @@ import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import ReactDOM from "react-dom";
+import ReactDOM, { unmountComponentAtNode } from "react-dom";
 import { DateTime } from "luxon";
 import { usePopper } from "react-popper";
 import { Cell } from "react-table";
@@ -34,14 +34,6 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     (contextValue.value as DateTime).toJSDate()
   );
 
-  useEffect(() => {
-    const portalActive = document.getElementById("unique-calendar-portal");
-    if (portalActive) {
-      // Hacky way to set focus on calendar
-      portalActive.focus();
-    }
-  }, [showCalendar]);
-
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);
     // save on disk
@@ -63,17 +55,19 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   function handlerOnClick(e: any) {
     if (!column.isMetadata) {
+      const portalActive = document.getElementById("unique-calendar-portal");
+      if (!showCalendar && portalActive !== null) {
+        // Hacky way to trigger focus event on opened calendar
+        // react-calendar has a bug where it doesn't trigger focus event
+        portalActive.setAttribute("tabindex", "-1");
+        portalActive.focus();
+        portalActive.blur();
+      }
       setShowCalendar(!showCalendar);
     }
   }
 
-  function handleBlur(event: any) {
-    console.log("blur");
-    event.preventDefault();
-    setShowCalendar(false);
-  }
-
-  function renderCalendar() {
+  function displayCalendar() {
     return (
       <div
         className="menu"
@@ -88,9 +82,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
           background: StyleVariables.BACKGROUND_SECONDARY,
         }}
         onMouseLeave={() => setShowCalendar(false)}
-        onBlur={handleBlur}
+        onBlur={() => setShowCalendar(false)}
         id={"unique-calendar-portal"}
-        tabIndex={-1}
       >
         <Calendar onChange={handleCalendarChange} value={calendarState} />
       </div>
@@ -110,7 +103,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       </div>
       {showCalendar &&
         ReactDOM.createPortal(
-          renderCalendar(),
+          displayCalendar(),
           document.getElementById("popper-container")
         )}
     </>
