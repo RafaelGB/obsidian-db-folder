@@ -1,5 +1,5 @@
 import { ActionTypes, DataTypes } from "helpers/Constants";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { LOGGER } from "services/Logger";
 import { Cell } from "react-table";
@@ -28,6 +28,7 @@ function getFilePath(cellValue: string): string {
 }
 
 export default function DefaultCell(cellProperties: Cell) {
+  console.log("render cell");
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Initial state of cell */
   const initialValue = cellProperties.value;
@@ -44,10 +45,20 @@ export default function DefaultCell(cellProperties: Cell) {
   });
   /** state for keeping the timeout to trigger the editior */
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
+  const [dirtyCell, setDirtyCell] = useState(false);
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`
   );
+  // set contextValue when cell is loaded
+  useEffect(() => {
+    if (!dirtyCell && initialValue !== contextValue.value) {
+      setContextValue({
+        value: initialValue,
+        update: false,
+      });
+    }
+  }, []);
 
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
@@ -62,6 +73,7 @@ export default function DefaultCell(cellProperties: Cell) {
     }
     // first update the input text as user type
     setContextValue({ value: event.target.value, update: false });
+    setDirtyCell(true);
     // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
     setEditNoteTimeout(
       setTimeout(() => {
@@ -81,6 +93,7 @@ export default function DefaultCell(cellProperties: Cell) {
       row: cellProperties.row,
       columnId: (cellProperties.column as any).id,
     });
+    setDirtyCell(false);
   }
 
   function getCellElement() {

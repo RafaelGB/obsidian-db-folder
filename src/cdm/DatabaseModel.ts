@@ -40,3 +40,8 @@ export type FilterCondition = {
     operator: string;
     value?: any;
 }
+
+export type OptionSelect = {
+    label: string;
+    backgroundColor: string;
+}

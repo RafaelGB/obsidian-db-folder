@@ -65,7 +65,6 @@ class VaultManager {
 
   ontainCurrentFrontmatter(content: string): Record<string, string> {
     const match = content.match(/^---\s+([\w\W]+?)\s+---/);
-    console.log("probando");
     if (match) {
       const frontmatterRaw = match[1];
       const yaml = parseYaml(frontmatterRaw);

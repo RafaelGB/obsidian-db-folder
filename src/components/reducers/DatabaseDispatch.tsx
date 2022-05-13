@@ -13,9 +13,14 @@ import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import { moveFile, updateRowFile } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
-import { DatabaseColumn, RowDatabaseFields } from "cdm/DatabaseModel";
+import {
+  DatabaseColumn,
+  OptionSelect,
+  RowDatabaseFields,
+} from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
+import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -166,13 +171,13 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ...row,
         [action.columnId]: DataviewService.parseLiteral(
           row[action.columnId],
-          action.dataType // Destination type to parse
+          action.TEXT // Destination type to parse
         ),
       }));
       // Update state
       switch (action.dataType) {
         case DataTypes.SELECT:
-          const options: any = [];
+          const options: OptionSelect[] = [];
           // Generate selected options
           parsedData.forEach((row) => {
             if (row[action.columnId]) {
@@ -191,7 +196,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
                 {
                   ...state.columns[typeIndex],
                   dataType: action.dataType,
-                  options: [...state.columns[typeIndex].options, ...options],
+                  options: obtainUniqueOptionValues(options),
                 },
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
               ],

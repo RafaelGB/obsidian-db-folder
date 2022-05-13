@@ -1,9 +1,9 @@
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Calendar from "react-calendar";
-import ReactDOM, { unmountComponentAtNode } from "react-dom";
+import ReactDOM from "react-dom";
 import { DateTime } from "luxon";
 import { usePopper } from "react-popper";
 import { Cell } from "react-table";
@@ -29,9 +29,13 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-
   const [calendarState, setCalendarState] = useState(
-    (contextValue.value as DateTime).toJSDate()
+    (
+      DataviewService.parseLiteral(
+        cellProperties.value,
+        DataTypes.CALENDAR
+      ) as DateTime
+    ).toJSDate()
   );
 
   function handleCalendarChange(date: Date) {
