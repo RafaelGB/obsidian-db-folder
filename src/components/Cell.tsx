@@ -28,7 +28,6 @@ function getFilePath(cellValue: string): string {
 }
 
 export default function DefaultCell(cellProperties: Cell) {
-  console.log("render cell");
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Initial state of cell */
   const initialValue = cellProperties.value;
