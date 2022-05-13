@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://github.com/RafaelGB/obsidian-db-folder/</loc>
+         <lastmod>2022-05-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/RafaelGB/obsidian-db-folder/Obsidian%20dbfolder%20Features/</loc>
+         <lastmod>2022-05-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/RafaelGB/obsidian-db-folder/Whats%20inside%20database%20view/</loc>
+         <lastmod>2022-05-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/RafaelGB/obsidian-db-folder/about/</loc>
+         <lastmod>2022-05-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
