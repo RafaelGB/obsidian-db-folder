@@ -1,10 +1,14 @@
-## 0.4.0
+## 1.0.0
+*Published on 2022/05/13*
 ### Shiny new things
 - New type of column: Calendar
 - 2 new settings to show metadata file of created and modified using a toggle button
+- Now metadata columns can be sorted and add columns to the right or left
 ### Improved
 - Type control using Literal of dataview. this will allow with futures versions the versatility of dataview plugin (images,links,...)
 - Refactor of settings to control errors in case of something is missing with a marshall and unmarshall
+### No longer broken
+- Control of options as unique with Select column type
 ## 0.3.1
 *Published on 2022/05/10*
 ### Shiny new things
