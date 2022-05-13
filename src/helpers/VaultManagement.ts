@@ -94,6 +94,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   const rowFields = obtainRowDatabaseFields(file, state.columns);
   const content = await VaultManagerDB.obtainContentFromTfile(file);
+  let currentFrontmatter = VaultManagerDB.ontainCurrentFrontmatter(content);
   const column = state.columns.find(c => c.key === columnId);
 
   // Adds an empty frontmatter at the beginning of the file
@@ -128,12 +129,15 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   // Modify key of a column
   async function columnKey(): Promise<void> {
     if (column.isInline) {
+      // Go to inline mode
       await inlineColumnKey();
       return;
     }
-    if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)) {
+    // If field does not exist yet, ignore it
+    if (!Object.prototype.hasOwnProperty.call(currentFrontmatter, columnId)) {
       return;
     }
+
     // Check if the column is already in the frontmatter
     // assign an empty value to the new key
     rowFields.frontmatter[newValue] = rowFields.frontmatter[columnId] ?? "";
@@ -157,7 +161,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       action: 'replace',
       file: file,
       regexp: frontmatterGroupRegex,
-      newValue: parseFrontmatterFieldsToString(rowFields, content, deletedColumn)
+      newValue: parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn)
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
@@ -238,9 +242,10 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   // Execute action
   if (updateOptions[option]) {
     // Check if file has frontmatter
-    if (!hasFrontmatterKey(content)) {
+    if (currentFrontmatter === undefined) {
       // If not, add it
       await addFrontmatter();
+      currentFrontmatter = {};
     }
     // Then execute the action
     await updateOptions[option]();

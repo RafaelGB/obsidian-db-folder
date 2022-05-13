@@ -1,4 +1,5 @@
 import { RowType } from "cdm/RowTypeModel"
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "Settings"
 
 /** database column */
@@ -30,12 +31,17 @@ export interface DatabaseYaml {
 }
 
 export type RowDatabaseFields = {
-    frontmatter: Record<string, any>;
-    inline: Record<string, any>;
+    frontmatter: Record<string, Literal>;
+    inline: Record<string, Literal>;
 }
 
 export type FilterCondition = {
     field: string;
     operator: string;
     value?: any;
+}
+
+export type OptionSelect = {
+    label: string;
+    backgroundColor: string;
 }

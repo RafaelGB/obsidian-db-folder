@@ -29,11 +29,10 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-
   const [calendarState, setCalendarState] = useState(
     (
       DataviewService.parseLiteral(
-        contextValue.value,
+        cellProperties.value,
         DataTypes.CALENDAR
       ) as DateTime
     ).toJSDate()
@@ -60,11 +59,19 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   function handlerOnClick(e: any) {
     if (!column.isMetadata) {
+      const portalActive = document.getElementById("unique-calendar-portal");
+      if (!showCalendar && portalActive !== null) {
+        // Hacky way to trigger focus event on opened calendar
+        // react-calendar has a bug where it doesn't trigger focus event
+        portalActive.setAttribute("tabindex", "-1");
+        portalActive.focus();
+        portalActive.blur();
+      }
       setShowCalendar(!showCalendar);
     }
   }
 
-  function renderCalendar() {
+  function displayCalendar() {
     return (
       <div
         className="menu"
@@ -79,18 +86,20 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
           background: StyleVariables.BACKGROUND_SECONDARY,
         }}
         onMouseLeave={() => setShowCalendar(false)}
+        onBlur={() => setShowCalendar(false)}
+        id={"unique-calendar-portal"}
       >
         <Calendar onChange={handleCalendarChange} value={calendarState} />
       </div>
     );
   }
+
   return (
     <>
       <div
         className="data-input calendar"
         ref={setCalendarRef}
         onClick={handlerOnClick}
-        onBlur={() => setShowCalendar(false)}
       >
         <span>
           {DataviewService.parseLiteral(contextValue.value, DataTypes.TEXT)}
@@ -98,7 +107,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       </div>
       {showCalendar &&
         ReactDOM.createPortal(
-          renderCalendar(),
+          displayCalendar(),
           document.getElementById("popper-container")
         )}
     </>
