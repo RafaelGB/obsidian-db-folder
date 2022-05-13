@@ -1,8 +1,8 @@
 ## 1.0.0
 *Published on 2022/05/13*
 ### Shiny new things
-- New type of column: Calendar
-- 2 new settings to show metadata file of created and modified using a toggle button
+- New type of column: Calendar [ISSUE#24](https://github.com/RafaelGB/obsidian-db-folder/issues/24)
+- 2 new settings to show metadata file of created and modified using a toggle button [ISSUE#26](https://github.com/RafaelGB/obsidian-db-folder/issues/26)
 - Now metadata columns can be sorted and add columns to the right or left
 ### Improved
 - Type control using Literal of dataview. this will allow with futures versions the versatility of dataview plugin (images,links,...)
