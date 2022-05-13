@@ -65,6 +65,7 @@ class VaultManager {
 
   ontainCurrentFrontmatter(content: string): Record<string, string> {
     const match = content.match(/^---\s+([\w\W]+?)\s+---/);
+    console.log("probando");
     if (match) {
       const frontmatterRaw = match[1];
       const yaml = parseYaml(frontmatterRaw);
@@ -74,8 +75,8 @@ class VaultManager {
         .forEach(key => {
           // add frontmatter fields that are not specified as database fields
           frontmatter[key] = yaml[key];
-          return frontmatter;
         });
+      return frontmatter;
     }
     else {
       return undefined;

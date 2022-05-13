@@ -129,12 +129,15 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   // Modify key of a column
   async function columnKey(): Promise<void> {
     if (column.isInline) {
+      // Go to inline mode
       await inlineColumnKey();
       return;
     }
-    if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)) {
+    // If field does not exist yet, ignore it
+    if (!Object.prototype.hasOwnProperty.call(currentFrontmatter, columnId)) {
       return;
     }
+
     // Check if the column is already in the frontmatter
     // assign an empty value to the new key
     rowFields.frontmatter[newValue] = rowFields.frontmatter[columnId] ?? "";
