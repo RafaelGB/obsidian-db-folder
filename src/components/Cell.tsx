@@ -109,7 +109,6 @@ export default function DefaultCell(cellProperties: Cell) {
               setContextValue((old) => ({ value: old.value, update: true }))
             }
             className={"data-input"}
-            innerRef={containerCellRef}
           />
         );
       /** Number option */

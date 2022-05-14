@@ -78,15 +78,8 @@ class DataviewProxy {
                     : Number.parseInt(literal as string);
                 break;
             default:
-                // TODO Values of dataview fails when Obsidian is loaded
-                switch (typeof literal) {
-                    case 'object':
-                        if (DateTime.isDateTime(literal) && typeof literal.toFormat === 'function') {
-                            parsedLiteral = literal.toFormat("yyyy-MM-dd");
-                        } else {
-                            parsedLiteral = literal.toString();
-                        }
-                }
+                // Values of dataview parse to md friendly strings
+                parsedLiteral = this.getDataviewAPI().value.toString(literal);
         }
         return parsedLiteral;
     }
