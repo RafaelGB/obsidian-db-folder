@@ -95,6 +95,33 @@ export default function DefaultCell(cellProperties: Cell) {
     setDirtyCell(false);
   }
 
+  function obsidianMarkdownContainer(mdContain: string) {
+    const containerRef = useRef<HTMLElement>();
+    useLayoutEffect(() => {
+      MarkdownRenderer.renderMarkdown(
+        initialValue,
+        containerRef.current,
+        mdContain,
+        null
+      );
+    });
+    return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
+  }
+
+  function contentEditableContainer(className: string) {
+    return (
+      <ContentEditable
+        html={(contextValue.value && contextValue.value.toString()) || ""}
+        onChange={handleOnChange}
+        onKeyDown={handleKeyDown}
+        onBlur={() =>
+          setContextValue((old) => ({ value: old.value, update: true }))
+        }
+        className={className}
+      />
+    );
+  }
+
   function getCellElement() {
     switch (dataType) {
       /** Plain text option */
@@ -102,43 +129,15 @@ export default function DefaultCell(cellProperties: Cell) {
         return (cellProperties.column as any).isMetadata ? (
           <span className="data-input">{contextValue.value.toString()}</span>
         ) : (
-          <ContentEditable
-            html={(contextValue.value && contextValue.value.toString()) || ""}
-            onChange={handleOnChange}
-            onKeyDown={handleKeyDown}
-            onBlur={() =>
-              setContextValue((old) => ({ value: old.value, update: true }))
-            }
-            className="data-input"
-          />
+          contentEditableContainer("data-input")
         );
       /** Number option */
       case DataTypes.NUMBER:
-        return (
-          <ContentEditable
-            html={(contextValue.value && contextValue.value.toString()) || ""}
-            onChange={handleOnChange}
-            onBlur={() =>
-              setContextValue((old) => ({ value: old.value, update: true }))
-            }
-            className="data-input text-align-right"
-          />
-        );
+        return contentEditableContainer("data-input text-align-right");
+
       /** Markdown option */
       case DataTypes.MARKDOWN:
-        const containerRef = useRef<HTMLElement>();
-        useLayoutEffect(() => {
-          //TODO - this is a hack. find why is layout effect called twice
-          containerRef.current.innerHTML = "";
-          MarkdownRenderer.renderMarkdown(
-            initialValue,
-            containerRef.current,
-            getFilePath(initialValue),
-            null
-          );
-        });
-
-        return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
+        return obsidianMarkdownContainer(getFilePath(initialValue));
       /** Selector option */
       case DataTypes.SELECT:
         return (
