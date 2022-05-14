@@ -62,24 +62,35 @@ class DataviewProxy {
     }
 
     parseLiteral(literal: Literal | NoteInfo, dataTypeDst: string): Literal | NoteInfo {
-        let parsedLiteral: Literal | NoteInfo;
+        if (literal === null || literal === undefined) return "";
+        let parsedLiteral: Literal | NoteInfo = literal;
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case DataTypes.CALENDAR:
-                // Check if original literal is a date. If not convert to current date
-                parsedLiteral = DateTime.isDateTime(literal) ? literal : DateTime.now();
+                switch (typeof literal) {
+                    case "string":
+                        parsedLiteral = DateTime.fromISO(literal);
+                        break;
+                }
                 break;
             case DataTypes.NUMBER:
                 parsedLiteral = isNaN(literal as any) ? ""
                     : Number.parseInt(literal as string);
                 break;
             default:
-                parsedLiteral = DateTime.isDateTime(literal) ? literal.toFormat("yyyy-MM-dd")
-                    : literal;
-
+                // TODO Values of dataview fails when Obsidian is loaded
+                switch (typeof literal) {
+                    case 'object':
+                        if (DateTime.isDateTime(literal) && typeof literal.toFormat === 'function') {
+                            parsedLiteral = literal.toFormat("yyyy-MM-dd");
+                        } else {
+                            parsedLiteral = literal.toString();
+                        }
+                }
         }
         return parsedLiteral;
     }
+
     /**
      * Singleton instance
      * @returns {VaultManager}

@@ -29,14 +29,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-  const [calendarState, setCalendarState] = useState(
-    (
-      DataviewService.parseLiteral(
-        cellProperties.value,
-        DataTypes.CALENDAR
-      ) as DateTime
-    ).toJSDate()
-  );
+  const [calendarState, setCalendarState] = useState(null);
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);
@@ -67,6 +60,12 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
         portalActive.focus();
         portalActive.blur();
       }
+      // Check value when click on calendar to parse it if its not a date
+      setCalendarState(
+        DateTime.isDateTime(contextValue.value)
+          ? contextValue.value.toJSDate()
+          : new Date()
+      );
       setShowCalendar(!showCalendar);
     }
   }

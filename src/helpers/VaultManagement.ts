@@ -17,7 +17,7 @@ const noBreakSpace = /\u00A0/g;
  * @param data 
  * @returns 
  */
-function hasFrontmatterKey(data: string): boolean {
+export function hasFrontmatterKey(data: string): boolean {
   const frontmatterRegex = /^---\n+.*---\n/g
   return frontmatterRegex.test(data);
 }

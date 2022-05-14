@@ -11,22 +11,6 @@ import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
 import { TableColumn } from "cdm/FolderModel";
 
-/**
- * Obtain the path of the file inside cellValue
- * i.e. if cellValue is "[[path/to/file.md|File Name]]" then return "path/to/file.md"
- * i.e. if cellValue is "[[path/to/file.md]]" then return "path/to/file.md"
- * i.e. if cellValue is "[[file.md]]" then return "file.md"
- * @param cellValue
- */
-function getFilePath(cellValue: string): string {
-  const regex = /\[\[(.*)\]\]/;
-  const matches = regex.exec(cellValue);
-  if (matches && matches.length > 1) {
-    return matches[1];
-  }
-  return "";
-}
-
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Initial state of cell */
@@ -37,6 +21,8 @@ export default function DefaultCell(cellProperties: Cell) {
   const dataType = (cellProperties.column as any).dataType;
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
+  /** Ref to cell container */
+  const containerCellRef = useRef<HTMLDivElement>();
   /** state of cell value */
   const [contextValue, setContextValue] = useState({
     value: initialValue,
@@ -58,6 +44,19 @@ export default function DefaultCell(cellProperties: Cell) {
       });
     }
   }, []);
+
+  useLayoutEffect(() => {
+    if (!dirtyCell && containerCellRef.current) {
+      //TODO - this is a hack. find why is layout effect called twice
+      containerCellRef.current.innerHTML = "";
+      MarkdownRenderer.renderMarkdown(
+        contextValue.value,
+        containerCellRef.current,
+        note.getFile().path,
+        null
+      );
+    }
+  }, [dirtyCell]);
 
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
@@ -95,33 +94,6 @@ export default function DefaultCell(cellProperties: Cell) {
     setDirtyCell(false);
   }
 
-  function obsidianMarkdownContainer(mdContain: string) {
-    const containerRef = useRef<HTMLElement>();
-    useLayoutEffect(() => {
-      MarkdownRenderer.renderMarkdown(
-        initialValue,
-        containerRef.current,
-        mdContain,
-        null
-      );
-    });
-    return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
-  }
-
-  function contentEditableContainer(className: string) {
-    return (
-      <ContentEditable
-        html={(contextValue.value && contextValue.value.toString()) || ""}
-        onChange={handleOnChange}
-        onKeyDown={handleKeyDown}
-        onBlur={() =>
-          setContextValue((old) => ({ value: old.value, update: true }))
-        }
-        className={className}
-      />
-    );
-  }
-
   function getCellElement() {
     switch (dataType) {
       /** Plain text option */
@@ -129,15 +101,36 @@ export default function DefaultCell(cellProperties: Cell) {
         return (cellProperties.column as any).isMetadata ? (
           <span className="data-input">{contextValue.value.toString()}</span>
         ) : (
-          contentEditableContainer("data-input")
+          <ContentEditable
+            html={(contextValue.value && contextValue.value.toString()) || ""}
+            onChange={handleOnChange}
+            onKeyDown={handleKeyDown}
+            onBlur={() =>
+              setContextValue((old) => ({ value: old.value, update: true }))
+            }
+            className={"data-input"}
+            innerRef={containerCellRef}
+          />
         );
       /** Number option */
       case DataTypes.NUMBER:
-        return contentEditableContainer("data-input text-align-right");
+        return (
+          <ContentEditable
+            html={(contextValue.value && contextValue.value.toString()) || ""}
+            onChange={handleOnChange}
+            onKeyDown={handleKeyDown}
+            onBlur={() =>
+              setContextValue((old) => ({ value: old.value, update: true }))
+            }
+            className="data-input text-align-right"
+          />
+        );
 
       /** Markdown option */
       case DataTypes.MARKDOWN:
-        return obsidianMarkdownContainer(getFilePath(initialValue));
+        return (
+          <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
+        );
       /** Selector option */
       case DataTypes.SELECT:
         return (
