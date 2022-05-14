@@ -1,7 +1,9 @@
 ## Database folder plugin
 This plugin is a Notion like database based on folders.
-**[Roadmap](https://github.com/RafaelGB/obsidian-db-folder/projects/1)**
-**[changelog](docs/docs/changelog.md)**
+
+- **[Documentation](https://rafaelgb.github.io/obsidian-db-folder/)**
+- **[Roadmap](https://github.com/RafaelGB/obsidian-db-folder/projects/1)**
+- **[changelog](https://rafaelgb.github.io/obsidian-db-folder/changelog/)**
 ### How can I add a database?
 This plugin is based on folders. You can add a folder database y by right clicking on the folder where you want to store your table
 
