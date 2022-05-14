@@ -1,0 +1,20 @@
+site_name: Database Folder
+repo_url: https://github.com/RafaelGB/obsidian-db-folder
+edit_uri: edit/master/docs/docs/
+nav:
+  - Get started: "index.md"
+  - About: "about.md"
+  - Features:
+      - Rows: "features/rows.md"
+      - Headers: "features/headers.md"
+      - Filters: "features/filters.md"
+      - Config: "features/config.md"
+  - FAQ: "faq.md"
+  - Changelog: "changelog.md"
+theme:
+  name: material
+  logo: assets/obsidian.png
+  icon:
+    repo: fontawesome/brands/github-square
+plugins:
+  - search

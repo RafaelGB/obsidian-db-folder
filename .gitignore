@@ -15,5 +15,8 @@ main.js
 data.json
 .DS_Store
 
+# Mkdocs
+site/
+
 # VSCode
 *.code-workspace
