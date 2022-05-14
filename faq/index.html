@@ -13,7 +13,7 @@
     
     
       
-        <title>About - Database Folder</title>
+        <title>FAQ - Database Folder</title>
       
     
     
@@ -58,11 +58,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#whats-inside-the-database-view" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -91,7 +86,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              About
+              FAQ
             
           </span>
         </div>
@@ -213,75 +208,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          About
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
         About
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#whats-inside-the-database-view" class="md-nav__link">
-    Whats inside the database view?
-  </a>
-  
-    <nav class="md-nav" aria-label="Whats inside the database view?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#information" class="md-nav__link">
-    Information
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#database" class="md-nav__link">
-    Database
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#local-configuration" class="md-nav__link">
-    Local configuration
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -382,11 +313,19 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../faq/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         FAQ
       </a>
+      
     </li>
   
 
@@ -424,48 +363,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#whats-inside-the-database-view" class="md-nav__link">
-    Whats inside the database view?
-  </a>
-  
-    <nav class="md-nav" aria-label="Whats inside the database view?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#information" class="md-nav__link">
-    Information
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#database" class="md-nav__link">
-    Database
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#local-configuration" class="md-nav__link">
-    Local configuration
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -476,110 +373,15 @@
             <article class="md-content__inner md-typeset">
               
                 
-  <a href="https://github.com/RafaelGB/obsidian-db-folder/edit/master/docs/docs/about.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/RafaelGB/obsidian-db-folder/edit/master/docs/docs/faq.md" title="Edit this page" class="md-content__button md-icon">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
 
-  <h1>About</h1>
+  <h1>FAQ</h1>
 
-<h2 id="whats-inside-the-database-view">Whats inside the database view?</h2>
-<p>Database view read the yaml configuration inside <code>.md</code> file and render a react DOM.</p>
-<p>You can edit directly the yaml configuration inside the <code>.md</code> file or use the table features to edit the columns.</p>
-<h3 id="information">Information</h3>
-<p>Details about your database
-- <strong>name</strong>: Name asociated to your database (TODO)
-- <strong>description</strong>: extra information explaining the purpose of the database (TODO)</p>
-<h3 id="database">Database</h3>
-<p>The <em>columns</em> key is used to charge the correct information when you charge the react-table. Each column supports all the literals of react-table column configurations. 
-Mandatory:
-- <strong>input</strong>: indicates the type of the column (text,markdown &amp; number)
-- <strong>key</strong>: name of obsidian field metadata in your notes (inline not supported edition yet)
-- <strong>accessor</strong>: is the key of the data. Must be unique
-- <strong>label</strong>: name of the column
-Optional:
-- <strong>position</strong>: order of the columns
-- <strong>isInline</strong>: true if you want to edit the field inline mode</p>
-<h3 id="local-configuration">Local configuration</h3>
-<p>Each database has a yaml local configuration that is read when you open the database.</p>
-<pre><code class="language-markdown">---
-
-database-plugin: basic
-
----
-&lt;%%
-name: Entertaiment
-description: All media contain that I consume
-columns:
-  view_state:
-    input: select
-    accessor: view_state
-    key: view_state
-    label: view_state
-    position: 3
-    isInline: false
-  Calification:
-    input: select
-    accessor: Calification
-    label: Calification
-    key: Calification
-    position: 7
-    isInline: true
-  director:
-    input: text
-    accessor: director
-    label: director
-    key: director
-    position: 4
-  Year:
-    input: number
-    accessor: Year
-    label: Year
-    key: Year
-    position: 6
-  __file__:
-    key: __file__
-    input: markdown
-    label: File
-    accessor: __file__
-    isMetadata: true
-    skipPersist: false
-    csvCandidate: true
-    isInline: false
-    position: 1
-  title:
-    input: text
-    accessor: title
-    label: title
-    key: title
-    position: 5
-    isInline: false
-  Watched_at:
-    input: calendar
-    accessor: Watched_at
-    key: Watched_at
-    label: Watched_at
-    position: 2
-  __created__:
-    key: __created__
-    input: calendar
-    label: Created
-    accessor: __created__
-    isMetadata: true
-    skipPersist: false
-    csvCandidate: true
-    isInline: false
-config:
-  enable_show_state: false
-  group_folder_column: view_state
-  remove_field_when_delete_column: true
-  show_metadata_created: true
-  show_metadata_modified: false
-filters:
-  - {field: Year, operator: GREATER_THAN_OR_EQUAL,value: 2000}
-%%&gt;
-</code></pre>
+<p>(Empty at this moment)</p>
 
               
             </article>
@@ -593,7 +395,7 @@ filters:
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Get started" rel="prev">
+        <a href="../features/config/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Config" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -602,20 +404,20 @@ filters:
               <span class="md-footer__direction">
                 Previous
               </span>
-              Get started
+              Config
             </div>
           </div>
         </a>
       
       
         
-        <a href="../features/rows/" class="md-footer__link md-footer__link--next" aria-label="Next: Rows" rel="next">
+        <a href="../changelog/" class="md-footer__link md-footer__link--next" aria-label="Next: Changelog" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Rows
+              Changelog
             </div>
           </div>
           <div class="md-footer__button md-icon">
