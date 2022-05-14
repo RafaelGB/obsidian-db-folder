@@ -1,5 +1,6 @@
 ## Database folder plugin
-[![Github All Releases](https://img.shields.io/github/downloads/RafaelGB/obsidian-db-folder/total.svg)]()
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/RafaelGB/obsidian-db-folder?style=for-the-badge&sort=semver)](https://github.com/RafaelGB/obsidian-db-folder/releases/latest)
+[![Github All Releases](https://img.shields.io/github/downloads/RafaelGB/obsidian-db-folder/total?style=for-the-badge)]()
 
 This plugin is a Notion like database based on folders.
 
