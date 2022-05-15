@@ -45,7 +45,7 @@ export default function DefaultCell(cellProperties: Cell) {
     }
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!dirtyCell && containerCellRef.current) {
       //TODO - this is a hack. find why is layout effect called twice
       containerCellRef.current.innerHTML = "";
@@ -109,6 +109,7 @@ export default function DefaultCell(cellProperties: Cell) {
               setContextValue((old) => ({ value: old.value, update: true }))
             }
             className={"data-input"}
+            //innerRef={containerCellRef}
           />
         );
       /** Number option */

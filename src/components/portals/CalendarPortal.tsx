@@ -9,6 +9,7 @@ import { usePopper } from "react-popper";
 import { Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 type CalendarProps = {
   intialState: TableDataType;
@@ -42,12 +43,19 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       row: cellProperties.row,
       columnId: (cellProperties.column as any).id,
     });
+
     setCalendarState(date);
     setShowCalendar(false);
     setContextValue({
       value: newValue,
       update: true,
     });
+  }
+
+  if (contextValue.value instanceof DateTime) {
+    console.log("calendar datatime value");
+  } else {
+    console.log("calendar differ value");
   }
 
   function handlerOnClick(e: any) {
@@ -101,7 +109,10 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
         onClick={handlerOnClick}
       >
         <span>
-          {DataviewService.parseLiteral(contextValue.value, DataTypes.TEXT)}
+          {DataviewService.parseLiteral(
+            contextValue.value as Literal,
+            DataTypes.TEXT
+          )}
         </span>
       </div>
       {showCalendar &&
