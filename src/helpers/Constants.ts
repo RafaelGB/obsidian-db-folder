@@ -23,6 +23,7 @@ export const DataTypes = Object.freeze({
   SELECT: 'select',
   MARKDOWN: 'markdown',
   CALENDAR: 'calendar',
+  CALENDAR_TIME: 'calendar_time',
   NEW_COLUMN: 'new_column'
 });
 
@@ -66,7 +67,7 @@ export const MetadataDatabaseColumns = Object.freeze({
   },
   CREATED: {
     key: MetadataColumns.CREATED,
-    input: DataTypes.CALENDAR,
+    input: DataTypes.CALENDAR_TIME,
     label: MetadataLabels.CREATED,
     accessor: MetadataColumns.CREATED,
     isMetadata: true,
@@ -76,7 +77,7 @@ export const MetadataDatabaseColumns = Object.freeze({
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
-    input: DataTypes.CALENDAR,
+    input: DataTypes.CALENDAR_TIME,
     label: MetadataLabels.MODIFIED,
     accessor: MetadataColumns.MODIFIED,
     isMetadata: true,

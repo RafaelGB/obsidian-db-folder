@@ -52,12 +52,6 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     });
   }
 
-  if (contextValue.value instanceof DateTime) {
-    console.log("calendar datatime value");
-  } else {
-    console.log("calendar differ value");
-  }
-
   function handlerOnClick(e: any) {
     if (!column.isMetadata) {
       const portalActive = document.getElementById("unique-calendar-portal");

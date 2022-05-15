@@ -112,6 +112,7 @@ export default function DefaultCell(cellProperties: Cell) {
             //innerRef={containerCellRef}
           />
         );
+
       /** Number option */
       case DataTypes.NUMBER:
         return (
@@ -131,6 +132,15 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
         );
+
+      /** Calendar with time option */
+      case DataTypes.CALENDAR_TIME:
+        return (
+          <span className="data-input calendar-time">
+            {contextValue.value.toString()}
+          </span>
+        );
+
       /** Selector option */
       case DataTypes.SELECT:
         return (
@@ -145,6 +155,7 @@ export default function DefaultCell(cellProperties: Cell) {
             />
           </CellContext.Provider>
         );
+
       /** Calendar option */
       case DataTypes.CALENDAR:
         return (
@@ -156,6 +167,7 @@ export default function DefaultCell(cellProperties: Cell) {
             />
           </CellContext.Provider>
         );
+
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);
