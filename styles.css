@@ -341,7 +341,6 @@
   max-width: 100%;
   background: var(--background-primary);
   border: 1px solid #a0a096;
-  font-family: Arial, Helvetica, sans-serif;
   line-height: 1.125em;
 }
 
@@ -447,7 +446,7 @@
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  background-color: #e6e6e6;
+  background-color: var(--background-secondary-alt);
 }
 
 .react-calendar__tile--now {
@@ -465,7 +464,7 @@
 
 .react-calendar__tile--hasActive:enabled:hover,
 .react-calendar__tile--hasActive:enabled:focus {
-  background: #a9d4ff;
+  background: var(--background-secondary-alt);
 }
 
 .react-calendar__tile--active {

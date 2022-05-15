@@ -11,22 +11,6 @@ import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
 import { TableColumn } from "cdm/FolderModel";
 
-/**
- * Obtain the path of the file inside cellValue
- * i.e. if cellValue is "[[path/to/file.md|File Name]]" then return "path/to/file.md"
- * i.e. if cellValue is "[[path/to/file.md]]" then return "path/to/file.md"
- * i.e. if cellValue is "[[file.md]]" then return "file.md"
- * @param cellValue
- */
-function getFilePath(cellValue: string): string {
-  const regex = /\[\[(.*)\]\]/;
-  const matches = regex.exec(cellValue);
-  if (matches && matches.length > 1) {
-    return matches[1];
-  }
-  return "";
-}
-
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Initial state of cell */
@@ -37,6 +21,8 @@ export default function DefaultCell(cellProperties: Cell) {
   const dataType = (cellProperties.column as any).dataType;
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
+  /** Ref to cell container */
+  const containerCellRef = useRef<HTMLDivElement>();
   /** state of cell value */
   const [contextValue, setContextValue] = useState({
     value: initialValue,
@@ -58,6 +44,19 @@ export default function DefaultCell(cellProperties: Cell) {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (!dirtyCell && containerCellRef.current) {
+      //TODO - this is a hack. find why is layout effect called twice
+      containerCellRef.current.innerHTML = "";
+      MarkdownRenderer.renderMarkdown(
+        contextValue.value,
+        containerCellRef.current,
+        note.getFile().path,
+        null
+      );
+    }
+  }, [dirtyCell]);
 
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
@@ -109,36 +108,39 @@ export default function DefaultCell(cellProperties: Cell) {
             onBlur={() =>
               setContextValue((old) => ({ value: old.value, update: true }))
             }
-            className="data-input"
+            className={"data-input"}
+            //innerRef={containerCellRef}
           />
         );
+
       /** Number option */
       case DataTypes.NUMBER:
         return (
           <ContentEditable
             html={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
+            onKeyDown={handleKeyDown}
             onBlur={() =>
               setContextValue((old) => ({ value: old.value, update: true }))
             }
             className="data-input text-align-right"
           />
         );
+
       /** Markdown option */
       case DataTypes.MARKDOWN:
-        const containerRef = useRef<HTMLElement>();
-        useLayoutEffect(() => {
-          //TODO - this is a hack. find why is layout effect called twice
-          containerRef.current.innerHTML = "";
-          MarkdownRenderer.renderMarkdown(
-            initialValue,
-            containerRef.current,
-            getFilePath(initialValue),
-            null
-          );
-        });
+        return (
+          <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
+        );
 
-        return <span ref={containerRef} className={`${c("md_cell")}`}></span>;
+      /** Calendar with time option */
+      case DataTypes.CALENDAR_TIME:
+        return (
+          <span className="data-input calendar-time">
+            {contextValue.value.toString()}
+          </span>
+        );
+
       /** Selector option */
       case DataTypes.SELECT:
         return (
@@ -153,6 +155,7 @@ export default function DefaultCell(cellProperties: Cell) {
             />
           </CellContext.Provider>
         );
+
       /** Calendar option */
       case DataTypes.CALENDAR:
         return (
@@ -164,6 +167,7 @@ export default function DefaultCell(cellProperties: Cell) {
             />
           </CellContext.Provider>
         );
+
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);

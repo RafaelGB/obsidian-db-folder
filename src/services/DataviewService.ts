@@ -2,10 +2,9 @@ import { FilterCondition } from "cdm/DatabaseModel";
 import { DataTypes, getOperatorFilterValue, OperatorFilter } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { getAPI, isPluginEnabled } from "obsidian-dataview";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
 import { DateTime } from "luxon";
-import NoteInfo from "services/NoteInfo";
 class DataviewProxy {
 
     private static instance: DataviewProxy;
@@ -61,25 +60,31 @@ class DataviewProxy {
         }
     }
 
-    parseLiteral(literal: Literal | NoteInfo, dataTypeDst: string): Literal | NoteInfo {
-        let parsedLiteral: Literal | NoteInfo;
+    parseLiteral(literal: Literal, dataTypeDst: string): Literal {
+        let parsedLiteral: Literal = literal;
+        const wrapped = this.getDataviewAPI().value.wrapValue(literal)
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case DataTypes.CALENDAR:
-                // Check if original literal is a date. If not convert to current date
-                parsedLiteral = DateTime.isDateTime(literal) ? literal : DateTime.now();
+                parsedLiteral = this.parseToCalendar(wrapped);
+                break;
+            case DataTypes.CALENDAR_TIME:
+                parsedLiteral = this.parseToCalendarTime(wrapped);
                 break;
             case DataTypes.NUMBER:
-                parsedLiteral = isNaN(literal as any) ? ""
-                    : Number.parseInt(literal as string);
+                parsedLiteral = wrapped.type === 'number' ? literal : Number(literal);
                 break;
             default:
-                parsedLiteral = DateTime.isDateTime(literal) ? literal.toFormat("yyyy-MM-dd")
-                    : literal;
-
+                // Values of dataview parse to md friendly strings
+                if (DateTime.isDateTime(wrapped.value)) {
+                    parsedLiteral = wrapped.value.toFormat("yyyy-MM-dd");
+                } else {
+                    parsedLiteral = this.getDataviewAPI().value.toString(literal);
+                }
         }
         return parsedLiteral;
     }
+
     /**
      * Singleton instance
      * @returns {VaultManager}
@@ -89,6 +94,22 @@ class DataviewProxy {
             this.instance = new DataviewProxy();
         }
         return this.instance;
+    }
+
+    private parseToCalendar(literal: WrappedLiteral): Literal {
+        if (literal.type === 'string') {
+            return DateTime.fromISO(literal.value);
+        } else {
+            return literal.value;
+        }
+    }
+
+    private parseToCalendarTime(literal: WrappedLiteral): Literal {
+        if (literal.type === 'string') {
+            return DateTime.fromISO(literal.value);
+        } else {
+            return literal.value;
+        }
     }
 }
 

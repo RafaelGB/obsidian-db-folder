@@ -9,6 +9,7 @@ import { usePopper } from "react-popper";
 import { Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 type CalendarProps = {
   intialState: TableDataType;
@@ -29,14 +30,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-  const [calendarState, setCalendarState] = useState(
-    (
-      DataviewService.parseLiteral(
-        cellProperties.value,
-        DataTypes.CALENDAR
-      ) as DateTime
-    ).toJSDate()
-  );
+  const [calendarState, setCalendarState] = useState(null);
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);
@@ -49,6 +43,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       row: cellProperties.row,
       columnId: (cellProperties.column as any).id,
     });
+
     setCalendarState(date);
     setShowCalendar(false);
     setContextValue({
@@ -67,6 +62,12 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
         portalActive.focus();
         portalActive.blur();
       }
+      // Check value when click on calendar to parse it if its not a date
+      setCalendarState(
+        DateTime.isDateTime(contextValue.value)
+          ? contextValue.value.toJSDate()
+          : new Date()
+      );
       setShowCalendar(!showCalendar);
     }
   }
@@ -102,7 +103,10 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
         onClick={handlerOnClick}
       >
         <span>
-          {DataviewService.parseLiteral(contextValue.value, DataTypes.TEXT)}
+          {DataviewService.parseLiteral(
+            contextValue.value as Literal,
+            DataTypes.TEXT
+          )}
         </span>
       </div>
       {showCalendar &&

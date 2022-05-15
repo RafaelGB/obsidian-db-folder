@@ -4,6 +4,7 @@ import { TFile } from "obsidian";
 import { VaultManagerDB } from "services/FileManagerService";
 import { DateTime } from "luxon";
 import { DataviewService } from "./DataviewService";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
@@ -36,7 +37,7 @@ export default class NoteInfo {
         /** Parse data with the type of column */
         columns.forEach(column => {
             if (aFile[column.key] !== undefined) {
-                aFile[column.key] = DataviewService.parseLiteral(aFile[column.key], column.dataType);
+                aFile[column.key] = DataviewService.parseLiteral((aFile[column.key]) as Literal, column.dataType);
             }
         });
         return aFile;

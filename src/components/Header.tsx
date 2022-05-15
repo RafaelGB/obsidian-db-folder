@@ -7,6 +7,7 @@ import PlusIcon from "components/img/Plus";
 import HeaderMenu from "components/HeaderMenu";
 import CalendarIcon from "components/img/CalendarIcon";
 import MarkdownObsidian from "components/img/Markdown";
+import CalendarTimeIcon from "components/img/CalendarTime";
 import {
   ActionTypes,
   DataTypes,
@@ -77,6 +78,9 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       break;
     case DataTypes.CALENDAR:
       propertyIcon = <CalendarIcon />;
+      break;
+    case DataTypes.CALENDAR_TIME:
+      propertyIcon = <CalendarTimeIcon />;
       break;
     case DataTypes.MARKDOWN:
       // TODO : add a markdown icon

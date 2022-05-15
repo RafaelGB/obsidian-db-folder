@@ -68,115 +68,27 @@ export async function obtainColumnsFromFolder(
   return sortColumnsByPosition(columns);
 }
 
-function parseDatabaseToTableColumn(
-  databaseColumn: DatabaseColumn,
-  columnKey: string,
-  index: number
-): TableColumn {
-  const tableColumn: TableColumn = {
-    ...(databaseColumn as Partial<TableColumn>),
-    id: columnKey,
-    dataType: databaseColumn.input,
-    position: databaseColumn.position ?? index,
-    key: databaseColumn.key ?? columnKey,
-    label: databaseColumn.label,
-    accessor: databaseColumn.accessor ?? dbTrim(databaseColumn.label),
-    csvCandidate: databaseColumn.csvCandidate ?? true,
-  };
-  return tableColumn;
-}
-
-async function columnOptions(
+function columnOptions(
   columnKey: string,
   index: number,
   column: DatabaseColumn
-): Promise<TableColumn> {
+): TableColumn {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = [];
-  const tableRow: TableColumn = parseDatabaseToTableColumn(
-    column,
-    columnKey,
-    index
-  );
-  /**
-   * return plain text
-   * @returns {TableColumn}
-   */
-  function isText(): TableColumn {
-    LOGGER.debug(`<= columnOptions`, `return text column`);
-    return {
-      ...tableRow,
-      dataType: DataTypes.TEXT,
-      options: options,
-    };
-  }
 
-  /**
-   * return number
-   * @returns {TableColumn}
-   */
-  function isNumber(): TableColumn {
-    LOGGER.debug(`<= columnOptions`, `return number column`);
+  if (Object.values(DataTypes).includes(column.input)) {
+    LOGGER.debug(`<= columnOptions`, `return ${column.input} column`);
     return {
-      ...tableRow,
-      dataType: DataTypes.NUMBER,
+      ...(column as Partial<TableColumn>),
+      position: column.position ?? index,
+      key: column.key ?? columnKey,
+      accessor: column.accessor ?? dbTrim(column.label),
+      csvCandidate: column.csvCandidate ?? true,
+      id: columnKey,
+      label: column.label,
+      dataType: column.input,
       options: options,
     };
-  }
-  /**
-   * return selector
-   * @returns {TableColumn}
-   */
-  function isSelect(): TableColumn {
-    LOGGER.debug(`<= columnOptions`, `return select column`);
-    return {
-      ...tableRow,
-      dataType: DataTypes.SELECT,
-      options: options,
-    };
-  }
-
-  /**
-   * return markdown rendered text
-   * @returns {TableColumn}
-   */
-  function isMarkdown(): TableColumn {
-    LOGGER.debug(`<= columnOptions`, `return markdown column`);
-    return {
-      ...tableRow,
-      dataType: DataTypes.MARKDOWN,
-      options: options,
-    };
-  }
-
-  function isNewColumn(): TableColumn {
-    LOGGER.debug(`<= columnOptions`, `return new column`);
-    return {
-      ...tableRow,
-      dataType: DataTypes.NEW_COLUMN,
-      options: options,
-    };
-  }
-
-  function isCalendar(): TableColumn {
-    LOGGER.debug(`<= columnOptions`, `return calendar column`);
-    return {
-      ...tableRow,
-      dataType: DataTypes.CALENDAR,
-      options: options,
-    };
-  }
-
-  // Record of options
-  let inputs: Record<string, any> = {};
-  inputs[DataTypes.TEXT] = isText;
-  inputs[DataTypes.NUMBER] = isNumber;
-  inputs[DataTypes.SELECT] = isSelect;
-  inputs[DataTypes.MARKDOWN] = isMarkdown;
-  inputs[DataTypes.NEW_COLUMN] = isNewColumn;
-  inputs[DataTypes.CALENDAR] = isCalendar;
-  if (inputs.hasOwnProperty(column.input)) {
-    return await inputs[column.input]();
   } else {
     throw `Error: option ${column.input} not supported yet`;
   }

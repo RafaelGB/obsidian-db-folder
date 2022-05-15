@@ -6,4 +6,4 @@ base:
   origin:
     - /path/to/files/1/
     - /path/to/files/n/
-  target: /path/to/vault/.obsidian/plugins/obsidian-dbfolder/
+  target: /path/to/vault/.obsidian/plugins/dbfolder/
