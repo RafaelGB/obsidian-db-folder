@@ -29,20 +29,19 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const [calendarState, setCalendarState] = useState(
     DateTime.isDateTime(contextValue.value)
       ? contextValue.value.toJSDate()
-      : new Date()
+      : null
   );
 
   function handleCalendarChange(date: Date) {
-    console.log("handleCalendarChange", date);
     const newValue = DateTime.fromJSDate(date);
     // save on disk
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: (cellProperties.column as any).key,
+      key: column.key,
       value: DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
       row: cellProperties.row,
-      columnId: (cellProperties.column as any).id,
+      columnId: column.id,
     });
 
     setCalendarState(date);
@@ -63,6 +62,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       selected={calendarState}
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
+      placeholderText="Pick a date..."
       className="data-input calendar"
     />
   );
