@@ -426,6 +426,10 @@
   width: 100%;
 }
 
+.react-datepicker-wrapper input[type="text"] {
+  border: none;
+}
+
 .react-datepicker {
   font-size: 0.8rem;
   background-color: var(--background-primary);
