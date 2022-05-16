@@ -55,14 +55,15 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   };
 
   return (
-    <DatePicker
-      dateFormat="yyyy-MM-dd"
-      selected={calendarState}
-      onChange={handleCalendarChange}
-      popperContainer={CalendarContainer}
-      placeholderText="Pick a date..."
-      className="data-input calendar"
-    />
+    <div className="data-input calendar">
+      <DatePicker
+        dateFormat="yyyy-MM-dd"
+        selected={calendarState}
+        onChange={handleCalendarChange}
+        popperContainer={CalendarContainer}
+        placeholderText="Pick a date..."
+      />
+    </div>
   );
 };
 
