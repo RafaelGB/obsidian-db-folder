@@ -59,6 +59,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   return (
     <DatePicker
+      dateFormat="yyyy-MM-dd"
       selected={calendarState}
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
