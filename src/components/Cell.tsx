@@ -22,6 +22,7 @@ export default function DefaultCell(cellProperties: Cell) {
   const note: NoteInfo = (cellProperties.row.original as any).note;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
+  const editableMdRef = useRef<HTMLInputElement>();
   /** state of cell value */
   const [contextValue, setContextValue] = useState({
     value: initialValue,
@@ -43,6 +44,12 @@ export default function DefaultCell(cellProperties: Cell) {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (editableMdRef.current) {
+      editableMdRef.current.focus();
+    }
+  }, [editableMdRef, dirtyCell]);
 
   useEffect(() => {
     if (!dirtyCell && containerCellRef.current) {
@@ -116,6 +123,7 @@ export default function DefaultCell(cellProperties: Cell) {
             onKeyDown={handleKeyDown}
             onBlur={handlerEditableOnBlur}
             className={"data-input"}
+            ref={editableMdRef}
           />
         ) : (
           <span
