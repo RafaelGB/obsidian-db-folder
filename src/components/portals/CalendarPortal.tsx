@@ -6,8 +6,6 @@ import { DateTime } from "luxon";
 import { Cell } from "react-table";
 import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
-import { DataviewService } from "services/DataviewService";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { Portal } from "@material-ui/core";
 
 type CalendarProps = {
