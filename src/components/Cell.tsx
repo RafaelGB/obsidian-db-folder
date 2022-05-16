@@ -1,6 +1,5 @@
 import { ActionTypes, DataTypes } from "helpers/Constants";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
+import React, { useEffect, useRef, useState } from "react";
 import { LOGGER } from "services/Logger";
 import { Cell } from "react-table";
 import { MarkdownRenderer } from "obsidian";
@@ -23,6 +22,7 @@ export default function DefaultCell(cellProperties: Cell) {
   const note: NoteInfo = (cellProperties.row.original as any).note;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
+  const editableMdRef = useRef<HTMLInputElement>();
   /** state of cell value */
   const [contextValue, setContextValue] = useState({
     value: initialValue,
@@ -46,6 +46,12 @@ export default function DefaultCell(cellProperties: Cell) {
   }, []);
 
   useEffect(() => {
+    if (editableMdRef.current) {
+      editableMdRef.current.focus();
+    }
+  }, [editableMdRef, dirtyCell]);
+
+  useEffect(() => {
     if (!dirtyCell && containerCellRef.current) {
       //TODO - this is a hack. find why is layout effect called twice
       containerCellRef.current.innerHTML = "";
@@ -53,7 +59,7 @@ export default function DefaultCell(cellProperties: Cell) {
         contextValue.value,
         containerCellRef.current,
         note.getFile().path,
-        null
+        (cellProperties as any).initialState.view
       );
     }
   }, [dirtyCell]);
@@ -63,8 +69,18 @@ export default function DefaultCell(cellProperties: Cell) {
       event.target.blur();
     }
   };
+
+  const handleEditableOnclick = (event: any) => {
+    setDirtyCell(true);
+  };
+
+  const handlerEditableOnBlur = (event: any) => {
+    setDirtyCell(false);
+    setContextValue((event) => ({ value: event.value, update: true }));
+  };
+
   // onChange handler
-  const handleOnChange = (event: ContentEditableEvent) => {
+  const handleOnChange = (event: any) => {
     // cancelling previous timeouts
     if (editNoteTimeout) {
       clearTimeout(editNoteTimeout);
@@ -100,29 +116,33 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.TEXT:
         return (cellProperties.column as any).isMetadata ? (
           <span className="data-input">{contextValue.value.toString()}</span>
-        ) : (
-          <ContentEditable
-            html={(contextValue.value && contextValue.value.toString()) || ""}
+        ) : dirtyCell ? (
+          <input
+            value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
-            onBlur={() =>
-              setContextValue((old) => ({ value: old.value, update: true }))
-            }
+            onBlur={handlerEditableOnBlur}
             className={"data-input"}
-            //innerRef={containerCellRef}
+            ref={editableMdRef}
           />
+        ) : (
+          <span
+            ref={containerCellRef}
+            className="data-input"
+            onClick={handleEditableOnclick}
+          >
+            {(contextValue.value && contextValue.value.toString()) || ""}
+          </span>
         );
 
       /** Number option */
       case DataTypes.NUMBER:
         return (
-          <ContentEditable
-            html={(contextValue.value && contextValue.value.toString()) || ""}
+          <input
+            value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
-            onBlur={() =>
-              setContextValue((old) => ({ value: old.value, update: true }))
-            }
+            onBlur={handlerEditableOnBlur}
             className="data-input text-align-right"
           />
         );

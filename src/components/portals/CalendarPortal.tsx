@@ -1,15 +1,12 @@
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { CellContext } from "components/contexts/CellContext";
-import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
+import { ActionTypes } from "helpers/Constants";
 import React, { useContext, useState } from "react";
-import Calendar from "react-calendar";
-import ReactDOM from "react-dom";
 import { DateTime } from "luxon";
-import { usePopper } from "react-popper";
 import { Cell } from "react-table";
+import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
-import { DataviewService } from "services/DataviewService";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { Portal } from "@material-ui/core";
 
 type CalendarProps = {
   intialState: TableDataType;
@@ -19,18 +16,19 @@ type CalendarProps = {
 const CalendarPortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties } = calendarProps;
   const dataDispatch = (cellProperties as any).dataDispatch;
-  const [showCalendar, setShowCalendar] = useState(false);
   // Selector reference state
-  const [calendarRef, setCalendarRef] = useState(null);
+
   // Selector popper state
-  const [selectPop, setSelectPop] = useState(null);
-  const { styles, attributes } = usePopper(calendarRef, selectPop);
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
 
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-  const [calendarState, setCalendarState] = useState(null);
+  const [calendarState, setCalendarState] = useState(
+    DateTime.isDateTime(contextValue.value)
+      ? contextValue.value.toJSDate()
+      : null
+  );
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);
@@ -38,83 +36,35 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: (cellProperties.column as any).key,
+      key: column.key,
       value: DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
       row: cellProperties.row,
-      columnId: (cellProperties.column as any).id,
+      columnId: column.id,
     });
 
     setCalendarState(date);
-    setShowCalendar(false);
     setContextValue({
       value: newValue,
       update: true,
     });
   }
 
-  function handlerOnClick(e: any) {
-    if (!column.isMetadata) {
-      const portalActive = document.getElementById("unique-calendar-portal");
-      if (!showCalendar && portalActive !== null) {
-        // Hacky way to trigger focus event on opened calendar
-        // react-calendar has a bug where it doesn't trigger focus event
-        portalActive.setAttribute("tabindex", "-1");
-        portalActive.focus();
-        portalActive.blur();
-      }
-      // Check value when click on calendar to parse it if its not a date
-      setCalendarState(
-        DateTime.isDateTime(contextValue.value)
-          ? contextValue.value.toJSDate()
-          : new Date()
-      );
-      setShowCalendar(!showCalendar);
-    }
-  }
-
-  function displayCalendar() {
-    return (
-      <div
-        className="menu"
-        ref={setSelectPop}
-        {...attributes.popper}
-        style={{
-          ...styles.popper,
-          zIndex: 4,
-          minWidth: 200,
-          maxWidth: 320,
-          padding: "0.5rem",
-          background: StyleVariables.BACKGROUND_SECONDARY,
-        }}
-        onMouseLeave={() => setShowCalendar(false)}
-        onBlur={() => setShowCalendar(false)}
-        id={"unique-calendar-portal"}
-      >
-        <Calendar onChange={handleCalendarChange} value={calendarState} />
-      </div>
-    );
-  }
+  const CalendarContainer = (containerProps: any) => {
+    const el = document.getElementById("popper-container");
+    return <Portal container={el}>{containerProps.children}</Portal>;
+  };
 
   return (
-    <>
-      <div
-        className="data-input calendar"
-        ref={setCalendarRef}
-        onClick={handlerOnClick}
-      >
-        <span>
-          {DataviewService.parseLiteral(
-            contextValue.value as Literal,
-            DataTypes.TEXT
-          )}
-        </span>
-      </div>
-      {showCalendar &&
-        ReactDOM.createPortal(
-          displayCalendar(),
-          document.getElementById("popper-container")
-        )}
-    </>
+    <div className="data-input calendar">
+      <DatePicker
+        dateFormat="yyyy-MM-dd"
+        selected={calendarState}
+        onChange={handleCalendarChange}
+        popperContainer={CalendarContainer}
+        placeholderText="Pick a date..."
+      />
+    </div>
   );
 };
+
 export default CalendarPortal;

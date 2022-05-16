@@ -97,10 +97,14 @@ class DataviewProxy {
     }
 
     private parseToCalendar(literal: WrappedLiteral): Literal {
-        if (literal.type === 'string') {
-            return DateTime.fromISO(literal.value);
+        if (DateTime.isDateTime(literal.value)) {
+            if (literal.type === 'string') {
+                return DateTime.fromISO(literal.value);
+            } else {
+                return literal.value;
+            }
         } else {
-            return literal.value;
+            return null;
         }
     }
 
