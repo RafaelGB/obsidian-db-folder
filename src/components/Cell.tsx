@@ -59,7 +59,7 @@ export default function DefaultCell(cellProperties: Cell) {
         contextValue.value,
         containerCellRef.current,
         note.getFile().path,
-        null
+        (cellProperties as any).initialState.view
       );
     }
   }, [dirtyCell]);
