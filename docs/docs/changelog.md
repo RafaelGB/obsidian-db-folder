@@ -1,3 +1,13 @@
+### 1.1.0
+### Shiny new things
+- New type of column: Calendar time
+- Now Text column supports Obsidian Markdown rendering (links, bold, italic, etc.)
+- MKdocs added as documentation tool of the project
+### Improved
+- New format of created and updated metadata columns allows sorting
+### Developers
+- Refactor of calendar column to support time as well. Changed the dependency of `react-calendar` to `react-datepicker` beacuse the onBlur event was not supported natively.
+
 ## 1.0.0
 *Published on 2022/05/13*
 ### Shiny new things
