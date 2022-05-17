@@ -13,7 +13,7 @@ You can add a folder database y by right clicking on the folder where you want t
 ![AddDatabase.gif](docs/resources/AddDatabase.gif)
 
 ### How to use?
-Database has its own type of view. It will search all notes into the same folder of the database and show the columns that you specify. Check our [documentation](https://rafaelgb.github.io/obsidian-db-folder/) for more information.
+Database has its own type of view. It will search all notes into the same folder of the database and show the columns that you specify. Check our [documentation](https://rafaelgb.github.io/obsidian-db-folder/features/rows/) for more information.
 
 ![TablePresentation.gif](docs/resources/TablePresentation.gif)
 

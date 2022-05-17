@@ -167,4 +167,10 @@ export function getOperatorFilterValue(keyToFind: string): string {
   return entry[1];
 }
 
+export const MediaExtensions = Object.freeze({
+  IMAGE: ['bmp', 'png', 'jpg', 'jpeg', 'gif', 'svg'],
+  VIDEO: ['mp4', 'webm', 'ogv'],
+  AUDIO: ['mp3', 'wav', 'm4a', '3gp', 'flac', 'ogg', 'oga']
+});
+
 export const YAML_INDENT = Object.freeze("  ");
