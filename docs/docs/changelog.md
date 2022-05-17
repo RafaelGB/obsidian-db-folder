@@ -1,3 +1,7 @@
+### 1.1.1
+*Published on 2022/05/17*
+### Improved
+- Now rendered markdowns supports media preview with `![[wikilink.format]]` as video,audio and image. [ISSUE#17](https://github.com/RafaelGB/obsidian-db-folder/issues/17)
 ### 1.1.0
 *Published on 2022/05/17*
 ### Shiny new things
