@@ -7,7 +7,7 @@ import NoteInfo from "services/NoteInfo";
 import { Portal } from "@material-ui/core";
 import { CalendarProps } from "cdm/DatabaseModel";
 
-const CalendarPortal = (calendarProps: CalendarProps) => {
+const CalendarTimePortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties } = calendarProps;
   const dataDispatch = (cellProperties as any).dataDispatch;
   // Selector reference state
@@ -48,17 +48,23 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
 
-  return (
-    <div className="data-input calendar">
+  return column.isMetadata ? (
+    <span className="data-input calendar-time">
+      {contextValue.value.toString()}
+    </span>
+  ) : (
+    <div className="data-input calendar-time">
       <DatePicker
-        dateFormat="yyyy-MM-dd"
+        dateFormat="yyyy-MM-dd h:mm aa"
         selected={calendarState}
         onChange={handleCalendarChange}
         popperContainer={CalendarContainer}
-        placeholderText="Pick a date..."
+        timeInputLabel="Time:"
+        showTimeInput
+        placeholderText="Pick a moment..."
       />
     </div>
   );
 };
 
-export default CalendarPortal;
+export default CalendarTimePortal;

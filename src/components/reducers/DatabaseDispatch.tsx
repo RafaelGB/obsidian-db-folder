@@ -213,6 +213,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
            * - TEXT
            * - NUMBER
            * - CALENDAR
+           * - CALENDAR_TIME
            */
           return update(state, {
             skipReset: { $set: true },

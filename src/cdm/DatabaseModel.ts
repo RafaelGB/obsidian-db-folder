@@ -1,6 +1,8 @@
 import { RowType } from "cdm/RowTypeModel"
 import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { Cell } from "react-table";
 import { LocalSettings } from "Settings"
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 /** database column */
 export interface DatabaseColumn {
@@ -45,3 +47,9 @@ export type OptionSelect = {
     label: string;
     backgroundColor: string;
 }
+
+export type CalendarProps = {
+    intialState: TableDataType;
+    column: TableColumn;
+    cellProperties: Cell;
+};
