@@ -49,11 +49,11 @@ function handleEmbeds(dom: HTMLDivElement, view: DatabaseView, depth: number) {
       }
 
       if (MediaExtensions.AUDIO.contains(target.extension)) {
-        //return handleAudio(el, target, view);
+        return handleAudio(el, target, view);
       }
 
       if (MediaExtensions.VIDEO.contains(target.extension)) {
-        //return handleVideo(el, target, view);
+        return handleVideo(el, target, view);
       }
 
       //   if (target.extension === "md") {
@@ -87,4 +87,35 @@ function handleImage(el: HTMLElement, file: TFile, view: DatabaseView) {
   );
 
   el.addClasses(["image-embed", "is-loaded"]);
+}
+
+function handleAudio(el: HTMLElement, file: TFile, view: DatabaseView) {
+  el.empty();
+  el.createEl("audio", {
+    attr: { controls: "", src: view.app.vault.getResourcePath(file) },
+  });
+  el.addClasses(["media-embed", "is-loaded"]);
+}
+
+function handleVideo(el: HTMLElement, file: TFile, view: DatabaseView) {
+  el.empty();
+
+  el.createEl(
+    "video",
+    { attr: { controls: "", src: view.app.vault.getResourcePath(file) } },
+    (video) => {
+      const handleLoad = () => {
+        video.removeEventListener("loadedmetadata", handleLoad);
+
+        if (video.videoWidth === 0 && video.videoHeight === 0) {
+          el.empty();
+          handleAudio(el, file, view);
+        }
+      };
+
+      video.addEventListener("loadedmetadata", handleLoad);
+    }
+  );
+
+  el.addClasses(["media-embed", "is-loaded"]);
 }
