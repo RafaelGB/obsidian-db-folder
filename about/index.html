@@ -488,19 +488,25 @@
 <p>Database view read the yaml configuration inside <code>.md</code> file and render a react DOM.</p>
 <p>You can edit directly the yaml configuration inside the <code>.md</code> file or use the table features to edit the columns.</p>
 <h3 id="information">Information</h3>
-<p>Details about your database
-- <strong>name</strong>: Name asociated to your database (TODO)
-- <strong>description</strong>: extra information explaining the purpose of the database (TODO)</p>
+<p>Details about your database</p>
+<ul>
+<li><strong>name</strong>: Name asociated to your database (TODO)</li>
+<li><strong>description</strong>: extra information explaining the purpose of the database (TODO)</li>
+</ul>
 <h3 id="database">Database</h3>
-<p>The <em>columns</em> key is used to charge the correct information when you charge the react-table. Each column supports all the literals of react-table column configurations. 
-Mandatory:
-- <strong>input</strong>: indicates the type of the column (text,markdown &amp; number)
-- <strong>key</strong>: name of obsidian field metadata in your notes (inline not supported edition yet)
-- <strong>accessor</strong>: is the key of the data. Must be unique
-- <strong>label</strong>: name of the column
-Optional:
-- <strong>position</strong>: order of the columns
-- <strong>isInline</strong>: true if you want to edit the field inline mode</p>
+<p>The <em>columns</em> key is used to charge the correct information when you charge the react-table. Each column supports all the literals of react-table column configurations. </p>
+<p>Mandatory:</p>
+<ul>
+<li><strong>input</strong>: indicates the type of the column (text,markdown &amp; number)</li>
+<li><strong>key</strong>: name of obsidian field metadata in your notes (inline not supported edition yet)</li>
+<li><strong>accessor</strong>: is the key of the data. Must be unique</li>
+<li><strong>label</strong>: name of the column</li>
+</ul>
+<p>Optional:</p>
+<ul>
+<li><strong>position</strong>: order of the columns</li>
+<li><strong>isInline</strong>: true if you want to edit the field inline mode</li>
+</ul>
 <h3 id="local-configuration">Local configuration</h3>
 <p>Each database has a yaml local configuration that is read when you open the database.</p>
 <pre><code class="language-markdown">---
