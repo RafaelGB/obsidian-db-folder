@@ -76,8 +76,8 @@ export default function DefaultCell(cellProperties: Cell) {
   };
 
   const handlerEditableOnBlur = (event: any) => {
-    setDirtyCell(false);
     setContextValue((event) => ({ value: event.value, update: true }));
+    setDirtyCell(false);
   };
 
   // onChange handler
@@ -108,16 +108,13 @@ export default function DefaultCell(cellProperties: Cell) {
       row: cellProperties.row,
       columnId: (cellProperties.column as any).id,
     });
-    setDirtyCell(false);
   }
 
   function getCellElement() {
     switch (dataType) {
       /** Plain text option */
       case DataTypes.TEXT:
-        return (cellProperties.column as any).isMetadata ? (
-          <span className="data-input">{contextValue.value.toString()}</span>
-        ) : dirtyCell ? (
+        return dirtyCell ? (
           <input
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}

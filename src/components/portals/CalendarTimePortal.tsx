@@ -50,7 +50,7 @@ const CalendarTimePortal = (calendarProps: CalendarProps) => {
 
   return column.isMetadata ? (
     <span className="data-input calendar-time">
-      {contextValue.value.toString()}
+      {(contextValue.value as DateTime).toFormat("yyyy-MM-dd h:mm a")}
     </span>
   ) : (
     <div className="data-input calendar-time">
