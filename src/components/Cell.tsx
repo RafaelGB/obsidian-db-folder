@@ -2,7 +2,6 @@ import { ActionTypes, DataTypes } from "helpers/Constants";
 import React, { useEffect, useRef, useState } from "react";
 import { LOGGER } from "services/Logger";
 import { Cell } from "react-table";
-import { MarkdownRenderer } from "obsidian";
 import NoteInfo from "services/NoteInfo";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
