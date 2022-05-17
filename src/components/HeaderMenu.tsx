@@ -1,5 +1,10 @@
 import { DatabaseHeaderProps } from "cdm/FolderModel";
-import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
+import {
+  ActionTypes,
+  DataTypes,
+  MetadataLabels,
+  StyleVariables,
+} from "helpers/Constants";
 import { dbTrim, c } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
@@ -9,6 +14,7 @@ import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
+import CalendarTimeIcon from "components/img/CalendarTime";
 import CalendarIcon from "components/img/CalendarIcon";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
@@ -213,6 +219,19 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <CalendarIcon />,
       label: DataTypes.CALENDAR,
+    },
+    {
+      onClick: (e: any) => {
+        dispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: column.id,
+          dataType: DataTypes.CALENDAR_TIME,
+        });
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <CalendarTimeIcon />,
+      label: MetadataLabels.CALENDAR_TIME,
     },
   ];
 
@@ -468,9 +487,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                           control={
                             <Switch
                               checked={isInline}
-                              onChange={(event) => {
-                                handleChangeToggleInlineFrontmatter(event);
-                              }}
+                              onChange={handleChangeToggleInlineFrontmatter}
                             />
                           }
                           label="Inline"

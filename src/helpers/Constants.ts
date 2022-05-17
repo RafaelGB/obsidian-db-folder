@@ -41,6 +41,7 @@ export const MetadataLabels = Object.freeze({
   ADD_COLUMN: '+',
   CREATED: 'Created',
   MODIFIED: 'Modified',
+  CALENDAR_TIME: 'Calendar time',
 });
 
 export const MetadataDatabaseColumns = Object.freeze({

@@ -9,6 +9,7 @@ import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
 import { TableColumn } from "cdm/FolderModel";
+import CalendarTimePortal from "./portals/CalendarTimePortal";
 
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
@@ -75,8 +76,8 @@ export default function DefaultCell(cellProperties: Cell) {
   };
 
   const handlerEditableOnBlur = (event: any) => {
-    setDirtyCell(false);
     setContextValue((event) => ({ value: event.value, update: true }));
+    setDirtyCell(false);
   };
 
   // onChange handler
@@ -107,16 +108,13 @@ export default function DefaultCell(cellProperties: Cell) {
       row: cellProperties.row,
       columnId: (cellProperties.column as any).id,
     });
-    setDirtyCell(false);
   }
 
   function getCellElement() {
     switch (dataType) {
       /** Plain text option */
       case DataTypes.TEXT:
-        return (cellProperties.column as any).isMetadata ? (
-          <span className="data-input">{contextValue.value.toString()}</span>
-        ) : dirtyCell ? (
+        return dirtyCell ? (
           <input
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
@@ -156,9 +154,13 @@ export default function DefaultCell(cellProperties: Cell) {
       /** Calendar with time option */
       case DataTypes.CALENDAR_TIME:
         return (
-          <span className="data-input calendar-time">
-            {contextValue.value.toString()}
-          </span>
+          <CellContext.Provider value={{ contextValue, setContextValue }}>
+            <CalendarTimePortal
+              intialState={(cellProperties as any).initialState}
+              column={cellProperties.column as unknown as TableColumn}
+              cellProperties={cellProperties}
+            />
+          </CellContext.Provider>
         );
 
       /** Selector option */

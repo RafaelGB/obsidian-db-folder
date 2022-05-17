@@ -66,10 +66,8 @@ class DataviewProxy {
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case DataTypes.CALENDAR:
-                parsedLiteral = this.parseToCalendar(wrapped);
-                break;
             case DataTypes.CALENDAR_TIME:
-                parsedLiteral = this.parseToCalendarTime(wrapped);
+                parsedLiteral = this.parseToCalendar(wrapped);
                 break;
             case DataTypes.NUMBER:
                 parsedLiteral = wrapped.type === 'number' ? literal : Number(literal);
@@ -105,14 +103,6 @@ class DataviewProxy {
             }
         } else {
             return null;
-        }
-    }
-
-    private parseToCalendarTime(literal: WrappedLiteral): Literal {
-        if (literal.type === 'string') {
-            return DateTime.fromISO(literal.value);
-        } else {
-            return literal.value;
         }
     }
 }
