@@ -96,7 +96,6 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   const content = await VaultManagerDB.obtainContentFromTfile(file);
   let currentFrontmatter = VaultManagerDB.ontainCurrentFrontmatter(content);
   const column = state.columns.find(c => c.key === columnId);
-  console.log("pruebas");
   // Adds an empty frontmatter at the beginning of the file
   async function addFrontmatter(): Promise<void> {
     /* Regex explanation
