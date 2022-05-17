@@ -6,7 +6,7 @@
 *Published on 2022/05/17*
 ### Shiny new things
 - New type of column: Calendar time
-- Now Text column supports Obsidian Markdown rendering (links, bold, italic, etc.)
+- Now Text column supports Obsidian Markdown rendering (links, bold, italic, etc.) [ISSUE#35](https://github.com/RafaelGB/obsidian-db-folder/issues/35)
 - MKdocs added as documentation tool of the project
 ### Improved
 - New format of created and updated metadata columns allows sorting
