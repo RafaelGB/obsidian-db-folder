@@ -9,7 +9,8 @@ import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
 import { TableColumn } from "cdm/FolderModel";
-import CalendarTimePortal from "./portals/CalendarTimePortal";
+import CalendarTimePortal from "components/portals/CalendarTimePortal";
+import { renderMarkdown } from "components/markdown/MarkdownRenderer";
 
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
@@ -54,13 +55,13 @@ export default function DefaultCell(cellProperties: Cell) {
 
   useEffect(() => {
     if (!dirtyCell && containerCellRef.current) {
+      renderMarkdown;
       //TODO - this is a hack. find why is layout effect called twice
       containerCellRef.current.innerHTML = "";
-      MarkdownRenderer.renderMarkdown(
+      renderMarkdown(
+        (cellProperties as any).initialState.view,
         contextValue.value,
-        containerCellRef.current,
-        note.getFile().path,
-        (cellProperties as any).initialState.view
+        containerCellRef.current
       );
     }
   }, [dirtyCell]);
