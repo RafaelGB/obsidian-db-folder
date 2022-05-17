@@ -1,4 +1,5 @@
 ### 1.1.0
+*Published on 2022/05/17*
 ### Shiny new things
 - New type of column: Calendar time
 - Now Text column supports Obsidian Markdown rendering (links, bold, italic, etc.)
