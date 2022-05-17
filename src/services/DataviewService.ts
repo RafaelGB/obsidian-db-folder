@@ -63,6 +63,9 @@ class DataviewProxy {
     parseLiteral(literal: Literal, dataTypeDst: string): Literal {
         let parsedLiteral: Literal = literal;
         const wrapped = this.getDataviewAPI().value.wrapValue(literal)
+        if (wrapped.value === undefined || wrapped.value === null) {
+            return "";
+        }
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case DataTypes.CALENDAR:
