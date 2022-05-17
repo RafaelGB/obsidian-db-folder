@@ -4,16 +4,21 @@ Database view read the yaml configuration inside `.md` file and render a react D
 You can edit directly the yaml configuration inside the `.md` file or use the table features to edit the columns.
 ### Information
 Details about your database
+
 - **name**: Name asociated to your database (TODO)
 - **description**: extra information explaining the purpose of the database (TODO)
 ### Database
 The *columns* key is used to charge the correct information when you charge the react-table. Each column supports all the literals of react-table column configurations. 
+
 Mandatory:
+
 - **input**: indicates the type of the column (text,markdown & number)
 - **key**: name of obsidian field metadata in your notes (inline not supported edition yet)
 - **accessor**: is the key of the data. Must be unique
 - **label**: name of the column
+
 Optional:
+
 - **position**: order of the columns
 - **isInline**: true if you want to edit the field inline mode
 
