@@ -96,7 +96,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   const content = await VaultManagerDB.obtainContentFromTfile(file);
   let currentFrontmatter = VaultManagerDB.ontainCurrentFrontmatter(content);
   const column = state.columns.find(c => c.key === columnId);
-
+  console.log("pruebas");
   // Adds an empty frontmatter at the beginning of the file
   async function addFrontmatter(): Promise<void> {
     /* Regex explanation
@@ -156,12 +156,12 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   }
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-    const frontmatterGroupRegex = new RegExp(`^---\\s+([\\w\\W]+?)\\s+---`, "g");
+    const frontmatterGroupRegex = new RegExp(`(^---\\n)+(.*)+(^---)`, "gm");
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterGroupRegex,
-      newValue: parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn)
+      newValue: `${parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn)}`
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
