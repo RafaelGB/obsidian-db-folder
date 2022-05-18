@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@material-ui/core";
 import { CalendarProps } from "cdm/DatabaseModel";
+import { c } from "helpers/StylesHelper";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties } = calendarProps;
@@ -63,7 +64,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       className="data-input calendar"
     />
   ) : (
-    <span className="data-input" onClick={handleOnClick}>
+    <span className={`data-input ${c("calendar")}`} onClick={handleOnClick}>
       {DateTime.isDateTime(contextValue.value)
         ? contextValue.value.toFormat("yyyy-MM-dd")
         : "Pick a date..."}

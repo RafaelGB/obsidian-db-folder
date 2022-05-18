@@ -265,6 +265,10 @@
   flex: 1 0 auto;
 }
 
+.database-plugin__calendar {
+  align-self: center;
+}
+
 .text-align-right {
   text-align: right;
 }
@@ -422,6 +426,7 @@
 .react-datepicker-wrapper {
   display: flex;
   flex: 1 1 0px;
+  align-self: center;
 }
 
 .react-datepicker-wrapper input[type="text"],
