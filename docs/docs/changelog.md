@@ -1,3 +1,8 @@
+## 1.1.3
+*Published on 2022/05/18*
+### No longer broken
+- width of input calendar cells fixed [ISSUE#46](https://github.com/RafaelGB/obsidian-db-folder/issues/46)
+- catastrofic regex failure fixed when `!` was present inside fields
 ## 1.1.2
 *Published on 2022/05/17*
 ### No longer broken
