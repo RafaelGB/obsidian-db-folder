@@ -210,9 +210,13 @@ export default class DBFolderPlugin extends Plugin {
 	defaultConfiguration(): string {
 		const local_settings = this.settings.local_settings;
 		return [
-			`configuration:`,
+			`config:`,
 			` enable_show_state: ${local_settings.enable_show_state}`,
-			'%%>'
+			` group_folder_column: `,
+			` remove_field_when_delete_column: ${local_settings.remove_field_when_delete_column}`,
+			` show_metadata_created: ${local_settings.show_metadata_created}`,
+			` show_metadata_modified: ${local_settings.show_metadata_modified}`,
+			`%%>`
 		].join('\n');
 	}
 	registerEvents() {

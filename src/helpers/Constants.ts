@@ -41,7 +41,8 @@ export const MetadataLabels = Object.freeze({
   ADD_COLUMN: '+',
   CREATED: 'Created',
   MODIFIED: 'Modified',
-  CALENDAR_TIME: 'Calendar time',
+  CALENDAR: 'Date',
+  CALENDAR_TIME: 'Datetime',
 });
 
 export const MetadataDatabaseColumns = Object.freeze({
@@ -110,6 +111,8 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '---',
     '',
     '<%%',
+    'name: new database',
+    'description: new description',
     'columns:',
     ' column1:',
     '  input: text',
@@ -117,6 +120,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '  accessor: column1',
     '  label: Column 1',
     '  position: 0',
+    'filters:',
   ].join('\n')
 });
 

@@ -32,9 +32,12 @@ class VaultManager {
   async editNoteContent(note: NoteContentAction): Promise<string> {
     LOGGER.debug(`=> editNoteContent. action:${note.action} filePath:${note.file.path}`);
     try {
-      const tfileContent = await this.obtainContentFromTfile(note.file);
-      const line_string = new FileContent(tfileContent);
-      let releasedContent = tfileContent;
+      let releasedContent = note.content;
+      if (releasedContent === undefined) {
+        releasedContent = await this.obtainContentFromTfile(note.file);
+      }
+      const line_string = new FileContent(releasedContent);
+
       switch (note.action) {
         case 'remove':
           releasedContent = line_string.remove(note.regexp).value;

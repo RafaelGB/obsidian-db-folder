@@ -218,7 +218,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
         setExpanded(false);
       },
       icon: <CalendarIcon />,
-      label: DataTypes.CALENDAR,
+      label: MetadataLabels.CALENDAR,
     },
     {
       onClick: (e: any) => {
