@@ -110,6 +110,8 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '---',
     '',
     '<%%',
+    'name: new database',
+    'description: new description',
     'columns:',
     ' column1:',
     '  input: text',
@@ -117,6 +119,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '  accessor: column1',
     '  label: Column 1',
     '  position: 0',
+    'filters:',
   ].join('\n')
 });
 
