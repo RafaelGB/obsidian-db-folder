@@ -18,7 +18,7 @@ const noBreakSpace = /\u00A0/g;
  * @returns 
  */
 export function hasFrontmatterKey(data: string): boolean {
-  const frontmatterRegex = /^---\n+.*---\n/g
+  const frontmatterRegex = /^---[\s\S]+?---/g;
   return frontmatterRegex.test(data);
 }
 
@@ -161,13 +161,14 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   }
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-    const frontmatterGroupRegex = new RegExp(`(^---\\n)+(.*)+(^---)`, "gm");
+    const frontmatterGroupRegex = /^---[\s\S]+?---/g;
     const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn);
+    console.log(frontmatterFieldsText);
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterGroupRegex,
-      newValue: frontmatterFieldsText
+      newValue: `${frontmatterFieldsText}`
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }

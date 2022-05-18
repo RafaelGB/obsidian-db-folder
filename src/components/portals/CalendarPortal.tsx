@@ -18,11 +18,6 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-  const [calendarState, setCalendarState] = useState(
-    DateTime.isDateTime(contextValue.value)
-      ? contextValue.value.toJSDate()
-      : null
-  );
 
   function handleOnClick(event: any) {
     event.preventDefault();
@@ -36,12 +31,11 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
       key: column.key,
-      value: DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
+      value: newValue.toFormat("yyyy-MM-dd"),
       row: cellProperties.row,
       columnId: column.id,
     });
 
-    setCalendarState(date);
     setContextValue({
       value: newValue,
       update: true,
@@ -57,7 +51,11 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   return showDatePicker ? (
     <DatePicker
       dateFormat="yyyy-MM-dd"
-      selected={calendarState}
+      selected={
+        DateTime.isDateTime(contextValue.value)
+          ? contextValue.value.toJSDate()
+          : null
+      }
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
       onBlur={() => setShowDatePicker(false)}
