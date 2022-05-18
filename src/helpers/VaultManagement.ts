@@ -163,7 +163,6 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
     const frontmatterGroupRegex = /^---[\s\S]+?---/g;
     const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn);
-    console.log(frontmatterFieldsText);
     const noteObject = {
       action: 'replace',
       file: file,
