@@ -82,6 +82,12 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
   return rows;
 }
+export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
+  await updateRowFile(file, columnId, newValue, state, option).catch(e => {
+    LOGGER.error(`updateRowFileProxy.  Error:${e}`);
+    throw e;
+  });
+}
 
 /**
  * Modify the file asociated to the row in function of input options
@@ -156,14 +162,16 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
     const frontmatterGroupRegex = new RegExp(`(^---\\n)+(.*)+(^---)`, "gm");
+    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn);
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterGroupRegex,
-      newValue: `${parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn)}`
+      newValue: frontmatterFieldsText
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
+
   /*******************************************************************************************
    *                              INLINE GROUP FUNCTIONS
    *******************************************************************************************/

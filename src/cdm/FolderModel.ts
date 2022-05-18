@@ -123,5 +123,6 @@ export type NoteContentAction = {
     file: TFile,
     action: string,
     regexp: RegExp,
+    content?: string,
     newValue?: string
 }

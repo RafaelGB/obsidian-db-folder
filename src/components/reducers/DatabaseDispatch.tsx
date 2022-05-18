@@ -11,7 +11,7 @@ import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
-import { moveFile, updateRowFile } from "helpers/VaultManagement";
+import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
 import {
   DatabaseColumn,
@@ -110,7 +110,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
 
           await Promise.all(
             state.data.map(async (row: RowDataType) => {
-              await updateRowFile(
+              await updateRowFileProxy(
                 row.note.getFile(),
                 action.columnId,
                 action.newKey,
@@ -315,7 +315,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       if (state.view.diskConfig.yaml.config.remove_field_when_delete_column) {
         Promise.all(
           state.data.map(async (row: RowDataType) => {
-            updateRowFile(
+            updateRowFileProxy(
               row.note.getFile(),
               action.key,
               undefined, // delete does not need this field
@@ -382,13 +382,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         (column) => column.id === action.columnId
       );
       // Save on disk
-      updateRowFile(
+      updateRowFileProxy(
         action.file,
         action.key,
         action.value,
         state,
         UpdateRowOptions.COLUMN_VALUE
       );
+
       const update_option_cell_column_key =
         state.columns[update_cell_index].key;
       return update(state, {
