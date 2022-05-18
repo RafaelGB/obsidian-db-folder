@@ -431,20 +431,17 @@
 
 .react-datepicker-wrapper input[type="text"],
 .react-datepicker-wrapper input[type="text"]:focus {
-  white-space: pre-wrap;
   border: none;
+  font-family: "Inter", sans-serif;
+  font-size: var(--font-size-normal);
   padding: 0.5rem;
   color: var(--text-normal);
   font-size: 1rem;
-  border-radius: 4px;
   resize: none;
-  background-color: var(--background-primary);
   box-sizing: border-box;
-  flex: 1 1 auto;
   height: inherit;
   width: inherit;
   align-self: center;
-  position: absolute;
   top: 0;
   bottom: 0;
 }
