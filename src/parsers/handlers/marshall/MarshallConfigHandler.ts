@@ -1,6 +1,5 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
-import { LocalSettings } from 'Settings';
 
 export class MarshallConfigHandler extends AbstractYamlHandler {
     handlerName: string = 'configuration';
@@ -36,6 +35,33 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
             if (checkNullable(handlerResponse.yaml.config.show_metadata_modified)) {
                 this.addError(`There was not show_metadata_modified key in yaml. Default will be loaded`);
                 this.localYaml.config.show_metadata_modified = false;
+            }
+
+            // if media_settings is not defined, load default
+            if (checkNullable(handlerResponse.yaml.config.media_settings)) {
+                this.addError(`There was not media_settings key in yaml. Default will be loaded`);
+                this.localYaml.config.media_settings = {
+                    enable_media_view: true,
+                    width: 100,
+                    height: 100
+                };
+            } else {
+                // otherwise, check if the media_settings fields are defined
+                if (checkNullable(handlerResponse.yaml.config.media_settings.enable_media_view)) {
+                    this.addError(`There was not enable_media_view key in yaml. Default will be loaded`);
+                    this.localYaml.config.media_settings.enable_media_view = true;
+                }
+
+                if (checkNullable(handlerResponse.yaml.config.media_settings.width)) {
+                    this.addError(`There was not width key in yaml. Default will be loaded`);
+                    this.localYaml.config.media_settings.width = 100;
+                }
+
+                if (checkNullable(handlerResponse.yaml.config.media_settings.height)) {
+                    this.addError(`There was not height key in yaml. Default will be loaded`);
+                    this.localYaml.config.media_settings.height = 100;
+                }
+
             }
         }
         return this.goNext(handlerResponse);

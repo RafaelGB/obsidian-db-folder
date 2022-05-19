@@ -29,7 +29,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
             onClickAddPromise
         );
         view.diskConfig.yaml.filters.forEach((filter, index) => {
-            const filterSetting = new Setting(containerEl)
+            new Setting(containerEl)
                 .addText(text => {
                     text.setPlaceholder("name of field")
                         .setValue(filter.field)

@@ -11,6 +11,13 @@ export async function renderMarkdown(
   domElement: HTMLDivElement
 ): Promise<HTMLDivElement> {
   try {
+    if (isValidHttpUrl(markdownString, view)) {
+      const { height, width } = view.diskConfig.yaml.config.media_settings;
+      // TODO option to generate Iframes
+      //markdownString = `<div class=iframe-container> <iframe width="427" height="240" src="${markdownString}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>`;
+      markdownString = `![embedded link|${height}x${width}](${markdownString})`;
+    }
+
     await MarkdownRenderer.renderMarkdown(
       markdownString,
       domElement,
@@ -118,4 +125,19 @@ function handleVideo(el: HTMLElement, file: TFile, view: DatabaseView) {
   );
 
   el.addClasses(["media-embed", "is-loaded"]);
+}
+
+function isValidHttpUrl(urlCandidate: string, view: DatabaseView) {
+  let url;
+
+  try {
+    url = new URL(urlCandidate);
+  } catch (_) {
+    return false;
+  }
+
+  return (
+    (url.protocol === "http:" || url.protocol === "https:") &&
+    view.diskConfig.yaml.config.media_settings.enable_media_view
+  );
 }

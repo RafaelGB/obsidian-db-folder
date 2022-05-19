@@ -8,18 +8,25 @@ import { columns_settings_section } from "settings/ColumnsSection";
 import { folder_settings_section } from "settings/FolderSection";
 import { StyleClasses } from "helpers/Constants";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { media_settings_section } from "settings/MediaSection";
 
 interface GlobalSettings {
   enable_debug_mode: boolean;
   logger_level_info: string;
 }
 
+export interface MediaSettings {
+  enable_media_view: boolean;
+  width: number;
+  height: number;
+}
 export interface LocalSettings {
   enable_show_state: boolean;
   group_folder_column: string;
   remove_field_when_delete_column: boolean;
   show_metadata_created: boolean;
   show_metadata_modified: boolean;
+  media_settings: MediaSettings;
 }
 
 export interface DatabaseSettings {
@@ -37,7 +44,12 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     remove_field_when_delete_column: false,
     group_folder_column: '',
     show_metadata_created: false,
-    show_metadata_modified: false
+    show_metadata_modified: false,
+    media_settings: {
+      enable_media_view: true,
+      width: 100,
+      height: 100
+    }
   }
 };
 
@@ -107,6 +119,8 @@ export class SettingsManager {
     }
     /** Columns section */
     columns_settings_section(settingHandlerResponse);
+    /** Media section */
+    media_settings_section(settingHandlerResponse);
     /** Developer section */
     developer_settings_section(settingHandlerResponse);
   }
