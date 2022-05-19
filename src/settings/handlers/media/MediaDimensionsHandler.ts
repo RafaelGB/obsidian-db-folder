@@ -59,6 +59,8 @@ export class MediaDimensionsHandler extends AbstractSettingsHandler {
                             media_settings.width = settingsManager.settings.local_settings.media_settings.width;
                             media_settings.height = settingsManager.settings.local_settings.media_settings.height;
                             view.diskConfig.updateConfig('media_settings', media_settings);
+                            // Force refresh of settings
+                            settingsManager.reset(settingHandlerResponse);
                         });
                 });
             }
