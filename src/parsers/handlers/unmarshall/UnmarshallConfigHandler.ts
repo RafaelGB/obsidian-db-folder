@@ -10,8 +10,16 @@ export class UnmarshallConfigHandler extends AbstractDiskHandler {
         // Lvl1: config
         this.localDisk.push(`${this.handlerName}:`);
         Object.entries(config).forEach(([key, value]) => {
-            // Lvl2: config properties
-            this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${value}`);
+            if (typeof value === 'object') {
+                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}:`);
+                Object.entries(value).forEach(([key, value]) => {
+                    // Lvl3: config properties
+                    this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${value}`);
+                });
+            } else {
+                // Lvl2: config properties
+                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${value}`);
+            }
         });
         return this.goNext(handlerResponse);
     }
