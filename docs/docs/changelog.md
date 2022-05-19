@@ -1,3 +1,8 @@
+## 1.2.0
+*Published on 2022/05/19*
+### Shiny new things
+- URLs could be wrap as embed information [ISSUE#57](https://github.com/RafaelGB/obsidian-db-folder/issues/57)
+- New configuration section to enable/disable embedding of URLs. You can choose heigth and width of the iframe.
 ## 1.1.3
 *Published on 2022/05/18*
 ### No longer broken
