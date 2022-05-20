@@ -55,7 +55,12 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    isInline: false
+    config: {
+      enable_media_view: false,
+      media_width: 0,
+      media_height: 0,
+      isInline: false
+    }
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
@@ -65,7 +70,12 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: true,
     csvCandidate: false,
-    isInline: false
+    config: {
+      enable_media_view: false,
+      media_width: 0,
+      media_height: 0,
+      isInline: false
+    }
   },
   CREATED: {
     key: MetadataColumns.CREATED,
@@ -75,7 +85,12 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    isInline: false
+    config: {
+      enable_media_view: false,
+      media_width: 0,
+      media_height: 0,
+      isInline: false
+    }
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
@@ -85,7 +100,12 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    isInline: false
+    config: {
+      enable_media_view: false,
+      media_width: 0,
+      media_height: 0,
+      isInline: false
+    }
   }
 });
 
@@ -93,7 +113,6 @@ export const TableColumnsTemplate: Partial<TableColumn> =
 {
   isMetadata: false,
   skipPersist: false,
-  isInline: false,
   options: [],
   csvCandidate: true,
 }

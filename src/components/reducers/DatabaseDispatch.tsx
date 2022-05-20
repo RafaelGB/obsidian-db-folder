@@ -63,7 +63,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       state.columns
         .filter((column: TableColumn) => !column.isMetadata)
         .forEach((column: TableColumn) => {
-          if (column.isInline) {
+          if (column.config.isInline) {
             rowRecord.inline[column.key] = "";
           } else {
             rowRecord.frontmatter[column.key] = "";
@@ -244,6 +244,12 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
+        config: {
+          isInline: false,
+          media_height: 100,
+          media_width: 100,
+          enable_media_view: false,
+        },
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newLeftColumn);
@@ -262,6 +268,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               accessor: newLeftColumn.accessor,
               position: newLeftColumn.position,
               csvCandidate: true,
+              config: newLeftColumn.config,
             },
             ...state.columns.slice(leftIndex, state.columns.length),
           ],
@@ -282,6 +289,12 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
+        config: {
+          isInline: false,
+          media_height: 100,
+          media_width: 100,
+          enable_media_view: false,
+        },
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newRIghtColumn);
@@ -301,6 +314,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               accessor: newRIghtColumn.accessor,
               position: newRIghtColumn.position,
               csvCandidate: true,
+              config: newLeftColumn.config,
             },
             ...state.columns.slice(rightIndex + 1, state.columns.length),
           ],
@@ -419,8 +433,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       return update(state, {
         columns: {
           [toggleInlineIndex]: {
-            $merge: {
-              isInline: action.isInline,
+            config: {
+              $merge: {
+                isInline: action.isInline,
+              },
             },
           },
         },

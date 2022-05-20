@@ -58,7 +58,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
-  const [isInline, setIsInline] = useState(headerProps.column.isInline);
+  const [isInline, setIsInline] = useState(headerProps.column.config.isInline);
   const [labelState, setLabelState] = useState(headerProps.column.label);
   React.useEffect(() => {
     setDomReady(true);

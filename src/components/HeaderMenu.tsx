@@ -23,6 +23,7 @@ import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { FormControlLabel, FormGroup, Switch } from "@material-ui/core";
+import { ColumnModal } from "./modals/ColumnModal";
 
 type HeaderMenuProps = {
   headerProps: DatabaseHeaderProps;
@@ -459,8 +460,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <div style={{ padding: "4px 0px" }}>
                   <div
                     className="menu-item sort-button"
-                    onMouseEnter={() => setShowSettings(true)}
-                    onMouseLeave={() => setShowSettings(false)}
+                    // onMouseEnter={() => setShowSettings(true)}
+                    // onMouseLeave={() => setShowSettings(false)}
+                    onClick={() =>
+                      new ColumnModal(initialState.view, column).open()
+                    }
                     ref={setSettingsReferenceElement}
                   >
                     <span className="svg-icon svg-text icon-margin">
@@ -468,7 +472,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     </span>
                     <span>Settings</span>
                   </div>
-                  {showSettings && (
+                  {/* {showSettings && (
                     <div
                       className={`menu ${c("popper")}`}
                       ref={setSettingsPopperElement}
@@ -494,7 +498,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                         />
                       </FormGroup>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             )}

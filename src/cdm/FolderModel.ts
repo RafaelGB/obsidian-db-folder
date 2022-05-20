@@ -1,11 +1,9 @@
 import { DatabaseView } from "DatabaseView";
 import { Dispatch } from "react";
 import StateManager from "StateManager";
-import { RowType } from "cdm/RowTypeModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
-import { DatabaseColumn } from "cdm/DatabaseModel";
 import { Column } from "react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 
@@ -35,12 +33,26 @@ export type Models = {
     [key: string]: FolderModel
 }
 
-export interface TableColumn {
-    id: string;
+export interface ConfigColumn {
+    enable_media_view: boolean;
+    media_width: number;
+    media_height: number;
+    isInline: boolean;
+    [key: string]: Literal;
+}
+
+export interface BaseColumn {
+    csvCandidate?: boolean;
+    accessor: string;
     label: string;
     key: string;
-    position: number;
-    accessor: any;
+    position?: number;
+    isMetadata?: boolean;
+    skipPersist?: boolean;
+    config: ConfigColumn;
+}
+export interface TableColumn extends BaseColumn {
+    id: string;
     minWidth?: number;
     width?: number;
     dataType: string;
@@ -48,10 +60,6 @@ export interface TableColumn {
     Cell?: any;
     getHeaderProps?: any;
     getResizerProps?: any;
-    isMetadata?: boolean;
-    skipPersist?: boolean;
-    isInline?: boolean;
-    csvCandidate: boolean;
 }
 
 export type RowDataType = {

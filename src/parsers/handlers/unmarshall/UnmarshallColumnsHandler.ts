@@ -7,7 +7,7 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
         const { columns } = handlerResponse.yaml;
-        // Lvl1: columns
+        // Lvl1: columns field group
         this.localDisk.push(`${this.handlerName}:`);
         for (const columnKey in columns) {
             const column = columns[columnKey];
@@ -16,9 +16,17 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
             // Lvl2: column key
             this.localDisk.push(`${YAML_INDENT.repeat(1)}${columnKey
                 }:`);
-            Object.keys(column).forEach(key => {
-                // Lvl3: column properties
-                this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${column[key]}`);
+            Object.keys(column)
+                .filter(key => key !== 'config')
+                .forEach(key => {
+                    // Lvl3: column properties
+                    this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${column[key]}`);
+                });
+            this.localDisk.push(`${YAML_INDENT.repeat(2)}config:`);
+
+            // Lvl4: column config
+            Object.keys(column.config).forEach(key => {
+                this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${column.config[key]}`);
             });
         };
         return this.goNext(handlerResponse);

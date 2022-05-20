@@ -1,5 +1,4 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
-import { parseYaml } from "obsidian";
 export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, original: Record<string, string>, deletedColumn?: string): string => {
     const frontmatterFields = databaseFields.frontmatter;
     const inlineFields = databaseFields.inline;

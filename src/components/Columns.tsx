@@ -88,6 +88,7 @@ function columnOptions(
       label: column.label,
       dataType: column.input,
       options: options,
+      config: column.config,
     };
   } else {
     throw `Error: option ${column.input} not supported yet`;
