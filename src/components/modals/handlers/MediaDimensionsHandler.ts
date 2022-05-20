@@ -1,5 +1,6 @@
 import { Setting } from "obsidian";
-import { AbstractColumnHandler, ColumnHandlerResponse } from "components/modals/handlers/AbstractColumnHandler";
+import { AbstractColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
+import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 
 export class MediaDimensionsHandler extends AbstractColumnHandler {
     settingTitle: string = 'Choose dimensions of embeded media';

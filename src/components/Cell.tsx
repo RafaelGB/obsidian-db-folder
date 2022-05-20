@@ -58,7 +58,7 @@ export default function DefaultCell(cellProperties: Cell) {
       //TODO - this is a hack. find why is layout effect called twice
       containerCellRef.current.innerHTML = "";
       renderMarkdown(
-        (cellProperties as any).initialState.view,
+        cellProperties,
         contextValue.value,
         containerCellRef.current
       );

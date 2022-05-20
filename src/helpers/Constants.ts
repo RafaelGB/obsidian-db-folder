@@ -145,6 +145,8 @@ export const StyleClasses = Object.freeze({
   TABLE_CONTAINER: 'dbfolder-table-container',
   SETTINGS_MODAL: 'database-settings-modal',
   SETTINGS_MODAL_BODY: 'database-settings-body',
+  COLUMN_MODAL: 'database-column-modal',
+  COLUMN_MODAL_BODY: 'database-column-body',
 });
 
 export const StyleVariables = Object.freeze({

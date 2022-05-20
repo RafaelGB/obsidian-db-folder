@@ -1,17 +1,20 @@
-import { NormalizedPath } from "cdm/FolderModel";
+import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DatabaseView } from "DatabaseView";
 import { MediaExtensions } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { MarkdownRenderer, TFile } from "obsidian";
+import { Cell } from "react-table";
 import { LOGGER } from "services/Logger";
 
 export async function renderMarkdown(
-  view: DatabaseView,
+  cell: Cell,
   markdownString: string,
   domElement: HTMLDivElement
 ): Promise<HTMLDivElement> {
   try {
-    if (isValidHttpUrl(markdownString, view)) {
+    const view = (cell as any).initialState.view;
+    const column = cell.column as unknown as DatabaseColumn;
+    if (isValidHttpUrl(markdownString, column)) {
       const { height, width } = view.diskConfig.yaml.config.media_settings;
       // TODO option to generate Iframes
       //markdownString = `<div class=iframe-container> <iframe width="427" height="240" src="${markdownString}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>`;
@@ -127,7 +130,7 @@ function handleVideo(el: HTMLElement, file: TFile, view: DatabaseView) {
   el.addClasses(["media-embed", "is-loaded"]);
 }
 
-function isValidHttpUrl(urlCandidate: string, view: DatabaseView) {
+function isValidHttpUrl(urlCandidate: string, column: DatabaseColumn) {
   let url;
 
   try {
@@ -138,6 +141,6 @@ function isValidHttpUrl(urlCandidate: string, view: DatabaseView) {
 
   return (
     (url.protocol === "http:" || url.protocol === "https:") &&
-    view.diskConfig.yaml.config.media_settings.enable_media_view
+    column.config.enable_media_view
   );
 }

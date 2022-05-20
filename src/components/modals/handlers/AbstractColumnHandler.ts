@@ -1,11 +1,4 @@
-import { TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "DatabaseView";
-
-export type ColumnHandlerResponse = {
-    containerEl: HTMLElement,
-    view: DatabaseView,
-    column: TableColumn,
-}
+import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 
 export interface ColumnHandler {
     setNext(handler: ColumnHandler): ColumnHandler;

@@ -103,7 +103,7 @@ export class SettingsManager {
 
     const settingBody = containerEl.createDiv();
     settingBody.addClass(StyleClasses.SETTINGS_MODAL_BODY);
-    containerEl.setAttribute("id", StyleClasses.SETTINGS_MODAL_BODY);
+    settingBody.setAttribute("id", StyleClasses.SETTINGS_MODAL_BODY);
     const settingHandlerResponse: SettingHandlerResponse = {
       settingsManager: this,
       containerEl: settingBody,
