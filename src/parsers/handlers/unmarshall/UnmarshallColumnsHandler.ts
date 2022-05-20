@@ -24,6 +24,8 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
                 });
             this.localDisk.push(`${YAML_INDENT.repeat(2)}config:`);
 
+            // Skip those columns that are metadata. They dont have config
+            if (column.isMetadata) continue;
             // Lvl4: column config
             Object.keys(column.config).forEach(key => {
                 this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${column.config[key]}`);

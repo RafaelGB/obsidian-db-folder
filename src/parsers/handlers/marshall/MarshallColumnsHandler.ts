@@ -1,5 +1,5 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
-import { DataTypes } from 'helpers/Constants';
+import { DataTypes, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class MarshallColumnsHandler extends AbstractYamlHandler {
@@ -28,7 +28,6 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
         }
         // Check every column
         Object.keys(yaml.columns)
-            .filter(key => !yaml.columns[key].isMetadata)
             .forEach((key) => {
                 const column = yaml.columns[key];
                 if (!column.input) {
@@ -48,29 +47,23 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     yaml.columns[key].label = key;
                 }
                 if (!column.config && !(column.config instanceof Object)) {
-                    this.addError(`There was not config in column ${key}`);
-                    column.config = {
-                        enable_media_view: true,
-                        media_width: 100,
-                        media_height: 100,
-                        isInline: false
-                    };
+                    column.config = DEFAULT_COLUMN_CONFIG;
                     yaml.columns[key] = column;
                 } else {
                     if (!column.config.enable_media_view) {
-                        column.config.enable_media_view = true;
+                        column.config.enable_media_view = DEFAULT_COLUMN_CONFIG.enable_media_view;
                         yaml.columns[key] = column;
                     }
                     if (!column.config.media_width) {
-                        column.config.media_width = 100;
+                        column.config.media_width = DEFAULT_COLUMN_CONFIG.media_width;
                         yaml.columns[key] = column;
                     }
                     if (!column.config.media_height) {
-                        column.config.media_height = 100;
+                        column.config.media_height = DEFAULT_COLUMN_CONFIG.media_height;
                         yaml.columns[key] = column;
                     }
                     if (!column.config.isInline) {
-                        column.config.isInline = false;
+                        column.config.isInline = DEFAULT_COLUMN_CONFIG.isInline;
                         yaml.columns[key] = column;
                     }
                 }

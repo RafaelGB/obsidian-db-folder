@@ -36,33 +36,6 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
                 this.addError(`There was not show_metadata_modified key in yaml. Default will be loaded`);
                 yaml.config.show_metadata_modified = false;
             }
-
-            // if media_settings is not defined, load default
-            if (checkNullable(yaml.config.media_settings)) {
-                this.addError(`There was not media_settings key in yaml. Default will be loaded`);
-                yaml.config.media_settings = {
-                    enable_media_view: true,
-                    width: 100,
-                    height: 100
-                };
-            } else {
-                // otherwise, check if the media_settings fields are defined
-                if (checkNullable(yaml.config.media_settings.enable_media_view)) {
-                    this.addError(`There was not enable_media_view key in yaml. Default will be loaded`);
-                    yaml.config.media_settings.enable_media_view = true;
-                }
-
-                if (checkNullable(yaml.config.media_settings.width)) {
-                    this.addError(`There was not width key in yaml. Default will be loaded`);
-                    yaml.config.media_settings.width = 100;
-                }
-
-                if (checkNullable(yaml.config.media_settings.height)) {
-                    this.addError(`There was not height key in yaml. Default will be loaded`);
-                    yaml.config.media_settings.height = 100;
-                }
-
-            }
         }
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);

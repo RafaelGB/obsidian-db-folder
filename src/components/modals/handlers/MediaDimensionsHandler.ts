@@ -41,8 +41,8 @@ export class MediaDimensionsHandler extends AbstractColumnHandler {
                         .onClick(async (): Promise<void> => {
                             // Persist change
                             view.diskConfig.updateColumnConfig(column.key, {
-                                media_width: dbSettings.local_settings.media_settings.width,
-                                media_height: dbSettings.local_settings.media_settings.height
+                                media_width: dbSettings.global_settings.media_settings.width,
+                                media_height: dbSettings.global_settings.media_settings.height
                             });
                             // Force refresh of settings
                             //settingsManager.reset(settingHandlerResponse);

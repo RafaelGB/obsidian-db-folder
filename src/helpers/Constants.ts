@@ -45,6 +45,12 @@ export const MetadataLabels = Object.freeze({
   CALENDAR_TIME: 'Datetime',
 });
 
+export const DEFAULT_COLUMN_CONFIG = Object.freeze({
+  enable_media_view: true,
+  media_width: 100,
+  media_height: 100,
+  isInline: false
+});
 export const MetadataDatabaseColumns = Object.freeze({
   FILE:
   {
@@ -55,12 +61,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    config: {
-      enable_media_view: false,
-      media_width: 0,
-      media_height: 0,
-      isInline: false
-    }
+    config: DEFAULT_COLUMN_CONFIG
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
@@ -70,12 +71,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: true,
     csvCandidate: false,
-    config: {
-      enable_media_view: false,
-      media_width: 0,
-      media_height: 0,
-      isInline: false
-    }
+    config: DEFAULT_COLUMN_CONFIG
   },
   CREATED: {
     key: MetadataColumns.CREATED,
@@ -85,12 +81,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    config: {
-      enable_media_view: false,
-      media_width: 0,
-      media_height: 0,
-      isInline: false
-    }
+    config: DEFAULT_COLUMN_CONFIG
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
@@ -100,12 +91,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    config: {
-      enable_media_view: false,
-      media_width: 0,
-      media_height: 0,
-      isInline: false
-    }
+    config: DEFAULT_COLUMN_CONFIG
   }
 });
 
@@ -139,6 +125,11 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '  accessor: column1',
     '  label: Column 1',
     '  position: 0',
+    '  config:',
+    '   enable_media_view: true',
+    '   media_width: 100',
+    '   media_height: 100',
+    '   isInline: false',
     'filters:',
   ].join('\n')
 });

@@ -5,17 +5,13 @@ export class MediaToggleHandler extends AbstractColumnHandler {
     handle(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
         const { column, containerEl, view } = settingHandlerResponse;
         // pass if modal opened from local settings
-        const { media_settings } = view.diskConfig.yaml.config;
         const media_togle_promise = async (value: boolean): Promise<void> => {
-            media_settings.enable_media_view = value;
+            column.config.enable_media_view = value;
             // Check context to define correct promise
             // Persist value
-
             view.diskConfig.updateColumnConfig(column.key, {
-                enable_media_view: value
+                media_togle_promise: value
             });
-            view.diskConfig.updateConfig('media_settings', media_settings);
-
             // Force refresh of settings
             //settingsManager.reset(settingHandlerResponse);
         }
@@ -23,7 +19,7 @@ export class MediaToggleHandler extends AbstractColumnHandler {
             containerEl,
             this.settingTitle,
             "Enable/disable wrap media links with embedding content",
-            media_settings.enable_media_view,
+            column.config.enable_media_view,
             media_togle_promise
         );
         return this.goNext(settingHandlerResponse);
