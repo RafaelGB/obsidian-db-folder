@@ -56,7 +56,7 @@ export class ColumnSettingsManager {
         settingBody.addClass(StyleClasses.COLUMN_MODAL_BODY);
         settingBody.setAttribute("id", StyleClasses.COLUMN_MODAL_BODY);
         const initialResponse: ColumnHandlerResponse = {
-            containerEl: containerEl,
+            containerEl: settingBody,
             view: this.view,
             column: this.column,
             columnSettingsManager: this
@@ -65,8 +65,8 @@ export class ColumnSettingsManager {
     }
 
     constructBody(settingHandlerResponse: ColumnHandlerResponse) {
-        /** Columns section */
-        folder_settings_section(settingHandlerResponse);
+        /** media section */
+        media_settings_section(settingHandlerResponse);
     }
 
     reset(response: ColumnHandlerResponse) {
@@ -78,10 +78,10 @@ export class ColumnSettingsManager {
     }
 }
 
-function folder_settings_section(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+function media_settings_section(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
     const folder_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-folder");
     // title of the section
-    add_setting_header(folder_section, "Folder adjustments", 'h3');
+    add_setting_header(folder_section, "Media adjustments", 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;

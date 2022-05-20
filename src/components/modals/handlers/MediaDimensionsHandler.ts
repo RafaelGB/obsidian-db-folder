@@ -5,7 +5,7 @@ import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 export class MediaDimensionsHandler extends AbstractColumnHandler {
     settingTitle: string = 'Choose dimensions of embeded media';
     handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
-        const { column, containerEl, view } = columnHandlerResponse;
+        const { column, containerEl, view, columnSettingsManager } = columnHandlerResponse;
         const dbSettings = view.plugin.settings;
         const { config } = column
         if (config.enable_media_view) {
@@ -46,7 +46,7 @@ export class MediaDimensionsHandler extends AbstractColumnHandler {
                                 media_height: dbSettings.global_settings.media_settings.height
                             });
                             // Force refresh of settings
-                            //settingsManager.reset(settingHandlerResponse);
+                            columnSettingsManager.reset(columnHandlerResponse);
                         });
                 });
 
