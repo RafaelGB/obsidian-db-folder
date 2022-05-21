@@ -20,7 +20,7 @@ export class MediaDimensionsHandler extends AbstractColumnHandler {
                             const validatedNumber = isNaN(parsedNumber) ? config.media_height : parsedNumber;
                             config.media_height = validatedNumber;
                             // Persist changes in local config
-                            view.diskConfig.updateColumnConfig(column.key, {
+                            await view.diskConfig.updateColumnConfig(column.key, {
                                 media_height: validatedNumber
                             });
                         })

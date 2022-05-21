@@ -13,7 +13,7 @@ export const ActionTypes = Object.freeze({
   DELETE_COLUMN: 'delete_column',
   ENABLE_RESET: 'enable_reset',
   SETTINGS_COLUMN: 'settings_column',
-  TOGGLE_INLINE_FRONTMATTER: 'toggle_inline_frontmatter',
+  MODIFY_COLUMN_CONFIG: 'modify_column_config',
 });
 
 /** Flavours of data types */

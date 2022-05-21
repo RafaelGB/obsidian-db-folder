@@ -421,11 +421,12 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
 
-    case ActionTypes.TOGGLE_INLINE_FRONTMATTER:
+    case ActionTypes.MODIFY_COLUMN_CONFIG:
       // Altern between inline & frontmatter mode
-      state.view.diskConfig.updateColumnProperties(action.columnId, {
-        isInline: action.isInline,
-      });
+      state.view.diskConfig.updateColumnProperties(
+        action.columnId,
+        action.columnConfig
+      );
       const toggleInlineIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
@@ -434,9 +435,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         columns: {
           [toggleInlineIndex]: {
             config: {
-              $merge: {
-                isInline: action.isInline,
-              },
+              $set: action.columnConfig,
             },
           },
         },

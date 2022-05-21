@@ -58,8 +58,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
-  console.log("headerProps", headerProps);
-  const [isInline, setIsInline] = useState(headerProps.column.config.isInline);
   const [labelState, setLabelState] = useState(headerProps.column.label);
   React.useEffect(() => {
     setDomReady(true);
@@ -123,7 +121,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       >
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
-        {isInline && <span>*</span>}
+        {headerProps.column.config.isInline && <span>*</span>}
       </div>
       {domReady
         ? ReactDOM.createPortal(
@@ -137,8 +135,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
               referenceElement={referenceElement}
               labelState={labelState}
               setLabelState={setLabelState}
-              isInline={isInline}
-              setIsInline={setIsInline}
             />,
             document.getElementById("popper-container")
           )

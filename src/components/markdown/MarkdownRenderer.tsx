@@ -14,11 +14,11 @@ export async function renderMarkdown(
   try {
     const view = (cell as any).initialState.view;
     const column = cell.column as unknown as DatabaseColumn;
-    if (isValidHttpUrl(markdownString, column)) {
-      const { height, width } = view.diskConfig.yaml.config.media_settings;
+    const { media_height, media_width, enable_media_view } = column.config;
+    if (enable_media_view && isValidHttpUrl(markdownString)) {
       // TODO option to generate Iframes
       //markdownString = `<div class=iframe-container> <iframe width="427" height="240" src="${markdownString}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>`;
-      markdownString = `![embedded link|${height}x${width}](${markdownString})`;
+      markdownString = `![embedded link|${media_height}x${media_width}](${markdownString})`;
     }
 
     await MarkdownRenderer.renderMarkdown(
@@ -130,7 +130,7 @@ function handleVideo(el: HTMLElement, file: TFile, view: DatabaseView) {
   el.addClasses(["media-embed", "is-loaded"]);
 }
 
-function isValidHttpUrl(urlCandidate: string, column: DatabaseColumn) {
+function isValidHttpUrl(urlCandidate: string) {
   let url;
 
   try {
@@ -139,8 +139,5 @@ function isValidHttpUrl(urlCandidate: string, column: DatabaseColumn) {
     return false;
   }
 
-  return (
-    (url.protocol === "http:" || url.protocol === "https:") &&
-    column.config.enable_media_view
-  );
+  return url.protocol === "http:" || url.protocol === "https:";
 }

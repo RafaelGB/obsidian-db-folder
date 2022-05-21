@@ -1,25 +1,25 @@
-import { TableColumn } from "cdm/FolderModel";
+import { ConfigColumn, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
-import { ColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
-import { MediaDimensionsHandler } from "components/modals/handlers/MediaDimensionsHandler";
-import { MediaToggleHandler } from "components/modals/handlers/MediaToggleHandler";
-import { StyleClasses } from "helpers/Constants";
+import { ActionTypes, StyleClasses } from "helpers/Constants";
 import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { media_settings_section, behavior_settings_section } from "components/modals/ColumnSections";
+import { HeaderMenuProps } from "cdm/HeaderModel";
+import { Dispatch } from "react";
 
 export class ColumnModal extends Modal {
     view: DatabaseView;
-    column: TableColumn;
+    headerMenuProps: HeaderMenuProps;
     columnSettingsManager: ColumnSettingsManager;
     constructor(
         view: DatabaseView,
-        column: TableColumn
+        headerMenuProps: HeaderMenuProps
     ) {
         super(view.app);
         this.view = view;
-        this.column = column;
-        this.columnSettingsManager = new ColumnSettingsManager(this.view, this.column);
+        this.headerMenuProps = headerMenuProps;
+        this.columnSettingsManager = new ColumnSettingsManager(this.view, this.headerMenuProps.headerProps.column);
     }
 
     onOpen() {
@@ -28,12 +28,11 @@ export class ColumnModal extends Modal {
         this.columnSettingsManager.constructUI(contentEl);
     }
 
-    reset(columnHandlerResponse: ColumnHandlerResponse) {
-
-    }
-
     onClose() {
         const { contentEl } = this;
+        handleColumnChanges(
+            (this.headerMenuProps.headerProps as any).dataDispatch,
+            this.headerMenuProps.headerProps.column)
         contentEl.empty();
     }
 }
@@ -65,6 +64,8 @@ export class ColumnSettingsManager {
     }
 
     constructBody(settingHandlerResponse: ColumnHandlerResponse) {
+        /** behavior section */
+        behavior_settings_section(settingHandlerResponse);
         /** media section */
         media_settings_section(settingHandlerResponse);
     }
@@ -78,28 +79,10 @@ export class ColumnSettingsManager {
     }
 }
 
-function media_settings_section(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
-    const folder_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-folder");
-    // title of the section
-    add_setting_header(folder_section, "Media adjustments", 'h3');
-    // section settings
-    const handlers = getHandlers();
-    let i = 1;
-    while (i < handlers.length) {
-        handlers[i - 1].setNext(handlers[i]);
-        i++;
-    }
-
-    settingHandlerResponse.containerEl = folder_section;
-    return handlers[0].handle(settingHandlerResponse);
-}
-
-/**
- * Obtain all classes than extends from AbstractHandler
- */
-function getHandlers(): ColumnHandler[] {
-    return [
-        new MediaToggleHandler(),
-        new MediaDimensionsHandler(),
-    ];
+function handleColumnChanges(dispatch: Dispatch<any>, column: TableColumn) {
+    dispatch({
+        type: ActionTypes.MODIFY_COLUMN_CONFIG,
+        columnId: column.id,
+        columnConfig: column.config,
+    });
 }
