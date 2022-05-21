@@ -19,9 +19,17 @@ import { DatabaseHeaderProps } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { HeaderContext } from "components/contexts/HeaderContext";
+import { RowSelectOption } from "cdm/RowSelectModel";
 
+/**
+ * Generate column Options with Select type
+ * @param options
+ * @param rows
+ * @param columnId
+ * @returns
+ */
 function setOptionsOfSelectDataType(
-  options: any[],
+  options: RowSelectOption[],
   rows: any,
   columnId: string
 ): any[] {

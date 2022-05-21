@@ -1,7 +1,6 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DiskHandlerResponse } from "cdm/MashallModel";
 import { DataTypes, YAML_INDENT } from "helpers/Constants";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
 
 export class UnmarshallColumnsHandler extends AbstractDiskHandler {
@@ -46,8 +45,8 @@ function unmarshallParticularInputInfo(column: DatabaseColumn): string[] {
             if (column.options && Array.isArray(column.options)) {
                 particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);
                 column.options.forEach(option => {
-                    particularInputString.push(`${YAML_INDENT.repeat(3)}- {label: ${option.label}, backgroundColor: ${option
-                        .backgroundColor.toString()}}`);
+                    particularInputString.push(`${YAML_INDENT.repeat(3)}- { label: "${option.label}", backgroundColor: "${option
+                        .backgroundColor}"}`);
                 });
             }
     }

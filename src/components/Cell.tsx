@@ -170,7 +170,7 @@ export default function DefaultCell(cellProperties: Cell) {
             <PopperSelectPortal
               dispatch={dataDispatch}
               row={cellProperties.row}
-              column={cellProperties.column}
+              column={cellProperties.column as unknown as TableColumn}
               columns={columns}
               note={note}
               state={(cellProperties as any).initialState}

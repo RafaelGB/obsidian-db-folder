@@ -39,7 +39,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     dispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
       file: note.getFile(),
-      key: (column as any).key,
+      key: column.key,
       value: option.label,
       row: row,
       columnId: column.id,
@@ -53,7 +53,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
         type: ActionTypes.ADD_OPTION_TO_COLUMN,
         option: e.target.value,
         backgroundColor: randomColor(),
-        columnId: (column as any).id,
+        columnId: column.id,
       });
     }
     setShowAdd(false);
@@ -70,7 +70,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
           columns: columns,
           option: e.target.value,
           backgroundColor: randomColor(),
-          columnId: (column as any).id,
+          columnId: column.id,
           type: ActionTypes.ADD_OPTION_TO_COLUMN,
         });
       }
@@ -79,8 +79,8 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   }
 
   function getColor() {
-    const match = (column as any).options.find(
-      (option: { label: any }) => option.label === contextValue.value
+    const match = column.options.find(
+      (option: { label: string }) => option.label === contextValue.value
     );
     return (match && match.backgroundColor) || grey(200);
   }
