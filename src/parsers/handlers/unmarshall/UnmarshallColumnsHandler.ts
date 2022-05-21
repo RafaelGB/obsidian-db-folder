@@ -47,7 +47,7 @@ function unmarshallParticularInputInfo(column: DatabaseColumn): string[] {
                 particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);
                 column.options.forEach(option => {
                     particularInputString.push(`${YAML_INDENT.repeat(3)}- {label: ${option.label}, backgroundColor: ${option
-                        .backgroundColor}`);
+                        .backgroundColor.toString()}}`);
                 });
             }
     }

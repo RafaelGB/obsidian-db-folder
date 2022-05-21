@@ -29,7 +29,10 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     setShowAdd(true);
   }
 
-  function handleOptionClick(option: { label: string; backgroundColor?: any }) {
+  function handleOptionClick(option: {
+    label: string;
+    backgroundColor?: string;
+  }) {
     setContextValue({ value: option.label, update: true });
     setShowSelect(false);
     // save on disk & move file if its configured on the column

@@ -74,7 +74,7 @@ function columnOptions(
   column: DatabaseColumn
 ): TableColumn {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
-  const options: RowSelectOption[] = [];
+  const options: RowSelectOption[] = column.options ?? [];
 
   if (Object.values(DataTypes).includes(column.input)) {
     LOGGER.debug(`<= columnOptions`, `return ${column.input} column`);

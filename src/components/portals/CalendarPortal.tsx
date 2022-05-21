@@ -11,9 +11,6 @@ import { c } from "helpers/StylesHelper";
 const CalendarPortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties } = calendarProps;
   const dataDispatch = (cellProperties as any).dataDispatch;
-  // Selector reference state
-
-  // Selector popper state
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
   const [showDatePicker, setShowDatePicker] = useState(false);
