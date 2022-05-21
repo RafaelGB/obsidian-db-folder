@@ -3,10 +3,12 @@ import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { Cell } from "react-table";
 import { LocalSettings } from "Settings"
 import { BaseColumn, TableColumn, TableDataType } from "cdm/FolderModel";
+import { RowSelectOption } from "cdm/RowSelectModel";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {
     input: string;
+    options?: RowSelectOption[];
     [key: string]: RowType;
 }
 

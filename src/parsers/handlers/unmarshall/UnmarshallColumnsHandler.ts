@@ -1,5 +1,7 @@
+import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DiskHandlerResponse } from "cdm/MashallModel";
-import { YAML_INDENT } from "helpers/Constants";
+import { DataTypes, YAML_INDENT } from "helpers/Constants";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
 
 export class UnmarshallColumnsHandler extends AbstractDiskHandler {
@@ -17,13 +19,14 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
             this.localDisk.push(`${YAML_INDENT.repeat(1)}${columnKey
                 }:`);
             Object.keys(column)
-                .filter(key => key !== 'config')
+                .filter(key => typeof column[key] !== 'object')
                 .forEach(key => {
-                    // Lvl3: column properties
+                    // Lvl3: literal column properties
                     this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${column[key]}`);
                 });
-            this.localDisk.push(`${YAML_INDENT.repeat(2)}config:`);
 
+            this.localDisk.push(...unmarshallParticularInputInfo(column));
+            this.localDisk.push(`${YAML_INDENT.repeat(2)}config:`);
             // Skip those columns that are metadata. They dont have config
             if (column.isMetadata) continue;
             // Lvl4: column config
@@ -33,4 +36,20 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
         };
         return this.goNext(handlerResponse);
     }
+}
+
+function unmarshallParticularInputInfo(column: DatabaseColumn): string[] {
+    const particularInputString: string[] = [];
+    switch (column.input) {
+        case DataTypes.SELECT:
+            // Lvl3: select column properties
+            if (column.options && Array.isArray(column.options)) {
+                particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);
+                column.options.forEach(option => {
+                    particularInputString.push(`${YAML_INDENT.repeat(3)}- {label: ${option.label}, backgroundColor: ${option
+                        .backgroundColor}`);
+                });
+            }
+    }
+    return particularInputString;
 }

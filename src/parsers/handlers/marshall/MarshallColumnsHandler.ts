@@ -1,4 +1,6 @@
+import { DatabaseColumn } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
+import { RowSelectOption } from 'cdm/RowSelectModel';
 import { DataTypes, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
@@ -30,9 +32,13 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
         Object.keys(yaml.columns)
             .forEach((key) => {
                 const column = yaml.columns[key];
+                /** BASE COLUMN INFO */
                 if (!column.input) {
                     this.addError(`There was not input in column ${key}`);
                     yaml.columns[key].input = DataTypes.TEXT;
+                } else {
+                    yaml.columns[key] = marshallParticularInputInfo(column);
+                    // PARTICULAR INPUT INFO
                 }
                 if (!column.accessor) {
                     this.addError(`There was not accessor in column ${key}`);
@@ -46,6 +52,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     this.addError(`There was not label in column ${key}`);
                     yaml.columns[key].label = key;
                 }
+                /** CONFIG COLUMN INFO */
                 if (!column.config && !(column.config instanceof Object)) {
                     column.config = DEFAULT_COLUMN_CONFIG;
                     yaml.columns[key] = column;
@@ -72,4 +79,22 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);
     }
+}
+
+function marshallParticularInputInfo(column: DatabaseColumn): DatabaseColumn {
+    switch (column.input) {
+        case DataTypes.SELECT:
+            if (!column.options || !Array.isArray(column.options)) {
+                column.options = [];
+            } else {
+                column.options = column.options.filter((option: RowSelectOption) => {
+                    return option.backgroundColor
+                        && option.label
+                        && option.label !== ''
+                        && option.backgroundColor !== '';
+                });
+            }
+            break;
+    }
+    return column;
 }

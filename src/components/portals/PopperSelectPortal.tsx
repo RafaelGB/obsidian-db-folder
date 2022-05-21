@@ -15,7 +15,6 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
-  const [addSelectRef, setAddSelectRef] = useState(null);
   // Selector popper state
   const [selectPop, setSelectPop] = useState(null);
   const { styles, attributes } = usePopper(selectRef, selectPop);
@@ -136,7 +135,6 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
                     type="text"
                     className="option-input"
                     onBlur={handleOptionBlur}
-                    ref={setAddSelectRef}
                     onKeyDown={handleOptionKeyDown}
                   />
                 </div>
