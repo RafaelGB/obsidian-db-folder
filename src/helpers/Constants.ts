@@ -13,7 +13,7 @@ export const ActionTypes = Object.freeze({
   DELETE_COLUMN: 'delete_column',
   ENABLE_RESET: 'enable_reset',
   SETTINGS_COLUMN: 'settings_column',
-  TOGGLE_INLINE_FRONTMATTER: 'toggle_inline_frontmatter',
+  MODIFY_COLUMN_CONFIG: 'modify_column_config',
 });
 
 /** Flavours of data types */
@@ -45,6 +45,12 @@ export const MetadataLabels = Object.freeze({
   CALENDAR_TIME: 'Datetime',
 });
 
+export const DEFAULT_COLUMN_CONFIG = Object.freeze({
+  enable_media_view: true,
+  media_width: 100,
+  media_height: 100,
+  isInline: false
+});
 export const MetadataDatabaseColumns = Object.freeze({
   FILE:
   {
@@ -55,7 +61,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    isInline: false
+    config: DEFAULT_COLUMN_CONFIG
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
@@ -65,7 +71,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: true,
     csvCandidate: false,
-    isInline: false
+    config: DEFAULT_COLUMN_CONFIG
   },
   CREATED: {
     key: MetadataColumns.CREATED,
@@ -75,7 +81,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    isInline: false
+    config: DEFAULT_COLUMN_CONFIG
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
@@ -85,7 +91,7 @@ export const MetadataDatabaseColumns = Object.freeze({
     isMetadata: true,
     skipPersist: false,
     csvCandidate: true,
-    isInline: false
+    config: DEFAULT_COLUMN_CONFIG
   }
 });
 
@@ -93,7 +99,6 @@ export const TableColumnsTemplate: Partial<TableColumn> =
 {
   isMetadata: false,
   skipPersist: false,
-  isInline: false,
   options: [],
   csvCandidate: true,
 }
@@ -120,6 +125,11 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '  accessor: column1',
     '  label: Column 1',
     '  position: 0',
+    '  config:',
+    '   enable_media_view: true',
+    '   media_width: 100',
+    '   media_height: 100',
+    '   isInline: false',
     'filters:',
   ].join('\n')
 });
@@ -135,6 +145,8 @@ export const StyleClasses = Object.freeze({
   TABLE_CONTAINER: 'dbfolder-table-container',
   SETTINGS_MODAL: 'database-settings-modal',
   SETTINGS_MODAL_BODY: 'database-settings-body',
+  COLUMN_MODAL: 'database-column-modal',
+  COLUMN_MODAL_BODY: 'database-column-body',
 });
 
 export const StyleVariables = Object.freeze({

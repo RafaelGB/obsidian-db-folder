@@ -19,9 +19,17 @@ import { DatabaseHeaderProps } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { HeaderContext } from "components/contexts/HeaderContext";
+import { RowSelectOption } from "cdm/RowSelectModel";
 
+/**
+ * Generate column Options with Select type
+ * @param options
+ * @param rows
+ * @param columnId
+ * @returns
+ */
 function setOptionsOfSelectDataType(
-  options: any[],
+  options: RowSelectOption[],
   rows: any,
   columnId: string
 ): any[] {
@@ -58,7 +66,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
-  const [isInline, setIsInline] = useState(headerProps.column.isInline);
   const [labelState, setLabelState] = useState(headerProps.column.label);
   React.useEffect(() => {
     setDomReady(true);
@@ -122,7 +129,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       >
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
-        {isInline && <span>*</span>}
+        {headerProps.column.config.isInline && <span>*</span>}
       </div>
       {domReady
         ? ReactDOM.createPortal(
@@ -136,8 +143,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
               referenceElement={referenceElement}
               labelState={labelState}
               setLabelState={setLabelState}
-              isInline={isInline}
-              setIsInline={setIsInline}
             />,
             document.getElementById("popper-container")
           )

@@ -122,7 +122,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
    *******************************************************************************************/
   // Modify value of a column
   async function columnValue(): Promise<void> {
-    if (column.isInline) {
+    if (column.config.isInline) {
       await inlineColumnEdit();
       return;
     }
@@ -133,7 +133,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
 
   // Modify key of a column
   async function columnKey(): Promise<void> {
-    if (column.isInline) {
+    if (column.config.isInline) {
       // Go to inline mode
       await inlineColumnKey();
       return;
@@ -152,7 +152,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
 
   // Remove a column
   async function removeColumn(): Promise<void> {
-    if (column.isInline) {
+    if (column.config.isInline) {
       await inlineRemoveColumn();
       return;
     }

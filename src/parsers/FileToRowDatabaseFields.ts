@@ -11,7 +11,7 @@ const obtainRowDatabaseFields = (file: TFile, columns: TableColumn[]): RowDataba
 
     columnsToPersist.forEach(column => {
         const fieldValue = currentFileFields[column.key] ?? "";
-        if (column.isInline) {
+        if (column.config.isInline) {
             filteredFields.inline[column.key] = fieldValue;
         } else {
             filteredFields.frontmatter[column.key] = fieldValue;

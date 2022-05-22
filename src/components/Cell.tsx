@@ -58,7 +58,7 @@ export default function DefaultCell(cellProperties: Cell) {
       //TODO - this is a hack. find why is layout effect called twice
       containerCellRef.current.innerHTML = "";
       renderMarkdown(
-        (cellProperties as any).initialState.view,
+        cellProperties,
         contextValue.value,
         containerCellRef.current
       );
@@ -170,7 +170,7 @@ export default function DefaultCell(cellProperties: Cell) {
             <PopperSelectPortal
               dispatch={dataDispatch}
               row={cellProperties.row}
-              column={cellProperties.column}
+              column={cellProperties.column as unknown as TableColumn}
               columns={columns}
               note={note}
               state={(cellProperties as any).initialState}

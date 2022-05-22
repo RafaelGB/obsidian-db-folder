@@ -1,14 +1,17 @@
+import { DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
 import { Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
 export class MediaDimensionsHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Choose dimensions of embeded media';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { local, settingsManager, containerEl, view } = settingHandlerResponse;
-        const media_settings = local ? view.diskConfig.yaml.config.media_settings : settingsManager.plugin.settings.local_settings.media_settings;
+        const { settingsManager, containerEl } = settingHandlerResponse;
+        const media_settings = settingsManager.plugin.settings.global_settings.media_settings;
         if (media_settings.enable_media_view) {
             // Check if media_settings is enabled
             const dimensionSettings = new Setting(containerEl)
+                .setName('Media Dimensions')
+                .setDesc('Choose default value of media dimensions (heightxwidth)')
                 .addText(text => {
                     text.setPlaceholder("Height")
                         .setValue(media_settings.height.toString())
@@ -17,17 +20,14 @@ export class MediaDimensionsHandler extends AbstractSettingsHandler {
                             const parsedNumber = Number(value);
                             const validatedNumber = isNaN(parsedNumber) ? media_settings.height : parsedNumber;
                             media_settings.height = validatedNumber;
-                            if (local) {
-                                // Persist changes in local config
-                                view.diskConfig.updateConfig('media_settings', media_settings);
-                            } else {
-                                // Persist changes in plugin settings
-                                const update_local_settings = settingsManager.plugin.settings.local_settings;
-                                update_local_settings.media_settings = media_settings;
-                                await settingsManager.plugin.updateSettings({
-                                    local_settings: update_local_settings
-                                });
-                            }
+
+                            // Persist changes in plugin settings
+                            const update_global_settings = settingsManager.plugin.settings.global_settings;
+                            update_global_settings.media_settings = media_settings;
+                            await settingsManager.plugin.updateSettings({
+                                global_settings: update_global_settings
+                            });
+
                         });
                 }).addText(text => {
                     text.setPlaceholder("Width")
@@ -37,34 +37,32 @@ export class MediaDimensionsHandler extends AbstractSettingsHandler {
                             const parsedNumber = Number(value);
                             const validatedNumber = isNaN(parsedNumber) ? media_settings.width : parsedNumber;
                             media_settings.width = validatedNumber;
-                            if (local) {
-                                // Persist changes in local config
-                                view.diskConfig.updateConfig('media_settings', media_settings);
-                            } else {
-                                // Persist changes in plugin settings
-                                const update_local_settings = settingsManager.plugin.settings.local_settings;
-                                update_local_settings.media_settings = media_settings;
-                                await settingsManager.plugin.updateSettings({
-                                    local_settings: update_local_settings
-                                });
-                            }
+                            // Persist changes in plugin settings
+                            const update_global_settings = settingsManager.plugin.settings.global_settings;
+                            update_global_settings.media_settings = media_settings;
+                            await settingsManager.plugin.updateSettings({
+                                global_settings: update_global_settings
+                            });
+
                         });
                 })
-            if (local) {
-                dimensionSettings.addExtraButton((cb) => {
-                    cb.setIcon("reset")
-                        .setTooltip("Restart default values")
-                        .onClick(async (): Promise<void> => {
-                            // Persist changes
-                            media_settings.width = settingsManager.settings.local_settings.media_settings.width;
-                            media_settings.height = settingsManager.settings.local_settings.media_settings.height;
-                            view.diskConfig.updateConfig('media_settings', media_settings);
-                            // Force refresh of settings
-                            settingsManager.reset(settingHandlerResponse);
+            dimensionSettings.addExtraButton((cb) => {
+                cb.setIcon("reset")
+                    .setTooltip("Restart default values")
+                    .onClick(async (): Promise<void> => {
+                        const update_global_settings = settingsManager.plugin.settings.global_settings;
+                        // Persist changes
+                        update_global_settings.media_settings.width = DEFAULT_COLUMN_CONFIG.media_width
+                        update_global_settings.media_settings.height = DEFAULT_COLUMN_CONFIG.media_height;
+                        await settingsManager.plugin.updateSettings({
+                            global_settings: update_global_settings
                         });
-                });
-            }
+                        // Force refresh of settings
+                        settingsManager.reset(settingHandlerResponse);
+                    });
+
+            });
+            return this.goNext(settingHandlerResponse);
         }
-        return this.goNext(settingHandlerResponse);
     }
 }

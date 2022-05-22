@@ -15,7 +15,6 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
-  const [addSelectRef, setAddSelectRef] = useState(null);
   // Selector popper state
   const [selectPop, setSelectPop] = useState(null);
   const { styles, attributes } = usePopper(selectRef, selectPop);
@@ -30,14 +29,17 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     setShowAdd(true);
   }
 
-  function handleOptionClick(option: { label: string; backgroundColor?: any }) {
+  function handleOptionClick(option: {
+    label: string;
+    backgroundColor?: string;
+  }) {
     setContextValue({ value: option.label, update: true });
     setShowSelect(false);
     // save on disk & move file if its configured on the column
     dispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
       file: note.getFile(),
-      key: (column as any).key,
+      key: column.key,
       value: option.label,
       row: row,
       columnId: column.id,
@@ -51,7 +53,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
         type: ActionTypes.ADD_OPTION_TO_COLUMN,
         option: e.target.value,
         backgroundColor: randomColor(),
-        columnId: (column as any).id,
+        columnId: column.id,
       });
     }
     setShowAdd(false);
@@ -68,7 +70,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
           columns: columns,
           option: e.target.value,
           backgroundColor: randomColor(),
-          columnId: (column as any).id,
+          columnId: column.id,
           type: ActionTypes.ADD_OPTION_TO_COLUMN,
         });
       }
@@ -77,8 +79,8 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   }
 
   function getColor() {
-    const match = (column as any).options.find(
-      (option: { label: any }) => option.label === contextValue.value
+    const match = column.options.find(
+      (option: { label: string }) => option.label === contextValue.value
     );
     return (match && match.backgroundColor) || grey(200);
   }
@@ -136,7 +138,6 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
                     type="text"
                     className="option-input"
                     onBlur={handleOptionBlur}
-                    ref={setAddSelectRef}
                     onKeyDown={handleOptionKeyDown}
                   />
                 </div>

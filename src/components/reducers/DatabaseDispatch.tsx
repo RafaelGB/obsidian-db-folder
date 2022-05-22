@@ -21,6 +21,7 @@ import {
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
+import { RowSelectOption } from "cdm/RowSelectModel";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -40,16 +41,20 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const optionIndex = state.columns.findIndex(
         (column: TableColumn) => column.id === action.columnId
       );
+      const newOption: RowSelectOption = {
+        label: action.option,
+        backgroundColor: action.backgroundColor,
+      };
+      state.columns[optionIndex].options.push(newOption);
+      state.view.diskConfig.updateColumnProperties(action.columnId, {
+        options: state.columns[optionIndex].options,
+      });
+
       return update(state, {
         columns: {
           [optionIndex]: {
             options: {
-              $push: [
-                {
-                  label: action.option,
-                  backgroundColor: action.backgroundColor,
-                },
-              ],
+              $push: [newOption],
             },
           },
         },
@@ -63,7 +68,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       state.columns
         .filter((column: TableColumn) => !column.isMetadata)
         .forEach((column: TableColumn) => {
-          if (column.isInline) {
+          if (column.config.isInline) {
             rowRecord.inline[column.key] = "";
           } else {
             rowRecord.frontmatter[column.key] = "";
@@ -244,6 +249,12 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
+        config: {
+          isInline: false,
+          media_height: 100,
+          media_width: 100,
+          enable_media_view: false,
+        },
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newLeftColumn);
@@ -262,6 +273,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               accessor: newLeftColumn.accessor,
               position: newLeftColumn.position,
               csvCandidate: true,
+              config: newLeftColumn.config,
             },
             ...state.columns.slice(leftIndex, state.columns.length),
           ],
@@ -282,6 +294,12 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
+        config: {
+          isInline: false,
+          media_height: 100,
+          media_width: 100,
+          enable_media_view: false,
+        },
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newRIghtColumn);
@@ -301,6 +319,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               accessor: newRIghtColumn.accessor,
               position: newRIghtColumn.position,
               csvCandidate: true,
+              config: newLeftColumn.config,
             },
             ...state.columns.slice(rightIndex + 1, state.columns.length),
           ],
@@ -407,24 +426,27 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
 
-    case ActionTypes.TOGGLE_INLINE_FRONTMATTER:
+    case ActionTypes.MODIFY_COLUMN_CONFIG:
       // Altern between inline & frontmatter mode
-      state.view.diskConfig.updateColumnProperties(action.columnId, {
-        isInline: action.isInline,
-      });
+      state.view.diskConfig.updateColumnProperties(
+        action.columnId,
+        action.columnConfig
+      );
       const toggleInlineIndex = state.columns.findIndex(
         (column) => column.id === action.columnId
       );
 
       return update(state, {
+        skipReset: { $set: true },
         columns: {
           [toggleInlineIndex]: {
-            $merge: {
-              isInline: action.isInline,
+            config: {
+              $set: action.columnConfig,
             },
           },
         },
       });
+
     default:
       LOGGER.warn(`<=> databaseReducer: unknown action ${action.type}`);
   }

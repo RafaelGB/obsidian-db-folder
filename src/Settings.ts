@@ -6,19 +6,22 @@ import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 import { columns_settings_section } from "settings/ColumnsSection";
 import { folder_settings_section } from "settings/FolderSection";
-import { StyleClasses } from "helpers/Constants";
+import { DEFAULT_COLUMN_CONFIG, StyleClasses } from "helpers/Constants";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { media_settings_section } from "settings/MediaSection";
-
-interface GlobalSettings {
-  enable_debug_mode: boolean;
-  logger_level_info: string;
-}
 
 export interface MediaSettings {
   enable_media_view: boolean;
   width: number;
   height: number;
+}
+/**
+ * Options that affects the behavior of the plugin and defines default values with some fields
+ */
+interface GlobalSettings {
+  enable_debug_mode: boolean;
+  logger_level_info: string;
+  media_settings: MediaSettings;
 }
 export interface LocalSettings {
   enable_show_state: boolean;
@@ -26,7 +29,6 @@ export interface LocalSettings {
   remove_field_when_delete_column: boolean;
   show_metadata_created: boolean;
   show_metadata_modified: boolean;
-  media_settings: MediaSettings;
 }
 
 export interface DatabaseSettings {
@@ -37,7 +39,12 @@ export interface DatabaseSettings {
 export const DEFAULT_SETTINGS: DatabaseSettings = {
   global_settings: {
     enable_debug_mode: false,
-    logger_level_info: 'error'
+    logger_level_info: 'error',
+    media_settings: {
+      enable_media_view: DEFAULT_COLUMN_CONFIG.enable_media_view,
+      width: DEFAULT_COLUMN_CONFIG.media_height,
+      height: DEFAULT_COLUMN_CONFIG.media_height
+    }
   },
   local_settings: {
     enable_show_state: false,
@@ -45,11 +52,6 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     group_folder_column: '',
     show_metadata_created: false,
     show_metadata_modified: false,
-    media_settings: {
-      enable_media_view: true,
-      width: 100,
-      height: 100
-    }
   }
 };
 
@@ -101,7 +103,7 @@ export class SettingsManager {
 
     const settingBody = containerEl.createDiv();
     settingBody.addClass(StyleClasses.SETTINGS_MODAL_BODY);
-    containerEl.setAttribute("id", StyleClasses.SETTINGS_MODAL_BODY);
+    settingBody.setAttribute("id", StyleClasses.SETTINGS_MODAL_BODY);
     const settingHandlerResponse: SettingHandlerResponse = {
       settingsManager: this,
       containerEl: settingBody,

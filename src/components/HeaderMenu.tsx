@@ -1,4 +1,3 @@
-import { DatabaseHeaderProps } from "cdm/FolderModel";
 import {
   ActionTypes,
   DataTypes,
@@ -22,21 +21,9 @@ import { Column } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
-import { FormControlLabel, FormGroup, Switch } from "@material-ui/core";
+import { ColumnModal } from "./modals/ColumnModal";
+import { HeaderMenuProps } from "cdm/HeaderModel";
 
-type HeaderMenuProps = {
-  headerProps: DatabaseHeaderProps;
-  setSortBy: any;
-  propertyIcon: any;
-  expanded: boolean;
-  setExpanded: (expanded: boolean) => void;
-  created: boolean;
-  referenceElement: any;
-  labelState: string;
-  setLabelState: (label: string) => void;
-  isInline: boolean;
-  setIsInline: (isInline: boolean) => void;
-};
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
@@ -50,8 +37,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     referenceElement,
     labelState,
     setLabelState,
-    isInline,
-    setIsInline,
   } = headerMenuProps;
   const { column, rows, initialState } = headerMenuProps.headerProps;
   const dispatch = (headerMenuProps.headerProps as any).dataDispatch;
@@ -67,12 +52,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
-
-  // Manage settings
-  const [settingsReferenceElement, setSettingsReferenceElement] =
-    useState(null);
-  const [settingsPopperElement, setSettingsPopperElement] = useState(null);
-  const [showSettings, setShowSettings] = useState(false);
 
   // Manage errors
   const [labelStateInvalid, setLabelStateInvalid] = useState(false);
@@ -240,15 +219,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     strategy: "fixed",
   });
 
-  const settingsPopper = usePopper(
-    settingsReferenceElement,
-    settingsPopperElement,
-    {
-      placement: "auto",
-      strategy: "fixed",
-    }
-  );
-
   function persistLabelChange(newKey: string) {
     const futureOrder = headerMenuProps.headerProps.allColumns.map(
       (o: Column) => (o.id === column.id ? newKey : o.id)
@@ -315,15 +285,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     );
     setColumnWidthState(columnWidthState);
     return { name: columnName, position: wantedPosition, label: columnLabel };
-  }
-
-  function handleChangeToggleInlineFrontmatter(e: any) {
-    setIsInline(e.target.checked);
-    dispatch({
-      type: ActionTypes.TOGGLE_INLINE_FRONTMATTER,
-      columnId: column.id,
-      isInline: e.target.checked,
-    });
   }
 
   return (
@@ -459,42 +420,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <div style={{ padding: "4px 0px" }}>
                   <div
                     className="menu-item sort-button"
-                    onMouseEnter={() => setShowSettings(true)}
-                    onMouseLeave={() => setShowSettings(false)}
-                    ref={setSettingsReferenceElement}
+                    onClick={() =>
+                      new ColumnModal(initialState.view, headerMenuProps).open()
+                    }
                   >
                     <span className="svg-icon svg-text icon-margin">
                       <AdjustmentsIcon />
                     </span>
                     <span>Settings</span>
                   </div>
-                  {showSettings && (
-                    <div
-                      className={`menu ${c("popper")}`}
-                      ref={setSettingsPopperElement}
-                      onMouseEnter={() => setShowSettings(true)}
-                      onMouseLeave={() => setShowSettings(false)}
-                      {...settingsPopper.attributes.popper}
-                      style={{
-                        ...settingsPopper.styles.popper,
-                        width: 200,
-                        zIndex: 4,
-                        padding: "4px 0px",
-                      }}
-                    >
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={isInline}
-                              onChange={handleChangeToggleInlineFrontmatter}
-                            />
-                          }
-                          label="Inline"
-                        />
-                      </FormGroup>
-                    </div>
-                  )}
                 </div>
               </div>
             )}

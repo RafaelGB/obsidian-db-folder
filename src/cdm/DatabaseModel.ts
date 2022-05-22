@@ -2,19 +2,13 @@ import { RowType } from "cdm/RowTypeModel"
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { Cell } from "react-table";
 import { LocalSettings } from "Settings"
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { BaseColumn, TableColumn, TableDataType } from "cdm/FolderModel";
+import { RowSelectOption } from "cdm/RowSelectModel";
 
 /** database column */
-export interface DatabaseColumn {
+export interface DatabaseColumn extends BaseColumn {
     input: string;
-    accessor: string;
-    label: string;
-    key: string;
-    position?: number;
-    isMetadata?: boolean;
-    skipPersist?: boolean;
-    csvCandidate?: boolean;
-    isInline?: boolean;
+    options?: RowSelectOption[];
     [key: string]: RowType;
 }
 

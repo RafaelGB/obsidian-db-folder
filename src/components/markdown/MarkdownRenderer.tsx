@@ -1,21 +1,24 @@
-import { NormalizedPath } from "cdm/FolderModel";
+import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DatabaseView } from "DatabaseView";
 import { MediaExtensions } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { MarkdownRenderer, TFile } from "obsidian";
+import { Cell } from "react-table";
 import { LOGGER } from "services/Logger";
 
 export async function renderMarkdown(
-  view: DatabaseView,
+  cell: Cell,
   markdownString: string,
   domElement: HTMLDivElement
 ): Promise<HTMLDivElement> {
   try {
-    if (isValidHttpUrl(markdownString, view)) {
-      const { height, width } = view.diskConfig.yaml.config.media_settings;
+    const view = (cell as any).initialState.view;
+    const column = cell.column as unknown as DatabaseColumn;
+    const { media_height, media_width, enable_media_view } = column.config;
+    if (enable_media_view && isValidHttpUrl(markdownString)) {
       // TODO option to generate Iframes
       //markdownString = `<div class=iframe-container> <iframe width="427" height="240" src="${markdownString}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>`;
-      markdownString = `![embedded link|${height}x${width}](${markdownString})`;
+      markdownString = `![embedded link|${media_height}x${media_width}](${markdownString})`;
     }
 
     await MarkdownRenderer.renderMarkdown(
@@ -127,7 +130,7 @@ function handleVideo(el: HTMLElement, file: TFile, view: DatabaseView) {
   el.addClasses(["media-embed", "is-loaded"]);
 }
 
-function isValidHttpUrl(urlCandidate: string, view: DatabaseView) {
+function isValidHttpUrl(urlCandidate: string) {
   let url;
 
   try {
@@ -136,8 +139,5 @@ function isValidHttpUrl(urlCandidate: string, view: DatabaseView) {
     return false;
   }
 
-  return (
-    (url.protocol === "http:" || url.protocol === "https:") &&
-    view.diskConfig.yaml.config.media_settings.enable_media_view
-  );
+  return url.protocol === "http:" || url.protocol === "https:";
 }

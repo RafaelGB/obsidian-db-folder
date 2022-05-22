@@ -6,7 +6,7 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
-import { NoteContentAction } from 'cdm/FolderModel';
+import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
 import { LocalSettings } from 'Settings';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
@@ -89,7 +89,7 @@ export default class DatabaseInfo {
      * @param columnId 
      * @param properties 
      */
-    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId: string, properties: Record<string, P>): Promise<void> {
+    async updateColumnProperties(columnId: string, properties: Partial<DatabaseColumn>): Promise<void> {
         const colToUpdate = this.yaml.columns[columnId];
         for (const key in properties) {
             colToUpdate[key] = properties[key];
@@ -129,6 +129,15 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
+    async updateColumnConfig(columnId: string, partialConfig: Partial<ConfigColumn>): Promise<void> {
+        const colToUpdate = this.yaml.columns[columnId];
+        colToUpdate.config = {
+            ...colToUpdate.config,
+            ...partialConfig
+        };
+        this.yaml.columns[columnId] = colToUpdate;
+        await this.saveOnDisk();
+    }
     async updateYaml<K extends keyof DatabaseYaml>(key: K, value: DatabaseYaml[K]): Promise<void> {
         this.yaml[key] = value;
         await this.saveOnDisk();

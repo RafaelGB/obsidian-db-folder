@@ -13,9 +13,10 @@ export class MarshallDatabaseInfoHandler extends AbstractYamlHandler {
 
         if (!yaml.description) {
             // handle continues if description is not defined. Its optional
-            this.localYaml.description = '';
+            yaml.description = '';
         }
 
+        handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);
     }
 }
