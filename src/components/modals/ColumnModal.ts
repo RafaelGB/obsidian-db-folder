@@ -1,4 +1,4 @@
-import { ConfigColumn, TableColumn } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";

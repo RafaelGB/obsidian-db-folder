@@ -437,6 +437,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       );
 
       return update(state, {
+        skipReset: { $set: true },
         columns: {
           [toggleInlineIndex]: {
             config: {
@@ -445,6 +446,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
           },
         },
       });
+
     default:
       LOGGER.warn(`<=> databaseReducer: unknown action ${action.type}`);
   }
