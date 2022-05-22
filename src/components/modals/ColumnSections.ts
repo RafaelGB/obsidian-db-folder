@@ -3,6 +3,9 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { MediaDimensionsHandler } from "components/modals/handlers/MediaDimensionsHandler";
 import { MediaToggleHandler } from "components/modals/handlers/MediaToggleHandler";
 import { InlineToggleHandler } from "components/modals/handlers/InlineToggleHandler";
+import { ColumnHandler } from "./handlers/AbstractColumnHandler";
+import { DataTypes } from "helpers/Constants";
+import { SelectedColumnOptionsHandler } from "./handlers/SelectedColumnOptionsHandler";
 
 export function behavior_settings_section(settingHandlerResponse: ColumnHandlerResponse) {
     const behavior_section = settingHandlerResponse.containerEl.createDiv("column-section-container-behavior");
@@ -33,6 +36,7 @@ export function media_settings_section(settingHandlerResponse: ColumnHandlerResp
     const handlers = [
         new MediaToggleHandler(),
         new MediaDimensionsHandler(),
+        ...addParticularInputSettings(settingHandlerResponse.column.dataType)
     ]
     let i = 1;
     while (i < handlers.length) {
@@ -42,4 +46,16 @@ export function media_settings_section(settingHandlerResponse: ColumnHandlerResp
 
     settingHandlerResponse.containerEl = folder_section;
     return handlers[0].handle(settingHandlerResponse);
+}
+
+function addParticularInputSettings(dataType: string): ColumnHandler[] {
+    const particularHandlers: ColumnHandler[] = [];
+    switch (dataType) {
+        case DataTypes.SELECT:
+            particularHandlers.push(new SelectedColumnOptionsHandler());
+            break;
+        default:
+            break;
+    }
+    return particularHandlers;
 }

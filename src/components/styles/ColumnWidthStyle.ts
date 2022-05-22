@@ -3,6 +3,7 @@ import { ColumnWidthState } from "cdm/StyleModel";
 import { DataTypes, MetadataColumns, WidthVariables } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { DateTime } from "luxon";
+import { HSLColor } from "react-color";
 import { Row } from "react-table";
 
 export const getColumnWidthStyle = (rows: Array<Row<object>>, column: TableColumn, customMaxWidth?: number): number => {
@@ -44,5 +45,9 @@ export const getColumnsWidthStyle = (rows: Array<Row<object>>, columns: TableCol
   columns.forEach((column: TableColumn) => {
     columnWidthStyle.widthRecord[column.id] = getColumnWidthStyle(rows, column);
   })
-  return columnWidthStyle
+  return columnWidthStyle;
+}
+
+export function castHslToString(color: HSLColor): string {
+  return `hsl(${color.h},${color.s * 100}%,${color.l * 100}%)`;
 }
