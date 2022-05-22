@@ -21,6 +21,7 @@ import {
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
+import { RowSelectOption } from "cdm/RowSelectModel";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -40,16 +41,20 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const optionIndex = state.columns.findIndex(
         (column: TableColumn) => column.id === action.columnId
       );
+      const newOption: RowSelectOption = {
+        label: action.option,
+        backgroundColor: action.backgroundColor,
+      };
+      state.columns[optionIndex].options.push(newOption);
+      state.view.diskConfig.updateColumnProperties(action.columnId, {
+        options: state.columns[optionIndex].options,
+      });
+
       return update(state, {
         columns: {
           [optionIndex]: {
             options: {
-              $push: [
-                {
-                  label: action.option,
-                  backgroundColor: action.backgroundColor,
-                },
-              ],
+              $push: [newOption],
             },
           },
         },

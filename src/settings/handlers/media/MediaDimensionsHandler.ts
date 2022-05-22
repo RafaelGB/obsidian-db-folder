@@ -5,11 +5,13 @@ import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handle
 export class MediaDimensionsHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Choose dimensions of embeded media';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, view } = settingHandlerResponse;
+        const { settingsManager, containerEl } = settingHandlerResponse;
         const media_settings = settingsManager.plugin.settings.global_settings.media_settings;
         if (media_settings.enable_media_view) {
             // Check if media_settings is enabled
             const dimensionSettings = new Setting(containerEl)
+                .setName('Media Dimensions')
+                .setDesc('Choose default value of media dimensions (heightxwidth)')
                 .addText(text => {
                     text.setPlaceholder("Height")
                         .setValue(media_settings.height.toString())
