@@ -30,10 +30,8 @@ export class ColumnModal extends Modal {
 
     onClose() {
         const { contentEl } = this;
-        handleColumnChanges(
-            (this.headerMenuProps.headerProps as any).dataDispatch,
-            this.headerMenuProps.headerProps.column)
         contentEl.empty();
+        this.view.reloadDatabase();
     }
 }
 export class ColumnSettingsManager {
