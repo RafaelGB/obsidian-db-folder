@@ -89,7 +89,7 @@ export default class DatabaseInfo {
      * @param columnId 
      * @param properties 
      */
-    async updateColumnProperties<P extends keyof DatabaseColumn>(columnId: string, properties: Record<string, P>): Promise<void> {
+    async updateColumnProperties(columnId: string, properties: Partial<DatabaseColumn>): Promise<void> {
         const colToUpdate = this.yaml.columns[columnId];
         for (const key in properties) {
             colToUpdate[key] = properties[key];

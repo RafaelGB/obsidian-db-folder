@@ -3,7 +3,7 @@ import { AbstractColumnHandler } from "components/modals/handlers/AbstractColumn
 import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 
 export class MediaDimensionsHandler extends AbstractColumnHandler {
-    settingTitle: string = 'Choose dimensions of embeded media';
+    settingTitle: string = 'Dimensions of embeded media';
     handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
         const { column, containerEl, view, columnSettingsManager } = columnHandlerResponse;
         const dbSettings = view.plugin.settings;
@@ -11,6 +11,8 @@ export class MediaDimensionsHandler extends AbstractColumnHandler {
         if (config.enable_media_view) {
             // Check if media_settings is enabled
             new Setting(containerEl)
+                .setName(this.settingTitle)
+                .setDesc("Choose dimensions of embeded media (heigthxwidth)")
                 .addText(text => {
                     text.setPlaceholder("Height")
                         .setValue(config.media_height.toString())

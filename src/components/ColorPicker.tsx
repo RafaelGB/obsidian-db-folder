@@ -6,7 +6,6 @@ import { castHslToString } from "./styles/ColumnWidthStyle";
 export function ColorPicker(colorPickerProps: ColorPickerProps) {
   const { view, options, option, columnKey } = colorPickerProps;
   const [colorState, setColorState] = React.useState(option.backgroundColor);
-  const [labelState, setLabelState] = React.useState(option.label);
   const [showColorPicker, setShowColorPicker] = React.useState(false);
   /**
    * Manage color picker
@@ -18,6 +17,7 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
     setColorState(castHslToString(color.hsl));
     option.backgroundColor = castHslToString(color.hsl);
   }
+
   async function handleChangeComplete(
     color: ColorResult,
     event: React.ChangeEvent<HTMLInputElement>
@@ -25,7 +25,7 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
     handleChange(color, event);
     setShowColorPicker(false);
     // Persist changes
-    await view.diskConfig.updateColumnConfig(columnKey, {
+    await view.diskConfig.updateColumnProperties(columnKey, {
       options: options,
     });
   }
@@ -36,7 +36,7 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
         onClick={() => setShowColorPicker(!showColorPicker)}
         style={{ backgroundColor: colorState, padding: "5px" }}
       >
-        {labelState}
+        {option.label}
       </span>
       {showColorPicker && (
         <SketchPicker

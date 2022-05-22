@@ -24,7 +24,7 @@ export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
         backgroundColor: randomColor(),
       });
       // Persist changes
-      view.diskConfig.updateColumnConfig(column.key, {
+      view.diskConfig.updateColumnProperties(column.key, {
         options: options,
       });
       // Force refresh of settings
@@ -39,7 +39,7 @@ export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
       .addText((text) => {
         text
           .setPlaceholder("label of option")
-          .setValue("")
+          .setValue(newLabel)
           .onChange(async (value: string): Promise<void> => {
             newLabel = value;
           });
