@@ -4,7 +4,7 @@ import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { ActionTypes, StyleClasses } from "helpers/Constants";
 import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
-import { media_settings_section, behavior_settings_section } from "components/modals/ColumnSections";
+import { particular_settings_section, behavior_settings_section } from "components/modals/ColumnSections";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import { Dispatch } from "react";
 
@@ -66,8 +66,8 @@ export class ColumnSettingsManager {
     constructBody(settingHandlerResponse: ColumnHandlerResponse) {
         /** behavior section */
         behavior_settings_section(settingHandlerResponse);
-        /** media section */
-        media_settings_section(settingHandlerResponse);
+        /** Particular settings section */
+        particular_settings_section(settingHandlerResponse);
     }
 
     reset(response: ColumnHandlerResponse) {

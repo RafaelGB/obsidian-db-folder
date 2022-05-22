@@ -26,16 +26,15 @@ export function behavior_settings_section(settingHandlerResponse: ColumnHandlerR
     return handlers[0].handle(settingHandlerResponse);
 }
 
-export function media_settings_section(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
-    const folder_section = settingHandlerResponse.containerEl.createDiv("column-section-container-media");
+export function particular_settings_section(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    const particular_section = settingHandlerResponse.containerEl.createDiv("column-section-container-particular");
     // title of the section
-    add_setting_header(folder_section, "Media adjustments", 'h3');
+    add_setting_header(particular_section, `Particular properties of "${settingHandlerResponse.column.dataType
+        }" column type`, 'h3');
     /**
      * Obtain all classes than extends from AbstractHandler
      */
     const handlers = [
-        new MediaToggleHandler(),
-        new MediaDimensionsHandler(),
         ...addParticularInputSettings(settingHandlerResponse.column.dataType)
     ]
     let i = 1;
@@ -44,13 +43,17 @@ export function media_settings_section(settingHandlerResponse: ColumnHandlerResp
         i++;
     }
 
-    settingHandlerResponse.containerEl = folder_section;
+    settingHandlerResponse.containerEl = particular_section;
     return handlers[0].handle(settingHandlerResponse);
 }
 
 function addParticularInputSettings(dataType: string): ColumnHandler[] {
     const particularHandlers: ColumnHandler[] = [];
     switch (dataType) {
+        case DataTypes.TEXT:
+            particularHandlers.push(new MediaToggleHandler());
+            particularHandlers.push(new MediaDimensionsHandler());
+            break;
         case DataTypes.SELECT:
             particularHandlers.push(new SelectedColumnOptionsHandler());
             break;
