@@ -11,17 +11,24 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
   /**
    * Manage color picker
    */
-  async function handleChange(color: ColorResult, event: any) {
+  async function handleChange(
+    color: ColorResult,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
     setColorState(castHslToString(color.hsl));
-    setShowColorPicker(false);
     option.backgroundColor = castHslToString(color.hsl);
-
+  }
+  async function handleChangeComplete(
+    color: ColorResult,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    handleChange(color, event);
+    setShowColorPicker(false);
     // Persist changes
     await view.diskConfig.updateColumnConfig(columnKey, {
       options: options,
     });
   }
-
   return (
     <>
       <span
@@ -32,7 +39,11 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
         {labelState}
       </span>
       {showColorPicker && (
-        <SketchPicker color={colorState} onChange={handleChange} />
+        <SketchPicker
+          color={colorState}
+          onChange={handleChange}
+          onChangeComplete={handleChangeComplete}
+        />
       )}
     </>
   );
