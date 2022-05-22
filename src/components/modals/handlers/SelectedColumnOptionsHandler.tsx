@@ -2,13 +2,10 @@ import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 import { ColorPickerProps } from "cdm/StyleModel";
 import { ColorPicker } from "components/ColorPicker";
 import { AbstractColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
-import { castHslToString } from "components/styles/ColumnWidthStyle";
 import { randomColor } from "helpers/Colors";
 import { ButtonComponent, Setting } from "obsidian";
 import React from "react";
-import { ColorResult } from "react-color";
 import ReactDOM from "react-dom";
-import { add_button } from "settings/SettingsComponents";
 
 export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
   settingTitle: string = "Column Options";
@@ -66,7 +63,7 @@ export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
           .onClick(async (): Promise<void> => {
             options.splice(index, 1);
             // Persist changes
-            await view.diskConfig.updateColumnConfig(column.key, {
+            await view.diskConfig.updateColumnProperties(column.key, {
               options: options,
             });
             // Force refresh of settings

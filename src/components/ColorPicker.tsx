@@ -1,7 +1,7 @@
 import { ColorPickerProps } from "cdm/StyleModel";
 import React from "react";
 import { ColorResult, SketchPicker } from "react-color";
-import { castHslToString } from "./styles/ColumnWidthStyle";
+import { castHslToString } from "components/styles/ColumnWidthStyle";
 
 export function ColorPicker(colorPickerProps: ColorPickerProps) {
   const { view, options, option, columnKey } = colorPickerProps;
@@ -23,7 +23,6 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
     event: React.ChangeEvent<HTMLInputElement>
   ) {
     handleChange(color, event);
-    setShowColorPicker(false);
     // Persist changes
     await view.diskConfig.updateColumnProperties(columnKey, {
       options: options,
@@ -39,11 +38,13 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
         {option.label}
       </span>
       {showColorPicker && (
-        <SketchPicker
-          color={colorState}
-          onChange={handleChange}
-          onChangeComplete={handleChangeComplete}
-        />
+        <div onMouseLeave={() => setShowColorPicker(false)}>
+          <SketchPicker
+            color={colorState}
+            onChange={handleChange}
+            onChangeComplete={handleChangeComplete}
+          />
+        </div>
       )}
     </>
   );
