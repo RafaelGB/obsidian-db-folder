@@ -5,6 +5,7 @@ import { getAPI, isPluginEnabled } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
 import { DateTime } from "luxon";
+import { LOGGER } from "services/Logger";
 class DataviewProxy {
 
     private static instance: DataviewProxy;
@@ -62,10 +63,19 @@ class DataviewProxy {
 
     parseLiteral(literal: Literal, dataTypeDst: string): Literal {
         let parsedLiteral: Literal = literal;
-        const wrapped = this.getDataviewAPI().value.wrapValue(literal)
-        if (wrapped.value === undefined || wrapped.value === null) {
+        if (!this.getDataviewAPI().value.isTruthy(literal)) {
             return "";
         }
+
+        if ((literal as any).values !== undefined) {
+
+            literal = (literal as any).values[0];
+            LOGGER.warn(`There is a repeated key into a file with this values: ${(literal as any).values[0]
+                }`);
+        }
+
+        const wrapped = this.getDataviewAPI().value.wrapValue(literal)
+
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case DataTypes.CALENDAR:
@@ -76,8 +86,9 @@ class DataviewProxy {
                 parsedLiteral = wrapped.type === 'number' ? literal : Number(literal);
                 break;
             default:
-                // Values of dataview parse to md friendly strings
+
                 if (DateTime.isDateTime(wrapped.value)) {
+                    // Values of dataview parse to md friendly strings
                     parsedLiteral = wrapped.value.toFormat("yyyy-MM-dd");
                 } else {
                     parsedLiteral = this.getDataviewAPI().value.toString(literal);

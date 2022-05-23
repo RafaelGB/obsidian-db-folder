@@ -54,7 +54,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         columns: {
           [optionIndex]: {
             options: {
-              $push: [newOption],
+              $set: state.columns[optionIndex].options,
             },
           },
         },
