@@ -1,3 +1,7 @@
+## 1.3.1
+### No longer broken
+- dataview currently supports multiple key with same name and is considered as an array. Actually this kind of array generates an error in the database plugin. Now are controlled taking just the fist hit. It will be considered as an array with future versions.
+
 ## 1.3.0
 *Published on 2022/05/23*
 ### Shiny new things
