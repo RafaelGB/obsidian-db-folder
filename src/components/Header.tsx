@@ -38,7 +38,7 @@ function setOptionsOfSelectDataType(
     let match = options.find(
       (option: { label: string }) => option.label === rowValue
     );
-    if (!match) {
+    if (!match && rowValue !== undefined && rowValue !== "") {
       options.push({ label: rowValue, backgroundColor: randomColor() });
     }
   });

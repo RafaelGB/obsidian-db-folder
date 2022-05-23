@@ -1,3 +1,12 @@
+## 1.3.0
+### Shiny new things
+- Refactor of column setting to Obsidian modal. Now every column will have its own configuration! As a consequence, the next point were possible:
+  - Every text column can configure its own media settings
+  - Options of Selected type column are now persistent.
+  - You can add new lavels even if does not exist in any cell (or delete it)
+  - You can now select the color of the option label.
+### Improved
+- The table will be refreshed when you close either the settings modal or the new modals of the column adjustments. This will suppose a minimal performance impact with a loading time of less than a second. Its a provisional solution until the refactor of react states stategy
 ## 1.2.0
 *Published on 2022/05/19*
 ### Shiny new things

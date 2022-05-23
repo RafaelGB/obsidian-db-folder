@@ -170,6 +170,7 @@ export class SettingsModal extends Modal {
 
     this.settingsManager.cleanUp();
     contentEl.empty();
+    this.view.reloadDatabase();
   }
 }
 

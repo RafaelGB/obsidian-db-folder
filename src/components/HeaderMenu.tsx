@@ -420,9 +420,13 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <div style={{ padding: "4px 0px" }}>
                   <div
                     className="menu-item sort-button"
-                    onClick={() =>
-                      new ColumnModal(initialState.view, headerMenuProps).open()
-                    }
+                    onClick={() => {
+                      new ColumnModal(
+                        initialState.view,
+                        headerMenuProps
+                      ).open();
+                      setExpanded(false);
+                    }}
                   >
                     <span className="svg-icon svg-text icon-margin">
                       <AdjustmentsIcon />

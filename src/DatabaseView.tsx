@@ -186,6 +186,11 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
   }
 
+  async reloadDatabase() {
+    ReactDOM.unmountComponentAtNode(this.tableContainer);
+    this.initDatabase();
+  }
+
   clear(): void {
     /*
         Obsidian *only* calls this after unloading a file, before loading the next.
