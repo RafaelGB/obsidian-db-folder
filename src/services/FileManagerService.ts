@@ -19,7 +19,7 @@ class VaultManager {
       targetFolder,
       filename ?? "Untitled"
     );
-    const content = parseFrontmatterFieldsToString(databasefields, {}).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    const content = parseFrontmatterFieldsToString(databasefields).concat("\n").concat(parseInlineFieldsToString(databasefields));
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;
@@ -66,12 +66,12 @@ class VaultManager {
     return await app.vault.read(tfile);
   }
 
-  ontainCurrentFrontmatter(content: string): Record<string, string> {
+  ontainCurrentFrontmatter(content: string): Record<string, any> {
     const match = content.match(/^---\s+([\w\W]+?)\s+---/);
     if (match) {
       const frontmatterRaw = match[1];
       const yaml = parseYaml(frontmatterRaw);
-      const frontmatter: Record<string, string> = {};
+      const frontmatter: Record<string, any> = {};
       Object.keys(yaml)
 
         .forEach(key => {
@@ -82,6 +82,16 @@ class VaultManager {
     }
     else {
       return undefined;
+    }
+  }
+
+  obtainFrontmatterKeys(content: string): string[] {
+    const currentFrontmatter = VaultManagerDB.ontainCurrentFrontmatter(content);
+    if (currentFrontmatter) {
+      return Object.keys(currentFrontmatter);
+    }
+    else {
+      return [];
     }
   }
   /**

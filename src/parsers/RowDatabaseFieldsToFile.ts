@@ -1,24 +1,15 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
-export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, original: Record<string, string>, deletedColumn?: string): string => {
+import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { DataviewService } from "services/DataviewService";
+export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, deletedColumn?: string): string => {
     const frontmatterFields = databaseFields.frontmatter;
-    const inlineFields = databaseFields.inline;
     const array: string[] = [];
     array.push(`---`);
     Object.keys(frontmatterFields).forEach(key => {
-        array.push(`${key}: ${frontmatterFields[key]}`);
+        if (key !== deletedColumn) {
+            array.push(...parseLiteralToString(frontmatterFields[key], 0, key));
+        }
     });
-
-    Object.keys(original)
-        .filter(fkey =>
-            // Filter out duplicates and deleted columns
-            !Object.prototype.hasOwnProperty.call(inlineFields, fkey)
-            && !Object.prototype.hasOwnProperty.call(frontmatterFields, fkey)
-            && fkey !== deletedColumn)
-        .forEach(key => {
-            // add frontmatter fields that are not specified as database fields
-            array.push(`${key}: ${original[key] ?? ''}`);
-        });
-
     array.push(`---`);
     return array.join('\n');
 }
@@ -29,4 +20,21 @@ export const parseInlineFieldsToString = (inlineFields: RowDatabaseFields): stri
         array.push(`${key}:: ${inlineFields.inline[key]}`);
     });
     return array.join('\n');
+}
+
+function parseLiteralToString(literal: Literal, level: number, key?: string): string[] {
+    const literalBlock: string[] = [];
+    literal = DataviewService.parseDataArray(literal);
+    if (DataviewService.getDataviewAPI().value.isArray(literal)) {
+        literalBlock.push(`${" ".repeat(level)}${key}:`);
+        literal.forEach((literal, index) => {
+            literalBlock.push(...parseLiteralToString(literal, level + 1));
+        });
+    }
+    else if (key) {
+        literalBlock.push(`${" ".repeat(level)}${key}: ${literal}`);
+    } else {
+        literalBlock.push(`${" ".repeat(level)}- ${literal}`);
+    }
+    return literalBlock;
 }

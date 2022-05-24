@@ -98,9 +98,9 @@ export async function updateRowFileProxy(file: TFile, columnId: string, newValue
  */
 export async function updateRowFile(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
-  const rowFields = obtainRowDatabaseFields(file, state.columns);
   const content = await VaultManagerDB.obtainContentFromTfile(file);
-  let currentFrontmatter = VaultManagerDB.ontainCurrentFrontmatter(content);
+  const frontmatterKeys = await VaultManagerDB.obtainFrontmatterKeys(content);
+  const rowFields = obtainRowDatabaseFields(file, state.columns, frontmatterKeys);
   const column = state.columns.find(c => c.key === columnId);
   // Adds an empty frontmatter at the beginning of the file
   async function addFrontmatter(): Promise<void> {
@@ -139,7 +139,8 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       return;
     }
     // If field does not exist yet, ignore it
-    if (!Object.prototype.hasOwnProperty.call(currentFrontmatter, columnId)) {
+    if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)
+      && !Object.prototype.hasOwnProperty.call(rowFields.inline, columnId)) {
       return;
     }
 
@@ -162,7 +163,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
     const frontmatterGroupRegex = /^---[\s\S]+?---/g;
-    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, currentFrontmatter, deletedColumn);
+    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, deletedColumn);
     const noteObject = {
       action: 'replace',
       file: file,
@@ -176,15 +177,15 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
    *                              INLINE GROUP FUNCTIONS
    *******************************************************************************************/
   async function inlineColumnEdit(): Promise<void> {
+    if (!Object.keys(rowFields.inline).contains(columnId)) {
+      await inlineAddColumn();
+      return;
+    }
     /* Regex explanation
     * group 1 is inline field checking that starts in new line
     * group 2 is the current value of inline field
     */
     const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
-    if (!inlineFieldRegex.test(content)) {
-      await inlineAddColumn();
-      return;
-    }
     const noteObject = {
       action: 'replace',
       file: file,
@@ -196,14 +197,14 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   }
 
   async function inlineColumnKey(): Promise<void> {
+    if (!Object.keys(rowFields.inline).contains(columnId)) {
+      return;
+    }
     /* Regex explanation
     * group 1 is inline field checking that starts in new line
     * group 2 is the current value of inline field
     */
     const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
-    if (!inlineFieldRegex.test(content)) {
-      return;
-    }
     const noteObject = {
       action: 'replace',
       file: file,
@@ -238,7 +239,6 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
       regexp: inlineFieldRegex
     };
     await VaultManagerDB.editNoteContent(noteObject);
-    await persistFrontmatter(columnId);
   }
   // Record of options
   const updateOptions: Record<string, any> = {};
@@ -249,10 +249,9 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   // Execute action
   if (updateOptions[option]) {
     // Check if file has frontmatter
-    if (currentFrontmatter === undefined) {
+    if (rowFields.frontmatter) {
       // If not, add it
       await addFrontmatter();
-      currentFrontmatter = {};
     }
     // Then execute the action
     await updateOptions[option]();
