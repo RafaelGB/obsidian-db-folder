@@ -177,7 +177,8 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
    *                              INLINE GROUP FUNCTIONS
    *******************************************************************************************/
   async function inlineColumnEdit(): Promise<void> {
-    if (!Object.keys(rowFields.inline).contains(columnId)) {
+    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
+    if (!inlineFieldRegex.test(content)) {
       await inlineAddColumn();
       return;
     }
@@ -185,7 +186,6 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     * group 1 is inline field checking that starts in new line
     * group 2 is the current value of inline field
     */
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
     const noteObject = {
       action: 'replace',
       file: file,
@@ -216,15 +216,15 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   }
 
   async function inlineAddColumn(): Promise<void> {
-    const inlineAddRegex = new RegExp(`(^---\\s+[\\w\\W]+?\\s+---\\s)+(.[\\w\\W]+)`, 'g');
+    const inlineAddRegex = new RegExp(`(^---[\\s\\S]+?---\\n)+(.*)`, 'g');
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: inlineAddRegex,
       newValue: `$1${columnId}:: ${newValue}\n$2`
     };
-    await VaultManagerDB.editNoteContent(noteObject);
     await persistFrontmatter();
+    await VaultManagerDB.editNoteContent(noteObject);
   }
 
   async function inlineRemoveColumn(): Promise<void> {
