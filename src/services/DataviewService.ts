@@ -67,12 +67,7 @@ class DataviewProxy {
             return "";
         }
 
-        if ((literal as any).values !== undefined) {
-
-            literal = (literal as any).values[0];
-            LOGGER.warn(`There is a repeated key into a file with this values: ${(literal as any).values[0]
-                }`);
-        }
+        literal = this.parseDataArray(literal);
 
         const wrapped = this.getDataviewAPI().value.wrapValue(literal)
 
@@ -96,7 +91,18 @@ class DataviewProxy {
         }
         return parsedLiteral;
     }
+    /**
+     * Check if literal is Proxy DataArray, if so, parse it. If not, return same literal
+     * @param literal 
+     * @returns 
+     */
+    parseDataArray(literal: Literal): Literal {
 
+        if ((literal as any).values !== undefined && (literal as any).settings !== undefined) {
+            literal = (literal as any).values
+        }
+        return literal;
+    }
     /**
      * Singleton instance
      * @returns {VaultManager}
