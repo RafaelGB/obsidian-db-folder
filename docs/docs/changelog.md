@@ -1,8 +1,15 @@
+## 1.3.2
+*Published on 2022/05/24*
+### Improved
+- Dataview Proxy DataArray are now supported. Parsed as a Array. That implies that few bugs are fixed relationated to load that kind of data.
+- Order of frontmatter fields is now respected.
+### No longer broken
+- Yaml array frontmatter is edited correctly now. [ISSUE#61](https://github.com/RafaelGB/obsidian-db-folder/issues/61)
 ## 1.3.1
+*Published on 2022/05/23*
 ### No longer broken
 - dataview currently supports multiple key with same name and is considered as an array. Actually this kind of array generates an error in the database plugin. Now are controlled taking just the fist hit. It will be considered as an array with future versions.
 - Add new label to selected cell type is duplicated no more. Introduced with 1.3.0 [ISSUE#64](https://github.com/RafaelGB/obsidian-db-folder/issues/64)
-
 ## 1.3.0
 *Published on 2022/05/23*
 ### Shiny new things
