@@ -94,7 +94,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       propertyIcon = <MarkdownObsidian />;
       break;
     case DataTypes.TASK:
-      // TODO : add a markdown icon
       propertyIcon = <TaskIcon />;
       break;
     default:

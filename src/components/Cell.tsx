@@ -10,6 +10,7 @@ import CalendarPortal from "./portals/CalendarPortal";
 import { TableColumn } from "cdm/FolderModel";
 import CalendarTimePortal from "components/portals/CalendarTimePortal";
 import { renderMarkdown } from "components/markdown/MarkdownRenderer";
+import { DataviewService } from "services/DataviewService";
 
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
@@ -24,6 +25,7 @@ export default function DefaultCell(cellProperties: Cell) {
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
+  const taskRef = useRef<HTMLDivElement>();
   /** state of cell value */
   const [contextValue, setContextValue] = useState({
     value: initialValue,
@@ -38,11 +40,25 @@ export default function DefaultCell(cellProperties: Cell) {
   );
   // set contextValue when cell is loaded
   useEffect(() => {
-    if (!dirtyCell && initialValue !== contextValue.value) {
-      setContextValue({
-        value: initialValue,
-        update: false,
-      });
+    switch (dataType) {
+      case DataTypes.TASK:
+        //TODO - this is a hack. find why is layout effect called twice
+        taskRef.current.innerHTML = "";
+        DataviewService.getDataviewAPI().taskList(
+          contextValue.value,
+          false,
+          taskRef.current,
+          (cellProperties as any).initialState.view,
+          (cellProperties as any).initialState.view.file.path
+        );
+        break;
+      default:
+        if (!dirtyCell && initialValue !== contextValue.value) {
+          setContextValue({
+            value: initialValue,
+            update: false,
+          });
+        }
     }
   }, []);
 
@@ -54,7 +70,6 @@ export default function DefaultCell(cellProperties: Cell) {
 
   useEffect(() => {
     if (!dirtyCell && containerCellRef.current) {
-      renderMarkdown;
       //TODO - this is a hack. find why is layout effect called twice
       containerCellRef.current.innerHTML = "";
       renderMarkdown(
@@ -191,9 +206,8 @@ export default function DefaultCell(cellProperties: Cell) {
         );
 
       case DataTypes.TASK:
-        return (
-          <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
-        );
+        return <div ref={taskRef} className="data-input"></div>;
+
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);

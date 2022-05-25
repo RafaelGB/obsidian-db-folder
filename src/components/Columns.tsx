@@ -45,6 +45,16 @@ export async function obtainMetadataColumns(
     delete yamlColumns[MetadataColumns.MODIFIED];
   }
 
+  if (localSetting.show_metadata_tasks) {
+    // If Modified is not already in the table, add it
+    yamlColumns[MetadataColumns.TASKS] = {
+      ...MetadataDatabaseColumns.TASKS,
+      ...(yamlColumns[MetadataColumns.TASKS] ?? {}),
+    };
+  } else {
+    delete yamlColumns[MetadataColumns.TASKS];
+  }
+
   yamlColumns[MetadataColumns.ADD_COLUMN] = MetadataDatabaseColumns.ADD_COLUMN;
   return yamlColumns;
 }

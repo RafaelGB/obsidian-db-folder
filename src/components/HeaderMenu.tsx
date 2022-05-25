@@ -81,23 +81,28 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /**
    * Array of action buttons asociated to the header
    */
-  const buttons = [
-    {
-      onClick: (e: any) => {
-        setSortBy([{ id: column.id, desc: false }]);
-        setExpanded(false);
+  const buttons = [];
+  if (column.dataType !== DataTypes.TASK) {
+    buttons.push(
+      {
+        onClick: (e: any) => {
+          setSortBy([{ id: column.id, desc: false }]);
+          setExpanded(false);
+        },
+        icon: <ArrowUpIcon />,
+        label: "Sort ascending",
       },
-      icon: <ArrowUpIcon />,
-      label: "Sort ascending",
-    },
-    {
-      onClick: (e: any) => {
-        setSortBy([{ id: column.id, desc: true }]);
-        setExpanded(false);
-      },
-      icon: <ArrowDownIcon />,
-      label: "Sort descending",
-    },
+      {
+        onClick: (e: any) => {
+          setSortBy([{ id: column.id, desc: true }]);
+          setExpanded(false);
+        },
+        icon: <ArrowDownIcon />,
+        label: "Sort descending",
+      }
+    );
+  }
+  buttons.push(
     {
       onClick: (e: any) => {
         dispatch({
@@ -123,8 +128,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <ArrowRightIcon />,
       label: "Insert right",
-    },
-  ];
+    }
+  );
   /**
    * Add extra buttons if column is not a metadata
    */
@@ -212,19 +217,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <CalendarTimeIcon />,
       label: MetadataLabels.CALENDAR_TIME,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.TASK,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TaskIcon />,
-      label: MetadataLabels.TASK,
     },
   ];
 

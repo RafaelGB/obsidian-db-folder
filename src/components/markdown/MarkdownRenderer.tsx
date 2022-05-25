@@ -65,12 +65,6 @@ function handleEmbeds(dom: HTMLDivElement, view: DatabaseView, depth: number) {
       if (MediaExtensions.VIDEO.contains(target.extension)) {
         return handleVideo(el, target, view);
       }
-
-      //   if (target.extension === "md") {
-      //     return await handleMarkdown(el, target, normalizedPath, view, depth);
-      //   }
-
-      //return handleUnknownFile(el, target);
     })
   );
 }

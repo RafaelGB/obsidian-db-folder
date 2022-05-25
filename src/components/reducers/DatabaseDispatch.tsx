@@ -210,20 +210,6 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               $set: parsedData,
             },
           });
-        case DataTypes.TASK:
-          return update(state, {
-            skipReset: { $set: true },
-            columns: {
-              $set: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
-                ...state.columns.slice(typeIndex + 1, state.columns.length),
-              ],
-            },
-            data: {
-              $set: parsedData,
-            },
-          });
         default:
           /**
            * GENERIC update change

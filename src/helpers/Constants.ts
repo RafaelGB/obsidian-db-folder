@@ -35,6 +35,7 @@ export const MetadataColumns = Object.freeze({
   CREATED: `__created__`,
   MODIFIED: `__modified__`,
   ADD_COLUMN: `__add_column__`,
+  TASKS: `__tasks__`
 });
 
 export const MetadataLabels = Object.freeze({
@@ -53,6 +54,7 @@ export const DEFAULT_COLUMN_CONFIG = Object.freeze({
   media_height: 100,
   isInline: false
 });
+
 export const MetadataDatabaseColumns = Object.freeze({
   FILE:
   {
@@ -94,7 +96,17 @@ export const MetadataDatabaseColumns = Object.freeze({
     skipPersist: false,
     csvCandidate: true,
     config: DEFAULT_COLUMN_CONFIG
-  }
+  },
+  TASKS: {
+    key: MetadataColumns.TASKS,
+    input: DataTypes.TASK,
+    label: MetadataLabels.TASK,
+    accessor: MetadataColumns.TASKS,
+    isMetadata: true,
+    skipPersist: false,
+    csvCandidate: true,
+    config: DEFAULT_COLUMN_CONFIG
+  },
 });
 
 export const TableColumnsTemplate: Partial<TableColumn> =

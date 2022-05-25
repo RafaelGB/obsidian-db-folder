@@ -28,6 +28,7 @@ export default class NoteInfo {
         aFile[MetadataColumns.FILE] = `${this.page.file.link.markdown()}`;
         aFile[MetadataColumns.CREATED] = this.page.file.ctime;
         aFile[MetadataColumns.MODIFIED] = this.page.file.mtime;
+        aFile[MetadataColumns.TASKS] = this.page.file.tasks;
 
         /** Optional fields */
         Object.keys(this.page).forEach(property => {

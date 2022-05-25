@@ -26,25 +26,32 @@ export function behavior_settings_section(settingHandlerResponse: ColumnHandlerR
     return handlers[0].handle(settingHandlerResponse);
 }
 
+/**
+ * Every column type has a different behavior section
+ * @param settingHandlerResponse 
+ * @returns 
+ */
 export function particular_settings_section(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
-    const particular_section = settingHandlerResponse.containerEl.createDiv("column-section-container-particular");
-    // title of the section
-    add_setting_header(particular_section, `Particular properties of "${settingHandlerResponse.column.dataType
-        }" column type`, 'h3');
-    /**
-     * Obtain all classes than extends from AbstractHandler
-     */
     const handlers = [
         ...addParticularInputSettings(settingHandlerResponse.column.dataType)
     ]
-    let i = 1;
-    while (i < handlers.length) {
-        handlers[i - 1].setNext(handlers[i]);
-        i++;
-    }
+    if (handlers.length > 0) {
+        const particular_section = settingHandlerResponse.containerEl.createDiv("column-section-container-particular");
+        // title of the section
+        add_setting_header(particular_section, `Particular properties of "${settingHandlerResponse.column.dataType
+            }" column type`, 'h3');
 
-    settingHandlerResponse.containerEl = particular_section;
-    return handlers[0].handle(settingHandlerResponse);
+        let i = 1;
+        while (i < handlers.length) {
+            handlers[i - 1].setNext(handlers[i]);
+            i++;
+        }
+
+        settingHandlerResponse.containerEl = particular_section;
+        return handlers[0].handle(settingHandlerResponse);
+    } else {
+        return settingHandlerResponse;
+    }
 }
 
 function addParticularInputSettings(dataType: string): ColumnHandler[] {
