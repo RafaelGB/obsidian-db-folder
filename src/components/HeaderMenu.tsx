@@ -23,6 +23,7 @@ import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import TaskIcon from "components/img/TaskIcon";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -80,23 +81,28 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /**
    * Array of action buttons asociated to the header
    */
-  const buttons = [
-    {
-      onClick: (e: any) => {
-        setSortBy([{ id: column.id, desc: false }]);
-        setExpanded(false);
+  const buttons = [];
+  if (column.dataType !== DataTypes.TASK) {
+    buttons.push(
+      {
+        onClick: (e: any) => {
+          setSortBy([{ id: column.id, desc: false }]);
+          setExpanded(false);
+        },
+        icon: <ArrowUpIcon />,
+        label: "Sort ascending",
       },
-      icon: <ArrowUpIcon />,
-      label: "Sort ascending",
-    },
-    {
-      onClick: (e: any) => {
-        setSortBy([{ id: column.id, desc: true }]);
-        setExpanded(false);
-      },
-      icon: <ArrowDownIcon />,
-      label: "Sort descending",
-    },
+      {
+        onClick: (e: any) => {
+          setSortBy([{ id: column.id, desc: true }]);
+          setExpanded(false);
+        },
+        icon: <ArrowDownIcon />,
+        label: "Sort descending",
+      }
+    );
+  }
+  buttons.push(
     {
       onClick: (e: any) => {
         dispatch({
@@ -122,8 +128,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <ArrowRightIcon />,
       label: "Insert right",
-    },
-  ];
+    }
+  );
   /**
    * Add extra buttons if column is not a metadata
    */

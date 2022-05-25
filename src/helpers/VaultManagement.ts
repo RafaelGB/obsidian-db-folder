@@ -82,6 +82,7 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
   return rows;
 }
+
 export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
   await updateRowFile(file, columnId, newValue, state, option).catch(e => {
     LOGGER.error(`updateRowFileProxy.  Error:${e}`);

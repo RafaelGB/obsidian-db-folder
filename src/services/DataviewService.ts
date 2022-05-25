@@ -70,7 +70,8 @@ class DataviewProxy {
         literal = this.parseDataArray(literal);
 
         const wrapped = this.getDataviewAPI().value.wrapValue(literal)
-
+        LOGGER.debug(`=>parseLiteral: type ${wrapped
+            .type} to ${dataTypeDst}`);
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case DataTypes.CALENDAR:
@@ -80,15 +81,19 @@ class DataviewProxy {
             case DataTypes.NUMBER:
                 parsedLiteral = wrapped.type === 'number' ? literal : Number(literal);
                 break;
+            case DataTypes.TASK:
+                // Do nothing
+                break;
             default:
-
                 if (DateTime.isDateTime(wrapped.value)) {
+                    LOGGER.debug("adapting DateTime to string...");
                     // Values of dataview parse to md friendly strings
                     parsedLiteral = wrapped.value.toFormat("yyyy-MM-dd");
                 } else {
                     parsedLiteral = this.getDataviewAPI().value.toString(literal);
                 }
         }
+        LOGGER.debug(`<=parseLiteral`);
         return parsedLiteral;
     }
     /**

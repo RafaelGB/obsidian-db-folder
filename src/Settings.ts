@@ -29,6 +29,7 @@ export interface LocalSettings {
   remove_field_when_delete_column: boolean;
   show_metadata_created: boolean;
   show_metadata_modified: boolean;
+  show_metadata_tasks: boolean;
 }
 
 export interface DatabaseSettings {
@@ -52,6 +53,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     group_folder_column: '',
     show_metadata_created: false,
     show_metadata_modified: false,
+    show_metadata_tasks: false
   }
 };
 
