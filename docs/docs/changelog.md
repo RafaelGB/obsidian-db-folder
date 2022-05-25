@@ -4,7 +4,7 @@
 - New metadata column: File tasks! You can see the tasks that are associated with each file and interact with them. Powered with tasklist render of dataview. [ISSUE#54](https://github.com/RafaelGB/obsidian-db-folder/issues/54)
 
 ### Improved
-- Extra margin added to the botton and top of every cell is removed. Markdown obsidian renderer add html tagging that affected the margin.[ISSUE#71](https://github.com/RafaelGB/obsidian-db-folder/issues/71)
+- Extra margin added to the botton and top of every cell is removed. Markdown obsidian renderer add html tagging that affected the margin.[ISSUE#71](https://github.com/RafaelGB/obsidian-db-folder/issues/71) [artisticat1](https://github.com/artisticat1)
 
 ### No longer broken
 - Column settings that has a type without behavior section produce a console error no more and section tittle is not shown.
