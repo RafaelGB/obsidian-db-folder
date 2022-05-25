@@ -24,6 +24,7 @@ export const DataTypes = Object.freeze({
   MARKDOWN: 'markdown',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
+  TASK: 'task',
   NEW_COLUMN: 'new_column'
 });
 
@@ -43,6 +44,7 @@ export const MetadataLabels = Object.freeze({
   MODIFIED: 'Modified',
   CALENDAR: 'Date',
   CALENDAR_TIME: 'Datetime',
+  TASK: 'Task',
 });
 
 export const DEFAULT_COLUMN_CONFIG = Object.freeze({

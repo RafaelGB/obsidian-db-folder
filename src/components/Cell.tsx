@@ -190,6 +190,10 @@ export default function DefaultCell(cellProperties: Cell) {
           </CellContext.Provider>
         );
 
+      case DataTypes.TASK:
+        return (
+          <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
+        );
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);

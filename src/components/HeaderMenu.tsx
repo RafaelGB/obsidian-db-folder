@@ -23,6 +23,7 @@ import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import TaskIcon from "components/img/TaskIcon";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -211,6 +212,19 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <CalendarTimeIcon />,
       label: MetadataLabels.CALENDAR_TIME,
+    },
+    {
+      onClick: (e: any) => {
+        dispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: column.id,
+          dataType: DataTypes.TASK,
+        });
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <TaskIcon />,
+      label: MetadataLabels.TASK,
     },
   ];
 
