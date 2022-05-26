@@ -32,6 +32,9 @@ export function CheckboxCell(props: CheckboxProps) {
     setChecked(event.target.checked);
     setContextValue({ value: event.target.checked ? 1 : 0, update: true });
   };
-  console.log(`${contextValue.value}`);
-  return <input type="checkbox" checked={checked} onChange={handleChange} />;
+  return (
+    <div className="data-input-checkbox">
+      <input type="checkbox" checked={checked} onChange={handleChange} />
+    </div>
+  );
 }
