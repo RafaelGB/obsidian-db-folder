@@ -52,6 +52,8 @@ export interface BaseColumn {
     config: ConfigColumn;
 }
 export interface TableColumn extends BaseColumn {
+    isSortedDesc: boolean;
+    isSorted: boolean;
     id: string;
     minWidth?: number;
     width?: number;

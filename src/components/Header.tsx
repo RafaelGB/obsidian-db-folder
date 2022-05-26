@@ -4,6 +4,8 @@ import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
 import PlusIcon from "components/img/Plus";
+import ArrowDown from "components/img/ArrowDown";
+import ArrowUp from "components/img/ArrowUp";
 import HeaderMenu from "components/HeaderMenu";
 import CalendarIcon from "components/img/CalendarIcon";
 import MarkdownObsidian from "components/img/Markdown";
@@ -134,6 +136,18 @@ export default function Header(headerProps: DatabaseHeaderProps) {
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
         {headerProps.column.config.isInline && <span>*</span>}
+        {/* Add a sort direction indicator */}
+        <span className="svg-icon svg-gray icon-margin">
+          {headerProps.column.isSorted ? (
+            headerProps.column.isSortedDesc ? (
+              <ArrowDown />
+            ) : (
+              <ArrowUp />
+            )
+          ) : (
+            ""
+          )}
+        </span>
       </div>
       {domReady
         ? ReactDOM.createPortal(
