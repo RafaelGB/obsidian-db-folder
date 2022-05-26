@@ -94,6 +94,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       propertyIcon = <MarkdownObsidian />;
       break;
     case DataTypes.TASK:
+    case DataTypes.CHECKBOX:
       propertyIcon = <TaskIcon />;
       break;
     default:

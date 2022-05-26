@@ -176,7 +176,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ...row,
         [action.columnId]: DataviewService.parseLiteral(
           row[action.columnId],
-          action.TEXT // Destination type to parse
+          action.dataType // Destination type to parse
         ),
       }));
       // Update state
@@ -219,6 +219,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
            * - NUMBER
            * - CALENDAR
            * - CALENDAR_TIME
+           * - CHECKBOX
            */
           return update(state, {
             skipReset: { $set: true },

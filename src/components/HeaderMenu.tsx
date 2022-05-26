@@ -218,6 +218,20 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       icon: <CalendarTimeIcon />,
       label: MetadataLabels.CALENDAR_TIME,
     },
+    ,
+    {
+      onClick: (e: any) => {
+        dispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: column.id,
+          dataType: DataTypes.CHECKBOX,
+        });
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <TaskIcon />,
+      label: DataTypes.CHECKBOX,
+    },
   ];
 
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {

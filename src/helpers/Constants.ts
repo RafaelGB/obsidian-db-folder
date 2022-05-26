@@ -25,6 +25,7 @@ export const DataTypes = Object.freeze({
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
   TASK: 'task',
+  CHECKBOX: 'checkbox',
   NEW_COLUMN: 'new_column'
 });
 

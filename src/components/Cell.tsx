@@ -7,10 +7,11 @@ import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
 import { c } from "helpers/StylesHelper";
 import CalendarPortal from "./portals/CalendarPortal";
-import { TableColumn } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 import CalendarTimePortal from "components/portals/CalendarTimePortal";
 import { renderMarkdown } from "components/markdown/MarkdownRenderer";
 import { DataviewService } from "services/DataviewService";
+import { CheckboxCell } from "./Checkbox";
 
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
@@ -135,7 +136,7 @@ export default function DefaultCell(cellProperties: Cell) {
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             onBlur={handlerEditableOnBlur}
-            className={"data-input"}
+            className="data-input"
             ref={editableMdRef}
           />
         ) : (
@@ -198,7 +199,9 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CalendarPortal
-              intialState={(cellProperties as any).initialState}
+              intialState={
+                (cellProperties as any).initialState as unknown as TableDataType
+              }
               column={cellProperties.column as unknown as TableColumn}
               cellProperties={cellProperties}
             />
@@ -208,6 +211,18 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.TASK:
         return <div ref={taskRef} className="data-input"></div>;
 
+      case DataTypes.CHECKBOX:
+        return (
+          <CellContext.Provider value={{ contextValue, setContextValue }}>
+            <CheckboxCell
+              intialState={
+                (cellProperties as any).initialState as unknown as TableDataType
+              }
+              column={cellProperties.column as unknown as TableColumn}
+              cellProperties={cellProperties}
+            />
+          </CellContext.Provider>
+        );
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);

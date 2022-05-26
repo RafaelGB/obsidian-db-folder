@@ -91,6 +91,7 @@
   background-color: var(--background-primary);
   box-sizing: border-box;
   flex: 1 1 auto;
+  text-align: justify;
 }
 
 .data-input *{
