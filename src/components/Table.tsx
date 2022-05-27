@@ -92,6 +92,7 @@ export function Table(initialState: TableDataType) {
     dataDispatch,
     sortTypes,
   };
+  propsUseTable.initialState = initialState.initialState;
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

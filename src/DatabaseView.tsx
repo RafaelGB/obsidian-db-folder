@@ -1,5 +1,5 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { TableDataType } from "cdm/FolderModel";
+import { InitialState, TableDataType } from "cdm/FolderModel";
 import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
@@ -7,6 +7,7 @@ import {
 import { createDatabase } from "components/index/Database";
 import { DbFolderError } from "errors/AbstractError";
 import { DatabaseCore, DataTypes, StyleClasses } from "helpers/Constants";
+import obtainInitialState from "helpers/InitialState";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import DBFolderPlugin from "main";
 
@@ -133,6 +134,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         columns,
         this.diskConfig.yaml.filters
       );
+      const initialState: InitialState = obtainInitialState(columns, rows);
       // Define table properties
       const tableProps: TableDataType = {
         columns: columns,
@@ -141,6 +143,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         skipReset: false,
         view: this,
         stateManager: this.plugin.getStateManager(this.file),
+        initialState: initialState,
       };
       // Render database
       const table = createDatabase(tableProps);

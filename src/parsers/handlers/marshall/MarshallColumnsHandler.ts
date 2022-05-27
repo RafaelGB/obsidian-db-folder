@@ -57,19 +57,19 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     column.config = DEFAULT_COLUMN_CONFIG;
                     yaml.columns[key] = column;
                 } else {
-                    if (!column.config.enable_media_view) {
+                    if (column.config.enable_media_view === undefined) {
                         column.config.enable_media_view = DEFAULT_COLUMN_CONFIG.enable_media_view;
                         yaml.columns[key] = column;
                     }
-                    if (!column.config.media_width) {
+                    if (column.config.media_width === undefined) {
                         column.config.media_width = DEFAULT_COLUMN_CONFIG.media_width;
                         yaml.columns[key] = column;
                     }
-                    if (!column.config.media_height) {
+                    if (column.config.media_height === undefined) {
                         column.config.media_height = DEFAULT_COLUMN_CONFIG.media_height;
                         yaml.columns[key] = column;
                     }
-                    if (!column.config.isInline) {
+                    if (column.config.isInline === undefined) {
                         column.config.isInline = DEFAULT_COLUMN_CONFIG.isInline;
                         yaml.columns[key] = column;
                     }

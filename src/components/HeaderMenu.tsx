@@ -21,9 +21,11 @@ import { Column } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
+import { generateSortedColumns } from "components/behavior/SortingColumns";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import TaskIcon from "components/img/TaskIcon";
+import CrossIcon from "components/img/CrossIcon";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -86,19 +88,37 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     buttons.push(
       {
         onClick: (e: any) => {
-          setSortBy([{ id: column.id, desc: false }]);
+          const sortArray = generateSortedColumns(initialState, column, false);
+          setSortBy(sortArray);
           setExpanded(false);
         },
-        icon: <ArrowUpIcon />,
-        label: "Sort ascending",
+        icon:
+          column.isSorted && !column.isSortedDesc ? (
+            <CrossIcon />
+          ) : (
+            <ArrowUpIcon />
+          ),
+        label:
+          column.isSorted && !column.isSortedDesc
+            ? "Remove ascending sort"
+            : "Sort ascending",
       },
       {
         onClick: (e: any) => {
-          setSortBy([{ id: column.id, desc: true }]);
+          const sortArray = generateSortedColumns(initialState, column, true);
+          setSortBy(sortArray);
           setExpanded(false);
         },
-        icon: <ArrowDownIcon />,
-        label: "Sort descending",
+        icon:
+          column.isSorted && column.isSortedDesc ? (
+            <CrossIcon />
+          ) : (
+            <ArrowDownIcon />
+          ),
+        label:
+          column.isSorted && column.isSortedDesc
+            ? "Remove descending sort"
+            : "Sort descending",
       }
     );
   }
