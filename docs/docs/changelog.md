@@ -1,6 +1,18 @@
-## 1.4.1
+## 1.5.0
+*Published on 2022/05/27*
+### Shiny new things
+- To take advantage of the task column type architecture, Checkbox column type is added! Will be a 1 is checked, 0 is unchecked. (allows sorting & better performance)
+- Improves to sorting columns: [ISSUE#67](https://github.com/RafaelGB/obsidian-db-folder/issues/67)
+  - Sorting is persisted now.
+  - Multi-column sorting is now possible.
+  - You can remove sorting by clicking on the same header option again.
+
 ### Visual
 - Text column style now justify the content of cells
+- Sortable columns now have a sort icon [ISSUE#65](https://github.com/RafaelGB/obsidian-db-folder/issues/65)
+
+### No longer broken
+- Enable media links of text column type config could be edited correctly again
 ## 1.4.0
 *Published on 2022/05/25*
 ### Shiny new things
