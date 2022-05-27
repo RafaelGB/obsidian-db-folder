@@ -17,6 +17,7 @@ import {
   DatabaseColumn,
   OptionSelect,
   RowDatabaseFields,
+  SortedType,
 } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
@@ -176,7 +177,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ...row,
         [action.columnId]: DataviewService.parseLiteral(
           row[action.columnId],
-          action.TEXT // Destination type to parse
+          action.dataType // Destination type to parse
         ),
       }));
       // Update state
@@ -219,6 +220,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
            * - NUMBER
            * - CALENDAR
            * - CALENDAR_TIME
+           * - CHECKBOX
            */
           return update(state, {
             skipReset: { $set: true },
@@ -426,6 +428,26 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
 
+    case ActionTypes.SET_SORT_BY:
+      const sortArray: SortedType[] = action.sortArray;
+      const modifiedColumns: TableColumn[] = state.columns.map((column) => {
+        const sortedColumn = sortArray.find((sort) => sort.id === column.id);
+        if (sortedColumn) {
+          column.isSorted = true;
+          column.isSortedDesc = sortedColumn.desc;
+        } else {
+          column.isSorted = false;
+        }
+        return column;
+      });
+
+      return update(state, {
+        columns: {
+          $set: modifiedColumns,
+        },
+      });
+
+    // case ActionTypes.MODIFY_COLUMN_SORTING:
     case ActionTypes.MODIFY_COLUMN_CONFIG:
       // Altern between inline & frontmatter mode
       state.view.diskConfig.updateColumnProperties(

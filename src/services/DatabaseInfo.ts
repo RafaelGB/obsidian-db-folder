@@ -138,6 +138,7 @@ export default class DatabaseInfo {
         this.yaml.columns[columnId] = colToUpdate;
         await this.saveOnDisk();
     }
+
     async updateYaml<K extends keyof DatabaseYaml>(key: K, value: DatabaseYaml[K]): Promise<void> {
         this.yaml[key] = value;
         await this.saveOnDisk();

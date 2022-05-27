@@ -79,6 +79,7 @@ class DataviewProxy {
                 parsedLiteral = this.parseToCalendar(wrapped);
                 break;
             case DataTypes.NUMBER:
+            case DataTypes.CHECKBOX:
                 parsedLiteral = wrapped.type === 'number' ? literal : Number(literal);
                 break;
             case DataTypes.TASK:

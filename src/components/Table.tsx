@@ -26,7 +26,7 @@ import { HeaderContext } from "components/contexts/HeaderContext";
 import { getDndListStyle, getDndItemStyle } from "./styles/DnDStyle";
 
 const defaultColumn = {
-  minWidth: 50,
+  minWidth: 25,
   maxWidth: 400,
   Cell: DefaultCell,
   Header: Header,
@@ -92,6 +92,7 @@ export function Table(initialState: TableDataType) {
     dataDispatch,
     sortTypes,
   };
+  propsUseTable.initialState = initialState.initialState;
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

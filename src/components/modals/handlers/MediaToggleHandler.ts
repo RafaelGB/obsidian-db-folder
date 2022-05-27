@@ -11,7 +11,7 @@ export class MediaToggleHandler extends AbstractColumnHandler {
             // Check context to define correct promise
             // Persist value
             await view.diskConfig.updateColumnConfig(column.key, {
-                media_togle_promise: value
+                enable_media_view: value
             });
             // Force refresh of settings
             columnSettingsManager.reset(columnHandlerResponse);

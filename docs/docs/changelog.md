@@ -1,3 +1,6 @@
+## 1.4.1
+### Visual
+- Text column style now justify the content of cells
 ## 1.4.0
 *Published on 2022/05/25*
 ### Shiny new things

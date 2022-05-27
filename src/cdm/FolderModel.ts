@@ -52,6 +52,8 @@ export interface BaseColumn {
     config: ConfigColumn;
 }
 export interface TableColumn extends BaseColumn {
+    isSortedDesc?: boolean;
+    isSorted?: boolean;
     id: string;
     minWidth?: number;
     width?: number;
@@ -68,6 +70,14 @@ export type RowDataType = {
     [key: string]: Literal | NoteInfo
 }
 
+export type SortByElement = {
+    id: string;
+    desc: boolean;
+}
+export type InitialState = {
+    sortBy?: SortByElement[],
+}
+
 export type TableDataType = {
     columns: TableColumn[],
     shadowColumns: TableColumn[],
@@ -75,7 +85,8 @@ export type TableDataType = {
     skipReset: boolean,
     view: DatabaseView,
     stateManager: StateManager,
-    dispatch?: Dispatch<any>
+    dispatch?: Dispatch<any>,
+    initialState?: InitialState,
 }
 export interface DatabaseHeaderProps {
     columns: any,
