@@ -14,6 +14,7 @@ export const ActionTypes = Object.freeze({
   ENABLE_RESET: 'enable_reset',
   SETTINGS_COLUMN: 'settings_column',
   MODIFY_COLUMN_CONFIG: 'modify_column_config',
+  SET_SORT_BY: 'set_sort_by',
 });
 
 /** Flavours of data types */

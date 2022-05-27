@@ -17,6 +17,7 @@ import {
   DatabaseColumn,
   OptionSelect,
   RowDatabaseFields,
+  SortedType,
 } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
@@ -426,6 +427,23 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
      */
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
+
+    case ActionTypes.SET_SORT_BY:
+      const sortArray: SortedType[] = action.sortArray;
+      const modifiedColumns: TableColumn[] = state.columns.map((column) => {
+        const sortedColumn = sortArray.find((sort) => sort.id === column.id);
+        if (sortedColumn) {
+          column.isSorted = true;
+          column.isSortedDesc = sortedColumn.desc;
+        }
+        return column;
+      });
+
+      return update(state, {
+        columns: {
+          $set: modifiedColumns,
+        },
+      });
 
     // case ActionTypes.MODIFY_COLUMN_SORTING:
     case ActionTypes.MODIFY_COLUMN_CONFIG:

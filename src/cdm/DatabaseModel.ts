@@ -47,3 +47,8 @@ export type CalendarProps = {
     column: TableColumn;
     cellProperties: Cell;
 };
+
+export type SortedType = {
+    id: string;
+    desc: boolean;
+}
