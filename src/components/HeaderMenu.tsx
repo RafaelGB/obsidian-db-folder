@@ -111,6 +111,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       {
         onClick: (e: any) => {
           const sortArray = generateSortedColumns(initialState, column, true);
+          // Update state
+          dispatch({
+            type: ActionTypes.SET_SORT_BY,
+            sortArray: sortArray,
+          });
           setSortBy(sortArray);
           setExpanded(false);
         },

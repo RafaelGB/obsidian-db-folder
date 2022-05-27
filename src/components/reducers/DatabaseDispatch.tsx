@@ -435,6 +435,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         if (sortedColumn) {
           column.isSorted = true;
           column.isSortedDesc = sortedColumn.desc;
+        } else {
+          column.isSorted = false;
         }
         return column;
       });
