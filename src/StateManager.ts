@@ -46,6 +46,8 @@ export default class StateManager {
   }
 
   async forceRefresh() {
-    LOGGER.warn("TODO forceRefresh");
+    this.viewSet.forEach((view) => {
+      view.reloadDatabase();
+    });
   }
 }
