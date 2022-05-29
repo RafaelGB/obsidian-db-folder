@@ -1,4 +1,7 @@
 ## 1.5.1
+*Published on 2022/05/29*
+### Shiny new things
+- Preview mode now renders a dataview table insead of markdown content! [ISSUE#41](https://github.com/RafaelGB/obsidian-db-folder/issues/41)
 ### Visual
 - Support for darkmode to checkbox column
 ### No longer broken
