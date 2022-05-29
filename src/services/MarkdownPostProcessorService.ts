@@ -91,7 +91,6 @@ export class PreviewDatabaseModeService {
 
             internalEmbedDiv.empty();
             const previewTimeoutContainer = await this.renderPreview(internalEmbedDiv, ctx);
-            console.log("internalEmbedDiv");
             //timer to avoid the image flickering when the user is typing
             let timer: NodeJS.Timeout = null;
             const observer = new MutationObserver((m) => {
@@ -140,7 +139,9 @@ export class PreviewDatabaseModeService {
             columns,
             databaseDisk.yaml.filters
         );
-        const dataviewCols: string[] = columns.map((c) => c.key);
+        const dataviewCols: string[] = columns
+            .filter((col) => !col.skipPersist)
+            .map((c) => c.key);
         const dataviewMatrixRow: any[][] = rows.map((r) =>
             dataviewCols.map((c) => r[c])
         );

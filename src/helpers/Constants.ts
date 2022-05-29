@@ -105,8 +105,8 @@ export const MetadataDatabaseColumns = Object.freeze({
     label: MetadataLabels.TASK,
     accessor: MetadataColumns.TASKS,
     isMetadata: true,
-    skipPersist: false,
-    csvCandidate: true,
+    skipPersist: true,
+    csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
   },
 });
