@@ -1,3 +1,11 @@
+## 1.5.1
+*Published on 2022/05/29*
+### Shiny new things
+- Preview mode now renders a dataview table insead of markdown content! [ISSUE#41](https://github.com/RafaelGB/obsidian-db-folder/issues/41)
+### Visual
+- Support for darkmode to checkbox column
+### No longer broken
+- When new row is added and metadata column of created and modified is enabled, the metadata column is automatically filled with the current date and time instead of crashing.
 ## 1.5.0
 *Published on 2022/05/27*
 ### Shiny new things

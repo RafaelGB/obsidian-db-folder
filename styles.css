@@ -143,6 +143,10 @@
   background-color: CanvasText;
 }
 
+.data-input-checkbox input[type="checkbox"]:checked{
+  background-color: var(--background-modifier-border);
+}
+
 .data-input-checkbox input[type="checkbox"]:checked::before {
   transform: scale(1);
 }

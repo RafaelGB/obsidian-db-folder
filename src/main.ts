@@ -33,6 +33,7 @@ import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
 import { DatabaseCore, DatabaseFrontmatterOptions } from 'helpers/Constants';
+import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -40,6 +41,11 @@ export default class DBFolderPlugin extends Plugin {
 
 	/** External-facing plugin API */
 	public api: DbfAPIInterface;
+
+	public hover: { linkText: string; sourcePath: string } = {
+		linkText: null,
+		sourcePath: null,
+	};
 
 	databaseFileModes: Record<string, string> = {};
 
@@ -58,10 +64,10 @@ export default class DBFolderPlugin extends Plugin {
 				this.settings = newSettings;
 				await this.saveSettings();
 
-				// Force a complete re-render when settings change
-				//this.stateManagers.forEach((stateManager) => {
-				//stateManager.forceRefresh();
-				//});
+				//Force a complete re-render when settings change
+				this.stateManagers.forEach((stateManager) => {
+					stateManager.forceRefresh();
+				});
 			},
 		})
 		);
@@ -69,6 +75,7 @@ export default class DBFolderPlugin extends Plugin {
 		this.registerView(DatabaseCore.FRONTMATTER_KEY, (leaf) => new DatabaseView(leaf, this));
 		this.registerEvents();
 		this.registerMonkeyPatches();
+		this.addMarkdownPostProcessor();
 		this.api = new DBFolderAPI(this.app, this.settings);
 	}
 
@@ -233,6 +240,21 @@ export default class DBFolderPlugin extends Plugin {
 				}
 			})
 		);
+	}
+
+	/**
+	   * Displays a transcluded .excalidraw image in markdown preview mode
+	   */
+	private addMarkdownPostProcessor() {
+		const previewMode = PreviewDatabaseModeService.getInstance(this);
+		this.registerMarkdownPostProcessor(previewMode.markdownPostProcessor);
+
+		// internal-link quick preview
+		this.registerEvent(this.app.workspace.on("quick-preview", previewMode.hoverEvent));
+
+		//monitoring for div.popover.hover-popover.file-embed.is-loaded to be added to the DOM tree
+		// this.observer = observer;
+		// this.observer.observe(document, { childList: true, subtree: true });
 	}
 
 	/**
