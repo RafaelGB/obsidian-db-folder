@@ -6,9 +6,10 @@ import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 import { columns_settings_section } from "settings/ColumnsSection";
 import { folder_settings_section } from "settings/FolderSection";
-import { DEFAULT_COLUMN_CONFIG, StyleClasses } from "helpers/Constants";
+import { DEFAULT_COLUMN_CONFIG, SourceDataTypes, StyleClasses } from "helpers/Constants";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { media_settings_section } from "settings/MediaSection";
+import { source_settings_section } from "settings/SourceSection";
 
 export interface MediaSettings {
   enable_media_view: boolean;
@@ -30,6 +31,8 @@ export interface LocalSettings {
   show_metadata_created: boolean;
   show_metadata_modified: boolean;
   show_metadata_tasks: boolean;
+  source_data: string;
+  source_form_result: string;
 }
 
 export interface DatabaseSettings {
@@ -53,7 +56,9 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     group_folder_column: '',
     show_metadata_created: false,
     show_metadata_modified: false,
-    show_metadata_tasks: false
+    show_metadata_tasks: false,
+    source_data: SourceDataTypes.CURRENT_FOLDER,
+    source_form_result: 'root'
   }
 };
 
@@ -118,6 +123,8 @@ export class SettingsManager {
 
   constructSettingBody(settingHandlerResponse: SettingHandlerResponse) {
     if (settingHandlerResponse.local) {
+      /** Source section */
+      source_settings_section(settingHandlerResponse);
       /** Folder section */
       folder_settings_section(settingHandlerResponse);
     }

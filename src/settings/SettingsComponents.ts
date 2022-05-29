@@ -1,4 +1,3 @@
-import { OperatorFilter } from "helpers/Constants";
 import { ButtonComponent, Setting } from "obsidian";
 
 /**
