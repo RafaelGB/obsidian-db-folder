@@ -4,11 +4,13 @@ import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, UpdateRowOptions } from "helpers/Constants";
+import { DatabaseCore, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
 import obtainRowDatabaseFields from 'parsers/FileToRowDatabaseFields';
 import { parseFrontmatterFieldsToString } from 'parsers/RowDatabaseFieldsToFile';
 import { DataviewService } from 'services/DataviewService';
-import { FilterCondition } from 'cdm/DatabaseModel';
+import { DatabaseYaml } from 'cdm/DatabaseModel';
+import { Literal } from 'obsidian-dataview/lib/data-model/value';
+import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -62,16 +64,16 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], filters: FilterCondition[]): Promise<Array<RowDataType>> {
+export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], dbYaml: DatabaseYaml): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
   let id = 0;
 
-  let folderFiles = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
+  let folderFiles = sourceDataviewPages(folderPath, dbYaml)
     .where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
-  if (filters) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(filters, p));
+  if (dbYaml.filters) {
+    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
   }
 
   folderFiles.map(async (page) => {
@@ -83,6 +85,14 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   return rows;
 }
 
+export function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYaml): DataArray<Record<string, Literal>> {
+  switch (dbYaml.config.source_data) {
+    case SourceDataTypes.TAG:
+      return DataviewService.getDataviewAPI().pages(`#${dbYaml.config.source_form_result}`);
+    default:
+      return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
+  }
+}
 export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
   await updateRowFile(file, columnId, newValue, state, option).catch(e => {
     LOGGER.error(`updateRowFileProxy.  Error:${e}`);

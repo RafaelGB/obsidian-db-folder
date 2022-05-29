@@ -137,7 +137,7 @@ export class PreviewDatabaseModeService {
         const rows = await adapterTFilesToRows(
             dbFile.parent.path,
             columns,
-            databaseDisk.yaml.filters
+            databaseDisk.yaml
         );
         const dataviewCols: string[] = columns
             .filter((col) => !col.skipPersist)
