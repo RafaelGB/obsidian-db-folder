@@ -23,6 +23,8 @@ import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 import { RowSelectOption } from "cdm/RowSelectModel";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { DateTime } from "luxon";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(
@@ -81,10 +83,13 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.filename,
         rowRecord
       );
-
+      const metadata: Record<string, Literal> = {};
+      metadata[MetadataColumns.CREATED] = DateTime.now();
+      metadata[MetadataColumns.MODIFIED] = DateTime.now();
       const row: RowDataType = {
         ...rowRecord.frontmatter,
         ...rowRecord.inline,
+        ...metadata,
         id: state.data.length + 1,
         note: new NoteInfo(
           {

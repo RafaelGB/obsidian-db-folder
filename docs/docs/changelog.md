@@ -1,3 +1,8 @@
+## 1.5.1
+### Visual
+- Support for darkmode to checkbox column
+### No longer broken
+- When new row is added and metadata column of created and modified is enabled, the metadata column is automatically filled with the current date and time instead of crashing.
 ## 1.5.0
 *Published on 2022/05/27*
 ### Shiny new things

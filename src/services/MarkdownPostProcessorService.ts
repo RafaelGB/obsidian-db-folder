@@ -1,8 +1,8 @@
 import { DatabaseCore } from "helpers/Constants";
 import DBFolderPlugin from "main";
 import { MarkdownPostProcessorContext } from "obsidian";
-
-
+import DatabaseInfo from "services/DatabaseInfo";
+import { VaultManagerDB } from "services/FileManagerService";
 
 /**
  * Keep info about a note and offer methods to manipulate it
@@ -71,8 +71,14 @@ export class PreviewDatabaseModeService {
         }
         el.empty();
 
+        const dbFile = VaultManagerDB.obtainTfileFromFilePath(ctx.sourcePath);
+        const databaseDisk = new DatabaseInfo(dbFile);
+        await databaseDisk.initDatabaseconfigYaml(
+            this.plugin.settings.local_settings
+        );
         const div = createDiv();
-        div.textContent = "Random Text";
+        div.textContent = `${databaseDisk
+            .yaml.description}`;
         el.appendChild(div);
         setTimeout(async () => {
             let internalEmbedDiv: HTMLElement = div;
