@@ -22,9 +22,9 @@ export class SourceFormHandler extends AbstractSettingsHandler {
 
                 add_dropdown(
                     containerEl,
-                    'Select a tag',
-                    'Select tag to get data from',
-                    `#${view.diskConfig.yaml.config.source_form_result}`,
+                    'Select a file',
+                    'Select file from vault to be used as source of data.',
+                    `${view.diskConfig.yaml.config.source_form_result}`,
                     filePaths,
                     source_form_promise
                 );
