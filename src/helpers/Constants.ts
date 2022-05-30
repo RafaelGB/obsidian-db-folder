@@ -175,6 +175,13 @@ export const StyleVariables = Object.freeze({
   TEXT_NORMAL: 'var(--text-normal)',
 });
 
+export const SourceDataTypes = Object.freeze({
+  CURRENT_FOLDER: 'current_folder',
+  TAG: 'tag',
+  OUTGOING_LINK: 'outgoing_link',
+  INCOMING_LINK: 'incoming_link',
+});
+
 export const WidthVariables = Object.freeze({
   ICON_SPACING: 17,
   MAGIC_SPACING: 10

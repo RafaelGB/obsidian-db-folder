@@ -1,3 +1,12 @@
+## 1.6.0
+### Shiny new things
+- Another kind of data sources of dataview are added(current folder will be avaliable too, of course) [ISSUE#59](https://github.com/RafaelGB/obsidian-db-folder/issues/59):
+  - TAGs: select a tag from a list of all tags
+  - INCOMING_LINKS: select a file from a list of all files
+  - OUTGOING_LINKS: select a file from a list of all files
+
+### No longer broken
+- Filters of type "contains", "starts with" & "ends with" are fixed. A bug appears when original data was empty. [ISSUE#72](https://github.com/RafaelGB/obsidian-db-folder/issues/72)
 ## 1.5.1
 *Published on 2022/05/29*
 ### Shiny new things

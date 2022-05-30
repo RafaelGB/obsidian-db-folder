@@ -1,4 +1,5 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
+import { SourceDataTypes } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class MarshallConfigHandler extends AbstractYamlHandler {
@@ -14,7 +15,7 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
                 yaml.config.enable_show_state = false;
             }
 
-            // if group_folder_column is not defined, load default
+            // if group_folder_column is not defined, load empty (optional)
             if (checkNullable(yaml.config.group_folder_column)) {
                 yaml.config.group_folder_column = '';
             }
@@ -35,6 +36,17 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
             if (checkNullable(yaml.config.show_metadata_modified)) {
                 this.addError(`There was not show_metadata_modified key in yaml. Default will be loaded`);
                 yaml.config.show_metadata_modified = false;
+            }
+
+            // if source_data is not defined, load default
+            if (checkNullable(yaml.config.source_data)) {
+                this.addError(`There was not source_data key in yaml. Default will be loaded`);
+                yaml.config.source_data = SourceDataTypes.CURRENT_FOLDER;
+            }
+
+            // if source_form_result is not defined, load empty (optional)
+            if (checkNullable(yaml.config.source_form_result)) {
+                yaml.config.source_form_result = '';
             }
         }
         handlerResponse.yaml = yaml;
