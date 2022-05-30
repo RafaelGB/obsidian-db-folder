@@ -178,6 +178,8 @@ export const StyleVariables = Object.freeze({
 export const SourceDataTypes = Object.freeze({
   CURRENT_FOLDER: 'current_folder',
   TAG: 'tag',
+  OUTGOING_LINK: 'outgoing_link',
+  INCOMING_LINK: 'incoming_link',
 });
 
 export const WidthVariables = Object.freeze({

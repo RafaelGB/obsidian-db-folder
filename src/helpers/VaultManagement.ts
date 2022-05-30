@@ -89,6 +89,10 @@ export function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYaml): D
   switch (dbYaml.config.source_data) {
     case SourceDataTypes.TAG:
       return DataviewService.getDataviewAPI().pages(`#${dbYaml.config.source_form_result}`);
+    case SourceDataTypes.INCOMING_LINK:
+      return DataviewService.getDataviewAPI().pages(`[[${dbYaml.config.source_form_result}]]`);
+    case SourceDataTypes.OUTGOING_LINK:
+      return DataviewService.getDataviewAPI().pages(`outgoing([[${dbYaml.config.source_form_result}]])`);
     default:
       return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }

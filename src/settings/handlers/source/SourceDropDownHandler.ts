@@ -21,6 +21,8 @@ export class SourceDropDownHandler extends AbstractSettingsHandler {
             {
                 current_folder: SourceDataTypes.CURRENT_FOLDER,
                 tag: SourceDataTypes.TAG,
+                outgoing_link: SourceDataTypes.OUTGOING_LINK,
+                incoming_link: SourceDataTypes.INCOMING_LINK,
             },
             source_dropdown_promise
         );
