@@ -46,13 +46,13 @@ class DataviewProxy {
                     if (p[c.field] > c.value) return false;
                     break;
                 case OperatorFilter.CONTAINS:
-                    if (!p[c.field].includes(c.value)) return false;
+                    if (p[c.field] !== undefined && !p[c.field].includes(c.value)) return false;
                     break;
                 case OperatorFilter.STARTS_WITH:
-                    if (!p[c.field].startsWith(c.value)) return false;
+                    if (p[c.field] !== undefined && !p[c.field].startsWith(c.value)) return false;
                     break;
                 case OperatorFilter.ENDS_WITH:
-                    if (!p[c.field].endsWith(c.value)) return false;
+                    if (p[c.field] !== undefined && !p[c.field].endsWith(c.value)) return false;
                     break;
                 default:
                     throw new Error(`Unknown operator: ${c.operator}`);
