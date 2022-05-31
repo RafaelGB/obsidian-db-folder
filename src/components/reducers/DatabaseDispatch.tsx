@@ -131,6 +131,11 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             })
           );
         });
+      // Update view yaml info
+      state.view.diskConfig.yaml.columns[action.newKey] =
+        state.view.diskConfig.yaml.columns[action.columnId];
+      delete state.view.diskConfig.yaml.columns[action.columnId];
+
       return update(state, {
         skipReset: { $set: true },
         // Modify column visually with the new label
@@ -157,6 +162,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             delete row[action.columnId];
             return row;
           }),
+        },
+        // Update view yaml state
+        view: {
+          diskConfig: {
+            yaml: {
+              columns: {
+                $set: state.view.diskConfig.yaml.columns,
+              },
+            },
+          },
         },
       });
 
