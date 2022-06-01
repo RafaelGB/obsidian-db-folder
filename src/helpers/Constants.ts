@@ -148,7 +148,6 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '   media_width: 100',
     '   media_height: 100',
     '   isInline: false',
-    '   source_data: current_folder',
     'filters:',
   ].join('\n')
 });

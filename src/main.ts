@@ -222,6 +222,8 @@ export default class DBFolderPlugin extends Plugin {
 			` remove_field_when_delete_column: ${local_settings.remove_field_when_delete_column}`,
 			` show_metadata_created: ${local_settings.show_metadata_created}`,
 			` show_metadata_modified: ${local_settings.show_metadata_modified}`,
+			` source_data: ${local_settings.source_data}`,
+			` source_form_result: ${local_settings.source_form_result}`,
 			`%%>`
 		].join('\n');
 	}
