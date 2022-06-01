@@ -300,6 +300,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ...state.columns.slice(leftIndex, state.columns.length),
           ],
         },
+        // Update view yaml
+        view: {
+          diskConfig: {
+            yaml: {
+              $set: state.view.diskConfig.yaml,
+            },
+          },
+        },
       });
     /**
      * Add new column to the table to the right of the column with the given id
@@ -345,6 +353,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             },
             ...state.columns.slice(rightIndex + 1, state.columns.length),
           ],
+        },
+        // Update view yaml
+        view: {
+          diskConfig: {
+            yaml: {
+              $set: state.view.diskConfig.yaml,
+            },
+          },
         },
       });
     case ActionTypes.DELETE_COLUMN:

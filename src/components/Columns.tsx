@@ -7,8 +7,8 @@ import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowSelectOption } from "cdm/RowSelectModel";
+import { LocalSettings } from "cdm/SettingsModel";
 import { dbTrim } from "helpers/StylesHelper";
-import { LocalSettings } from "Settings";
 
 /**
  * Add mandatory columns to the table
