@@ -118,20 +118,18 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.newKey,
         action.label
       );
-      async () => {
-        // Update the rows in case the key is changed
-        await Promise.all(
-          state.data.map(async (row: RowDataType) => {
-            await updateRowFileProxy(
-              row.note.getFile(),
-              action.columnId,
-              action.newKey,
-              state,
-              UpdateRowOptions.COLUMN_KEY
-            );
-          })
-        );
-      };
+      Promise.all(
+        state.data.map(async (row: RowDataType) => {
+          await updateRowFileProxy(
+            row.note.getFile(),
+            action.columnId,
+            action.newKey,
+            state,
+            UpdateRowOptions.COLUMN_KEY
+          );
+        })
+      );
+
       return update(state, {
         skipReset: { $set: true },
         // Modify column visually with the new label
