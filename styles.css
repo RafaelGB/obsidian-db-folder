@@ -323,6 +323,14 @@
   align-self: center;
 }
 
+.database-plugin__relationship {
+  box-sizing: border-box;
+  font-weight: 400;
+  padding: 2px 6px;
+  border-radius: 4;
+  display: inline-block;
+}
+
 .text-align-right {
   text-align: right;
 }

@@ -1,7 +1,6 @@
+import { DatabaseSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
 import { App, TFile } from 'obsidian';
-import { LOGGER } from "services/Logger";
-import { DatabaseSettings } from 'Settings';
 export default class StateManager {
   private onEmpty: () => void;
   private getGlobalSettings: () => DatabaseSettings;

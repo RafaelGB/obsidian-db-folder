@@ -1,4 +1,5 @@
 import { TableColumn } from "cdm/FolderModel";
+import { DatabaseSettings } from "cdm/SettingsModel";
 
 /** Table Actions */
 export const ActionTypes = Object.freeze({
@@ -54,7 +55,8 @@ export const DEFAULT_COLUMN_CONFIG = Object.freeze({
   enable_media_view: true,
   media_width: 100,
   media_height: 100,
-  isInline: false
+  isInline: false,
+  source_data: 'current_folder',
 });
 
 export const MetadataDatabaseColumns = Object.freeze({
@@ -146,6 +148,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '   media_width: 100',
     '   media_height: 100',
     '   isInline: false',
+    '   source_data: current_folder',
     'filters:',
   ].join('\n')
 });
@@ -164,6 +167,7 @@ export const StyleClasses = Object.freeze({
   COLUMN_MODAL: 'database-column-modal',
   COLUMN_MODAL_BODY: 'database-column-body',
 });
+
 
 export const StyleVariables = Object.freeze({
   BACKGROUND_MODIFIER_ERROR: 'var(--background-modifier-error)',
@@ -213,3 +217,28 @@ export const MediaExtensions = Object.freeze({
 });
 
 export const YAML_INDENT = Object.freeze("  ");
+
+/******************************************************************************
+ *                          SETTINGS CONSTANTS
+ ******************************************************************************/
+export const DEFAULT_SETTINGS: DatabaseSettings = {
+  global_settings: {
+    enable_debug_mode: false,
+    logger_level_info: 'error',
+    media_settings: {
+      enable_media_view: DEFAULT_COLUMN_CONFIG.enable_media_view,
+      width: DEFAULT_COLUMN_CONFIG.media_height,
+      height: DEFAULT_COLUMN_CONFIG.media_height
+    }
+  },
+  local_settings: {
+    enable_show_state: false,
+    remove_field_when_delete_column: false,
+    group_folder_column: '',
+    show_metadata_created: false,
+    show_metadata_modified: false,
+    show_metadata_tasks: false,
+    source_data: SourceDataTypes.CURRENT_FOLDER,
+    source_form_result: 'root'
+  }
+};

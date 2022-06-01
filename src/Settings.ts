@@ -10,57 +10,7 @@ import { DEFAULT_COLUMN_CONFIG, SourceDataTypes, StyleClasses } from "helpers/Co
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { media_settings_section } from "settings/MediaSection";
 import { source_settings_section } from "settings/SourceSection";
-
-export interface MediaSettings {
-  enable_media_view: boolean;
-  width: number;
-  height: number;
-}
-/**
- * Options that affects the behavior of the plugin and defines default values with some fields
- */
-interface GlobalSettings {
-  enable_debug_mode: boolean;
-  logger_level_info: string;
-  media_settings: MediaSettings;
-}
-export interface LocalSettings {
-  enable_show_state: boolean;
-  group_folder_column: string;
-  remove_field_when_delete_column: boolean;
-  show_metadata_created: boolean;
-  show_metadata_modified: boolean;
-  show_metadata_tasks: boolean;
-  source_data: string;
-  source_form_result: string;
-}
-
-export interface DatabaseSettings {
-  global_settings: GlobalSettings;
-  local_settings: LocalSettings;
-}
-
-export const DEFAULT_SETTINGS: DatabaseSettings = {
-  global_settings: {
-    enable_debug_mode: false,
-    logger_level_info: 'error',
-    media_settings: {
-      enable_media_view: DEFAULT_COLUMN_CONFIG.enable_media_view,
-      width: DEFAULT_COLUMN_CONFIG.media_height,
-      height: DEFAULT_COLUMN_CONFIG.media_height
-    }
-  },
-  local_settings: {
-    enable_show_state: false,
-    remove_field_when_delete_column: false,
-    group_folder_column: '',
-    show_metadata_created: false,
-    show_metadata_modified: false,
-    show_metadata_tasks: false,
-    source_data: SourceDataTypes.CURRENT_FOLDER,
-    source_form_result: 'root'
-  }
-};
+import { DatabaseSettings } from "cdm/SettingsModel";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,

@@ -15,8 +15,6 @@ import {
 } from 'DatabaseView';
 
 import {
-	DEFAULT_SETTINGS,
-	DatabaseSettings,
 	DBFolderSettingTab,
 	loadServicesThatRequireSettings
 } from 'Settings';
@@ -28,11 +26,12 @@ import {
 import {
 	DBFolderAPI
 } from 'api/plugin-api';
+import { DatabaseSettings } from 'cdm/SettingsModel';
 
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
-import { DatabaseCore, DatabaseFrontmatterOptions } from 'helpers/Constants';
+import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 
 export default class DBFolderPlugin extends Plugin {

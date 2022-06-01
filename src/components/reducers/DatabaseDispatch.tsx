@@ -3,6 +3,7 @@ import update from "immutability-helper";
 import {
   ActionTypes,
   DataTypes,
+  DEFAULT_COLUMN_CONFIG,
   MetadataColumns,
   TableColumnsTemplate,
   UpdateRowOptions,
@@ -27,9 +28,7 @@ import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
-  LOGGER.debug(
-    `<=>databaseReducer action: ${action.type} value: ${action.value}`
-  );
+  LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
   /** database configuration */
   const dbconfig = state.view.diskConfig.yaml.config;
   // Check if action exists
@@ -114,23 +113,25 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         (column: any) => column.id === action.columnId
       );
       // Update configuration & row files on disk
-      state.view.diskConfig
-        .updateColumnKey(action.columnId, action.newKey, action.label)
-        .then(async () => {
-          // Once the column is updated, update the rows in case the key is changed
-
-          await Promise.all(
-            state.data.map(async (row: RowDataType) => {
-              await updateRowFileProxy(
-                row.note.getFile(),
-                action.columnId,
-                action.newKey,
-                state,
-                UpdateRowOptions.COLUMN_KEY
-              );
-            })
-          );
-        });
+      state.view.diskConfig.updateColumnKey(
+        action.columnId,
+        action.newKey,
+        action.label
+      );
+      async () => {
+        // Update the rows in case the key is changed
+        await Promise.all(
+          state.data.map(async (row: RowDataType) => {
+            await updateRowFileProxy(
+              row.note.getFile(),
+              action.columnId,
+              action.newKey,
+              state,
+              UpdateRowOptions.COLUMN_KEY
+            );
+          })
+        );
+      };
       return update(state, {
         skipReset: { $set: true },
         // Modify column visually with the new label
@@ -157,6 +158,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             delete row[action.columnId];
             return row;
           }),
+        },
+        // Update view yaml state
+        view: {
+          diskConfig: {
+            yaml: {
+              $set: state.view.diskConfig.yaml,
+            },
+          },
         },
       });
 
@@ -256,12 +265,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
-        config: {
-          isInline: false,
-          media_height: 100,
-          media_width: 100,
-          enable_media_view: false,
-        },
+        config: DEFAULT_COLUMN_CONFIG,
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newLeftColumn);
@@ -285,6 +289,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ...state.columns.slice(leftIndex, state.columns.length),
           ],
         },
+        // Update view yaml
+        view: {
+          diskConfig: {
+            yaml: {
+              $set: state.view.diskConfig.yaml,
+            },
+          },
+        },
       });
     /**
      * Add new column to the table to the right of the column with the given id
@@ -301,12 +313,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
-        config: {
-          isInline: false,
-          media_height: 100,
-          media_width: 100,
-          enable_media_view: false,
-        },
+        config: DEFAULT_COLUMN_CONFIG,
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newRIghtColumn);
@@ -330,6 +337,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             },
             ...state.columns.slice(rightIndex + 1, state.columns.length),
           ],
+        },
+        // Update view yaml
+        view: {
+          diskConfig: {
+            yaml: {
+              $set: state.view.diskConfig.yaml,
+            },
+          },
         },
       });
     case ActionTypes.DELETE_COLUMN:
