@@ -71,17 +71,17 @@ export default class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(oldColumnId: string, newColumnId: string, newLabel: string): Promise<void> {
+    updateColumnKey(oldColumnId: string, newColumnId: string, newLabel: string) {
         // clone current column configuration
         const currentCol = this.yaml.columns[oldColumnId];
         // update column id
-        currentCol.label = newColumnId;
+        currentCol.label = newLabel;
         currentCol.accessor = newColumnId;
         currentCol.key = newColumnId;
         delete this.yaml.columns[oldColumnId];
         this.yaml.columns[newColumnId] = currentCol;
         // save on disk
-        await this.saveOnDisk();
+        this.saveOnDisk();
     }
 
     /**
@@ -119,9 +119,9 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
-    async addColumn(columnId: string, properties: DatabaseColumn): Promise<void> {
+    addColumn(columnId: string, properties: DatabaseColumn) {
         this.yaml.columns[columnId] = properties;
-        await this.saveOnDisk();
+        this.saveOnDisk();
     }
 
     async updateConfig<K extends keyof LocalSettings>(key: K, value: LocalSettings[K]): Promise<void> {
