@@ -1,3 +1,7 @@
+## 1.6.1
+### No longer broken
+- State of db columns is fixed after edit column label or create new column. That fix problem with persisting information correctly.
+- Now label column edition not add _ instead of space.
 ## 1.6.0
 ### Shiny new things
 - Another kind of data sources of dataview are added(current folder will be avaliable too, of course) [ISSUE#59](https://github.com/RafaelGB/obsidian-db-folder/issues/59):

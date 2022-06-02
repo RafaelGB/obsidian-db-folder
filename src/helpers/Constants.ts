@@ -1,3 +1,4 @@
+import { MetadataColumnsModel } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
 import { DatabaseSettings } from "cdm/SettingsModel";
 
@@ -31,7 +32,11 @@ export const DataTypes = Object.freeze({
   NEW_COLUMN: 'new_column'
 });
 
-export const MAX_CAPACITY_DATABASE = 999999;
+export const MaxCapacitiesDatabase = Object.freeze({
+  MAX_COLUMNS: 100,
+  MAX_ROWS: 99999,
+  MAX_OPTIONS: 100,
+});
 
 export const MetadataColumns = Object.freeze({
   FILE: `__file__`,
@@ -59,7 +64,7 @@ export const DEFAULT_COLUMN_CONFIG = Object.freeze({
   source_data: 'current_folder',
 });
 
-export const MetadataDatabaseColumns = Object.freeze({
+export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   FILE:
   {
     key: MetadataColumns.FILE,

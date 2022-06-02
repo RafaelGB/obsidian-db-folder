@@ -122,7 +122,9 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
     /* Regex explanation
     * group 1 all content
     */
-    const frontmatterRegex = new RegExp(`(^.*$)`, 'g');
+    const frontmatterRegex = /(^[\s\S]*$)/g;
+
+
     const noteObject = {
       action: 'replace',
       file: file,

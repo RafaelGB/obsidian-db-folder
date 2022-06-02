@@ -135,6 +135,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.diskConfig.yaml
       );
       const initialState: InitialState = obtainInitialState(columns, rows);
+
       // Define table properties
       const tableProps: TableDataType = {
         columns: columns,
@@ -145,6 +146,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         stateManager: this.plugin.getStateManager(this.file),
         initialState: initialState,
       };
+
       // Render database
       const table = createDatabase(tableProps);
       ReactDOM.render(table, this.tableContainer);
