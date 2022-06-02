@@ -1,5 +1,6 @@
 import {
   DataTypes,
+  MaxCapacitiesDatabase,
   MetadataColumns,
   MetadataDatabaseColumns,
 } from "helpers/Constants";
@@ -55,7 +56,10 @@ export async function obtainMetadataColumns(
     delete yamlColumns[MetadataColumns.TASKS];
   }
 
-  yamlColumns[MetadataColumns.ADD_COLUMN] = MetadataDatabaseColumns.ADD_COLUMN;
+  yamlColumns[MetadataColumns.ADD_COLUMN] = {
+    ...MetadataDatabaseColumns.ADD_COLUMN,
+    position: MaxCapacitiesDatabase.MAX_COLUMNS + 1,
+  };
   return yamlColumns;
 }
 

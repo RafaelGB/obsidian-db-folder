@@ -37,7 +37,6 @@ class VaultManager {
         releasedContent = await this.obtainContentFromTfile(note.file);
       }
       const line_string = new FileContent(releasedContent);
-
       switch (note.action) {
         case 'remove':
           releasedContent = line_string.remove(note.regexp).value;
@@ -86,7 +85,7 @@ class VaultManager {
   }
 
   obtainFrontmatterKeys(content: string): string[] {
-    const currentFrontmatter = VaultManagerDB.ontainCurrentFrontmatter(content);
+    const currentFrontmatter = this.ontainCurrentFrontmatter(content);
     if (currentFrontmatter) {
       return Object.keys(currentFrontmatter);
     }

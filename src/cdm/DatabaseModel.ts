@@ -52,3 +52,7 @@ export type SortedType = {
     id: string;
     desc: boolean;
 }
+
+export type MetadataColumnsModel = {
+    [key: string]: DatabaseColumn
+}
