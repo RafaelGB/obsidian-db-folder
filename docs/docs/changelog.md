@@ -1,11 +1,14 @@
 ## 1.6.2
+*Published on 2022/06/02*
 ### No longer broken
 - There was some cases where editing a file without frontmatter does not create one. This is now fixed. [ISSUE#80](https://github.com/RafaelGB/obsidian-db-folder/issues/80)
 ## 1.6.1
+*Published on 2022/06/01*
 ### No longer broken
 - State of db columns is fixed after edit column label or create new column. That fix problem with persisting information correctly.
 - Now label column edition not add _ instead of space.
 ## 1.6.0
+*Published on 2022/05/30*
 ### Shiny new things
 - Another kind of data sources of dataview are added(current folder will be avaliable too, of course) [ISSUE#59](https://github.com/RafaelGB/obsidian-db-folder/issues/59):
   - TAGs: select a tag from a list of all tags
