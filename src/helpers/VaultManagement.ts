@@ -266,7 +266,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
   // Execute action
   if (updateOptions[option]) {
     // Check if file has frontmatter
-    if (rowFields.frontmatter) {
+    if (!hasFrontmatterKey(content)) {
       // If not, add it
       await addFrontmatter();
     }
