@@ -5,8 +5,8 @@ You can edit directly the yaml configuration inside the `.md` file or use the ta
 ### Information
 Details about your database
 
-- **name**: Name asociated to your database (TODO)
-- **description**: extra information explaining the purpose of the database (TODO)
+- **name**: Name asociated to your database.
+- **description**: extra information explaining the purpose of the database. Will be displated in preview mode.
 ### Database
 The *columns* key is used to charge the correct information when you charge the react-table. Each column supports all the literals of react-table column configurations. 
 
@@ -18,9 +18,14 @@ Mandatory:
 - **label**: name of the column
 
 Optional:
-
 - **position**: order of the columns
+- **options**: list of options for the column (only for select type)
+
+Configuration:
 - **isInline**: true if you want to edit the field inline mode
+- **enable_media_view**: true if you want to see the media view (only for text type)
+  - **media_width**: width of the media view
+  - **media_height**: height of the media view
 
 
 ### Local configuration
@@ -33,35 +38,68 @@ database-plugin: basic
 
 ---
 <%%
+---
+
+database-plugin: basic
+
+---
+<%%
 name: Entertaiment
 description: All media contain that I consume
 columns:
-  view_state:
-    input: select
-    accessor: view_state
-    key: view_state
-    label: view_state
-    position: 3
-    isInline: false
   Calification:
     input: select
     accessor: Calification
     label: Calification
     key: Calification
-    position: 7
-    isInline: true
+    position: 5
+    enable_media_view: true
+    media_width: 100
+    media_height: 100
+    isInline: false
+    isSorted: false
+    isSortedDesc: false
+    options:
+      - { label: "⭐️⭐️⭐️⭐️⭐️", backgroundColor: "hsl(0,62.66650406270436%,57.196614999999994%)"}
+      - { label: "⭐️⭐️⭐️⭐️", backgroundColor: "hsl(305, 95%, 90%)"}
+      - { label: "⭐️⭐️⭐️", backgroundColor: "hsl(116, 95%, 90%)"}
+      - { label: "⭐️⭐️", backgroundColor: "hsl(185, 95%, 90%)"}
+      - { label: "⭐️", backgroundColor: "hsl(78, 95%, 90%)"}
+    config:
+      enable_media_view: true
+      media_width: 100
+      media_height: 100
+      isInline: false
   director:
     input: text
     accessor: director
     label: director
     key: director
     position: 4
+    enable_media_view: true
+    media_width: 100
+    media_height: 100
+    isInline: false
+    isSorted: false
+    isSortedDesc: true
+    config:
+      enable_media_view: true
+      media_width: 100
+      media_height: 100
+      isInline: false
   Year:
     input: number
     accessor: Year
     label: Year
     key: Year
-    position: 6
+    position: 7
+    isSorted: false
+    isSortedDesc: false
+    config:
+      enable_media_view: true
+      media_width: 100
+      media_height: 100
+      isInline: false
   __file__:
     key: __file__
     input: markdown
@@ -70,37 +108,66 @@ columns:
     isMetadata: true
     skipPersist: false
     csvCandidate: true
-    isInline: false
     position: 1
+    config:
   title:
     input: text
     accessor: title
     label: title
     key: title
-    position: 5
-    isInline: false
+    position: 6
+    isSorted: false
+    isSortedDesc: true
+    config:
+      enable_media_view: true
+      media_width: 100
+      media_height: 100
+      isInline: false
   Watched_at:
     input: calendar
     accessor: Watched_at
     key: Watched_at
     label: Watched_at
+    position: 3
+    isSorted: true
+    isSortedDesc: true
+    config:
+      enable_media_view: true
+      media_width: 100
+      media_height: 100
+      isInline: false
+  viewed:
+    input: checkbox
+    accessor: viewed
+    key: viewed
+    label: viewed
     position: 2
-  __created__:
-    key: __created__
-    input: calendar
-    label: Created
-    accessor: __created__
-    isMetadata: true
-    skipPersist: false
-    csvCandidate: true
+    enable_media_view: true
+    media_width: 100
+    media_height: 100
     isInline: false
+    media_togle_promise: true
+    isSorted: false
+    isSortedDesc: false
+    config:
+      enable_media_view: true
+      media_width: 100
+      media_height: 100
+      isInline: false
+      media_togle_promise: true
 config:
   enable_show_state: false
-  group_folder_column: view_state
+  group_folder_column: none
   remove_field_when_delete_column: true
-  show_metadata_created: true
+  show_metadata_created: false
   show_metadata_modified: false
+  media_settings:
+    enable_media_view: true
+    width: 100
+    height: 100
+  show_metadata_tasks: true
+  source_data: current_folder
+  source_form_result: zettelcaster/meet
 filters:
-  - {field: Year, operator: GREATER_THAN_OR_EQUAL,value: 2000}
 %%>
 ```
