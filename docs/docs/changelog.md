@@ -1,3 +1,6 @@
+## 1.6.2
+### No longer broken
+- There was some cases where editing a file without frontmatter does not create one. This is now fixed. [ISSUE#80](https://github.com/RafaelGB/obsidian-db-folder/issues/80)
 ## 1.6.1
 ### No longer broken
 - State of db columns is fixed after edit column label or create new column. That fix problem with persisting information correctly.
