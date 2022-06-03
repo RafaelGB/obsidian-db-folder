@@ -73,6 +73,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     accessor: MetadataColumns.FILE,
     isMetadata: true,
     skipPersist: false,
+    isDragDisabled: false,
     csvCandidate: true,
     config: DEFAULT_COLUMN_CONFIG
   },
@@ -82,6 +83,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     label: MetadataLabels.ADD_COLUMN,
     accessor: MetadataColumns.ADD_COLUMN,
     isMetadata: true,
+    isDragDisabled: true,
     skipPersist: true,
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
@@ -92,6 +94,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     label: MetadataLabels.CREATED,
     accessor: MetadataColumns.CREATED,
     isMetadata: true,
+    isDragDisabled: false,
     skipPersist: false,
     csvCandidate: true,
     config: DEFAULT_COLUMN_CONFIG
@@ -102,6 +105,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     label: MetadataLabels.MODIFIED,
     accessor: MetadataColumns.MODIFIED,
     isMetadata: true,
+    isDragDisabled: false,
     skipPersist: false,
     csvCandidate: true,
     config: DEFAULT_COLUMN_CONFIG
@@ -112,6 +116,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     label: MetadataLabels.TASK,
     accessor: MetadataColumns.TASKS,
     isMetadata: true,
+    isDragDisabled: false,
     skipPersist: true,
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
@@ -122,6 +127,7 @@ export const TableColumnsTemplate: Partial<TableColumn> =
 {
   isMetadata: false,
   skipPersist: false,
+  isDragDisabled: false,
   options: [],
   csvCandidate: true,
 }
