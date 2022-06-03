@@ -10,6 +10,7 @@ nav:
       - Filters: "features/filters.md"
       - Config: "features/config.md"
   - FAQ: "faq.md"
+  - Contributing: "contributing.md"
   - Changelog: "changelog.md"
 theme:
   name: material
