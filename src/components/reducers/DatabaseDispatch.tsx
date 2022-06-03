@@ -331,7 +331,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               accessor: newRIghtColumn.accessor,
               position: newRIghtColumn.position,
               csvCandidate: true,
-              config: newLeftColumn.config,
+              config: newRIghtColumn.config,
             },
             ...state.columns.slice(rightIndex + 1, state.columns.length),
           ],

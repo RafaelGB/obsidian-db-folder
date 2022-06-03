@@ -23,6 +23,7 @@ import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { RowSelectOption } from "cdm/RowSelectModel";
+import { Column } from "react-table";
 
 /**
  * Generate column Options with Select type
@@ -104,8 +105,16 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   }
 
   function adjustWidthOfTheColumn(position: number) {
-    const columnNumber =
+    let columnNumber =
       initialState.columns.length + 1 - initialState.shadowColumns.length;
+    // Check if column name already exists
+    while (
+      headerProps.allColumns.find(
+        (o: Column) => o.id === `newColumn${columnNumber}`
+      )
+    ) {
+      columnNumber++;
+    }
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
     // Add width of the new column

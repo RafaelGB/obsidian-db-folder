@@ -325,16 +325,21 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   }
 
   function adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
-    const columnNumber =
+    let columnNumber =
       initialState.columns.length - initialState.shadowColumns.length;
-    const columnName = `newColumn${columnNumber}`;
+    // Check if column name already exists
+    while (
+      headerMenuProps.headerProps.allColumns.find(
+        (o: Column) => o.id === `newColumn${columnNumber}`
+      )
+    ) {
+      columnNumber++;
+    }
+    const columnId = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
-    columnWidthState.widthRecord[columnName] = getColumnWidthStyle(
-      rows,
-      column
-    );
+    columnWidthState.widthRecord[columnId] = getColumnWidthStyle(rows, column);
     setColumnWidthState(columnWidthState);
-    return { name: columnName, position: wantedPosition, label: columnLabel };
+    return { name: columnId, position: wantedPosition, label: columnLabel };
   }
 
   return (
