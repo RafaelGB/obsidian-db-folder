@@ -269,7 +269,18 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     strategy: "fixed",
   });
 
-  function persistLabelChange(newKey: string) {
+  function persistLabelChange() {
+    // trim label will get a valid yaml key
+    const newKey = dbTrim(labelState);
+    // Check if key already exists. If so, mark it as invalid
+    if (
+      headerMenuProps.headerProps.allColumns.find(
+        (o: Column) => o.id === newKey
+      )
+    ) {
+      setLabelStateInvalid(true);
+      return;
+    }
     const futureOrder = headerMenuProps.headerProps.allColumns.map(
       (o: Column) => (o.id === column.id ? newKey : o.id)
     );
@@ -294,18 +305,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   }
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
-      // trim label will get a valid yaml key
-      const newKey = dbTrim(labelState);
-      // Check if key already exists. If so, mark it as invalid
-      if (
-        headerMenuProps.headerProps.allColumns.find(
-          (o: Column) => o.id === newKey
-        )
-      ) {
-        setLabelStateInvalid(true);
-        return;
-      }
-      persistLabelChange(newKey);
+      persistLabelChange();
     }
   }
 
@@ -322,6 +322,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    */
   function handleBlur(e: any) {
     e.preventDefault();
+    persistLabelChange();
   }
 
   function adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
