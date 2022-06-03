@@ -1,6 +1,7 @@
 ## 1.6.3
 ### No longer broken
 - Duplicated column ids on new column button is controlled now [ISSUE#82](https://github.com/RafaelGB/obsidian-db-folder/issues/82)
+- checkbox color supports all type of dark mode modes [ISSUE#85](https://github.com/RafaelGB/obsidian-db-folder/issues/85)
 ## 1.6.2
 *Published on 2022/06/02*
 ### No longer broken
