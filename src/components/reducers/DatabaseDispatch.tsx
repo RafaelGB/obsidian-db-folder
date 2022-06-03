@@ -373,6 +373,22 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ...state.columns.slice(deleteIndex + 1, state.columns.length),
           ],
         },
+        data: {
+          $set: state.data.map((row) => {
+            const newRow = { ...row };
+            delete newRow[action.columnId];
+            return newRow;
+          }),
+        },
+
+        // Update view yaml
+        view: {
+          diskConfig: {
+            yaml: {
+              $set: state.view.diskConfig.yaml,
+            },
+          },
+        },
       });
     /**
      * Check if the given option cell is a candidate for moving the file into a subfolder
