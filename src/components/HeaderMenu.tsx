@@ -4,7 +4,7 @@ import {
   MetadataLabels,
   StyleVariables,
 } from "helpers/Constants";
-import { dbTrim, c } from "helpers/StylesHelper";
+import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import ArrowLeftIcon from "components/img/ArrowLeft";
@@ -408,7 +408,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                       {propertyIcon}
                     </span>
                     <span style={{ textTransform: "capitalize" }}>
-                      {column.dataType}
+                      {getLabelHeader(column.dataType)}
                     </span>
                   </div>
                   {showType && (

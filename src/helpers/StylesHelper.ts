@@ -1,5 +1,5 @@
 import { ColumnWidthState } from "cdm/StyleModel";
-import { DatabaseCore, WidthVariables } from "helpers/Constants";
+import { DatabaseCore, MetadataLabels, WidthVariables } from "helpers/Constants";
 
 /**
  * Wrap the classname of css elements
@@ -39,4 +39,18 @@ export function getTotalWidth(state: ColumnWidthState): number {
         totalWidth += state.widthRecord[key];
     });
     return totalWidth;
+}
+
+/**
+ * Obtain label associated with a header type
+ * @param dataType 
+ * @returns 
+ */
+export function getLabelHeader(dataType: string) {
+    const labelCandidate = Object.entries(MetadataLabels).find(([key, value]) => {
+        if (key === dataType.toUpperCase()) {
+            return true;
+        }
+    });
+    return labelCandidate === undefined ? dataType : labelCandidate[1];
 }
