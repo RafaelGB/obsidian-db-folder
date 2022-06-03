@@ -260,110 +260,136 @@ export function Table(initialState: TableDataType) {
           />
           {/** Headers */}
           {headerGroups.map((headerGroup, i) => (
-            <DragDropContext
-              key={`DragDropContext-${i}`}
-              onDragStart={() => {
-                console.log(headerGroup.headers);
-                currentColOrder.current = allColumns.map((o: Column) => o.id);
-              }}
-              onDragUpdate={(dragUpdateObj, b) => {
-                const colOrder = [...currentColOrder.current];
-                const sIndex = dragUpdateObj.source.index;
-                const dIndex =
-                  dragUpdateObj.destination && dragUpdateObj.destination.index;
-
-                if (typeof sIndex === "number" && typeof dIndex === "number") {
-                  colOrder.splice(sIndex, 1);
-                  colOrder.splice(dIndex, 0, dragUpdateObj.draggableId);
-                  setColumnOrder(colOrder);
-                }
-              }}
-              onDragEnd={(result) => {
-                // save on disk in case of changes
-                if (result.source.index !== result.destination!.index) {
-                  initialState.view.diskConfig.reorderColumns(
-                    (state as any).columnOrder
-                  );
-                }
-
-                // clear the current order
-                currentColOrder.current = null;
-              }}
+            <div
+              {...headerGroup.getHeaderGroupProps({
+                style: {
+                  width:
+                    totalWidth -
+                    columnsWidthState.widthRecord[MetadataColumns.ADD_COLUMN],
+                },
+              })}
             >
-              <Droppable
-                key={`Droppable-${i}`}
-                droppableId="droppable"
-                direction="horizontal"
+              <DragDropContext
+                key={`DragDropContext-${i}`}
+                onDragStart={() => {
+                  currentColOrder.current = allColumns.map((o: Column) => o.id);
+                }}
+                onDragUpdate={(dragUpdateObj, b) => {
+                  const colOrder = [...currentColOrder.current];
+                  const sIndex = dragUpdateObj.source.index;
+                  const dIndex =
+                    dragUpdateObj.destination &&
+                    dragUpdateObj.destination.index;
+
+                  if (
+                    typeof sIndex === "number" &&
+                    typeof dIndex === "number"
+                  ) {
+                    colOrder.splice(sIndex, 1);
+                    colOrder.splice(dIndex, 0, dragUpdateObj.draggableId);
+                    setColumnOrder(colOrder);
+                  }
+                }}
+                onDragEnd={(result) => {
+                  // save on disk in case of changes
+                  if (result.source.index !== result.destination!.index) {
+                    initialState.view.diskConfig.reorderColumns(
+                      (state as any).columnOrder
+                    );
+                  }
+
+                  // clear the current order
+                  currentColOrder.current = null;
+                }}
               >
-                {(provided, snapshot) => (
-                  <div
-                    key={`div-Droppable-${i}`}
-                    {...provided.droppableProps}
-                    {...headerGroup.getHeaderGroupProps({
-                      style: {
-                        ...getDndListStyle(snapshot.isDraggingOver),
-                        width:
-                          totalWidth -
-                          columnsWidthState.widthRecord[
-                            MetadataColumns.ADD_COLUMN
-                          ],
-                      },
-                    })}
-                    ref={provided.innerRef}
-                    className={`${c("tr header-group")}`}
-                  >
-                    {headerGroup.headers
-                      .filter((o: any) => o.key !== MetadataColumns.ADD_COLUMN)
-                      .map((column, index) => (
-                        <Draggable
-                          key={`Draggable-${column.id}`}
-                          draggableId={`${column.id}`}
-                          index={index}
-                          isDragDisabled={(column as any).skipPersist}
-                          disableInteractiveElementBlocking={
-                            (column as any).skipPersist
-                          }
-                        >
-                          {(provided, snapshot) => {
-                            const tableCellBaseProps = {
-                              ...provided.draggableProps,
-                              ...provided.dragHandleProps,
-                              ...column.getHeaderProps({
-                                style: {
-                                  width: `${
-                                    columnsWidthState.widthRecord[column.id]
-                                  }px`,
-                                  ...getDndItemStyle(
-                                    snapshot.isDragging,
-                                    provided.draggableProps.style
-                                  ),
-                                },
-                              }),
-                              className: `${c("th noselect")} header`,
-                              key: `div-Draggable-${column.id}`,
-                              // {...extraProps}
-                              ref: provided.innerRef,
-                            };
-                            return (
-                              <div {...tableCellBaseProps}>
-                                <HeaderContext.Provider
-                                  value={{
-                                    columnWidthState: columnsWidthState,
-                                    setColumnWidthState: setColumnsWidthState,
-                                  }}
-                                >
-                                  {column.render("Header")}
-                                </HeaderContext.Provider>
-                              </div>
-                            );
-                          }}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
+                <Droppable
+                  key={`Droppable-${i}`}
+                  droppableId="droppable"
+                  direction="horizontal"
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      key={`div-Droppable-${i}`}
+                      {...provided.droppableProps}
+                      {...headerGroup.getHeaderGroupProps({
+                        style: {
+                          ...getDndListStyle(snapshot.isDraggingOver),
+                        },
+                      })}
+                      ref={provided.innerRef}
+                      className={`${c("tr header-group")}`}
+                    >
+                      {headerGroup.headers
+                        .filter(
+                          (o: any) => o.key !== MetadataColumns.ADD_COLUMN
+                        )
+                        .map((column, index) => (
+                          <Draggable
+                            key={`Draggable-${column.id}`}
+                            draggableId={`${column.id}`}
+                            index={index}
+                            isDragDisabled={
+                              (column as unknown as TableColumn).isDragDisabled
+                            }
+                            disableInteractiveElementBlocking={
+                              (column as unknown as TableColumn).isDragDisabled
+                            }
+                          >
+                            {(provided, snapshot) => {
+                              const tableCellBaseProps = {
+                                ...provided.draggableProps,
+                                ...provided.dragHandleProps,
+                                ...column.getHeaderProps({
+                                  style: {
+                                    width: `${
+                                      columnsWidthState.widthRecord[column.id]
+                                    }px`,
+                                    ...getDndItemStyle(
+                                      snapshot.isDragging,
+                                      provided.draggableProps.style
+                                    ),
+                                  },
+                                }),
+                                className: `${c("th noselect")} header`,
+                                key: `div-Draggable-${column.id}`,
+                                // {...extraProps}
+                                ref: provided.innerRef,
+                              };
+                              return (
+                                <div {...tableCellBaseProps}>
+                                  <HeaderContext.Provider
+                                    value={{
+                                      columnWidthState: columnsWidthState,
+                                      setColumnWidthState: setColumnsWidthState,
+                                    }}
+                                  >
+                                    {column.render("Header")}
+                                  </HeaderContext.Provider>
+                                </div>
+                              );
+                            }}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              {headerGroup.headers
+                .filter((o: any) => o.key === MetadataColumns.ADD_COLUMN)
+                .map((column, index) => (
+                  <div {...column.getHeaderProps()}>
+                    <HeaderContext.Provider
+                      value={{
+                        columnWidthState: columnsWidthState,
+                        setColumnWidthState: setColumnsWidthState,
+                      }}
+                    >
+                      {column.render("Header")}
+                    </HeaderContext.Provider>
                   </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+                ))}
+            </div>
           ))}
         </div>
         {/** Body */}

@@ -49,6 +49,7 @@ export interface BaseColumn {
     position?: number;
     isMetadata?: boolean;
     skipPersist?: boolean;
+    isDragDisabled?: boolean;
     config: ConfigColumn;
 }
 export interface TableColumn extends BaseColumn {
