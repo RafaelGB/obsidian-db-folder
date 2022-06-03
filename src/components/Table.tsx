@@ -14,7 +14,12 @@ import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import { ActionTypes, DatabaseCore, MetadataColumns } from "helpers/Constants";
+import {
+  ActionTypes,
+  DatabaseCore,
+  DataTypes,
+  MetadataColumns,
+} from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
@@ -258,6 +263,7 @@ export function Table(initialState: TableDataType) {
             <DragDropContext
               key={`DragDropContext-${i}`}
               onDragStart={() => {
+                console.log(headerGroup.headers);
                 currentColOrder.current = allColumns.map((o: Column) => o.id);
               }}
               onDragUpdate={(dragUpdateObj, b) => {
@@ -306,51 +312,53 @@ export function Table(initialState: TableDataType) {
                     ref={provided.innerRef}
                     className={`${c("tr header-group")}`}
                   >
-                    {headerGroup.headers.map((column, index) => (
-                      <Draggable
-                        key={`Draggable-${column.id}`}
-                        draggableId={`${column.id}`}
-                        index={index}
-                        isDragDisabled={(column as any).skipPersist}
-                        disableInteractiveElementBlocking={
-                          (column as any).skipPersist
-                        }
-                      >
-                        {(provided, snapshot) => {
-                          const tableCellBaseProps = {
-                            ...provided.draggableProps,
-                            ...provided.dragHandleProps,
-                            ...column.getHeaderProps({
-                              style: {
-                                width: `${
-                                  columnsWidthState.widthRecord[column.id]
-                                }px`,
-                                ...getDndItemStyle(
-                                  snapshot.isDragging,
-                                  provided.draggableProps.style
-                                ),
-                              },
-                            }),
-                            className: `${c("th noselect")} header`,
-                            key: `div-Draggable-${column.id}`,
-                            // {...extraProps}
-                            ref: provided.innerRef,
-                          };
-                          return (
-                            <div {...tableCellBaseProps}>
-                              <HeaderContext.Provider
-                                value={{
-                                  columnWidthState: columnsWidthState,
-                                  setColumnWidthState: setColumnsWidthState,
-                                }}
-                              >
-                                {column.render("Header")}
-                              </HeaderContext.Provider>
-                            </div>
-                          );
-                        }}
-                      </Draggable>
-                    ))}
+                    {headerGroup.headers
+                      .filter((o: any) => o.key !== MetadataColumns.ADD_COLUMN)
+                      .map((column, index) => (
+                        <Draggable
+                          key={`Draggable-${column.id}`}
+                          draggableId={`${column.id}`}
+                          index={index}
+                          isDragDisabled={(column as any).skipPersist}
+                          disableInteractiveElementBlocking={
+                            (column as any).skipPersist
+                          }
+                        >
+                          {(provided, snapshot) => {
+                            const tableCellBaseProps = {
+                              ...provided.draggableProps,
+                              ...provided.dragHandleProps,
+                              ...column.getHeaderProps({
+                                style: {
+                                  width: `${
+                                    columnsWidthState.widthRecord[column.id]
+                                  }px`,
+                                  ...getDndItemStyle(
+                                    snapshot.isDragging,
+                                    provided.draggableProps.style
+                                  ),
+                                },
+                              }),
+                              className: `${c("th noselect")} header`,
+                              key: `div-Draggable-${column.id}`,
+                              // {...extraProps}
+                              ref: provided.innerRef,
+                            };
+                            return (
+                              <div {...tableCellBaseProps}>
+                                <HeaderContext.Provider
+                                  value={{
+                                    columnWidthState: columnsWidthState,
+                                    setColumnWidthState: setColumnsWidthState,
+                                  }}
+                                >
+                                  {column.render("Header")}
+                                </HeaderContext.Provider>
+                              </div>
+                            );
+                          }}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}
