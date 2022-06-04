@@ -1,3 +1,6 @@
+## 1.4.0
+### No longer broken
+- with subgroup config on, now file link is updated correctly [ISSUE#101](https://github.com/RafaelGB/obsidian-db-folder/issues/101)
 ## 1.6.3
 *Published on 2022/06/04*
 ### No longer broken
