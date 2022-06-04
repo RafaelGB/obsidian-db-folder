@@ -7,7 +7,7 @@ import {
 import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { RowSelectOption } from "cdm/RowSelectModel";
+import { RowSelectOption } from "cdm/ComponentsModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { dbTrim } from "helpers/StylesHelper";
 

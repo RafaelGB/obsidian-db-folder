@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@material-ui/core";
-import { CalendarProps } from "cdm/DatabaseModel";
+import { CalendarProps } from "cdm/ComponentsModel";
 
 const CalendarTimePortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties } = calendarProps;

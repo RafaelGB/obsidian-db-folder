@@ -23,7 +23,7 @@ import { DatabaseHeaderProps } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { HeaderContext } from "components/contexts/HeaderContext";
-import { RowSelectOption } from "cdm/RowSelectModel";
+import { RowSelectOption } from "cdm/ComponentsModel";
 import { Column } from "react-table";
 
 /**

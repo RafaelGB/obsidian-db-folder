@@ -1,6 +1,6 @@
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
-import { RowSelectOption } from 'cdm/RowSelectModel';
+import { RowSelectOption } from 'cdm/ComponentsModel';
 import { DataTypes, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 

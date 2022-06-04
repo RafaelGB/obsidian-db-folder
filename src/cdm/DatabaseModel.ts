@@ -3,7 +3,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { Cell } from "react-table";
 import { BaseColumn, TableColumn, TableDataType } from "cdm/FolderModel";
-import { RowSelectOption } from "cdm/RowSelectModel";
+import { RowSelectOption } from "cdm/ComponentsModel";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {
@@ -41,12 +41,9 @@ export type OptionSelect = {
     label: string;
     backgroundColor: string;
 }
-
-export type CalendarProps = {
+export type BaseComponentProps = {
     intialState: TableDataType;
-    column: TableColumn;
-    cellProperties: Cell;
-};
+}
 
 export type SortedType = {
     id: string;

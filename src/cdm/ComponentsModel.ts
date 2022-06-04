@@ -1,6 +1,7 @@
-import { ActionType } from "react-table";
+import { ActionType, Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { BaseComponentProps } from "cdm/DatabaseModel";
 
 export type RowSelectOption = {
     backgroundColor: string,
@@ -12,5 +13,13 @@ export type PopperProps = {
     column: TableColumn;
     columns: any;
     note: NoteInfo;
-    state: TableDataType;
-};
+} & BaseComponentProps;
+
+
+export type TagsProps = {
+} & BaseComponentProps;
+
+export type CalendarProps = {
+    column: TableColumn;
+    cellProperties: Cell;
+} & BaseComponentProps;

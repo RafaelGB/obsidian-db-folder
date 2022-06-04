@@ -5,18 +5,18 @@ import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@material-ui/core";
-import { CalendarProps } from "cdm/DatabaseModel";
+import { CalendarProps } from "cdm/ComponentsModel";
 import { c } from "helpers/StylesHelper";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
-  const { column, cellProperties } = calendarProps;
+  const { column, cellProperties, intialState } = calendarProps;
+  const { row } = cellProperties;
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** state of cell value */
-  const { contextValue, setContextValue } = useContext(CellContext);
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-
+  const valueCandidate = intialState.data[row.index][column.key];
   function handleOnClick(event: any) {
     event.preventDefault();
     setShowDatePicker(true);
@@ -34,10 +34,6 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       columnId: column.id,
     });
 
-    setContextValue({
-      value: newValue,
-      update: true,
-    });
     setShowDatePicker(false);
   }
 
@@ -50,8 +46,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     <DatePicker
       dateFormat="yyyy-MM-dd"
       selected={
-        DateTime.isDateTime(contextValue.value)
-          ? contextValue.value.toJSDate()
+        DateTime.isDateTime(valueCandidate)
+          ? (valueCandidate as unknown as DateTime).toJSDate()
           : null
       }
       onChange={handleCalendarChange}
@@ -62,8 +58,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     />
   ) : (
     <span className={`data-input ${c("calendar")}`} onClick={handleOnClick}>
-      {DateTime.isDateTime(contextValue.value)
-        ? contextValue.value.toFormat("yyyy-MM-dd")
+      {DateTime.isDateTime(valueCandidate)
+        ? (valueCandidate as unknown as DateTime).toFormat("yyyy-MM-dd")
         : "Pick a date..."}
     </span>
   );

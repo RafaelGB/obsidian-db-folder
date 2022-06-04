@@ -5,12 +5,12 @@ import { ActionTypes, StyleVariables } from "helpers/Constants";
 import React, { useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
-import { PopperProps } from "cdm/RowSelectModel";
+import { PopperProps } from "cdm/ComponentsModel";
 import { CellContext } from "components/contexts/CellContext";
 import CrossIcon from "components/img/CrossIcon";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { dispatch, row, column, columns, note, state } = popperProps;
+  const { dispatch, row, column, columns, note, intialState } = popperProps;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
   // Selector reference state
@@ -35,7 +35,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       value: "",
       row: row,
       columnId: column.id,
-      state: state,
+      state: intialState,
     });
     setContextValue({ value: "", update: true });
     setShowSelect(false);
@@ -55,7 +55,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       value: option.label,
       row: row,
       columnId: column.id,
-      state: state,
+      state: intialState,
     });
   }
 
