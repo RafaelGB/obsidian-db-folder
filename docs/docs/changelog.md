@@ -1,4 +1,6 @@
 ## 1.4.0
+### Improved
+- Select column type can remove the cell value now easily.
 ### No longer broken
 - with subgroup config on, now file link is updated correctly [ISSUE#101](https://github.com/RafaelGB/obsidian-db-folder/issues/101)
 ## 1.6.3

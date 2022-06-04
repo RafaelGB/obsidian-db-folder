@@ -11,6 +11,7 @@ import CalendarIcon from "components/img/CalendarIcon";
 import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
+import TagsIcon from "components/img/TagsIcon";
 import {
   ActionTypes,
   DataTypes,
@@ -75,7 +76,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     setDomReady(true);
   });
 
-  let propertyIcon: any;
+  let propertyIcon: JSX.Element;
   switch (dataType) {
     case DataTypes.NUMBER:
       propertyIcon = <HashIcon />;
@@ -95,6 +96,9 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       break;
     case DataTypes.MARKDOWN:
       propertyIcon = <MarkdownObsidian />;
+      break;
+    case DataTypes.TAGS:
+      propertyIcon = <TagsIcon />;
       break;
     case DataTypes.TASK:
     case DataTypes.CHECKBOX:

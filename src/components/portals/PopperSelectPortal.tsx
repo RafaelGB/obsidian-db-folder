@@ -7,6 +7,7 @@ import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { PopperProps } from "cdm/RowSelectModel";
 import { CellContext } from "components/contexts/CellContext";
+import CrossIcon from "components/img/CrossIcon";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
   const { dispatch, row, column, columns, note, state } = popperProps;
@@ -25,8 +26,19 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   React.useEffect(() => {
     setDomReady(true);
   });
-  function handleAddOption(e: any) {
-    setShowAdd(true);
+
+  function handleRemoveOption(e: any) {
+    dispatch({
+      type: ActionTypes.UPDATE_OPTION_CELL,
+      file: note.getFile(),
+      key: column.key,
+      value: "",
+      row: row,
+      columnId: column.id,
+      state: state,
+    });
+    setContextValue({ value: "", update: true });
+    setShowSelect(false);
   }
 
   function handleOptionClick(option: {
@@ -145,12 +157,26 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
               <div
                 className="cursor-pointer"
                 style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                onClick={handleAddOption}
+                onClick={() => setShowAdd(true)}
               >
                 <Relationship
                   value={
                     <span className="svg-icon-sm svg-text">
                       <PlusIcon />
+                    </span>
+                  }
+                  backgroundColor={grey(200)}
+                />
+              </div>
+              <div
+                className="cursor-pointer"
+                style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                onClick={handleRemoveOption}
+              >
+                <Relationship
+                  value={
+                    <span className="svg-icon-sm svg-text">
+                      <CrossIcon />
                     </span>
                   }
                   backgroundColor={grey(200)}

@@ -212,7 +212,9 @@ export default function DefaultCell(cellProperties: Cell) {
             />
           </CellContext.Provider>
         );
-
+      /** Tags option */
+      case DataTypes.TAGS:
+        return <span></span>;
       /** Calendar option */
       case DataTypes.CALENDAR:
         return (
