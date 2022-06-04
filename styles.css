@@ -513,8 +513,8 @@
 .react-datepicker {
   font-size: 0.8rem;
   background-color: var(--background-primary);
-  color: var(--background-primary-alt);
-  border: 1px solid var(--background-secondary);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
   border-radius: 0.3rem;
   display: inline-block;
   position: relative;
