@@ -41,6 +41,9 @@ export default function DefaultCell(cellProperties: Cell) {
   );
   // set contextValue when cell is loaded
   useEffect(() => {
+    LOGGER.debug(
+      `default useEffect. dataType:${dataType} - value: ${contextValue.value} initialValue: ${initialValue}`
+    );
     switch (dataType) {
       case DataTypes.TASK:
         //TODO - this is a hack. find why is layout effect called twice
@@ -53,6 +56,10 @@ export default function DefaultCell(cellProperties: Cell) {
           (cellProperties as any).initialState.view.file.path
         );
         break;
+      case DataTypes.MARKDOWN:
+        containerCellRef.current.innerHTML = "";
+        renderMarkdown(cellProperties, initialValue, containerCellRef.current);
+        break;
       default:
         if (!dirtyCell && initialValue !== contextValue.value) {
           setContextValue({
@@ -61,16 +68,22 @@ export default function DefaultCell(cellProperties: Cell) {
           });
         }
     }
-  }, []);
+  });
 
   useEffect(() => {
     if (editableMdRef.current) {
+      LOGGER.debug(
+        `useEffect hooked with editableMdRef. current value & dirtyCell: ${contextValue.value} ${dirtyCell}`
+      );
       editableMdRef.current.focus();
     }
   }, [editableMdRef, dirtyCell]);
 
   useEffect(() => {
     if (!dirtyCell && containerCellRef.current) {
+      LOGGER.debug(
+        `useEffect hooked with dirtyCell. Value:${contextValue.value}`
+      );
       //TODO - this is a hack. find why is layout effect called twice
       containerCellRef.current.innerHTML = "";
       renderMarkdown(
@@ -163,6 +176,12 @@ export default function DefaultCell(cellProperties: Cell) {
 
       /** Markdown option */
       case DataTypes.MARKDOWN:
+        if (initialValue !== contextValue.value.toString()) {
+          setContextValue({
+            value: initialValue,
+            update: false,
+          });
+        }
         return (
           <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
         );

@@ -89,7 +89,7 @@ function columnOptions(
 ): TableColumn {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = column.options ?? [];
-  if (Object.values(DataTypes).includes(column.input)) {
+  if ((Object.values(DataTypes) as Array<string>).includes(column.input)) {
     LOGGER.debug(`<= columnOptions`, `return ${column.input} column`);
     return {
       ...(column as Partial<TableColumn>),

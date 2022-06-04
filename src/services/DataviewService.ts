@@ -92,13 +92,8 @@ class DataviewProxy {
                 // Do nothing
                 break;
             default:
-                if (DateTime.isDateTime(wrapped.value)) {
-                    LOGGER.debug("adapting DateTime to string...");
-                    // Values of dataview parse to md friendly strings
-                    parsedLiteral = wrapped.value.toFormat("yyyy-MM-dd");
-                } else {
-                    parsedLiteral = this.getDataviewAPI().value.toString(literal);
-                }
+                parsedLiteral = parsedLiteral = this.parseToString(wrapped);
+
         }
         LOGGER.debug(`<=parseLiteral`);
         return parsedLiteral;
