@@ -1,4 +1,5 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
+import { DataTypes } from "helpers/Constants";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DataviewService } from "services/DataviewService";
 export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, deletedColumn?: string): string => {
@@ -25,6 +26,7 @@ export const parseInlineFieldsToString = (inlineFields: RowDatabaseFields): stri
 function parseLiteralToString(literal: Literal, level: number, key?: string): string[] {
     const literalBlock: string[] = [];
     literal = DataviewService.parseDataArray(literal);
+    // Manage Arrays
     if (DataviewService.getDataviewAPI().value.isArray(literal)) {
         literalBlock.push(`${" ".repeat(level)}${key}:`);
         literal.forEach((literal, index) => {
@@ -32,9 +34,9 @@ function parseLiteralToString(literal: Literal, level: number, key?: string): st
         });
     }
     else if (key) {
-        literalBlock.push(`${" ".repeat(level)}${key}: ${literal}`);
+        literalBlock.push(`${" ".repeat(level)}${key}: ${DataviewService.parseLiteral(literal, DataTypes.MARKDOWN)}`);
     } else {
-        literalBlock.push(`${" ".repeat(level)}- ${literal}`);
+        literalBlock.push(`${" ".repeat(level)}- ${DataviewService.parseLiteral(literal, DataTypes.MARKDOWN)}`);
     }
     return literalBlock;
 }

@@ -74,6 +74,12 @@ class DataviewProxy {
             .type} to ${dataTypeDst}`);
         // Check empty or undefined literals
         switch (dataTypeDst) {
+            case DataTypes.TEXT:
+                parsedLiteral = this.parseToString(wrapped);
+                break;
+            case DataTypes.MARKDOWN:
+                parsedLiteral = this.parseToMarkdown(wrapped);
+                break;
             case DataTypes.CALENDAR:
             case DataTypes.CALENDAR_TIME:
                 parsedLiteral = this.parseToCalendar(wrapped);
@@ -120,16 +126,34 @@ class DataviewProxy {
         return this.instance;
     }
 
-    private parseToCalendar(literal: WrappedLiteral): Literal {
-        if (DateTime.isDateTime(literal.value)) {
-            if (literal.type === 'string') {
-                return DateTime.fromISO(literal.value);
+    private parseToCalendar(wrapped: WrappedLiteral): Literal {
+        if (DateTime.isDateTime(wrapped.value)) {
+            if (wrapped.type === 'string') {
+                return DateTime.fromISO(wrapped.value);
             } else {
-                return literal.value;
+                return wrapped.value;
             }
         } else {
             return null;
         }
+    }
+
+    private parseToString(wrapped: WrappedLiteral): Literal {
+        if (DateTime.isDateTime(wrapped.value)) {
+            LOGGER.debug("adapting DateTime to string...");
+            // Values of dataview parse to md friendly strings
+            return wrapped.value.toFormat("yyyy-MM-dd");
+        } else {
+            return this.getDataviewAPI().value.toString(wrapped.value);
+        }
+    }
+
+    private parseToMarkdown(wrapped: WrappedLiteral): Literal {
+        let auxMarkdown = this.parseToString(wrapped) as string;
+        if (auxMarkdown.contains(":")) {
+            auxMarkdown = `"${auxMarkdown}"`;
+        }
+        return auxMarkdown;
     }
 }
 

@@ -29,7 +29,6 @@ export default class NoteInfo {
         aFile[MetadataColumns.CREATED] = this.page.file.ctime;
         aFile[MetadataColumns.MODIFIED] = this.page.file.mtime;
         aFile[MetadataColumns.TASKS] = this.page.file.tasks;
-
         /** Optional fields */
         Object.keys(this.page).forEach(property => {
             const value = this.page[property];

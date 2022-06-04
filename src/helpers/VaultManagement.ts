@@ -75,7 +75,6 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   if (dbYaml.filters) {
     folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
   }
-
   folderFiles.map(async (page) => {
     const noteInfo = new NoteInfo(page, ++id);
     rows.push(noteInfo.getRowDataType(columns));
