@@ -325,10 +325,11 @@
 }
 
 .database-plugin__relationship {
+  color: rgb(66, 66, 66);
   box-sizing: border-box;
   font-weight: 400;
   padding: 2px 6px;
-  border-radius: 4;
+  border-radius: 4px;
   display: inline-block;
 }
 
