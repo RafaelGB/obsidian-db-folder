@@ -6,6 +6,7 @@
 - Visual bug after deleting and adding the same column. The data was removed into the note but not into the table [ISSUE#83](https://github.com/RafaelGB/obsidian-db-folder/issues/83)
 - Add column is out of draggable area now, so you cant dnd to the right [ISSUE#63](https://github.com/RafaelGB/obsidian-db-folder/issues/63)
 - onBlur event when changing the name of a column now works correctly [ISSUE#96](https://github.com/RafaelGB/obsidian-db-folder/issues/96)
+- `:` inside text cells now saves wrapped with `"your msg"` [ISSUE#90](https://github.com/RafaelGB/obsidian-db-folder/issues/90)
 ## 1.6.2
 *Published on 2022/06/02*
 ### No longer broken
