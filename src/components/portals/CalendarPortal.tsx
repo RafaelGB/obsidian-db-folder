@@ -16,7 +16,10 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-  const valueCandidate = intialState.data[row.index][column.key];
+  const [calendarState, setCalendarState] = useState(
+    intialState.data[row.index][column.key]
+  );
+
   function handleOnClick(event: any) {
     event.preventDefault();
     setShowDatePicker(true);
@@ -33,7 +36,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       row: cellProperties.row,
       columnId: column.id,
     });
-
+    setCalendarState(newValue);
     setShowDatePicker(false);
   }
 
@@ -41,13 +44,12 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     const el = document.getElementById("popper-container");
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
-
   return showDatePicker ? (
     <DatePicker
       dateFormat="yyyy-MM-dd"
       selected={
-        DateTime.isDateTime(valueCandidate)
-          ? (valueCandidate as unknown as DateTime).toJSDate()
+        DateTime.isDateTime(calendarState)
+          ? (calendarState as unknown as DateTime).toJSDate()
           : null
       }
       onChange={handleCalendarChange}
@@ -58,8 +60,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     />
   ) : (
     <span className={`data-input ${c("calendar")}`} onClick={handleOnClick}>
-      {DateTime.isDateTime(valueCandidate)
-        ? (valueCandidate as unknown as DateTime).toFormat("yyyy-MM-dd")
+      {DateTime.isDateTime(calendarState)
+        ? (calendarState as unknown as DateTime).toFormat("yyyy-MM-dd")
         : "Pick a date..."}
     </span>
   );

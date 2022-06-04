@@ -195,7 +195,6 @@ export default function DefaultCell(cellProperties: Cell) {
         );
       /** Calendar option */
       case DataTypes.CALENDAR:
-        console.log("calendar", initialState);
         return (
           <CalendarPortal
             intialState={initialState}
