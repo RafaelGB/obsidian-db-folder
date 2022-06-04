@@ -31,7 +31,7 @@ const CalendarTimePortal = (calendarProps: CalendarProps) => {
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
       key: column.key,
-      value: DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
+      value: DateTime.fromJSDate(date).toISO(),
       row: cellProperties.row,
       columnId: column.id,
     });
@@ -59,8 +59,9 @@ const CalendarTimePortal = (calendarProps: CalendarProps) => {
         selected={calendarState}
         onChange={handleCalendarChange}
         popperContainer={CalendarContainer}
-        timeInputLabel="Time:"
-        showTimeInput
+        timeFormat="HH:mm"
+        timeCaption="time"
+        showTimeSelect
         placeholderText="Pick a moment..."
       />
     </div>
