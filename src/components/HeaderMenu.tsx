@@ -296,7 +296,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     columnWidthState.widthRecord[newKey] = getColumnWidthStyle(rows, column);
 
     /*
-      To adjust column settings to the new key, we need to update the order 
+      To adjust column settings to the new key, we need to update the order
       of the columns with it and calculate the new width
      */
     delete columnWidthState.widthRecord[column.id];
@@ -435,7 +435,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                             <span className="svg-icon svg-text icon-margin">
                               {type.icon}
                             </span>
-                            {type.label}
+                            <span style={{ textTransform: "capitalize" }}>
+                              {type.label}
+                            </span>
                           </div>
                         </div>
                       ))}
