@@ -496,7 +496,6 @@
 .react-datepicker-wrapper input[type="text"],
 .react-datepicker-wrapper input[type="text"]:focus {
   border: none;
-  font-family: "Inter", sans-serif;
   font-size: var(--font-size-normal);
   padding: 0.5rem;
   color: var(--text-normal);
