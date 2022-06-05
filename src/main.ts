@@ -50,7 +50,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	viewMap: Map<string, DatabaseView> = new Map();
 
-	_loaded: boolean = false;
+	_loaded = false;
 
 	stateManagers: Map<TFile, StateManager> = new Map();
 
@@ -108,7 +108,7 @@ export default class DBFolderPlugin extends Plugin {
 		priority: number,
 		processor: (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => Promise<void>
 	) {
-		let registered = this.registerMarkdownCodeBlockProcessor(language, processor);
+		const registered = this.registerMarkdownCodeBlockProcessor(language, processor);
 		registered.sortOrder = priority;
 	}
 
@@ -164,7 +164,7 @@ export default class DBFolderPlugin extends Plugin {
 		}
 	}
 
-	async setMarkdownView(leaf: WorkspaceLeaf, focus: boolean = true) {
+	async setMarkdownView(leaf: WorkspaceLeaf, focus = true) {
 		await leaf.setViewState(
 			{
 				type: 'markdown',
@@ -220,6 +220,7 @@ export default class DBFolderPlugin extends Plugin {
 			` enable_show_state: ${local_settings.enable_show_state}`,
 			` group_folder_column: `,
 			` remove_field_when_delete_column: ${local_settings.remove_field_when_delete_column}`,
+			` cell_size: ${local_settings.cell_size}`,
 			` show_metadata_created: ${local_settings.show_metadata_created}`,
 			` show_metadata_modified: ${local_settings.show_metadata_modified}`,
 			` source_data: ${local_settings.source_data}`,

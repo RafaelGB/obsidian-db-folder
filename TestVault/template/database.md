@@ -110,12 +110,13 @@ columns:
       source_data: current_folder
 config:
   enable_show_state: false
-  group_folder_column: 
+  group_folder_column:
   remove_field_when_delete_column: true
+  cell_size: normal
   show_metadata_created: true
   show_metadata_modified: true
   source_data: current_folder
-  source_form_result: 
+  source_form_result:
   show_metadata_tasks: true
 filters:
 %%>
