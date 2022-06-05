@@ -55,6 +55,8 @@ const TagsPortal = (tagsProps: TagsProps) => {
           options={multiOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
+          menuPortalTarget={document.getElementById("popper-container")}
+          isSearchable
         />
       </div>
     );
@@ -69,11 +71,16 @@ const TagsPortal = (tagsProps: TagsProps) => {
               onClick={() => setShowSelectTags(true)}
             >
               {tagsState.map((tag: string) => (
-                <Relationship
-                  key={`key-Relationship-${tag}`}
-                  value={tag}
-                  backgroundColor={getColor(tag)}
-                />
+                <div
+                  key={`key-${tag}`}
+                  style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                >
+                  <Relationship
+                    key={`key-Relationship-${tag}`}
+                    value={tag}
+                    backgroundColor={getColor(tag)}
+                  />
+                </div>
               ))}
             </div>
           )}
