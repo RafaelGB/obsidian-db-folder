@@ -9,8 +9,7 @@ export default function Relationship(relationShipProps: RelationshipProps) {
     <span
       className={c("relationship")}
       style={{
-        backgroundColor: backgroundColor,
-        color: grey(800),
+        backgroundColor: backgroundColor
       }}
     >
       {value}

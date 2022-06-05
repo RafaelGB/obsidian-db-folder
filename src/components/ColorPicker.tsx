@@ -2,6 +2,7 @@ import { ColorPickerProps } from "cdm/StyleModel";
 import React from "react";
 import { ColorResult, SketchPicker } from "react-color";
 import { castHslToString } from "components/styles/ColumnWidthStyle";
+import { c } from "helpers/StylesHelper";
 
 export function ColorPicker(colorPickerProps: ColorPickerProps) {
   const { view, options, option, columnKey } = colorPickerProps;
@@ -31,9 +32,9 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
   return (
     <>
       <span
-        className="colorPicker"
+        className={"colorPicker " + c("relationship")}
         onClick={() => setShowColorPicker(!showColorPicker)}
-        style={{ backgroundColor: colorState, padding: "5px" }}
+        style={{ backgroundColor: colorState }}
       >
         {option.label}
       </span>
