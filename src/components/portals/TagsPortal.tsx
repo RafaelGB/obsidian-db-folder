@@ -1,4 +1,4 @@
-import { TagsProps } from "cdm/ComponentsModel";
+import { RowSelectOption, TagsProps } from "cdm/ComponentsModel";
 import Relationship from "components/RelationShip";
 import Select, { StylesConfig } from "react-select";
 import { grey } from "helpers/Colors";
@@ -33,11 +33,11 @@ const TagsPortal = (tagsProps: TagsProps) => {
     );
     return (match && match.backgroundColor) || grey(200);
   }
-  const testing = [
-    { value: "vanilla", label: "Chocolate" },
-    { value: "vanilla", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  const multiOptions = column.options.map((option: RowSelectOption) => ({
+    value: option.label,
+    label: option.label,
+    color: option.backgroundColor,
+  }));
   function PortalTags() {
     return (
       <div
@@ -55,7 +55,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
           <Select
             closeMenuOnSelect={false}
             isMulti
-            options={testing}
+            options={multiOptions}
             onBlur={() => setShowSelectTags(false)}
           />
         )}
