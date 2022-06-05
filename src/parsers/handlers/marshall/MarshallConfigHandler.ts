@@ -1,9 +1,9 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
-import { SourceDataTypes } from 'helpers/Constants';
+import { SourceDataTypes, CellSizeOptions } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class MarshallConfigHandler extends AbstractYamlHandler {
-    handlerName: string = 'configuration';
+    handlerName = 'configuration';
 
     public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse {
         const { yaml } = handlerResponse;
@@ -24,6 +24,12 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
             if (checkNullable(yaml.config.remove_field_when_delete_column)) {
                 this.addError(`There was not remove_field_when_delete_column key in yaml. Default will be loaded`);
                 yaml.config.remove_field_when_delete_column = false;
+            }
+
+            // if cell_size is not defined, load default
+            if (checkNullable(yaml.config.cell_size)) {
+                this.addError(`There was not cell_size key in yaml. Default will be loaded`);
+                yaml.config.cell_size = CellSizeOptions.NORMAL;
             }
 
             // if show_metadata_created is not defined, load default

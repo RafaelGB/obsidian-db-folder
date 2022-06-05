@@ -197,6 +197,14 @@ export const SourceDataTypes = Object.freeze({
   INCOMING_LINK: 'incoming_link',
 });
 
+
+export const CellSizeOptions = Object.freeze({
+  COMPACT: 'compact',
+  NORMAL: 'normal',
+  WIDE: 'wide'
+})
+
+
 export const WidthVariables = Object.freeze({
   ICON_SPACING: 17,
   MAGIC_SPACING: 10
@@ -245,6 +253,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
   local_settings: {
     enable_show_state: false,
     remove_field_when_delete_column: false,
+    cell_size: CellSizeOptions.NORMAL,
     group_folder_column: '',
     show_metadata_created: false,
     show_metadata_modified: false,
