@@ -9,8 +9,6 @@ export class CellSizeDropDownHandler extends AbstractSettingsHandler {
         const source_dropdown_promise = async (value: string): Promise<void> => {
             // update settings
             view.diskConfig.updateConfig('cell_size', value);
-            // Force refresh of settings
-            settingsManager.reset(settingHandlerResponse);
         };
         // render dropdown inside container
         add_dropdown(
