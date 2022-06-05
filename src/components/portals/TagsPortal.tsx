@@ -4,10 +4,8 @@ import CreatableSelect from "react-select/creatable";
 
 import { grey } from "helpers/Colors";
 import React, { useState } from "react";
-import { usePopper } from "react-popper";
-import ReactDOM from "react-dom";
-import { StyleVariables } from "helpers/Constants";
 import { ActionMeta, OnChangeValue } from "react-select";
+import { c } from "helpers/StylesHelper";
 
 const TagsPortal = (tagsProps: TagsProps) => {
   const { intialState, column, dispatch, cellProperties } = tagsProps;
@@ -41,18 +39,9 @@ const TagsPortal = (tagsProps: TagsProps) => {
     console.groupEnd();
   };
 
-  function PortalTags() {
+  function TagsForm() {
     return (
-      <div
-        className="menu"
-        style={{
-          padding: "0.75rem",
-          background: StyleVariables.BACKGROUND_SECONDARY,
-          zIndex: 4,
-          minWidth: 200,
-          maxWidth: 320,
-        }}
-      >
+      <div className={c("tags")}>
         <CreatableSelect
           closeMenuOnSelect={false}
           isMulti
@@ -66,7 +55,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
   return (
     <>
       {showSelectTags
-        ? PortalTags()
+        ? TagsForm()
         : tagsState && (
             <div
               className="cell-padding d-flex cursor-default align-items-center flex-1"
