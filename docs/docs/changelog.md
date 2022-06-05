@@ -1,6 +1,8 @@
-## 1.4.0
+## 1.7.0
 ### Improved
 - Select column type can remove the cell value now easily.
+### Visual
+- Visual improvements with selected tags, properties menu & calendars [PR#105](https://github.com/RafaelGB/obsidian-db-folder/pull/105) [artisticat1](https://github.com/artisticat1)
 ### No longer broken
 - with subgroup config on, now file link is updated correctly [ISSUE#101](https://github.com/RafaelGB/obsidian-db-folder/issues/101)
 ## 1.6.3
