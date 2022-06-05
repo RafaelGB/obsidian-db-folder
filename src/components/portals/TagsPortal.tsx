@@ -6,6 +6,7 @@ import { grey } from "helpers/Colors";
 import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 const TagsPortal = (tagsProps: TagsProps) => {
   const { intialState, column, dispatch, cellProperties } = tagsProps;
@@ -14,21 +15,26 @@ const TagsPortal = (tagsProps: TagsProps) => {
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    intialState.data[row.index][column.key]
+    intialState.data[row.index][column.key] as Literal[]
   );
 
-  function getColor() {
+  function getColor(tag: string) {
     const match = column.options.find(
-      (option: { label: string }) => option.label === tagsState
+      (option: { label: string }) => option.label === tag
     );
     return (match && match.backgroundColor) || grey(200);
   }
+  const defaultValue = tagsState.map((tag: string) => ({
+    label: tag,
+    value: tag,
+    color: getColor(tag),
+  }));
+
   const multiOptions = column.options.map((option: RowSelectOption) => ({
     value: option.label,
     label: option.label,
     color: option.backgroundColor,
   }));
-
   const handleOnChange = (
     newValue: OnChangeValue<any, true>,
     actionMeta: ActionMeta<RowSelectOption>
@@ -43,6 +49,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
     return (
       <div className={c("tags")}>
         <CreatableSelect
+          defaultValue={defaultValue}
           closeMenuOnSelect={false}
           isMulti
           options={multiOptions}
@@ -61,10 +68,13 @@ const TagsPortal = (tagsProps: TagsProps) => {
               className="cell-padding d-flex cursor-default align-items-center flex-1"
               onClick={() => setShowSelectTags(true)}
             >
-              <Relationship
-                value={tagsState.toString()}
-                backgroundColor={getColor()}
-              />
+              {tagsState.map((tag: string) => (
+                <Relationship
+                  key={`key-Relationship-${tag}`}
+                  value={tag}
+                  backgroundColor={getColor(tag)}
+                />
+              ))}
             </div>
           )}
     </>

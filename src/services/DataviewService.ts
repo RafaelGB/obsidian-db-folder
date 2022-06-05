@@ -80,6 +80,9 @@ class DataviewProxy {
             case DataTypes.MARKDOWN:
                 parsedLiteral = this.parseToMarkdown(wrapped);
                 break;
+            case DataTypes.TAGS:
+                parsedLiteral = this.parseToOptionsArray(wrapped);
+                break;
             case DataTypes.CALENDAR:
             case DataTypes.CALENDAR_TIME:
                 parsedLiteral = this.parseToCalendar(wrapped);
@@ -149,6 +152,14 @@ class DataviewProxy {
             auxMarkdown = `"${auxMarkdown}"`;
         }
         return auxMarkdown;
+    }
+
+    private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
+        if (!Array.isArray(wrapped.value)) {
+            return [wrapped.value];
+        }
+        return wrapped.value;
+
     }
 }
 
