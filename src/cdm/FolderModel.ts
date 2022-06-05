@@ -88,6 +88,7 @@ export type TableDataType = {
     stateManager: StateManager,
     dispatch?: Dispatch<any>,
     initialState?: InitialState,
+    cellSize: string
 }
 export interface DatabaseHeaderProps {
     columns: any,

@@ -8,7 +8,7 @@ Details about your database
 - **name**: Name asociated to your database.
 - **description**: extra information explaining the purpose of the database. Will be displated in preview mode.
 ### Database
-The *columns* key is used to charge the correct information when you charge the react-table. Each column supports all the literals of react-table column configurations. 
+The *columns* key is used to charge the correct information when you charge the react-table. Each column supports all the literals of react-table column configurations.
 
 Mandatory:
 
@@ -158,6 +158,7 @@ columns:
 config:
   enable_show_state: false
   group_folder_column: none
+  cell_size: normal
   remove_field_when_delete_column: true
   show_metadata_created: false
   show_metadata_modified: false

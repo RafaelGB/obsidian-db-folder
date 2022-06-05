@@ -286,6 +286,23 @@
   align-items: center;
 }
 
+
+.database-plugin__cell_size_compact .database-plugin__td {
+  padding: 0;
+}
+
+
+.database-plugin__cell_size_normal .database-plugin__td {
+  padding: 0.3rem;
+}
+
+
+.database-plugin__cell_size_wide .database-plugin__td {
+  padding: 0.6rem;
+}
+
+
+
 .database-plugin__table {
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);

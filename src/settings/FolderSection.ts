@@ -1,6 +1,7 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { FilterDataviewHandler } from './handlers/folder/FilterDataviewHandler';
+import { CellSizeDropDownHandler } from './handlers/folder/CellSizeDropDownHandler';
 import { DetailsFormHandler } from './handlers/folder/DetailsFormHandler';
 
 /**
@@ -28,6 +29,7 @@ export function folder_settings_section(settingHandlerResponse: SettingHandlerRe
 function getHandlers(): SettingHandler[] {
     return [
         new DetailsFormHandler(),
+        new CellSizeDropDownHandler(),
         new FilterDataviewHandler(),
     ];
 }

@@ -14,6 +14,7 @@ interface GlobalSettings {
 export interface LocalSettings {
     enable_show_state: boolean;
     group_folder_column: string;
+    cell_size: string;
     remove_field_when_delete_column: boolean;
     show_metadata_created: boolean;
     show_metadata_modified: boolean;

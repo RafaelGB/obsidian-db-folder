@@ -239,7 +239,7 @@ export function Table(initialState: TableDataType) {
             width: totalWidth,
           },
         })}
-        className={`${c("table noselect")}`}
+        className={`${c("table noselect cell_size_" + initialState.cellSize)}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
       >
@@ -341,9 +341,8 @@ export function Table(initialState: TableDataType) {
                                 ...provided.dragHandleProps,
                                 ...column.getHeaderProps({
                                   style: {
-                                    width: `${
-                                      columnsWidthState.widthRecord[column.id]
-                                    }px`,
+                                    width: `${columnsWidthState.widthRecord[column.id]
+                                      }px`,
                                     ...getDndItemStyle(
                                       snapshot.isDragging,
                                       provided.draggableProps.style
