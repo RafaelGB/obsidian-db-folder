@@ -19,6 +19,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector popper state
   const [selectPop, setSelectPop] = useState(null);
   const { styles, attributes } = usePopper(selectRef, selectPop);
+  // Show add button
   const [showAdd, setShowAdd] = useState(false);
   // Selector popper state
   const [domReady, setDomReady] = useState(false);

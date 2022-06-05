@@ -1,6 +1,8 @@
 ## 1.7.0
+### Shiny new things
+- New config option to choose the row height [ISSUE#69](https://github.com/RafaelGB/obsidian-db-folder/issues/69) [artisticat1](https://github.com/artisticat1)
 ### Improved
-- Select column type can remove the cell value now easily.
+-  New button to remove the cell value easily of select column type
 ### Visual
 - Visual improvements with selected tags, properties menu & calendars [PR#105](https://github.com/RafaelGB/obsidian-db-folder/pull/105) [artisticat1](https://github.com/artisticat1)
 ### No longer broken
