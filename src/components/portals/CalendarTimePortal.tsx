@@ -1,28 +1,23 @@
-import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@material-ui/core";
 import { CalendarProps } from "cdm/ComponentsModel";
 
-const CalendarTimePortal = (calendarProps: CalendarProps) => {
-  const { column, cellProperties } = calendarProps;
+const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
+  const { column, cellProperties, intialState } = calendarTimeProps;
+  const { row } = cellProperties;
   const dataDispatch = (cellProperties as any).dataDispatch;
-  // Selector reference state
-
+  // Calendar state
+  const [calendarTimeState, setCalendarTimeState] = useState(
+    intialState.data[row.index][column.key]
+  );
   // Selector popper state
-  /** state of cell value */
-  const { contextValue, setContextValue } = useContext(CellContext);
 
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
-  const [calendarState, setCalendarState] = useState(
-    DateTime.isDateTime(contextValue.value)
-      ? contextValue.value.toJSDate()
-      : null
-  );
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);
@@ -36,11 +31,7 @@ const CalendarTimePortal = (calendarProps: CalendarProps) => {
       columnId: column.id,
     });
 
-    setCalendarState(date);
-    setContextValue({
-      value: newValue,
-      update: true,
-    });
+    setCalendarTimeState(newValue);
   }
 
   const CalendarContainer = (containerProps: any) => {
@@ -50,13 +41,19 @@ const CalendarTimePortal = (calendarProps: CalendarProps) => {
 
   return column.isMetadata ? (
     <span className="data-input calendar-time">
-      {(contextValue.value as DateTime).toFormat("yyyy-MM-dd h:mm a")}
+      {DateTime.isDateTime(calendarTimeState)
+        ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
+        : "Invalid metadata date!"}
     </span>
   ) : (
     <div className="data-input calendar-time">
       <DatePicker
         dateFormat="yyyy-MM-dd h:mm aa"
-        selected={calendarState}
+        selected={
+          DateTime.isDateTime(calendarTimeState)
+            ? (calendarTimeState as unknown as DateTime).toJSDate()
+            : null
+        }
         onChange={handleCalendarChange}
         popperContainer={CalendarContainer}
         timeFormat="HH:mm"

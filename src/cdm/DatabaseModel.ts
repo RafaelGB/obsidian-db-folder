@@ -43,6 +43,7 @@ export type OptionSelect = {
 }
 export type BaseComponentProps = {
     intialState: TableDataType;
+    column: TableColumn;
 }
 
 export type SortedType = {

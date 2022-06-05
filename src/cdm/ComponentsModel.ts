@@ -1,6 +1,5 @@
 import { ActionType, Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { BaseComponentProps } from "cdm/DatabaseModel";
 
 export type RowSelectOption = {
@@ -10,16 +9,16 @@ export type RowSelectOption = {
 export type PopperProps = {
     dispatch: (action: ActionType) => void;
     row: any;
-    column: TableColumn;
     columns: any;
     note: NoteInfo;
 } & BaseComponentProps;
 
 
 export type TagsProps = {
+    dispatch: (action: ActionType) => void;
+    cellProperties: Cell;
 } & BaseComponentProps;
 
 export type CalendarProps = {
-    column: TableColumn;
     cellProperties: Cell;
 } & BaseComponentProps;

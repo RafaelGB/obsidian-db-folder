@@ -45,8 +45,6 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     label: string;
     backgroundColor?: string;
   }) {
-    setContextValue({ value: option.label, update: true });
-    setShowSelect(false);
     // save on disk & move file if its configured on the column
     dispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
@@ -57,6 +55,8 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       columnId: column.id,
       state: intialState,
     });
+    setContextValue({ value: option.label, update: true });
+    setShowSelect(false);
   }
 
   function handleOptionBlur(e: any) {

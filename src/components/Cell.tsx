@@ -40,6 +40,7 @@ export default function DefaultCell(cellProperties: Cell) {
 
   const initialState = (cellProperties as any)
     .initialState as unknown as TableDataType;
+  const column = cellProperties.column as unknown as TableColumn;
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`
@@ -198,7 +199,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <CalendarPortal
             intialState={initialState}
-            column={cellProperties.column as unknown as TableColumn}
+            column={column}
             cellProperties={cellProperties}
           />
         );
@@ -206,13 +207,11 @@ export default function DefaultCell(cellProperties: Cell) {
       /** Calendar with time option */
       case DataTypes.CALENDAR_TIME:
         return (
-          <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <CalendarTimePortal
-              intialState={initialState}
-              column={cellProperties.column as unknown as TableColumn}
-              cellProperties={cellProperties}
-            />
-          </CellContext.Provider>
+          <CalendarTimePortal
+            intialState={initialState}
+            column={column}
+            cellProperties={cellProperties}
+          />
         );
 
       /** Selector option */
@@ -222,7 +221,7 @@ export default function DefaultCell(cellProperties: Cell) {
             <PopperSelectPortal
               dispatch={dataDispatch}
               row={cellProperties.row}
-              column={cellProperties.column as unknown as TableColumn}
+              column={column}
               columns={columns}
               note={note}
               intialState={initialState}
@@ -233,7 +232,12 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.TAGS:
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <TagsPortal intialState={initialState} />
+            <TagsPortal
+              intialState={initialState}
+              column={column}
+              dispatch={dataDispatch}
+              cellProperties={cellProperties}
+            />
           </CellContext.Provider>
         );
 
@@ -245,7 +249,7 @@ export default function DefaultCell(cellProperties: Cell) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CheckboxCell
               intialState={initialState}
-              column={cellProperties.column as unknown as TableColumn}
+              column={column}
               cellProperties={cellProperties}
             />
           </CellContext.Provider>
