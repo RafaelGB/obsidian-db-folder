@@ -32,7 +32,7 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
   return (
     <>
       <span
-        className={"colorPicker " + c("relationship")}
+        className={`colorPicker ${c("relationship")}`}
         onClick={() => setShowColorPicker(!showColorPicker)}
         style={{ backgroundColor: colorState }}
       >
