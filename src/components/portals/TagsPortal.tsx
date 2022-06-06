@@ -95,6 +95,30 @@ const TagsPortal = (tagsProps: TagsProps) => {
               left: "40",
               backgroundColor: `${StyleVariables.BACKGROUND_SECONDARY}`,
             }),
+            control: (styles) => ({ ...styles, backgroundColor: "white" }),
+            option: (styles, { data }) => ({
+              ...styles,
+              backgroundColor: data.color,
+              color: "black",
+            }),
+            multiValue: (styles, { data }) => {
+              return {
+                ...styles,
+                backgroundColor: data.color,
+              };
+            },
+            multiValueLabel: (styles, { data }) => ({
+              ...styles,
+              color: data.color,
+            }),
+            multiValueRemove: (styles, { data }) => ({
+              ...styles,
+              color: data.color,
+              ":hover": {
+                backgroundColor: data.color,
+                color: "white",
+              },
+            }),
           }}
           options={multiOptions}
           onBlur={() => setShowSelectTags(false)}
