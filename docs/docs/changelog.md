@@ -1,6 +1,7 @@
 ## 1.7.0
 ### Shiny new things
 - New config option to choose the row height [ISSUE#69](https://github.com/RafaelGB/obsidian-db-folder/issues/69) [artisticat1](https://github.com/artisticat1)
+- New config to freeze first column [ISSUE#51](https://github.com/RafaelGB/obsidian-db-folder/issues/51)
 ### Improved
 -  New button to remove the cell value easily of select column type
 ### Visual
