@@ -2,7 +2,7 @@ import { RowSelectOption, TagsProps } from "cdm/ComponentsModel";
 import Relationship from "components/RelationShip";
 import CreatableSelect from "react-select/creatable";
 
-import { grey } from "helpers/Colors";
+import { grey, randomColor } from "helpers/Colors";
 import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
@@ -11,7 +11,7 @@ import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { intialState, column, dispatch, cellProperties } = tagsProps;
+  const { intialState, column, dispatch, cellProperties, columns } = tagsProps;
   const { row } = cellProperties;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
@@ -55,6 +55,22 @@ const TagsPortal = (tagsProps: TagsProps) => {
       row: cellProperties.row,
       columnId: column.id,
     });
+    // Add new option to column options
+    newValue
+      .filter(
+        (tag: any) =>
+          tag.__isNew__ &&
+          !column.options.find((option: any) => option.label === tag.value)
+      )
+      .forEach((tag: any) => {
+        dispatch({
+          columns: columns,
+          option: tag.value,
+          backgroundColor: randomColor(),
+          columnId: column.id,
+          type: ActionTypes.ADD_OPTION_TO_COLUMN,
+        });
+      });
     setTagsState(arrayTags);
   };
 
@@ -83,7 +99,10 @@ const TagsPortal = (tagsProps: TagsProps) => {
         ? TagsForm()
         : tagsState && (
             <div
-              className="cell-padding d-flex cursor-default align-items-center flex-1"
+              className="d-flex flex-wrap-wrap"
+              style={{
+                padding: "0.75rem",
+              }}
               onClick={() => setShowSelectTags(true)}
             >
               {tagsState.map((tag: string) => (

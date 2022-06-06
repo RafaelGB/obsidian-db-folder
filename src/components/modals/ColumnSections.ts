@@ -62,6 +62,7 @@ function addParticularInputSettings(dataType: string): ColumnHandler[] {
             particularHandlers.push(new MediaDimensionsHandler());
             break;
         case DataTypes.SELECT:
+        case DataTypes.TAGS:
             particularHandlers.push(new SelectedColumnOptionsHandler());
             break;
         default:

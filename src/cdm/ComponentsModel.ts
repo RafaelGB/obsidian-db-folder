@@ -17,6 +17,7 @@ export type PopperProps = {
 export type TagsProps = {
     dispatch: (action: ActionType) => void;
     cellProperties: Cell;
+    columns: any;
 } & BaseComponentProps;
 
 export type CalendarProps = {
