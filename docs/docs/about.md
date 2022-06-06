@@ -159,6 +159,7 @@ config:
   enable_show_state: false
   group_folder_column: none
   cell_size: normal
+  sticky_first_column: false
   remove_field_when_delete_column: true
   show_metadata_created: false
   show_metadata_modified: false

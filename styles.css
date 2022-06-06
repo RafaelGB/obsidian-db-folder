@@ -298,6 +298,16 @@
   padding: 0.6rem;
 }
 
+
+.database-plugin__sticky_first_column .database-plugin__td:first-child,
+.database-plugin__sticky_first_column .database-plugin__th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+
+
 .database-plugin__table {
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);
@@ -330,6 +340,7 @@
 .database-plugin__navbar {
   display: flex;
   flex: 1 0 auto;
+  background-color: var(--background-secondary);
 }
 
 .database-plugin__calendar {

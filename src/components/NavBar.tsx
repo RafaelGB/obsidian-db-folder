@@ -42,7 +42,7 @@ export function NavBar(navBarProps: NavBarProps) {
     >
       <AppBar
         position="static"
-        style={{ color: StyleVariables.TEXT_MUTED, backgroundColor: StyleVariables.BACKGROUND_SECONDARY, boxShadow: "none" }}
+        style={{ color: StyleVariables.TEXT_MUTED, backgroundColor: StyleVariables.BACKGROUND_SECONDARY, boxShadow: "none", position: "fixed", left: 0, width: "calc(100% - 20px)" }}
       >
         <Toolbar>
           <IconButton
@@ -73,6 +73,7 @@ export function NavBar(navBarProps: NavBarProps) {
           <GlobalFilter {...navBarProps.globalFilterRows} />
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </Box>
   );
 }

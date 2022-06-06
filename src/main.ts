@@ -221,6 +221,7 @@ export default class DBFolderPlugin extends Plugin {
 			` group_folder_column: `,
 			` remove_field_when_delete_column: ${local_settings.remove_field_when_delete_column}`,
 			` cell_size: ${local_settings.cell_size}`,
+			` sticky_first_column: ${local_settings.sticky_first_column}`,
 			` show_metadata_created: ${local_settings.show_metadata_created}`,
 			` show_metadata_modified: ${local_settings.show_metadata_modified}`,
 			` source_data: ${local_settings.source_data}`,
