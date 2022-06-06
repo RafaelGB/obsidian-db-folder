@@ -298,15 +298,12 @@
   padding: 0.6rem;
 }
 
-
 .database-plugin__sticky_first_column .database-plugin__td:first-child,
 .database-plugin__sticky_first_column .database-plugin__th:first-child {
   position: sticky;
   left: 0;
   z-index: 1;
 }
-
-
 
 .database-plugin__table {
   border-spacing: 0;
@@ -357,7 +354,7 @@
 }
 
 .database-plugin__tags {
-  overflow: visible;
+  background-color: var(--background-primary);
 }
 
 .text-align-right {

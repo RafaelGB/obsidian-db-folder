@@ -4,7 +4,7 @@ import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
+import { DatabaseCore, DataTypes, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
 import obtainRowDatabaseFields from 'parsers/FileToRowDatabaseFields';
 import { parseFrontmatterFieldsToString } from 'parsers/RowDatabaseFieldsToFile';
 import { DataviewService } from 'services/DataviewService';
@@ -110,7 +110,7 @@ export async function updateRowFileProxy(file: TFile, columnId: string, newValue
  * @param newColumnValue 
  * @param option 
  */
-export async function updateRowFile(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
+export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, state: TableDataType, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   const content = await VaultManagerDB.obtainContentFromTfile(file);
   const frontmatterKeys = await VaultManagerDB.obtainFrontmatterKeys(content);
@@ -162,7 +162,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: str
 
     // Check if the column is already in the frontmatter
     // assign an empty value to the new key
-    rowFields.frontmatter[newValue] = rowFields.frontmatter[columnId] ?? "";
+    rowFields.frontmatter[DataviewService.parseLiteral(newValue, DataTypes.TEXT) as string] = rowFields.frontmatter[columnId] ?? "";
     delete rowFields.frontmatter[columnId];
     await persistFrontmatter(columnId);
   }

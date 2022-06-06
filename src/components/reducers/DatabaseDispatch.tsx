@@ -23,9 +23,9 @@ import {
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
-import { RowSelectOption } from "cdm/ComponentsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
+import { RowSelectOption } from "cdm/ComponentsModel";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);

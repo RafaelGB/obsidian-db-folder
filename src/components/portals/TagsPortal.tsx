@@ -7,6 +7,8 @@ import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { ActionTypes } from "helpers/Constants";
+import NoteInfo from "services/NoteInfo";
 
 const TagsPortal = (tagsProps: TagsProps) => {
   const { intialState, column, dispatch, cellProperties } = tagsProps;
@@ -15,8 +17,13 @@ const TagsPortal = (tagsProps: TagsProps) => {
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    intialState.data[row.index][column.key] as Literal[]
+    Array.isArray(intialState.data[row.index][column.key])
+      ? (intialState.data[row.index][column.key] as Literal[])
+      : []
   );
+
+  /** Note info of current Cell */
+  const note: NoteInfo = (cellProperties.row.original as any).note;
 
   function getColor(tag: string) {
     const match = column.options.find(
@@ -39,10 +46,16 @@ const TagsPortal = (tagsProps: TagsProps) => {
     newValue: OnChangeValue<any, true>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    console.group("Value Changed");
-    console.log(newValue);
-    console.log(`action: ${actionMeta.action}`);
-    console.groupEnd();
+    const arrayTags = newValue.map((tag: any) => tag.value);
+    dispatch({
+      type: ActionTypes.UPDATE_CELL,
+      file: note.getFile(),
+      key: column.key,
+      value: arrayTags,
+      row: cellProperties.row,
+      columnId: column.id,
+    });
+    setTagsState(arrayTags);
   };
 
   function TagsForm() {
@@ -51,12 +64,15 @@ const TagsPortal = (tagsProps: TagsProps) => {
         <CreatableSelect
           defaultValue={defaultValue}
           closeMenuOnSelect={false}
+          isSearchable
           isMulti
+          autoFocus
+          menuPosition="fixed"
+          menuPlacement="auto"
           options={multiOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
           menuPortalTarget={document.getElementById("popper-container")}
-          isSearchable
         />
       </div>
     );

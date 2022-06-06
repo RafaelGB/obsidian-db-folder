@@ -1,12 +1,11 @@
-import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@material-ui/core";
-import { CalendarProps } from "cdm/ComponentsModel";
 import { c } from "helpers/StylesHelper";
+import { CalendarProps } from "cdm/ComponentsModel";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties, intialState } = calendarProps;

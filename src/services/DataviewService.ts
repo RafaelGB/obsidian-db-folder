@@ -124,7 +124,7 @@ class DataviewProxy {
         return this.instance;
     }
 
-    private parseToCalendar(wrapped: WrappedLiteral): Literal {
+    private parseToCalendar(wrapped: WrappedLiteral): DateTime {
         if (DateTime.isDateTime(wrapped.value)) {
             if (wrapped.type === 'string') {
                 return DateTime.fromISO(wrapped.value);
@@ -136,7 +136,7 @@ class DataviewProxy {
         }
     }
 
-    private parseToString(wrapped: WrappedLiteral): Literal {
+    private parseToString(wrapped: WrappedLiteral): string {
         if (DateTime.isDateTime(wrapped.value)) {
             LOGGER.debug("adapting DateTime to string...");
             // Values of dataview parse to md friendly strings
@@ -146,7 +146,7 @@ class DataviewProxy {
         }
     }
 
-    private parseToMarkdown(wrapped: WrappedLiteral): Literal {
+    private parseToMarkdown(wrapped: WrappedLiteral): string {
         let auxMarkdown = this.parseToString(wrapped) as string;
         if (auxMarkdown.contains(":")) {
             auxMarkdown = `"${auxMarkdown}"`;
