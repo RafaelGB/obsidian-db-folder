@@ -99,7 +99,6 @@ const TagsPortal = (tagsProps: TagsProps) => {
             option: (styles, { data }) => ({
               ...styles,
               backgroundColor: data.color,
-              color: "black",
             }),
             multiValue: (styles, { data }) => {
               return {
@@ -107,13 +106,13 @@ const TagsPortal = (tagsProps: TagsProps) => {
                 backgroundColor: data.color,
               };
             },
-            multiValueLabel: (styles, { data }) => ({
+            multiValueLabel: (styles) => ({
               ...styles,
-              color: data.color,
+              color: "black",
             }),
             multiValueRemove: (styles, { data }) => ({
               ...styles,
-              color: data.color,
+              color: "black",
               ":hover": {
                 backgroundColor: data.color,
                 color: "white",
