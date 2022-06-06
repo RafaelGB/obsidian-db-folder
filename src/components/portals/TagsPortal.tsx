@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { ActionTypes } from "helpers/Constants";
+import { ActionTypes, StyleVariables } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
 
 const TagsPortal = (tagsProps: TagsProps) => {
@@ -85,6 +85,17 @@ const TagsPortal = (tagsProps: TagsProps) => {
           autoFocus
           menuPosition="fixed"
           menuPlacement="auto"
+          styles={{
+            container: () => ({
+              position: "static",
+              boxSizing: "border-box",
+            }),
+            menu: () => ({
+              position: "fixed",
+              left: "40",
+              backgroundColor: `${StyleVariables.BACKGROUND_SECONDARY}`,
+            }),
+          }}
           options={multiOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
