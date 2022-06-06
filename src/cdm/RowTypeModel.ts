@@ -1,5 +1,5 @@
 import { Link } from "obsidian-dataview";
-import { RowSelectOption } from "cdm/RowSelectModel";
+import { RowSelectOption } from "cdm/ComponentsModel";
 import NoteInfo from "services/NoteInfo";
 import { ConfigColumn } from "cdm/FolderModel";
 

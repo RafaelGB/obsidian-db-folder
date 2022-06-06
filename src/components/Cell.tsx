@@ -1,17 +1,19 @@
-import { ActionTypes, DataTypes } from "helpers/Constants";
 import React, { useEffect, useRef, useState } from "react";
-import { LOGGER } from "services/Logger";
 import { Cell } from "react-table";
+import { ActionTypes, DataTypes } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
+
+import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
-import { c } from "helpers/StylesHelper";
-import CalendarPortal from "./portals/CalendarPortal";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import CalendarPortal from "components/portals/CalendarPortal";
 import CalendarTimePortal from "components/portals/CalendarTimePortal";
 import { renderMarkdown } from "components/markdown/MarkdownRenderer";
+import { CheckboxCell } from "components/Checkbox";
+import TagsPortal from "components/portals/TagsPortal";
 import { DataviewService } from "services/DataviewService";
-import { CheckboxCell } from "./Checkbox";
 
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
@@ -35,6 +37,10 @@ export default function DefaultCell(cellProperties: Cell) {
   /** state for keeping the timeout to trigger the editior */
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
+
+  const initialState = (cellProperties as any)
+    .initialState as unknown as TableDataType;
+  const column = cellProperties.column as unknown as TableColumn;
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`
@@ -52,13 +58,16 @@ export default function DefaultCell(cellProperties: Cell) {
           contextValue.value,
           false,
           taskRef.current,
-          (cellProperties as any).initialState.view,
-          (cellProperties as any).initialState.view.file.path
+          initialState.view,
+          initialState.view.file.path
         );
         break;
       case DataTypes.MARKDOWN:
         containerCellRef.current.innerHTML = "";
         renderMarkdown(cellProperties, initialValue, containerCellRef.current);
+        break;
+      case DataTypes.CALENDAR:
+      case DataTypes.CALENDAR_TIME:
         break;
       default:
         if (!dirtyCell && initialValue !== contextValue.value) {
@@ -185,17 +194,24 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
         );
+      /** Calendar option */
+      case DataTypes.CALENDAR:
+        return (
+          <CalendarPortal
+            intialState={initialState}
+            column={column}
+            cellProperties={cellProperties}
+          />
+        );
 
       /** Calendar with time option */
       case DataTypes.CALENDAR_TIME:
         return (
-          <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <CalendarTimePortal
-              intialState={(cellProperties as any).initialState}
-              column={cellProperties.column as unknown as TableColumn}
-              cellProperties={cellProperties}
-            />
-          </CellContext.Provider>
+          <CalendarTimePortal
+            intialState={initialState}
+            column={column}
+            cellProperties={cellProperties}
+          />
         );
 
       /** Selector option */
@@ -205,23 +221,22 @@ export default function DefaultCell(cellProperties: Cell) {
             <PopperSelectPortal
               dispatch={dataDispatch}
               row={cellProperties.row}
-              column={cellProperties.column as unknown as TableColumn}
+              column={column}
               columns={columns}
               note={note}
-              state={(cellProperties as any).initialState}
+              intialState={initialState}
             />
           </CellContext.Provider>
         );
-
-      /** Calendar option */
-      case DataTypes.CALENDAR:
+      /** Tags option */
+      case DataTypes.TAGS:
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <CalendarPortal
-              intialState={
-                (cellProperties as any).initialState as unknown as TableDataType
-              }
-              column={cellProperties.column as unknown as TableColumn}
+            <TagsPortal
+              intialState={initialState}
+              column={column}
+              columns={columns}
+              dispatch={dataDispatch}
               cellProperties={cellProperties}
             />
           </CellContext.Provider>
@@ -234,10 +249,8 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CheckboxCell
-              intialState={
-                (cellProperties as any).initialState as unknown as TableDataType
-              }
-              column={cellProperties.column as unknown as TableColumn}
+              intialState={initialState}
+              column={column}
               cellProperties={cellProperties}
             />
           </CellContext.Provider>

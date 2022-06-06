@@ -1,4 +1,11 @@
-## 1.4.0
+## 1.7.0
+### Shiny new things
+- New config option to choose the row height [ISSUE#69](https://github.com/RafaelGB/obsidian-db-folder/issues/69) [artisticat1](https://github.com/artisticat1)
+- New config to freeze first column [ISSUE#51](https://github.com/RafaelGB/obsidian-db-folder/issues/51) [artisticat1](https://github.com/artisticat1)
+### Improved
+-  New button to remove the cell value easily of select column type
+### Visual
+- Visual improvements with selected tags, properties menu & calendars [PR#105](https://github.com/RafaelGB/obsidian-db-folder/pull/105) [artisticat1](https://github.com/artisticat1)
 ### No longer broken
 - with subgroup config on, now file link is updated correctly [ISSUE#101](https://github.com/RafaelGB/obsidian-db-folder/issues/101)
 ## 1.6.3

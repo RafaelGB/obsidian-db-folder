@@ -3,8 +3,6 @@ import React from "react";
 export default function PlusIcon() {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="icon icon-tabler icon-tabler-plus"
       width="44"
       height="44"
       viewBox="0 0 24 24"

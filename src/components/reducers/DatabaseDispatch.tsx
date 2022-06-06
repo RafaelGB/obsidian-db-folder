@@ -23,9 +23,9 @@ import {
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
-import { RowSelectOption } from "cdm/RowSelectModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
+import { RowSelectOption } from "cdm/ComponentsModel";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
@@ -400,11 +400,17 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.row[
           MetadataColumns.FILE
         ] = `[[${state.view.file.parent.path}/${action.value}/${action.file.name}|${action.file.basename}]]`;
+        // Check if action.value is a valid folder name
+        const auxPath =
+          action.value !== ""
+            ? `${state.view.file.parent.path}/${action.value}/${action.file.name}`
+            : `${state.view.file.parent.path}/${action.file.name}`;
+
         action.row.original.note = new NoteInfo(
           {
             ...action.row,
             file: {
-              path: `${state.view.file.parent.path}/${action.value}/${action.file.name}`,
+              path: auxPath,
             },
           },
           action.row.index

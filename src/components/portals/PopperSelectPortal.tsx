@@ -5,11 +5,12 @@ import { ActionTypes, StyleVariables } from "helpers/Constants";
 import React, { useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
-import { PopperProps } from "cdm/RowSelectModel";
+import { PopperProps } from "cdm/ComponentsModel";
 import { CellContext } from "components/contexts/CellContext";
+import CrossIcon from "components/img/CrossIcon";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { dispatch, row, column, columns, note, state } = popperProps;
+  const { dispatch, row, column, columns, note, intialState } = popperProps;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
   // Selector reference state
@@ -18,6 +19,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector popper state
   const [selectPop, setSelectPop] = useState(null);
   const { styles, attributes } = usePopper(selectRef, selectPop);
+  // Show add button
   const [showAdd, setShowAdd] = useState(false);
   // Selector popper state
   const [domReady, setDomReady] = useState(false);
@@ -25,16 +27,25 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   React.useEffect(() => {
     setDomReady(true);
   });
-  function handleAddOption(e: any) {
-    setShowAdd(true);
+
+  function handleRemoveOption(e: any) {
+    dispatch({
+      type: ActionTypes.UPDATE_OPTION_CELL,
+      file: note.getFile(),
+      key: column.key,
+      value: "",
+      row: row,
+      columnId: column.id,
+      state: intialState,
+    });
+    setContextValue({ value: "", update: true });
+    setShowSelect(false);
   }
 
   function handleOptionClick(option: {
     label: string;
     backgroundColor?: string;
   }) {
-    setContextValue({ value: option.label, update: true });
-    setShowSelect(false);
     // save on disk & move file if its configured on the column
     dispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
@@ -43,8 +54,10 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       value: option.label,
       row: row,
       columnId: column.id,
-      state: state,
+      state: intialState,
     });
+    setContextValue({ value: option.label, update: true });
+    setShowSelect(false);
   }
 
   function handleOptionBlur(e: any) {
@@ -145,12 +158,26 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
               <div
                 className="cursor-pointer"
                 style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                onClick={handleAddOption}
+                onClick={() => setShowAdd(true)}
               >
                 <Relationship
                   value={
                     <span className="svg-icon-sm svg-text">
                       <PlusIcon />
+                    </span>
+                  }
+                  backgroundColor={grey(200)}
+                />
+              </div>
+              <div
+                className="cursor-pointer"
+                style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                onClick={handleRemoveOption}
+              >
+                <Relationship
+                  value={
+                    <span className="svg-icon-sm svg-text">
+                      <CrossIcon />
                     </span>
                   }
                   backgroundColor={grey(200)}

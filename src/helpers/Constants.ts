@@ -24,6 +24,7 @@ export const DataTypes = Object.freeze({
   NUMBER: 'number',
   TEXT: 'text',
   SELECT: 'select',
+  TAGS: 'tags',
   MARKDOWN: 'markdown',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',

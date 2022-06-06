@@ -1,21 +1,23 @@
-import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@material-ui/core";
-import { CalendarProps } from "cdm/DatabaseModel";
 import { c } from "helpers/StylesHelper";
+import { CalendarProps } from "cdm/ComponentsModel";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
-  const { column, cellProperties } = calendarProps;
+  const { column, cellProperties, intialState } = calendarProps;
+  const { row } = cellProperties;
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** state of cell value */
-  const { contextValue, setContextValue } = useContext(CellContext);
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;
+  const [calendarState, setCalendarState] = useState(
+    intialState.data[row.index][column.key]
+  );
 
   function handleOnClick(event: any) {
     event.preventDefault();
@@ -33,11 +35,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       row: cellProperties.row,
       columnId: column.id,
     });
-
-    setContextValue({
-      value: newValue,
-      update: true,
-    });
+    setCalendarState(newValue);
     setShowDatePicker(false);
   }
 
@@ -45,13 +43,12 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     const el = document.getElementById("popper-container");
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
-
   return showDatePicker ? (
     <DatePicker
       dateFormat="yyyy-MM-dd"
       selected={
-        DateTime.isDateTime(contextValue.value)
-          ? contextValue.value.toJSDate()
+        DateTime.isDateTime(calendarState)
+          ? (calendarState as unknown as DateTime).toJSDate()
           : null
       }
       onChange={handleCalendarChange}
@@ -62,8 +59,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     />
   ) : (
     <span className={`data-input ${c("calendar")}`} onClick={handleOnClick}>
-      {DateTime.isDateTime(contextValue.value)
-        ? contextValue.value.toFormat("yyyy-MM-dd")
+      {DateTime.isDateTime(calendarState)
+        ? (calendarState as unknown as DateTime).toFormat("yyyy-MM-dd")
         : "Pick a date..."}
     </span>
   );

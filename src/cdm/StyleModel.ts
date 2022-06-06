@@ -1,6 +1,6 @@
 import { DatabaseView } from "DatabaseView";
 import { ColorResult } from "react-color";
-import { RowSelectOption } from "./RowSelectModel";
+import { RowSelectOption } from "./ComponentsModel";
 
 export type ColumnWidthState = {
     widthRecord: Record<string, number>

@@ -41,6 +41,7 @@ function unmarshallParticularInputInfo(column: DatabaseColumn): string[] {
     const particularInputString: string[] = [];
     switch (column.input) {
         case DataTypes.SELECT:
+        case DataTypes.TAGS:
             // Lvl3: select column properties
             if (column.options && Array.isArray(column.options)) {
                 particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);

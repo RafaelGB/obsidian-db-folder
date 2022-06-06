@@ -13,6 +13,9 @@ import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
+import TaskIcon from "components/img/TaskIcon";
+import CrossIcon from "components/img/CrossIcon";
+import TagsIcon from "components/img/TagsIcon";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import CalendarIcon from "components/img/CalendarIcon";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
@@ -24,8 +27,6 @@ import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { generateSortedColumns } from "components/behavior/SortingColumns";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
-import TaskIcon from "components/img/TaskIcon";
-import CrossIcon from "components/img/CrossIcon";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -195,6 +196,19 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       },
       icon: <MultiIcon />,
       label: DataTypes.SELECT,
+    },
+    {
+      onClick: (e: any) => {
+        dispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: column.id,
+          dataType: DataTypes.TAGS,
+        });
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <TagsIcon />,
+      label: DataTypes.TAGS,
     },
     {
       onClick: (e: any) => {
