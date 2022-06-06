@@ -343,6 +343,7 @@
 .database-plugin__navbar {
   display: flex;
   flex: 1 0 auto;
+  background-color: var(--background-secondary);
 }
 
 .database-plugin__calendar {
