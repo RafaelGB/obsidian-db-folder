@@ -32,6 +32,12 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
                 yaml.config.cell_size = CellSizeOptions.NORMAL;
             }
 
+            // if sticky_first_column is not defined, load default
+            if (checkNullable(yaml.config.sticky_first_column)) {
+                this.addError(`There was not sticky_first_column key in yaml. Default will be loaded`);
+                yaml.config.sticky_first_column = false;
+            }
+
             // if show_metadata_created is not defined, load default
             if (checkNullable(yaml.config.show_metadata_created)) {
                 this.addError(`There was not show_metadata_created key in yaml. Default will be loaded`);

@@ -2,6 +2,7 @@ import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { FilterDataviewHandler } from './handlers/folder/FilterDataviewHandler';
 import { CellSizeDropDownHandler } from './handlers/folder/CellSizeDropDownHandler';
+import { StickyFirstColumnHandler } from './handlers/folder/StickyFirstColumnHandler';
 import { DetailsFormHandler } from './handlers/folder/DetailsFormHandler';
 
 /**
@@ -30,6 +31,7 @@ function getHandlers(): SettingHandler[] {
     return [
         new DetailsFormHandler(),
         new CellSizeDropDownHandler(),
+        new StickyFirstColumnHandler(),
         new FilterDataviewHandler(),
     ];
 }

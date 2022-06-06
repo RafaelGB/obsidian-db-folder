@@ -113,6 +113,7 @@ config:
   group_folder_column:
   remove_field_when_delete_column: true
   cell_size: normal
+  sticky_first_column: false
   show_metadata_created: true
   show_metadata_modified: true
   source_data: current_folder

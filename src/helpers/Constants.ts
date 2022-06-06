@@ -253,6 +253,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_show_state: false,
     remove_field_when_delete_column: false,
     cell_size: CellSizeOptions.NORMAL,
+    sticky_first_column: false,
     group_folder_column: '',
     show_metadata_created: false,
     show_metadata_modified: false,

@@ -239,7 +239,7 @@ export function Table(initialState: TableDataType) {
             width: totalWidth,
           },
         })}
-        className={`${c("table noselect cell_size_" + initialState.cellSize)}`}
+        className={`${c("table noselect cell_size_" + initialState.cellSize + (initialState.stickyFirstColumn ? " sticky_first_column" : ""))}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
       >
@@ -247,7 +247,7 @@ export function Table(initialState: TableDataType) {
           style={{
             position: "sticky",
             top: 0,
-            zIndex: 1,
+            zIndex: 2,
             borderTop: "1px solid var(--background-modifier-border)",
           }}
         >
@@ -432,12 +432,12 @@ export function Table(initialState: TableDataType) {
                 onKeyDown={handleKeyDown}
                 placeholder="filename of new row"
               />
-            </div>
-            <div className={`${c("td")}`} onClick={handleAddNewRow}>
-              <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
-                <PlusIcon />
-              </span>
-              New
+              <div className={`${c("td")}`} onClick={handleAddNewRow}>
+                <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+                  <PlusIcon />
+                </span>
+                New
+              </div>
             </div>
           </div>
         </div>
