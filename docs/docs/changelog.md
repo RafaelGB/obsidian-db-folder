@@ -2,8 +2,9 @@
 ### Shiny new things
 - New config option to choose the row height [ISSUE#69](https://github.com/RafaelGB/obsidian-db-folder/issues/69) [artisticat1](https://github.com/artisticat1)
 - New config to freeze first column [ISSUE#51](https://github.com/RafaelGB/obsidian-db-folder/issues/51) [artisticat1](https://github.com/artisticat1)
+- New type of column: Tags! Now you can select multiple options inside a cell powered with react-select component. Search of tags inside the form, control of duplicates, choose of tag colors inside the config and more! [ISSUE#36](https://github.com/RafaelGB/obsidian-db-folder/issues/36)
 ### Improved
--  New button to remove the cell value easily of select column type
+-  New button to remove the cell value easily of select column types
 ### Visual
 - Visual improvements with selected tags, properties menu & calendars [PR#105](https://github.com/RafaelGB/obsidian-db-folder/pull/105) [artisticat1](https://github.com/artisticat1)
 ### No longer broken

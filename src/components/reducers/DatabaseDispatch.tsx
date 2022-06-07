@@ -195,6 +195,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       // Update state
       switch (action.dataType) {
         case DataTypes.SELECT:
+        case DataTypes.TAGS:
           const options: OptionSelect[] = [];
           // Generate selected options
           parsedData.forEach((row) => {
