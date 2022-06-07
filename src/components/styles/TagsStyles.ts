@@ -13,11 +13,7 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
         position: "fixed",
         backgroundColor: `${StyleVariables.BACKGROUND_SECONDARY}`,
     }),
-    menuPortal: (base) => ({
-        ...base,
-        position: "fixed",
-        zIndex: 9999,
-    }),
+    menuPortal: base => ({ ...base, zIndex: 9999 }),
     control: (styles) => ({ ...styles, backgroundColor: "white" }),
     option: (styles, { data }) => ({
         ...styles,

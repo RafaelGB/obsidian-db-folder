@@ -84,12 +84,12 @@ const TagsPortal = (tagsProps: TagsProps) => {
           isMulti
           autoFocus
           menuPosition="fixed"
-          menuPlacement="auto"
           styles={CustomTagsStyles}
           options={multiOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
-          menuPortalTarget={document.getElementById("popper-container")}
+          menuPortalTarget={document.body}
+          menuShouldBlockScroll={true}
         />
       </div>
     );
