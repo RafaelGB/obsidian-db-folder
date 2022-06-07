@@ -1,13 +1,13 @@
 import { RowSelectOption, TagsProps } from "cdm/ComponentsModel";
 import Relationship from "components/RelationShip";
+import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
-
 import { grey, randomColor } from "helpers/Colors";
 import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { ActionTypes, StyleVariables } from "helpers/Constants";
+import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
 
 const TagsPortal = (tagsProps: TagsProps) => {
@@ -85,40 +85,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
           autoFocus
           menuPosition="fixed"
           menuPlacement="auto"
-          styles={{
-            container: () => ({
-              position: "static",
-              boxSizing: "border-box",
-            }),
-            menu: () => ({
-              position: "fixed",
-              left: "40",
-              backgroundColor: `${StyleVariables.BACKGROUND_SECONDARY}`,
-            }),
-            control: (styles) => ({ ...styles, backgroundColor: "white" }),
-            option: (styles, { data }) => ({
-              ...styles,
-              backgroundColor: data.color,
-            }),
-            multiValue: (styles, { data }) => {
-              return {
-                ...styles,
-                backgroundColor: data.color,
-              };
-            },
-            multiValueLabel: (styles) => ({
-              ...styles,
-              color: "black",
-            }),
-            multiValueRemove: (styles, { data }) => ({
-              ...styles,
-              color: "black",
-              ":hover": {
-                backgroundColor: data.color,
-                color: "white",
-              },
-            }),
-          }}
+          styles={CustomTagsStyles}
           options={multiOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}

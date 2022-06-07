@@ -89,7 +89,7 @@ class DataviewProxy {
                 break;
             case DataTypes.NUMBER:
             case DataTypes.CHECKBOX:
-                parsedLiteral = wrapped.type === 'number' ? literal : Number(literal);
+                parsedLiteral = this.parseToNumber(wrapped);
                 break;
             case DataTypes.TASK:
                 // Do nothing
@@ -107,7 +107,6 @@ class DataviewProxy {
      * @returns 
      */
     parseDataArray(literal: Literal): Literal {
-
         if ((literal as any).values !== undefined && (literal as any).settings !== undefined) {
             literal = (literal as any).values
         }
@@ -145,6 +144,10 @@ class DataviewProxy {
             return this.getDataviewAPI().value.toString(wrapped.value);
         }
     }
+    private parseToNumber(wrapped: WrappedLiteral): number {
+        const adjustedValue = this.getDataviewAPI().value.toString(wrapped.value);
+        return wrapped.type === 'number' ? wrapped.value : Number(adjustedValue);
+    }
 
     private parseToMarkdown(wrapped: WrappedLiteral): string {
         let auxMarkdown = this.parseToString(wrapped) as string;
@@ -155,11 +158,10 @@ class DataviewProxy {
     }
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
-        if (!Array.isArray(wrapped.value)) {
-            return [wrapped.value];
+        if (wrapped.type !== 'array') {
+            return [wrapped.value.toString()];
         }
         return wrapped.value;
-
     }
 }
 
