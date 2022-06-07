@@ -74,7 +74,6 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                         yaml.columns[key] = column;
                     }
                 }
-
             });
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);
@@ -84,15 +83,24 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
 function marshallParticularInputInfo(column: DatabaseColumn): DatabaseColumn {
     switch (column.input) {
         case DataTypes.SELECT:
+        case DataTypes.TAGS:
             if (!column.options || !Array.isArray(column.options)) {
                 column.options = [];
             } else {
+                console.log(column.options);
+                // Control undefined or null labels and backgroundColors
                 column.options = column.options.filter((option: RowSelectOption) => {
                     return option.backgroundColor
                         && option.label
                         && option.label !== ''
                         && option.backgroundColor !== '';
-                });
+                    // Control duplicates labels in options
+                }).filter((option: RowSelectOption, index: number, self: RowSelectOption[]) => {
+                    return self.findIndex((t: RowSelectOption) => {
+                        return t.label === option.label;
+                    }) === index;
+                }
+                );
             }
             break;
     }
