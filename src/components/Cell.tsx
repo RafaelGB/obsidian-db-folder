@@ -87,6 +87,9 @@ export default function DefaultCell(cellProperties: Cell) {
         break;
       default:
         if (!dirtyCell && initialValue !== contextValue.value) {
+          LOGGER.warn(
+            `Dirtycell effect triggered: ${initialValue} !== ${contextValue.value}`
+          );
           setContextValue({
             value: initialValue,
             update: false,
@@ -129,11 +132,6 @@ export default function DefaultCell(cellProperties: Cell) {
     setDirtyCell(true);
   };
 
-  const handlerEditableOnBlur = (event: any) => {
-    setContextValue((event) => ({ value: event.value, update: true }));
-    setDirtyCell(false);
-  };
-
   // onChange handler
   const handleOnChange = (event: any) => {
     // cancelling previous timeouts
@@ -173,7 +171,6 @@ export default function DefaultCell(cellProperties: Cell) {
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
-            onBlur={handlerEditableOnBlur}
             className="data-input"
             ref={editableMdRef}
           />
@@ -194,7 +191,6 @@ export default function DefaultCell(cellProperties: Cell) {
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
-            onBlur={handlerEditableOnBlur}
             className="data-input text-align-right"
           />
         );
