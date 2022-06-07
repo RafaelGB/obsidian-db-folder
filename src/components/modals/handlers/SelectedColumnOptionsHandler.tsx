@@ -30,9 +30,7 @@ export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
 
     new Setting(containerEl)
       .setName("Add new label")
-      .setDesc(
-        "Adds a new filter to the dataview query when the database is initialized"
-      )
+      .setDesc("Add new label to the list of options available for this column")
       .addText((text) => {
         text
           .setPlaceholder("label of option")

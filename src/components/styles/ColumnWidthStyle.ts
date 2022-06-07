@@ -1,6 +1,6 @@
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnWidthState } from "cdm/StyleModel";
-import { DataTypes, MetadataColumns, WidthVariables } from "helpers/Constants";
+import { DataTypes, WidthVariables } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { DateTime } from "luxon";
 import { HSLColor } from "react-color";
