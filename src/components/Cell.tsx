@@ -66,8 +66,24 @@ export default function DefaultCell(cellProperties: Cell) {
         containerCellRef.current.innerHTML = "";
         renderMarkdown(cellProperties, initialValue, containerCellRef.current);
         break;
+      case DataTypes.NUMBER:
+        if (
+          !dirtyCell &&
+          initialValue &&
+          contextValue.value &&
+          initialValue !== contextValue.value
+        ) {
+          setContextValue({
+            value: initialValue,
+            update: false,
+          });
+        }
+        break;
       case DataTypes.CALENDAR:
       case DataTypes.CALENDAR_TIME:
+      case DataTypes.TAGS:
+      case DataTypes.SELECT:
+        // do nothing
         break;
       default:
         if (!dirtyCell && initialValue !== contextValue.value) {
