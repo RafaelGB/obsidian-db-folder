@@ -150,16 +150,23 @@ class DataviewProxy {
     }
 
     private parseToMarkdown(wrapped: WrappedLiteral): string {
-        let auxMarkdown = this.parseToString(wrapped) as string;
-        if (auxMarkdown.contains(":")) {
-            auxMarkdown = `"${auxMarkdown}"`;
+        let auxMarkdown = '';
+        if (wrapped.type === 'array') {
+            auxMarkdown = wrapped.value
+                .map(v => this.parseToMarkdown(this.getDataviewAPI().value.wrapValue(v)))
+                .join(', ');
+        } else {
+            auxMarkdown = this.parseToString(wrapped) as string;
+            if (auxMarkdown.contains(":")) {
+                auxMarkdown = `"${auxMarkdown}"`;
+            }
         }
         return auxMarkdown;
     }
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
         if (wrapped.type !== 'array') {
-            return [wrapped.value.toString()];
+            return wrapped.value.toString().split(",").map(s => s.trim());
         }
         return wrapped.value;
     }
