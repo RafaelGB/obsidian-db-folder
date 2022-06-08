@@ -29,7 +29,20 @@ const TagsPortal = (tagsProps: TagsProps) => {
     const match = column.options.find(
       (option: { label: string }) => option.label === tag
     );
-    return (match && match.backgroundColor) || grey(200);
+    if (match) {
+      return match.backgroundColor;
+    } else {
+      // In case of new tag, generate random color
+      const color = randomColor();
+      dispatch({
+        columns: columns,
+        option: tag,
+        backgroundColor: color,
+        columnId: column.id,
+        type: ActionTypes.ADD_OPTION_TO_COLUMN,
+      });
+      return color;
+    }
   }
   const defaultValue = tagsState.map((tag: string) => ({
     label: tag,
