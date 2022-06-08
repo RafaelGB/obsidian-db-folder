@@ -15,7 +15,7 @@ You can add a folder database by right clicking on the folder where you want to 
 ### How to use?
 Database has its own type of view. It will search all notes into the same folder of the database and show the columns that you specify. Check our [documentation](https://rafaelgb.github.io/obsidian-db-folder/features/rows/) for more information.
 
-![demo.mp4](docs/resources/demo.gif)
+<video src='docs/resources/demo.mp4' width=280/>
 
 The information you add or edit will be saved into the target obsidian note.
 
