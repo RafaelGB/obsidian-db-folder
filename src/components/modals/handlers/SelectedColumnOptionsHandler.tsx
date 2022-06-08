@@ -3,7 +3,7 @@ import { ColorPickerProps } from "cdm/StyleModel";
 import { ColorPicker } from "components/ColorPicker";
 import { AbstractColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
 import { randomColor } from "helpers/Colors";
-import { ButtonComponent, Setting } from "obsidian";
+import { ButtonComponent, Notice, Setting } from "obsidian";
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -16,6 +16,16 @@ export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
     let newLabel = "";
     const options = column.options;
     const onClickAddPromise = async (): Promise<void> => {
+      // Error handling
+      if (newLabel === "") {
+        new Notice("Empty label could not be added!");
+        return;
+      }
+      if (options.find((option) => option.label === newLabel)) {
+        new Notice("Duplicate labels could not be added!");
+        return;
+      }
+      // Add new label
       options.push({
         label: newLabel,
         backgroundColor: randomColor(),
