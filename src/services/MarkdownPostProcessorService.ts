@@ -44,11 +44,11 @@ export class PreviewDatabaseModeService {
             return;
         }
 
-        //If the file being processed is an excalidraw file,
+        //If the file being processed is an database file,
         //then I want to hide all embedded items as these will be
-        //transcluded text element or some other transcluded content inside the Excalidraw file
+        //transcluded text element or some other transcluded content inside the Database file
         //in reading mode these elements should be hidden
-        if (ctx.frontmatter?.hasOwnProperty(DatabaseCore.FRONTMATTER_KEY)) {
+        if (Object.prototype.hasOwnProperty.call(ctx.frontmatter, DatabaseCore.FRONTMATTER_KEY)) {
             el.style.display = "none";
             return;
         }
@@ -61,7 +61,7 @@ export class PreviewDatabaseModeService {
         if (!ctx.frontmatter) {
             return;
         }
-        if (!ctx.frontmatter.hasOwnProperty(DatabaseCore.FRONTMATTER_KEY)) {
+        if (!Object.prototype.hasOwnProperty.call(ctx.frontmatter, DatabaseCore.FRONTMATTER_KEY)) {
             return;
         }
         //@ts-ignore

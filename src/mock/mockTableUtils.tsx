@@ -37,6 +37,8 @@ export async function makeData(count: number): Promise<TableDataType> {
     skipReset: false,
     view: null,
     stateManager: null,
+    cellSize: "normal",
+    stickyFirstColumn: false,
   };
 }
 
@@ -60,6 +62,12 @@ export const generateYamlColumns = (
       isMetadata: false,
       skipPersist: true,
       csvCandidate: false,
+      config: {
+        enable_media_view: true,
+        media_width: 100,
+        media_height: 100,
+        isInline: false,
+      },
     };
   }
   return yamlColumns;
