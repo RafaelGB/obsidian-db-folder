@@ -12,6 +12,7 @@
 - with subgroup config on, now file link is updated correctly [ISSUE#101](https://github.com/RafaelGB/obsidian-db-folder/issues/101)
 - Error handler adding option labels on modal of selected columns ( and now tags too)
 - Control of duplicated options during the load of database, leaving only one unique option
+- Control of special character that potentially breaks yaml frontmatter [ISSUE#103](https://github.com/RafaelGB/obsidian-db-folder/issues/103)
 ## 1.6.3
 *Published on 2022/06/04*
 ### No longer broken

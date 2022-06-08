@@ -144,6 +144,7 @@ class DataviewProxy {
             return this.getDataviewAPI().value.toString(wrapped.value);
         }
     }
+
     private parseToNumber(wrapped: WrappedLiteral): number {
         const adjustedValue = this.getDataviewAPI().value.toString(wrapped.value);
         return wrapped.type === 'number' ? wrapped.value : Number(adjustedValue);
@@ -157,9 +158,8 @@ class DataviewProxy {
                 .join(', ');
         } else {
             auxMarkdown = this.parseToString(wrapped) as string;
-            if (auxMarkdown.contains(":")) {
-                auxMarkdown = `"${auxMarkdown}"`;
-            }
+            // Check possible markdown breakers
+            auxMarkdown = this.handleMarkdownBreaker(auxMarkdown);
         }
         return auxMarkdown;
     }
@@ -169,6 +169,18 @@ class DataviewProxy {
             return wrapped.value.toString().split(",").map(s => s.trim());
         }
         return wrapped.value;
+    }
+
+    private handleMarkdownBreaker(value: string): string {
+        if (value.contains(":") ||
+            value.startsWith("`") ||
+            value.startsWith("\"") ||
+            value === "?") {
+            value = value.replaceAll(`"`, `\\"`);
+            return `"${value}"`;
+        }
+
+        return value;
     }
 }
 
