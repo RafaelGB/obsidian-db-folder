@@ -15,6 +15,7 @@ columns:
     accessor: __file__
     isMetadata: true
     skipPersist: false
+    isDragDisabled: false
     csvCandidate: true
     position: 1
     config:
@@ -82,6 +83,7 @@ columns:
     label: Created
     accessor: __created__
     isMetadata: true
+    isDragDisabled: false
     skipPersist: false
     csvCandidate: true
     position: 8
@@ -92,6 +94,7 @@ columns:
     label: Modified
     accessor: __modified__
     isMetadata: true
+    isDragDisabled: false
     skipPersist: false
     csvCandidate: true
     position: 9
@@ -108,16 +111,30 @@ columns:
       media_height: 100
       isInline: false
       source_data: current_folder
+  tags_column:
+    input: tags
+    accessor: tags_column
+    key: tags_column
+    label: tags column
+    position: 4
+    options:
+      - { label: "new tag", backgroundColor: "hsl(247, 95%, 90%)"}
+    config:
+      enable_media_view: true
+      media_width: 100
+      media_height: 100
+      isInline: false
+      source_data: current_folder
 config:
   enable_show_state: false
-  group_folder_column:
+  group_folder_column: 
   remove_field_when_delete_column: true
   cell_size: normal
   sticky_first_column: false
   show_metadata_created: true
   show_metadata_modified: true
   source_data: current_folder
-  source_form_result:
+  source_form_result: 
   show_metadata_tasks: true
 filters:
 %%>
