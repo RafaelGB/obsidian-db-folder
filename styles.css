@@ -146,7 +146,7 @@
 }
 
 .data-input-checkbox input[type="checkbox"]:checked {
-  background-color: currentColor;
+  background-color: var(--text-accent);
 }
 
 .data-input-checkbox input[type="checkbox"]:checked::before {
