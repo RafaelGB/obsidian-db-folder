@@ -76,7 +76,10 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     skipPersist: false,
     isDragDisabled: false,
     csvCandidate: true,
-    config: DEFAULT_COLUMN_CONFIG
+    config: {
+      ...DEFAULT_COLUMN_CONFIG,
+      isInline: true,
+    }
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
@@ -228,6 +231,13 @@ export function getOperatorFilterValue(keyToFind: string): string {
   );
   return entry[1];
 }
+
+export const MarkdownBreakerRules = Object.freeze({
+  INIT_CHARS: ['`', '\"', '[', '{', '*'],
+  BETWEEN_CHARS: [':'],
+  UNIQUE_CHARS: ['?'],
+})
+
 
 export const MediaExtensions = Object.freeze({
   IMAGE: ['bmp', 'png', 'jpg', 'jpeg', 'gif', 'svg'],

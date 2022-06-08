@@ -87,7 +87,6 @@ function marshallParticularInputInfo(column: DatabaseColumn): DatabaseColumn {
             if (!column.options || !Array.isArray(column.options)) {
                 column.options = [];
             } else {
-                console.log(column.options);
                 // Control undefined or null labels and backgroundColors
                 column.options = column.options.filter((option: RowSelectOption) => {
                     return option.backgroundColor
