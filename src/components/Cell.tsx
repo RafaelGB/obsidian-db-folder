@@ -194,6 +194,7 @@ export default function DefaultCell(cellProperties: Cell) {
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
+            onBlur={handleOnBlur}
             className="data-input text-align-right"
           />
         ) : (
