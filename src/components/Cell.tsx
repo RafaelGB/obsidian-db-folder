@@ -66,35 +66,8 @@ export default function DefaultCell(cellProperties: Cell) {
         containerCellRef.current.innerHTML = "";
         renderMarkdown(cellProperties, initialValue, containerCellRef.current);
         break;
-      case DataTypes.NUMBER:
-        if (
-          !dirtyCell &&
-          initialValue &&
-          contextValue.value &&
-          initialValue !== contextValue.value
-        ) {
-          setContextValue({
-            value: initialValue,
-            update: false,
-          });
-        }
-        break;
-      case DataTypes.CALENDAR:
-      case DataTypes.CALENDAR_TIME:
-      case DataTypes.TAGS:
-      case DataTypes.SELECT:
-        // do nothing
-        break;
       default:
-        if (!dirtyCell && initialValue !== contextValue.value) {
-          LOGGER.warn(
-            `Dirtycell effect triggered: ${initialValue} !== ${contextValue.value}`
-          );
-          setContextValue({
-            value: initialValue,
-            update: false,
-          });
-        }
+      // do nothing
     }
   });
 
@@ -108,7 +81,7 @@ export default function DefaultCell(cellProperties: Cell) {
   }, [editableMdRef, dirtyCell]);
 
   useEffect(() => {
-    if (!dirtyCell && containerCellRef.current) {
+    if (!dirtyCell && containerCellRef.current !== undefined) {
       LOGGER.debug(
         `useEffect hooked with dirtyCell. Value:${contextValue.value}`
       );
@@ -128,19 +101,23 @@ export default function DefaultCell(cellProperties: Cell) {
     }
   };
 
+  const handleOnBlur = (event: any) => {
+    setDirtyCell(false);
+  };
+
   const handleEditableOnclick = (event: any) => {
     setDirtyCell(true);
   };
 
   // onChange handler
   const handleOnChange = (event: any) => {
+    setDirtyCell(true);
     // cancelling previous timeouts
     if (editNoteTimeout) {
       clearTimeout(editNoteTimeout);
     }
     // first update the input text as user type
-    setContextValue({ value: event.target.value, update: false });
-    setDirtyCell(true);
+    setContextValue({ value: event.target.value, update: true });
     // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
     setEditNoteTimeout(
       setTimeout(() => {
@@ -171,28 +148,35 @@ export default function DefaultCell(cellProperties: Cell) {
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
+            onBlur={handleOnBlur}
             className="data-input"
             ref={editableMdRef}
           />
         ) : (
           <span
             ref={containerCellRef}
-            className="data-input"
+            className={"data-input"}
             onClick={handleEditableOnclick}
-          >
-            {(contextValue.value && contextValue.value.toString()) || ""}
-          </span>
+          />
         );
 
       /** Number option */
       case DataTypes.NUMBER:
-        return (
+        return dirtyCell ? (
           <input
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
+            onBlur={handleOnBlur}
             className="data-input text-align-right"
           />
+        ) : (
+          <span
+            className="data-input text-align-right"
+            onClick={handleEditableOnclick}
+          >
+            {(contextValue.value && contextValue.value.toString()) || ""}
+          </span>
         );
 
       /** Markdown option */
@@ -206,6 +190,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
         );
+
       /** Calendar option */
       case DataTypes.CALENDAR:
         return (

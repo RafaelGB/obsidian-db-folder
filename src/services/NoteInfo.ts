@@ -37,7 +37,7 @@ export default class NoteInfo {
         /** Parse data with the type of column */
         columns.forEach(column => {
             if (aFile[column.key] !== undefined) {
-                aFile[column.key] = DataviewService.parseLiteral((aFile[column.key]) as Literal, column.dataType);
+                aFile[column.key] = DataviewService.parseLiteral((aFile[column.key]) as Literal, column.dataType, column.config.isInline);
             }
         });
         return aFile;
