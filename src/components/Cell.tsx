@@ -66,35 +66,8 @@ export default function DefaultCell(cellProperties: Cell) {
         containerCellRef.current.innerHTML = "";
         renderMarkdown(cellProperties, initialValue, containerCellRef.current);
         break;
-      case DataTypes.NUMBER:
-        if (
-          !dirtyCell &&
-          initialValue &&
-          contextValue.value &&
-          initialValue !== contextValue.value
-        ) {
-          setContextValue({
-            value: initialValue,
-            update: false,
-          });
-        }
-        break;
-      case DataTypes.CALENDAR:
-      case DataTypes.CALENDAR_TIME:
-      case DataTypes.TAGS:
-      case DataTypes.SELECT:
-        // do nothing
-        break;
       default:
-        if (!dirtyCell && initialValue !== contextValue.value) {
-          LOGGER.warn(
-            `Dirtycell effect triggered: ${initialValue} !== ${contextValue.value}`
-          );
-          setContextValue({
-            value: initialValue,
-            update: false,
-          });
-        }
+      // do nothing
     }
   });
 
@@ -138,13 +111,13 @@ export default function DefaultCell(cellProperties: Cell) {
 
   // onChange handler
   const handleOnChange = (event: any) => {
+    setDirtyCell(true);
     // cancelling previous timeouts
     if (editNoteTimeout) {
       clearTimeout(editNoteTimeout);
     }
     // first update the input text as user type
-    setContextValue({ value: event.target.value, update: false });
-    setDirtyCell(true);
+    setContextValue({ value: event.target.value, update: true });
     // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
     setEditNoteTimeout(
       setTimeout(() => {
@@ -202,9 +175,7 @@ export default function DefaultCell(cellProperties: Cell) {
             className="data-input text-align-right"
             onClick={handleEditableOnclick}
           >
-            {contextValue.value !== undefined
-              ? contextValue.value.toString()
-              : ""}
+            {(contextValue.value && contextValue.value.toString()) || ""}
           </span>
         );
 
@@ -219,6 +190,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <span ref={containerCellRef} className={`${c("md_cell")}`}></span>
         );
+
       /** Calendar option */
       case DataTypes.CALENDAR:
         return (
