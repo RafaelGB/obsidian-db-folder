@@ -2,6 +2,8 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript2 from "rollup-plugin-typescript2";
+import { terser } from 'rollup-plugin-terser';
+
 const isProd = (process.env.BUILD === 'production');
 
 const BASE_CONFIG = {
@@ -20,6 +22,18 @@ const getRollupPlugins = (tsconfig, ...plugins) =>
         nodeResolve({ browser: true }),
         json(),
         commonjs(),
+       terser({
+          ecma: 2018,
+          mangle: { toplevel: true },
+          compress: {
+            module: true,
+            toplevel: true,
+            unsafe_arrows: true,
+            drop_console: true,
+            drop_debugger: true
+          },
+          output: { quote_style: 1 }
+        }),
     ].concat(plugins);
 
 const PROD_PLUGIN_CONFIG = {
