@@ -108,7 +108,7 @@ export default function DefaultCell(cellProperties: Cell) {
   }, [editableMdRef, dirtyCell]);
 
   useEffect(() => {
-    if (!dirtyCell && containerCellRef.current) {
+    if (!dirtyCell && containerCellRef.current !== undefined) {
       LOGGER.debug(
         `useEffect hooked with dirtyCell. Value:${contextValue.value}`
       );
@@ -126,6 +126,10 @@ export default function DefaultCell(cellProperties: Cell) {
     if (event.key === "Enter") {
       event.target.blur();
     }
+  };
+
+  const handleOnBlur = (event: any) => {
+    setDirtyCell(false);
   };
 
   const handleEditableOnclick = (event: any) => {
@@ -171,28 +175,36 @@ export default function DefaultCell(cellProperties: Cell) {
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
+            onBlur={handleOnBlur}
             className="data-input"
             ref={editableMdRef}
           />
         ) : (
           <span
             ref={containerCellRef}
-            className="data-input"
+            className={"data-input"}
             onClick={handleEditableOnclick}
-          >
-            {(contextValue.value && contextValue.value.toString()) || ""}
-          </span>
+          />
         );
 
       /** Number option */
       case DataTypes.NUMBER:
-        return (
+        return dirtyCell ? (
           <input
             value={(contextValue.value && contextValue.value.toString()) || ""}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             className="data-input text-align-right"
           />
+        ) : (
+          <span
+            className="data-input text-align-right"
+            onClick={handleEditableOnclick}
+          >
+            {contextValue.value !== undefined
+              ? contextValue.value.toString()
+              : ""}
+          </span>
         );
 
       /** Markdown option */

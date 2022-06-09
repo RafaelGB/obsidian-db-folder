@@ -19,7 +19,7 @@ export class LoggerLevelInfoDropDownHandler extends AbstractSettingsHandler {
             add_dropdown(
                 containerEl,
                 'Select level info of logs',
-                'This setting assigns the level of logs that will be shown in the console.',
+                'This setting assigns the level of logs that will be shown in the console',
                 settingsManager.plugin.settings.global_settings.logger_level_info,
                 {
                     debug: 'debug',
