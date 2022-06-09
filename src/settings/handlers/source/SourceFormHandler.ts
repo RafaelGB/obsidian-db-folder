@@ -41,9 +41,12 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
     const tagArray: Record<string, number> = (app.metadataCache as unknown as any).getTags();
     if (tagArray) {
         const tagRecords: Record<string, string> = {};
-        Object.keys(tagArray).forEach((tag) => {
-            tagRecords[tag] = tag;
-        });
+        // Order tagRecord by key (tag name)
+        Object.entries(tagArray)
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .forEach(([key, value]) => {
+                tagRecords[key] = `${key}(${value})`;
+            });
         const source_form_promise = async (value: string): Promise<void> => {
             // update settings
             view.diskConfig.updateConfig('source_form_result', value.slice(1));
