@@ -145,7 +145,9 @@ export default class DatabaseInfo {
     }
 
     async updateFilters(updatedFilters: FilterCondition[]): Promise<void> {
+        LOGGER.info(`=>updateFilters`, `${JSON.stringify(updatedFilters)}`);
         this.yaml.filters = updatedFilters;
         await this.saveOnDisk();
+        LOGGER.info(`<=updateFilters`);
     }
 }

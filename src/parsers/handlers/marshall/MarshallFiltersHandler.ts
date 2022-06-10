@@ -14,15 +14,15 @@ export class MarshallFiltersHandler extends AbstractYamlHandler {
         }
         for (const filter of yaml.filters) {
             if (!DataviewService.getDataviewAPI().value.isTruthy(filter.value)) {
-                this.addError(`There was not field key in filter.`);
+                this.addError(`There was not field key in filter: ${JSON.stringify(filter)}`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
-            if (!DataviewService.getDataviewAPI().value.isTruthy(filter.operator) || getOperatorFilterValue(filter.operator) !== '') {
-                this.addError(`There was not operator key in filter.`);
+            else if (!DataviewService.getDataviewAPI().value.isTruthy(filter.operator) || getOperatorFilterValue(filter.operator) === '') {
+                this.addError(`There was not operator key in filter: ${JSON.stringify(filter)}`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
-            if (!DataviewService.getDataviewAPI().value.isTruthy(filter.value)) {
-                this.addError(`There was not value key in filter.`);
+            else if (!DataviewService.getDataviewAPI().value.isTruthy(filter.value)) {
+                this.addError(`There was not value key in filter: ${JSON.stringify(filter)}`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
         }

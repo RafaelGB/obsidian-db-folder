@@ -16,6 +16,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                 value: '',
             });
             // Persist changes
+            console.log('Persist changes');
             view.diskConfig.updateFilters(filters);
             // Force refresh of settings
             settingsManager.reset(settingHandlerResponse);

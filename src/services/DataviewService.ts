@@ -26,6 +26,7 @@ class DataviewProxy {
     filter(condition: FilterCondition[], p: any): boolean {
         if (!condition || condition.length === 0) return true;
         for (const c of condition) {
+            console.log(c);
             switch (getOperatorFilterValue(c.operator)) {
                 case OperatorFilter.EQUAL:
                     if (p[c.field] !== c.value) return false;
