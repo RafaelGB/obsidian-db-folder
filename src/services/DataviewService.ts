@@ -26,7 +26,6 @@ class DataviewProxy {
     filter(condition: FilterCondition[], p: any): boolean {
         if (!condition || condition.length === 0) return true;
         for (const c of condition) {
-            console.log(c);
             switch (getOperatorFilterValue(c.operator)) {
                 case OperatorFilter.EQUAL:
                     if (p[c.field] !== c.value) return false;
@@ -55,9 +54,11 @@ class DataviewProxy {
                 case OperatorFilter.ENDS_WITH:
                     if (p[c.field] !== undefined && !p[c.field].endsWith(c.value)) return false;
                     break;
+                default:
+                    throw new Error(`Unknown operator ${c.operator}`);
             }
-            return true;
         }
+        return true;
     }
 
     parseLiteral(literal: Literal, dataTypeDst: string, isInline?: boolean): Literal {

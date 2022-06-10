@@ -13,20 +13,17 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
         if (filters) {
             for (const filter of filters) {
                 // Lvl2: Array of filters
-                console.log("filter", filter);
                 this.localDisk.push(`${YAML_INDENT.repeat(1)}- {field: ${DataviewService.getDataviewAPI().
                     value
-                    .isTruthy(filter.field) ? filter.field : ""
+                    .isTruthy(filter.field) ? filter.field : "\"\""
                     }, operator: ${DataviewService.getDataviewAPI()
                         .value
-                        .isTruthy(filter.operator) ? filter.operator : OperatorFilter.EQUAL
-                    }${DataviewService.getDataviewAPI()
+                        .isTruthy(filter.operator) ? filter.operator : "\"\""
+                    }, value: ${DataviewService.getDataviewAPI()
                         .value
-                        .isTruthy(filter.field) ? filter.field : ""
-                    }, operator: ${DataviewService.getDataviewAPI()
-                        .value
-                        .isTruthy(filter.value) ? (",value: " + filter.value) : ""
-                    }}`);
+                        .isTruthy(filter.value) ? filter.value : "\"\""
+                    }}`
+                );
             }
         }
 
