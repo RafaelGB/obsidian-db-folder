@@ -19,7 +19,7 @@ export function media_settings_section(settingHandlerResponse: SettingHandlerRes
     }
 
     settingHandlerResponse.containerEl = media_section;
-    return handlers[0].handle(settingHandlerResponse);
+    return handlers[0]?.handle(settingHandlerResponse);
 }
 
 /**

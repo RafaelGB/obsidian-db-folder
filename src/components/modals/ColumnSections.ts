@@ -23,7 +23,7 @@ export function behavior_settings_section(settingHandlerResponse: ColumnHandlerR
     }
 
     settingHandlerResponse.containerEl = behavior_section;
-    return handlers[0].handle(settingHandlerResponse);
+    return handlers[0]?.handle(settingHandlerResponse);
 }
 
 /**
@@ -48,7 +48,7 @@ export function particular_settings_section(settingHandlerResponse: ColumnHandle
         }
 
         settingHandlerResponse.containerEl = particular_section;
-        return handlers[0].handle(settingHandlerResponse);
+        return handlers[0]?.handle(settingHandlerResponse);
     } else {
         return settingHandlerResponse;
     }
