@@ -5,7 +5,7 @@ import typescript2 from "rollup-plugin-typescript2";
 import { terser } from 'rollup-plugin-terser';
 
 const isProd = (process.env.BUILD === 'production');
-
+console.log(`Building ${isProd ? 'production' : 'development'}`);
 const BASE_CONFIG = {
     input: "src/main.ts",
     external: ["obsidian","obsidian-dataview/lib/data-model/value"],
@@ -22,18 +22,6 @@ const getRollupPlugins = (tsconfig, ...plugins) =>
         nodeResolve({ browser: true }),
         json(),
         commonjs(),
-       terser({
-          ecma: 2018,
-          mangle: { toplevel: true },
-          compress: {
-            module: true,
-            toplevel: true,
-            unsafe_arrows: true,
-            drop_console: true,
-            drop_debugger: true
-          },
-          output: { quote_style: 1 }
-        }),
     ].concat(plugins);
 
 const PROD_PLUGIN_CONFIG = {
@@ -46,9 +34,35 @@ const PROD_PLUGIN_CONFIG = {
         exports: "default",
         name: "Database Folder (Production)",
     },
+    plugins: [
+        ...getRollupPlugins()
+        ,terser({
+            ecma: 2018,
+            mangle: { toplevel: true },
+            compress: {
+                module: true,
+                toplevel: true,
+                unsafe_arrows: true,
+                drop_console: true,
+                drop_debugger: true
+            }
+        })
+    ],
+};
+
+const DEV_PLUGIN_CONFIG = {
+    ...BASE_CONFIG,
+    output: {
+        dir: 'dist',
+        sourcemap: 'inline',
+        sourcemapExcludeSources: isProd,
+        format: "cjs",
+        exports: "default",
+        name: "Database Folder (Production)",
+    },
     plugins: getRollupPlugins(),
 };
 let configs = [];
-configs.push(PROD_PLUGIN_CONFIG);
+configs.push(isProd ? PROD_PLUGIN_CONFIG : DEV_PLUGIN_CONFIG);
 
 export default configs;

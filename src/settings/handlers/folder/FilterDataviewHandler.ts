@@ -16,6 +16,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                 value: '',
             });
             // Persist changes
+            console.log('Persist changes');
             view.diskConfig.updateFilters(filters);
             // Force refresh of settings
             settingsManager.reset(settingHandlerResponse);
@@ -47,8 +48,6 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         filters[index].operator = value;
                         // Persist changes
                         view.diskConfig.updateFilters(filters);
-                        // Force refresh of settings
-                        settingsManager.reset(settingHandlerResponse);
                     });
                 }).addText(text => {
                     text.setPlaceholder("name of value")

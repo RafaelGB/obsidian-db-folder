@@ -1,6 +1,7 @@
 import { DiskHandlerResponse } from "cdm/MashallModel";
-import { YAML_INDENT } from "helpers/Constants";
+import { OperatorFilter, YAML_INDENT } from "helpers/Constants";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
+import { DataviewService } from "services/DataviewService";
 
 export class UnmarshallFiltersHandler extends AbstractDiskHandler {
     handlerName: string = 'filters';
@@ -12,8 +13,17 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
         if (filters) {
             for (const filter of filters) {
                 // Lvl2: Array of filters
-                this.localDisk.push(`${YAML_INDENT.repeat(1)}- {field: ${filter.field}, operator: ${filter.operator}${filter.value !== undefined ? (",value: " + filter.value)
-                    : ""}}`);
+                this.localDisk.push(`${YAML_INDENT.repeat(1)}- {field: ${DataviewService.getDataviewAPI().
+                    value
+                    .isTruthy(filter.field) ? filter.field : "\"\""
+                    }, operator: ${DataviewService.getDataviewAPI()
+                        .value
+                        .isTruthy(filter.operator) ? filter.operator : "\"\""
+                    }, value: ${DataviewService.getDataviewAPI()
+                        .value
+                        .isTruthy(filter.value) ? filter.value : "\"\""
+                    }}`
+                );
             }
         }
 

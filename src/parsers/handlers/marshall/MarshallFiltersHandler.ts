@@ -1,5 +1,7 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
+import { getOperatorFilterValue } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
+import { DataviewService } from 'services/DataviewService';
 
 export class MarshallFiltersHandler extends AbstractYamlHandler {
     handlerName: string = 'columns';
@@ -11,20 +13,20 @@ export class MarshallFiltersHandler extends AbstractYamlHandler {
             yaml.filters = [];
         }
         for (const filter of yaml.filters) {
-            if (filter.field === undefined) {
-                this.addError(`There was not field key in filter.`);
+            if (!DataviewService.getDataviewAPI().value.isTruthy(filter.field)) {
+                this.addError(`undefined field in filter: ${JSON.stringify(filter)}`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
-            if (filter.operator === undefined) {
-                this.addError(`There was not operator key in filter.`);
+            else if (!DataviewService.getDataviewAPI().value.isTruthy(filter.operator)) {
+                this.addError(`There was not operator key in filter: ${JSON.stringify(filter)}`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
-            if (filter.value === undefined) {
-                this.addError(`There was not value key in filter.`);
+            else if (!DataviewService.getDataviewAPI().value.isTruthy(filter.value)) {
+                this.addError(`undefined value in filter: ${JSON.stringify(filter)}`);
                 yaml.filters.splice(yaml.filters.indexOf(filter), 1);
             }
         }
-
+        handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);
     }
 }
