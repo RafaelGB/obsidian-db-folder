@@ -229,7 +229,12 @@ export function getOperatorFilterValue(keyToFind: string): string {
   const entry = Object.entries(OperatorFilter).find(([key]) =>
     key === keyToFind
   );
-  return entry[1];
+  // Check if the key was found
+  if (entry) {
+    return entry[1];
+  } else {
+    return '';
+  }
 }
 
 export const MarkdownBreakerRules = Object.freeze({

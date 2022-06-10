@@ -54,8 +54,6 @@ class DataviewProxy {
                 case OperatorFilter.ENDS_WITH:
                     if (p[c.field] !== undefined && !p[c.field].endsWith(c.value)) return false;
                     break;
-                default:
-                    throw new Error(`Unknown operator: ${c.operator}`);
             }
             return true;
         }
