@@ -10,19 +10,19 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
         boxSizing: "border-box",
     }),
     menu: () => ({
-        position: "fixed",
-        backgroundColor: `${StyleVariables.BACKGROUND_SECONDARY}`,
+        position: "fixed"
     }),
     menuPortal: base => ({ ...base, zIndex: 9999 }),
-    control: (styles) => ({ ...styles, backgroundColor: "white" }),
+    control: (styles) => ({ ...styles, backgroundColor: "var(--background-primary)" }),
     option: (styles, { data }) => ({
         ...styles,
-        backgroundColor: data.color,
+        backgroundColor: data.color + " !important",
+        color: "rgb(66, 66, 66) !important"
     }),
     multiValue: (styles, { data }) => {
         return {
             ...styles,
-            backgroundColor: data.color,
+            backgroundColor: data.color + " !important",
         };
     },
     multiValueLabel: (styles) => ({
@@ -33,7 +33,7 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
         ...styles,
         color: "black",
         ":hover": {
-            backgroundColor: data.color,
+            backgroundColor: data.color + " !important",
             color: "white",
         },
     }),
