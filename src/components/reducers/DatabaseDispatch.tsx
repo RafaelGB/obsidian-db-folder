@@ -481,10 +481,13 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         }
         return column;
       });
-
+      state.initialState.sortBy = action.sortArray;
       return update(state, {
         columns: {
           $set: modifiedColumns,
+        },
+        initialState: {
+          $set: state.initialState,
         },
       });
 
