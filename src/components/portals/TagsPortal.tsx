@@ -114,27 +114,23 @@ const TagsPortal = (tagsProps: TagsProps) => {
       {showSelectTags
         ? TagsForm()
         : tagsState && (
-            <div
-              className="d-flex flex-wrap-wrap"
-              style={{
-                padding: "0.75rem",
-              }}
-              onClick={() => setShowSelectTags(true)}
-            >
-              {tagsState.map((tag: string) => (
-                <div
-                  key={`key-${tag}`}
-                  style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                >
-                  <Relationship
-                    key={`key-Relationship-${tag}`}
-                    value={tag}
-                    backgroundColor={getColor(tag)}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          <div
+            className={c("tags-container") + " cell-padding d-flex flex-wrap-wrap"}
+            onClick={() => setShowSelectTags(true)}
+          >
+            {tagsState.map((tag: string) => (
+              <div
+                key={`key-${tag}`}
+              >
+                <Relationship
+                  key={`key-Relationship-${tag}`}
+                  value={tag}
+                  backgroundColor={getColor(tag)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
     </>
   );
 };

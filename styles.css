@@ -348,7 +348,8 @@
   align-self: center;
 }
 
-.database-plugin__relationship, .react-select__option {
+.database-plugin__relationship,
+.react-select__option {
   color: rgb(66, 66, 66);
   box-sizing: border-box;
   font-weight: 400;
@@ -358,12 +359,13 @@
 }
 
 
-.react-select__option + .react-select__option {
+.react-select__option+.react-select__option {
   margin-top: 10px;
 }
 
 
-.react-select__option, .react-select__multi-value {
+.react-select__option,
+.react-select__multi-value {
   background-color: #e3e3e3;
   color: var(--text-normal);
 }
@@ -384,6 +386,11 @@
 .database-plugin__tags {
   background-color: var(--background-primary);
 }
+
+.database-plugin__tags-container {
+  gap: 0.5rem;
+}
+
 
 .text-align-right {
   text-align: right;
