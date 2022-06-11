@@ -103,6 +103,8 @@ const TagsPortal = (tagsProps: TagsProps) => {
           onChange={handleOnChange}
           menuPortalTarget={document.body}
           menuShouldBlockScroll={true}
+          className="react-select-container"
+          classNamePrefix="react-select"
         />
       </div>
     );

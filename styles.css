@@ -348,7 +348,7 @@
   align-self: center;
 }
 
-.database-plugin__relationship {
+.database-plugin__relationship, .react-select__option {
   color: rgb(66, 66, 66);
   box-sizing: border-box;
   font-weight: 400;
@@ -356,6 +356,30 @@
   border-radius: 4px;
   display: inline-block;
 }
+
+
+.react-select__option + .react-select__option {
+  margin-top: 10px;
+}
+
+
+.react-select__option, .react-select__multi-value {
+  background-color: #e3e3e3;
+  color: var(--text-normal);
+}
+
+
+.react-select__menu .react-select__menu-list {
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.react-select__value-container .react-select__input-container {
+  color: var(--text-normal);
+}
+
 
 .database-plugin__tags {
   background-color: var(--background-primary);
