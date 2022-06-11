@@ -5,8 +5,6 @@ import {
   StyleVariables,
 } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
-import ArrowLeftIcon from "components/img/ArrowLeft";
-import ArrowRightIcon from "components/img/ArrowRight";
 import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
@@ -91,28 +89,12 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       setExpanded: setExpanded,
       setColumnWidthState: setColumnWidthState,
       columnWidthState: columnWidthState,
+      keyState: keyState,
+      setKeyState: setkeyState,
     },
   };
   headerActionResponse = header_action_button_section.run(headerActionResponse);
-  /**
-   * Add extra buttons if column is not a metadata
-   */
-  if (!column.isMetadata) {
-    headerActionResponse.buttons.push({
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.DELETE_COLUMN,
-          columnId: column.id,
-          key: keyState,
-        });
-        setExpanded(false);
-        delete columnWidthState.widthRecord[column.id];
-        setColumnWidthState(columnWidthState);
-      },
-      icon: <TrashIcon />,
-      label: "Delete",
-    });
-  }
+
   /**
    * Array of type headers available to change the data type of the column
    */

@@ -9,7 +9,9 @@ export type HeaderActionResponse = {
         setSortBy: (sortedType: SortedType[]) => void,
         setExpanded: (expanded: boolean) => void,
         setColumnWidthState: (a: ColumnWidthState) => void,
-        columnWidthState: ColumnWidthState
+        columnWidthState: ColumnWidthState,
+        setKeyState: (a: string) => void,
+        keyState: string,
     }
 }
 
