@@ -6,7 +6,7 @@ import { LOGGER } from "services/Logger";
 import { developer_settings_section } from "settings/DeveloperSection";
 import { columns_settings_section } from "settings/ColumnsSection";
 import { folder_settings_section } from "settings/FolderSection";
-import { DEFAULT_COLUMN_CONFIG, SourceDataTypes, StyleClasses } from "helpers/Constants";
+import { StyleClasses } from "helpers/Constants";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { media_settings_section } from "settings/MediaSection";
 import { source_settings_section } from "settings/SourceSection";

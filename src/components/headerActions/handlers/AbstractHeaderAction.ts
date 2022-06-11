@@ -1,6 +1,6 @@
 import { HeaderAction, HeaderActionResponse } from "cdm/HeaderActionModel";
 
-export abstract class AbstractColumnHandler implements HeaderAction {
+export abstract class AbstractHeaderAction implements HeaderAction {
     protected nextHandler: HeaderAction;
 
     public goNext(settingHandlerResponse: HeaderActionResponse): HeaderActionResponse {

@@ -27,6 +27,8 @@ import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { generateSortedColumns } from "components/behavior/SortingColumns";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import header_action_button_section from "components/headerActions/HeaderActionSections";
+import { HeaderActionResponse } from "cdm/HeaderActionModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -84,56 +86,19 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /**
    * Array of action buttons asociated to the header
    */
-  const buttons = [];
-  if (column.dataType !== DataTypes.TASK) {
-    buttons.push(
-      {
-        onClick: (e: any) => {
-          const sortArray = generateSortedColumns(initialState, column, false);
-          // Update state
-          dispatch({
-            type: ActionTypes.SET_SORT_BY,
-            sortArray: sortArray,
-          });
-          setSortBy(sortArray);
-          setExpanded(false);
-        },
-        icon:
-          column.isSorted && !column.isSortedDesc ? (
-            <CrossIcon />
-          ) : (
-            <ArrowUpIcon />
-          ),
-        label:
-          column.isSorted && !column.isSortedDesc
-            ? "Remove ascending sort"
-            : "Sort ascending",
-      },
-      {
-        onClick: (e: any) => {
-          const sortArray = generateSortedColumns(initialState, column, true);
-          // Update state
-          dispatch({
-            type: ActionTypes.SET_SORT_BY,
-            sortArray: sortArray,
-          });
-          setSortBy(sortArray);
-          setExpanded(false);
-        },
-        icon:
-          column.isSorted && column.isSortedDesc ? (
-            <CrossIcon />
-          ) : (
-            <ArrowDownIcon />
-          ),
-        label:
-          column.isSorted && column.isSortedDesc
-            ? "Remove descending sort"
-            : "Sort descending",
-      }
-    );
-  }
-  buttons.push(
+  const initButtons: any[] = [];
+  let headerActionResponse: HeaderActionResponse = {
+    buttons: initButtons,
+    column: column,
+    initialState: initialState,
+    hooks: {
+      setSortBy: setSortBy,
+      setExpanded: setExpanded,
+    },
+  };
+  headerActionResponse = header_action_button_section.run(headerActionResponse);
+
+  headerActionResponse.buttons.push(
     {
       onClick: (e: any) => {
         dispatch({
@@ -165,7 +130,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    * Add extra buttons if column is not a metadata
    */
   if (!column.isMetadata) {
-    buttons.push({
+    headerActionResponse.buttons.push({
       onClick: (e: any) => {
         dispatch({
           type: ActionTypes.DELETE_COLUMN,
@@ -467,7 +432,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 padding: "4px 0px",
               }}
             >
-              {buttons.map((button) => (
+              {headerActionResponse.buttons.map((button) => (
                 <div
                   key={button.label}
                   className="menu-item sort-button"
