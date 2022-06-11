@@ -23,6 +23,7 @@ import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
+import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -80,9 +81,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /**
    * Array of action buttons asociated to the header
    */
-  const initButtons: any[] = [];
   let headerActionResponse: HeaderActionResponse = {
-    buttons: initButtons,
+    buttons: [],
     headerMenuProps: headerMenuProps,
     hooks: {
       setSortBy: setSortBy,
@@ -93,11 +93,26 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       setKeyState: setkeyState,
     },
   };
-  headerActionResponse = header_action_button_section.run(headerActionResponse);
+  const headerButtons =
+    header_action_button_section.run(headerActionResponse).buttons;
 
   /**
    * Array of type headers available to change the data type of the column
    */
+  headerActionResponse = {
+    buttons: [],
+    headerMenuProps: headerMenuProps,
+    hooks: {
+      setSortBy: setSortBy,
+      setExpanded: setExpanded,
+      setColumnWidthState: setColumnWidthState,
+      columnWidthState: columnWidthState,
+      keyState: keyState,
+      setKeyState: setkeyState,
+    },
+  };
+  const typesTest =
+    header_action_types_section.run(headerActionResponse).buttons;
   const types = [
     {
       onClick: (e: any) => {
@@ -177,22 +192,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       icon: <CalendarTimeIcon />,
       label: MetadataLabels.CALENDAR_TIME,
     },
-    ,
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.CHECKBOX,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TaskIcon />,
-      label: DataTypes.CHECKBOX,
-    },
   ];
-
+  types.push(...typesTest);
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: "right",
     strategy: "fixed",
@@ -382,7 +383,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 padding: "4px 0px",
               }}
             >
-              {headerActionResponse.buttons.map((button) => (
+              {headerButtons.map((button) => (
                 <div
                   key={button.label}
                   className="menu-item sort-button"

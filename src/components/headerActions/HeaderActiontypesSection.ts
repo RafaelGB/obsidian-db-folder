@@ -2,16 +2,15 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractChain, AbstractHandler } from "patterns/AbstractFactoryChain";
 import CheckboxTypeHandlerAction from "components/headerActions/handlers/types/CheckboxTypeHeaderAction";
 class HeaderActionTypesSection extends AbstractChain<HeaderActionResponse> {
-src/.tsx
     protected customHandle(abstractResponse: HeaderActionResponse): HeaderActionResponse {
-    return abstractResponse;
-}
+        return abstractResponse;
+    }
 
-    protected getHandlers(): AbstractHandler < HeaderActionResponse > [] {
-    return [
-        new CheckboxTypeHandlerAction
-    ];
-}
+    protected getHandlers(): AbstractHandler<HeaderActionResponse>[] {
+        return [
+            new CheckboxTypeHandlerAction()
+        ];
+    }
 }
 
 const header_action_types_section = new HeaderActionTypesSection();

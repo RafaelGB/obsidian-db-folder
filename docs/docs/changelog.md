@@ -1,6 +1,10 @@
 ## 1.7.1
 ### Improved
 - Now select source tags will be ordered alphabetically and the number of tags will be shown. [ISSUE#76](https://github.com/RafaelGB/obsidian-db-folder/issues/76)
+## Visual
+- Tag options supports dark mode [PR](https://github.com/RafaelGB/obsidian-db-folder/pull/133)[ISSUE#124](https://github.com/RafaelGB/obsidian-db-folder/issues/124) [artisticat1](https://github.com/artisticat1)
+- Freeze column gap fixed [ISSUE#120](https://github.com/RafaelGB/obsidian-db-folder/issues/120) [artisticat1](https://github.com/artisticat1)
+- Improvements of compact row mode [artisticat1](https://github.com/artisticat1)
 ### No longer broken
 - More that one filter can be applied again to the same source. [ISSUE#113](https://github.com/RafaelGB/obsidian-db-folder/issues/113)
 - You can not order by tags because was not prepared to do it yet (crashed). [ISSUE#119](https://github.com/RafaelGB/obsidian-db-folder/issues/119)
