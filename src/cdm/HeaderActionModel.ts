@@ -12,6 +12,7 @@ export type HeaderActionResponse = {
         columnWidthState: ColumnWidthState,
         setKeyState: (a: string) => void,
         keyState: string,
+        [key: string]: any | ((a: any) => void)
     }
 }
 

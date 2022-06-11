@@ -21,7 +21,7 @@ import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
-import header_action_button_section from "components/headerActions/HeaderActionSections";
+import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
