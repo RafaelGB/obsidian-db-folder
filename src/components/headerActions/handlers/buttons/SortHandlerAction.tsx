@@ -7,21 +7,30 @@ import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
 import { ActionTypes, DataTypes } from "helpers/Constants";
 
-export class SortHandlerAction extends AbstractHeaderAction {
+export default class SortHandlerAction extends AbstractHeaderAction {
+  globalHeaderActionResponse: HeaderActionResponse;
   handle(headerActionResponse: HeaderActionResponse): HeaderActionResponse {
-    const { column } = headerActionResponse;
+    this.globalHeaderActionResponse = headerActionResponse;
+    const { column } =
+      this.globalHeaderActionResponse.headerMenuProps.headerProps;
     switch (column.dataType) {
       case DataTypes.TAGS:
       case DataTypes.TASK:
         // DO NOTHING
         break;
       default:
-        headerActionResponse = this.addSortButtons(headerActionResponse);
+        this.addSortButtons();
     }
-    return headerActionResponse;
+    return this.goNext(this.globalHeaderActionResponse);
   }
-  private addSortButtons(headerActionResponse: HeaderActionResponse) {
-    const { column, initialState, hooks } = headerActionResponse;
+
+  /**
+   * add sort buttons to the column header. Global header action response is updated.
+   */
+  private addSortButtons(): void {
+    const { hooks } = this.globalHeaderActionResponse;
+    const { column, initialState } =
+      this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const sortButtons: any[] = [];
     sortButtons.push(
       {
@@ -69,7 +78,6 @@ export class SortHandlerAction extends AbstractHeaderAction {
             : "Sort descending",
       }
     );
-    headerActionResponse.buttons.push(...sortButtons);
-    return headerActionResponse;
+    this.globalHeaderActionResponse.buttons.push(...sortButtons);
   }
 }

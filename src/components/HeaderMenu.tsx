@@ -5,8 +5,6 @@ import {
   StyleVariables,
 } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
-import ArrowUpIcon from "components/img/ArrowUp";
-import ArrowDownIcon from "components/img/ArrowDown";
 import ArrowLeftIcon from "components/img/ArrowLeft";
 import ArrowRightIcon from "components/img/ArrowRight";
 import TrashIcon from "components/img/Trash";
@@ -14,7 +12,6 @@ import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
 import TaskIcon from "components/img/TaskIcon";
-import CrossIcon from "components/img/CrossIcon";
 import TagsIcon from "components/img/TagsIcon";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import CalendarIcon from "components/img/CalendarIcon";
@@ -24,7 +21,6 @@ import { Column } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
-import { generateSortedColumns } from "components/behavior/SortingColumns";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionSections";
@@ -89,43 +85,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const initButtons: any[] = [];
   let headerActionResponse: HeaderActionResponse = {
     buttons: initButtons,
-    column: column,
-    initialState: initialState,
+    headerMenuProps: headerMenuProps,
     hooks: {
       setSortBy: setSortBy,
       setExpanded: setExpanded,
+      setColumnWidthState: setColumnWidthState,
+      columnWidthState: columnWidthState,
     },
   };
   headerActionResponse = header_action_button_section.run(headerActionResponse);
-
-  headerActionResponse.buttons.push(
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.ADD_COLUMN_TO_LEFT,
-          columnId: column.id,
-          focus: false,
-          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position - 1),
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowLeftIcon />,
-      label: "Insert left",
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.ADD_COLUMN_TO_RIGHT,
-          columnId: column.id,
-          focus: false,
-          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position + 1),
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowRightIcon />,
-      label: "Insert right",
-    }
-  );
   /**
    * Add extra buttons if column is not a metadata
    */

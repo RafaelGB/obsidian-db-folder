@@ -1,13 +1,15 @@
-import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { SortedType } from "cdm/DatabaseModel";
+import { ColumnWidthState } from "cdm/StyleModel";
+import { HeaderMenuProps } from "cdm/HeaderModel";
 
 export type HeaderActionResponse = {
-    column: TableColumn,
     buttons: any[]
-    initialState: TableDataType,
+    headerMenuProps: HeaderMenuProps
     hooks: {
         setSortBy: (sortedType: SortedType[]) => void,
         setExpanded: (expanded: boolean) => void,
+        setColumnWidthState: (a: ColumnWidthState) => void,
+        columnWidthState: ColumnWidthState
     }
 }
 
