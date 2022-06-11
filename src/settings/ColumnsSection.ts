@@ -19,7 +19,7 @@ export function columns_settings_section(settingHandlerResponse: SettingHandlerR
         i++;
     }
     settingHandlerResponse.containerEl = columns_section;
-    return handlers[0].handle(settingHandlerResponse);
+    return handlers[0]?.handle(settingHandlerResponse);
 }
 
 /**

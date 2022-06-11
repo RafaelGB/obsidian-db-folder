@@ -42,7 +42,7 @@ function validateYaml(yaml: any): YamlHandlerResponse {
     }
 
     const response: YamlHandlerResponse = { yaml: yaml, errors: {} };
-    return handlers[0].handle(response);
+    return handlers[0]?.handle(response);
 }
 
 

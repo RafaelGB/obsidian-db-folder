@@ -33,7 +33,7 @@ function persisDatabaseConfigOnDisk(databaseConfig: DatabaseYaml): DiskHandlerRe
   }
 
   const response: DiskHandlerResponse = { yaml: databaseConfig, disk: [], errors: {} };
-  return handlers[0].handle(response);
+  return handlers[0]?.handle(response);
 }
 
 

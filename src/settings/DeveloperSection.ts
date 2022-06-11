@@ -20,7 +20,7 @@ export function developer_settings_section(settingHandlerResponse: SettingHandle
     }
 
     settingHandlerResponse.containerEl = developer_section;
-    return handlers[0].handle(settingHandlerResponse);
+    return handlers[0]?.handle(settingHandlerResponse);
 }
 
 /**

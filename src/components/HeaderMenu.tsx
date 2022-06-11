@@ -5,16 +5,11 @@ import {
   StyleVariables,
 } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
-import ArrowUpIcon from "components/img/ArrowUp";
-import ArrowDownIcon from "components/img/ArrowDown";
-import ArrowLeftIcon from "components/img/ArrowLeft";
-import ArrowRightIcon from "components/img/ArrowRight";
 import TrashIcon from "components/img/Trash";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
 import TaskIcon from "components/img/TaskIcon";
-import CrossIcon from "components/img/CrossIcon";
 import TagsIcon from "components/img/TagsIcon";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import CalendarIcon from "components/img/CalendarIcon";
@@ -24,9 +19,10 @@ import { Column } from "react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
-import { generateSortedColumns } from "components/behavior/SortingColumns";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import header_action_button_section from "components/headerActions/HeaderActionSections";
+import { HeaderActionResponse } from "cdm/HeaderActionModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -84,102 +80,21 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /**
    * Array of action buttons asociated to the header
    */
-  const buttons = [];
-  if (column.dataType !== DataTypes.TASK) {
-    buttons.push(
-      {
-        onClick: (e: any) => {
-          const sortArray = generateSortedColumns(initialState, column, false);
-          // Update state
-          dispatch({
-            type: ActionTypes.SET_SORT_BY,
-            sortArray: sortArray,
-          });
-          setSortBy(sortArray);
-          setExpanded(false);
-        },
-        icon:
-          column.isSorted && !column.isSortedDesc ? (
-            <CrossIcon />
-          ) : (
-            <ArrowUpIcon />
-          ),
-        label:
-          column.isSorted && !column.isSortedDesc
-            ? "Remove ascending sort"
-            : "Sort ascending",
-      },
-      {
-        onClick: (e: any) => {
-          const sortArray = generateSortedColumns(initialState, column, true);
-          // Update state
-          dispatch({
-            type: ActionTypes.SET_SORT_BY,
-            sortArray: sortArray,
-          });
-          setSortBy(sortArray);
-          setExpanded(false);
-        },
-        icon:
-          column.isSorted && column.isSortedDesc ? (
-            <CrossIcon />
-          ) : (
-            <ArrowDownIcon />
-          ),
-        label:
-          column.isSorted && column.isSortedDesc
-            ? "Remove descending sort"
-            : "Sort descending",
-      }
-    );
-  }
-  buttons.push(
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.ADD_COLUMN_TO_LEFT,
-          columnId: column.id,
-          focus: false,
-          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position - 1),
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowLeftIcon />,
-      label: "Insert left",
+  const initButtons: any[] = [];
+  let headerActionResponse: HeaderActionResponse = {
+    buttons: initButtons,
+    headerMenuProps: headerMenuProps,
+    hooks: {
+      setSortBy: setSortBy,
+      setExpanded: setExpanded,
+      setColumnWidthState: setColumnWidthState,
+      columnWidthState: columnWidthState,
+      keyState: keyState,
+      setKeyState: setkeyState,
     },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.ADD_COLUMN_TO_RIGHT,
-          columnId: column.id,
-          focus: false,
-          columnInfo: adjustWidthOfTheColumnsWhenAdd(column.position + 1),
-        });
-        setExpanded(false);
-      },
-      icon: <ArrowRightIcon />,
-      label: "Insert right",
-    }
-  );
-  /**
-   * Add extra buttons if column is not a metadata
-   */
-  if (!column.isMetadata) {
-    buttons.push({
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.DELETE_COLUMN,
-          columnId: column.id,
-          key: keyState,
-        });
-        setExpanded(false);
-        delete columnWidthState.widthRecord[column.id];
-        setColumnWidthState(columnWidthState);
-      },
-      icon: <TrashIcon />,
-      label: "Delete",
-    });
-  }
+  };
+  headerActionResponse = header_action_button_section.run(headerActionResponse);
+
   /**
    * Array of type headers available to change the data type of the column
    */
@@ -467,7 +382,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 padding: "4px 0px",
               }}
             >
-              {buttons.map((button) => (
+              {headerActionResponse.buttons.map((button) => (
                 <div
                   key={button.label}
                   className="menu-item sort-button"

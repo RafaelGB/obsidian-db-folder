@@ -21,7 +21,7 @@ export function folder_settings_section(settingHandlerResponse: SettingHandlerRe
     }
 
     settingHandlerResponse.containerEl = folder_section;
-    return handlers[0].handle(settingHandlerResponse);
+    return handlers[0]?.handle(settingHandlerResponse);
 }
 
 /**
