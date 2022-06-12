@@ -5,12 +5,7 @@ import {
   StyleVariables,
 } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
-import TrashIcon from "components/img/Trash";
-import TextIcon from "components/img/Text";
-import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
-import TaskIcon from "components/img/TaskIcon";
-import TagsIcon from "components/img/TagsIcon";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import CalendarIcon from "components/img/CalendarIcon";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
@@ -111,89 +106,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       setKeyState: setkeyState,
     },
   };
-  const typesTest =
-    header_action_types_section.run(headerActionResponse).buttons;
-  const types = [
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.SELECT,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <MultiIcon />,
-      label: DataTypes.SELECT,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.TAGS,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TagsIcon />,
-      label: DataTypes.TAGS,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.TEXT,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TextIcon />,
-      label: DataTypes.TEXT,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.NUMBER,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <HashIcon />,
-      label: DataTypes.NUMBER,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.CALENDAR,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <CalendarIcon />,
-      label: MetadataLabels.CALENDAR,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.CALENDAR_TIME,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <CalendarTimeIcon />,
-      label: MetadataLabels.CALENDAR_TIME,
-    },
-  ];
-  types.push(...typesTest);
+  const types = header_action_types_section.run(headerActionResponse).buttons;
+
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: "right",
     strategy: "fixed",
