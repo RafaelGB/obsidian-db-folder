@@ -2,7 +2,6 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
 import { ActionTypes, DataTypes, MetadataLabels } from "helpers/Constants";
-import TaskIcon from "components/img/TaskIcon";
 import CalendarTimeIcon from "components/img/CalendarTime";
 
 export default class DatetimeTypeHeaderAction extends AbstractHeaderAction {
