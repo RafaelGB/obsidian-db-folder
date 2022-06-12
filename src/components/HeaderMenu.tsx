@@ -1,13 +1,5 @@
-import {
-  ActionTypes,
-  DataTypes,
-  MetadataLabels,
-  StyleVariables,
-} from "helpers/Constants";
+import { ActionTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
-import HashIcon from "components/img/Hash";
-import CalendarTimeIcon from "components/img/CalendarTime";
-import CalendarIcon from "components/img/CalendarIcon";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
 import { Column } from "react-table";
@@ -167,24 +159,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   function handleBlur(e: any) {
     e.preventDefault();
     persistLabelChange();
-  }
-
-  function adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
-    let columnNumber =
-      initialState.columns.length - initialState.shadowColumns.length;
-    // Check if column name already exists
-    while (
-      headerMenuProps.headerProps.allColumns.find(
-        (o: Column) => o.id === `newColumn${columnNumber}`
-      )
-    ) {
-      columnNumber++;
-    }
-    const columnId = `newColumn${columnNumber}`;
-    const columnLabel = `New Column ${columnNumber}`;
-    columnWidthState.widthRecord[columnId] = getColumnWidthStyle(rows, column);
-    setColumnWidthState(columnWidthState);
-    return { name: columnId, position: wantedPosition, label: columnLabel };
   }
 
   return (
