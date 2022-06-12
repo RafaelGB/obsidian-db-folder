@@ -5,12 +5,7 @@ import {
   StyleVariables,
 } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
-import TrashIcon from "components/img/Trash";
-import TextIcon from "components/img/Text";
-import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
-import TaskIcon from "components/img/TaskIcon";
-import TagsIcon from "components/img/TagsIcon";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import CalendarIcon from "components/img/CalendarIcon";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
@@ -21,8 +16,9 @@ import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
-import header_action_button_section from "components/headerActions/HeaderActionSections";
+import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
+import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** state of width columns */
@@ -80,9 +76,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /**
    * Array of action buttons asociated to the header
    */
-  const initButtons: any[] = [];
   let headerActionResponse: HeaderActionResponse = {
-    buttons: initButtons,
+    buttons: [],
     headerMenuProps: headerMenuProps,
     hooks: {
       setSortBy: setSortBy,
@@ -93,105 +88,25 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       setKeyState: setkeyState,
     },
   };
-  headerActionResponse = header_action_button_section.run(headerActionResponse);
+  const headerButtons =
+    header_action_button_section.run(headerActionResponse).buttons;
 
   /**
    * Array of type headers available to change the data type of the column
    */
-  const types = [
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.SELECT,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <MultiIcon />,
-      label: DataTypes.SELECT,
+  headerActionResponse = {
+    buttons: [],
+    headerMenuProps: headerMenuProps,
+    hooks: {
+      setSortBy: setSortBy,
+      setExpanded: setExpanded,
+      setColumnWidthState: setColumnWidthState,
+      columnWidthState: columnWidthState,
+      keyState: keyState,
+      setKeyState: setkeyState,
     },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.TAGS,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TagsIcon />,
-      label: DataTypes.TAGS,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.TEXT,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TextIcon />,
-      label: DataTypes.TEXT,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.NUMBER,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <HashIcon />,
-      label: DataTypes.NUMBER,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.CALENDAR,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <CalendarIcon />,
-      label: MetadataLabels.CALENDAR,
-    },
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.CALENDAR_TIME,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <CalendarTimeIcon />,
-      label: MetadataLabels.CALENDAR_TIME,
-    },
-    ,
-    {
-      onClick: (e: any) => {
-        dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          dataType: DataTypes.CHECKBOX,
-        });
-        setShowType(false);
-        setExpanded(false);
-      },
-      icon: <TaskIcon />,
-      label: DataTypes.CHECKBOX,
-    },
-  ];
+  };
+  const types = header_action_types_section.run(headerActionResponse).buttons;
 
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: "right",
@@ -382,7 +297,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 padding: "4px 0px",
               }}
             >
-              {headerActionResponse.buttons.map((button) => (
+              {headerButtons.map((button) => (
                 <div
                   key={button.label}
                   className="menu-item sort-button"
