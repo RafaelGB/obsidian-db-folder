@@ -89,7 +89,6 @@ export type TableDataType = {
     dispatch?: Dispatch<any>,
     initialState?: InitialState,
     cellSize: string,
-    stickyFirstColumn: boolean
 }
 export interface DatabaseHeaderProps {
     columns: any,

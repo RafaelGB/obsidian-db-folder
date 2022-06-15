@@ -12,6 +12,10 @@ export class UseFileFieldsAsTemplateColumnsHandler extends AbstractSettingsHandl
         // Local exclusivey
         if (local) {
             const filePaths: Record<string, string> = {};
+            app.vault.getMarkdownFiles()
+                .filter(file => file.path.startsWith(view.file.parent.path))
+                .forEach(file => { filePaths[file.path] = file.basename });
+            DataviewService.getDataviewAPI().pages
             new Setting(containerEl)
                 .setName(this.settingTitle)
                 .setDesc('Select file to use as template for database columns')

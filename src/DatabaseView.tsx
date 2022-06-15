@@ -146,7 +146,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
         stateManager: this.plugin.getStateManager(this.file),
         initialState: initialState,
         cellSize: this.diskConfig.yaml.config.cell_size,
-        stickyFirstColumn: this.diskConfig.yaml.config.sticky_first_column,
       };
 
       // Render database

@@ -239,7 +239,13 @@ export function Table(initialState: TableDataType) {
             width: totalWidth,
           },
         })}
-        className={`${c("table noselect cell_size_" + initialState.cellSize + (initialState.stickyFirstColumn ? " sticky_first_column" : ""))}`}
+        className={`${c(
+          "table noselect cell_size_" +
+            initialState.cellSize +
+            (initialState.view.diskConfig.yaml.config.sticky_first_column
+              ? " sticky_first_column"
+              : "")
+        )}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
       >
@@ -341,8 +347,9 @@ export function Table(initialState: TableDataType) {
                                 ...provided.dragHandleProps,
                                 ...column.getHeaderProps({
                                   style: {
-                                    width: `${columnsWidthState.widthRecord[column.id]
-                                      }px`,
+                                    width: `${
+                                      columnsWidthState.widthRecord[column.id]
+                                    }px`,
                                     ...getDndItemStyle(
                                       snapshot.isDragging,
                                       provided.draggableProps.style

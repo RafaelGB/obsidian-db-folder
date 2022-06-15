@@ -38,7 +38,6 @@ export async function makeData(count: number): Promise<TableDataType> {
     view: null,
     stateManager: null,
     cellSize: "normal",
-    stickyFirstColumn: false,
   };
 }
 
