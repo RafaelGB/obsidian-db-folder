@@ -12,7 +12,6 @@ export async function renderMarkdown(
   domElement: HTMLDivElement
 ): Promise<HTMLDivElement> {
   try {
-    console.log("rendering markdown", markdownString);
     const view: DatabaseView = (cell as any).tableData.view;
     const column = cell.column as unknown as DatabaseColumn;
     const { media_height, media_width, enable_media_view } = column.config;

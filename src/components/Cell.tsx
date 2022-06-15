@@ -63,7 +63,6 @@ export default function DefaultCell(cellProperties: Cell) {
         );
         break;
       case DataTypes.MARKDOWN:
-        console.log("MARKDOWN initialValue", initialValue);
         containerCellRef.current.innerHTML = "";
         renderMarkdown(cellProperties, initialValue, containerCellRef.current);
         break;
@@ -91,7 +90,6 @@ export default function DefaultCell(cellProperties: Cell) {
         `useEffect hooked with dirtyCell. Value:${contextValue.value}`
       );
       //TODO - this is a hack. find why is layout effect called twice
-      console.log("dirtyCell initialValue", contextValue.value);
       containerCellRef.current.innerHTML = "";
       renderMarkdown(
         cellProperties,

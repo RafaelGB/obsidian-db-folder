@@ -1,6 +1,6 @@
+import { RowDataType } from "cdm/FolderModel";
 import { obtainColumnsFromFile } from "components/Columns";
-import { Setting } from "obsidian";
-import { DataviewService } from "services/DataviewService";
+import { Notice, Setting } from "obsidian";
 import { VaultManagerDB } from "services/FileManagerService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
@@ -12,12 +12,12 @@ export class UseFileFieldsAsTemplateColumnsHandler extends AbstractSettingsHandl
         // Local exclusivey
         if (local) {
             const filePaths: Record<string, string> = {};
-            app.vault.getMarkdownFiles()
-                .filter(file => file.path.startsWith(view.file.parent.path))
-                .forEach(file => { filePaths[file.path] = file.basename });
+            view.rows.forEach((row: RowDataType) => {
+                filePaths[row.note.getFile().path] = row.note.getFile().basename;
+            });
             new Setting(containerEl)
                 .setName(this.settingTitle)
-                .setDesc('Select file to use as template for database columns')
+                .setDesc('Select file to use as template for database columns. Click the button to apply the template.')
                 .addDropdown((dropdown) => {
                     dropdown.addOptions(filePaths);
                     dropdown.setValue("-");
@@ -32,6 +32,7 @@ export class UseFileFieldsAsTemplateColumnsHandler extends AbstractSettingsHandl
                             const columns = await obtainColumnsFromFile(tfile);
                             view.diskConfig.yaml.columns = columns;
                             view.diskConfig.saveOnDisk();
+                            new Notice(`${Object.keys(columns).length} Columns were loaded from file "${tfile.basename}"! Close this dialog to show the database changes`);
                         });
                 });
         }
