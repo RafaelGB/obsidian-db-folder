@@ -82,7 +82,6 @@ export type InitialState = {
 export type TableDataType = {
     columns: TableColumn[],
     shadowColumns: TableColumn[],
-    data: Array<RowDataType>,
     skipReset: boolean,
     view: DatabaseView,
     stateManager: StateManager,
@@ -93,7 +92,7 @@ export type TableDataType = {
 export interface DatabaseHeaderProps {
     columns: any,
     data: any,
-    initialState: TableDataType,
+    tableData: TableDataType,
     defaultColumn: any,
     getSubRows: any,
     getRowId: any,

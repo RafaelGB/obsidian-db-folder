@@ -11,7 +11,7 @@ type CheckboxProps = {
   cellProperties: Cell;
 };
 export function CheckboxCell(props: CheckboxProps) {
-  const { intialState, column, cellProperties } = props;
+  const { column, cellProperties } = props;
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Note info of current Cell */
   const note: NoteInfo = (cellProperties.row.original as any).note;

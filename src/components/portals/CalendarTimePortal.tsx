@@ -12,7 +12,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   const dataDispatch = (cellProperties as any).dataDispatch;
   // Calendar state
   const [calendarTimeState, setCalendarTimeState] = useState(
-    intialState.data[row.index][column.key]
+    intialState.view.rows[row.index][column.key]
   );
   // Selector popper state
 

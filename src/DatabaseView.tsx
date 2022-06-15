@@ -1,5 +1,5 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { InitialState, TableDataType } from "cdm/FolderModel";
+import { InitialState, RowDataType, TableDataType } from "cdm/FolderModel";
 import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
@@ -32,7 +32,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   hoverPopover: HoverPopover | null;
   tableContainer: HTMLDivElement | null = null;
   diskConfig: DatabaseInfo;
-
+  rows: Array<RowDataType>;
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
     this.plugin = plugin;
@@ -129,18 +129,17 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       // Obtain base information about columns
       const columns = await obtainColumnsFromFolder(yamlColumns);
-      const rows = adapterTFilesToRows(
+      this.rows = adapterTFilesToRows(
         this.file.parent.path,
         columns,
         this.diskConfig.yaml
       );
-      const initialState: InitialState = obtainInitialState(columns, rows);
+      const initialState: InitialState = obtainInitialState(columns, this.rows);
 
       // Define table properties
       const tableProps: TableDataType = {
         columns: columns,
         shadowColumns: columns.filter((col) => col.skipPersist),
-        data: rows,
         skipReset: false,
         view: this,
         stateManager: this.plugin.getStateManager(this.file),

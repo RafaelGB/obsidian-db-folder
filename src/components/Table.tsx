@@ -40,22 +40,22 @@ const defaultColumn = {
 
 /**
  * Table component based on react-table
- * @param initialState
+ * @param tableDataType
  * @returns
  */
-export function Table(initialState: TableDataType) {
+export function Table(tableData: TableDataType) {
   LOGGER.debug(
-    `=> Table. number of columns: ${initialState.columns.length}. number of rows: ${initialState.data.length}`
+    `=> Table. number of columns: ${tableData.columns.length}. number of rows: ${tableData.view.rows.length}`
   );
   /** Columns information */
-  const columns: TableColumn[] = initialState.columns;
+  const columns: TableColumn[] = tableData.columns;
   /** Rows information */
-  const data: Array<RowDataType> = initialState.data;
+  const data: Array<RowDataType> = tableData.view.rows;
   /** Reducer */
-  const dataDispatch = initialState.dispatch;
+  const dataDispatch = tableData.dispatch;
   /** Database information  */
-  const view: DatabaseView = initialState.view;
-  const stateManager: StateManager = initialState.stateManager;
+  const view: DatabaseView = tableData.view;
+  const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
   /** Sort columns */
   const sortTypes = React.useMemo(
@@ -87,7 +87,7 @@ export function Table(initialState: TableDataType) {
   );
 
   function useTableDataInstance(instance: TableInstance<TableDataType>) {
-    Object.assign(instance, { initialState });
+    Object.assign(instance, { tableData });
   }
 
   const propsUseTable: any = {
@@ -97,7 +97,7 @@ export function Table(initialState: TableDataType) {
     dataDispatch,
     sortTypes,
   };
-  propsUseTable.initialState = initialState.initialState;
+  propsUseTable.initialState = tableData.initialState;
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -221,7 +221,7 @@ export function Table(initialState: TableDataType) {
   const csvButtonProps = {
     columns: columns,
     rows: rows,
-    name: initialState.view.diskConfig.yaml.name,
+    name: tableData.view.diskConfig.yaml.name,
   };
 
   const globalFilterRows = {
@@ -241,8 +241,8 @@ export function Table(initialState: TableDataType) {
         })}
         className={`${c(
           "table noselect cell_size_" +
-            initialState.cellSize +
-            (initialState.view.diskConfig.yaml.config.sticky_first_column
+            tableData.cellSize +
+            (tableData.view.diskConfig.yaml.config.sticky_first_column
               ? " sticky_first_column"
               : "")
         )}`}
@@ -299,7 +299,7 @@ export function Table(initialState: TableDataType) {
                 onDragEnd={(result) => {
                   // save on disk in case of changes
                   if (result.source.index !== result.destination!.index) {
-                    initialState.view.diskConfig.reorderColumns(
+                    tableData.view.diskConfig.reorderColumns(
                       (state as any).columnOrder
                     );
                   }
@@ -448,7 +448,7 @@ export function Table(initialState: TableDataType) {
             </div>
           </div>
         </div>
-        {initialState.view.diskConfig.yaml.config.enable_show_state && (
+        {tableData.view.diskConfig.yaml.config.enable_show_state && (
           <pre>
             <code>{JSON.stringify(state, null, 2)}</code>
           </pre>

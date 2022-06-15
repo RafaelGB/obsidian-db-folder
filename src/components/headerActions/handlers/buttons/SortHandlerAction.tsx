@@ -29,15 +29,15 @@ export default class SortHandlerAction extends AbstractHeaderAction {
    */
   private addSortButtons(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { column, initialState } =
+    const { column, tableData } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const sortButtons: any[] = [];
     sortButtons.push(
       {
         onClick: (e: any) => {
-          const sortArray = generateSortedColumns(initialState, column, false);
+          const sortArray = generateSortedColumns(tableData, column, false);
           // Update state
-          initialState.dispatch({
+          tableData.dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
@@ -57,9 +57,9 @@ export default class SortHandlerAction extends AbstractHeaderAction {
       },
       {
         onClick: (e: any) => {
-          const sortArray = generateSortedColumns(initialState, column, true);
+          const sortArray = generateSortedColumns(tableData, column, true);
           // Update state
-          initialState.dispatch({
+          tableData.dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
