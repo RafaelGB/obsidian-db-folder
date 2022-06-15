@@ -61,15 +61,17 @@ class DataviewProxy {
         return true;
     }
 
+    wrapLiteral(literal: Literal): WrappedLiteral {
+        return this.getDataviewAPI().value.wrapValue(literal);
+    }
+
     parseLiteral(literal: Literal, dataTypeDst: string, isInline?: boolean): Literal {
         let parsedLiteral: Literal = literal;
         if (!this.getDataviewAPI().value.isTruthy(literal)) {
             return "";
         }
-
         literal = this.parseDataArray(literal);
-
-        const wrapped = this.getDataviewAPI().value.wrapValue(literal)
+        const wrapped = this.wrapLiteral(literal);
         LOGGER.debug(`=>parseLiteral: type ${wrapped
             .type} to ${dataTypeDst}`);
         // Check empty or undefined literals

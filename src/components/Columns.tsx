@@ -1,5 +1,6 @@
 import {
   DataTypes,
+  DEFAULT_COLUMN_CONFIG,
   MaxCapacitiesDatabase,
   MetadataColumns,
   MetadataDatabaseColumns,
@@ -10,9 +11,12 @@ import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { dbTrim } from "helpers/StylesHelper";
+import { TFile } from "obsidian";
+import { DataviewService } from "services/DataviewService";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 /**
- * Add mandatory columns to the table
+ * Add mandatory and configured metadata columns of the table
  * @param columns
  * @returns
  */
@@ -63,6 +67,11 @@ export async function obtainMetadataColumns(
   return yamlColumns;
 }
 
+/**
+ * Given a record of columns of yaml file, return a record of columns of the table
+ * @param databaseColumns
+ * @returns
+ */
 export async function obtainColumnsFromFolder(
   databaseColumns: Record<string, DatabaseColumn>
 ): Promise<TableColumn[]> {
@@ -80,6 +89,52 @@ export async function obtainColumnsFromFolder(
   );
   LOGGER.debug(`<= obtainColumnsFromFolder(. return ${columns.length} columns`);
   return sortColumnsByPosition(columns);
+}
+
+export async function obtainColumnsFromFile(
+  file: TFile
+): Promise<Record<string, DatabaseColumn>> {
+  const columns: Record<string, DatabaseColumn> = {};
+  const propertiesOfFile = DataviewService.getDataviewAPI().page(file.path);
+  // Check if propertiesOfFile is empty
+  if (propertiesOfFile.length === 0) {
+    return columns;
+  }
+
+  Object.entries(propertiesOfFile).forEach(([key, value, index]) => {
+    const input = getInputInFuctionOfLiteral(value);
+    const newColumn: DatabaseColumn = {
+      input: input,
+      accessor: key,
+      label: key,
+      key: key,
+      position: index,
+      config: DEFAULT_COLUMN_CONFIG,
+    };
+    columns[key] = newColumn;
+  });
+  // remove metadata fields of dataview
+  delete columns["file"];
+  return columns;
+}
+
+function getInputInFuctionOfLiteral(literal: Literal) {
+  const wrappedLiteral = DataviewService.wrapLiteral(literal);
+  let input = DataTypes.TEXT;
+  switch (wrappedLiteral.type) {
+    case DataTypes.NUMBER:
+      input = DataTypes.NUMBER;
+      break;
+    case "date":
+      input = DataTypes.CALENDAR;
+      break;
+    case "duration":
+      input = DataTypes.CALENDAR_TIME;
+      break;
+    default:
+      input = DataTypes.TEXT;
+  }
+  return input;
 }
 
 function columnOptions(
