@@ -17,7 +17,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   // Selector popper state
 
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).__note__;
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);

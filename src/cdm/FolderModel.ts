@@ -67,7 +67,7 @@ export interface TableColumn extends BaseColumn {
 
 export type RowDataType = {
     id: number,
-    note: NoteInfo,
+    __note__: NoteInfo,
     [key: string]: Literal | NoteInfo
 }
 

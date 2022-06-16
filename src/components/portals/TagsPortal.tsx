@@ -23,7 +23,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
   );
 
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).__note__;
 
   function getColor(tag: string) {
     const match = column.options.find(

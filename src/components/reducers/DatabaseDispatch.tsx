@@ -90,7 +90,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ...rowRecord.inline,
         ...metadata,
         id: state.view.rows.length + 1,
-        note: new NoteInfo(
+        __note__: new NoteInfo(
           {
             ...rowRecord.frontmatter,
             ...rowRecord.inline,
@@ -121,7 +121,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       Promise.all(
         state.view.rows.map(async (row: RowDataType) => {
           await updateRowFileProxy(
-            row.note.getFile(),
+            row.__note__.getFile(),
             action.columnId,
             action.newKey,
             state,
@@ -361,7 +361,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         Promise.all(
           state.view.rows.map(async (row: RowDataType) => {
             updateRowFileProxy(
-              row.note.getFile(),
+              row.__note__.getFile(),
               action.key,
               undefined, // delete does not need this field
               state,
@@ -412,7 +412,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ? `${state.view.file.parent.path}/${action.value}/${action.file.name}`
             : `${state.view.file.parent.path}/${action.file.name}`;
 
-        action.row.original.note = new NoteInfo(
+        action.row.original.__note__ = new NoteInfo(
           {
             ...action.row,
             file: {
@@ -433,7 +433,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               [action.row.index]: {
                 $merge: {
                   [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
-                  note: action.row.original.note,
+                  note: action.row.original.__note__,
                   [update_option_cell_column_key]: action.value,
                 },
               },

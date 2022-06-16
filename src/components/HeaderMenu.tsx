@@ -26,7 +26,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     labelState,
     setLabelState,
   } = headerMenuProps;
-  const { column, rows, initialState } = headerMenuProps.headerProps;
+  const { column, rows, tableData } = headerMenuProps.headerProps;
   const dispatch = (headerMenuProps.headerProps as any).dataDispatch;
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(column.key));
@@ -297,10 +297,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   <div
                     className="menu-item sort-button"
                     onClick={() => {
-                      new ColumnModal(
-                        initialState.view,
-                        headerMenuProps
-                      ).open();
+                      new ColumnModal(tableData.view, headerMenuProps).open();
                       setExpanded(false);
                     }}
                   >

@@ -24,7 +24,7 @@ export default function DefaultCell(cellProperties: Cell) {
   /** Type of cell */
   const dataType = (cellProperties.column as any).dataType;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();

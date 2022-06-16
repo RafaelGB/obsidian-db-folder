@@ -4,6 +4,7 @@ import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/Grou
 import { RemoveFieldsWhenDeleteToggleHandler } from 'settings/handlers/columns/RemoveFieldsWhenDeleteToggleHandler';
 import { MetadataToggleGroupHandler } from 'settings/handlers/columns/MetadataToggleGroupHandler';
 import { UseFileFieldsAsTemplateColumnsHandler } from 'settings/handlers/columns/UseFileFieldsAsTemplateColumnsHandler';
+import { AddAllPossibleColumnsHandler } from 'settings/handlers/columns/AddAllPossibleColumnsHandler';
 import { AbstractChain, AbstractHandler } from 'patterns/AbstractFactoryChain';
 
 class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
@@ -19,6 +20,7 @@ class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
             new GroupFolderColumnDropDownHandler(),
             new RemoveFieldsWhenDeleteToggleHandler(),
             new UseFileFieldsAsTemplateColumnsHandler(),
+            new AddAllPossibleColumnsHandler(),
             new MetadataToggleGroupHandler(),
         ];
     }

@@ -13,12 +13,15 @@ export class UseFileFieldsAsTemplateColumnsHandler extends AbstractSettingsHandl
         if (local) {
             const filePaths: Record<string, string> = {};
             view.rows.forEach((row: RowDataType) => {
-                filePaths[row.note.getFile().path] = row.note.getFile().basename;
+                if (row.__note__) {
+                    filePaths[row.__note__.getFile().path] = row.__note__.getFile().basename;
+                }
             });
             new Setting(containerEl)
                 .setName(this.settingTitle)
                 .setDesc('Select file to use as template for database columns. Click the button to apply the template.')
                 .addDropdown((dropdown) => {
+                    dropdown
                     dropdown.addOptions(filePaths);
                     dropdown.setValue("-");
                     dropdown.onChange((value: string) => {

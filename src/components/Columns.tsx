@@ -5,7 +5,7 @@ import {
   MetadataColumns,
   MetadataDatabaseColumns,
 } from "helpers/Constants";
-import { TableColumn } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowSelectOption } from "cdm/ComponentsModel";
@@ -115,6 +115,33 @@ export async function obtainColumnsFromFile(
   });
   // remove metadata fields of dataview
   delete columns["file"];
+  return columns;
+}
+
+export function obtainColumnsFromRows(
+  rows: RowDataType[]
+): Record<string, DatabaseColumn> {
+  const columns: Record<string, DatabaseColumn> = {};
+  // Obtain unique keys from source
+  const keys = rows.reduce((acc, row) => {
+    const keys = Object.keys(row);
+    return [...acc, ...keys];
+  }, [] as string[]);
+  // Add keys to columns
+  keys
+    // Check metadata columns to not be added
+    .filter((key) => !(key.startsWith("__") && key.endsWith("__")))
+    .forEach((key, index) => {
+      columns[key] = {
+        input: DataTypes.TEXT,
+        accessor: key,
+        label: key,
+        key: key,
+        position: index,
+        config: DEFAULT_COLUMN_CONFIG,
+      };
+    });
+
   return columns;
 }
 
