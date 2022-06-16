@@ -1,4 +1,6 @@
 ## 1.7.1
+### Shiny new things
+- Create your columns easily with 2 new options. Choose a file as template or just take all the avaliable fields in your source! [ISSUE#39](https://github.com/RafaelGB/obsidian-db-folder/issues/39)
 ### Improved
 - Now select source tags will be ordered alphabetically and the number of tags will be shown. [ISSUE#76](https://github.com/RafaelGB/obsidian-db-folder/issues/76)
 ## Visual
