@@ -145,12 +145,11 @@ export class PreviewDatabaseModeService {
         const dataviewMatrixRow: any[][] = rows.map((r) =>
             dataviewCols.map((c) => r[c])
         );
-
         DataviewService.getDataviewAPI().table(
             dataviewCols,
             dataviewMatrixRow,
             div,
-            null,
+            this.plugin,
             ctx.sourcePath
         )
         return div;

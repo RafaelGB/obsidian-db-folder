@@ -2,7 +2,6 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
 import { ActionTypes, DataTypes, MetadataLabels } from "helpers/Constants";
-import TaskIcon from "components/img/TaskIcon";
 import CalendarTimeIcon from "components/img/CalendarTime";
 
 export default class DatetimeTypeHeaderAction extends AbstractHeaderAction {
@@ -14,11 +13,11 @@ export default class DatetimeTypeHeaderAction extends AbstractHeaderAction {
   }
   private addDatetimeType() {
     const { hooks } = this.globalHeaderActionResponse;
-    const { initialState, column } =
+    const { tableData, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const checkBoxType = {
       onClick: (e: any) => {
-        initialState.dispatch({
+        tableData.dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
           dataType: DataTypes.CALENDAR_TIME,

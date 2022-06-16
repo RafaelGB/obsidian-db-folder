@@ -51,9 +51,7 @@ export function add_dropdown(
         .setName(name)
         .setDesc(desc)
         .addDropdown((dropdown) => {
-            Object.entries(options).forEach(([key, value]) => {
-                dropdown.addOption(key, value);
-            });
+            dropdown.addOptions(options);
             dropdown.setValue(value);
             dropdown.onChange(onChangePromise);
         });

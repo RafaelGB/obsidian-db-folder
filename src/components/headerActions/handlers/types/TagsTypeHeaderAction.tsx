@@ -13,11 +13,11 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
   }
   private addTagsType() {
     const { hooks } = this.globalHeaderActionResponse;
-    const { initialState, column } =
+    const { tableData, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const checkBoxType = {
       onClick: (e: any) => {
-        initialState.dispatch({
+        tableData.dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
           dataType: DataTypes.TAGS,

@@ -62,7 +62,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   // TODO : add a tooltip to the header
   const created: boolean = false;
   /** Properties of header */
-  const { setSortBy, rows, initialState } = headerProps;
+  const { setSortBy, rows, tableData } = headerProps;
   /** Column values */
   const { id, dataType, options, position } = headerProps.column;
   /** reducer asociated to database */
@@ -110,7 +110,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
 
   function adjustWidthOfTheColumn(position: number) {
     let columnNumber =
-      initialState.columns.length + 1 - initialState.shadowColumns.length;
+      tableData.columns.length + 1 - tableData.shadowColumns.length;
     // Check if column name already exists
     while (
       headerProps.allColumns.find(

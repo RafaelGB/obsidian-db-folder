@@ -67,7 +67,7 @@ export interface TableColumn extends BaseColumn {
 
 export type RowDataType = {
     id: number,
-    note: NoteInfo,
+    __note__: NoteInfo,
     [key: string]: Literal | NoteInfo
 }
 
@@ -82,19 +82,17 @@ export type InitialState = {
 export type TableDataType = {
     columns: TableColumn[],
     shadowColumns: TableColumn[],
-    data: Array<RowDataType>,
     skipReset: boolean,
     view: DatabaseView,
     stateManager: StateManager,
     dispatch?: Dispatch<any>,
     initialState?: InitialState,
     cellSize: string,
-    stickyFirstColumn: boolean
 }
 export interface DatabaseHeaderProps {
     columns: any,
     data: any,
-    initialState: TableDataType,
+    tableData: TableDataType,
     defaultColumn: any,
     getSubRows: any,
     getRowId: any,

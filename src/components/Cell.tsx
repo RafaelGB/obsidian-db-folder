@@ -24,7 +24,7 @@ export default function DefaultCell(cellProperties: Cell) {
   /** Type of cell */
   const dataType = (cellProperties.column as any).dataType;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -38,8 +38,8 @@ export default function DefaultCell(cellProperties: Cell) {
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
-  const initialState = (cellProperties as any)
-    .initialState as unknown as TableDataType;
+  const tableData = (cellProperties as any)
+    .tableData as unknown as TableDataType;
   const column = cellProperties.column as unknown as TableColumn;
   /** states for selector option  */
   LOGGER.debug(
@@ -58,8 +58,8 @@ export default function DefaultCell(cellProperties: Cell) {
           contextValue.value,
           false,
           taskRef.current,
-          initialState.view,
-          initialState.view.file.path
+          tableData.view,
+          tableData.view.file.path
         );
         break;
       case DataTypes.MARKDOWN:
@@ -81,7 +81,11 @@ export default function DefaultCell(cellProperties: Cell) {
   }, [editableMdRef, dirtyCell]);
 
   useEffect(() => {
-    if (!dirtyCell && containerCellRef.current !== undefined) {
+    if (
+      !dirtyCell &&
+      containerCellRef.current !== undefined &&
+      dataType !== DataTypes.MARKDOWN
+    ) {
       LOGGER.debug(
         `useEffect hooked with dirtyCell. Value:${contextValue.value}`
       );
@@ -195,7 +199,7 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.CALENDAR:
         return (
           <CalendarPortal
-            intialState={initialState}
+            intialState={tableData}
             column={column}
             cellProperties={cellProperties}
           />
@@ -205,7 +209,7 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.CALENDAR_TIME:
         return (
           <CalendarTimePortal
-            intialState={initialState}
+            intialState={tableData}
             column={column}
             cellProperties={cellProperties}
           />
@@ -221,7 +225,7 @@ export default function DefaultCell(cellProperties: Cell) {
               column={column}
               columns={columns}
               note={note}
-              intialState={initialState}
+              intialState={tableData}
             />
           </CellContext.Provider>
         );
@@ -230,7 +234,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <TagsPortal
-              intialState={initialState}
+              intialState={tableData}
               column={column}
               columns={columns}
               dispatch={dataDispatch}
@@ -246,7 +250,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CheckboxCell
-              intialState={initialState}
+              intialState={tableData}
               column={column}
               cellProperties={cellProperties}
             />

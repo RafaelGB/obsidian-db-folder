@@ -22,7 +22,7 @@ export default class NoteInfo {
         /** Mandatory fields */
         const aFile: RowDataType = {
             id: this.id,
-            note: this
+            __note__: this
         }
         /** Metadata fields */
         aFile[MetadataColumns.FILE] = `${this.page.file.link.markdown()}`;

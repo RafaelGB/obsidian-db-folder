@@ -14,9 +14,9 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).__note__;
   const [calendarState, setCalendarState] = useState(
-    intialState.data[row.index][column.key]
+    intialState.view.rows[row.index][column.key]
   );
 
   function handleOnClick(event: any) {

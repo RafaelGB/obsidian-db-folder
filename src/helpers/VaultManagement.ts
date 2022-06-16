@@ -64,7 +64,7 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], dbYaml: DatabaseYaml): Promise<Array<RowDataType>> {
+export function adapterTFilesToRows(folderPath: string, columns: TableColumn[], dbYaml: DatabaseYaml): Array<RowDataType> {
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
   let id = 0;
@@ -75,7 +75,7 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   if (dbYaml.filters) {
     folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
   }
-  folderFiles.map(async (page) => {
+  folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page, ++id);
     rows.push(noteInfo.getRowDataType(columns));
   });

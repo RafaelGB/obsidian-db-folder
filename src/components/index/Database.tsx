@@ -12,7 +12,7 @@ export function Database(tableProps: TableDataType) {
 
   useEffect(() => {
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
-  }, [state.data, state.columns]);
+  }, [state.view.row, state.columns]);
 
   return (
     <>

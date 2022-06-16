@@ -33,12 +33,10 @@ export async function makeData(count: number): Promise<TableDataType> {
   return {
     columns: columns,
     shadowColumns: [],
-    data: data,
     skipReset: false,
     view: null,
     stateManager: null,
     cellSize: "normal",
-    stickyFirstColumn: false,
   };
 }
 

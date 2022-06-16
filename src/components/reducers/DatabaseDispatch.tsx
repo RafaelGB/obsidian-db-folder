@@ -89,14 +89,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ...rowRecord.frontmatter,
         ...rowRecord.inline,
         ...metadata,
-        id: state.data.length + 1,
-        note: new NoteInfo(
+        id: state.view.rows.length + 1,
+        __note__: new NoteInfo(
           {
             ...rowRecord.frontmatter,
             ...rowRecord.inline,
             file: { path: filename },
           },
-          state.data.length + 1
+          state.view.rows.length + 1
         ),
         [MetadataColumns.FILE]: `[[${filename}|${action.filename}]]`,
       };
@@ -119,9 +119,9 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         action.label
       );
       Promise.all(
-        state.data.map(async (row: RowDataType) => {
+        state.view.rows.map(async (row: RowDataType) => {
           await updateRowFileProxy(
-            row.note.getFile(),
+            row.__note__.getFile(),
             action.columnId,
             action.newKey,
             state,
@@ -149,16 +149,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ),
           ],
         },
-        // Modify data visually with the new key
-        data: {
-          $set: state.data.map((row: RowDataType) => {
-            row[action.newKey] = row[action.columnId];
-            delete row[action.columnId];
-            return row;
-          }),
-        },
-        // Update view yaml state
         view: {
+          // Modify data visually with the new key
+          rows: {
+            $set: state.view.rows.map((row: RowDataType) => {
+              row[action.newKey] = row[action.columnId];
+              delete row[action.columnId];
+              return row;
+            }),
+          },
+          // Update view yaml state
           diskConfig: {
             yaml: {
               $set: state.view.diskConfig.yaml,
@@ -185,7 +185,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         input: action.dataType,
       });
       // Parse data
-      const parsedData = state.data.map((row: any) => ({
+      const parsedData = state.view.rows.map((row: any) => ({
         ...row,
         [action.columnId]: DataviewService.parseLiteral(
           row[action.columnId],
@@ -220,8 +220,11 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
               ],
             },
-            data: {
-              $set: parsedData,
+            view: {
+              // Update data associated to column
+              rows: {
+                $set: parsedData,
+              },
             },
           });
         default:
@@ -244,8 +247,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
               ],
             },
-            data: {
-              $set: parsedData,
+            view: {
+              rows: {
+                $set: parsedData,
+              },
             },
           });
       }
@@ -354,9 +359,9 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       state.view.diskConfig.removeColumn(action.columnId);
       if (state.view.diskConfig.yaml.config.remove_field_when_delete_column) {
         Promise.all(
-          state.data.map(async (row: RowDataType) => {
+          state.view.rows.map(async (row: RowDataType) => {
             updateRowFileProxy(
-              row.note.getFile(),
+              row.__note__.getFile(),
               action.key,
               undefined, // delete does not need this field
               state,
@@ -374,16 +379,16 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ...state.columns.slice(deleteIndex + 1, state.columns.length),
           ],
         },
-        data: {
-          $set: state.data.map((row) => {
-            const newRow = { ...row };
-            delete newRow[action.columnId];
-            return newRow;
-          }),
-        },
-
-        // Update view yaml
         view: {
+          // Update data associated to column
+          rows: {
+            $set: state.view.rows.map((row) => {
+              const newRow = { ...row };
+              delete newRow[action.columnId];
+              return newRow;
+            }),
+          },
+          // Update view yaml
           diskConfig: {
             yaml: {
               $set: state.view.diskConfig.yaml,
@@ -407,7 +412,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             ? `${state.view.file.parent.path}/${action.value}/${action.file.name}`
             : `${state.view.file.parent.path}/${action.file.name}`;
 
-        action.row.original.note = new NoteInfo(
+        action.row.original.__note__ = new NoteInfo(
           {
             ...action.row,
             file: {
@@ -423,12 +428,14 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         const update_option_cell_column_key =
           state.columns[update_option_cell_index].key;
         return update(state, {
-          data: {
-            [action.row.index]: {
-              $merge: {
-                [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
-                note: action.row.original.note,
-                [update_option_cell_column_key]: action.value,
+          view: {
+            rows: {
+              [action.row.index]: {
+                $merge: {
+                  [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
+                  note: action.row.original.__note__,
+                  [update_option_cell_column_key]: action.value,
+                },
               },
             },
           },
@@ -455,10 +462,12 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const update_option_cell_column_key =
         state.columns[update_cell_index].key;
       return update(state, {
-        data: {
-          [action.row.index]: {
-            $merge: {
-              [update_option_cell_column_key]: action.value,
+        view: {
+          rows: {
+            [action.row.index]: {
+              $merge: {
+                [update_option_cell_column_key]: action.value,
+              },
             },
           },
         },
@@ -524,7 +533,7 @@ export function getDispatch(initialState: TableDataType) {
 
   useEffect(() => {
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
-  }, [state.data, state.columns]);
+  }, [state.view.rows, state.columns]);
 
   return { state, dataDispatch };
 }

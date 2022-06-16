@@ -17,13 +17,13 @@ const TagsPortal = (tagsProps: TagsProps) => {
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    Array.isArray(intialState.data[row.index][column.key])
-      ? (intialState.data[row.index][column.key] as Literal[])
+    Array.isArray(intialState.view.rows[row.index][column.key])
+      ? (intialState.view.rows[row.index][column.key] as Literal[])
       : []
   );
 
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).__note__;
 
   function getColor(tag: string) {
     const match = column.options.find(
@@ -114,23 +114,23 @@ const TagsPortal = (tagsProps: TagsProps) => {
       {showSelectTags
         ? TagsForm()
         : tagsState && (
-          <div
-            className={c("tags-container") + " cell-padding d-flex flex-wrap-wrap"}
-            onClick={() => setShowSelectTags(true)}
-          >
-            {tagsState.map((tag: string) => (
-              <div
-                key={`key-${tag}`}
-              >
-                <Relationship
-                  key={`key-Relationship-${tag}`}
-                  value={tag}
-                  backgroundColor={getColor(tag)}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+            <div
+              className={
+                c("tags-container") + " cell-padding d-flex flex-wrap-wrap"
+              }
+              onClick={() => setShowSelectTags(true)}
+            >
+              {tagsState.map((tag: string) => (
+                <div key={`key-${tag}`}>
+                  <Relationship
+                    key={`key-Relationship-${tag}`}
+                    value={tag}
+                    backgroundColor={getColor(tag)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
     </>
   );
 };

@@ -12,12 +12,12 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   const dataDispatch = (cellProperties as any).dataDispatch;
   // Calendar state
   const [calendarTimeState, setCalendarTimeState] = useState(
-    intialState.data[row.index][column.key]
+    intialState.view.rows[row.index][column.key]
   );
   // Selector popper state
 
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).note;
+  const note: NoteInfo = (cellProperties.row.original as any).__note__;
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);

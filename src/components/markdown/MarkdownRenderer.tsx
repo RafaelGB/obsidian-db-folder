@@ -12,7 +12,7 @@ export async function renderMarkdown(
   domElement: HTMLDivElement
 ): Promise<HTMLDivElement> {
   try {
-    const view = (cell as any).initialState.view;
+    const view: DatabaseView = (cell as any).tableData.view;
     const column = cell.column as unknown as DatabaseColumn;
     const { media_height, media_width, enable_media_view } = column.config;
     if (enable_media_view && isValidHttpUrl(markdownString)) {
@@ -20,7 +20,6 @@ export async function renderMarkdown(
       //markdownString = `<div class=iframe-container> <iframe width="427" height="240" src="${markdownString}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>`;
       markdownString = `![embedded link|${media_height}x${media_width}](${markdownString})`;
     }
-
     await MarkdownRenderer.renderMarkdown(
       markdownString,
       domElement,
