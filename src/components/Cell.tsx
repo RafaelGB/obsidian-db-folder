@@ -18,7 +18,7 @@ import { DataviewService } from "services/DataviewService";
 export default function DefaultCell(cellProperties: Cell) {
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Initial state of cell */
-  const initialValue = cellProperties.value;
+  const cellValue = cellProperties.value;
   /** Columns information */
   const columns = (cellProperties as any).columns;
   /** Type of cell */
@@ -31,7 +31,7 @@ export default function DefaultCell(cellProperties: Cell) {
   const taskRef = useRef<HTMLDivElement>();
   /** state of cell value */
   const [contextValue, setContextValue] = useState({
-    value: initialValue,
+    value: cellValue,
     update: false,
   });
   /** state for keeping the timeout to trigger the editior */
@@ -48,12 +48,12 @@ export default function DefaultCell(cellProperties: Cell) {
   // set contextValue when cell is loaded
   useEffect(() => {
     LOGGER.debug(
-      `default useEffect. dataType:${dataType} - value: ${contextValue.value} initialValue: ${initialValue}`
+      `default useEffect. dataType:${dataType} - value: ${contextValue.value} cellValue: ${cellValue}`
     );
     switch (dataType) {
       case DataTypes.TASK:
-        //TODO - this is a hack. find why is layout effect called twice
-        taskRef.current.innerHTML = "";
+        // Check if there are tasks in the cell
+        if (contextValue.value === "") break;
         DataviewService.getDataviewAPI().taskList(
           contextValue.value,
           false,
@@ -61,10 +61,11 @@ export default function DefaultCell(cellProperties: Cell) {
           tableData.view,
           tableData.view.file.path
         );
+
         break;
       case DataTypes.MARKDOWN:
         containerCellRef.current.innerHTML = "";
-        renderMarkdown(cellProperties, initialValue, containerCellRef.current);
+        renderMarkdown(cellProperties, cellValue, containerCellRef.current, 5);
         break;
       default:
       // do nothing
@@ -89,12 +90,11 @@ export default function DefaultCell(cellProperties: Cell) {
       LOGGER.debug(
         `useEffect hooked with dirtyCell. Value:${contextValue.value}`
       );
-      //TODO - this is a hack. find why is layout effect called twice
-      containerCellRef.current.innerHTML = "";
       renderMarkdown(
         cellProperties,
         contextValue.value,
-        containerCellRef.current
+        containerCellRef.current,
+        5
       );
     }
   }, [dirtyCell]);
@@ -185,9 +185,9 @@ export default function DefaultCell(cellProperties: Cell) {
 
       /** Markdown option */
       case DataTypes.MARKDOWN:
-        if (initialValue !== contextValue.value.toString()) {
+        if (cellValue !== contextValue.value.toString()) {
           setContextValue({
-            value: initialValue,
+            value: cellValue,
             update: false,
           });
         }

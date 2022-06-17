@@ -241,7 +241,7 @@ export function Table(tableData: TableDataType) {
         })}
         className={`${c(
           "table noselect cell_size_" +
-            tableData.cellSize +
+            tableData.view.diskConfig.yaml.config.cell_size +
             (tableData.view.diskConfig.yaml.config.sticky_first_column
               ? " sticky_first_column"
               : "")

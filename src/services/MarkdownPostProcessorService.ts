@@ -48,7 +48,7 @@ export class PreviewDatabaseModeService {
         //then I want to hide all embedded items as these will be
         //transcluded text element or some other transcluded content inside the Database file
         //in reading mode these elements should be hidden
-        if (Object.prototype.hasOwnProperty.call(ctx.frontmatter, DatabaseCore.FRONTMATTER_KEY)) {
+        if (ctx.frontmatter !== undefined && Object.prototype.hasOwnProperty.call(ctx.frontmatter, DatabaseCore.FRONTMATTER_KEY)) {
             el.style.display = "none";
             return;
         }

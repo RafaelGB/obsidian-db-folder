@@ -1,40 +1,63 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DatabaseView } from "DatabaseView";
 import { MediaExtensions } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import { MarkdownRenderer, TFile } from "obsidian";
+import { MarkdownRenderer, MarkdownPreviewView, TFile } from "obsidian";
 import { Cell } from "react-table";
 import { LOGGER } from "services/Logger";
 
 export async function renderMarkdown(
   cell: Cell,
   markdownString: string,
-  domElement: HTMLDivElement
-): Promise<HTMLDivElement> {
+  domElement: HTMLDivElement,
+  depth: number
+) {
   try {
     const view: DatabaseView = (cell as any).tableData.view;
     const column = cell.column as unknown as DatabaseColumn;
     const { media_height, media_width, enable_media_view } = column.config;
     if (enable_media_view && isValidHttpUrl(markdownString)) {
-      // TODO option to generate Iframes
-      //markdownString = `<div class=iframe-container> <iframe width="427" height="240" src="${markdownString}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>`;
       markdownString = `![embedded link|${media_height}x${media_width}](${markdownString})`;
     }
-    await MarkdownRenderer.renderMarkdown(
-      markdownString,
-      domElement,
-      view.file.path,
-      view
-    );
+    domElement.empty();
+    const dom = domElement.createDiv();
 
-    await handleEmbeds(domElement, view, 5);
-    // applyCheckboxIndexes(dom);
-    // findUnresolvedLinks(dom, view);
+    dom.addClasses(["markdown-preview-view", c("markdown-preview-view")]);
+    dom.createDiv(c("embed-link-wrapper"), (wrapper) => {
+      wrapper.createEl(
+        "a",
+        {
+          href: domElement.getAttr("src") || view.file.basename,
+          cls: `internal-link ${c("embed-link")}`,
+        },
+        (link) => {
+          link.setAttr("aria-label", view.file.basename);
+        }
+      );
+    });
+    if (markdownString.startsWith("![[") && markdownString.endsWith("]]")) {
+      MarkdownPreviewView.renderMarkdown(
+        markdownString,
+        dom.createDiv(),
+        view.file.path,
+        view
+      );
+    } else {
+      await MarkdownRenderer.renderMarkdown(
+        markdownString,
+        dom.createDiv(),
+        view.file.path,
+        view
+      );
+    }
+    domElement.addClass("is-loaded");
+    if (depth > 0) {
+      await handleEmbeds(dom, view, --depth);
+    }
   } catch (e) {
     LOGGER.error(e);
   }
-
-  return domElement;
 }
 
 function handleEmbeds(dom: HTMLDivElement, view: DatabaseView, depth: number) {

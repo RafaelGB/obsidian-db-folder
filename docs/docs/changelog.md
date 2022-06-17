@@ -1,3 +1,6 @@
+## 1.7.2
+### No longer broken
+- add new rows hotfix. Was broken in 1.7.1 with refactor of datadispatch
 ## 1.7.1
 ### Shiny new things
 - Create your columns easily with 2 new options. Choose a file as template or just take all the avaliable fields in your source! [ISSUE#39](https://github.com/RafaelGB/obsidian-db-folder/issues/39)
