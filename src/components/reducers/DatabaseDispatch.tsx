@@ -528,8 +528,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
   return state;
 }
 
-export function getDispatch(initialState: TableDataType) {
-  const [state, dataDispatch] = useReducer(databaseReducer, initialState);
+export function getDispatch(tableData: TableDataType) {
+  const [state, dataDispatch] = useReducer(databaseReducer, tableData);
 
   useEffect(() => {
     dataDispatch({ type: ActionTypes.ENABLE_RESET });

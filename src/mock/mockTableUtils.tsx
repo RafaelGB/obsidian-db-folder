@@ -20,7 +20,7 @@ export async function makeData(count: number): Promise<TableDataType> {
     const row = {
       id: faker.mersenne.rand(),
       title: faker.system.fileName(),
-      note: note,
+      __note__: note,
     };
     options.push({ label: row.title, backgroundColor: randomColor() });
 
