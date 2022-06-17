@@ -3,8 +3,7 @@ import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler
 import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/GroupFolderColumnDropDownHandler';
 import { RemoveFieldsWhenDeleteToggleHandler } from 'settings/handlers/columns/RemoveFieldsWhenDeleteToggleHandler';
 import { MetadataToggleGroupHandler } from 'settings/handlers/columns/MetadataToggleGroupHandler';
-import { UseFileFieldsAsTemplateColumnsHandler } from 'settings/handlers/columns/UseFileFieldsAsTemplateColumnsHandler';
-import { AddAllPossibleColumnsHandler } from 'settings/handlers/columns/AddAllPossibleColumnsHandler';
+import { TemplateColumnsHandler } from 'settings/handlers/columns/TemplateColumnsHandler';
 import { AbstractChain, AbstractHandler } from 'patterns/AbstractFactoryChain';
 
 class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
@@ -19,8 +18,7 @@ class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
         return [
             new GroupFolderColumnDropDownHandler(),
             new RemoveFieldsWhenDeleteToggleHandler(),
-            new UseFileFieldsAsTemplateColumnsHandler(),
-            new AddAllPossibleColumnsHandler(),
+            new TemplateColumnsHandler(),
             new MetadataToggleGroupHandler(),
         ];
     }

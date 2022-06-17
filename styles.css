@@ -464,6 +464,10 @@
   background-color: var(--background-modifier-error);
 }
 
+.configuration-section-container-columns-template {
+  background-color: var(--background-modifier-box-shadow);
+}
+
 /*
 *  React-datepicker styles
 */
