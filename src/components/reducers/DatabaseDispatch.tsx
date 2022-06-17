@@ -101,8 +101,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         [MetadataColumns.FILE]: `[[${filename}|${action.filename}]]`,
       };
       // TODO add typing
-      return update(state as any, {
-        data: { $push: [row] },
+      return update(state, {
+        view: {
+          rows: { $push: [row] },
+        },
       });
     /**
      * Modify column label of its header.
