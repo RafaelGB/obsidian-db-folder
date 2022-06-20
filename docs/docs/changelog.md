@@ -1,3 +1,8 @@
+## 1.8.0
+### Improved
+- Inline fields now supports render embed images with ![[note]] syntax. [ISSUE#136](https://github.com/RafaelGB/obsidian-db-folder/issues/136)
+### No longer broken
+- If you modify the label of a column, now exist an onMouseLeave event to blur the input and be more frieldly to the user interact with the next action without a double click (once for onBlur label edition and another for your next interaction) [ISSUE#114](https://github.com/RafaelGB/obsidian-db-folder/issues/114)
 ## 1.7.2
 ### No longer broken
 - add new rows hotfix. Was broken in 1.7.1 with refactor of datadispatch
