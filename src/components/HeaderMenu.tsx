@@ -78,6 +78,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       columnWidthState: columnWidthState,
       keyState: keyState,
       setKeyState: setkeyState,
+      setShowType: setShowType,
     },
   };
   const headerButtons =
@@ -86,18 +87,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /**
    * Array of type headers available to change the data type of the column
    */
-  headerActionResponse = {
-    buttons: [],
-    headerMenuProps: headerMenuProps,
-    hooks: {
-      setSortBy: setSortBy,
-      setExpanded: setExpanded,
-      setColumnWidthState: setColumnWidthState,
-      columnWidthState: columnWidthState,
-      keyState: keyState,
-      setKeyState: setkeyState,
-    },
-  };
+  headerActionResponse.buttons = [];
   const types = header_action_types_section.run(headerActionResponse).buttons;
 
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
@@ -127,10 +117,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       newKey: newKey,
       label: labelState,
     });
-    setExpanded(false);
     setkeyState(newKey);
     columnWidthState.widthRecord[newKey] = getColumnWidthStyle(rows, column);
-
     /*
       To adjust column settings to the new key, we need to update the order
       of the columns with it and calculate the new width
@@ -152,6 +140,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     }
   }
 
+  function handleOnMouseLeaveLabel() {
+    if (document.activeElement === inputRef) {
+      inputRef.blur();
+    }
+  }
   /**
    * When user leaves the input field
    * @param e
@@ -201,6 +194,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                       style={{ width: "100%" }}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      onMouseLeave={handleOnMouseLeaveLabel}
                       onKeyDown={handleKeyDown}
                     />
                   </div>
