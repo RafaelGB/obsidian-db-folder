@@ -66,7 +66,7 @@ class DataviewProxy {
 
     parseLiteral(literal: Literal, dataTypeDst: string, isInline?: boolean): Literal {
         let parsedLiteral: Literal = literal;
-        if (!this.getDataviewAPI().value.isTruthy(literal)) {
+        if (!this.getDataviewAPI().value.isTruthy(literal.toString())) {
             return "";
         }
         literal = this.parseDataArray(literal);
