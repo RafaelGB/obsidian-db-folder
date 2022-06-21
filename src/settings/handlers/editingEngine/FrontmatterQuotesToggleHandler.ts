@@ -2,7 +2,7 @@ import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handle
 import { add_toggle } from "settings/SettingsComponents";
 
 export class FrontmatterQuotesToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable/Disable quotes wrap';
+    settingTitle: string = 'Enable/Disable quotes wrap with frontmatter fields';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local, view } = settingHandlerResponse;
         const table_state_togle_promise = async (value: boolean): Promise<void> => {
@@ -23,7 +23,7 @@ export class FrontmatterQuotesToggleHandler extends AbstractSettingsHandler {
         add_toggle(
             containerEl,
             this.settingTitle,
-            'Enable/Disable quotes wrap with frontmatter fields',
+            'Wrap with qoutes the value of all your frontmatter edited fields when is enabled',
             local ? view.diskConfig.yaml.config.enable_show_state : settingsManager.plugin.settings.local_settings.frontmatter_quote_wrap,
             table_state_togle_promise
         );
