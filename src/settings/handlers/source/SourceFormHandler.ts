@@ -1,6 +1,7 @@
 import { DatabaseView } from "DatabaseView";
 import { SourceDataTypes } from "helpers/Constants";
-import { Notice } from "obsidian";
+import { generateDataviewTableQuery } from "helpers/QueryHelper";
+import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown, add_text } from "settings/SettingsComponents";
@@ -73,30 +74,29 @@ function queryHandler(view: DatabaseView, containerEl: HTMLElement) {
         view.diskConfig.yaml.config.source_form_result = value;
         view.diskConfig.updateConfig('source_form_result', value);
     };
-    const query_setting = add_text(
-        containerEl,
-        'Dataview query',
-        'Enter a dataview query to get data from',
-        'Write here your dataview query...',
-        view.diskConfig.yaml.config.source_form_result,
-        query_promise
-    );
-    query_setting.addExtraButton((cb) => {
-        cb.setIcon("check")
-            .setTooltip("Validate query")
-            .onClick(async (): Promise<void> => {
-                const query = `TABLE ${Object.keys(view.diskConfig.yaml.columns)
-                    .filter((key) => !key.startsWith("__") && !key.endsWith("__"))
-                    .join(",")},file ${view.diskConfig.yaml.config.source_form_result}`;
-                if (query) {
-                    DataviewService.getDataviewAPI().tryQuery(query)
-                        .then(() => {
-                            new Notice(`Dataview query "${query}" is valid!`, 2000);
-                        })
-                        .catch((e) => {
-                            new Notice(`Dataview query "${query}" is invalid: ${e.message}`, 10000);
-                        });
-                }
-            });
-    });
+    new Setting(containerEl)
+        .setName('Dataview query')
+        .setDesc('Enter a dataview query starting with FROM (the plugin autocomplete the query with TABLE & the column fields)')
+        .addTextArea((textArea) => {
+            textArea.setValue(view.diskConfig.yaml.config.source_form_result);
+            textArea.setPlaceholder('Write here your dataview query...');
+            textArea.onChange(query_promise);
+        }).addExtraButton((cb) => {
+            cb.setIcon("check")
+                .setTooltip("Validate query")
+                .onClick(async (): Promise<void> => {
+                    const query = generateDataviewTableQuery(
+                        view.diskConfig.yaml.columns,
+                        view.diskConfig.yaml.config.source_form_result);
+                    if (query) {
+                        DataviewService.getDataviewAPI().tryQuery(query)
+                            .then(() => {
+                                new Notice(`Dataview query "${query}" is valid!`, 2000);
+                            })
+                            .catch((e) => {
+                                new Notice(`Dataview query "${query}" is invalid: ${e.message}`, 10000);
+                            });
+                    }
+                });
+        });
 }

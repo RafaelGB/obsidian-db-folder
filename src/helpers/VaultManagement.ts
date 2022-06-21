@@ -1,10 +1,11 @@
 import { RowDataType, NormalizedPath, TableDataType, TableColumn } from 'cdm/FolderModel';
-import { TFile } from 'obsidian';
+import { Notice, TFile } from 'obsidian';
 import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
 import { DatabaseCore, DataTypes, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
+import { generateDataviewTableQuery } from 'helpers/QueryHelper';
 import obtainRowDatabaseFields from 'parsers/FileToRowDatabaseFields';
 import { parseFrontmatterFieldsToString } from 'parsers/RowDatabaseFieldsToFile';
 import { DataviewService } from 'services/DataviewService';
@@ -85,23 +86,30 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
 }
 
 export async function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYaml): Promise<DataArray<Record<string, Literal>>> {
+  let pagesResult: DataArray<Record<string, Literal>>;
   switch (dbYaml.config.source_data) {
     case SourceDataTypes.TAG:
-      return DataviewService.getDataviewAPI().pages(`#${dbYaml.config.source_form_result}`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`#${dbYaml.config.source_form_result}`);
+      break;
     case SourceDataTypes.INCOMING_LINK:
-      return DataviewService.getDataviewAPI().pages(`[[${dbYaml.config.source_form_result}]]`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`[[${dbYaml.config.source_form_result}]]`);
+      break;
     case SourceDataTypes.OUTGOING_LINK:
-      return DataviewService.getDataviewAPI().pages(`outgoing([[${dbYaml.config.source_form_result}]])`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`outgoing([[${dbYaml.config.source_form_result}]])`);
+      break;
     case SourceDataTypes.QUERY:
-      return obtainQueryResult(`TABLE ${Object.keys(dbYaml.columns)
-        .filter((key) => !key.startsWith("__") && !key.endsWith("__"))
-        .join(",")},file ${dbYaml.config.source_form_result}`);
+      const query = generateDataviewTableQuery(
+        dbYaml.columns,
+        dbYaml.config.source_form_result)
+      pagesResult = await obtainQueryResult(query, folderPath);
+      break;
     default:
-      return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }
+  return pagesResult;
 }
 
-async function obtainQueryResult(query: string): Promise<DataArray<Record<string, Literal>>> {
+async function obtainQueryResult(query: string, folderPath: string): Promise<DataArray<Record<string, Literal>>> {
   try {
     const result = await DataviewService.getDataviewAPI().query(query);
     if (!result.successful || result.value.type !== 'table') {
@@ -118,8 +126,10 @@ async function obtainQueryResult(query: string): Promise<DataArray<Record<string
     });
     return DataviewService.getDataviewAPI().array(arrayRecord);
   } catch (error) {
-    LOGGER.error(`Error obtaining query result: ${error}`);
-    throw error;
+    const msg = `Error obtaining query result: "${query}", current folder loaded instead`;
+    LOGGER.error(msg, error);
+    new Notice(msg, 10000);
+    return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);;
   }
 }
 
