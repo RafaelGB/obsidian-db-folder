@@ -1,5 +1,6 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
+import { DataTypes } from "helpers/Constants";
 import { TFile } from "obsidian";
 import { DataArray } from "obsidian-dataview/lib/api/data-array";
 import { DataviewService } from "services/DataviewService";
@@ -20,7 +21,7 @@ const obtainRowDatabaseFields = (file: TFile, columns: TableColumn[], frontmatte
     Object.keys(currentFileFields)
         .forEach(fieldKey => {
             // Parse nullable fields
-            const fieldValue = DataviewService.getDataviewAPI().value.isTruthy(currentFileFields[fieldKey])
+            const fieldValue = DataviewService.getDataviewAPI().value.isTruthy(currentFileFields[fieldKey].toString())
                 ? currentFileFields[fieldKey] : "";
             // Then classify fields into frontmatter and inline
             let forceInline = false;

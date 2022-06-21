@@ -24,7 +24,7 @@ export class FrontmatterQuotesToggleHandler extends AbstractSettingsHandler {
             containerEl,
             this.settingTitle,
             'Wrap with qoutes the value of all your frontmatter edited fields when is enabled',
-            local ? view.diskConfig.yaml.config.enable_show_state : settingsManager.plugin.settings.local_settings.frontmatter_quote_wrap,
+            local ? view.diskConfig.yaml.config.frontmatter_quote_wrap : settingsManager.plugin.settings.local_settings.frontmatter_quote_wrap,
             table_state_togle_promise
         );
         return this.goNext(settingHandlerResponse);

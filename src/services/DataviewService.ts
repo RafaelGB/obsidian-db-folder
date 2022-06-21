@@ -173,7 +173,7 @@ class DataviewProxy {
     }
 
     private handleMarkdownBreaker(value: string, isInline?: boolean): string {
-        if (isInline) {
+        if (isInline || (value.startsWith('"') && value.endsWith('"'))) {
             return value;
         }
         // Check possible markdown breakers of the yaml
