@@ -1,9 +1,8 @@
 import { FilterCondition } from "cdm/DatabaseModel";
 import { DataTypes, getOperatorFilterValue, MarkdownBreakerRules, OperatorFilter } from "helpers/Constants";
 import { Notice } from "obsidian";
-import { getAPI, isPluginEnabled } from "obsidian-dataview";
+import { DataviewApi, getAPI, isPluginEnabled } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
-import { DvAPIInterface } from "obsidian-dataview/lib/typings/api";
 import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
 class DataviewProxy {
@@ -14,7 +13,7 @@ class DataviewProxy {
      * @returns true if installed, false otherwise
      * @throws Error if plugin is not installed
      */
-    getDataviewAPI(): DvAPIInterface {
+    getDataviewAPI(): DataviewApi {
         if (isPluginEnabled(app)) {
             return getAPI(app);
         } else {

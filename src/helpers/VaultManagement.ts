@@ -64,13 +64,13 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export function adapterTFilesToRows(folderPath: string, columns: TableColumn[], dbYaml: DatabaseYaml): Array<RowDataType> {
+export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], dbYaml: DatabaseYaml): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
   let id = 0;
 
-  let folderFiles = sourceDataviewPages(folderPath, dbYaml)
-    .where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
+  folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
   if (dbYaml.filters) {
     folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
@@ -84,7 +84,7 @@ export function adapterTFilesToRows(folderPath: string, columns: TableColumn[], 
   return rows;
 }
 
-export function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYaml): DataArray<Record<string, Literal>> {
+export async function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYaml): Promise<DataArray<Record<string, Literal>>> {
   switch (dbYaml.config.source_data) {
     case SourceDataTypes.TAG:
       return DataviewService.getDataviewAPI().pages(`#${dbYaml.config.source_form_result}`);
@@ -92,10 +92,38 @@ export function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYaml): D
       return DataviewService.getDataviewAPI().pages(`[[${dbYaml.config.source_form_result}]]`);
     case SourceDataTypes.OUTGOING_LINK:
       return DataviewService.getDataviewAPI().pages(`outgoing([[${dbYaml.config.source_form_result}]])`);
+    case SourceDataTypes.QUERY:
+      return obtainQueryResult(dbYaml.config.source_form_result);
     default:
       return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }
 }
+
+async function obtainQueryResult(query: string): Promise<DataArray<Record<string, Literal>>> {
+  try {
+    const result = await DataviewService.getDataviewAPI().query(query);
+    if (!result.successful || result.value.type !== 'table') {
+      throw new Error(`Query ${query} failed`);
+    }
+    const arrayRecord: Record<string, Literal>[] = [];
+    const headers = result.value.headers;
+    result.value.values.forEach((row) => {
+      const recordResult: Record<string, Literal> = {};
+      headers.forEach((header, index) => {
+        if (header === 'File') {
+          header = 'file';
+        }
+        recordResult[header] = row[index];
+      })
+      arrayRecord.push(recordResult);
+    });
+    return DataviewService.getDataviewAPI().array(arrayRecord);
+  } catch (error) {
+    LOGGER.error(`Error obtaining query result: ${error}`);
+    throw error;
+  }
+}
+
 export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
   await updateRowFile(file, columnId, newValue, state, option).catch(e => {
     LOGGER.error(`updateRowFileProxy.  Error:${e}`);
