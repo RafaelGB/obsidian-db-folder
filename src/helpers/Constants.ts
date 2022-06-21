@@ -198,6 +198,7 @@ export const SourceDataTypes = Object.freeze({
   TAG: 'tag',
   OUTGOING_LINK: 'outgoing_link',
   INCOMING_LINK: 'incoming_link',
+  QUERY: 'query',
 });
 
 

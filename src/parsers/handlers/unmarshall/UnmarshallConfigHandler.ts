@@ -14,11 +14,11 @@ export class UnmarshallConfigHandler extends AbstractDiskHandler {
                 this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}:`);
                 Object.entries(value).forEach(([key, value]) => {
                     // Lvl3: config properties
-                    this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${value}`);
+                    this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: \"${value}\"`);
                 });
             } else {
                 // Lvl2: config properties
-                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${value}`);
+                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: \"${value}\"`);
             }
         });
         return this.goNext(handlerResponse);

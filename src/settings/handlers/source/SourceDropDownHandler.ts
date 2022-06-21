@@ -23,6 +23,7 @@ export class SourceDropDownHandler extends AbstractSettingsHandler {
                 tag: SourceDataTypes.TAG,
                 outgoing_link: SourceDataTypes.OUTGOING_LINK,
                 incoming_link: SourceDataTypes.INCOMING_LINK,
+                query: SourceDataTypes.QUERY,
             },
             source_dropdown_promise
         );

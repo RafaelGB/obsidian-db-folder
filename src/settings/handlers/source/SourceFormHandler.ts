@@ -1,7 +1,9 @@
 import { DatabaseView } from "DatabaseView";
 import { SourceDataTypes } from "helpers/Constants";
+import { Notice } from "obsidian";
+import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-import { add_dropdown } from "settings/SettingsComponents";
+import { add_dropdown, add_text } from "settings/SettingsComponents";
 
 export class SourceFormHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Form in function of source data';
@@ -29,6 +31,8 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                     source_form_promise
                 );
                 break;
+            case SourceDataTypes.QUERY:
+                queryHandler(view, containerEl);
             default:
             //Current folder
         }
@@ -61,4 +65,38 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
             source_form_promise
         );
     }
+}
+
+function queryHandler(view: DatabaseView, containerEl: HTMLElement) {
+    const query_promise = async (value: string): Promise<void> => {
+        // update settings
+        view.diskConfig.yaml.config.source_form_result = value;
+        view.diskConfig.updateConfig('source_form_result', value);
+    };
+    const query_setting = add_text(
+        containerEl,
+        'Dataview query',
+        'Enter a dataview query to get data from',
+        'Write here your dataview query...',
+        view.diskConfig.yaml.config.source_form_result,
+        query_promise
+    );
+    query_setting.addExtraButton((cb) => {
+        cb.setIcon("check")
+            .setTooltip("Validate query")
+            .onClick(async (): Promise<void> => {
+                const query = `TABLE ${Object.keys(view.diskConfig.yaml.columns)
+                    .filter((key) => !key.startsWith("__") && !key.endsWith("__"))
+                    .join(",")},file ${view.diskConfig.yaml.config.source_form_result}`;
+                if (query) {
+                    DataviewService.getDataviewAPI().tryQuery(query)
+                        .then(() => {
+                            new Notice(`Dataview query "${query}" is valid!`, 2000);
+                        })
+                        .catch((e) => {
+                            new Notice(`Dataview query "${query}" is invalid: ${e.message}`, 10000);
+                        });
+                }
+            });
+    });
 }
