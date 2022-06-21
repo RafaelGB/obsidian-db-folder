@@ -3,9 +3,9 @@ import { add_setting_header } from 'settings/SettingsComponents';
 import DBFolderPlugin from 'main';
 import { DatabaseView } from "DatabaseView";
 import { LOGGER } from "services/Logger";
-import { developer_settings_section } from "settings/DeveloperSection";
 import columns_settings_section from "settings/ColumnsSection";
 import { folder_settings_section } from "settings/FolderSection";
+import developer_settings_section from "settings/DeveloperSection";
 import { StyleClasses } from "helpers/Constants";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { media_settings_section } from "settings/MediaSection";
@@ -83,7 +83,7 @@ export class SettingsManager {
     /** Media section */
     media_settings_section(settingHandlerResponse);
     /** Developer section */
-    developer_settings_section(settingHandlerResponse);
+    developer_settings_section.run(settingHandlerResponse);
   }
 
   reset(response: SettingHandlerResponse) {
