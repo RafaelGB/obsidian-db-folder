@@ -11,6 +11,7 @@ import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler
 import { media_settings_section } from "settings/MediaSection";
 import { source_settings_section } from "settings/SourceSection";
 import { DatabaseSettings } from "cdm/SettingsModel";
+import editing_engine_settings_section from "settings/EditingEngineSection";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -80,6 +81,8 @@ export class SettingsManager {
     }
     /** Columns section */
     columns_settings_section.run(settingHandlerResponse);
+    /** Editing engine section */
+    editing_engine_settings_section.run(settingHandlerResponse);
     /** Media section */
     media_settings_section(settingHandlerResponse);
     /** Developer section */

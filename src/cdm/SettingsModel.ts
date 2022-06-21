@@ -22,6 +22,7 @@ export interface LocalSettings {
     show_metadata_tasks: boolean;
     source_data: string;
     source_form_result: string;
+    frontmatter_quote_wrap: boolean;
 }
 
 export interface DatabaseSettings {
