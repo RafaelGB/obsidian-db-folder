@@ -66,7 +66,7 @@ class DataviewProxy {
 
     parseLiteral(literal: Literal, dataTypeDst: string, isInline?: boolean): Literal {
         let parsedLiteral: Literal = literal;
-        if (!this.getDataviewAPI().value.isTruthy(literal)) {
+        if (!this.getDataviewAPI().value.isTruthy(literal.toString())) {
             return "";
         }
         literal = this.parseDataArray(literal);
@@ -173,7 +173,7 @@ class DataviewProxy {
     }
 
     private handleMarkdownBreaker(value: string, isInline?: boolean): string {
-        if (isInline) {
+        if (isInline || (value.startsWith('"') && value.endsWith('"'))) {
             return value;
         }
         // Check possible markdown breakers of the yaml

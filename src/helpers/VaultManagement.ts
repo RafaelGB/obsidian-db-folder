@@ -216,7 +216,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
     const frontmatterGroupRegex = /^---[\s\S]+?---/g;
-    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, deletedColumn);
+    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, state.view.diskConfig.yaml.config, deletedColumn);
     const noteObject = {
       action: 'replace',
       file: file,
@@ -243,7 +243,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `$1 ${DataviewService.parseLiteral(newValue, DataTypes.MARKDOWN) as string}`
+      newValue: `$1 ${DataviewService.parseLiteral(newValue, DataTypes.MARKDOWN) as string, true}`
     };
     await VaultManagerDB.editNoteContent(noteObject);
     await persistFrontmatter();

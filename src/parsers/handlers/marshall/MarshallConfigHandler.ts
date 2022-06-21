@@ -56,6 +56,13 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
             }
             yaml.config.show_metadata_modified = parseBoolean(yaml.config.show_metadata_modified);
 
+            // if show_metadata_modified is not defined, load default
+            if (checkNullable(yaml.config.show_metadata_tasks)) {
+                this.addError(`There was not show_metadata_tasks key in yaml. Default will be loaded`);
+                yaml.config.show_metadata_tasks = false;
+            }
+            yaml.config.show_metadata_tasks = parseBoolean(yaml.config.show_metadata_tasks);
+
             // if source_data is not defined, load default
             if (checkNullable(yaml.config.source_data)) {
                 this.addError(`There was not source_data key in yaml. Default will be loaded`);
@@ -66,6 +73,13 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
             if (checkNullable(yaml.config.source_form_result)) {
                 yaml.config.source_form_result = '';
             }
+
+            // if frontmatter_quote_wrap is not defined, load default
+            if (checkNullable(yaml.config.frontmatter_quote_wrap)) {
+                this.addError(`There was not frontmatter_quote_wrap key in yaml. Default will be loaded`);
+                yaml.config.frontmatter_quote_wrap = false;
+            }
+            yaml.config.frontmatter_quote_wrap = parseBoolean(yaml.config.frontmatter_quote_wrap);
         }
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);
