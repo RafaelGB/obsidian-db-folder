@@ -1,4 +1,6 @@
 ## 1.8.0
+### Shiny new things
+- New source option: query. Use your own dataview query as source of the database. Start the query with the `FROM` term, since the plugin will autocomplete the beginning with `TABLE` and the column fields[ISSUE#156](https://github.com/RafaelGB/obsidian-db-folder/issues/156)
 ### Improved
 - Inline fields now supports render embed images with ![[note]] syntax. [ISSUE#136](https://github.com/RafaelGB/obsidian-db-folder/issues/136)
 ### No longer broken
