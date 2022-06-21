@@ -93,7 +93,9 @@ export async function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYa
     case SourceDataTypes.OUTGOING_LINK:
       return DataviewService.getDataviewAPI().pages(`outgoing([[${dbYaml.config.source_form_result}]])`);
     case SourceDataTypes.QUERY:
-      return obtainQueryResult(dbYaml.config.source_form_result);
+      return obtainQueryResult(`TABLE ${Object.keys(dbYaml.columns)
+        .filter((key) => !key.startsWith("__") && !key.endsWith("__"))
+        .join(",")},file ${dbYaml.config.source_form_result}`);
     default:
       return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }
@@ -110,9 +112,6 @@ async function obtainQueryResult(query: string): Promise<DataArray<Record<string
     result.value.values.forEach((row) => {
       const recordResult: Record<string, Literal> = {};
       headers.forEach((header, index) => {
-        if (header === 'File') {
-          header = 'file';
-        }
         recordResult[header] = row[index];
       })
       arrayRecord.push(recordResult);

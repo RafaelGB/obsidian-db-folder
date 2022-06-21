@@ -85,11 +85,17 @@ function queryHandler(view: DatabaseView, containerEl: HTMLElement) {
         cb.setIcon("check")
             .setTooltip("Validate query")
             .onClick(async (): Promise<void> => {
-                const query = view.diskConfig.yaml.config.source_form_result;
+                const query = `TABLE ${Object.keys(view.diskConfig.yaml.columns)
+                    .filter((key) => !key.startsWith("__") && !key.endsWith("__"))
+                    .join(",")},file ${view.diskConfig.yaml.config.source_form_result}`;
                 if (query) {
-                    DataviewService.getDataviewAPI().tryQuery(query).catch((e) => {
-                        new Notice(`Dataview query "${query}" is invalid: ${e.message}`);
-                    });
+                    DataviewService.getDataviewAPI().tryQuery(query)
+                        .then(() => {
+                            new Notice(`Dataview query "${query}" is valid!`, 2000);
+                        })
+                        .catch((e) => {
+                            new Notice(`Dataview query "${query}" is invalid: ${e.message}`, 10000);
+                        });
                 }
             });
     });
