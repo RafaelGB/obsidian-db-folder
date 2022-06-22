@@ -191,7 +191,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         ...row,
         [action.columnId]: DataviewService.parseLiteral(
           row[action.columnId],
-          action.dataType // Destination type to parse
+          action.dataType, // Destination type to parse
+          state.view.diskConfig.yaml.config
         ),
       }));
       // Update state

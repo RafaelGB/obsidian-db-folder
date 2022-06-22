@@ -5,6 +5,7 @@ import { VaultManagerDB } from "services/FileManagerService";
 import { DateTime } from "luxon";
 import { DataviewService } from "./DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { LocalSettings } from "cdm/SettingsModel";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
@@ -18,7 +19,7 @@ export default class NoteInfo {
         this.id = id;
     }
 
-    getRowDataType(columns: TableColumn[]): RowDataType {
+    getRowDataType(columns: TableColumn[], config: LocalSettings): RowDataType {
         /** Mandatory fields */
         const aFile: RowDataType = {
             id: this.id,
@@ -37,7 +38,7 @@ export default class NoteInfo {
         /** Parse data with the type of column */
         columns.forEach(column => {
             if (aFile[column.key] !== undefined) {
-                aFile[column.key] = DataviewService.parseLiteral((aFile[column.key]) as Literal, column.dataType, column.config.isInline);
+                aFile[column.key] = DataviewService.parseLiteral((aFile[column.key]) as Literal, column.dataType, config, column.config.isInline);
             }
         });
         return aFile;

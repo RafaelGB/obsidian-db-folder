@@ -35,16 +35,9 @@ function parseLiteralToString(literal: Literal, level: number, localSettings: Lo
         });
     }
     else if (key) {
-        literalBlock.push(`${" ".repeat(level)}${key}: ${wrapWithQuotes(DataviewService.parseLiteral(literal, DataTypes.MARKDOWN), localSettings.frontmatter_quote_wrap)}`);
+        literalBlock.push(`${" ".repeat(level)}${key}: ${DataviewService.parseLiteral(literal, DataTypes.MARKDOWN, localSettings)}`);
     } else {
-        literalBlock.push(`${" ".repeat(level)}- ${wrapWithQuotes(DataviewService.parseLiteral(literal, DataTypes.MARKDOWN), localSettings.frontmatter_quote_wrap)}`);
+        literalBlock.push(`${" ".repeat(level)}- ${DataviewService.parseLiteral(literal, DataTypes.MARKDOWN, localSettings)}`);
     }
     return literalBlock;
-}
-
-function wrapWithQuotes(literal: Literal, isWrapActivated: boolean): string {
-    if (!literal.toString().startsWith('"') && !literal.toString().endsWith('"') && isWrapActivated) {
-        return `\"${literal.toString()}\"`;
-    }
-    return literal.toString();
 }

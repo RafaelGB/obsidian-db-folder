@@ -78,7 +78,7 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page, ++id);
-    rows.push(noteInfo.getRowDataType(columns));
+    rows.push(noteInfo.getRowDataType(columns, dbYaml.config));
   });
 
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
@@ -199,7 +199,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
     // Check if the column is already in the frontmatter
     // assign an empty value to the new key
-    rowFields.frontmatter[DataviewService.parseLiteral(newValue, DataTypes.TEXT) as string] = rowFields.frontmatter[columnId] ?? "";
+    rowFields.frontmatter[DataviewService.parseLiteral(newValue, DataTypes.TEXT, state.view.diskConfig.yaml.config) as string] = rowFields.frontmatter[columnId] ?? "";
     delete rowFields.frontmatter[columnId];
     await persistFrontmatter(columnId);
   }
@@ -243,7 +243,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `$1 ${DataviewService.parseLiteral(newValue, DataTypes.MARKDOWN) as string, true}`
+      newValue: `$1 ${DataviewService.parseLiteral(newValue, DataTypes.MARKDOWN, state.view.diskConfig.yaml.config) as string, true}`
     };
     await VaultManagerDB.editNoteContent(noteObject);
     await persistFrontmatter();

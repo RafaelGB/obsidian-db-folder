@@ -5,6 +5,7 @@ import { DataviewApi, getAPI, isPluginEnabled } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
+import { LocalSettings } from "cdm/SettingsModel";
 class DataviewProxy {
 
     private static instance: DataviewProxy;
@@ -64,7 +65,7 @@ class DataviewProxy {
         return this.getDataviewAPI().value.wrapValue(literal);
     }
 
-    parseLiteral(literal: Literal, dataTypeDst: string, isInline?: boolean): Literal {
+    parseLiteral(literal: Literal, dataTypeDst: string, localSettings: LocalSettings, isInline?: boolean): Literal {
         let parsedLiteral: Literal = literal;
         if (!this.getDataviewAPI().value.isTruthy(literal.toString())) {
             return "";
@@ -79,7 +80,7 @@ class DataviewProxy {
                 parsedLiteral = this.parseToString(wrapped);
                 break;
             case DataTypes.MARKDOWN:
-                parsedLiteral = this.parseToMarkdown(wrapped, isInline);
+                parsedLiteral = this.parseToMarkdown(wrapped, localSettings, isInline);
                 break;
             case DataTypes.TAGS:
                 parsedLiteral = this.parseToOptionsArray(wrapped);
@@ -151,16 +152,23 @@ class DataviewProxy {
         return wrapped.type === 'number' ? wrapped.value : Number(adjustedValue);
     }
 
-    private parseToMarkdown(wrapped: WrappedLiteral, isInline: boolean): string {
+    private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean): string {
         let auxMarkdown = '';
-        if (wrapped.type === 'array') {
-            auxMarkdown = wrapped.value
-                .map(v => this.parseToMarkdown(this.getDataviewAPI().value.wrapValue(v), isInline))
-                .join(', ');
-        } else {
-            auxMarkdown = this.parseToString(wrapped) as string;
-            // Check possible markdown breakers
-            auxMarkdown = this.handleMarkdownBreaker(auxMarkdown, isInline);
+        switch (wrapped.type) {
+            case 'boolean':
+            case 'number':
+                // Do nothing
+                auxMarkdown = wrapped.value.toString();
+                break;
+            case 'array':
+                auxMarkdown = wrapped.value
+                    .map(v => this.parseToMarkdown(this.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
+                    .join(', ');
+                break;
+            default:
+                auxMarkdown = this.parseToString(wrapped) as string;
+                // Check possible markdown breakers
+                auxMarkdown = this.handleMarkdownBreaker(auxMarkdown, localSettings, isInline);
         }
         return auxMarkdown;
     }
@@ -172,14 +180,15 @@ class DataviewProxy {
         return wrapped.value;
     }
 
-    private handleMarkdownBreaker(value: string, isInline?: boolean): string {
+    private handleMarkdownBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {
         if (isInline || (value.startsWith('"') && value.endsWith('"'))) {
             return value;
         }
         // Check possible markdown breakers of the yaml
         if (MarkdownBreakerRules.INIT_CHARS.some(c => value.startsWith(c)) ||
             MarkdownBreakerRules.BETWEEN_CHARS.some(rule => value.includes(rule)) ||
-            MarkdownBreakerRules.UNIQUE_CHARS.some(c => value === c)) {
+            MarkdownBreakerRules.UNIQUE_CHARS.some(c => value === c) ||
+            localSettings.frontmatter_quote_wrap) {
             value = value.replaceAll(`"`, `\\"`);
             return `"${value}"`;
         }
