@@ -277,6 +277,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     show_metadata_tasks: false,
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
-    frontmatter_quote_wrap: false
+    frontmatter_quote_wrap: false,
+    templates_folder: '',
   }
 };

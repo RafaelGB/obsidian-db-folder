@@ -1,5 +1,6 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { NoteContentAction } from "cdm/FolderModel";
+import { LocalSettings } from "cdm/SettingsModel";
 import { FileContent } from "helpers/FileContent";
 import { parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
@@ -13,13 +14,13 @@ class VaultManager {
    * @param filename 
    * @param content 
    */
-  async create_markdown_file(targetFolder: TFolder, filename: string, databasefields: RowDatabaseFields): Promise<TFile> {
+  async create_markdown_file(targetFolder: TFolder, filename: string, databasefields: RowDatabaseFields, localSettings: LocalSettings): Promise<TFile> {
     LOGGER.debug(`=> create_markdown_file. name:${targetFolder.path}/${filename})`);
     const created_note = await app.fileManager.createNewMarkdownFile(
       targetFolder,
       filename ?? "Untitled"
     );
-    const content = parseFrontmatterFieldsToString(databasefields).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    const content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;

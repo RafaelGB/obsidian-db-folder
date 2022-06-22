@@ -12,6 +12,7 @@ import { media_settings_section } from "settings/MediaSection";
 import { source_settings_section } from "settings/SourceSection";
 import { DatabaseSettings } from "cdm/SettingsModel";
 import editing_engine_settings_section from "settings/EditingEngineSection";
+import rows_settings_section from "settings/RowsSection";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -81,6 +82,8 @@ export class SettingsManager {
     }
     /** Columns section */
     columns_settings_section.run(settingHandlerResponse);
+    /** Rows section */
+    rows_settings_section.run(settingHandlerResponse);
     /** Editing engine section */
     editing_engine_settings_section.run(settingHandlerResponse);
     /** Media section */

@@ -80,7 +80,8 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       VaultManagerDB.create_markdown_file(
         state.view.file.parent,
         action.filename,
-        rowRecord
+        rowRecord,
+        state.view.diskConfig.yaml.config
       );
       const metadata: Record<string, Literal> = {};
       metadata[MetadataColumns.CREATED] = DateTime.now();
