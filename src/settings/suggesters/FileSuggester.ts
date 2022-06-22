@@ -3,7 +3,6 @@
 import { App, TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "settings/suggesters/suggest";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
-import { LocalSettings } from "cdm/SettingsModel";
 
 export enum FileSuggestMode {
     TemplateFiles,
@@ -13,17 +12,17 @@ export enum FileSuggestMode {
 export class FileSuggest extends TextInputSuggest<TFile> {
     constructor(
         public inputEl: HTMLInputElement,
-        private localSettings: LocalSettings,
+        private folderPath: string,
     ) {
         super(inputEl);
     }
 
     get_folder(): string {
-        return this.localSettings.templates_folder;
+        return this.folderPath
     }
 
     getSuggestions(input_str: string): TFile[] {
-        const all_files = get_tfiles_from_folder(`Templates folder doesn't exist`);
+        const all_files = get_tfiles_from_folder(input_str);
         if (!all_files) {
             return [];
         }

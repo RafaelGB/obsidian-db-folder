@@ -7,6 +7,7 @@ import { DataviewService } from "services/DataviewService";
 import { obtainColumnsFromFolder, obtainMetadataColumns } from "components/Columns";
 import { adapterTFilesToRows } from "helpers/VaultManagement";
 import { DatabaseColumn } from "cdm/DatabaseModel";
+import { resolve_tfile } from "helpers/FileManagement";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
@@ -115,7 +116,7 @@ export class PreviewDatabaseModeService {
         el: HTMLElement,
         ctx: MarkdownPostProcessorContext,
     ): Promise<HTMLElement> => {
-        const dbFile = VaultManagerDB.obtainTfileFromFilePath(ctx.sourcePath);
+        const dbFile = resolve_tfile(ctx.sourcePath);
         const databaseDisk = new DatabaseInfo(dbFile);
         await databaseDisk.initDatabaseconfigYaml(
             this.plugin.settings.local_settings

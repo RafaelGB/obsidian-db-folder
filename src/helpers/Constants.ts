@@ -278,6 +278,6 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
     frontmatter_quote_wrap: false,
-    templates_folder: '',
+    templates_folder: '/',
   }
 };

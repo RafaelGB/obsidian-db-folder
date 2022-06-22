@@ -80,6 +80,12 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
                 yaml.config.frontmatter_quote_wrap = false;
             }
             yaml.config.frontmatter_quote_wrap = parseBoolean(yaml.config.frontmatter_quote_wrap);
+
+            // if templates_folder is not defined, load empty (optional)
+            if (checkNullable(yaml.config.templates_folder)) {
+                this.addError(`There was not templates_folder key in yaml. Default will be loaded`);
+                yaml.config.templates_folder = '/';
+            }
         }
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);

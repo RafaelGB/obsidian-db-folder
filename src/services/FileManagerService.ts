@@ -94,19 +94,6 @@ class VaultManager {
       return [];
     }
   }
-  /**
-   * Obtain TFile from file path
-   * @param filePath 
-   * @returns 
-   */
-  obtainTfileFromFilePath(filePath: string): TFile {
-    const abstractFile = app.vault.getAbstractFileByPath(filePath);
-    if (abstractFile instanceof TFile) {
-      return abstractFile;
-    } else {
-      throw "Error: File " + filePath + " is not a TFile";
-    }
-  }
 
   /**
    * Singleton instance

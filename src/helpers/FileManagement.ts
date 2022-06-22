@@ -18,9 +18,9 @@ export function resolve_tfile(file_str: string): TFile {
 export function resolve_tfolder(folder_str: string): TFolder {
     folder_str = normalizePath(folder_str);
 
-    const folder = app.vault.getAbstractFileByPath(folder_str);
+    let folder = app.vault.getAbstractFileByPath(folder_str);
     if (!folder) {
-        throw new HelperError(`Folder "${folder_str}" doesn't exist`);
+        folder = resolve_tfolder(folder_str.split("/").slice(0, -1).join("/"));
     }
     if (!(folder instanceof TFolder)) {
         throw new HelperError(`${folder_str} is a file, not a folder`);
@@ -31,8 +31,13 @@ export function resolve_tfolder(folder_str: string): TFolder {
 export function get_tfiles_from_folder(
     folder_str: string
 ): Array<TFile> {
-    const folder = resolve_tfolder(folder_str);
-
+    let folder;
+    try {
+        folder = resolve_tfolder(folder_str);
+    } catch (err) {
+        // Split the string into '/' and remove the last element
+        folder = resolve_tfolder(folder_str.split("/").slice(0, -1).join("/"));
+    }
     const files: Array<TFile> = [];
     Vault.recurseChildren(folder, (file: TAbstractFile) => {
         if (file instanceof TFile) {
