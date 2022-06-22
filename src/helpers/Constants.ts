@@ -137,7 +137,8 @@ export const TableColumnsTemplate: Partial<TableColumn> =
 }
 
 export const DatabaseCore = Object.freeze({
-  FRONTMATTER_KEY: 'database-plugin'
+  FRONTMATTER_KEY: 'database-plugin',
+  DATAVIEW_FILE: 'file',
 });
 
 export const DatabaseFrontmatterOptions = Object.freeze({

@@ -71,7 +71,7 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   let id = 0;
 
   let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
-  folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
   if (dbYaml.filters) {
     folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
