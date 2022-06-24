@@ -54,6 +54,12 @@ export default function DefaultCell(cellProperties: Cell) {
       case DataTypes.TASK:
         // Check if there are tasks in the cell
         if (contextValue.value === "") break;
+        taskRef.current.innerHTML = "";
+        if (column.config.task_hide_completed) {
+          contextValue.value = contextValue.value.where(
+            (t: any) => !t.completed
+          );
+        }
         DataviewService.getDataviewAPI().taskList(
           contextValue.value,
           false,
@@ -244,6 +250,8 @@ export default function DefaultCell(cellProperties: Cell) {
         );
 
       case DataTypes.TASK:
+        if (column.config.task_hide_completed) {
+        }
         return <div ref={taskRef} className="data-input"></div>;
 
       case DataTypes.CHECKBOX:

@@ -3,7 +3,8 @@
 - New source option: query. Use your own dataview query as source of the database. Start the query with the `FROM` term, since the plugin will autocomplete the beginning with `TABLE` and the column fields[ISSUE#156](https://github.com/RafaelGB/obsidian-db-folder/issues/156)
 - Templates for new rows added! now you can choose a template folder on settings menu, then you can choose your template file easily near of the add row button[ISSUE#48](https://github.com/RafaelGB/obsidian-db-folder/issues/48)
 ### Improved
-- Inline fields now supports render embed images with ![[note]] syntax. [ISSUE#136](https://github.com/RafaelGB/obsidian-db-folder/issues/136)
+- Inline fields now supports render embed images with `![[note]]` syntax. [ISSUE#136](https://github.com/RafaelGB/obsidian-db-folder/issues/136)
+- Now you can hide completed task on task column type [ISSUE#111](https://github.com/RafaelGB/obsidian-db-folder/issues/111)
 ### No longer broken
 - If you modify the label of a column, now exist an onMouseLeave event to blur the input and be more frieldly to the user interact with the next action without a double click (once for onBlur label edition and another for your next interaction) [ISSUE#114](https://github.com/RafaelGB/obsidian-db-folder/issues/114)
 ## 1.7.2

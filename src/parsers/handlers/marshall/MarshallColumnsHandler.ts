@@ -26,6 +26,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
         // Check every column
         Object.keys(yaml.columns)
             .forEach((key) => {
+                console.log(key);
                 let column = yaml.columns[key];
                 /** BASE COLUMN INFO */
                 if (!column.input) {
@@ -47,10 +48,13 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     this.addError(`There was not label in column ${key}`);
                     column.label = key;
                 }
+                if (column.skipPersist === undefined) {
+                    column.skipPersist = false;
+                }
+
                 /** CONFIG COLUMN INFO */
                 if (!column.config && !(column.config instanceof Object)) {
                     column.config = DEFAULT_COLUMN_CONFIG;
-                    column = column;
                 } else {
                     // General config
                     if (column.config.isInline === undefined) {
@@ -109,6 +113,6 @@ function marshallParticularConfigInfo(column: DatabaseColumn): DatabaseColumn {
                 column.config.task_hide_completed = DEFAULT_COLUMN_CONFIG.task_hide_completed;
                 break;
             }
-            return column;
     }
+    return column;
 }

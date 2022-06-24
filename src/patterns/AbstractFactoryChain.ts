@@ -4,7 +4,17 @@ export interface AbstractHandler<T> {
 }
 
 export abstract class AbstractChain<T> {
+    /**
+     * Implement this method to customize the chain response before the handlers are run
+     * @param abstractResponse 
+     * @returns 
+     */
+    protected runBefore(abstractResponse: T): T {
+        return abstractResponse;
+    }
+
     public run(abstractResponse: T): T {
+        abstractResponse = this.runBefore(abstractResponse);
         // Obtain the group of handlers
         const handlers = this.getHandlers();
         if (handlers.length > 0) {

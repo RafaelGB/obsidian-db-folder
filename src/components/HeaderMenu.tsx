@@ -1,4 +1,4 @@
-import { ActionTypes, StyleVariables } from "helpers/Constants";
+import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
@@ -278,7 +278,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 </div>
               ))}
             </div>
-            {!column.isMetadata && (
+            {(!column.isMetadata || column.dataType === DataTypes.TASK) && (
               <div
                 style={{
                   borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,

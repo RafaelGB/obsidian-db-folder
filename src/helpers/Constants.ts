@@ -123,7 +123,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     accessor: MetadataColumns.TASKS,
     isMetadata: true,
     isDragDisabled: false,
-    skipPersist: true,
+    skipPersist: false,
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
   },
