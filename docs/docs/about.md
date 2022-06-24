@@ -18,10 +18,12 @@ Mandatory:
 - **label**: name of the column
 
 Optional:
+
 - **position**: order of the columns
 - **options**: list of options for the column (only for select type)
 
 Configuration:
+
 - **isInline**: true if you want to edit the field inline mode
 - **enable_media_view**: true if you want to see the media view (only for text type)
   - **media_width**: width of the media view
