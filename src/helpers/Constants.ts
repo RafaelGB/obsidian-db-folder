@@ -6,6 +6,7 @@ import { DatabaseSettings } from "cdm/SettingsModel";
 export const ActionTypes = Object.freeze({
   ADD_OPTION_TO_COLUMN: 'add_option_to_column',
   ADD_ROW: 'add_row',
+  CHANGE_ROW_TEMPLATE: 'change_row_template',
   UPDATE_COLUMN_TYPE: 'update_column_type',
   UPDATE_COLUMN_LABEL: 'update_column_label',
   UPDATE_CELL: 'update_cell',
@@ -279,6 +280,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
     frontmatter_quote_wrap: false,
-    templates_folder: '/',
+    row_templates_folder: '/',
+    current_row_template: '',
   }
 };

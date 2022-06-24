@@ -2,7 +2,7 @@ import { RowSelectOption, TagsProps } from "cdm/ComponentsModel";
 import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
-import { grey, randomColor } from "helpers/Colors";
+import { randomColor } from "helpers/Colors";
 import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";

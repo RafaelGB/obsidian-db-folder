@@ -138,6 +138,11 @@ export type RelationshipProps = {
     backgroundColor: string
 }
 
+export type RowTemplateOption = {
+    label: string,
+    value: string
+}
+
 export type NoteContentAction = {
     file: TFile,
     action: string,

@@ -10,7 +10,12 @@ import {
   Column,
 } from "react-table";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
+import {
+  TableDataType,
+  RowDataType,
+  TableColumn,
+  RowTemplateOption,
+} from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
@@ -28,7 +33,10 @@ import { c, getTotalWidth } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
-import { getDndListStyle, getDndItemStyle } from "./styles/DnDStyle";
+import { getDndListStyle, getDndItemStyle } from "components/styles/DnDStyle";
+import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
+import Select, { ActionMeta, OnChangeValue } from "react-select";
+import { get_tfiles_from_folder } from "helpers/FileManagement";
 
 const defaultColumn = {
   minWidth: 25,
@@ -229,7 +237,31 @@ export function Table(tableData: TableDataType) {
     globalFilter: (state as any).globalFilter,
     setGlobalFilter: setGlobalFilter,
   };
+  // Manage Templates
+  const [rowTemplateState, setRowTemplateState] = React.useState(
+    view.diskConfig.yaml.config.current_row_template
+  );
+  const rowTemplatesOptions = get_tfiles_from_folder(
+    view.diskConfig.yaml.config.row_templates_folder
+  ).map((tfile) => {
+    return {
+      value: tfile.path,
+      label: tfile.path,
+    };
+  });
+
+  function handleChangeRowTemplate(
+    newValue: OnChangeValue<RowTemplateOption, false>,
+    actionMeta: ActionMeta<RowTemplateOption>
+  ) {
+    dataDispatch({
+      type: ActionTypes.CHANGE_ROW_TEMPLATE,
+      template: newValue.value,
+    });
+    setRowTemplateState(newValue.value);
+  }
   LOGGER.debug(`<= Table`);
+
   return (
     <>
       <div
@@ -445,6 +477,20 @@ export function Table(tableData: TableDataType) {
                 </span>
                 New
               </div>
+              <Select
+                styles={CustomTemplateSelectorStyles}
+                options={rowTemplatesOptions}
+                value={{
+                  label: rowTemplateState,
+                  value: rowTemplateState,
+                }}
+                isMulti={false}
+                onChange={handleChangeRowTemplate}
+                defaultValue={{ label: "Choose a Template", value: "None" }}
+                menuPortalTarget={document.body}
+                menuShouldBlockScroll={true}
+                isSearchable
+              />
             </div>
           </div>
         </div>

@@ -12,13 +12,13 @@ export class TemplateFolderNewRowsHandler extends AbstractSettingsHandler {
             .addSearch((cb) => {
                 new FolderSuggest(cb.inputEl);
                 cb.setPlaceholder("Example: folder1/folder2")
-                    .setValue(local ? view.diskConfig.yaml.config.templates_folder : settingsManager.plugin.settings.local_settings.templates_folder)
+                    .setValue(local ? view.diskConfig.yaml.config.row_templates_folder : settingsManager.plugin.settings.local_settings.row_templates_folder)
                     .onChange((new_folder) => {
                         if (local) {
-                            view.diskConfig.updateConfig('templates_folder', new_folder);
+                            view.diskConfig.updateConfig('row_templates_folder', new_folder);
                         } else {
                             const update_local_settings = settingsManager.plugin.settings.local_settings;
-                            update_local_settings.templates_folder = new_folder;
+                            update_local_settings.row_templates_folder = new_folder;
                             settingsManager.plugin.updateSettings({
                                 local_settings: update_local_settings
                             });

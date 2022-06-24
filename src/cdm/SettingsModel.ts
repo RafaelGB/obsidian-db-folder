@@ -23,7 +23,8 @@ export interface LocalSettings {
     source_data: string;
     source_form_result: string;
     frontmatter_quote_wrap: boolean;
-    templates_folder: string;
+    row_templates_folder: string;
+    current_row_template: string;
 }
 
 export interface DatabaseSettings {

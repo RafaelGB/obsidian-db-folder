@@ -2,6 +2,7 @@ import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { NoteContentAction } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { FileContent } from "helpers/FileContent";
+import { resolve_tfile } from "helpers/FileManagement";
 import { parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
@@ -20,7 +21,11 @@ class VaultManager {
       targetFolder,
       filename ?? "Untitled"
     );
-    const content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    let content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    // Obtain content from current row template
+    const templateTFile = resolve_tfile(localSettings.current_row_template)
+    const templateContent = await this.obtainContentFromTfile(templateTFile);
+    content = content.concat(templateContent);
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;
