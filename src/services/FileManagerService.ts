@@ -3,7 +3,7 @@ import { NoteContentAction } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { FileContent } from "helpers/FileContent";
 import { resolve_tfile } from "helpers/FileManagement";
-import { parseYaml, TFile, TFolder } from "obsidian";
+import { Notice, parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 class VaultManager {
@@ -23,9 +23,15 @@ class VaultManager {
     );
     let content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
     // Obtain content from current row template
-    const templateTFile = resolve_tfile(localSettings.current_row_template)
-    const templateContent = await this.obtainContentFromTfile(templateTFile);
-    content = content.concat(templateContent);
+    try {
+      if (localSettings.current_row_template.endsWith(".md")) {
+        const templateTFile = resolve_tfile(localSettings.current_row_template)
+        const templateContent = await this.obtainContentFromTfile(templateTFile);
+        content = content.concat(templateContent);
+      }
+    } catch (err) {
+      new Notice(`Error while inserting ${localSettings.current_row_template}: ${err}`);
+    }
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;

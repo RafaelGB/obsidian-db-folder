@@ -21,7 +21,7 @@ const obtainRowDatabaseFields = (file: TFile, columns: TableColumn[], frontmatte
     Object.keys(currentFileFields)
         .forEach(fieldKey => {
             // Parse nullable fields
-            const fieldValue = DataviewService.getDataviewAPI().value.isTruthy(currentFileFields[fieldKey].toString())
+            const fieldValue = DataviewService.isTruthy(currentFileFields[fieldKey])
                 ? currentFileFields[fieldKey] : "";
             // Then classify fields into frontmatter and inline
             let forceInline = false;
