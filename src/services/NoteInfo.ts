@@ -1,11 +1,10 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { MetadataColumns } from "helpers/Constants";
 import { TFile } from "obsidian";
-import { VaultManagerDB } from "services/FileManagerService";
-import { DateTime } from "luxon";
 import { DataviewService } from "./DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "cdm/SettingsModel";
+import { resolve_tfile } from "helpers/FileManagement";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
@@ -45,6 +44,6 @@ export default class NoteInfo {
     }
 
     getFile(): TFile {
-        return VaultManagerDB.obtainTfileFromFilePath(this.filepath);
+        return resolve_tfile(this.filepath);
     }
 }

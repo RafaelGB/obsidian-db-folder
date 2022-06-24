@@ -6,6 +6,7 @@ import { DatabaseSettings } from "cdm/SettingsModel";
 export const ActionTypes = Object.freeze({
   ADD_OPTION_TO_COLUMN: 'add_option_to_column',
   ADD_ROW: 'add_row',
+  CHANGE_ROW_TEMPLATE: 'change_row_template',
   UPDATE_COLUMN_TYPE: 'update_column_type',
   UPDATE_COLUMN_LABEL: 'update_column_label',
   UPDATE_CELL: 'update_cell',
@@ -137,7 +138,8 @@ export const TableColumnsTemplate: Partial<TableColumn> =
 }
 
 export const DatabaseCore = Object.freeze({
-  FRONTMATTER_KEY: 'database-plugin'
+  FRONTMATTER_KEY: 'database-plugin',
+  DATAVIEW_FILE: 'file',
 });
 
 export const DatabaseFrontmatterOptions = Object.freeze({
@@ -277,6 +279,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     show_metadata_tasks: false,
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
-    frontmatter_quote_wrap: false
+    frontmatter_quote_wrap: false,
+    row_templates_folder: '/',
+    current_row_template: '',
   }
 };

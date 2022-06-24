@@ -5,7 +5,7 @@ import { add_dropdown } from "settings/SettingsComponents";
 export class CellSizeDropDownHandler extends AbstractSettingsHandler {
     settingTitle = 'Cell size';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, view } = settingHandlerResponse;
+        const { containerEl, view } = settingHandlerResponse;
         const source_dropdown_promise = async (value: string): Promise<void> => {
             // update settings
             view.diskConfig.updateConfig('cell_size', value);

@@ -5,6 +5,7 @@ import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown, add_text } from "settings/SettingsComponents";
+import { FileSuggest } from "settings/suggesters/FileSuggester";
 
 export class SourceFormHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Form in function of source data';
@@ -22,15 +23,18 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                     // update settings
                     view.diskConfig.updateConfig('source_form_result', value);
                 };
-
-                add_dropdown(
-                    containerEl,
-                    'Select a file',
-                    'Select file from vault to be used as source of data.',
-                    `${view.diskConfig.yaml.config.source_form_result}`,
-                    filePaths,
-                    source_form_promise
-                );
+                new Setting(containerEl)
+                    .setName('Select a file')
+                    .setDesc('Select file from vault to be used as source of data.')
+                    .addSearch((cb) => {
+                        new FileSuggest(
+                            cb.inputEl,
+                            view.file.parent.path
+                        );
+                        cb.setPlaceholder("Example: folder1/template_file")
+                            .setValue(view.diskConfig.yaml.config.source_form_result)
+                            .onChange(source_form_promise);
+                    });
                 break;
             case SourceDataTypes.QUERY:
                 queryHandler(view, containerEl);

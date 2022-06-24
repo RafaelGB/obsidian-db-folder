@@ -80,6 +80,17 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
                 yaml.config.frontmatter_quote_wrap = false;
             }
             yaml.config.frontmatter_quote_wrap = parseBoolean(yaml.config.frontmatter_quote_wrap);
+
+            // if row_templates_folder is not defined, load root folder as default
+            if (checkNullable(yaml.config.row_templates_folder)) {
+                this.addError(`There was not templates_folder key in yaml. Default will be loaded`);
+                yaml.config.row_templates_folder = '/';
+            }
+
+            // if current_row_template is not defined, load empty (optional)
+            if (checkNullable(yaml.config.current_row_template)) {
+                yaml.config.current_row_template = '';
+            }
         }
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);

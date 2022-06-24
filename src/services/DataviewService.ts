@@ -65,9 +65,13 @@ class DataviewProxy {
         return this.getDataviewAPI().value.wrapValue(literal);
     }
 
+    isTruthy(literal: Literal): boolean {
+        return this.getDataviewAPI().value.isTruthy(literal?.toString());
+    }
+
     parseLiteral(literal: Literal, dataTypeDst: string, localSettings: LocalSettings, isInline?: boolean): Literal {
         let parsedLiteral: Literal = literal;
-        if (!this.getDataviewAPI().value.isTruthy(literal.toString())) {
+        if (!this.isTruthy(literal?.toString())) {
             return "";
         }
         literal = this.parseDataArray(literal);

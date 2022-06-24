@@ -1,9 +1,12 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { NoteContentAction } from "cdm/FolderModel";
+import { LocalSettings } from "cdm/SettingsModel";
 import { FileContent } from "helpers/FileContent";
-import { parseYaml, TFile, TFolder } from "obsidian";
+import { resolve_tfile } from "helpers/FileManagement";
+import { Notice, parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
+import { DataviewService } from "services/DataviewService";
 class VaultManager {
   private static instance: VaultManager;
 
@@ -13,13 +16,23 @@ class VaultManager {
    * @param filename 
    * @param content 
    */
-  async create_markdown_file(targetFolder: TFolder, filename: string, databasefields: RowDatabaseFields): Promise<TFile> {
+  async create_markdown_file(targetFolder: TFolder, filename: string, databasefields: RowDatabaseFields, localSettings: LocalSettings): Promise<TFile> {
     LOGGER.debug(`=> create_markdown_file. name:${targetFolder.path}/${filename})`);
     const created_note = await app.fileManager.createNewMarkdownFile(
       targetFolder,
       filename ?? "Untitled"
     );
-    const content = parseFrontmatterFieldsToString(databasefields).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    let content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    // Obtain content from current row template
+    try {
+      if (DataviewService.isTruthy(localSettings.current_row_template) && localSettings.current_row_template.endsWith(".md")) {
+        const templateTFile = resolve_tfile(localSettings.current_row_template);
+        const templateContent = await this.obtainContentFromTfile(templateTFile);
+        content = content.concat(templateContent);
+      }
+    } catch (err) {
+      new Notice(`Error while inserting ${localSettings.current_row_template}: ${err}`);
+    }
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;
@@ -91,19 +104,6 @@ class VaultManager {
     }
     else {
       return [];
-    }
-  }
-  /**
-   * Obtain TFile from file path
-   * @param filePath 
-   * @returns 
-   */
-  obtainTfileFromFilePath(filePath: string): TFile {
-    const abstractFile = app.vault.getAbstractFileByPath(filePath);
-    if (abstractFile instanceof TFile) {
-      return abstractFile;
-    } else {
-      throw "Error: File " + filePath + " is not a TFile";
     }
   }
 
