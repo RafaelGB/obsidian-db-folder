@@ -38,6 +38,7 @@ export interface ConfigColumn {
     media_width: number;
     media_height: number;
     isInline: boolean;
+    task_hide_completed?: boolean;
     [key: string]: Literal;
 }
 

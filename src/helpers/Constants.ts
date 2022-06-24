@@ -1,5 +1,5 @@
 import { MetadataColumnsModel } from "cdm/DatabaseModel";
-import { TableColumn } from "cdm/FolderModel";
+import { ConfigColumn, TableColumn } from "cdm/FolderModel";
 import { DatabaseSettings } from "cdm/SettingsModel";
 
 /** Table Actions */
@@ -58,12 +58,13 @@ export const MetadataLabels = Object.freeze({
   TASK: 'Task',
 });
 
-export const DEFAULT_COLUMN_CONFIG = Object.freeze({
+export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   enable_media_view: true,
   media_width: 100,
   media_height: 100,
   isInline: false,
   source_data: 'current_folder',
+  task_hide_completed: true,
 });
 
 export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
@@ -122,7 +123,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     accessor: MetadataColumns.TASKS,
     isMetadata: true,
     isDragDisabled: false,
-    skipPersist: true,
+    skipPersist: false,
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
   },

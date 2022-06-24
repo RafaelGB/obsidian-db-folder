@@ -51,7 +51,7 @@ export async function obtainMetadataColumns(
   }
 
   if (localSetting.show_metadata_tasks) {
-    // If Modified is not already in the table, add it
+    // If TASKS is not already in the table, add it
     yamlColumns[MetadataColumns.TASKS] = {
       ...MetadataDatabaseColumns.TASKS,
       ...(yamlColumns[MetadataColumns.TASKS] ?? {}),
