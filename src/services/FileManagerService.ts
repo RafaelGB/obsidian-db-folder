@@ -6,6 +6,7 @@ import { resolve_tfile } from "helpers/FileManagement";
 import { Notice, parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
+import { DataviewService } from "services/DataviewService";
 class VaultManager {
   private static instance: VaultManager;
 
@@ -24,8 +25,8 @@ class VaultManager {
     let content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
     // Obtain content from current row template
     try {
-      if (localSettings.current_row_template.endsWith(".md")) {
-        const templateTFile = resolve_tfile(localSettings.current_row_template)
+      if (DataviewService.isTruthy(localSettings.current_row_template) && localSettings.current_row_template.endsWith(".md")) {
+        const templateTFile = resolve_tfile(localSettings.current_row_template);
         const templateContent = await this.obtainContentFromTfile(templateTFile);
         content = content.concat(templateContent);
       }

@@ -87,9 +87,9 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
                 yaml.config.row_templates_folder = '/';
             }
 
-            // if row_templates_folder is not defined, load empty (optional)
-            if (checkNullable(yaml.config.row_templates_folder)) {
-                yaml.config.row_templates_folder = '';
+            // if current_row_template is not defined, load empty (optional)
+            if (checkNullable(yaml.config.current_row_template)) {
+                yaml.config.current_row_template = '';
             }
         }
         handlerResponse.yaml = yaml;

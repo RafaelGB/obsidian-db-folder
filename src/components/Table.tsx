@@ -254,11 +254,12 @@ export function Table(tableData: TableDataType) {
     newValue: OnChangeValue<RowTemplateOption, false>,
     actionMeta: ActionMeta<RowTemplateOption>
   ) {
+    const settingsValue = !!newValue ? newValue.value : "";
     dataDispatch({
       type: ActionTypes.CHANGE_ROW_TEMPLATE,
-      template: newValue.value,
+      template: settingsValue,
     });
-    setRowTemplateState(newValue.value);
+    setRowTemplateState(settingsValue);
   }
   LOGGER.debug(`<= Table`);
 
@@ -477,20 +478,23 @@ export function Table(tableData: TableDataType) {
                 </span>
                 New
               </div>
-              <Select
-                styles={CustomTemplateSelectorStyles}
-                options={rowTemplatesOptions}
-                value={{
-                  label: rowTemplateState,
-                  value: rowTemplateState,
-                }}
-                isMulti={false}
-                onChange={handleChangeRowTemplate}
-                defaultValue={{ label: "Choose a Template", value: "None" }}
-                menuPortalTarget={document.body}
-                menuShouldBlockScroll={true}
-                isSearchable
-              />
+              <div className={`${c("padding-left")}`}>
+                <Select
+                  styles={CustomTemplateSelectorStyles}
+                  options={rowTemplatesOptions}
+                  value={{
+                    label: rowTemplateState,
+                    value: rowTemplateState,
+                  }}
+                  isClearable={true}
+                  isMulti={false}
+                  onChange={handleChangeRowTemplate}
+                  defaultValue={{ label: "Choose a Template", value: "None" }}
+                  menuPortalTarget={document.body}
+                  menuShouldBlockScroll={true}
+                  isSearchable
+                />
+              </div>
             </div>
           </div>
         </div>

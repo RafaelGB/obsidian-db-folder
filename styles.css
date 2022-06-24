@@ -356,6 +356,10 @@
   background-color: var(--background-secondary);
 }
 
+.database-plugin__padding-left {
+  padding-left: 0.5rem;
+}
+
 .database-plugin__calendar {
   align-self: center;
 }

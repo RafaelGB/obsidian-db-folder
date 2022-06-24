@@ -1,8 +1,6 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
-import { DataTypes } from "helpers/Constants";
 import { TFile } from "obsidian";
-import { DataArray } from "obsidian-dataview/lib/api/data-array";
 import { DataviewService } from "services/DataviewService";
 
 /**
