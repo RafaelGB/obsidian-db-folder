@@ -98,10 +98,12 @@ export async function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYa
       pagesResult = DataviewService.getDataviewAPI().pages(`outgoing([[${dbYaml.config.source_form_result}]])`);
       break;
     case SourceDataTypes.QUERY:
-      const query = generateDataviewTableQuery(
-        dbYaml.columns,
-        dbYaml.config.source_form_result)
-      pagesResult = await obtainQueryResult(query, folderPath);
+      pagesResult = await obtainQueryResult(
+        generateDataviewTableQuery(
+          dbYaml.columns,
+          dbYaml.config.source_form_result),
+        folderPath
+      );
       break;
     default:
       pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
@@ -129,7 +131,7 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
     const msg = `Error obtaining query result: "${query}", current folder loaded instead`;
     LOGGER.error(msg, error);
     new Notice(msg, 10000);
-    return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);;
+    return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }
 }
 
