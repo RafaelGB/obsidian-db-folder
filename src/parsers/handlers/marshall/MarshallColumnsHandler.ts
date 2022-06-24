@@ -26,7 +26,6 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
         // Check every column
         Object.keys(yaml.columns)
             .forEach((key) => {
-                console.log(key);
                 let column = yaml.columns[key];
                 /** BASE COLUMN INFO */
                 if (!column.input) {
