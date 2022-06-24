@@ -3,56 +3,45 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { MediaDimensionsHandler } from "components/modals/handlers/MediaDimensionsHandler";
 import { MediaToggleHandler } from "components/modals/handlers/MediaToggleHandler";
 import { InlineToggleHandler } from "components/modals/handlers/InlineToggleHandler";
-import { ColumnHandler } from "./handlers/AbstractColumnHandler";
+import { ColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
+import { SelectedColumnOptionsHandler } from "components/modals/handlers/SelectedColumnOptionsHandler";
+import { HideCompletedTaskToggleHandler } from "components/modals/handlers/tasks/HideCompletedTaskToggleHandler";
 import { DataTypes } from "helpers/Constants";
-import { SelectedColumnOptionsHandler } from "./handlers/SelectedColumnOptionsHandler";
+import { AbstractChain, AbstractHandler } from "patterns/AbstractFactoryChain";
 
-export function behavior_settings_section(settingHandlerResponse: ColumnHandlerResponse) {
-    const behavior_section = settingHandlerResponse.containerEl.createDiv("column-section-container-behavior");
-    add_setting_header(behavior_section, "Behavior", "h3");
-    /**
-     * Obtain all classes than extends from AbstractHandler
-     */
-    const handlers = [
-        new InlineToggleHandler()
-    ]
-    let i = 1;
-    while (i < handlers.length) {
-        handlers[i - 1].setNext(handlers[i]);
-        i++;
+class BehaviorSetttingsSection extends AbstractChain<ColumnHandlerResponse> {
+    protected customHandle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+        const behavior_section = columnHandlerResponse.containerEl.createDiv("column-section-container-behavior");
+        add_setting_header(behavior_section, "Behavior", "h3");
+        columnHandlerResponse.containerEl = behavior_section;
+        return columnHandlerResponse;
     }
-
-    settingHandlerResponse.containerEl = behavior_section;
-    return handlers[0]?.handle(settingHandlerResponse);
+    protected getHandlers(): AbstractHandler<ColumnHandlerResponse>[] {
+        return [
+            new InlineToggleHandler()
+        ]
+    }
 }
+export const behavior_settings_section = new BehaviorSetttingsSection();
 
 /**
  * Every column type has a different behavior section
- * @param settingHandlerResponse 
- * @returns 
  */
-export function particular_settings_section(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
-    const handlers = [
-        ...addParticularInputSettings(settingHandlerResponse.column.dataType)
-    ]
-    if (handlers.length > 0) {
-        const particular_section = settingHandlerResponse.containerEl.createDiv("column-section-container-particular");
+class ParticularSetttingsSection extends AbstractChain<ColumnHandlerResponse> {
+    protected customHandle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+        const particular_section = columnHandlerResponse.containerEl.createDiv("column-section-container-particular");
         // title of the section
-        add_setting_header(particular_section, `Particular properties of "${settingHandlerResponse.column.dataType
-            }" column type`, 'h3');
-
-        let i = 1;
-        while (i < handlers.length) {
-            handlers[i - 1].setNext(handlers[i]);
-            i++;
-        }
-
-        settingHandlerResponse.containerEl = particular_section;
-        return handlers[0]?.handle(settingHandlerResponse);
-    } else {
-        return settingHandlerResponse;
+        add_setting_header(particular_section, `Particular properties of "${columnHandlerResponse.column.dataType}" column type`, 'h3');
+        columnHandlerResponse.containerEl = particular_section;
+        return columnHandlerResponse;
+    }
+    protected getHandlers(option?: string): AbstractHandler<ColumnHandlerResponse>[] {
+        return [
+            new InlineToggleHandler()
+        ]
     }
 }
+export const particular_settings_section = new ParticularSetttingsSection();
 
 function addParticularInputSettings(dataType: string): ColumnHandler[] {
     const particularHandlers: ColumnHandler[] = [];
@@ -65,6 +54,8 @@ function addParticularInputSettings(dataType: string): ColumnHandler[] {
         case DataTypes.TAGS:
             particularHandlers.push(new SelectedColumnOptionsHandler());
             break;
+        case DataTypes.TASK:
+            particularHandlers.push(new HideCompletedTaskToggleHandler());
         default:
             break;
     }

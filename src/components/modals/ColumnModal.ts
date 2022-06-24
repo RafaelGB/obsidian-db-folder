@@ -63,9 +63,9 @@ export class ColumnSettingsManager {
 
     constructBody(settingHandlerResponse: ColumnHandlerResponse) {
         /** behavior section */
-        behavior_settings_section(settingHandlerResponse);
+        behavior_settings_section.run(settingHandlerResponse);
         /** Particular settings section */
-        particular_settings_section(settingHandlerResponse);
+        particular_settings_section.run(settingHandlerResponse);
     }
 
     reset(response: ColumnHandlerResponse) {
@@ -75,12 +75,4 @@ export class ColumnSettingsManager {
         response.containerEl = columnElement;
         this.constructBody(response);
     }
-}
-
-function handleColumnChanges(dispatch: Dispatch<any>, column: TableColumn) {
-    dispatch({
-        type: ActionTypes.MODIFY_COLUMN_CONFIG,
-        columnId: column.id,
-        columnConfig: column.config,
-    });
 }

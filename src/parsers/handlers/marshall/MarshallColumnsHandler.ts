@@ -19,61 +19,47 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     key: 'Column1',
                     label: 'Column 1',
                     position: 1,
-                    config: {
-                        enable_media_view: true,
-                        media_width: 100,
-                        media_height: 100,
-                        isInline: false
-                    }
+                    config: DEFAULT_COLUMN_CONFIG
                 }
             };
         }
         // Check every column
         Object.keys(yaml.columns)
             .forEach((key) => {
-                const column = yaml.columns[key];
+                let column = yaml.columns[key];
                 /** BASE COLUMN INFO */
                 if (!column.input) {
                     this.addError(`There was not input in column ${key}`);
-                    yaml.columns[key].input = DataTypes.TEXT;
+                    column.input = DataTypes.TEXT;
                 } else {
-                    yaml.columns[key] = marshallParticularInputInfo(column);
+                    column = marshallParticularInputInfo(column);
                     // PARTICULAR INPUT INFO
                 }
                 if (!column.accessor) {
                     this.addError(`There was not accessor in column ${key}`);
-                    yaml.columns[key].accessor = key;
+                    column.accessor = key;
                 }
                 if (!column.key) {
                     this.addError(`There was not key in column ${key}`);
-                    yaml.columns[key].key = key;
+                    column.key = key;
                 }
                 if (!column.label) {
                     this.addError(`There was not label in column ${key}`);
-                    yaml.columns[key].label = key;
+                    column.label = key;
                 }
                 /** CONFIG COLUMN INFO */
                 if (!column.config && !(column.config instanceof Object)) {
                     column.config = DEFAULT_COLUMN_CONFIG;
-                    yaml.columns[key] = column;
+                    column = column;
                 } else {
-                    if (column.config.enable_media_view === undefined) {
-                        column.config.enable_media_view = DEFAULT_COLUMN_CONFIG.enable_media_view;
-                        yaml.columns[key] = column;
-                    }
-                    if (column.config.media_width === undefined) {
-                        column.config.media_width = DEFAULT_COLUMN_CONFIG.media_width;
-                        yaml.columns[key] = column;
-                    }
-                    if (column.config.media_height === undefined) {
-                        column.config.media_height = DEFAULT_COLUMN_CONFIG.media_height;
-                        yaml.columns[key] = column;
-                    }
+                    // General config
                     if (column.config.isInline === undefined) {
                         column.config.isInline = DEFAULT_COLUMN_CONFIG.isInline;
-                        yaml.columns[key] = column;
                     }
+                    column = marshallParticularConfigInfo(column);
                 }
+                // Update mashaller response
+                yaml.columns[key] = column;
             });
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);
@@ -104,4 +90,25 @@ function marshallParticularInputInfo(column: DatabaseColumn): DatabaseColumn {
             break;
     }
     return column;
+}
+
+function marshallParticularConfigInfo(column: DatabaseColumn): DatabaseColumn {
+    switch (column.input) {
+        case DataTypes.TEXT:
+            if (column.config.enable_media_view === undefined) {
+                column.config.enable_media_view = DEFAULT_COLUMN_CONFIG.enable_media_view;
+            }
+            if (column.config.media_width === undefined) {
+                column.config.media_width = DEFAULT_COLUMN_CONFIG.media_width;
+            }
+            if (column.config.media_height === undefined) {
+                column.config.media_height = DEFAULT_COLUMN_CONFIG.media_height;
+            }
+        case DataTypes.TASK:
+            if (column.config.task_hide_completed === undefined) {
+                column.config.task_hide_completed = DEFAULT_COLUMN_CONFIG.task_hide_completed;
+                break;
+            }
+            return column;
+    }
 }
