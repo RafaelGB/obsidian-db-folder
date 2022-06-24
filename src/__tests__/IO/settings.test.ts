@@ -1,4 +1,5 @@
 import { YamlHandlerResponse } from "cdm/MashallModel";
+import { mockReset, mockDeep, DeepMockProxy } from "jest-mock-extended";
 import { parseYamlMock } from "mock/mockObsidianUtils";
 import DatabaseStringToYamlParser from "parsers/DatabaseStringToYamlParser";
 
@@ -8,12 +9,20 @@ jest.mock("obsidian",
         return {
             parseYaml: jest.fn(() => {
                 return parseYamlMock(1, 1);
-            }
-            ),
+            }),
         };
     }
 );
 describe("Settings", () => {
+    // @ts-ignore
+    const mockGlobalApp: DeepMockProxy<App> = mockDeep<App>();
+    /**
+     * Run this before each test.
+     */
+    beforeAll(() => {
+        mockReset(mockGlobalApp);
+        global.app = mockGlobalApp;
+    });
     /** Parse string YAML */
     test("Parse Database string to Yaml", () => {
         const yamlResponse: YamlHandlerResponse = DatabaseStringToYamlParser("test");

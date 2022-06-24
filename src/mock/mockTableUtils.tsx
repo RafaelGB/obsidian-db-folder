@@ -2,7 +2,7 @@
 import faker from "@faker-js/faker";
 import React, { useRef, useLayoutEffect } from "react";
 import { randomColor } from "helpers/Colors";
-import { DataTypes } from "helpers/Constants";
+import { DataTypes, DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
 import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromFolder } from "components/Columns";
@@ -36,7 +36,6 @@ export async function makeData(count: number): Promise<TableDataType> {
     skipReset: false,
     view: null,
     stateManager: null,
-    cellSize: "normal",
   };
 }
 
@@ -60,12 +59,7 @@ export const generateYamlColumns = (
       isMetadata: false,
       skipPersist: true,
       csvCandidate: false,
-      config: {
-        enable_media_view: true,
-        media_width: 100,
-        media_height: 100,
-        isInline: false,
-      },
+      config: DEFAULT_COLUMN_CONFIG,
     };
   }
   return yamlColumns;
