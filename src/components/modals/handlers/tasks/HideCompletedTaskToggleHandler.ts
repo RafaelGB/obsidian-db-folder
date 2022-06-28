@@ -6,7 +6,7 @@ export class HideCompletedTaskToggleHandler extends AbstractColumnHandler {
     handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
         const { column, containerEl, view } = columnHandlerResponse;
         const inline_togle_promise = async (value: boolean): Promise<void> => {
-            column.config.isInline = value;
+            column.config.task_hide_completed = value;
             // Persist value
             await view.diskConfig.updateColumnConfig(column.key, {
                 task_hide_completed: value

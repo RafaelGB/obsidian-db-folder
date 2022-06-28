@@ -1,27 +1,13 @@
-import { parseYaml } from "obsidian";
+import { generateYamlColumns } from "mock/mockTableUtils";
+import { DEFAULT_SETTINGS } from "helpers/Constants";
 
 /** Mock parseYaml returning YamlHandlerResponse object */
 export const parseYamlMock = (numOfColumns: number, numberOfFilters: number) => {
     return {
         name: "Test",
         description: "Test",
-        columns: {
-            "test": {
-                input: "text",
-                accessor: "test",
-                label: "test",
-                key: "test",
-                position: 1,
-                isMetadata: true,
-                skipPersist: false,
-                csvCandidate: true,
-                isInline: false
-            }
-        },
-        config: {
-            enable_show_state: false,
-            group_folder_column: "test"
-        },
+        columns: generateYamlColumns(numOfColumns),
+        config: DEFAULT_SETTINGS.local_settings,
         filters: [
             {
                 field: "test",

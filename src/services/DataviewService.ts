@@ -152,8 +152,12 @@ class DataviewProxy {
     }
 
     private parseToNumber(wrapped: WrappedLiteral): number {
-        const adjustedValue = this.getDataviewAPI().value.toString(wrapped.value);
-        return wrapped.type === 'number' ? wrapped.value : Number(adjustedValue);
+        if (wrapped.type === 'number') {
+            return wrapped.value;
+        } else {
+            const adjustedValue = this.getDataviewAPI().value.toString(wrapped.value);
+            return Number(adjustedValue);
+        }
     }
 
     private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean): string {
