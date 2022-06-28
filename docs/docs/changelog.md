@@ -7,7 +7,7 @@
 - Now you can hide completed task on task column type [ISSUE#111](https://github.com/RafaelGB/obsidian-db-folder/issues/111)
 ### No longer broken
 - If you modify the label of a column, now exist an onMouseLeave event to blur the input and be more frieldly to the user interact with the next action without a double click (once for onBlur label edition and another for your next interaction) [ISSUE#114](https://github.com/RafaelGB/obsidian-db-folder/issues/114)
-## 1.7.2
+- Change the type of the column to checkbox respects the value `1` as marked and will not mark as `0` all by default[ISSUE#161](https://github.com/RafaelGB/obsidian-db-folder/issues/161)
 ### No longer broken
 - add new rows hotfix. Was broken in 1.7.1 with refactor of datadispatch
 ## 1.7.1
