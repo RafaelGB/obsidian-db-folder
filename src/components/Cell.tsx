@@ -71,7 +71,12 @@ export default function DefaultCell(cellProperties: Cell) {
         break;
       case DataTypes.MARKDOWN:
         containerCellRef.current.innerHTML = "";
-        renderMarkdown(cellProperties, cellValue, containerCellRef.current, 5);
+        renderMarkdown(
+          cellProperties,
+          cellValue.toString(),
+          containerCellRef.current,
+          5
+        );
         break;
       default:
       // do nothing
@@ -98,7 +103,7 @@ export default function DefaultCell(cellProperties: Cell) {
       );
       renderMarkdown(
         cellProperties,
-        contextValue.value,
+        contextValue.value.toString(),
         containerCellRef.current,
         5
       );
