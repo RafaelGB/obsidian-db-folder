@@ -38,7 +38,7 @@ export default class DatabaseInfo {
         const response = DatabaseStringToYamlParser(frontmatterRaw);
         if (Object.keys(response.errors).length > 0) {
             const errors = Object.keys(response.errors).map(e => e + ': ' + response.errors[e].join('\n')).join('\n')
-            new Notice(errors);
+            new Notice(errors, 10000);
             if (!response.yaml.config) response.yaml.config = default_local_settings;
         }
 
