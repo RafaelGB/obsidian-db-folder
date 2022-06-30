@@ -5,6 +5,7 @@
 ### Improved
 - Inline fields now supports render embed images with `![[note]]` syntax. [ISSUE#136](https://github.com/RafaelGB/obsidian-db-folder/issues/136)
 - Now you can hide completed task on task column type [ISSUE#111](https://github.com/RafaelGB/obsidian-db-folder/issues/111)
+- Now if your ddbb source is a tag, add a new row includes de tag too[ISSUE#94](https://github.com/RafaelGB/obsidian-db-folder/issues/94)
 ### No longer broken
 - If you modify the label of a column, now exist an onMouseLeave event to blur the input and be more frieldly to the user interact with the next action without a double click (once for onBlur label edition and another for your next interaction) [ISSUE#114](https://github.com/RafaelGB/obsidian-db-folder/issues/114)
 - Change the type of the column to checkbox respects the value `1` as marked and will not mark as `0` all by default[ISSUE#161](https://github.com/RafaelGB/obsidian-db-folder/issues/161)
