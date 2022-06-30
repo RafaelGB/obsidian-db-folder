@@ -7,6 +7,7 @@ import { Notice, parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
+import { SourceDataTypes } from "helpers/Constants";
 class VaultManager {
   private static instance: VaultManager;
 
@@ -23,6 +24,15 @@ class VaultManager {
       filename ?? "Untitled"
     );
     let content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
+
+    // Custom content by source
+    switch (localSettings.source_data) {
+      case SourceDataTypes.TAG:
+        content = content.concat(`#${localSettings.source_form_result}\n`);
+        break;
+      default:
+    }
+
     // Obtain content from current row template
     try {
       if (DataviewService.isTruthy(localSettings.current_row_template) && localSettings.current_row_template.endsWith(".md")) {
