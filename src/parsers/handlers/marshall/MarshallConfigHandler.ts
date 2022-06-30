@@ -15,14 +15,14 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
         } else {
             Object.entries(DEFAULT_SETTINGS.local_settings).forEach(([key, value]) => {
                 if (this.checkNullable(yaml.config[key as keyof LocalSettings])) {
-                    yaml.config = this.loadDefaultConfig(key, value, yaml.config);
+                    yaml.config = this.loadDefaultConfig(key as keyof LocalSettings, value, yaml.config);
                     if (value !== "") {
                         this.addError(`There was not "${key}" key in yaml. Default value "${value}" will be loaded`);
                     }
                 }
                 // Check type of default value
                 if (typeof value === "boolean") {
-                    yaml.config = this.parseBoolean(key, yaml.config);
+                    yaml.config = this.parseBoolean(key as keyof LocalSettings, yaml.config);
                 }
             });
         }

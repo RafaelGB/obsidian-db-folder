@@ -26,12 +26,12 @@ import {
 import {
 	DBFolderAPI
 } from 'api/plugin-api';
-import { DatabaseSettings } from 'cdm/SettingsModel';
+import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
 
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
-import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS } from 'helpers/Constants';
+import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 
 export default class DBFolderPlugin extends Plugin {
@@ -195,13 +195,13 @@ export default class DBFolderPlugin extends Plugin {
 				this.app.fileManager as any
 			).createNewMarkdownFile(targetFolder, 'Untitled database');
 
-			await this.app.vault.modify(
+			await app.vault.modify(
 				database,
 				DatabaseFrontmatterOptions.BASIC
 					.concat('\n')
 					.concat(this.defaultConfiguration())
 			);
-			await this.app.workspace.activeLeaf.setViewState({
+			await app.workspace.getMostRecentLeaf().setViewState({
 				type: DatabaseCore.FRONTMATTER_KEY,
 				state: { file: database.path },
 			});
@@ -215,20 +215,16 @@ export default class DBFolderPlugin extends Plugin {
 	 */
 	defaultConfiguration(): string {
 		const local_settings = this.settings.local_settings;
-		return [
-			`config:`,
-			` enable_show_state: ${local_settings.enable_show_state}`,
-			` group_folder_column: `,
-			` remove_field_when_delete_column: ${local_settings.remove_field_when_delete_column}`,
-			` cell_size: ${local_settings.cell_size}`,
-			` sticky_first_column: ${local_settings.sticky_first_column}`,
-			` show_metadata_created: ${local_settings.show_metadata_created}`,
-			` show_metadata_modified: ${local_settings.show_metadata_modified}`,
-			` source_data: ${local_settings.source_data}`,
-			` source_form_result: ${local_settings.source_form_result}`,
-			`%%>`
-		].join('\n');
+		const defaultConfig = [];
+		defaultConfig.push("config:");
+		Object.entries(DEFAULT_SETTINGS.local_settings).forEach(([key, value]) => {
+			const defaultValue = local_settings[key as keyof LocalSettings] !== undefined ? local_settings[key as keyof LocalSettings] : value;
+			defaultConfig.push(`${YAML_INDENT}${key}: ${defaultValue}`);
+		});
+		defaultConfig.push("%%>");
+		return defaultConfig.join('\n');
 	}
+
 	registerEvents() {
 		this.registerEvent(
 			this.app.workspace.on('file-menu', (menu, file: TFile) => {
@@ -253,7 +249,7 @@ export default class DBFolderPlugin extends Plugin {
 		this.registerMarkdownPostProcessor(previewMode.markdownPostProcessor);
 
 		// internal-link quick preview
-		this.registerEvent(this.app.workspace.on("quick-preview", previewMode.hoverEvent));
+		this.registerEvent(app.workspace.on("quick-preview", previewMode.hoverEvent));
 
 		//monitoring for div.popover.hover-popover.file-embed.is-loaded to be added to the DOM tree
 		// this.observer = observer;
@@ -268,10 +264,10 @@ export default class DBFolderPlugin extends Plugin {
 
 		this.app.workspace.onLayoutReady(() => {
 			this.register(
-				around((this.app as any).commands, {
+				around((app as any).commands, {
 					executeCommandById(next) {
 						return function (command: string) {
-							const view = self.app.workspace.getActiveViewOfType(DatabaseView);
+							const view = app.workspace.getActiveViewOfType(DatabaseView);
 
 							if (view) {
 								//view.emitter.emit('hotkey', command);
@@ -337,7 +333,7 @@ export default class DBFolderPlugin extends Plugin {
 		// Add a menu item to go back to database view
 		this.register(
 			around(MarkdownView.prototype, {
-				onMoreOptionsMenu(next) {
+				onPaneMenu(next) {
 					return function (menu: Menu) {
 						const file = this.file;
 						const cache = file
