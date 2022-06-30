@@ -1,7 +1,6 @@
 import React from "react";
 import "regenerator-runtime/runtime";
 import { useAsyncDebounce } from "react-table";
-import { StyleVariables } from "helpers/Constants";
 import { GlobalFilterProps } from "cdm/MenuBarModel";
 
 /**
