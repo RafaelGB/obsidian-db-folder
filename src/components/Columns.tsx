@@ -101,7 +101,7 @@ export async function obtainColumnsFromFile(
     return columns;
   }
 
-  Object.entries(propertiesOfFile).forEach(([key, value, index]) => {
+  Object.entries(propertiesOfFile).forEach(([key, value], index) => {
     const input = getInputInFuctionOfLiteral(value);
     const newColumn: DatabaseColumn = {
       input: input,
