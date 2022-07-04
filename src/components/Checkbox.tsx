@@ -17,7 +17,7 @@ export function CheckboxCell(props: CheckboxProps) {
   const note: NoteInfo = (cellProperties.row.original as any).__note__;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
-  const [checked, setChecked] = useState(contextValue.value === 1);
+  const [checked, setChecked] = useState(contextValue.value.toString() === "1");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk

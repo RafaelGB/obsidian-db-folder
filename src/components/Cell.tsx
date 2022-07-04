@@ -50,6 +50,10 @@ export default function DefaultCell(cellProperties: Cell) {
     LOGGER.debug(
       `default useEffect. dataType:${dataType} - value: ${contextValue.value} cellValue: ${cellValue}`
     );
+    if (dirtyCell) {
+      // End useEffect
+      return;
+    }
     switch (dataType) {
       case DataTypes.TASK:
         // Check if there are tasks in the cell
@@ -70,13 +74,16 @@ export default function DefaultCell(cellProperties: Cell) {
 
         break;
       case DataTypes.MARKDOWN:
-        containerCellRef.current.innerHTML = "";
-        renderMarkdown(
-          cellProperties,
-          cellValue.toString(),
-          containerCellRef.current,
-          5
-        );
+      case DataTypes.TEXT:
+        if (containerCellRef.current !== null) {
+          containerCellRef.current.innerHTML = "";
+          renderMarkdown(
+            cellProperties,
+            cellValue.toString(),
+            containerCellRef.current,
+            5
+          );
+        }
         break;
       default:
       // do nothing
