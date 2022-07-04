@@ -1,6 +1,6 @@
 ## 1.8.1
 ### No longer broken
-- Supports for popout windows. Create new ddbb with Obsidian v15 open a new pane instead of replace file manager[ISSUE#172](https://github.com/RafaelGB/obsidian-db-folder/issues/172)
+- Supports for popout windows. Create new ddbb with Obsidian v15 open a new pane instead of replace file manager [ISSUE#172](https://github.com/RafaelGB/obsidian-db-folder/issues/172)
 - Create new rows with the task column enabled works well now [ISSUE#188](https://github.com/RafaelGB/obsidian-db-folder/issues/188)
 ## 1.8.0
 ### Shiny new things
