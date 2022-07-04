@@ -26,7 +26,6 @@ import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { RowSelectOption } from "cdm/ComponentsModel";
-import { viewport } from "@popperjs/core";
 
 export function databaseReducer(state: TableDataType, action: ActionType) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
@@ -87,6 +86,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
       const metadata: Record<string, Literal> = {};
       metadata[MetadataColumns.CREATED] = DateTime.now();
       metadata[MetadataColumns.MODIFIED] = DateTime.now();
+      metadata[MetadataColumns.TASKS] = ""; // Represents the tasks for the row as empty
       const row: RowDataType = {
         ...rowRecord.frontmatter,
         ...rowRecord.inline,

@@ -74,8 +74,11 @@ export class DatabaseView extends TextFileView implements HoverParent {
   get isPrimary(): boolean {
     return this.plugin.getStateManager(this.file)?.getAView() === this;
   }
-
-  onMoreOptionsMenu(menu: Menu) {
+  onPaneMenu(menu: Menu, source: string, callSuper: boolean = true): void {
+    if (source !== "more-options") {
+      super.onPaneMenu(menu, source);
+      return;
+    }
     // Add a menu item to force the database to markdown view
     menu
       .addItem((item) => {
@@ -109,7 +112,9 @@ export class DatabaseView extends TextFileView implements HoverParent {
       })
       .addSeparator();
 
-    super.onMoreOptionsMenu(menu);
+    if (callSuper) {
+      super.onPaneMenu(menu, source);
+    }
   }
 
   async initDatabase(): Promise<void> {

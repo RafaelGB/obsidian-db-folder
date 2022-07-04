@@ -1,3 +1,7 @@
+## 1.8.1
+### No longer broken
+- Supports for popout windows. Create new ddbb with Obsidian v15 open a new pane instead of replace file manager[ISSUE#172](https://github.com/RafaelGB/obsidian-db-folder/issues/172)
+- Create new rows with the task column enabled works well now [ISSUE#188](https://github.com/RafaelGB/obsidian-db-folder/issues/188)
 ## 1.8.0
 ### Shiny new things
 - New source option: query. Use your own dataview query as source of the database. Start the query with the `FROM` term, since the plugin will autocomplete the beginning with `TABLE` and the column fields[ISSUE#156](https://github.com/RafaelGB/obsidian-db-folder/issues/156)
