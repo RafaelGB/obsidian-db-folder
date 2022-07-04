@@ -1,14 +1,5 @@
 import * as React from "react";
-import {
-  useTable,
-  TableInstance,
-  useFlexLayout,
-  useSortBy,
-  useGlobalFilter,
-  useColumnOrder,
-  useFilters,
-  Column,
-} from "react-table";
+import { Column, useReactTable, getCoreRowModel } from "@tanstack/react-table";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   TableDataType,

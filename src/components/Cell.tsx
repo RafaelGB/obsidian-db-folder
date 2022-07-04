@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Cell } from "react-table";
+import { Cell } from "@tanstack/react-table";
 import { ActionTypes, DataTypes } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 

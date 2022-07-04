@@ -10,7 +10,7 @@ import {
 } from "helpers/Constants";
 import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
-import { ActionType } from "react-table";
+import { ActionType } from "@tanstack/react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
-import { Cell } from "react-table";
+import { Cell } from "@tanstack/react-table";
 import NoteInfo from "services/NoteInfo";
 
 type CheckboxProps = {
