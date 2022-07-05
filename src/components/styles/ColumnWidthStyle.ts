@@ -4,7 +4,7 @@ import { DataTypes, WidthVariables } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { DateTime } from "luxon";
 import { HSLColor } from "react-color";
-import { Row } from "react-table";
+import { Row } from "@tanstack/react-table";
 
 export const getColumnWidthStyle = (rows: Array<Row<object>>, column: TableColumn, customMaxWidth?: number): number => {
   const maxWidth = (customMaxWidth ?? 400)

@@ -165,35 +165,40 @@ export function Table(tableData: TableDataType) {
     [stateManager, filePath]
   );
 
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
   /** Hook to use react-table */
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    // Debug proposes & metainfo
-    state,
-    preGlobalFilteredRows,
-    setGlobalFilter,
-    allColumns,
-    setColumnOrder,
-  } = useTable(
-    // Table properties
-    propsUseTable,
-    // React hooks
-    useFlexLayout,
-    useFilters,
-    useGlobalFilter,
-    useSortBy,
-    useColumnOrder,
-    (hooks) => {
-      hooks.useInstance.push(useTableDataInstance);
-    }
-  );
+  // const {
+  //   getTableProps,
+  //   getTableBodyProps,
+  //   headerGroups,
+  //   rows,
+  //   prepareRow,
+  //   // Debug proposes & metainfo
+  //   state,
+  //   preGlobalFilteredRows,
+  //   setGlobalFilter,
+  //   allColumns,
+  //   setColumnOrder,
+  // } = useTable(
+  //   // Table properties
+  //   propsUseTable,
+  //   // React hooks
+  //   useFlexLayout,
+  //   useFilters,
+  //   useGlobalFilter,
+  //   useSortBy,
+  //   useColumnOrder,
+  //   (hooks) => {
+  //     hooks.useInstance.push(useTableDataInstance);
+  //   }
+  // );
   // Manage column width
   const [columnsWidthState, setColumnsWidthState] = React.useState(
-    getColumnsWidthStyle(rows, columns)
+    getColumnsWidthStyle(table.rows, columns)
   );
   const totalWidth = getTotalWidth(columnsWidthState);
   // Manage DnD
@@ -219,14 +224,14 @@ export function Table(tableData: TableDataType) {
   // Manage NavBar
   const csvButtonProps = {
     columns: columns,
-    rows: rows,
+    rows: table.rows,
     name: tableData.view.diskConfig.yaml.name,
   };
 
   const globalFilterRows = {
-    preGlobalFilteredRows: preGlobalFilteredRows,
-    globalFilter: (state as any).globalFilter,
-    setGlobalFilter: setGlobalFilter,
+    preGlobalFilteredRows: table.preGlobalFilteredRows,
+    globalFilter: table.state.globalFilter,
+    setGlobalFilter: table.setGlobalFilter,
   };
   // Manage Templates
   const [rowTemplateState, setRowTemplateState] = React.useState(
@@ -257,9 +262,9 @@ export function Table(tableData: TableDataType) {
   return (
     <>
       <div
-        {...getTableProps({
+        {...table.getTableProps({
           style: {
-            ...getTableProps().style,
+            ...table.getTableProps().style,
             width: totalWidth,
           },
         })}
@@ -284,12 +289,12 @@ export function Table(tableData: TableDataType) {
           <HeaderNavBar
             csvButtonProps={csvButtonProps}
             globalFilterRows={globalFilterRows}
-            headerGroupProps={headerGroups[0].getHeaderGroupProps({
+            headerGroupProps={table.headerGroups[0].getHeaderGroupProps({
               style: { width: getTotalWidth(columnsWidthState) },
             })}
           />
           {/** Headers */}
-          {headerGroups.map((headerGroup, i) => (
+          {table.headerGroups.map((headerGroup, i) => (
             <div
               {...headerGroup.getHeaderGroupProps({
                 style: {
@@ -302,7 +307,9 @@ export function Table(tableData: TableDataType) {
               <DragDropContext
                 key={`DragDropContext-${i}`}
                 onDragStart={() => {
-                  currentColOrder.current = allColumns.map((o: Column) => o.id);
+                  currentColOrder.current = table.allColumns.map(
+                    (o: Column) => o.id
+                  );
                 }}
                 onDragUpdate={(dragUpdateObj, b) => {
                   const colOrder = [...currentColOrder.current];
@@ -317,14 +324,14 @@ export function Table(tableData: TableDataType) {
                   ) {
                     colOrder.splice(sIndex, 1);
                     colOrder.splice(dIndex, 0, dragUpdateObj.draggableId);
-                    setColumnOrder(colOrder);
+                    table.setColumnOrder(colOrder);
                   }
                 }}
                 onDragEnd={(result) => {
                   // save on disk in case of changes
                   if (result.source.index !== result.destination!.index) {
                     tableData.view.diskConfig.reorderColumns(
-                      (state as any).columnOrder
+                      table.state.columnOrder
                     );
                   }
 
@@ -423,9 +430,9 @@ export function Table(tableData: TableDataType) {
           ))}
         </div>
         {/** Body */}
-        <div {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
+        <div {...table.getTableBodyProps()}>
+          {table.rows.map((row, i) => {
+            table.prepareRow(row);
             return (
               <div
                 {...row.getRowProps({
@@ -491,7 +498,7 @@ export function Table(tableData: TableDataType) {
         </div>
         {tableData.view.diskConfig.yaml.config.enable_show_state && (
           <pre>
-            <code>{JSON.stringify(state, null, 2)}</code>
+            <code>{JSON.stringify(table.state, null, 2)}</code>
           </pre>
         )}
       </div>
