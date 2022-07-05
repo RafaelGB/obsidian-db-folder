@@ -94,8 +94,10 @@ class DataviewProxy {
                 parsedLiteral = this.parseToCalendar(wrapped);
                 break;
             case DataTypes.NUMBER:
-            case DataTypes.CHECKBOX:
                 parsedLiteral = this.parseToNumber(wrapped);
+                break;
+            case DataTypes.CHECKBOX:
+                parsedLiteral = this.parseToBoolean(wrapped);
                 break;
             case DataTypes.TASK:
                 // Do nothing
@@ -157,6 +159,15 @@ class DataviewProxy {
         } else {
             const adjustedValue = this.getDataviewAPI().value.toString(wrapped.value);
             return Number(adjustedValue);
+        }
+    }
+
+    private parseToBoolean(wrapped: WrappedLiteral): boolean {
+        if (wrapped.type === 'boolean') {
+            return wrapped.value;
+        } else {
+            const adjustedValue = this.getDataviewAPI().value.toString(wrapped.value);
+            return adjustedValue === 'true' || adjustedValue === '1';
         }
     }
 

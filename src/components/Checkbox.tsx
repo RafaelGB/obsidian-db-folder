@@ -4,6 +4,7 @@ import { ActionTypes } from "helpers/Constants";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
+import { DataviewService } from "services/DataviewService";
 
 type CheckboxProps = {
   intialState: TableDataType;
@@ -17,7 +18,9 @@ export function CheckboxCell(props: CheckboxProps) {
   const note: NoteInfo = (cellProperties.row.original as any).__note__;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
-  const [checked, setChecked] = useState(contextValue.value.toString() === "1");
+  const [checked, setChecked] = useState(
+    DataviewService.getDataviewAPI().value.isBoolean(contextValue.value)
+  );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk
