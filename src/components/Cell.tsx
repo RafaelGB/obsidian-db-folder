@@ -79,7 +79,7 @@ export default function DefaultCell(cellProperties: Cell) {
           containerCellRef.current.innerHTML = "";
           renderMarkdown(
             cellProperties,
-            cellValue.toString(),
+            cellValue,
             containerCellRef.current,
             5
           );
@@ -110,7 +110,7 @@ export default function DefaultCell(cellProperties: Cell) {
       );
       renderMarkdown(
         cellProperties,
-        contextValue.value.toString(),
+        contextValue.value,
         containerCellRef.current,
         5
       );

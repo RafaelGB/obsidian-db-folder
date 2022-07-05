@@ -1,3 +1,6 @@
+# 1.8.2
+### No longer broken
+- Hotfix of critical mapping bug [ISSUE#190](https://github.com/RafaelGB/obsidian-db-folder/issues/190)
 ## 1.8.1
 ### No longer broken
 - Supports for popout windows. Create new ddbb with Obsidian v15 open a new pane instead of replace file manager [ISSUE#172](https://github.com/RafaelGB/obsidian-db-folder/issues/172)
