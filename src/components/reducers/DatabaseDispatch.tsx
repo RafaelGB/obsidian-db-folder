@@ -10,7 +10,6 @@ import {
 } from "helpers/Constants";
 import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
-import { ActionType } from "@tanstack/react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
@@ -27,7 +26,7 @@ import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { RowSelectOption } from "cdm/ComponentsModel";
 
-export function databaseReducer(state: TableDataType, action: ActionType) {
+export function databaseReducer(state: TableDataType, action: any) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
   /** database configuration */
   const dbconfig = state.view.diskConfig.yaml.config;

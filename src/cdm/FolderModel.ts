@@ -4,7 +4,7 @@ import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
-import { Column } from "react-table";
+import { Column } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
@@ -102,7 +102,7 @@ export interface DatabaseHeaderProps {
     getHooks: any,
     state: any,
     dispatch: any,
-    allColumns: Column[],
+    allColumns: any[],
     setColumnOrder: (cols: string[]) => void,
     rows: any,
     initialRows: any,

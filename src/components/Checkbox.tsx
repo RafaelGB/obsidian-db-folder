@@ -9,7 +9,7 @@ import { DataviewService } from "services/DataviewService";
 type CheckboxProps = {
   intialState: TableDataType;
   column: TableColumn;
-  cellProperties: Cell;
+  cellProperties: any;
 };
 export function CheckboxCell(props: CheckboxProps) {
   const { column, cellProperties } = props;

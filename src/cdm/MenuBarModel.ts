@@ -1,4 +1,4 @@
-import { Row } from "react-table";
+import { Row } from "@tanstack/react-table";
 import { TableColumn } from "cdm/FolderModel";
 
 export type CsvButtonProps = {

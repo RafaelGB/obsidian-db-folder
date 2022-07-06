@@ -4,11 +4,11 @@ import { MediaExtensions } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { MarkdownRenderer, MarkdownPreviewView, TFile } from "obsidian";
-import { Cell } from "react-table";
+import { Cell } from "@tanstack/react-table";
 import { LOGGER } from "services/Logger";
 
 export async function renderMarkdown(
-  cell: Cell,
+  cell: any,
   markdownString: string,
   domElement: HTMLDivElement,
   depth: number

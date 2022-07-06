@@ -4,7 +4,7 @@ import StateManager from "StateManager";
 // TODO
 export const generateStateManager = (): StateManager => {
     const initialView: DatabaseView = new DatabaseView(
-        app.workspace.activeLeaf,
+        app.workspace.getMostRecentLeaf(),
         null
     );
     const stateManager = new StateManager(app, initialView, null, null, null);

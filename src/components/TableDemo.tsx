@@ -37,7 +37,7 @@ const defaultColumn = {
  * @param tableDataType
  * @returns
  */
-export function Table(tableData: TableDataType) {
+export function TableDemo(tableData: TableDataType) {
   LOGGER.debug(
     `=> Table. number of columns: ${tableData.columns.length}. number of rows: ${tableData.view.rows.length}`
   );

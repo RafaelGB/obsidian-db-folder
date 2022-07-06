@@ -15,7 +15,7 @@ import { CheckboxCell } from "components/Checkbox";
 import TagsPortal from "components/portals/TagsPortal";
 import { DataviewService } from "services/DataviewService";
 
-export default function DefaultCell(cellProperties: Cell) {
+export default function DefaultCell(cellProperties: any) {
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Initial state of cell */
   const cellValue = cellProperties.value;

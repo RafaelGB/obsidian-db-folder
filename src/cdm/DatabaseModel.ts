@@ -1,7 +1,7 @@
 import { RowType } from "cdm/RowTypeModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { Cell } from "react-table";
+import { Cell } from "@tanstack/react-table";
 import { BaseColumn, TableColumn, TableDataType } from "cdm/FolderModel";
 import { RowSelectOption } from "cdm/ComponentsModel";
 

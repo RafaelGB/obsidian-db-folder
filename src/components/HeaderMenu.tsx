@@ -2,7 +2,7 @@ import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
-import { Column } from "react-table";
+import { Column } from "@tanstack/react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
@@ -100,15 +100,13 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     const newKey = dbTrim(labelState);
     // Check if key already exists. If so, mark it as invalid
     if (
-      headerMenuProps.headerProps.allColumns.find(
-        (o: Column) => o.id === newKey
-      )
+      headerMenuProps.headerProps.allColumns.find((o: any) => o.id === newKey)
     ) {
       setLabelStateInvalid(true);
       return;
     }
-    const futureOrder = headerMenuProps.headerProps.allColumns.map(
-      (o: Column) => (o.id === column.id ? newKey : o.id)
+    const futureOrder = headerMenuProps.headerProps.allColumns.map((o: any) =>
+      o.id === column.id ? newKey : o.id
     );
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,

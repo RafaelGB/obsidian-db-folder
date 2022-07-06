@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { Table } from "components/Table";
+import { TableDemo } from "components/TableDemo";
 import { TableDataType } from "cdm/FolderModel";
 import { databaseReducer } from "components/reducers/DatabaseDispatch";
 import { ActionTypes } from "helpers/Constants";
@@ -16,7 +16,7 @@ export function Database(tableProps: TableDataType) {
 
   return (
     <>
-      <Table {...state} dispatch={dataDispatch} />
+      <TableDemo {...state} dispatch={dataDispatch} />
       <div id="popper-container"></div>
     </>
   );
