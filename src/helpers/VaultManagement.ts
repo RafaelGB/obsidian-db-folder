@@ -19,9 +19,20 @@ const noBreakSpace = /\u00A0/g;
  * @param data 
  * @returns 
  */
-export function hasFrontmatterKey(data: string): boolean {
-  const frontmatterRegex = /^---[\s\S]+?---/g;
-  return frontmatterRegex.test(data);
+export function hasFrontmatterKey(data: string | TFile): boolean {
+  if (!data) return false;
+
+  if (typeof data === 'string') {
+    const frontmatterRegex = /^---[\s\S]+?---/g;
+    return frontmatterRegex.test(data);
+  }
+
+  if (data instanceof TFile) {
+    const cache = app.metadataCache.getFileCache(data);
+    return !!cache?.frontmatter && !!cache?.frontmatter['kanban-plugin'];
+  }
+
+  return false;
 }
 
 /** Check if file is a database note */
