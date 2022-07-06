@@ -24,7 +24,7 @@ import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { RowSelectOption } from "cdm/ComponentsModel";
-import { Column } from "react-table";
+import { Column } from "@tanstack/react-table";
 
 /**
  * Generate column Options with Select type
@@ -114,7 +114,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     // Check if column name already exists
     while (
       headerProps.allColumns.find(
-        (o: Column) => o.id === `newColumn${columnNumber}`
+        (o: any) => o.id === `newColumn${columnNumber}`
       )
     ) {
       columnNumber++;

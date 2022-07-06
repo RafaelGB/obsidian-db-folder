@@ -10,15 +10,14 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-} from "@material-ui/core";
-import { TableHeaderProps } from "react-table";
+} from "@mui/material";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
 
 type NavBarProps = {
   csvButtonProps: CsvButtonProps;
   globalFilterRows: GlobalFilterProps;
-  headerGroupProps?: TableHeaderProps;
+  headerGroupProps?: any;
 };
 
 export function NavBar(navBarProps: NavBarProps) {
@@ -42,7 +41,14 @@ export function NavBar(navBarProps: NavBarProps) {
     >
       <AppBar
         position="static"
-        style={{ color: StyleVariables.TEXT_MUTED, backgroundColor: StyleVariables.BACKGROUND_SECONDARY, boxShadow: "none", position: "fixed", left: 0, width: "calc(100% - 20px)" }}
+        style={{
+          color: StyleVariables.TEXT_MUTED,
+          backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+          boxShadow: "none",
+          position: "fixed",
+          left: 0,
+          width: "calc(100% - 20px)",
+        }}
       >
         <Toolbar>
           <IconButton
