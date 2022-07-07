@@ -8,16 +8,16 @@ export function createDatabase(tableProps: TableDataType): JSX.Element {
 }
 
 export function Database(tableProps: TableDataType) {
-  const [state, dataDispatch] = useReducer(databaseReducer, tableProps);
+  // const [state, dataDispatch] = useReducer(databaseReducer, tableProps);
 
-  useEffect(() => {
-    dataDispatch({ type: ActionTypes.ENABLE_RESET });
-  }, [state.view.rows, state.columns]);
+  // useEffect(() => {
+  //   dataDispatch({ type: ActionTypes.ENABLE_RESET });
+  // }, [state.view.rows, state.columns]);
 
   return (
     <>
-      <TableDemo {...state} dispatch={dataDispatch} />
-      <div id="popper-container"></div>
+      {/* <TableDemo {...state} dispatch={dataDispatch} /> */}
+      <div id="popper-container">Hola buenos días</div>
     </>
   );
 }

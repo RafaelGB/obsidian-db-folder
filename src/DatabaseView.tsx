@@ -20,7 +20,7 @@ import {
   Menu,
 } from "obsidian";
 import * as React from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
@@ -153,7 +153,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
       // Render database
       const table = createDatabase(tableProps);
-      ReactDOM.createRoot(this.tableContainer).render(table);
+      createRoot(this.tableContainer).render(table);
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     } catch (e: unknown) {
       LOGGER.error(`initDatabase ${this.file.path}`, e);
