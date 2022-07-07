@@ -3,7 +3,7 @@ import { AbstractHeaderAction } from "components/headerActions/handlers/Abstract
 import TrashIcon from "components/img/Trash";
 import React from "react";
 import { ActionTypes } from "helpers/Constants";
-import { Column } from "react-table";
+import { Column } from "@tanstack/react-table";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 
 export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
@@ -57,7 +57,7 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
     // Check if column name already exists
     while (
       this.globalHeaderActionResponse.headerMenuProps.headerProps.allColumns.find(
-        (o: Column) => o.id === `newColumn${columnNumber}`
+        (o: any) => o.id === `newColumn${columnNumber}`
       )
     ) {
       columnNumber++;

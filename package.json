@@ -49,6 +49,7 @@
 		"@faker-js/faker": "7.3.0"
 	},
 	"dependencies": {
+		"@emotion/styled": "11.9.3",
 		"@mui/material": "5.8.7",
 		"@mui/icons-material": "5.8.4",
 		"@popperjs/core": "2.11.5",

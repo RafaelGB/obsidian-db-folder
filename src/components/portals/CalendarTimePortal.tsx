@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
-import { Portal } from "@material-ui/core";
+import { Portal } from "@mui/material";
 import { CalendarProps } from "cdm/ComponentsModel";
 
 const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
