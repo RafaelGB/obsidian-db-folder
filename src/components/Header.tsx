@@ -55,7 +55,7 @@ function setOptionsOfSelectDataType(
  * @param headerProps
  * @returns
  */
-export default function Header(headerProps: DatabaseHeaderProps) {
+export default function Header(headerProps: any) {
   LOGGER.debug(`=>Header ${headerProps.column.label}`);
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);

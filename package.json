@@ -62,7 +62,7 @@
 		"react-dom": "18.2.0",
 		"react-csv": "2.2.2",
 		"react-popper": "2.3.0",
-		"@tanstack/react-table": "8.1.4",
+		"@tanstack/react-table": "8.2.1",
 		"react-select": "5.4.0",
 		"react-color": "2.19.3",
 		"react-window": "1.8.7",
