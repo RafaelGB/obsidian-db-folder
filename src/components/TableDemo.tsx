@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   useReactTable,
   getCoreRowModel,
+  getFilteredRowModel,
   TableOptions,
   ColumnDef,
   ColumnResizeMode,
@@ -35,93 +36,6 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   header: Header,
 };
 
-type Person = {
-  firstName: string;
-  lastName: string;
-  age: number;
-  visits: number;
-  status: string;
-  progress: number;
-};
-
-const defaultData: Person[] = [
-  {
-    firstName: "tanner",
-    lastName: "linsley",
-    age: 24,
-    visits: 100,
-    status: "In Relationship",
-    progress: 50,
-  },
-  {
-    firstName: "tandy",
-    lastName: "miller",
-    age: 40,
-    visits: 40,
-    status: "Single",
-    progress: 80,
-  },
-  {
-    firstName: "joe",
-    lastName: "dirte",
-    age: 45,
-    visits: 20,
-    status: "Complicated",
-    progress: 10,
-  },
-];
-
-const defaultColumns: ColumnDef<Person>[] = [
-  {
-    header: "Name",
-    footer: (props) => props.column.id,
-    columns: [
-      {
-        accessorKey: "firstName",
-        cell: (info) => info.getValue(),
-        footer: (props) => props.column.id,
-      },
-      {
-        accessorFn: (row) => row.lastName,
-        id: "lastName",
-        cell: (info) => info.getValue(),
-        header: () => <span>Last Name</span>,
-        footer: (props) => props.column.id,
-      },
-    ],
-  },
-  {
-    header: "Info",
-    footer: (props) => props.column.id,
-    columns: [
-      {
-        accessorKey: "age",
-        header: () => "Age",
-        footer: (props) => props.column.id,
-      },
-      {
-        header: "More Info",
-        columns: [
-          {
-            accessorKey: "visits",
-            header: () => <span>Visits</span>,
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: "status",
-            header: "Status",
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: "progress",
-            header: "Profile Progress",
-            footer: (props) => props.column.id,
-          },
-        ],
-      },
-    ],
-  },
-];
 /**
  * Table component based on react-table
  * @param tableDataType
@@ -135,9 +49,9 @@ export function TableDemo(tableData: TableDataType) {
   // const columns: TableColumn[] = tableData.columns;
   // /** Rows information */
   // const data: Array<RowDataType> = tableData.view.rows;
-  const [data, setData] = React.useState(() => [...defaultData]);
-  const [columns] = React.useState<typeof defaultColumns>(() => [
-    ...defaultColumns,
+  const [data, setData] = React.useState(() => [...tableData.view.rows]);
+  const [columns] = React.useState<typeof tableData.columns>(() => [
+    ...tableData.columns,
   ]);
   const [columnResizeMode, setColumnResizeMode] =
     React.useState<ColumnResizeMode>("onChange");
@@ -269,7 +183,9 @@ export function TableDemo(tableData: TableDataType) {
     data,
     columns,
     columnResizeMode,
+    defaultColumn,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,
@@ -302,290 +218,191 @@ export function TableDemo(tableData: TableDataType) {
   //   }
   // );
   // Manage column width
+  const [columnsWidthState, setColumnsWidthState] = React.useState(
+    getColumnsWidthStyle(table.rows, columns)
+  );
+  const totalWidth = getTotalWidth(columnsWidthState);
+  // Manage DnD
+  const currentColOrder = React.useRef(null);
+  // Manage input of new row
+  const [inputNewRow, setInputNewRow] = React.useState("");
+  const newRowRef = React.useRef(null);
+  function handleKeyDown(e: any) {
+    if (e.key === "Enter") {
+      handleAddNewRow();
+    }
+  }
+
+  function handleAddNewRow() {
+    dataDispatch({
+      type: ActionTypes.ADD_ROW,
+      filename: inputNewRow,
+    });
+    setInputNewRow("");
+    newRowRef.current.value = "";
+  }
+  // Manage Templates
+  const [rowTemplateState, setRowTemplateState] = React.useState(
+    view.diskConfig.yaml.config.current_row_template
+  );
+  const rowTemplatesOptions = get_tfiles_from_folder(
+    view.diskConfig.yaml.config.row_templates_folder
+  ).map((tfile) => {
+    return {
+      value: tfile.path,
+      label: tfile.path,
+    };
+  });
+
+  function handleChangeRowTemplate(
+    newValue: OnChangeValue<RowTemplateOption, false>,
+    actionMeta: ActionMeta<RowTemplateOption>
+  ) {
+    const settingsValue = !!newValue ? newValue.value : "";
+    dataDispatch({
+      type: ActionTypes.CHANGE_ROW_TEMPLATE,
+      template: settingsValue,
+    });
+    setRowTemplateState(settingsValue);
+  }
+  LOGGER.debug(`<= Table`);
   return (
-    <div className="p-2">
-      <select
-        value={columnResizeMode}
-        onChange={(e) =>
-          setColumnResizeMode(e.target.value as ColumnResizeMode)
-        }
-        className="border p-2 border-black rounded"
+    <>
+      <div
+        className={`${c(
+          "table noselect cell_size_" +
+            tableData.view.diskConfig.yaml.config.cell_size +
+            (tableData.view.diskConfig.yaml.config.sticky_first_column
+              ? " sticky_first_column"
+              : "")
+        )}`}
+        onMouseOver={onMouseOver}
+        onClick={onClick}
       >
-        <option value="onEnd">Resize: "onEnd"</option>
-        <option value="onChange">Resize: "onChange"</option>
-      </select>
-      <div className="h-4" />
-      <div className="text-xl">{"<table/>"}</div>
-      <div className="overflow-x-auto">
-        <table
-          {...{
-            style: {
-              width: table.getCenterTotalSize(),
-            },
-          }}
-        >
-          <thead>
-            {table.getHeaderGroups().map((headerGroup: any) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header: any) => (
-                  <th
-                    {...{
-                      key: header.id,
-                      colSpan: header.colSpan,
-                      style: {
-                        width: header.getSize(),
-                      },
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    <div
-                      {...{
-                        onMouseDown: header.getResizeHandler(),
-                        onTouchStart: header.getResizeHandler(),
-                        className: `resizer ${
-                          header.column.getIsResizing() ? "isResizing" : ""
-                        }`,
-                        style: {
-                          transform:
-                            columnResizeMode === "onEnd" &&
-                            header.column.getIsResizing()
-                              ? `translateX(${
-                                  table.getState().columnSizingInfo.deltaOffset
-                                }px)`
-                              : "",
-                        },
-                      }}
-                    />
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row: any) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell: any) => (
-                  <td
-                    {...{
-                      key: cell.id,
-                      style: {
-                        width: cell.column.getSize(),
-                      },
-                    }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="h-4" />
-      <div className="text-xl">{"<div/> (relative)"}</div>
-      <div className="overflow-x-auto">
         <div
-          {...{
-            className: "divTable",
-            style: {
-              width: table.getTotalSize(),
-            },
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 2,
+            borderTop: "1px solid var(--background-modifier-border)",
           }}
         >
-          <div className="thead">
-            {table.getHeaderGroups().map((headerGroup: any) => (
+          {/** Headers */}
+          {table.getHeaderGroups().map((headerGroup: any, i: number) => (
+            <div>
               <div
-                {...{
-                  key: headerGroup.id,
-                  className: "tr",
-                }}
+                key={`div-Droppable-${i}`}
+                className={`${c("tr header-group")}`}
               >
-                {headerGroup.headers.map((header: any) => (
-                  <div
-                    {...{
-                      key: header.id,
-                      className: "th",
-                      style: {
-                        width: header.getSize(),
-                      },
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    <div
-                      {...{
-                        onMouseDown: header.getResizeHandler(),
-                        onTouchStart: header.getResizeHandler(),
-                        className: `resizer ${
-                          header.column.getIsResizing() ? "isResizing" : ""
-                        }`,
-                        style: {
-                          transform:
-                            columnResizeMode === "onEnd" &&
-                            header.column.getIsResizing()
-                              ? `translateX(${
-                                  table.getState().columnSizingInfo.deltaOffset
-                                }px)`
-                              : "",
-                        },
+                {(headerGroup.headers as any[])
+                  .filter((o: any) => o.key !== MetadataColumns.ADD_COLUMN)
+                  .map((column: any, index: number) => {
+                    return (
+                      <div>
+                        <HeaderContext.Provider
+                          value={{
+                            columnWidthState: columnsWidthState,
+                            setColumnWidthState: setColumnsWidthState,
+                          }}
+                        >
+                          {column.isPlaceholder
+                            ? null
+                            : flexRender(
+                                column.column.columnDef.header,
+                                column.getContext()
+                              )}
+                        </HeaderContext.Provider>
+                      </div>
+                    );
+                  })}
+              </div>
+
+              {headerGroup.headers
+                .filter((o: any) => o.key === MetadataColumns.ADD_COLUMN)
+                .map((column: any, index: number) => (
+                  <div>
+                    <HeaderContext.Provider
+                      value={{
+                        columnWidthState: columnsWidthState,
+                        setColumnWidthState: setColumnsWidthState,
                       }}
-                    />
+                    >
+                      {column.isPlaceholder
+                        ? null
+                        : flexRender(
+                            column.column.columnDef.header,
+                            column.getContext()
+                          )}
+                    </HeaderContext.Provider>
                   </div>
                 ))}
+            </div>
+          ))}
+        </div>
+        {/** Body */}
+        <div>
+          {table.getRowModel().rows.map((row: any, i: number) => {
+            return (
+              <div className={`${c("tr")}`} key={row.id}>
+                {row.getVisibleCells().map((cell: any) => {
+                  const tableCellBaseProps = {
+                    className: `${c("td")}`,
+                  };
+                  return (
+                    <div {...tableCellBaseProps}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-          <div
-            {...{
-              className: "tbody",
-            }}
-          >
-            {table.getRowModel().rows.map((row: any) => (
-              <div
-                {...{
-                  key: row.id,
-                  className: "tr",
+            );
+          })}
+          <div className={`${c("tr add-row")}`}>
+            <div className={`${c("td")}`}>
+              <input
+                type="text"
+                ref={newRowRef}
+                onChange={(e) => {
+                  setInputNewRow(e.target.value);
                 }}
-              >
-                {row.getVisibleCells().map((cell: any) => (
-                  <div
-                    {...{
-                      key: cell.id,
-                      className: "td",
-                      style: {
-                        width: cell.column.getSize(),
-                      },
-                    }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </div>
-                ))}
+                onKeyDown={handleKeyDown}
+                placeholder="filename of new row"
+              />
+              <div className={`${c("td")}`} onClick={handleAddNewRow}>
+                <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+                  <PlusIcon />
+                </span>
+                New
               </div>
-            ))}
+              <div className={`${c("padding-left")}`}>
+                <Select
+                  styles={CustomTemplateSelectorStyles}
+                  options={rowTemplatesOptions}
+                  value={{
+                    label: rowTemplateState,
+                    value: rowTemplateState,
+                  }}
+                  isClearable={true}
+                  isMulti={false}
+                  onChange={handleChangeRowTemplate}
+                  defaultValue={{ label: "Choose a Template", value: "None" }}
+                  menuPortalTarget={document.body}
+                  menuShouldBlockScroll={true}
+                  isSearchable
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="h-4" />
-      <div className="text-xl">{"<div/> (absolute positioning)"}</div>
-      <div className="overflow-x-auto">
-        <div
-          {...{
-            className: "divTable",
-            style: {
-              width: table.getTotalSize(),
-            },
-          }}
-        >
-          <div className="thead">
-            {table.getHeaderGroups().map((headerGroup: any) => (
-              <div
-                {...{
-                  key: headerGroup.id,
-                  className: "tr",
-                  style: {
-                    position: "relative",
-                  },
-                }}
-              >
-                {headerGroup.headers.map((header: any) => (
-                  <div
-                    {...{
-                      key: header.id,
-                      className: "th",
-                      style: {
-                        position: "absolute",
-                        left: header.getStart(),
-                        width: header.getSize(),
-                      },
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    <div
-                      {...{
-                        onMouseDown: header.getResizeHandler(),
-                        onTouchStart: header.getResizeHandler(),
-                        className: `resizer ${
-                          header.column.getIsResizing() ? "isResizing" : ""
-                        }`,
-                        style: {
-                          transform:
-                            columnResizeMode === "onEnd" &&
-                            header.column.getIsResizing()
-                              ? `translateX(${
-                                  table.getState().columnSizingInfo.deltaOffset
-                                }px)`
-                              : "",
-                        },
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          <div
-            {...{
-              className: "tbody",
-            }}
-          >
-            {table.getRowModel().rows.map((row: any) => (
-              <div
-                {...{
-                  key: row.id,
-                  className: "tr",
-                  style: {
-                    position: "relative",
-                  },
-                }}
-              >
-                {row.getVisibleCells().map((cell: any) => (
-                  <div
-                    {...{
-                      key: cell.id,
-                      className: "td",
-                      style: {
-                        position: "absolute",
-                        left: cell.column.getStart(),
-                        width: cell.column.getSize(),
-                      },
-                    }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="h-4" />
-      <button onClick={() => rerender()} className="border p-2">
-        Rerender
-      </button>
-      <pre>
-        {JSON.stringify(
-          {
-            columnSizing: table.getState().columnSizing,
-            columnSizingInfo: table.getState().columnSizingInfo,
-          },
-          null,
-          2
+        {tableData.view.diskConfig.yaml.config.enable_show_state && (
+          <pre>
+            <code>{JSON.stringify(table.state, null, 2)}</code>
+          </pre>
         )}
-      </pre>
-    </div>
+      </div>
+    </>
   );
 }

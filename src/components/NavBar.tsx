@@ -1,7 +1,7 @@
 import * as React from "react";
 import CsvButton from "components/CsvButton";
 import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
-import GlobalFilter from "components/reducers/GlobalFilter";
+// import GlobalFilter from "components/reducers/GlobalFilter";
 import { StyleVariables } from "helpers/Constants";
 import {
   AppBar,
@@ -76,7 +76,7 @@ export function NavBar(navBarProps: NavBarProps) {
             </MenuItem>
           </Menu>
           {/** Global filter */}
-          <GlobalFilter {...navBarProps.globalFilterRows} />
+          {/* <GlobalFilter {...navBarProps.globalFilterRows} /> */}
         </Toolbar>
       </AppBar>
       <Toolbar />

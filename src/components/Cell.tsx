@@ -16,6 +16,7 @@ import TagsPortal from "components/portals/TagsPortal";
 import { DataviewService } from "services/DataviewService";
 
 export default function DefaultCell(cellProperties: any) {
+  console.log("DefaultCell", cellProperties);
   const dataDispatch = (cellProperties as any).dataDispatch;
   /** Initial state of cell */
   const cellValue = cellProperties.value;

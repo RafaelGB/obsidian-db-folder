@@ -1,4 +1,4 @@
-import { Row } from "react-table"
+import { Row } from "@tanstack/react-table"
 import { LabelKeyObject } from "react-csv/components/CommonPropTypes";
 import { TableColumn } from "cdm/FolderModel";
 import { MetadataColumns } from "helpers/Constants";

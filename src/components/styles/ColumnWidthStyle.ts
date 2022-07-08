@@ -7,13 +7,14 @@ import { HSLColor } from "react-color";
 import { Row } from "@tanstack/react-table";
 
 export const getColumnWidthStyle = (rows: Array<Row<object>>, column: TableColumn, customMaxWidth?: number): number => {
-  const maxWidth = (customMaxWidth ?? 400)
+  // const maxWidth = (customMaxWidth ?? 400)
 
-  const cellLength = Math.max(
-    ...rows.map((row: any) => lengthOfNormalizeCellValue(row, column)),
-    column.label.length, WidthVariables.ICON_SPACING
-  )
-  return Math.min(maxWidth, cellLength * WidthVariables.MAGIC_SPACING)
+  // const cellLength = Math.max(
+  //   ...rows.map((row: any) => lengthOfNormalizeCellValue(row, column)),
+  //   column.label.length, WidthVariables.ICON_SPACING
+  // )
+  // return Math.min(maxWidth, cellLength * WidthVariables.MAGIC_SPACING)
+  return 400;
 }
 
 /**

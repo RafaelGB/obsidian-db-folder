@@ -56,6 +56,7 @@ function setOptionsOfSelectDataType(
  * @returns
  */
 export default function Header(headerProps: any) {
+  console.log("Header", headerProps);
   LOGGER.debug(`=>Header ${headerProps.column.label}`);
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
