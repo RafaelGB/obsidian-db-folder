@@ -63,7 +63,7 @@ export default function Header(headerProps: any) {
   // TODO : add a tooltip to the header
   const created: boolean = false;
   /** Properties of header */
-  const { setSortBy, rows, tableData } = headerProps;
+  const { column, header, table } = headerProps;
   /** Column values */
   const { id, dataType, options, position } = headerProps.column;
   /** reducer asociated to database */
@@ -86,7 +86,7 @@ export default function Header(headerProps: any) {
       propertyIcon = <TextIcon />;
       break;
     case DataTypes.SELECT:
-      setOptionsOfSelectDataType(options, rows, id);
+      setOptionsOfSelectDataType(options, table.getRowModel().rows, id);
       propertyIcon = <MultiIcon />;
       break;
     case DataTypes.CALENDAR:
@@ -167,7 +167,7 @@ export default function Header(headerProps: any) {
         ? ReactDOM.createPortal(
             <HeaderMenu
               headerProps={headerProps}
-              setSortBy={setSortBy}
+              setSortBy={table.setSorting}
               propertyIcon={propertyIcon}
               expanded={expanded}
               setExpanded={setExpanded}

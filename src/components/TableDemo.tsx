@@ -7,6 +7,7 @@ import {
   ColumnDef,
   ColumnResizeMode,
   flexRender,
+  Table,
 } from "@tanstack/react-table";
 import {
   TableDataType,
@@ -35,7 +36,6 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
   header: Header,
 };
-
 /**
  * Table component based on react-table
  * @param tableDataType
@@ -179,7 +179,7 @@ export function TableDemo(tableData: TableDataType) {
   // };
   // const table: any = useReactTable(tableOptions);
 
-  const table: any = useReactTable({
+  const table: Table<RowDataType> = useReactTable({
     data,
     columns,
     columnResizeMode,
@@ -219,7 +219,7 @@ export function TableDemo(tableData: TableDataType) {
   // );
   // Manage column width
   const [columnsWidthState, setColumnsWidthState] = React.useState(
-    getColumnsWidthStyle(table.rows, columns)
+    getColumnsWidthStyle(table.getRowModel().rows, columns)
   );
   const totalWidth = getTotalWidth(columnsWidthState);
   // Manage DnD
