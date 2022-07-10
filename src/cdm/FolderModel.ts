@@ -4,7 +4,7 @@ import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
-import { Column } from "@tanstack/react-table";
+import { Column, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
@@ -89,49 +89,11 @@ export type TableDataType = {
     dispatch?: Dispatch<any>,
     initialState?: InitialState,
 }
+
 export interface DatabaseHeaderProps {
-    columns: any,
-    data: any,
-    tableData: TableDataType,
-    defaultColumn: any,
-    getSubRows: any,
-    getRowId: any,
-    stateReducer: any,
-    useControlledState: any,
-    plugins: any,
-    getHooks: any,
-    state: any,
-    dispatch: any,
-    allColumns: any[],
-    setColumnOrder: (cols: string[]) => void,
-    rows: any,
-    initialRows: any,
-    flatRows: any,
-    rowsById: any,
-    headerGroups: any,
-    headers: any, flatHeaders: any,
-    visibleColumns: any,
-    totalColumnsMinWidth: any,
-    totalColumnsWidth: any,
-    totalColumnsMaxWidth: any,
-    allColumnsHidden: any,
-    toggleHideColumn: any,
-    setHiddenColumns: any,
-    toggleHideAllColumns: any,
-    getToggleHideAllColumnsProps: any,
-    resetResizing: any,
-    preSortedRows: any,
-    preSortedFlatRows: any,
-    sortedRows: any,
-    sortedFlatRows: any,
-    setSortBy: any,
-    toggleSortBy: any,
-    rowSpanHeaders: any,
-    footerGroups: any,
-    prepareRow: any,
-    getTableProps: any,
-    getTableBodyProps: any,
-    column: TableColumn
+    column: any,
+    header: any,
+    table: Table<RowDataType>
 }
 
 export type RelationshipProps = {

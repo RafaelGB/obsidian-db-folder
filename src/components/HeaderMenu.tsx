@@ -12,7 +12,7 @@ import header_action_button_section from "components/headerActions/HeaderActionB
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 
-const HeaderMenu = (headerMenuProps: any) => {
+const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
@@ -99,15 +99,13 @@ const HeaderMenu = (headerMenuProps: any) => {
     // trim label will get a valid yaml key
     const newKey = dbTrim(labelState);
     // Check if key already exists. If so, mark it as invalid
-    if (
-      headerMenuProps.headerProps.allColumns.find((o: any) => o.id === newKey)
-    ) {
+    if (table.getAllColumns().find((o: any) => o.id === newKey)) {
       setLabelStateInvalid(true);
       return;
     }
-    const futureOrder = headerMenuProps.headerProps.allColumns.map((o: any) =>
-      o.id === column.id ? newKey : o.id
-    );
+    const futureOrder = table
+      .getAllColumns()
+      .map((o: any) => (o.id === column.id ? newKey : o.id));
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,
       columnId: column.id,
@@ -126,7 +124,7 @@ const HeaderMenu = (headerMenuProps: any) => {
      */
     delete columnWidthState.widthRecord[column.id];
     setColumnWidthState(columnWidthState);
-    headerMenuProps.headerProps.setColumnOrder(futureOrder);
+    table.setColumnOrder(futureOrder);
   }
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
@@ -293,7 +291,7 @@ const HeaderMenu = (headerMenuProps: any) => {
                     className="menu-item sort-button"
                     onClick={() => {
                       new ColumnModal(
-                        table.options.meta.view,
+                        (table.options.meta as any).view,
                         headerMenuProps
                       ).open();
                       setExpanded(false);

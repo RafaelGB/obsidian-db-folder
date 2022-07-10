@@ -55,7 +55,7 @@ function setOptionsOfSelectDataType(
  * @param headerProps
  * @returns
  */
-export default function Header(headerProps: any) {
+export default function Header(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.label}`);
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
@@ -110,14 +110,14 @@ export default function Header(headerProps: any) {
 
   function adjustWidthOfTheColumn(position: number) {
     let columnNumber =
-      table.options.meta.columns.length +
+      (table.options.meta as any).columns.length +
       1 -
-      table.options.meta.shadowColumns.length;
+      (table.options.meta as any).shadowColumns.length;
     // Check if column name already exists
     while (
-      headerProps.allColumns.find(
-        (o: any) => o.id === `newColumn${columnNumber}`
-      )
+      table
+        .getAllColumns()
+        .find((o: any) => o.id === `newColumn${columnNumber}`)
     ) {
       columnNumber++;
     }

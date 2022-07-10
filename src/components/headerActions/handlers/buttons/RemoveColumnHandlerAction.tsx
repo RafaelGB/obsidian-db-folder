@@ -23,12 +23,12 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
    */
   private removeColumnButton(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { column, tableData } =
+    const { column, table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const newButtons: any[] = [];
     newButtons.push({
       onClick: (e: any) => {
-        tableData.dispatch({
+        (table.options.meta as any).dispatch({
           type: ActionTypes.DELETE_COLUMN,
           columnId: column.id,
           key: hooks.keyState,
@@ -50,22 +50,23 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
    */
   private adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
     const { hooks } = this.globalHeaderActionResponse;
-    const { tableData, column, rows } =
+    const { table, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     let columnNumber =
-      tableData.columns.length - tableData.shadowColumns.length;
+      (table.options.meta as any).columns.length -
+      (table.options.meta as any).shadowColumns.length;
     // Check if column name already exists
     while (
-      this.globalHeaderActionResponse.headerMenuProps.headerProps.allColumns.find(
-        (o: any) => o.id === `newColumn${columnNumber}`
-      )
+      table
+        .getAllColumns()
+        .find((o: any) => o.id === `newColumn${columnNumber}`)
     ) {
       columnNumber++;
     }
     const columnId = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
     hooks.columnWidthState.widthRecord[columnId] = getColumnWidthStyle(
-      rows,
+      table.getRowModel().rows,
       column
     );
     hooks.setColumnWidthState(hooks.columnWidthState);

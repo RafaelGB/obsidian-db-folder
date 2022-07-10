@@ -14,12 +14,13 @@ import { renderMarkdown } from "components/markdown/MarkdownRenderer";
 import { CheckboxCell } from "components/Checkbox";
 import TagsPortal from "components/portals/TagsPortal";
 import { DataviewService } from "services/DataviewService";
+import { CellProps } from "cdm/CellModel";
 
-export default function DefaultCell(cellProperties: any) {
-  console.log("DefaultCell", cellProperties);
-  const dataDispatch = (cellProperties as any).dataDispatch;
+export default function DefaultCell(cellProperties: CellProps) {
+  const { cell, column, row, table } = cellProperties;
+  const dataDispatch = (table.options.meta as any).dataDispatch;
   /** Initial state of cell */
-  const cellValue = cellProperties.value;
+  const cellValue = cell.getValue();
   /** Columns information */
   const columns = (cellProperties as any).columns;
   /** Type of cell */
@@ -41,7 +42,6 @@ export default function DefaultCell(cellProperties: any) {
 
   const tableData = (cellProperties as any)
     .tableData as unknown as TableDataType;
-  const column = cellProperties.column as unknown as TableColumn;
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`

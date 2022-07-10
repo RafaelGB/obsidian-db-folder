@@ -13,11 +13,11 @@ export default class DatetimeTypeHeaderAction extends AbstractHeaderAction {
   }
   private addDatetimeType() {
     const { hooks } = this.globalHeaderActionResponse;
-    const { tableData, column } =
+    const { table, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const checkBoxType = {
       onClick: (e: any) => {
-        tableData.dispatch({
+        (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
           dataType: DataTypes.CALENDAR_TIME,
