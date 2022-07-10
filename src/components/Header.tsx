@@ -56,7 +56,6 @@ function setOptionsOfSelectDataType(
  * @returns
  */
 export default function Header(headerProps: any) {
-  console.log("Header", headerProps);
   LOGGER.debug(`=>Header ${headerProps.column.label}`);
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
@@ -111,7 +110,9 @@ export default function Header(headerProps: any) {
 
   function adjustWidthOfTheColumn(position: number) {
     let columnNumber =
-      tableData.columns.length + 1 - tableData.shadowColumns.length;
+      table.options.meta.columns.length +
+      1 -
+      table.options.meta.shadowColumns.length;
     // Check if column name already exists
     while (
       headerProps.allColumns.find(
@@ -149,11 +150,11 @@ export default function Header(headerProps: any) {
       >
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
-        {headerProps.column.config.isInline && <span>*</span>}
+        {column.columnDef.config.isInline && <span>*</span>}
         {/* Add a sort direction indicator */}
         <span className="svg-icon svg-gray icon-margin">
-          {headerProps.column.isSorted ? (
-            headerProps.column.isSortedDesc ? (
+          {column.isSorted ? (
+            column.isSortedDesc ? (
               <ArrowDown />
             ) : (
               <ArrowUp />

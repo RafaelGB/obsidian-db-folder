@@ -184,13 +184,13 @@ export function TableDemo(tableData: TableDataType) {
     columns,
     columnResizeMode,
     defaultColumn,
+    meta: tableData,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,
   });
-  console.log("table", table);
   /** Hook to use react-table */
   // const {
   //   getTableProps,
@@ -399,7 +399,7 @@ export function TableDemo(tableData: TableDataType) {
         </div>
         {tableData.view.diskConfig.yaml.config.enable_show_state && (
           <pre>
-            <code>{JSON.stringify(table.state, null, 2)}</code>
+            <code>{JSON.stringify(table.getState(), null, 2)}</code>
           </pre>
         )}
       </div>

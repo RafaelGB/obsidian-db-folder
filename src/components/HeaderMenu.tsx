@@ -12,7 +12,8 @@ import header_action_button_section from "components/headerActions/HeaderActionB
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 
-const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
+const HeaderMenu = (headerMenuProps: any) => {
+  const { table, header, column } = headerMenuProps.headerProps;
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   /** Header props */
@@ -26,10 +27,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     labelState,
     setLabelState,
   } = headerMenuProps;
-  const { column, rows, tableData } = headerMenuProps.headerProps;
   const dispatch = (headerMenuProps.headerProps as any).dataDispatch;
   /** Column values */
-  const [keyState, setkeyState] = useState(dbTrim(column.key));
+  const [keyState, setkeyState] = useState(dbTrim(column.columnDef.key));
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -116,7 +116,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       label: labelState,
     });
     setkeyState(newKey);
-    columnWidthState.widthRecord[newKey] = getColumnWidthStyle(rows, column);
+    columnWidthState.widthRecord[newKey] = getColumnWidthStyle(
+      table.getRowModel().rows,
+      column
+    );
     /*
       To adjust column settings to the new key, we need to update the order
       of the columns with it and calculate the new width
@@ -289,7 +292,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   <div
                     className="menu-item sort-button"
                     onClick={() => {
-                      new ColumnModal(tableData.view, headerMenuProps).open();
+                      new ColumnModal(
+                        table.options.meta.view,
+                        headerMenuProps
+                      ).open();
                       setExpanded(false);
                     }}
                   >
