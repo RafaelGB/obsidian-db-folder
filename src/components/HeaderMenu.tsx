@@ -15,6 +15,7 @@ import { TableColumn } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
+  const dispatch = (table.options.meta as any).dispatch;
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   /** Header props */
@@ -28,7 +29,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     labelState,
     setLabelState,
   } = headerMenuProps;
-  const dispatch = (headerMenuProps.headerProps as any).dataDispatch;
 
   const { key, isMetadata, dataType } = column.columnDef as TableColumn;
   /** Column values */

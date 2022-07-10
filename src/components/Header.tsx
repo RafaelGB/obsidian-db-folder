@@ -57,7 +57,6 @@ function setOptionsOfSelectDataType(
  */
 export default function Header(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
-  console.log("headerProps", headerProps);
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   // TODO : add a tooltip to the header
@@ -69,7 +68,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     column.columnDef as TableColumn;
   /** reducer asociated to database */
   // TODO typying improve
-  const dataDispatch = (headerProps as any).dataDispatch;
+  const dispatch = (table.options.meta as any).dispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -134,7 +133,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   }
 
   function handlerAddColumnToLeft(e: any) {
-    dataDispatch({
+    dispatch({
       type: ActionTypes.ADD_COLUMN_TO_LEFT,
       columnId: MetadataColumns.ADD_COLUMN,
       focus: true,
