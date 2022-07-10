@@ -91,7 +91,7 @@ export type TableDataType = {
 }
 
 export interface DatabaseHeaderProps {
-    column: any,
+    column: Column<RowDataType, any>,
     header: any,
     table: Table<RowDataType>
 }

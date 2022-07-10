@@ -171,13 +171,6 @@ export function TableDemo(tableData: TableDataType) {
     },
     [stateManager, filePath]
   );
-  // const tableOptions: TableOptions<RowDataType> = {
-  //   data,
-  //   columns,
-  //   defaultColumn,
-  //   getCoreRowModel: getCoreRowModel(),
-  // };
-  // const table: any = useReactTable(tableOptions);
 
   const table: Table<RowDataType> = useReactTable({
     data,
@@ -191,32 +184,7 @@ export function TableDemo(tableData: TableDataType) {
     debugHeaders: true,
     debugColumns: true,
   });
-  /** Hook to use react-table */
-  // const {
-  //   getTableProps,
-  //   getTableBodyProps,
-  //   headerGroups,
-  //   rows,
-  //   prepareRow,
-  //   // Debug proposes & metainfo
-  //   state,
-  //   preGlobalFilteredRows,
-  //   setGlobalFilter,
-  //   allColumns,
-  //   setColumnOrder,
-  // } = useTable(
-  //   // Table properties
-  //   propsUseTable,
-  //   // React hooks
-  //   useFlexLayout,
-  //   useFilters,
-  //   useGlobalFilter,
-  //   useSortBy,
-  //   useColumnOrder,
-  //   (hooks) => {
-  //     hooks.useInstance.push(useTableDataInstance);
-  //   }
-  // );
+
   // Manage column width
   const [columnsWidthState, setColumnsWidthState] = React.useState(
     getColumnsWidthStyle(table.getRowModel().rows, columns)
@@ -269,6 +237,7 @@ export function TableDemo(tableData: TableDataType) {
   return (
     <>
       <div
+        key={`div-table`}
         className={`${c(
           "table noselect cell_size_" +
             tableData.view.diskConfig.yaml.config.cell_size +
@@ -291,7 +260,7 @@ export function TableDemo(tableData: TableDataType) {
           {table.getHeaderGroups().map((headerGroup: any, i: number) => (
             <div>
               <div
-                key={`div-Droppable-${i}`}
+                key={`div-header-group-${i}`}
                 className={`${c("tr header-group")}`}
               >
                 {(headerGroup.headers as any[])
@@ -299,6 +268,7 @@ export function TableDemo(tableData: TableDataType) {
                   .map((column: any, index: number) => {
                     return (
                       <div>
+                        key={`div-header-${index}`}
                         <HeaderContext.Provider
                           value={{
                             columnWidthState: columnsWidthState,
@@ -321,6 +291,7 @@ export function TableDemo(tableData: TableDataType) {
                 .filter((o: any) => o.key === MetadataColumns.ADD_COLUMN)
                 .map((column: any, index: number) => (
                   <div>
+                    key={`div-header-add-column`}
                     <HeaderContext.Provider
                       value={{
                         columnWidthState: columnsWidthState,
@@ -344,12 +315,15 @@ export function TableDemo(tableData: TableDataType) {
           {table.getRowModel().rows.map((row: any, i: number) => {
             return (
               <div className={`${c("tr")}`} key={row.id}>
-                {row.getVisibleCells().map((cell: any) => {
+                {row.getVisibleCells().map((cell: any, index: number) => {
                   const tableCellBaseProps = {
                     className: `${c("td")}`,
                   };
                   return (
-                    <div {...tableCellBaseProps}>
+                    <div
+                      key={`div-row-${i}-cell-${index}`}
+                      {...tableCellBaseProps}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

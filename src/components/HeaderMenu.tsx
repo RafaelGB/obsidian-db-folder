@@ -11,6 +11,7 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
+import { TableColumn } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
@@ -28,8 +29,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     setLabelState,
   } = headerMenuProps;
   const dispatch = (headerMenuProps.headerProps as any).dataDispatch;
+
+  const { key, isMetadata, dataType } = column.columnDef as TableColumn;
   /** Column values */
-  const [keyState, setkeyState] = useState(dbTrim(column.columnDef.key));
+  const [keyState, setkeyState] = useState(dbTrim(key));
   const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -116,7 +119,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     setkeyState(newKey);
     columnWidthState.widthRecord[newKey] = getColumnWidthStyle(
       table.getRowModel().rows,
-      column
+      column.columnDef as TableColumn
     );
     /*
       To adjust column settings to the new key, we need to update the order
@@ -171,7 +174,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             }}
           >
             {/** Edit header label section */}
-            {!column.isMetadata && (
+            {!isMetadata && (
               <>
                 <div
                   style={{
@@ -220,7 +223,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                       {propertyIcon}
                     </span>
                     <span style={{ textTransform: "capitalize" }}>
-                      {getLabelHeader(column.dataType)}
+                      {getLabelHeader(dataType)}
                     </span>
                   </div>
                   {showType && (
@@ -277,7 +280,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 </div>
               ))}
             </div>
-            {(!column.isMetadata || column.dataType === DataTypes.TASK) && (
+            {(!isMetadata || dataType === DataTypes.TASK) && (
               <div
                 style={{
                   borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,

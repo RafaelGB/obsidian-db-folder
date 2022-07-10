@@ -19,7 +19,7 @@ import {
   WidthVariables,
 } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
-import { DatabaseHeaderProps } from "cdm/FolderModel";
+import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { HeaderContext } from "components/contexts/HeaderContext";
@@ -56,7 +56,8 @@ function setOptionsOfSelectDataType(
  * @returns
  */
 export default function Header(headerProps: DatabaseHeaderProps) {
-  LOGGER.debug(`=>Header ${headerProps.column.label}`);
+  LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
+  console.log("headerProps", headerProps);
   /** state of width columns */
   const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   // TODO : add a tooltip to the header
@@ -64,14 +65,15 @@ export default function Header(headerProps: DatabaseHeaderProps) {
   /** Properties of header */
   const { column, header, table } = headerProps;
   /** Column values */
-  const { id, dataType, options, position } = headerProps.column;
+  const { id, dataType, options, position, label, config } =
+    column.columnDef as TableColumn;
   /** reducer asociated to database */
   // TODO typying improve
   const dataDispatch = (headerProps as any).dataDispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
-  const [labelState, setLabelState] = useState(headerProps.column.label);
+  const [labelState, setLabelState] = useState(label);
   React.useEffect(() => {
     setDomReady(true);
   });
@@ -140,7 +142,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     });
   }
 
-  LOGGER.debug(`<=Header ${headerProps.column.label}`);
+  LOGGER.debug(`<=Header ${label}`);
   return id !== MetadataColumns.ADD_COLUMN ? (
     <>
       <div
@@ -150,11 +152,11 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       >
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
-        {column.columnDef.config.isInline && <span>*</span>}
+        {config.isInline && <span>*</span>}
         {/* Add a sort direction indicator */}
         <span className="svg-icon svg-gray icon-margin">
-          {column.isSorted ? (
-            column.isSortedDesc ? (
+          {column.getIsSorted() ? (
+            column.getIsSorted() ? (
               <ArrowDown />
             ) : (
               <ArrowUp />
