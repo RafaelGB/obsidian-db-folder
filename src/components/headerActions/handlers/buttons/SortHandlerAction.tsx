@@ -6,13 +6,14 @@ import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
 import { ActionTypes, DataTypes } from "helpers/Constants";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
   handle(headerActionResponse: HeaderActionResponse): HeaderActionResponse {
     this.globalHeaderActionResponse = headerActionResponse;
-    const { column } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
+    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
+      .column.columnDef as TableColumn;
     switch (column.dataType) {
       case DataTypes.TAGS:
       case DataTypes.TASK:
@@ -29,8 +30,10 @@ export default class SortHandlerAction extends AbstractHeaderAction {
    */
   private addSortButtons(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { column, table } =
+    const { table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
+    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
+      .column.columnDef as TableColumn;
     const sortButtons: any[] = [];
     sortButtons.push(
       {

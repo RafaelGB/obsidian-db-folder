@@ -6,6 +6,7 @@ import React from "react";
 import { ActionTypes } from "helpers/Constants";
 import { Column } from "@tanstack/react-table";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class AddColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -20,8 +21,10 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
    */
   private addColumnButtons(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { column, table } =
+    const { table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
+    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
+      .column.columnDef as TableColumn;
     const newButtons: any[] = [];
     newButtons.push(
       {
@@ -65,8 +68,10 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
    */
   private adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
     const { hooks } = this.globalHeaderActionResponse;
-    const { table, column } =
+    const { table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
+    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
+      .column.columnDef as TableColumn;
     let columnNumber =
       (table.options.meta as any).columns.length -
       (table.options.meta as any).shadowColumns.length;
