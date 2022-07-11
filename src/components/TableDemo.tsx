@@ -10,6 +10,8 @@ import {
   Table,
   Header,
   HeaderGroup,
+  Row,
+  Cell,
 } from "@tanstack/react-table";
 import {
   TableDataType,
@@ -334,25 +336,27 @@ export function TableDemo(tableData: TableDataType) {
         </div>
         {/** Body */}
         <div>
-          {table.getRowModel().rows.map((row: any, i: number) => {
+          {table.getRowModel().rows.map((row: Row<RowDataType>, i: number) => {
             return (
               <div className={`${c("tr")}`} key={row.id}>
-                {row.getVisibleCells().map((cell: any, index: number) => {
-                  const tableCellBaseProps = {
-                    className: `${c("td")}`,
-                  };
-                  return (
-                    <div
-                      key={`div-row-${i}-cell-${index}`}
-                      {...tableCellBaseProps}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </div>
-                  );
-                })}
+                {row
+                  .getVisibleCells()
+                  .map((cell: Cell<RowDataType, unknown>, index: number) => {
+                    const tableCellBaseProps = {
+                      className: `${c("td")}`,
+                    };
+                    return (
+                      <div
+                        key={`div-row-${i}-cell-${index}`}
+                        {...tableCellBaseProps}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
+                    );
+                  })}
               </div>
             );
           })}

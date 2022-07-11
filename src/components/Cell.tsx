@@ -17,8 +17,9 @@ import { DataviewService } from "services/DataviewService";
 import { CellProps } from "cdm/CellModel";
 
 export default function DefaultCell(cellProperties: CellProps) {
+  console.log("DefaultCell", cellProperties);
   const { cell, column, row, table } = cellProperties;
-  const dataDispatch = (table.options.meta as any).dataDispatch;
+  const dataDispatch = (table.options.meta as TableDataType).dispatch;
   /** Initial state of cell */
   const cellValue = cell.getValue();
   /** Columns information */
