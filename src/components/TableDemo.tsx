@@ -8,6 +8,8 @@ import {
   ColumnResizeMode,
   flexRender,
   Table,
+  Header,
+  HeaderGroup,
 } from "@tanstack/react-table";
 import {
   TableDataType,
@@ -22,7 +24,7 @@ import { ActionTypes, DatabaseCore, MetadataColumns } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/Cell";
-import Header from "components/Header";
+import DefaultHeader from "components/Header";
 import { c, getTotalWidth } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
@@ -34,7 +36,7 @@ import { get_tfiles_from_folder } from "helpers/FileManagement";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
-  header: Header,
+  header: DefaultHeader,
 };
 /**
  * Table component based on react-table
@@ -236,6 +238,7 @@ export function TableDemo(tableData: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
+      {/* INIT TABLE */}
       <div
         key={`div-table`}
         className={`${c(
@@ -257,18 +260,59 @@ export function TableDemo(tableData: TableDataType) {
           }}
         >
           {/** Headers */}
-          {table.getHeaderGroups().map((headerGroup: any, i: number) => (
-            <div>
-              <div
-                key={`div-header-group-${i}`}
-                className={`${c("tr header-group")}`}
-              >
-                {(headerGroup.headers as any[])
-                  .filter((o: any) => o.key !== MetadataColumns.ADD_COLUMN)
-                  .map((column: any, index: number) => {
-                    return (
-                      <div>
-                        key={`div-header-${index}`}
+          {table
+            .getHeaderGroups()
+            .map((headerGroup: HeaderGroup<RowDataType>, i: number) => (
+              <div>
+                <div
+                  key={`${headerGroup.id}`}
+                  className={`${c("tr header-group")}`}
+                >
+                  {headerGroup.headers
+                    .filter(
+                      (o: Header<RowDataType, TableColumn>) =>
+                        (o.column.columnDef as TableColumn).key !==
+                        MetadataColumns.ADD_COLUMN
+                    )
+                    .map(
+                      (
+                        header: Header<RowDataType, TableColumn>,
+                        index: number
+                      ) => {
+                        console.log(header);
+                        return (
+                          <div key={header.id} className={`${c("th")}`}>
+                            <HeaderContext.Provider
+                              value={{
+                                columnWidthState: columnsWidthState,
+                                setColumnWidthState: setColumnsWidthState,
+                              }}
+                            >
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                            </HeaderContext.Provider>
+                          </div>
+                        );
+                      }
+                    )}
+                </div>
+
+                {headerGroup.headers
+                  .filter(
+                    (o: Header<RowDataType, TableColumn>) =>
+                      (o.column.columnDef as TableColumn).key ===
+                      MetadataColumns.ADD_COLUMN
+                  )
+                  .map(
+                    (column: Header<RowDataType, unknown>, index: number) => (
+                      <div
+                        key={`div-header-add-column`}
+                        className={`${c("th")}`}
+                      >
                         <HeaderContext.Provider
                           value={{
                             columnWidthState: columnsWidthState,
@@ -283,32 +327,10 @@ export function TableDemo(tableData: TableDataType) {
                               )}
                         </HeaderContext.Provider>
                       </div>
-                    );
-                  })}
+                    )
+                  )}
               </div>
-
-              {headerGroup.headers
-                .filter((o: any) => o.key === MetadataColumns.ADD_COLUMN)
-                .map((column: any, index: number) => (
-                  <div>
-                    key={`div-header-add-column`}
-                    <HeaderContext.Provider
-                      value={{
-                        columnWidthState: columnsWidthState,
-                        setColumnWidthState: setColumnsWidthState,
-                      }}
-                    >
-                      {column.isPlaceholder
-                        ? null
-                        : flexRender(
-                            column.column.columnDef.header,
-                            column.getContext()
-                          )}
-                    </HeaderContext.Provider>
-                  </div>
-                ))}
-            </div>
-          ))}
+            ))}
         </div>
         {/** Body */}
         <div>
@@ -376,6 +398,7 @@ export function TableDemo(tableData: TableDataType) {
             <code>{JSON.stringify(table.getState(), null, 2)}</code>
           </pre>
         )}
+        {/* ENDS TABLE */}
       </div>
     </>
   );
