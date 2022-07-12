@@ -12,7 +12,7 @@ columns:
     key: __file__
     input: markdown
     label: File
-    accessor: __file__
+    accessorkey: __file__
     isMetadata: true
     skipPersist: false
     isDragDisabled: false
@@ -21,7 +21,7 @@ columns:
     config:
   text_column:
     input: text
-    accessor: text_column
+    accessorkey: text_column
     key: text_column
     label: text column
     position: 2
@@ -32,7 +32,7 @@ columns:
       enable_media_view: false
   selected_column:
     input: select
-    accessor: selected_column
+    accessorkey: selected_column
     key: selected_column
     label: selected column
     position: 3
@@ -44,7 +44,7 @@ columns:
       enable_media_view: false
   number_column:
     input: number
-    accessor: number_column
+    accessorkey: number_column
     key: number_column
     label: number column
     position: 4
@@ -55,7 +55,7 @@ columns:
       enable_media_view: false
   Datetime_column:
     input: calendar_time
-    accessor: Datetime_column
+    accessorkey: Datetime_column
     key: Datetime_column
     label: Datetime column
     position: 6
@@ -67,7 +67,7 @@ columns:
       source_data: current_folder
   Date_column:
     input: calendar
-    accessor: Date_column
+    accessorkey: Date_column
     key: Date_column
     label: Date column
     position: 5
@@ -81,7 +81,7 @@ columns:
     key: __created__
     input: calendar_time
     label: Created
-    accessor: __created__
+    accessorkey: __created__
     isMetadata: true
     isDragDisabled: false
     skipPersist: false
@@ -92,7 +92,7 @@ columns:
     key: __modified__
     input: calendar_time
     label: Modified
-    accessor: __modified__
+    accessorkey: __modified__
     isMetadata: true
     isDragDisabled: false
     skipPersist: false
@@ -101,7 +101,7 @@ columns:
     config:
   checkbox_column:
     input: checkbox
-    accessor: checkbox_column
+    accessorkey: checkbox_column
     key: checkbox_column
     label: checkbox column
     position: 7
@@ -113,7 +113,7 @@ columns:
       source_data: current_folder
   tags_column:
     input: tags
-    accessor: tags_column
+    accessorkey: tags_column
     key: tags_column
     label: tags column
     position: 4

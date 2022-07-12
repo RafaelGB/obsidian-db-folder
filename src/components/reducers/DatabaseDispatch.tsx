@@ -165,7 +165,7 @@ export function databaseReducer(state: TableDataType, action: any) {
               label: action.label,
               id: action.newKey,
               key: action.newKey,
-              accessor: action.newKey,
+              accessorKey: action.newKey,
             },
             ...state.columns.slice(
               update_column_label_index + 1,
@@ -290,7 +290,7 @@ export function databaseReducer(state: TableDataType, action: any) {
 
       const newLeftColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: action.columnInfo.name,
+        accessorKey: action.columnInfo.name,
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
@@ -307,10 +307,10 @@ export function databaseReducer(state: TableDataType, action: any) {
             {
               ...TableColumnsTemplate,
               dataType: newLeftColumn.input,
-              id: newLeftColumn.accessor,
+              id: newLeftColumn.key,
               label: newLeftColumn.label,
               key: newLeftColumn.key,
-              accessor: newLeftColumn.accessor,
+              accessorKey: newLeftColumn.accessorKey,
               position: newLeftColumn.position,
               csvCandidate: true,
               config: newLeftColumn.config,
@@ -338,7 +338,7 @@ export function databaseReducer(state: TableDataType, action: any) {
 
       const newRIghtColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: action.columnInfo.name,
+        accessorKey: action.columnInfo.name,
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
@@ -356,10 +356,10 @@ export function databaseReducer(state: TableDataType, action: any) {
             {
               ...TableColumnsTemplate,
               dataType: newRIghtColumn.input,
-              id: newRIghtColumn.accessor,
+              id: newRIghtColumn.key,
               label: newRIghtColumn.label,
               key: newRIghtColumn.key,
-              accessor: newRIghtColumn.accessor,
+              accessorKey: newRIghtColumn.accessorKey,
               position: newRIghtColumn.position,
               csvCandidate: true,
               config: newRIghtColumn.config,

@@ -17,7 +17,7 @@ export function Database(tableProps: TableDataType) {
   return (
     <>
       <TableDemo {...state} dispatch={dataDispatch} />
-      <div id="popper-container"></div>
+      <div id="popper-container" key={"popper-container-key"}></div>
     </>
   );
 }

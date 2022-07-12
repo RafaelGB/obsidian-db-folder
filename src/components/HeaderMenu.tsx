@@ -112,7 +112,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,
       columnId: column.id,
-      accessor: newKey,
+      accessorKey: newKey,
       newKey: newKey,
       label: labelState,
     });

@@ -76,7 +76,7 @@ export default class DatabaseInfo {
         const currentCol = this.yaml.columns[oldColumnId];
         // update column id
         currentCol.label = newLabel;
-        currentCol.accessor = newColumnId;
+        currentCol.accessorKey = newColumnId;
         currentCol.key = newColumnId;
         delete this.yaml.columns[oldColumnId];
         this.yaml.columns[newColumnId] = currentCol;

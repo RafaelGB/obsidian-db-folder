@@ -3,7 +3,7 @@ import {
   useReactTable,
   getCoreRowModel,
   getFilteredRowModel,
-  TableOptions,
+  getExpandedRowModel,
   ColumnDef,
   ColumnResizeMode,
   flexRender,
@@ -53,12 +53,11 @@ export function TableDemo(tableData: TableDataType) {
   // const columns: TableColumn[] = tableData.columns;
   // /** Rows information */
   // const data: Array<RowDataType> = tableData.view.rows;
-  const [data, setData] = React.useState(() => [...tableData.view.rows]);
-  const [columns] = React.useState<typeof tableData.columns>(() => [
-    ...tableData.columns,
-  ]);
-  const [columnResizeMode, setColumnResizeMode] =
-    React.useState<ColumnResizeMode>("onChange");
+  const data = tableData.view.rows;
+  const columns = React.useMemo<typeof tableData.columns>(
+    () => [...tableData.columns],
+    []
+  );
 
   const rerender = React.useReducer(() => ({}), {})[1];
   /** Reducer */
@@ -179,9 +178,9 @@ export function TableDemo(tableData: TableDataType) {
   const table: Table<RowDataType> = useReactTable({
     data,
     columns,
-    columnResizeMode,
-    defaultColumn,
     meta: tableData,
+    defaultColumn: defaultColumn,
+    getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     debugTable: true,
@@ -193,9 +192,6 @@ export function TableDemo(tableData: TableDataType) {
   const [columnsWidthState, setColumnsWidthState] = React.useState(
     getColumnsWidthStyle(table.getRowModel().rows, columns)
   );
-  const totalWidth = getTotalWidth(columnsWidthState);
-  // Manage DnD
-  const currentColOrder = React.useRef(null);
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
@@ -260,108 +256,121 @@ export function TableDemo(tableData: TableDataType) {
             zIndex: 2,
             borderTop: "1px solid var(--background-modifier-border)",
           }}
+          key={`div-table-sticky`}
         >
           {/** Headers */}
           {table
             .getHeaderGroups()
-            .map((headerGroup: HeaderGroup<RowDataType>, i: number) => (
-              <div>
-                <div
-                  key={`${headerGroup.id}`}
-                  className={`${c("tr header-group")}`}
-                >
+            .map(
+              (
+                headerGroup: HeaderGroup<RowDataType>,
+                headerGroupIndex: number
+              ) => (
+                <div>
+                  <div
+                    key={`${headerGroup.id}-${headerGroupIndex}`}
+                    className={`${c("tr header-group")}`}
+                  >
+                    {headerGroup.headers
+                      .filter(
+                        (o: Header<RowDataType, TableColumn>) =>
+                          (o.column.columnDef as TableColumn).key !==
+                          MetadataColumns.ADD_COLUMN
+                      )
+                      .map(
+                        (
+                          header: Header<RowDataType, TableColumn>,
+                          headerIndex: number
+                        ) => {
+                          return (
+                            <div
+                              key={`${header.id}-${headerIndex}`}
+                              className={`${c("th")}`}
+                            >
+                              <HeaderContext.Provider
+                                value={{
+                                  columnWidthState: columnsWidthState,
+                                  setColumnWidthState: setColumnsWidthState,
+                                }}
+                              >
+                                {header.isPlaceholder
+                                  ? null
+                                  : flexRender(
+                                      header.column.columnDef.header,
+                                      header.getContext()
+                                    )}
+                              </HeaderContext.Provider>
+                            </div>
+                          );
+                        }
+                      )}
+                  </div>
+
                   {headerGroup.headers
                     .filter(
                       (o: Header<RowDataType, TableColumn>) =>
-                        (o.column.columnDef as TableColumn).key !==
+                        (o.column.columnDef as TableColumn).key ===
                         MetadataColumns.ADD_COLUMN
                     )
                     .map(
                       (
-                        header: Header<RowDataType, TableColumn>,
-                        index: number
-                      ) => {
-                        console.log(header);
+                        header: Header<RowDataType, unknown>,
+                        headerIndex: number
+                      ) => (
+                        <div
+                          key={`${header.id}-${headerIndex}`}
+                          className={`${c("th")}`}
+                        >
+                          <HeaderContext.Provider
+                            value={{
+                              columnWidthState: columnsWidthState,
+                              setColumnWidthState: setColumnsWidthState,
+                            }}
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </HeaderContext.Provider>
+                        </div>
+                      )
+                    )}
+                </div>
+              )
+            )}
+        </div>
+        {/** Body */}
+        <div>
+          {table
+            .getRowModel()
+            .rows.map((row: Row<RowDataType>, rowIndex: number) => {
+              return (
+                <div className={`${c("tr")}`} key={`${row.id}-${rowIndex}`}>
+                  {row
+                    .getVisibleCells()
+                    .map(
+                      (cell: Cell<RowDataType, unknown>, cellIndex: number) => {
+                        console.log(cell.getValue());
                         return (
-                          <div key={header.id} className={`${c("th")}`}>
-                            <HeaderContext.Provider
-                              value={{
-                                columnWidthState: columnsWidthState,
-                                setColumnWidthState: setColumnsWidthState,
-                              }}
-                            >
-                              {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                            </HeaderContext.Provider>
+                          <div
+                            key={`${cell.id}-${cellIndex}`}
+                            className={`${c("td")}`}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                           </div>
                         );
                       }
                     )}
                 </div>
-
-                {headerGroup.headers
-                  .filter(
-                    (o: Header<RowDataType, TableColumn>) =>
-                      (o.column.columnDef as TableColumn).key ===
-                      MetadataColumns.ADD_COLUMN
-                  )
-                  .map(
-                    (column: Header<RowDataType, unknown>, index: number) => (
-                      <div
-                        key={`div-header-add-column`}
-                        className={`${c("th")}`}
-                      >
-                        <HeaderContext.Provider
-                          value={{
-                            columnWidthState: columnsWidthState,
-                            setColumnWidthState: setColumnsWidthState,
-                          }}
-                        >
-                          {column.isPlaceholder
-                            ? null
-                            : flexRender(
-                                column.column.columnDef.header,
-                                column.getContext()
-                              )}
-                        </HeaderContext.Provider>
-                      </div>
-                    )
-                  )}
-              </div>
-            ))}
-        </div>
-        {/** Body */}
-        <div>
-          {table.getRowModel().rows.map((row: Row<RowDataType>, i: number) => {
-            return (
-              <div className={`${c("tr")}`} key={row.id}>
-                {row
-                  .getVisibleCells()
-                  .map((cell: Cell<RowDataType, unknown>, index: number) => {
-                    const tableCellBaseProps = {
-                      className: `${c("td")}`,
-                    };
-                    return (
-                      <div
-                        key={`div-row-${i}-cell-${index}`}
-                        {...tableCellBaseProps}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </div>
-                    );
-                  })}
-              </div>
-            );
-          })}
-          <div className={`${c("tr add-row")}`}>
-            <div className={`${c("td")}`}>
+              );
+            })}
+          <div className={`${c("tr add-row")}`} key={`div-add-row`}>
+            <div className={`${c("td")}`} key={`div-add-row-cell`}>
               <input
                 type="text"
                 ref={newRowRef}
@@ -371,13 +380,20 @@ export function TableDemo(tableData: TableDataType) {
                 onKeyDown={handleKeyDown}
                 placeholder="filename of new row"
               />
-              <div className={`${c("td")}`} onClick={handleAddNewRow}>
+              <div
+                className={`${c("td")}`}
+                onClick={handleAddNewRow}
+                key={`div-add-row-cell-button`}
+              >
                 <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
                   <PlusIcon />
                 </span>
                 New
               </div>
-              <div className={`${c("padding-left")}`}>
+              <div
+                className={`${c("padding-left")}`}
+                key={`div-add-row-cell-padding-left`}
+              >
                 <Select
                   styles={CustomTemplateSelectorStyles}
                   options={rowTemplatesOptions}

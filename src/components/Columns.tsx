@@ -105,7 +105,7 @@ export async function obtainColumnsFromFile(
     const input = getInputInFuctionOfLiteral(value);
     const newColumn: DatabaseColumn = {
       input: input,
-      accessor: key,
+      accessorKey: key,
       label: key,
       key: key,
       position: index,
@@ -134,7 +134,7 @@ export function obtainColumnsFromRows(
     .forEach((key, index) => {
       columns[key] = {
         input: DataTypes.TEXT,
-        accessor: key,
+        accessorKey: key,
         label: key,
         key: key,
         position: index,
@@ -177,7 +177,7 @@ function columnOptions(
       ...(column as Partial<TableColumn>),
       position: column.position ?? index,
       key: column.key ?? columnKey,
-      accessor: column.accessor ?? dbTrim(column.label),
+      accessorKey: column.accessorKey ?? dbTrim(column.label),
       csvCandidate: column.csvCandidate ?? true,
       id: columnKey,
       label: column.label,

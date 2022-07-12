@@ -44,7 +44,7 @@ export interface ConfigColumn {
 
 export interface BaseColumn {
     csvCandidate?: boolean;
-    accessor: string;
+    accessorKey: string;
     label: string;
     key: string;
     position?: number;
