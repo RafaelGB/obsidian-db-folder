@@ -95,10 +95,6 @@ export function TableDemo(tableData: TableDataType) {
     []
   );
 
-  function useTableDataInstance(instance: any) {
-    Object.assign(instance, { tableData });
-  }
-
   const propsUseTable: any = {
     columns,
     data,

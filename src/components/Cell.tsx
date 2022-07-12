@@ -25,9 +25,9 @@ export default function DefaultCell(cellProperties: CellProps) {
   /** Columns information */
   const columns = (cellProperties as any).columns;
   /** Type of cell */
-  const dataType = (cellProperties.column as any).dataType;
+  const dataType = (column.columnDef as TableColumn).dataType;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).__note__;
+  const note: NoteInfo = (row.original as any).__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -61,7 +61,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         // Check if there are tasks in the cell
         if (contextValue.value === "") break;
         taskRef.current.innerHTML = "";
-        if (column.config.task_hide_completed) {
+        if ((column.columnDef as TableColumn).config.task_hide_completed) {
           contextValue.value = contextValue.value.where(
             (t: any) => !t.completed
           );
@@ -220,7 +220,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         return (
           <CalendarPortal
             intialState={tableData}
-            column={column}
+            column={column.columnDef as TableColumn}
             cellProperties={cellProperties}
           />
         );
@@ -230,7 +230,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         return (
           <CalendarTimePortal
             intialState={tableData}
-            column={column}
+            column={column.columnDef as TableColumn}
             cellProperties={cellProperties}
           />
         );
@@ -242,7 +242,7 @@ export default function DefaultCell(cellProperties: CellProps) {
             <PopperSelectPortal
               dispatch={dataDispatch}
               row={cellProperties.row}
-              column={column}
+              column={column.columnDef as TableColumn}
               columns={columns}
               note={note}
               intialState={tableData}
@@ -255,7 +255,7 @@ export default function DefaultCell(cellProperties: CellProps) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <TagsPortal
               intialState={tableData}
-              column={column}
+              column={column.columnDef as TableColumn}
               columns={columns}
               dispatch={dataDispatch}
               cellProperties={cellProperties}
@@ -264,7 +264,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         );
 
       case DataTypes.TASK:
-        if (column.config.task_hide_completed) {
+        if ((column.columnDef as TableColumn).config.task_hide_completed) {
         }
         return <div ref={taskRef} className="data-input"></div>;
 
@@ -273,7 +273,7 @@ export default function DefaultCell(cellProperties: CellProps) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CheckboxCell
               intialState={tableData}
-              column={column}
+              column={column.columnDef as TableColumn}
               cellProperties={cellProperties}
             />
           </CellContext.Provider>
