@@ -39,7 +39,7 @@ function setOptionsOfSelectDataType(
   columnId: string
 ): any[] {
   rows.forEach((row: any) => {
-    const rowValue = row.values[columnId];
+    const rowValue = row.original[columnId];
     let match = options.find(
       (option: { label: string }) => option.label === rowValue
     );

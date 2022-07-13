@@ -1,21 +1,16 @@
 import React, { useContext, useState } from "react";
 import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
-import { Cell } from "@tanstack/react-table";
 import NoteInfo from "services/NoteInfo";
-import { DataviewService } from "services/DataviewService";
+import { CheckboxProps } from "cdm/CheckboxModel";
+import { TableDataType } from "cdm/FolderModel";
 
-type CheckboxProps = {
-  intialState: TableDataType;
-  column: TableColumn;
-  cellProperties: any;
-};
 export function CheckboxCell(props: CheckboxProps) {
   const { column, cellProperties } = props;
-  const dataDispatch = (cellProperties as any).dataDispatch;
+  const { row, table } = cellProperties;
+  const dataDispatch = (table.options.meta as TableDataType).dispatch;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).__note__;
+  const note: NoteInfo = row.original.__note__;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
   const [checked, setChecked] = useState(contextValue.value as boolean);
@@ -27,7 +22,7 @@ export function CheckboxCell(props: CheckboxProps) {
       file: note.getFile(),
       key: column.key,
       value: newValue,
-      row: cellProperties.row,
+      row: row,
       columnId: column.id,
     });
     setChecked(event.target.checked);

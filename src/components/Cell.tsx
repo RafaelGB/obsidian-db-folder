@@ -17,7 +17,6 @@ import { DataviewService } from "services/DataviewService";
 import { CellProps } from "cdm/CellModel";
 
 export default function DefaultCell(cellProperties: CellProps) {
-  console.log("DefaultCell", cellProperties);
   const { cell, column, row, table } = cellProperties;
   const dataDispatch = (table.options.meta as TableDataType).dispatch;
   /** Initial state of cell */
@@ -155,10 +154,10 @@ export default function DefaultCell(cellProperties: CellProps) {
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: (cellProperties.column as any).key,
+      key: (column.columnDef as TableColumn).key,
       value: changedValue,
-      row: cellProperties.row,
-      columnId: (cellProperties.column as any).id,
+      row: row,
+      columnId: (column.columnDef as TableColumn).id,
     });
   }
 
@@ -240,7 +239,7 @@ export default function DefaultCell(cellProperties: CellProps) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal
               dispatch={dataDispatch}
-              row={cellProperties.row}
+              row={row}
               column={column.columnDef as TableColumn}
               columns={columns}
               note={note}

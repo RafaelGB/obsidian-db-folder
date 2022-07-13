@@ -6,15 +6,16 @@ import NoteInfo from "services/NoteInfo";
 import { Portal } from "@mui/material";
 import { c } from "helpers/StylesHelper";
 import { CalendarProps } from "cdm/ComponentsModel";
+import { TableDataType } from "cdm/FolderModel";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties, intialState } = calendarProps;
-  const { row } = cellProperties;
-  const dataDispatch = (cellProperties as any).dataDispatch;
+  const { row, table } = cellProperties;
+  const dataDispatch = (table.options.meta as TableDataType).dispatch;
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).__note__;
+  const note: NoteInfo = row.original.__note__;
   const [calendarState, setCalendarState] = useState(
     intialState.view.rows[row.index][column.key]
   );
@@ -32,7 +33,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       file: note.getFile(),
       key: column.key,
       value: newValue.toFormat("yyyy-MM-dd"),
-      row: cellProperties.row,
+      row: row,
       columnId: column.id,
     });
     setCalendarState(newValue);

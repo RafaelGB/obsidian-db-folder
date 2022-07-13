@@ -231,8 +231,7 @@ export function TableDemo(tableData: TableDataType) {
   }
   LOGGER.debug(`<= Table`);
   return (
-    <div className="p-2">
-      <div className="h-2" />
+    <>
       {/* INIT TABLE */}
       <div
         key={`div-table`}
@@ -353,7 +352,6 @@ export function TableDemo(tableData: TableDataType) {
                     .getVisibleCells()
                     .map(
                       (cell: Cell<RowDataType, unknown>, cellIndex: number) => {
-                        console.log(cell.getValue());
                         return (
                           <div
                             key={`${cell.id}-${cellIndex}`}
@@ -370,6 +368,7 @@ export function TableDemo(tableData: TableDataType) {
                 </div>
               );
             })}
+          {/* INIT NEW ROW */}
           <div className={`${c("tr add-row")}`} key={`div-add-row`}>
             <div className={`${c("td")}`} key={`div-add-row-cell`}>
               <input
@@ -412,6 +411,7 @@ export function TableDemo(tableData: TableDataType) {
                 />
               </div>
             </div>
+            {/* ENDS NEW ROW */}
           </div>
           {/* ENDS BODY */}
         </div>
@@ -424,6 +424,6 @@ export function TableDemo(tableData: TableDataType) {
         {/* ENDS DEBUG INFO */}
         {/* ENDS TABLE */}
       </div>
-    </div>
+    </>
   );
 }
