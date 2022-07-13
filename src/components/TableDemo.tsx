@@ -231,7 +231,8 @@ export function TableDemo(tableData: TableDataType) {
   }
   LOGGER.debug(`<= Table`);
   return (
-    <>
+    <div className="p-2">
+      <div className="h-2" />
       {/* INIT TABLE */}
       <div
         key={`div-table`}
@@ -254,7 +255,7 @@ export function TableDemo(tableData: TableDataType) {
           }}
           key={`div-table-sticky`}
         >
-          {/** Headers */}
+          {/* INIT HEADERS */}
           {table
             .getHeaderGroups()
             .map(
@@ -262,45 +263,43 @@ export function TableDemo(tableData: TableDataType) {
                 headerGroup: HeaderGroup<RowDataType>,
                 headerGroupIndex: number
               ) => (
-                <div>
-                  <div
-                    key={`${headerGroup.id}-${headerGroupIndex}`}
-                    className={`${c("tr header-group")}`}
-                  >
-                    {headerGroup.headers
-                      .filter(
-                        (o: Header<RowDataType, TableColumn>) =>
-                          (o.column.columnDef as TableColumn).key !==
-                          MetadataColumns.ADD_COLUMN
-                      )
-                      .map(
-                        (
-                          header: Header<RowDataType, TableColumn>,
-                          headerIndex: number
-                        ) => {
-                          return (
-                            <div
-                              key={`${header.id}-${headerIndex}`}
-                              className={`${c("th")}`}
+                <div
+                  key={`${headerGroup.id}-${headerGroupIndex}`}
+                  className={`${c("tr header-group")}`}
+                >
+                  {headerGroup.headers
+                    .filter(
+                      (o: Header<RowDataType, TableColumn>) =>
+                        (o.column.columnDef as TableColumn).key !==
+                        MetadataColumns.ADD_COLUMN
+                    )
+                    .map(
+                      (
+                        header: Header<RowDataType, TableColumn>,
+                        headerIndex: number
+                      ) => {
+                        return (
+                          <div
+                            key={`${header.id}-${headerIndex}`}
+                            className={`${c("th noselect")} header`}
+                          >
+                            <HeaderContext.Provider
+                              value={{
+                                columnWidthState: columnsWidthState,
+                                setColumnWidthState: setColumnsWidthState,
+                              }}
                             >
-                              <HeaderContext.Provider
-                                value={{
-                                  columnWidthState: columnsWidthState,
-                                  setColumnWidthState: setColumnsWidthState,
-                                }}
-                              >
-                                {header.isPlaceholder
-                                  ? null
-                                  : flexRender(
-                                      header.column.columnDef.header,
-                                      header.getContext()
-                                    )}
-                              </HeaderContext.Provider>
-                            </div>
-                          );
-                        }
-                      )}
-                  </div>
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                            </HeaderContext.Provider>
+                          </div>
+                        );
+                      }
+                    )}
 
                   {headerGroup.headers
                     .filter(
@@ -336,8 +335,9 @@ export function TableDemo(tableData: TableDataType) {
                 </div>
               )
             )}
+          {/* ENDS HEADERS */}
         </div>
-        {/** Body */}
+        {/* INIT BODY */}
         <div>
           {table
             .getRowModel()
@@ -408,14 +408,17 @@ export function TableDemo(tableData: TableDataType) {
               </div>
             </div>
           </div>
+          {/* ENDS BODY */}
         </div>
+        {/* INIT DEBUG INFO */}
         {tableData.view.diskConfig.yaml.config.enable_show_state && (
           <pre>
             <code>{JSON.stringify(table.getState(), null, 2)}</code>
           </pre>
         )}
+        {/* ENDS DEBUG INFO */}
         {/* ENDS TABLE */}
       </div>
-    </>
+    </div>
   );
 }

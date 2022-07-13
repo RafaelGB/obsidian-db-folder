@@ -229,6 +229,10 @@
   padding: 0;
 }
 
+.database-plugin__tr {
+  display: table-row;
+}
+
 .database-plugin__tr:last-child .database-plugin__td {
   border-bottom: 0;
 }
@@ -251,7 +255,6 @@
   border: none;
   background-color: transparent;
   color: var(--text-muted);
-
   flex-direction: row;
   align-items: center;
 }
