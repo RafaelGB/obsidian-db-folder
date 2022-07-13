@@ -230,7 +230,7 @@
 }
 
 .database-plugin__tr {
-  display: flex;
+  display: table-row;
 }
 
 .database-plugin__tr:last-child .database-plugin__td {
@@ -240,7 +240,7 @@
 .database-plugin__add-row {
   color: var(--text-accent);
   padding: 0.5rem;
-  display: flex;
+  display: table-row;
   align-items: center;
   font-size: 0.875rem;
   cursor: pointer;
@@ -265,6 +265,7 @@
   font-size: 0.875rem;
   cursor: pointer;
   background-color: var(--background-primary);
+  display: table-cell;
 }
 
 .database-plugin__th:hover {
@@ -287,7 +288,7 @@
   align-items: stretch;
   justify-content: center;
   padding: 0;
-  display: flex;
+  display: table-cell;
   padding: 0.5rem;
   flex-direction: column;
 }
@@ -327,7 +328,7 @@
 .database-plugin__table {
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);
-  display: "flex";
+  display: table;
 }
 
 .database-plugin__th:last-child {
