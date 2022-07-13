@@ -252,6 +252,7 @@ export function TableDemo(tableData: TableDataType) {
             top: 0,
             zIndex: 2,
             borderTop: "1px solid var(--background-modifier-border)",
+            display: "table-header-group",
           }}
           key={`div-table-sticky`}
         >
@@ -338,7 +339,11 @@ export function TableDemo(tableData: TableDataType) {
           {/* ENDS HEADERS */}
         </div>
         {/* INIT BODY */}
-        <div>
+        <div
+          style={{
+            display: "table-row-group",
+          }}
+        >
           {table
             .getRowModel()
             .rows.map((row: Row<RowDataType>, rowIndex: number) => {
