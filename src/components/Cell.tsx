@@ -5,7 +5,7 @@ import { c } from "helpers/StylesHelper";
 
 import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
 import CalendarPortal from "components/portals/CalendarPortal";
@@ -23,11 +23,11 @@ export default function DefaultCell(cellProperties: CellProps) {
   /** Initial state of cell */
   const cellValue = cell.getValue();
   /** Columns information */
-  const columns = (cellProperties as any).columns;
+  const columns = (table.options.meta as TableDataType).columns;
   /** Type of cell */
   const dataType = (column.columnDef as TableColumn).dataType;
   /** Note info of current Cell */
-  const note: NoteInfo = (row.original as any).__note__;
+  const note: NoteInfo = (row.original as RowDataType).__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -41,8 +41,7 @@ export default function DefaultCell(cellProperties: CellProps) {
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
-  const tableData = (cellProperties as any)
-    .tableData as unknown as TableDataType;
+  const tableData = table.options.meta as TableDataType;
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`

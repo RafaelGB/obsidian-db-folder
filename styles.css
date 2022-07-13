@@ -230,7 +230,7 @@
 }
 
 .database-plugin__tr {
-  display: table-row;
+  display: flex;
 }
 
 .database-plugin__tr:last-child .database-plugin__td {
@@ -349,7 +349,7 @@
 
 .database-plugin__header-group,
 .database-plugin__header {
-  justify-content: space-between;
+  justify-content: flex-start;
   background-color: var(--background-secondary);
 }
 
