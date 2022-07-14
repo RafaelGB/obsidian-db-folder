@@ -239,7 +239,7 @@ export function TableDemo(tableData: TableDataType) {
         }}
         globalFilterRows={{
           globalFilter: globalFilter,
-          setGlobalFilter: table.setGlobalFilter,
+          setGlobalFilter: setGlobalFilter,
         }}
         headerGroupProps={{
           style: { width: table.getCenterTotalSize() },

@@ -1,16 +1,14 @@
 import * as React from "react";
 import CsvButton from "components/CsvButton";
 import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
-// import GlobalFilter from "components/reducers/GlobalFilter";
+import GlobalFilter from "components/reducers/GlobalFilter";
 import { StyleVariables } from "helpers/Constants";
-import {
-  AppBar,
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-} from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
 
@@ -28,6 +26,7 @@ export function NavBar(navBarProps: NavBarProps) {
   };
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    console.log("handleMenuClick");
     setMenuEl(event.currentTarget);
   };
   return (
@@ -76,7 +75,7 @@ export function NavBar(navBarProps: NavBarProps) {
             </MenuItem>
           </Menu>
           {/** Global filter */}
-          {/* <GlobalFilter {...navBarProps.globalFilterRows} /> */}
+          <GlobalFilter {...navBarProps.globalFilterRows} />
         </Toolbar>
       </AppBar>
       <Toolbar />
