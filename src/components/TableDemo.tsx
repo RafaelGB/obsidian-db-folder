@@ -49,19 +49,22 @@ export function TableDemo(tableData: TableDataType) {
   LOGGER.debug(
     `=> Table. number of columns: ${tableData.columns.length}. number of rows: ${tableData.view.rows.length}`
   );
-  // /** Columns information */
-  // const columns: TableColumn[] = tableData.columns;
-  // /** Rows information */
-  // const data: Array<RowDataType> = tableData.view.rows;
+  /** Main information about the table */
   const data = tableData.view.rows;
   const columns = tableData.columns;
+
   /** Reducer */
   const dataDispatch = tableData.dispatch;
-  /** Database information  */
+  /** Plugin services */
   const view: DatabaseView = tableData.view;
   const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
-  /** Sort columns */
+  /** Table services */
+  // Resize
+  const [columnResizeMode, setColumnResizeMode] =
+    React.useState<ColumnResizeMode>("onChange");
+
+  // Sorting
   const sortTypes = React.useMemo(
     () => ({
       alphanumericFalsyLast(
@@ -160,6 +163,7 @@ export function TableDemo(tableData: TableDataType) {
   const table: Table<RowDataType> = useReactTable({
     data,
     columns,
+    columnResizeMode,
     meta: tableData,
     defaultColumn: defaultColumn,
     getExpandedRowModel: getExpandedRowModel(),
@@ -233,6 +237,9 @@ export function TableDemo(tableData: TableDataType) {
         )}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
+        style={{
+          width: table.getCenterTotalSize(),
+        }}
       >
         <div
           style={{
@@ -271,6 +278,9 @@ export function TableDemo(tableData: TableDataType) {
                           <div
                             key={`${header.id}-${headerIndex}`}
                             className={`${c("th noselect")} header`}
+                            style={{
+                              width: header.getSize(),
+                            }}
                           >
                             <HeaderContext.Provider
                               value={{
@@ -285,6 +295,27 @@ export function TableDemo(tableData: TableDataType) {
                                     header.getContext()
                                   )}
                             </HeaderContext.Provider>
+                            <div
+                              {...{
+                                onMouseDown: header.getResizeHandler(),
+                                onTouchStart: header.getResizeHandler(),
+                                className: `resizer ${
+                                  header.column.getIsResizing()
+                                    ? "isResizing"
+                                    : ""
+                                }`,
+                                style: {
+                                  transform:
+                                    columnResizeMode === "onEnd" &&
+                                    header.column.getIsResizing()
+                                      ? `translateX(${
+                                          table.getState().columnSizingInfo
+                                            .deltaOffset
+                                        }px)`
+                                      : "",
+                                },
+                              }}
+                            />
                           </div>
                         );
                       }
