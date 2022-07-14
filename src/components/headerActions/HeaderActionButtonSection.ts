@@ -6,10 +6,6 @@ import RemoveColumnHandlerAction from "components/headerActions/handlers/buttons
 
 class HeaderActionButtonSection extends AbstractChain<HeaderActionResponse> {
 
-    protected customHandle(abstractResponse: HeaderActionResponse): HeaderActionResponse {
-        return abstractResponse;
-    }
-
     protected getHandlers(): AbstractHandler<HeaderActionResponse>[] {
         return [
             new SortHandlerAction(),

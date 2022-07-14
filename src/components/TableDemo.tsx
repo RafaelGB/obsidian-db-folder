@@ -92,6 +92,8 @@ export function TableDemo(tableData: TableDataType) {
     }),
     []
   );
+  // Filtering
+  const [globalFilter, setGlobalFilter] = React.useState("");
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -164,6 +166,9 @@ export function TableDemo(tableData: TableDataType) {
     data,
     columns,
     columnResizeMode,
+    state: {
+      globalFilter,
+    },
     meta: tableData,
     defaultColumn: defaultColumn,
     getExpandedRowModel: getExpandedRowModel(),
@@ -225,6 +230,22 @@ export function TableDemo(tableData: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
+      {/* INIT NAVBAR */}
+      <HeaderNavBar
+        csvButtonProps={{
+          columns: columns,
+          rows: table.getRowModel().rows,
+          name: tableData.view.diskConfig.yaml.name,
+        }}
+        globalFilterRows={{
+          globalFilter: globalFilter,
+          setGlobalFilter: table.setGlobalFilter,
+        }}
+        headerGroupProps={{
+          style: { width: table.getCenterTotalSize() },
+        }}
+      />
+      {/* ENDS NAVBAR */}
       {/* INIT TABLE */}
       <div
         key={`div-table`}

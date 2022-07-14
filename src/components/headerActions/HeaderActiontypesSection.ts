@@ -8,10 +8,6 @@ import NumberTypeHeaderAction from "components/headerActions/handlers/types/Numb
 import DateTypeHeaderAction from "components/headerActions/handlers/types/DateTypeHeaderAction";
 import DatetimeTypeHeaderAction from "components/headerActions/handlers/types/DatetimeTypeHeaderAction";
 class HeaderActionTypesSection extends AbstractChain<HeaderActionResponse> {
-    protected customHandle(abstractResponse: HeaderActionResponse): HeaderActionResponse {
-        return abstractResponse;
-    }
-
     protected getHandlers(): AbstractHandler<HeaderActionResponse>[] {
         return [
             new TextTypeHeaderAction(),

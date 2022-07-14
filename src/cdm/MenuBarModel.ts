@@ -1,14 +1,13 @@
 import { Row } from "@tanstack/react-table";
-import { TableColumn } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 
 export type CsvButtonProps = {
     columns: TableColumn[];
-    rows: Row<object>[];
+    rows: Row<RowDataType>[];
     name: string;
 };
 
 export type GlobalFilterProps = {
-    preGlobalFilteredRows: any;
-    setGlobalFilter: any;
-    globalFilter: any;
+    setGlobalFilter: (updater: any) => void;
+    globalFilter: string;
 };

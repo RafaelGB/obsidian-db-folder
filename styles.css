@@ -382,7 +382,10 @@
 }
 
 .database-plugin__navbar {
-  display: flex;
+  position: "sticky";
+  top: 0;
+  z-index: 2;
+  border-top: "1px solid var(--background-modifier-border)";
   flex: 1 0 auto;
   background-color: var(--background-secondary);
 }
