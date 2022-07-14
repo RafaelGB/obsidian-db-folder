@@ -54,12 +54,7 @@ export function TableDemo(tableData: TableDataType) {
   // /** Rows information */
   // const data: Array<RowDataType> = tableData.view.rows;
   const data = tableData.view.rows;
-  const columns = React.useMemo<typeof tableData.columns>(
-    () => [...tableData.columns],
-    []
-  );
-
-  const rerender = React.useReducer(() => ({}), {})[1];
+  const columns = tableData.columns;
   /** Reducer */
   const dataDispatch = tableData.dispatch;
   /** Database information  */
@@ -94,15 +89,6 @@ export function TableDemo(tableData: TableDataType) {
     }),
     []
   );
-
-  const propsUseTable: any = {
-    columns,
-    data,
-    defaultColumn,
-    dataDispatch,
-    sortTypes,
-  };
-  propsUseTable.initialState = tableData.initialState;
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -179,9 +165,12 @@ export function TableDemo(tableData: TableDataType) {
     getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
+    debugTable:
+      tableData.view.plugin.settings.global_settings.enable_debug_mode,
+    debugHeaders:
+      tableData.view.plugin.settings.global_settings.enable_debug_mode,
+    debugColumns:
+      tableData.view.plugin.settings.global_settings.enable_debug_mode,
   });
 
   // Manage column width
@@ -368,62 +357,63 @@ export function TableDemo(tableData: TableDataType) {
                 </div>
               );
             })}
-          {/* INIT NEW ROW */}
-          <div className={`${c("tr add-row")}`} key={`div-add-row`}>
-            <div className={`${c("td")}`} key={`div-add-row-cell`}>
-              <input
-                type="text"
-                ref={newRowRef}
-                onChange={(e) => {
-                  setInputNewRow(e.target.value);
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder="filename of new row"
-              />
-              <div
-                className={`${c("td")}`}
-                onClick={handleAddNewRow}
-                key={`div-add-row-cell-button`}
-              >
-                <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
-                  <PlusIcon />
-                </span>
-                New
-              </div>
-              <div
-                className={`${c("padding-left")}`}
-                key={`div-add-row-cell-padding-left`}
-              >
-                <Select
-                  styles={CustomTemplateSelectorStyles}
-                  options={rowTemplatesOptions}
-                  value={{
-                    label: rowTemplateState,
-                    value: rowTemplateState,
-                  }}
-                  isClearable={true}
-                  isMulti={false}
-                  onChange={handleChangeRowTemplate}
-                  defaultValue={{ label: "Choose a Template", value: "None" }}
-                  menuPortalTarget={document.body}
-                  menuShouldBlockScroll={true}
-                  isSearchable
-                />
-              </div>
-            </div>
-            {/* ENDS NEW ROW */}
-          </div>
+
           {/* ENDS BODY */}
         </div>
-        {/* INIT DEBUG INFO */}
-        {tableData.view.diskConfig.yaml.config.enable_show_state && (
-          <pre>
-            <code>{JSON.stringify(table.getState(), null, 2)}</code>
-          </pre>
-        )}
-        {/* ENDS DEBUG INFO */}
         {/* ENDS TABLE */}
       </div>
+      {/* INIT NEW ROW */}
+      <div className={`${c("tr add-row")}`} key={`div-add-row`}>
+        <div className={`${c("td")}`} key={`div-add-row-cell`}>
+          <input
+            type="text"
+            ref={newRowRef}
+            onChange={(e) => {
+              setInputNewRow(e.target.value);
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder="filename of new row"
+          />
+        </div>
+        <div
+          className={`${c("td")}`}
+          onClick={handleAddNewRow}
+          key={`div-add-row-cell-button`}
+        >
+          <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
+            <PlusIcon />
+          </span>
+          New
+        </div>
+        <div
+          className={`${c("padding-left")}`}
+          key={`div-add-row-cell-padding-left`}
+        >
+          <Select
+            styles={CustomTemplateSelectorStyles}
+            options={rowTemplatesOptions}
+            value={{
+              label: rowTemplateState,
+              value: rowTemplateState,
+            }}
+            isClearable={true}
+            isMulti={false}
+            onChange={handleChangeRowTemplate}
+            defaultValue={{ label: "Choose a Template", value: "None" }}
+            menuPortalTarget={document.body}
+            menuShouldBlockScroll={true}
+            isSearchable
+          />
+        </div>
+        {/* ENDS NEW ROW */}
+      </div>
+      {/* INIT DEBUG INFO */}
+      {tableData.view.diskConfig.yaml.config.enable_show_state && (
+        <pre>
+          <code>{JSON.stringify(table.getState(), null, 2)}</code>
+        </pre>
+      )}
+      {/* ENDS DEBUG INFO */}
     </>
   );
 }
