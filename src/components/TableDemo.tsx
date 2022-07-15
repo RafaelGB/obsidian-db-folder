@@ -35,11 +35,13 @@ import { getDndListStyle, getDndItemStyle } from "components/styles/DnDStyle";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { ActionMeta, OnChangeValue } from "react-select";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
+import fuzzyFilter from "components/filters/GlobalFilterFn";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
   header: DefaultHeader,
 };
+
 /**
  * Table component based on react-table
  * @param tableDataType
@@ -169,6 +171,7 @@ export function TableDemo(tableData: TableDataType) {
     state: {
       globalFilter,
     },
+    globalFilterFn: fuzzyFilter,
     meta: tableData,
     defaultColumn: defaultColumn,
     getExpandedRowModel: getExpandedRowModel(),
