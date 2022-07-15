@@ -59,6 +59,7 @@
 		"obsidian-dataview": "0.5.41",
 		"react": "18.2.0",
 		"react-dnd": "16.0.1",
+		"react-dnd-html5-backend": "16.0.1",
 		"react-dom": "18.2.0",
 		"react-csv": "2.2.2",
 		"react-popper": "2.3.0",

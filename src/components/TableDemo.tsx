@@ -25,17 +25,20 @@ import { getNormalizedPath } from "helpers/VaultManagement";
 import { ActionTypes, DatabaseCore, MetadataColumns } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
-import DefaultCell from "components/Cell";
-import DefaultHeader from "components/Header";
+import DefaultCell from "components/DefaultCell";
+import DefaultHeader from "components/DefaultHeader";
 import { c, getTotalWidth } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
+import fuzzyFilter from "components/filters/GlobalFilterFn";
+import TableHeader from "components/TableHeader";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getDndListStyle, getDndItemStyle } from "components/styles/DnDStyle";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { ActionMeta, OnChangeValue } from "react-select";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
-import fuzzyFilter from "components/filters/GlobalFilterFn";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
@@ -96,6 +99,7 @@ export function TableDemo(tableData: TableDataType) {
   );
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
+
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -287,64 +291,29 @@ export function TableDemo(tableData: TableDataType) {
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
                 >
-                  {headerGroup.headers
-                    .filter(
-                      (o: Header<RowDataType, TableColumn>) =>
-                        (o.column.columnDef as TableColumn).key !==
-                        MetadataColumns.ADD_COLUMN
-                    )
-                    .map(
-                      (
-                        header: Header<RowDataType, TableColumn>,
-                        headerIndex: number
-                      ) => {
-                        return (
-                          <div
-                            key={`${header.id}-${headerIndex}`}
-                            className={`${c("th noselect")} header`}
-                            style={{
-                              width: header.getSize(),
-                            }}
-                          >
-                            <HeaderContext.Provider
-                              value={{
-                                columnWidthState: columnsWidthState,
-                                setColumnWidthState: setColumnsWidthState,
-                              }}
-                            >
-                              {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                            </HeaderContext.Provider>
-                            <div
-                              {...{
-                                onMouseDown: header.getResizeHandler(),
-                                onTouchStart: header.getResizeHandler(),
-                                className: `resizer ${
-                                  header.column.getIsResizing()
-                                    ? "isResizing"
-                                    : ""
-                                }`,
-                                style: {
-                                  transform:
-                                    columnResizeMode === "onEnd" &&
-                                    header.column.getIsResizing()
-                                      ? `translateX(${
-                                          table.getState().columnSizingInfo
-                                            .deltaOffset
-                                        }px)`
-                                      : "",
-                                },
-                              }}
-                            />
-                          </div>
-                        );
-                      }
-                    )}
-
+                  <DndProvider backend={HTML5Backend}>
+                    {headerGroup.headers
+                      .filter(
+                        (o: Header<RowDataType, TableColumn>) =>
+                          (o.column.columnDef as TableColumn).key !==
+                          MetadataColumns.ADD_COLUMN
+                      )
+                      .map(
+                        (
+                          header: Header<RowDataType, TableColumn>,
+                          headerIndex: number
+                        ) => (
+                          <TableHeader
+                            table={table}
+                            header={header}
+                            headerIndex={headerIndex}
+                            columnResizeMode={columnResizeMode}
+                            columnsWidthState={columnsWidthState}
+                            setColumnsWidthState={setColumnsWidthState}
+                          />
+                        )
+                      )}
+                  </DndProvider>
                   {headerGroup.headers
                     .filter(
                       (o: Header<RowDataType, TableColumn>) =>
