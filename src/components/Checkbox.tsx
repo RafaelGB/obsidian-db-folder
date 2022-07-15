@@ -4,6 +4,7 @@ import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
 import { CheckboxProps } from "cdm/CheckboxModel";
 import { TableDataType } from "cdm/FolderModel";
+import { c } from "helpers/StylesHelper";
 
 export function CheckboxCell(props: CheckboxProps) {
   const { column, cellProperties } = props;
@@ -29,7 +30,7 @@ export function CheckboxCell(props: CheckboxProps) {
     setContextValue({ value: event.target.checked ? 1 : 0, update: true });
   };
   return (
-    <div className="data-input-checkbox">
+    <div className={`${c("checkbox")}`}>
       <input type="checkbox" checked={checked} onChange={handleChange} />
     </div>
   );

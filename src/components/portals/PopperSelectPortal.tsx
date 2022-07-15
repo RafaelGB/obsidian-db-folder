@@ -10,7 +10,6 @@ import { CellContext } from "components/contexts/CellContext";
 import CrossIcon from "components/img/CrossIcon";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  console.log("PopperSelectPortal", popperProps);
   const { dispatch, row, column, columns, note, intialState } = popperProps;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);

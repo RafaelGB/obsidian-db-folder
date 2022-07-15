@@ -26,7 +26,6 @@ export function NavBar(navBarProps: NavBarProps) {
   };
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    console.log("handleMenuClick");
     setMenuEl(event.currentTarget);
   };
   return (

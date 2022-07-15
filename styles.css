@@ -92,7 +92,8 @@
   background-color: var(--background-primary);
   box-sizing: border-box;
   flex: 1 1 auto;
-  text-align: justify;
+  text-align: -webkit-center;
+  vertical-align: middle;
 }
 
 .data-input * {
@@ -107,11 +108,11 @@
   outline: none;
 }
 
-.data-input-checkbox {
+.database-plugin__checkbox {
   place-self: center;
 }
 
-.data-input-checkbox input[type="checkbox"] {
+.database-plugin__checkbox input[type="checkbox"] {
   /* Add if not using autoprefixer */
   -webkit-appearance: none;
   /* Remove most all native input styles */
@@ -132,7 +133,7 @@
   place-content: center;
 }
 
-.data-input-checkbox input[type="checkbox"]::before {
+.database-plugin__checkbox input[type="checkbox"]::before {
   content: "";
   width: 0.65em;
   height: 0.65em;
@@ -145,15 +146,15 @@
   background-color: CanvasText;
 }
 
-.data-input-checkbox input[type="checkbox"]:checked {
+.database-plugin__checkbox input[type="checkbox"]:checked {
   background-color: var(--text-accent);
 }
 
-.data-input-checkbox input[type="checkbox"]:checked::before {
+.database-plugin__checkbox input[type="checkbox"]:checked::before {
   transform: scale(1);
 }
 
-.data-input-checkbox input[type="checkbox"]:focus {
+.database-plugin__checkbox input[type="checkbox"]:focus {
   outline: max(2px, 0.15em) solid currentColor;
   outline-offset: max(2px, 0.15em);
 }

@@ -396,7 +396,7 @@ export function TableDemo(tableData: TableDataType) {
                         return (
                           <div
                             key={`${cell.id}-${cellIndex}`}
-                            className={`${c("td")}`}
+                            className={`${c("td")} data-input`}
                           >
                             {flexRender(
                               cell.column.columnDef.cell,

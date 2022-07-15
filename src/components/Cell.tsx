@@ -171,15 +171,10 @@ export default function DefaultCell(cellProperties: CellProps) {
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             onBlur={handleOnBlur}
-            className="data-input"
             ref={editableMdRef}
           />
         ) : (
-          <span
-            ref={containerCellRef}
-            className={"data-input"}
-            onClick={handleEditableOnclick}
-          />
+          <span ref={containerCellRef} onClick={handleEditableOnclick} />
         );
 
       /** Number option */
@@ -190,13 +185,10 @@ export default function DefaultCell(cellProperties: CellProps) {
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             onBlur={handleOnBlur}
-            className="data-input text-align-right"
+            className="text-align-right"
           />
         ) : (
-          <span
-            className="data-input text-align-right"
-            onClick={handleEditableOnclick}
-          >
+          <span className="text-align-right" onClick={handleEditableOnclick}>
             {(contextValue.value && contextValue.value.toString()) || ""}
           </span>
         );
@@ -264,7 +256,7 @@ export default function DefaultCell(cellProperties: CellProps) {
       case DataTypes.TASK:
         if ((column.columnDef as TableColumn).config.task_hide_completed) {
         }
-        return <div ref={taskRef} className="data-input"></div>;
+        return <div ref={taskRef}></div>;
 
       case DataTypes.CHECKBOX:
         return (
