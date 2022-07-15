@@ -107,6 +107,16 @@ export function databaseReducer(state: TableDataType, action: any) {
           rows: { $push: [row] },
         },
       });
+
+    case ActionTypes.DND_MOVE_HEADER:
+      return update(state, {
+        columns: {
+          $splice: [
+            [action.droppedId, 1],
+            [action.originalIndex, 0, state.columns[action.droppedId]],
+          ],
+        },
+      });
     /**
      * Add new row into table
      */

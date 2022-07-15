@@ -19,7 +19,6 @@ import { c, getTotalWidth } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
-import { getDndListStyle, getDndItemStyle } from "components/styles/DnDStyle";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { ActionMeta, OnChangeValue } from "react-select";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
@@ -343,11 +342,7 @@ export function Table(tableData: TableDataType) {
                     <div
                       key={`div-Droppable-${i}`}
                       {...provided.droppableProps}
-                      {...headerGroup.getHeaderGroupProps({
-                        style: {
-                          ...getDndListStyle(snapshot.isDraggingOver),
-                        },
-                      })}
+                      {...headerGroup.getHeaderGroupProps({})}
                       ref={provided.innerRef}
                       className={`${c("tr header-group")}`}
                     >
@@ -376,10 +371,6 @@ export function Table(tableData: TableDataType) {
                                     width: `${
                                       columnsWidthState.widthRecord[column.id]
                                     }px`,
-                                    ...getDndItemStyle(
-                                      snapshot.isDragging,
-                                      provided.draggableProps.style
-                                    ),
                                   },
                                 }),
                                 className: `${c("th noselect")} header`,

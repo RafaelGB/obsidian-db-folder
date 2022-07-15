@@ -2,7 +2,6 @@ import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useContext, useEffect, useState } from "react";
-import { Column } from "@tanstack/react-table";
 import { usePopper } from "react-popper";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";

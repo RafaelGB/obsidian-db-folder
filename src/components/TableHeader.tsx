@@ -5,6 +5,8 @@ import { c } from "helpers/StylesHelper";
 import { TableHeaderProps } from "cdm/HeaderModel";
 import { useDrag, useDrop } from "react-dnd";
 import type { Identifier, XYCoord } from "dnd-core";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { ActionTypes } from "helpers/Constants";
 interface DragItem {
   index: number;
   id: string;
@@ -21,6 +23,8 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     setColumnsWidthState,
   } = headerProps;
   const id = header.column.columnDef.id;
+  const { dispatch, columns } = table.options.meta as TableDataType;
+  const originalIndex = columns.indexOf(header.column.columnDef as TableColumn);
   //DnD
   const DnDref = React.useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<
@@ -80,15 +84,28 @@ export default function TableHeader(headerProps: TableHeaderProps) {
       item.index = hoverIndex;
     },
   });
-  const [{ isDragging }, drag] = useDrag({
-    type: "card",
-    item: () => {
-      return { id, headerIndex };
-    },
-    collect: (monitor: any) => ({
-      isDragging: monitor.isDragging(),
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: "card",
+      item: { id, originalIndex },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+      end: (item, monitor) => {
+        console.log("end");
+        const { id: droppedId, originalIndex } = item;
+        const didDrop = monitor.didDrop();
+        if (!didDrop) {
+          dispatch({
+            type: ActionTypes.DND_MOVE_HEADER,
+            droppedId: droppedId,
+            originalIndex: originalIndex,
+          });
+        }
+      },
     }),
-  });
+    [id, originalIndex, dispatch]
+  );
 
   const opacity = isDragging ? 0 : 1;
   drag(drop(DnDref));

@@ -18,6 +18,7 @@ export const ActionTypes = Object.freeze({
   SETTINGS_COLUMN: 'settings_column',
   MODIFY_COLUMN_CONFIG: 'modify_column_config',
   SET_SORT_BY: 'set_sort_by',
+  DND_MOVE_HEADER: 'dnd_move_header',
 });
 
 /** Flavours of data types */
