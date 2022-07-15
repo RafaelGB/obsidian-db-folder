@@ -14,7 +14,7 @@ export type HeaderMenuProps = {
     setLabelState: (label: string) => void;
 };
 
-export type HeaderTableProps = {
+export type TableHeaderProps = {
     table: Table<RowDataType>;
     header: Header<RowDataType, TableColumn>;
     headerIndex: number;

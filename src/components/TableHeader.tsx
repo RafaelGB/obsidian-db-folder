@@ -2,7 +2,7 @@ import React from "react";
 import { HeaderContext } from "components/contexts/HeaderContext";
 import { flexRender } from "@tanstack/react-table";
 import { c } from "helpers/StylesHelper";
-import { HeaderTableProps } from "cdm/HeaderModel";
+import { TableHeaderProps } from "cdm/HeaderModel";
 import { useDrag, useDrop } from "react-dnd";
 import type { Identifier, XYCoord } from "dnd-core";
 interface DragItem {
@@ -11,7 +11,7 @@ interface DragItem {
   type: string;
 }
 
-export default function TableHeader(headerProps: HeaderTableProps) {
+export default function TableHeader(headerProps: TableHeaderProps) {
   const {
     table,
     header,

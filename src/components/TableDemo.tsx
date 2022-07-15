@@ -11,7 +11,6 @@ import {
   Header,
   HeaderGroup,
   Row,
-  Cell,
 } from "@tanstack/react-table";
 import {
   TableDataType,
@@ -27,18 +26,18 @@ import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/DefaultCell";
 import DefaultHeader from "components/DefaultHeader";
-import { c, getTotalWidth } from "helpers/StylesHelper";
+import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import fuzzyFilter from "components/filters/GlobalFilterFn";
 import TableHeader from "components/TableHeader";
 import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
 import { HeaderContext } from "components/contexts/HeaderContext";
-import { getDndListStyle, getDndItemStyle } from "components/styles/DnDStyle";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { ActionMeta, OnChangeValue } from "react-select";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import TableCell from "./TableCell";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
@@ -358,29 +357,9 @@ export function TableDemo(tableData: TableDataType) {
         >
           {table
             .getRowModel()
-            .rows.map((row: Row<RowDataType>, rowIndex: number) => {
-              return (
-                <div className={`${c("tr")}`} key={`${row.id}-${rowIndex}`}>
-                  {row
-                    .getVisibleCells()
-                    .map(
-                      (cell: Cell<RowDataType, unknown>, cellIndex: number) => {
-                        return (
-                          <div
-                            key={`${cell.id}-${cellIndex}`}
-                            className={`${c("td")} data-input`}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </div>
-                        );
-                      }
-                    )}
-                </div>
-              );
-            })}
+            .rows.map((row: Row<RowDataType>, rowIndex: number) => (
+              <TableCell row={row} rowIndex={rowIndex} />
+            ))}
 
           {/* ENDS BODY */}
         </div>

@@ -8,3 +8,8 @@ export type CellProps = {
     table: Table<RowDataType>;
     [key: string]: any;
 }
+
+export type TableCellProps = {
+    row: any,
+    rowIndex: any
+}
