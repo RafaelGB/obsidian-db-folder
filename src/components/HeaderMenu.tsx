@@ -1,10 +1,8 @@
 import { ActionTypes, DataTypes, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePopper } from "react-popper";
-import { HeaderContext } from "components/contexts/HeaderContext";
-import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { ColumnModal } from "./modals/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
@@ -15,8 +13,6 @@ import { TableColumn } from "cdm/FolderModel";
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
   const dispatch = (table.options.meta as any).dispatch;
-  /** state of width columns */
-  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   /** Header props */
   const {
     setSortBy,
@@ -76,8 +72,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     hooks: {
       setSortBy: setSortBy,
       setExpanded: setExpanded,
-      setColumnWidthState: setColumnWidthState,
-      columnWidthState: columnWidthState,
       keyState: keyState,
       setKeyState: setkeyState,
       setShowType: setShowType,
@@ -116,16 +110,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       label: labelState,
     });
     setkeyState(newKey);
-    columnWidthState.widthRecord[newKey] = getColumnWidthStyle(
-      table.getRowModel().rows,
-      column.columnDef as TableColumn
-    );
-    /*
-      To adjust column settings to the new key, we need to update the order
-      of the columns with it and calculate the new width
-     */
-    delete columnWidthState.widthRecord[column.id];
-    setColumnWidthState(columnWidthState);
     table.setColumnOrder(futureOrder);
   }
   function handleKeyDown(e: any) {

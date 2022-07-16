@@ -23,6 +23,4 @@ export type TableHeaderProps = {
     };
     headerIndex: number;
     columnResizeMode: ColumnResizeMode;
-    columnsWidthState: ColumnWidthState;
-    setColumnsWidthState: React.Dispatch<React.SetStateAction<ColumnWidthState>>;
 };

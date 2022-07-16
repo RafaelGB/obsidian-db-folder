@@ -22,7 +22,6 @@ import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
-import { HeaderContext } from "components/contexts/HeaderContext";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { Column } from "@tanstack/react-table";
 
@@ -57,8 +56,6 @@ function setOptionsOfSelectDataType(
  */
 export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
-  /** state of width columns */
-  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
   // TODO : add a tooltip to the header
   const created: boolean = false;
   /** Properties of header */
@@ -125,10 +122,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
     // Add width of the new column
-    columnWidthState.widthRecord[columnName] =
-      (columnLabel.length + WidthVariables.ICON_SPACING) *
-      WidthVariables.MAGIC_SPACING;
-    setColumnWidthState(columnWidthState);
     return { name: columnName, position: position, label: columnLabel };
   }
 

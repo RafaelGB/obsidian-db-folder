@@ -30,8 +30,6 @@ import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import fuzzyFilter from "components/filters/GlobalFilterFn";
 import TableHeader from "components/TableHeader";
-import { getColumnsWidthStyle } from "components/styles/ColumnWidthStyle";
-import { HeaderContext } from "components/contexts/HeaderContext";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { ActionMeta, OnChangeValue } from "react-select";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
@@ -188,10 +186,6 @@ export function TableDemo(tableData: TableDataType) {
       tableData.view.plugin.settings.global_settings.enable_debug_mode,
   });
 
-  // Manage column width
-  const [columnsWidthState, setColumnsWidthState] = React.useState(
-    getColumnsWidthStyle(table.getRowModel().rows, columns)
-  );
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
@@ -245,6 +239,7 @@ export function TableDemo(tableData: TableDataType) {
     [columns]
   );
   LOGGER.debug(`<= Table`);
+  console.log(table.getCenterTotalSize());
   return (
     <>
       {/* INIT NAVBAR */}
@@ -319,8 +314,6 @@ export function TableDemo(tableData: TableDataType) {
                             findColumn={findColumn}
                             headerIndex={headerIndex}
                             columnResizeMode={columnResizeMode}
-                            columnsWidthState={columnsWidthState}
-                            setColumnsWidthState={setColumnsWidthState}
                           />
                         )
                       )}
@@ -340,19 +333,12 @@ export function TableDemo(tableData: TableDataType) {
                           key={`${header.id}-${headerIndex}`}
                           className={`${c("th")}`}
                         >
-                          <HeaderContext.Provider
-                            value={{
-                              columnWidthState: columnsWidthState,
-                              setColumnWidthState: setColumnsWidthState,
-                            }}
-                          >
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                          </HeaderContext.Provider>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
                         </div>
                       )
                     )}

@@ -1,5 +1,4 @@
 import { SortedType } from "cdm/DatabaseModel";
-import { ColumnWidthState } from "cdm/StyleModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 
 export type HeaderActionResponse = {
@@ -8,8 +7,6 @@ export type HeaderActionResponse = {
     hooks: {
         setSortBy: (sortedType: SortedType[]) => void,
         setExpanded: (expanded: boolean) => void,
-        setColumnWidthState: (a: ColumnWidthState) => void,
-        columnWidthState: ColumnWidthState,
         setKeyState: (a: string) => void,
         keyState: string,
         [key: string]: any | ((a: any) => void)

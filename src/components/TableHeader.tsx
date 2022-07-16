@@ -1,10 +1,8 @@
 import React from "react";
-import { HeaderContext } from "components/contexts/HeaderContext";
 import { flexRender } from "@tanstack/react-table";
 import { c } from "helpers/StylesHelper";
 import { TableHeaderProps } from "cdm/HeaderModel";
 import { useDrag, useDrop } from "react-dnd";
-import type { Identifier, XYCoord } from "dnd-core";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 import { ActionTypes } from "helpers/Constants";
 interface Item {
@@ -13,15 +11,8 @@ interface Item {
 }
 
 export default function TableHeader(headerProps: TableHeaderProps) {
-  const {
-    table,
-    header,
-    findColumn,
-    headerIndex,
-    columnResizeMode,
-    columnsWidthState,
-    setColumnsWidthState,
-  } = headerProps;
+  const { table, header, findColumn, headerIndex, columnResizeMode } =
+    headerProps;
   const { id } = header.column.columnDef as TableColumn;
   const { dispatch, columns } = table.options.meta as TableDataType;
   const originalIndex = columns.findIndex((col) => col.id === id);
@@ -37,15 +28,10 @@ export default function TableHeader(headerProps: TableHeaderProps) {
       end: (item, monitor) => {
         const { id: droppedId, originalIndex } = item;
         const didDrop = monitor.didDrop();
-        console.log(
-          "useDrag droppedId-originalIndex",
-          droppedId,
-          originalIndex
-        );
         if (!didDrop) {
           dispatch({
             type: ActionTypes.DND_MOVE_HEADER,
-            droppedId: droppedId,
+            destinationId: droppedId,
             originalIndex: originalIndex,
           });
         }
@@ -58,7 +44,6 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     () => ({
       accept: "card",
       hover({ id: draggedId }: Item) {
-        console.log("useDrop draggedId", draggedId);
         if (draggedId !== id) {
           const { index: overIndex } = findColumn(id);
           dispatch({
@@ -84,16 +69,9 @@ export default function TableHeader(headerProps: TableHeaderProps) {
         opacity,
       }}
     >
-      <HeaderContext.Provider
-        value={{
-          columnWidthState: columnsWidthState,
-          setColumnWidthState: setColumnsWidthState,
-        }}
-      >
-        {header.isPlaceholder
-          ? null
-          : flexRender(header.column.columnDef.header, header.getContext())}
-      </HeaderContext.Provider>
+      {header.isPlaceholder
+        ? null
+        : flexRender(header.column.columnDef.header, header.getContext())}
       <div
         key={`${header.id}-${headerIndex}-resizer`}
         {...{

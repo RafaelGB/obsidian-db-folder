@@ -110,13 +110,14 @@ export function databaseReducer(state: TableDataType, action: any) {
 
     case ActionTypes.DND_MOVE_HEADER:
       const columnIndex = state.columns.findIndex(
-        (column: TableColumn) => column.id === action.destId
+        (column: TableColumn) => column.id === action.destinationId
       );
+      console.log("columnIndex", columnIndex);
       return update(state, {
         columns: {
           $splice: [
             [columnIndex, 1],
-            [action.originalIndex, 0, state.columns[action.droppedId]],
+            [action.originalIndex, 0, state.columns[columnIndex]],
           ],
         },
       });
