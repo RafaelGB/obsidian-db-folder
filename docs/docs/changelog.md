@@ -1,3 +1,6 @@
+# 2.0.0
+### No longer broken
+- Control label value before save changes [ISSUE#203](https://github.com/RafaelGB/obsidian-db-folder/issues/203)
 # 1.8.2
 ### No longer broken
 - Hotfix of critical mapping bug [ISSUE#190](https://github.com/RafaelGB/obsidian-db-folder/issues/190)
