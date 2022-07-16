@@ -233,6 +233,17 @@ export function TableDemo(tableData: TableDataType) {
     });
     setRowTemplateState(settingsValue);
   }
+
+  const findColumn = React.useCallback(
+    (id: string) => {
+      const findedColumn = columns.filter((c) => `${c.id}` === id)[0];
+      return {
+        findedColumn,
+        index: columns.indexOf(findedColumn),
+      };
+    },
+    [columns]
+  );
   LOGGER.debug(`<= Table`);
   return (
     <>
@@ -305,6 +316,7 @@ export function TableDemo(tableData: TableDataType) {
                           <TableHeader
                             table={table}
                             header={header}
+                            findColumn={findColumn}
                             headerIndex={headerIndex}
                             columnResizeMode={columnResizeMode}
                             columnsWidthState={columnsWidthState}

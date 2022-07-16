@@ -17,6 +17,10 @@ export type HeaderMenuProps = {
 export type TableHeaderProps = {
     table: Table<RowDataType>;
     header: Header<RowDataType, TableColumn>;
+    findColumn: (id: string) => {
+        findedColumn: TableColumn;
+        index: number;
+    };
     headerIndex: number;
     columnResizeMode: ColumnResizeMode;
     columnsWidthState: ColumnWidthState;
