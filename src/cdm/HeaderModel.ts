@@ -1,6 +1,5 @@
-import { ColumnResizeMode, Header, Table } from "@tanstack/react-table";
+import { ColumnOrderState, ColumnResizeMode, Header, Table } from "@tanstack/react-table";
 import { DatabaseHeaderProps, RowDataType, TableColumn } from "cdm/FolderModel";
-import { ColumnWidthState } from "cdm/StyleModel";
 
 export type HeaderMenuProps = {
     headerProps: DatabaseHeaderProps;
@@ -23,4 +22,5 @@ export type TableHeaderProps = {
     };
     headerIndex: number;
     columnResizeMode: ColumnResizeMode;
+    setColumnOrder: React.Dispatch<React.SetStateAction<ColumnOrderState>>;
 };

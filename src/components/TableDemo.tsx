@@ -6,6 +6,7 @@ import {
   getExpandedRowModel,
   ColumnDef,
   ColumnResizeMode,
+  ColumnOrderState,
   flexRender,
   Table,
   Header,
@@ -94,8 +95,22 @@ export function TableDemo(tableData: TableDataType) {
     }),
     []
   );
+
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
+
+  // Drag and drop
+  const findColumn = React.useCallback(
+    (id: string) => {
+      const findedColumn = columns.filter((c) => `${c.id}` === id)[0];
+      return {
+        findedColumn,
+        index: columns.indexOf(findedColumn),
+      };
+    },
+    [columns]
+  );
+  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>([]);
 
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
@@ -171,7 +186,9 @@ export function TableDemo(tableData: TableDataType) {
     columnResizeMode,
     state: {
       globalFilter,
+      columnOrder,
     },
+    onColumnOrderChange: setColumnOrder,
     globalFilterFn: fuzzyFilter,
     meta: tableData,
     defaultColumn: defaultColumn,
@@ -228,18 +245,7 @@ export function TableDemo(tableData: TableDataType) {
     setRowTemplateState(settingsValue);
   }
 
-  const findColumn = React.useCallback(
-    (id: string) => {
-      const findedColumn = columns.filter((c) => `${c.id}` === id)[0];
-      return {
-        findedColumn,
-        index: columns.indexOf(findedColumn),
-      };
-    },
-    [columns]
-  );
   LOGGER.debug(`<= Table`);
-  console.log(table.getCenterTotalSize());
   return (
     <>
       {/* INIT NAVBAR */}
@@ -314,6 +320,7 @@ export function TableDemo(tableData: TableDataType) {
                             findColumn={findColumn}
                             headerIndex={headerIndex}
                             columnResizeMode={columnResizeMode}
+                            setColumnOrder={setColumnOrder}
                           />
                         )
                       )}

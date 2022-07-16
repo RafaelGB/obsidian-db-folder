@@ -11,13 +11,28 @@ interface Item {
 }
 
 export default function TableHeader(headerProps: TableHeaderProps) {
-  const { table, header, findColumn, headerIndex, columnResizeMode } =
-    headerProps;
+  const {
+    table,
+    header,
+    findColumn,
+    headerIndex,
+    columnResizeMode,
+    setColumnOrder,
+  } = headerProps;
   const { id } = header.column.columnDef as TableColumn;
-  const { dispatch, columns } = table.options.meta as TableDataType;
+  const { dispatch, columns, view } = table.options.meta as TableDataType;
   const originalIndex = columns.findIndex((col) => col.id === id);
   //DnD
   const DnDref = React.useRef<HTMLDivElement>(null);
+
+  function moveColumn(source: number, destinationKey: string) {
+    const { index: destIndex } = findColumn(destinationKey);
+    const initialOrder = table.getAllColumns().map((d) => d.id);
+    initialOrder.splice(destIndex, 1);
+    initialOrder.splice(source, 0, columns[destIndex].id);
+    setColumnOrder(initialOrder);
+    view.diskConfig.reorderColumns(initialOrder);
+  }
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: "card",
@@ -29,11 +44,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
         const { id: droppedId, originalIndex } = item;
         const didDrop = monitor.didDrop();
         if (!didDrop) {
-          dispatch({
-            type: ActionTypes.DND_MOVE_HEADER,
-            destinationId: droppedId,
-            originalIndex: originalIndex,
-          });
+          moveColumn(originalIndex, droppedId);
         }
       },
     }),
@@ -46,11 +57,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
       hover({ id: draggedId }: Item) {
         if (draggedId !== id) {
           const { index: overIndex } = findColumn(id);
-          dispatch({
-            type: ActionTypes.DND_MOVE_HEADER,
-            destinationId: draggedId,
-            originalIndex: overIndex,
-          });
+          moveColumn(overIndex, draggedId);
         }
       },
     }),

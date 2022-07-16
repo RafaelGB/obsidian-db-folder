@@ -107,20 +107,6 @@ export function databaseReducer(state: TableDataType, action: any) {
           rows: { $push: [row] },
         },
       });
-
-    case ActionTypes.DND_MOVE_HEADER:
-      const columnIndex = state.columns.findIndex(
-        (column: TableColumn) => column.id === action.destinationId
-      );
-      console.log("columnIndex", columnIndex);
-      return update(state, {
-        columns: {
-          $splice: [
-            [columnIndex, 1],
-            [action.originalIndex, 0, state.columns[columnIndex]],
-          ],
-        },
-      });
     /**
      * Add new row into table
      */
