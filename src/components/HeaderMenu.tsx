@@ -91,11 +91,27 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     strategy: "fixed",
   });
 
+  function isValidLabel(newKey: string): boolean {
+    if (table.getAllColumns().find((o: any) => o.id === newKey)) {
+      return false;
+    }
+
+    if (newKey === undefined || newKey === null) {
+      return false;
+    }
+
+    if (newKey.length === 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   function persistLabelChange() {
     // trim label will get a valid yaml key
     const newKey = dbTrim(labelState);
     // Check if key already exists. If so, mark it as invalid
-    if (table.getAllColumns().find((o: any) => o.id === newKey)) {
+    if (!isValidLabel(newKey)) {
       setLabelStateInvalid(true);
       return;
     }
