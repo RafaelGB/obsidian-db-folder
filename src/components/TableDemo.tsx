@@ -22,7 +22,12 @@ import {
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
-import { ActionTypes, DatabaseCore, MetadataColumns } from "helpers/Constants";
+import {
+  ActionTypes,
+  DatabaseCore,
+  DatabaseLimits,
+  MetadataColumns,
+} from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/DefaultCell";
@@ -36,9 +41,12 @@ import Select, { ActionMeta, OnChangeValue } from "react-select";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import TableCell from "./TableCell";
+import TableCell from "components/TableCell";
+import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
+  minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
+  maxSize: DatabaseLimits.MAX_COLUMN_HEIGHT,
   cell: DefaultCell,
   header: DefaultHeader,
 };
@@ -187,6 +195,15 @@ export function TableDemo(tableData: TableDataType) {
     state: {
       globalFilter,
       columnOrder,
+      columnSizing: getInitialColumnSizing(columns),
+      // columnSizingInfo: {
+      //   deltaOffset: 0,
+      //   deltaPercentage: 0,
+      //   startOffset: 0,
+      //   isResizingColumn: false,
+      //   startSize: 0,
+      //   columnSizingStart: columns.map((c) => [c.id, 300]),
+      // },
     },
     onColumnOrderChange: setColumnOrder,
     globalFilterFn: fuzzyFilter,

@@ -1,7 +1,7 @@
 import {
   DataTypes,
   DEFAULT_COLUMN_CONFIG,
-  MaxCapacitiesDatabase,
+  DatabaseLimits,
   MetadataColumns,
   MetadataDatabaseColumns,
 } from "helpers/Constants";
@@ -62,7 +62,7 @@ export async function obtainMetadataColumns(
 
   yamlColumns[MetadataColumns.ADD_COLUMN] = {
     ...MetadataDatabaseColumns.ADD_COLUMN,
-    position: MaxCapacitiesDatabase.MAX_COLUMNS + 1,
+    position: DatabaseLimits.MAX_COLUMNS + 1,
   };
   return yamlColumns;
 }

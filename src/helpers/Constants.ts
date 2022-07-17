@@ -34,10 +34,12 @@ export const DataTypes = Object.freeze({
   NEW_COLUMN: 'new_column'
 });
 
-export const MaxCapacitiesDatabase = Object.freeze({
+export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
   MAX_ROWS: 99999,
   MAX_OPTIONS: 100,
+  MIN_COLUMN_HEIGHT: 30,
+  MAX_COLUMN_HEIGHT: 350,
 });
 
 export const MetadataColumns = Object.freeze({

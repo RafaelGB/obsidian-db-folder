@@ -33,6 +33,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     setColumnOrder(initialOrder);
     view.diskConfig.reorderColumns(initialOrder);
   }
+
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: "card",

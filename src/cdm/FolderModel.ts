@@ -57,7 +57,6 @@ export interface TableColumn extends BaseColumn {
     isSortedDesc?: boolean;
     isSorted?: boolean;
     id: string;
-    minWidth?: number;
     width?: number;
     dataType: string;
     options?: RowSelectOption[];
