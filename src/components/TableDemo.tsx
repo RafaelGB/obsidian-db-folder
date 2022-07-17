@@ -12,6 +12,7 @@ import {
   Header,
   HeaderGroup,
   Row,
+  ColumnSizingState,
 } from "@tanstack/react-table";
 import {
   TableDataType,
@@ -106,6 +107,7 @@ export function TableDemo(tableData: TableDataType) {
 
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
+  const columnSizing = getInitialColumnSizing(columns);
 
   // Drag and drop
   const findColumn = React.useCallback(
@@ -195,15 +197,14 @@ export function TableDemo(tableData: TableDataType) {
     state: {
       globalFilter,
       columnOrder,
-      columnSizing: getInitialColumnSizing(columns),
-      // columnSizingInfo: {
-      //   deltaOffset: 0,
-      //   deltaPercentage: 0,
-      //   startOffset: 0,
-      //   isResizingColumn: false,
-      //   startSize: 0,
-      //   columnSizingStart: columns.map((c) => [c.id, 300]),
-      // },
+      columnSizing: columnSizing,
+    },
+    onColumnSizingChange: (updater) => {
+      dataDispatch({
+        type: ActionTypes.MODIFY_COLUMN_SIZE,
+        updater: updater,
+        columnSizing: columnSizing,
+      });
     },
     onColumnOrderChange: setColumnOrder,
     globalFilterFn: fuzzyFilter,

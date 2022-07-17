@@ -47,6 +47,7 @@ export interface BaseColumn {
     accessorKey: string;
     label: string;
     key: string;
+    width?: number;
     position?: number;
     isMetadata?: boolean;
     skipPersist?: boolean;
@@ -57,7 +58,6 @@ export interface TableColumn extends BaseColumn {
     isSortedDesc?: boolean;
     isSorted?: boolean;
     id: string;
-    width?: number;
     dataType: string;
     options?: RowSelectOption[];
     Cell?: any;

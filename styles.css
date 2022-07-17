@@ -160,7 +160,7 @@
 }
 
 .database-plugin__md_cell {
-  padding: 0.5rem;
+  vertical-align: middle;
 }
 
 .database-plugin__md_cell p {

@@ -25,6 +25,7 @@ import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnSizingState } from "@tanstack/react-table";
 
 export function databaseReducer(state: TableDataType, action: any) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
@@ -525,7 +526,37 @@ export function databaseReducer(state: TableDataType, action: any) {
         },
       });
 
-    // case ActionTypes.MODIFY_COLUMN_SORTING:
+    /**
+     * Update the size of a column
+     */
+    case ActionTypes.MODIFY_COLUMN_SIZE:
+      let list: ColumnSizingState = null;
+      if (typeof action.updater === "function") {
+        list = action.updater(action.columnSizing);
+      } else {
+        list = action.updater;
+      }
+      Object.keys(list)
+        .filter((key) => list[key] !== undefined)
+        .map((key) => {
+          state.view.diskConfig.updateColumnProperties(key, {
+            width: list[key],
+          });
+        });
+      return update(state, {
+        columns: {
+          $set: state.columns.map((column) => {
+            const newColumn = { ...column };
+            if (list[column.id] !== undefined) {
+              newColumn.width = list[column.id];
+            }
+            return newColumn;
+          }),
+        },
+      });
+    /**
+     * Update the configuration of a column
+     */
     case ActionTypes.MODIFY_COLUMN_CONFIG:
       // Altern between inline & frontmatter mode
       state.view.diskConfig.updateColumnProperties(
