@@ -12,18 +12,12 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
-import {
-  ActionTypes,
-  DataTypes,
-  MetadataColumns,
-  WidthVariables,
-} from "helpers/Constants";
+import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { RowSelectOption } from "cdm/ComponentsModel";
-import { Column } from "@tanstack/react-table";
 
 /**
  * Generate column Options with Select type

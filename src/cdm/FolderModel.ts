@@ -4,7 +4,7 @@ import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
-import { Column, Table } from "@tanstack/react-table";
+import { Column, Header, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
@@ -91,7 +91,7 @@ export type TableDataType = {
 
 export interface DatabaseHeaderProps {
     column: Column<RowDataType, any>,
-    header: any,
+    header: Header<RowDataType, TableColumn>,
     table: Table<RowDataType>
 }
 

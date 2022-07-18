@@ -12,7 +12,7 @@ import {
   Header,
   HeaderGroup,
   Row,
-  ColumnSizingState,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   TableDataType,
@@ -77,6 +77,7 @@ export function TableDemo(tableData: TableDataType) {
     React.useState<ColumnResizeMode>("onChange");
 
   // Sorting
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const sortTypes = React.useMemo(
     () => ({
       alphanumericFalsyLast(
@@ -195,10 +196,12 @@ export function TableDemo(tableData: TableDataType) {
     columns,
     columnResizeMode,
     state: {
-      globalFilter,
-      columnOrder,
+      globalFilter: globalFilter,
+      columnOrder: columnOrder,
       columnSizing: columnSizing,
+      sorting: sorting,
     },
+    onSortingChange: setSorting,
     onColumnSizingChange: (updater) => {
       dataDispatch({
         type: ActionTypes.MODIFY_COLUMN_SIZE,

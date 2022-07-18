@@ -6,7 +6,7 @@ import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
 import { ActionTypes, DataTypes } from "helpers/Constants";
-import { TableColumn } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -30,35 +30,36 @@ export default class SortHandlerAction extends AbstractHeaderAction {
    */
   private addSortButtons(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { table } =
+    const { table, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
-      .column.columnDef as TableColumn;
+    const tablecolumn = column.columnDef as TableColumn;
     const sortButtons: any[] = [];
     sortButtons.push(
       {
         onClick: (e: any) => {
           const sortArray = generateSortedColumns(
-            table.options.meta as any,
-            column,
+            table.options.meta as TableDataType,
+            tablecolumn,
             false
           );
+          console.log(sortArray);
           // Update state
-          (table.options.meta as any).dispatch({
+          (table.options.meta as TableDataType).dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
-          hooks.setSortBy(sortArray);
+          column.getToggleSortingHandler();
+
           hooks.setExpanded(false);
         },
         icon:
-          column.isSorted && !column.isSortedDesc ? (
+          tablecolumn.isSorted && !tablecolumn.isSortedDesc ? (
             <CrossIcon />
           ) : (
             <ArrowUpIcon />
           ),
         label:
-          column.isSorted && !column.isSortedDesc
+          tablecolumn.isSorted && !tablecolumn.isSortedDesc
             ? "Remove ascending sort"
             : "Sort ascending",
       },
@@ -66,7 +67,7 @@ export default class SortHandlerAction extends AbstractHeaderAction {
         onClick: (e: any) => {
           const sortArray = generateSortedColumns(
             table.options.meta as any,
-            column,
+            tablecolumn,
             true
           );
           // Update state
@@ -74,17 +75,17 @@ export default class SortHandlerAction extends AbstractHeaderAction {
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
-          hooks.setSortBy(sortArray);
+          column.getToggleSortingHandler();
           hooks.setExpanded(false);
         },
         icon:
-          column.isSorted && column.isSortedDesc ? (
+          tablecolumn.isSorted && tablecolumn.isSortedDesc ? (
             <CrossIcon />
           ) : (
             <ArrowDownIcon />
           ),
         label:
-          column.isSorted && column.isSortedDesc
+          tablecolumn.isSorted && tablecolumn.isSortedDesc
             ? "Remove descending sort"
             : "Sort descending",
       }

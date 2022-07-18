@@ -15,7 +15,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const dispatch = (table.options.meta as any).dispatch;
   /** Header props */
   const {
-    setSortBy,
     propertyIcon,
     expanded,
     setExpanded,
@@ -70,7 +69,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     buttons: [],
     headerMenuProps: headerMenuProps,
     hooks: {
-      setSortBy: setSortBy,
       setExpanded: setExpanded,
       keyState: keyState,
       setKeyState: setkeyState,

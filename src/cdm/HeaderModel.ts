@@ -3,7 +3,6 @@ import { DatabaseHeaderProps, RowDataType, TableColumn } from "cdm/FolderModel";
 
 export type HeaderMenuProps = {
     headerProps: DatabaseHeaderProps;
-    setSortBy: any;
     propertyIcon: any;
     expanded: boolean;
     setExpanded: (expanded: boolean) => void;

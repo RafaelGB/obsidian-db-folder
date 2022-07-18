@@ -5,9 +5,8 @@ export type HeaderActionResponse = {
     buttons: any[]
     headerMenuProps: HeaderMenuProps
     hooks: {
-        setSortBy: (sortedType: SortedType[]) => void,
         setExpanded: (expanded: boolean) => void,
-        setKeyState: (a: string) => void,
+        setKeyState: (key: string) => void,
         keyState: string,
         [key: string]: any | ((a: any) => void)
     }
