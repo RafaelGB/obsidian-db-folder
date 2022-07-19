@@ -4,18 +4,20 @@ import { MediaExtensions } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { MarkdownRenderer, MarkdownPreviewView, TFile } from "obsidian";
-import { Cell } from "react-table";
+import { Cell } from "@tanstack/react-table";
 import { LOGGER } from "services/Logger";
+import { CellProps } from "cdm/CellModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 export async function renderMarkdown(
-  cell: Cell,
+  cell: CellProps,
   markdownString: string,
   domElement: HTMLDivElement,
   depth: number
 ) {
   try {
-    const view: DatabaseView = (cell as any).tableData.view;
-    const column = cell.column as unknown as DatabaseColumn;
+    const view: DatabaseView = (cell.table.options.meta as TableDataType).view;
+    const column = cell.column.columnDef as TableColumn;
     const { media_height, media_width, enable_media_view } = column.config;
     if (enable_media_view && isValidHttpUrl(markdownString)) {
       markdownString = `![embedded link|${media_height}x${media_width}](${markdownString})`;

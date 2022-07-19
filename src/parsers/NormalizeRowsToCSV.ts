@@ -1,14 +1,14 @@
-import { Row } from "react-table"
+import { Row } from "@tanstack/react-table"
 import { LabelKeyObject } from "react-csv/components/CommonPropTypes";
-import { TableColumn } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { MetadataColumns } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 
-export const normalizeRowsToCsvData = (rows: Row<object>[]): object[] => {
+export const normalizeRowsToCsvData = (rows: Row<RowDataType>[]): object[] => {
     // Filter out empty rows
     return sanitizeDataCSV(rows);
 }
-function sanitizeDataCSV(rows: Row<object>[]): object[] {
+function sanitizeDataCSV(rows: Row<RowDataType>[]): object[] {
     const originalData: object[] = rows.map(row => row.original);
     const sanitizedData: object[] = [];
     Object.values(originalData).map(rowObject => {

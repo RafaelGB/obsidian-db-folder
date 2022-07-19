@@ -12,19 +12,12 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
-import {
-  ActionTypes,
-  DataTypes,
-  MetadataColumns,
-  WidthVariables,
-} from "helpers/Constants";
+import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
-import { DatabaseHeaderProps } from "cdm/FolderModel";
+import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
-import { HeaderContext } from "components/contexts/HeaderContext";
 import { RowSelectOption } from "cdm/ComponentsModel";
-import { Column } from "react-table";
 
 /**
  * Generate column Options with Select type
@@ -39,7 +32,7 @@ function setOptionsOfSelectDataType(
   columnId: string
 ): any[] {
   rows.forEach((row: any) => {
-    const rowValue = row.values[columnId];
+    const rowValue = row.original[columnId];
     let match = options.find(
       (option: { label: string }) => option.label === rowValue
     );
@@ -55,23 +48,22 @@ function setOptionsOfSelectDataType(
  * @param headerProps
  * @returns
  */
-export default function Header(headerProps: DatabaseHeaderProps) {
-  LOGGER.debug(`=>Header ${headerProps.column.label}`);
-  /** state of width columns */
-  const { columnWidthState, setColumnWidthState } = useContext(HeaderContext);
+export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
+  LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
   // TODO : add a tooltip to the header
   const created: boolean = false;
   /** Properties of header */
-  const { setSortBy, rows, tableData } = headerProps;
+  const { column, header, table } = headerProps;
   /** Column values */
-  const { id, dataType, options, position } = headerProps.column;
+  const { id, dataType, options, position, label, config } =
+    column.columnDef as TableColumn;
   /** reducer asociated to database */
   // TODO typying improve
-  const dataDispatch = (headerProps as any).dataDispatch;
+  const dispatch = (table.options.meta as any).dispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
-  const [labelState, setLabelState] = useState(headerProps.column.label);
+  const [labelState, setLabelState] = useState(label);
   React.useEffect(() => {
     setDomReady(true);
   });
@@ -85,7 +77,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       propertyIcon = <TextIcon />;
       break;
     case DataTypes.SELECT:
-      setOptionsOfSelectDataType(options, rows, id);
+      setOptionsOfSelectDataType(options, table.getRowModel().rows, id);
       propertyIcon = <MultiIcon />;
       break;
     case DataTypes.CALENDAR:
@@ -110,27 +102,25 @@ export default function Header(headerProps: DatabaseHeaderProps) {
 
   function adjustWidthOfTheColumn(position: number) {
     let columnNumber =
-      tableData.columns.length + 1 - tableData.shadowColumns.length;
+      (table.options.meta as any).columns.length +
+      1 -
+      (table.options.meta as any).shadowColumns.length;
     // Check if column name already exists
     while (
-      headerProps.allColumns.find(
-        (o: Column) => o.id === `newColumn${columnNumber}`
-      )
+      table
+        .getAllColumns()
+        .find((o: any) => o.id === `newColumn${columnNumber}`)
     ) {
       columnNumber++;
     }
     const columnName = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
     // Add width of the new column
-    columnWidthState.widthRecord[columnName] =
-      (columnLabel.length + WidthVariables.ICON_SPACING) *
-      WidthVariables.MAGIC_SPACING;
-    setColumnWidthState(columnWidthState);
     return { name: columnName, position: position, label: columnLabel };
   }
 
   function handlerAddColumnToLeft(e: any) {
-    dataDispatch({
+    dispatch({
       type: ActionTypes.ADD_COLUMN_TO_LEFT,
       columnId: MetadataColumns.ADD_COLUMN,
       focus: true,
@@ -138,7 +128,7 @@ export default function Header(headerProps: DatabaseHeaderProps) {
     });
   }
 
-  LOGGER.debug(`<=Header ${headerProps.column.label}`);
+  LOGGER.debug(`<=Header ${label}`);
   return id !== MetadataColumns.ADD_COLUMN ? (
     <>
       <div
@@ -148,11 +138,11 @@ export default function Header(headerProps: DatabaseHeaderProps) {
       >
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
         {labelState}
-        {headerProps.column.config.isInline && <span>*</span>}
+        {config.isInline && <span>*</span>}
         {/* Add a sort direction indicator */}
         <span className="svg-icon svg-gray icon-margin">
-          {headerProps.column.isSorted ? (
-            headerProps.column.isSortedDesc ? (
+          {header.column.getIsSorted() ? (
+            header.column.getIsSorted() === "desc" ? (
               <ArrowDown />
             ) : (
               <ArrowUp />
@@ -166,7 +156,6 @@ export default function Header(headerProps: DatabaseHeaderProps) {
         ? ReactDOM.createPortal(
             <HeaderMenu
               headerProps={headerProps}
-              setSortBy={setSortBy}
               propertyIcon={propertyIcon}
               expanded={expanded}
               setExpanded={setExpanded}

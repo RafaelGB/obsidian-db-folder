@@ -1,24 +1,20 @@
 import React, { useContext, useState } from "react";
 import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
-import { Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
-import { DataviewService } from "services/DataviewService";
+import { CheckboxProps } from "cdm/CheckboxModel";
+import { TableDataType } from "cdm/FolderModel";
+import { c } from "helpers/StylesHelper";
 
-type CheckboxProps = {
-  intialState: TableDataType;
-  column: TableColumn;
-  cellProperties: Cell;
-};
 export function CheckboxCell(props: CheckboxProps) {
   const { column, cellProperties } = props;
-  const dataDispatch = (cellProperties as any).dataDispatch;
+  const { row, table } = cellProperties;
+  const dataDispatch = (table.options.meta as TableDataType).dispatch;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).__note__;
+  const note: NoteInfo = row.original.__note__;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
-  const [checked, setChecked] = useState(contextValue.value);
+  const [checked, setChecked] = useState(contextValue.value as boolean);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk
@@ -27,14 +23,14 @@ export function CheckboxCell(props: CheckboxProps) {
       file: note.getFile(),
       key: column.key,
       value: newValue,
-      row: cellProperties.row,
+      row: row,
       columnId: column.id,
     });
     setChecked(event.target.checked);
     setContextValue({ value: event.target.checked ? 1 : 0, update: true });
   };
   return (
-    <div className="data-input-checkbox">
+    <div className={`${c("checkbox")}`}>
       <input type="checkbox" checked={checked} onChange={handleChange} />
     </div>
   );

@@ -15,7 +15,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
             yaml.columns = {
                 Column1: {
                     input: DataTypes.TEXT,
-                    accessor: 'Column1',
+                    accessorKey: 'Column1',
                     key: 'Column1',
                     label: 'Column 1',
                     position: 1,
@@ -35,9 +35,9 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     column = marshallParticularInputInfo(column);
                     // PARTICULAR INPUT INFO
                 }
-                if (!column.accessor) {
-                    this.addError(`There was not accessor in column ${key}`);
-                    column.accessor = key;
+                if (!column.accessorKey) {
+                    this.addError(`There was not accessorKey in column ${key}`);
+                    column.accessorKey = key;
                 }
                 if (!column.key) {
                     this.addError(`There was not key in column ${key}`);

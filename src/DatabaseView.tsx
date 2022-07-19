@@ -19,8 +19,7 @@ import {
   TFile,
   Menu,
 } from "obsidian";
-import * as React from "react";
-import ReactDOM from "react-dom";
+import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
@@ -31,6 +30,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   plugin: DBFolderPlugin;
   hoverPopover: HoverPopover | null;
   tableContainer: HTMLDivElement | null = null;
+  rootContainer: Root | null = null;
   diskConfig: DatabaseInfo;
   rows: Array<RowDataType>;
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
@@ -153,7 +153,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
       // Render database
       const table = createDatabase(tableProps);
-      ReactDOM.render(table, this.tableContainer);
+      this.rootContainer.render(table);
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     } catch (e: unknown) {
       LOGGER.error(`initDatabase ${this.file.path}`, e);
@@ -169,7 +169,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
     LOGGER.info(`=>destroy ${this.file.path}`);
     // Remove draggables from render, as the DOM has already detached
     this.plugin.removeView(this);
-    ReactDOM.unmountComponentAtNode(this.tableContainer);
     this.tableContainer.remove();
     LOGGER.info(`<=destroy ${this.file.path}`);
   }
@@ -188,6 +187,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       this.tableContainer = this.contentEl.createDiv(
         StyleClasses.TABLE_CONTAINER
       );
+      this.tableContainer.setAttribute("id", "root");
+      this.rootContainer = createRoot(this.tableContainer);
       return await super.onLoadFile(file);
     } catch (e) {
       const stateManager = this.plugin.stateManagers.get(this.file);
@@ -196,7 +197,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
   }
 
   async reloadDatabase() {
-    ReactDOM.unmountComponentAtNode(this.tableContainer);
+    this.rootContainer.unmount();
+    this.rootContainer = createRoot(this.tableContainer);
     this.initDatabase();
   }
 

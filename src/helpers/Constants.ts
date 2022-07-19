@@ -17,6 +17,7 @@ export const ActionTypes = Object.freeze({
   ENABLE_RESET: 'enable_reset',
   SETTINGS_COLUMN: 'settings_column',
   MODIFY_COLUMN_CONFIG: 'modify_column_config',
+  MODIFY_COLUMN_SIZE: 'modify_column_size',
   SET_SORT_BY: 'set_sort_by',
 });
 
@@ -34,10 +35,12 @@ export const DataTypes = Object.freeze({
   NEW_COLUMN: 'new_column'
 });
 
-export const MaxCapacitiesDatabase = Object.freeze({
+export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
   MAX_ROWS: 99999,
   MAX_OPTIONS: 100,
+  MIN_COLUMN_HEIGHT: 30,
+  MAX_COLUMN_HEIGHT: 350,
 });
 
 export const MetadataColumns = Object.freeze({
@@ -73,7 +76,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     key: MetadataColumns.FILE,
     input: DataTypes.MARKDOWN,
     label: MetadataLabels.FILE,
-    accessor: MetadataColumns.FILE,
+    accessorKey: MetadataColumns.FILE,
     isMetadata: true,
     skipPersist: false,
     isDragDisabled: false,
@@ -87,7 +90,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     key: MetadataColumns.ADD_COLUMN,
     input: DataTypes.NEW_COLUMN,
     label: MetadataLabels.ADD_COLUMN,
-    accessor: MetadataColumns.ADD_COLUMN,
+    accessorKey: MetadataColumns.ADD_COLUMN,
     isMetadata: true,
     isDragDisabled: true,
     skipPersist: true,
@@ -98,7 +101,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     key: MetadataColumns.CREATED,
     input: DataTypes.CALENDAR_TIME,
     label: MetadataLabels.CREATED,
-    accessor: MetadataColumns.CREATED,
+    accessorKey: MetadataColumns.CREATED,
     isMetadata: true,
     isDragDisabled: false,
     skipPersist: false,
@@ -109,7 +112,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     key: MetadataColumns.MODIFIED,
     input: DataTypes.CALENDAR_TIME,
     label: MetadataLabels.MODIFIED,
-    accessor: MetadataColumns.MODIFIED,
+    accessorKey: MetadataColumns.MODIFIED,
     isMetadata: true,
     isDragDisabled: false,
     skipPersist: false,
@@ -120,7 +123,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     key: MetadataColumns.TASKS,
     input: DataTypes.TASK,
     label: MetadataLabels.TASK,
-    accessor: MetadataColumns.TASKS,
+    accessorKey: MetadataColumns.TASKS,
     isMetadata: true,
     isDragDisabled: false,
     skipPersist: false,

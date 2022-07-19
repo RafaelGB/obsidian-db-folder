@@ -3,22 +3,19 @@ import CsvButton from "components/CsvButton";
 import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import { StyleVariables } from "helpers/Constants";
-import {
-  AppBar,
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-} from "@material-ui/core";
-import { TableHeaderProps } from "react-table";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
 
 type NavBarProps = {
   csvButtonProps: CsvButtonProps;
   globalFilterRows: GlobalFilterProps;
-  headerGroupProps?: TableHeaderProps;
+  headerGroupProps?: any;
 };
 
 export function NavBar(navBarProps: NavBarProps) {
@@ -42,7 +39,14 @@ export function NavBar(navBarProps: NavBarProps) {
     >
       <AppBar
         position="static"
-        style={{ color: StyleVariables.TEXT_MUTED, backgroundColor: StyleVariables.BACKGROUND_SECONDARY, boxShadow: "none", position: "fixed", left: 0, width: "calc(100% - 20px)" }}
+        style={{
+          color: StyleVariables.TEXT_MUTED,
+          backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+          boxShadow: "none",
+          position: "fixed",
+          left: 0,
+          width: "calc(100% - 20px)",
+        }}
       >
         <Toolbar>
           <IconButton

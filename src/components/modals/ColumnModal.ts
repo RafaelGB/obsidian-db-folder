@@ -19,7 +19,7 @@ export class ColumnModal extends Modal {
         super(view.app);
         this.view = view;
         this.headerMenuProps = headerMenuProps;
-        this.columnSettingsManager = new ColumnSettingsManager(this.view, this.headerMenuProps.headerProps.column);
+        this.columnSettingsManager = new ColumnSettingsManager(this.view, this.headerMenuProps.headerProps.column.columnDef as TableColumn);
     }
 
     onOpen() {

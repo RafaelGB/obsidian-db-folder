@@ -1,19 +1,20 @@
-import { TableColumn } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnWidthState } from "cdm/StyleModel";
 import { DataTypes, WidthVariables } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { DateTime } from "luxon";
 import { HSLColor } from "react-color";
-import { Row } from "react-table";
+import { Row } from "@tanstack/react-table";
 
-export const getColumnWidthStyle = (rows: Array<Row<object>>, column: TableColumn, customMaxWidth?: number): number => {
-  const maxWidth = (customMaxWidth ?? 400)
+export const getColumnWidthStyle = (rows: Array<Row<RowDataType>>, column: TableColumn, customMaxWidth?: number): number => {
+  // const maxWidth = (customMaxWidth ?? 400)
 
-  const cellLength = Math.max(
-    ...rows.map((row: any) => lengthOfNormalizeCellValue(row, column)),
-    column.label.length, WidthVariables.ICON_SPACING
-  )
-  return Math.min(maxWidth, cellLength * WidthVariables.MAGIC_SPACING)
+  // const cellLength = Math.max(
+  //   ...rows.map((row: any) => lengthOfNormalizeCellValue(row, column)),
+  //   column.label.length, WidthVariables.ICON_SPACING
+  // )
+  // return Math.min(maxWidth, cellLength * WidthVariables.MAGIC_SPACING)
+  return 400;
 }
 
 /**
@@ -38,7 +39,7 @@ const lengthOfNormalizeCellValue = (row: any, column: TableColumn): number => {
   return result
 }
 
-export const getColumnsWidthStyle = (rows: Array<Row<object>>, columns: TableColumn[]): ColumnWidthState => {
+export const getColumnsWidthStyle = (rows: Array<Row<RowDataType>>, columns: TableColumn[]): ColumnWidthState => {
   const columnWidthStyle: ColumnWidthState = {
     widthRecord: {}
   }

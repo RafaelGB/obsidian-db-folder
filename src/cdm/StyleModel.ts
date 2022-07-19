@@ -1,15 +1,10 @@
 import { DatabaseView } from "DatabaseView";
-import { ColorResult } from "react-color";
 import { RowSelectOption } from "./ComponentsModel";
 
 export type ColumnWidthState = {
     widthRecord: Record<string, number>
 }
 
-export type HeaderContextType = {
-    columnWidthState: ColumnWidthState,
-    setColumnWidthState: (a: ColumnWidthState) => void
-}
 
 export type ColorPickerProps = {
     view: DatabaseView;

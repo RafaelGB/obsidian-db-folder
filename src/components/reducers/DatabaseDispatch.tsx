@@ -10,7 +10,6 @@ import {
 } from "helpers/Constants";
 import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
-import { ActionType } from "react-table";
 import { VaultManagerDB } from "services/FileManagerService";
 import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
@@ -26,8 +25,9 @@ import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnSizingState } from "@tanstack/react-table";
 
-export function databaseReducer(state: TableDataType, action: ActionType) {
+export function databaseReducer(state: TableDataType, action: any) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
   /** database configuration */
   const dbconfig = state.view.diskConfig.yaml.config;
@@ -166,7 +166,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
               label: action.label,
               id: action.newKey,
               key: action.newKey,
-              accessor: action.newKey,
+              accessorKey: action.newKey,
             },
             ...state.columns.slice(
               update_column_label_index + 1,
@@ -291,7 +291,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
 
       const newLeftColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: action.columnInfo.name,
+        accessorKey: action.columnInfo.name,
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
@@ -308,10 +308,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             {
               ...TableColumnsTemplate,
               dataType: newLeftColumn.input,
-              id: newLeftColumn.accessor,
+              id: newLeftColumn.key,
               label: newLeftColumn.label,
               key: newLeftColumn.key,
-              accessor: newLeftColumn.accessor,
+              accessorKey: newLeftColumn.accessorKey,
               position: newLeftColumn.position,
               csvCandidate: true,
               config: newLeftColumn.config,
@@ -339,7 +339,7 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
 
       const newRIghtColumn: DatabaseColumn = {
         input: DataTypes.TEXT,
-        accessor: action.columnInfo.name,
+        accessorKey: action.columnInfo.name,
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
@@ -357,10 +357,10 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
             {
               ...TableColumnsTemplate,
               dataType: newRIghtColumn.input,
-              id: newRIghtColumn.accessor,
+              id: newRIghtColumn.key,
               label: newRIghtColumn.label,
               key: newRIghtColumn.key,
-              accessor: newRIghtColumn.accessor,
+              accessorKey: newRIghtColumn.accessorKey,
               position: newRIghtColumn.position,
               csvCandidate: true,
               config: newRIghtColumn.config,
@@ -526,7 +526,37 @@ export function databaseReducer(state: TableDataType, action: ActionType) {
         },
       });
 
-    // case ActionTypes.MODIFY_COLUMN_SORTING:
+    /**
+     * Update the size of a column
+     */
+    case ActionTypes.MODIFY_COLUMN_SIZE:
+      let list: ColumnSizingState = null;
+      if (typeof action.updater === "function") {
+        list = action.updater(action.columnSizing);
+      } else {
+        list = action.updater;
+      }
+      Object.keys(list)
+        .filter((key) => list[key] !== undefined)
+        .map((key) => {
+          state.view.diskConfig.updateColumnProperties(key, {
+            width: list[key],
+          });
+        });
+      return update(state, {
+        columns: {
+          $set: state.columns.map((column) => {
+            const newColumn = { ...column };
+            if (list[column.id] !== undefined) {
+              newColumn.width = list[column.id];
+            }
+            return newColumn;
+          }),
+        },
+      });
+    /**
+     * Update the configuration of a column
+     */
     case ActionTypes.MODIFY_COLUMN_CONFIG:
       // Altern between inline & frontmatter mode
       state.view.diskConfig.updateColumnProperties(

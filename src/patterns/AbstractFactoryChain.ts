@@ -12,6 +12,9 @@ export abstract class AbstractChain<T> {
     protected runBefore(abstractResponse: T): T {
         return abstractResponse;
     }
+    protected customHandle(abstractResponse: T): T {
+        return abstractResponse;
+    }
 
     public run(abstractResponse: T): T {
         abstractResponse = this.runBefore(abstractResponse);
@@ -30,6 +33,5 @@ export abstract class AbstractChain<T> {
         // Run the chain
         return handlers[0]?.handle(abstractResponse);
     }
-    protected abstract customHandle(abstractResponse: T): T;
     protected abstract getHandlers(): AbstractHandler<T>[];
 }

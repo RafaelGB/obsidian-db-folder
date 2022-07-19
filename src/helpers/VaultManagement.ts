@@ -1,6 +1,5 @@
 import { RowDataType, NormalizedPath, TableDataType, TableColumn } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
-import { ActionType } from 'react-table';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
@@ -332,7 +331,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
  * @param folderPath 
  * @param action 
  */
-export async function moveFile(folderPath: string, action: ActionType): Promise<void> {
+export async function moveFile(folderPath: string, action: any): Promise<void> {
   await updateRowFile(
     action.file,
     action.key,

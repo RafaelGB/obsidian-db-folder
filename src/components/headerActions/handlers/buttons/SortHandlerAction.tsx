@@ -6,13 +6,14 @@ import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
 import { ActionTypes, DataTypes } from "helpers/Constants";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
   handle(headerActionResponse: HeaderActionResponse): HeaderActionResponse {
     this.globalHeaderActionResponse = headerActionResponse;
-    const { column } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
+    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
+      .column.columnDef as TableColumn;
     switch (column.dataType) {
       case DataTypes.TAGS:
       case DataTypes.TASK:
@@ -29,51 +30,61 @@ export default class SortHandlerAction extends AbstractHeaderAction {
    */
   private addSortButtons(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { column, tableData } =
+    const { table, header, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
+
+    const tablecolumn = column.columnDef as TableColumn;
     const sortButtons: any[] = [];
     sortButtons.push(
       {
         onClick: (e: any) => {
-          const sortArray = generateSortedColumns(tableData, column, false);
+          const sortArray = generateSortedColumns(
+            table.options.meta as TableDataType,
+            tablecolumn,
+            false
+          );
+          table.setSorting(sortArray);
+          hooks.setExpanded(false);
           // Update state
-          tableData.dispatch({
+          (table.options.meta as TableDataType).dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
-          hooks.setSortBy(sortArray);
-          hooks.setExpanded(false);
         },
         icon:
-          column.isSorted && !column.isSortedDesc ? (
+          header.column.getIsSorted() === "asc" ? (
             <CrossIcon />
           ) : (
             <ArrowUpIcon />
           ),
         label:
-          column.isSorted && !column.isSortedDesc
+          header.column.getIsSorted() === "asc"
             ? "Remove ascending sort"
             : "Sort ascending",
       },
       {
         onClick: (e: any) => {
-          const sortArray = generateSortedColumns(tableData, column, true);
+          const sortArray = generateSortedColumns(
+            table.options.meta as any,
+            tablecolumn,
+            true
+          );
+          table.setSorting(sortArray);
+          hooks.setExpanded(false);
           // Update state
-          tableData.dispatch({
+          (table.options.meta as any).dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
-          hooks.setSortBy(sortArray);
-          hooks.setExpanded(false);
         },
         icon:
-          column.isSorted && column.isSortedDesc ? (
+          header.column.getIsSorted() === "desc" ? (
             <CrossIcon />
           ) : (
             <ArrowDownIcon />
           ),
         label:
-          column.isSorted && column.isSortedDesc
+          header.column.getIsSorted() === "desc"
             ? "Remove descending sort"
             : "Sort descending",
       }

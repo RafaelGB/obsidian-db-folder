@@ -3,15 +3,16 @@ import { AbstractHeaderAction } from "components/headerActions/handlers/Abstract
 import TrashIcon from "components/img/Trash";
 import React from "react";
 import { ActionTypes } from "helpers/Constants";
-import { Column } from "react-table";
+import { Column } from "@tanstack/react-table";
 import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
   handle(headerActionResponse: HeaderActionResponse): HeaderActionResponse {
     this.globalHeaderActionResponse = headerActionResponse;
-    const { column } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
+    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
+      .column.columnDef as TableColumn;
     if (!column.isMetadata) {
       this.removeColumnButton();
     }
@@ -23,12 +24,12 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
    */
   private removeColumnButton(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { column, tableData } =
+    const { column, table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const newButtons: any[] = [];
     newButtons.push({
       onClick: (e: any) => {
-        tableData.dispatch({
+        (table.options.meta as any).dispatch({
           type: ActionTypes.DELETE_COLUMN,
           columnId: column.id,
           key: hooks.keyState,
@@ -41,34 +42,5 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
       label: "Delete",
     });
     this.globalHeaderActionResponse.buttons.push(...newButtons);
-  }
-
-  /**
-   * Adjust width of the columns when add a new column.
-   * @param wantedPosition
-   * @returns
-   */
-  private adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
-    const { hooks } = this.globalHeaderActionResponse;
-    const { tableData, column, rows } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    let columnNumber =
-      tableData.columns.length - tableData.shadowColumns.length;
-    // Check if column name already exists
-    while (
-      this.globalHeaderActionResponse.headerMenuProps.headerProps.allColumns.find(
-        (o: Column) => o.id === `newColumn${columnNumber}`
-      )
-    ) {
-      columnNumber++;
-    }
-    const columnId = `newColumn${columnNumber}`;
-    const columnLabel = `New Column ${columnNumber}`;
-    hooks.columnWidthState.widthRecord[columnId] = getColumnWidthStyle(
-      rows,
-      column
-    );
-    hooks.setColumnWidthState(hooks.columnWidthState);
-    return { name: columnId, position: wantedPosition, label: columnLabel };
   }
 }

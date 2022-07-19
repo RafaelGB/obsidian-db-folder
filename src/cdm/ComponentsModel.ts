@@ -1,13 +1,13 @@
-import { ActionType, Cell } from "react-table";
 import NoteInfo from "services/NoteInfo";
 import { BaseComponentProps } from "cdm/DatabaseModel";
+import { CellProps } from "cdm/CellModel";
 
 export type RowSelectOption = {
     backgroundColor: string,
     label: string,
 }
 export type PopperProps = {
-    dispatch: (action: ActionType) => void;
+    dispatch: (action: any) => void;
     row: any;
     columns: any;
     note: NoteInfo;
@@ -15,11 +15,11 @@ export type PopperProps = {
 
 
 export type TagsProps = {
-    dispatch: (action: ActionType) => void;
-    cellProperties: Cell;
+    dispatch: (action: any) => void;
+    cellProperties: CellProps;
     columns: any;
 } & BaseComponentProps;
 
 export type CalendarProps = {
-    cellProperties: Cell;
+    cellProperties: CellProps;
 } & BaseComponentProps;

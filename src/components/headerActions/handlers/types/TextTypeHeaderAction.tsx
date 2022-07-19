@@ -13,11 +13,11 @@ export default class TextTypeHeaderAction extends AbstractHeaderAction {
   }
   private addTextType() {
     const { hooks } = this.globalHeaderActionResponse;
-    const { tableData, column } =
+    const { table, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const textBoxType = {
       onClick: (e: any) => {
-        tableData.dispatch({
+        (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
           dataType: DataTypes.TEXT,

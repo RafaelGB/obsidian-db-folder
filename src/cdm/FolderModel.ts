@@ -4,7 +4,7 @@ import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
-import { Column } from "react-table";
+import { Column, ColumnSort, Header, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
@@ -44,9 +44,10 @@ export interface ConfigColumn {
 
 export interface BaseColumn {
     csvCandidate?: boolean;
-    accessor: string;
+    accessorKey: string;
     label: string;
     key: string;
+    width?: number;
     position?: number;
     isMetadata?: boolean;
     skipPersist?: boolean;
@@ -57,8 +58,6 @@ export interface TableColumn extends BaseColumn {
     isSortedDesc?: boolean;
     isSorted?: boolean;
     id: string;
-    minWidth?: number;
-    width?: number;
     dataType: string;
     options?: RowSelectOption[];
     Cell?: any;
@@ -72,12 +71,8 @@ export type RowDataType = {
     [key: string]: Literal | NoteInfo
 }
 
-export type SortByElement = {
-    id: string;
-    desc: boolean;
-}
 export type InitialState = {
-    sortBy?: SortByElement[],
+    sortBy?: ColumnSort[],
 }
 
 export type TableDataType = {
@@ -89,49 +84,11 @@ export type TableDataType = {
     dispatch?: Dispatch<any>,
     initialState?: InitialState,
 }
+
 export interface DatabaseHeaderProps {
-    columns: any,
-    data: any,
-    tableData: TableDataType,
-    defaultColumn: any,
-    getSubRows: any,
-    getRowId: any,
-    stateReducer: any,
-    useControlledState: any,
-    plugins: any,
-    getHooks: any,
-    state: any,
-    dispatch: any,
-    allColumns: Column[],
-    setColumnOrder: (cols: string[]) => void,
-    rows: any,
-    initialRows: any,
-    flatRows: any,
-    rowsById: any,
-    headerGroups: any,
-    headers: any, flatHeaders: any,
-    visibleColumns: any,
-    totalColumnsMinWidth: any,
-    totalColumnsWidth: any,
-    totalColumnsMaxWidth: any,
-    allColumnsHidden: any,
-    toggleHideColumn: any,
-    setHiddenColumns: any,
-    toggleHideAllColumns: any,
-    getToggleHideAllColumnsProps: any,
-    resetResizing: any,
-    preSortedRows: any,
-    preSortedFlatRows: any,
-    sortedRows: any,
-    sortedFlatRows: any,
-    setSortBy: any,
-    toggleSortBy: any,
-    rowSpanHeaders: any,
-    footerGroups: any,
-    prepareRow: any,
-    getTableProps: any,
-    getTableBodyProps: any,
-    column: TableColumn
+    column: Column<RowDataType, any>,
+    header: Header<RowDataType, TableColumn>,
+    table: Table<RowDataType>
 }
 
 export type RelationshipProps = {

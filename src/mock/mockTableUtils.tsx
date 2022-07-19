@@ -52,7 +52,7 @@ export const generateYamlColumns = (
     const columnKey: string = faker.unique(faker.name.firstName);
     yamlColumns[columnKey] = {
       input: getRandomEnumValue(DataTypes),
-      accessor: columnKey,
+      accessorKey: columnKey,
       label: `${columnKey} label`,
       key: columnKey,
       position: 1,

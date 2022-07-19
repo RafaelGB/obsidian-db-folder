@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Cell } from "react-table";
+import { Cell } from "@tanstack/react-table";
 import { ActionTypes, DataTypes } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 
 import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { CellContext } from "components/contexts/CellContext";
 import CalendarPortal from "components/portals/CalendarPortal";
@@ -14,17 +14,19 @@ import { renderMarkdown } from "components/markdown/MarkdownRenderer";
 import { CheckboxCell } from "components/Checkbox";
 import TagsPortal from "components/portals/TagsPortal";
 import { DataviewService } from "services/DataviewService";
+import { CellProps } from "cdm/CellModel";
 
-export default function DefaultCell(cellProperties: Cell) {
-  const dataDispatch = (cellProperties as any).dataDispatch;
+export default function DefaultCell(cellProperties: CellProps) {
+  const { cell, column, row, table } = cellProperties;
+  const dataDispatch = (table.options.meta as TableDataType).dispatch;
   /** Initial state of cell */
-  const cellValue = cellProperties.value;
+  const cellValue = cell.getValue();
   /** Columns information */
-  const columns = (cellProperties as any).columns;
+  const columns = (table.options.meta as TableDataType).columns;
   /** Type of cell */
-  const dataType = (cellProperties.column as any).dataType;
+  const dataType = (column.columnDef as TableColumn).dataType;
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).__note__;
+  const note: NoteInfo = (row.original as RowDataType).__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -38,9 +40,7 @@ export default function DefaultCell(cellProperties: Cell) {
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
-  const tableData = (cellProperties as any)
-    .tableData as unknown as TableDataType;
-  const column = cellProperties.column as unknown as TableColumn;
+  const tableData = table.options.meta as TableDataType;
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`
@@ -59,7 +59,7 @@ export default function DefaultCell(cellProperties: Cell) {
         // Check if there are tasks in the cell
         if (contextValue.value === "") break;
         taskRef.current.innerHTML = "";
-        if (column.config.task_hide_completed) {
+        if ((column.columnDef as TableColumn).config.task_hide_completed) {
           contextValue.value = contextValue.value.where(
             (t: any) => !t.completed
           );
@@ -154,10 +154,10 @@ export default function DefaultCell(cellProperties: Cell) {
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: (cellProperties.column as any).key,
+      key: (column.columnDef as TableColumn).key,
       value: changedValue,
-      row: cellProperties.row,
-      columnId: (cellProperties.column as any).id,
+      row: row,
+      columnId: (column.columnDef as TableColumn).id,
     });
   }
 
@@ -171,15 +171,10 @@ export default function DefaultCell(cellProperties: Cell) {
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             onBlur={handleOnBlur}
-            className="data-input"
             ref={editableMdRef}
           />
         ) : (
-          <span
-            ref={containerCellRef}
-            className={"data-input"}
-            onClick={handleEditableOnclick}
-          />
+          <span ref={containerCellRef} onClick={handleEditableOnclick} />
         );
 
       /** Number option */
@@ -190,13 +185,10 @@ export default function DefaultCell(cellProperties: Cell) {
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             onBlur={handleOnBlur}
-            className="data-input text-align-right"
+            className="text-align-right"
           />
         ) : (
-          <span
-            className="data-input text-align-right"
-            onClick={handleEditableOnclick}
-          >
+          <span className="text-align-right" onClick={handleEditableOnclick}>
             {(contextValue.value && contextValue.value.toString()) || ""}
           </span>
         );
@@ -218,7 +210,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <CalendarPortal
             intialState={tableData}
-            column={column}
+            column={column.columnDef as TableColumn}
             cellProperties={cellProperties}
           />
         );
@@ -228,7 +220,7 @@ export default function DefaultCell(cellProperties: Cell) {
         return (
           <CalendarTimePortal
             intialState={tableData}
-            column={column}
+            column={column.columnDef as TableColumn}
             cellProperties={cellProperties}
           />
         );
@@ -239,8 +231,8 @@ export default function DefaultCell(cellProperties: Cell) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal
               dispatch={dataDispatch}
-              row={cellProperties.row}
-              column={column}
+              row={row}
+              column={column.columnDef as TableColumn}
               columns={columns}
               note={note}
               intialState={tableData}
@@ -253,7 +245,7 @@ export default function DefaultCell(cellProperties: Cell) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <TagsPortal
               intialState={tableData}
-              column={column}
+              column={column.columnDef as TableColumn}
               columns={columns}
               dispatch={dataDispatch}
               cellProperties={cellProperties}
@@ -262,16 +254,16 @@ export default function DefaultCell(cellProperties: Cell) {
         );
 
       case DataTypes.TASK:
-        if (column.config.task_hide_completed) {
+        if ((column.columnDef as TableColumn).config.task_hide_completed) {
         }
-        return <div ref={taskRef} className="data-input"></div>;
+        return <div ref={taskRef}></div>;
 
       case DataTypes.CHECKBOX:
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CheckboxCell
               intialState={tableData}
-              column={column}
+              column={column.columnDef as TableColumn}
               cellProperties={cellProperties}
             />
           </CellContext.Provider>
