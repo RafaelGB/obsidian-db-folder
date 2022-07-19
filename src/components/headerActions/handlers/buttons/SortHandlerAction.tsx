@@ -30,8 +30,9 @@ export default class SortHandlerAction extends AbstractHeaderAction {
    */
   private addSortButtons(): void {
     const { hooks } = this.globalHeaderActionResponse;
-    const { table, column } =
+    const { table, header, column } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
+
     const tablecolumn = column.columnDef as TableColumn;
     const sortButtons: any[] = [];
     sortButtons.push(
@@ -42,24 +43,22 @@ export default class SortHandlerAction extends AbstractHeaderAction {
             tablecolumn,
             false
           );
-          console.log(sortArray);
+          table.setSorting(sortArray);
+          hooks.setExpanded(false);
           // Update state
           (table.options.meta as TableDataType).dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
-          column.getToggleSortingHandler();
-
-          hooks.setExpanded(false);
         },
         icon:
-          tablecolumn.isSorted && !tablecolumn.isSortedDesc ? (
+          header.column.getIsSorted() === "asc" ? (
             <CrossIcon />
           ) : (
             <ArrowUpIcon />
           ),
         label:
-          tablecolumn.isSorted && !tablecolumn.isSortedDesc
+          header.column.getIsSorted() === "asc"
             ? "Remove ascending sort"
             : "Sort ascending",
       },
@@ -70,22 +69,22 @@ export default class SortHandlerAction extends AbstractHeaderAction {
             tablecolumn,
             true
           );
+          table.setSorting(sortArray);
+          hooks.setExpanded(false);
           // Update state
           (table.options.meta as any).dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
-          column.getToggleSortingHandler();
-          hooks.setExpanded(false);
         },
         icon:
-          tablecolumn.isSorted && tablecolumn.isSortedDesc ? (
+          header.column.getIsSorted() === "desc" ? (
             <CrossIcon />
           ) : (
             <ArrowDownIcon />
           ),
         label:
-          tablecolumn.isSorted && tablecolumn.isSortedDesc
+          header.column.getIsSorted() === "desc"
             ? "Remove descending sort"
             : "Sort descending",
       }

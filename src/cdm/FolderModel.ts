@@ -4,7 +4,7 @@ import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
-import { Column, Header, Table } from "@tanstack/react-table";
+import { Column, ColumnSort, Header, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
@@ -71,12 +71,8 @@ export type RowDataType = {
     [key: string]: Literal | NoteInfo
 }
 
-export type SortByElement = {
-    id: string;
-    desc: boolean;
-}
 export type InitialState = {
-    sortBy?: SortByElement[],
+    sortBy?: ColumnSort[],
 }
 
 export type TableDataType = {

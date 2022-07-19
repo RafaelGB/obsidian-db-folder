@@ -141,8 +141,8 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
         {config.isInline && <span>*</span>}
         {/* Add a sort direction indicator */}
         <span className="svg-icon svg-gray icon-margin">
-          {column.getIsSorted() ? (
-            column.getIsSorted() ? (
+          {header.column.getIsSorted() ? (
+            header.column.getIsSorted() === "desc" ? (
               <ArrowDown />
             ) : (
               <ArrowUp />
@@ -156,7 +156,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
         ? ReactDOM.createPortal(
             <HeaderMenu
               headerProps={headerProps}
-              setSortBy={table.setSorting}
               propertyIcon={propertyIcon}
               expanded={expanded}
               setExpanded={setExpanded}
