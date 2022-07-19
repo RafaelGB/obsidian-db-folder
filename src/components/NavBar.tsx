@@ -1,6 +1,6 @@
 import * as React from "react";
 import CsvButton from "components/CsvButton";
-import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
+import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import { StyleVariables } from "helpers/Constants";
 import AppBar from "@mui/material/AppBar";
@@ -11,12 +11,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
-
-type NavBarProps = {
-  csvButtonProps: CsvButtonProps;
-  globalFilterRows: GlobalFilterProps;
-  headerGroupProps?: any;
-};
 
 export function NavBar(navBarProps: NavBarProps) {
   const [menuEl, setMenuEl] = React.useState<null | HTMLElement>(null);

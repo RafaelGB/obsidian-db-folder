@@ -65,14 +65,14 @@ export default class SortHandlerAction extends AbstractHeaderAction {
       {
         onClick: (e: any) => {
           const sortArray = generateSortedColumns(
-            table.options.meta as any,
+            table.options.meta as TableDataType,
             tablecolumn,
             true
           );
           table.setSorting(sortArray);
           hooks.setExpanded(false);
           // Update state
-          (table.options.meta as any).dispatch({
+          (table.options.meta as TableDataType).dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });

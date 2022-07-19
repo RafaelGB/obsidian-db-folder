@@ -255,6 +255,7 @@ export function Table(tableData: TableDataType) {
         }}
         globalFilterRows={{
           globalFilter: globalFilter,
+          hits: table.getFilteredRowModel().rows.length,
           setGlobalFilter: setGlobalFilter,
         }}
         headerGroupProps={{
