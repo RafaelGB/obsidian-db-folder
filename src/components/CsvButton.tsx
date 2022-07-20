@@ -21,23 +21,23 @@ const CsvButton = (CsvButtonProps: CsvButtonProps) => {
     const csvRows = await normalizeRowsToCsvData(rows);
     setDataForDownload(csvRows);
     setHeadersForDownload(csvHeaders);
-    csvLink.current.link.click();
   };
 
   return (
     <>
-      <Button onClick={getTransactionData}>
-        <DownloadIcon />
-        CSV
-      </Button>
       <CSVLink
         data={dataForDownload}
         headers={headersForDownload}
+        asyncOnClick={true}
+        onClick={getTransactionData}
         filename={`${name}.csv`}
         className="hidden"
         ref={csvLink}
         target="_blank"
-      />
+      >
+        <DownloadIcon />
+        Download CSV
+      </CSVLink>
     </>
   );
 };

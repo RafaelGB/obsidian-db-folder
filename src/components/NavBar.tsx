@@ -2,7 +2,7 @@ import * as React from "react";
 import CsvButton from "components/CsvButton";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import { StyleVariables } from "helpers/Constants";
+import { NavBarConfig, StyleVariables } from "helpers/Constants";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -13,15 +13,16 @@ import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
 
 export function NavBar(navBarProps: NavBarProps) {
-  const [menuEl, setMenuEl] = React.useState<null | HTMLElement>(null);
-  const isMenuOpen = Boolean(menuEl);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   const handleMenuClose = () => {
-    setMenuEl(null);
+    setAnchorEl(null);
   };
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuEl(event.currentTarget);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
+
   return (
     <Box
       sx={{ flexGrow: 1 }}
@@ -44,23 +45,30 @@ export function NavBar(navBarProps: NavBarProps) {
       >
         <Toolbar>
           <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={handleMenuClick}
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? "long-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
           >
             <MenuIcon />
           </IconButton>
           <Menu
-            anchorEl={menuEl}
-            open={isMenuOpen}
+            anchorEl={anchorEl}
+            open={open}
             onClose={handleMenuClose}
             onClick={handleMenuClose}
             onBlur={handleMenuClose}
             PaperProps={{
-              elevation: 0,
+              style: {
+                maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
+                width: "20ch",
+              },
             }}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            MenuListProps={{
+              "aria-labelledby": "long-button",
+            }}
           >
             <MenuItem>
               {/* CSV buttton download */}
