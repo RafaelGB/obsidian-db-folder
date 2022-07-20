@@ -1,8 +1,9 @@
-import { InitialState, RowDataType, SortByElement, TableColumn } from "cdm/FolderModel";
+import { ColumnSort } from "@tanstack/react-table";
+import { InitialState, RowDataType, TableColumn } from "cdm/FolderModel";
 
 function obtainInitialState(columns: TableColumn[], rows: RowDataType[]): InitialState {
     const initialState: InitialState = {};
-    const sortElemList: SortByElement[] = [];
+    const sortElemList: ColumnSort[] = [];
     columns.forEach((column: TableColumn) => {
         if (column.isSorted) {
             sortElemList.push({

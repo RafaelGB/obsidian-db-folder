@@ -268,11 +268,14 @@ export default function DefaultCell(cellProperties: CellProps) {
             />
           </CellContext.Provider>
         );
+      case DataTypes.NEW_COLUMN:
+        // Do nothing
+        break;
       /** Default option */
       default:
         LOGGER.warn(`Unknown data type: ${dataType}`);
-        return <span></span>;
     }
+    return <span></span>;
   }
   return getCellElement();
 }

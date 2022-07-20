@@ -1,8 +1,8 @@
 import * as React from "react";
 import CsvButton from "components/CsvButton";
-import { CsvButtonProps, GlobalFilterProps } from "cdm/MenuBarModel";
+import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import { StyleVariables } from "helpers/Constants";
+import { NavBarConfig, StyleVariables } from "helpers/Constants";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -12,72 +12,70 @@ import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
 
-type NavBarProps = {
-  csvButtonProps: CsvButtonProps;
-  globalFilterRows: GlobalFilterProps;
-  headerGroupProps?: any;
-};
-
 export function NavBar(navBarProps: NavBarProps) {
-  const [menuEl, setMenuEl] = React.useState<null | HTMLElement>(null);
-  const isMenuOpen = Boolean(menuEl);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   const handleMenuClose = () => {
-    setMenuEl(null);
+    setAnchorEl(null);
   };
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuEl(event.currentTarget);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
-  return (
-    <Box
-      sx={{ flexGrow: 1 }}
-      style={{
-        top: 0,
-        alignSelf: "flex-start",
-        zIndex: 1,
+
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      open={open}
+      onClose={handleMenuClose}
+      onClick={handleMenuClose}
+      onBlur={handleMenuClose}
+      PaperProps={{
+        style: {
+          maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
+          width: "20ch",
+        },
+      }}
+      MenuListProps={{
+        "aria-labelledby": "long-button",
       }}
     >
+      <MenuItem>
+        {/* CSV buttton download */}
+        <CsvButton {...navBarProps.csvButtonProps} />
+      </MenuItem>
+    </Menu>
+  );
+  return (
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
         style={{
           color: StyleVariables.TEXT_MUTED,
           backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
-          boxShadow: "none",
-          position: "fixed",
-          left: 0,
           width: "calc(100% - 20px)",
         }}
       >
         <Toolbar>
           <IconButton
+            size="large"
             edge="start"
             color="inherit"
-            aria-label="menu"
-            onClick={handleMenuClick}
+            aria-label="Open table options"
+            sx={{ mr: 2 }}
+            id="long-button"
+            aria-controls={open ? "long-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
           >
             <MenuIcon />
           </IconButton>
-          <Menu
-            anchorEl={menuEl}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-            onClick={handleMenuClose}
-            onBlur={handleMenuClose}
-            PaperProps={{
-              elevation: 0,
-            }}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-          >
-            <MenuItem>
-              {/* CSV buttton download */}
-              <CsvButton {...navBarProps.csvButtonProps} />
-            </MenuItem>
-          </Menu>
+          {renderMenu}
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
         </Toolbar>
       </AppBar>
-      <Toolbar />
     </Box>
   );
 }
@@ -85,7 +83,7 @@ export function HeaderNavBar(props: NavBarProps) {
   return (
     <div
       key="div-navbar-header-row"
-      className={`${c("tr navbar")}`}
+      className={`${c("tr")}`}
       {...props.headerGroupProps}
     >
       <div className={`${c("th navbar")}`} key="div-navbar-header-cell">

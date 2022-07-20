@@ -38,7 +38,11 @@ export async function renderMarkdown(
         }
       );
     });
-    if (markdownString.startsWith("![[") && markdownString.endsWith("]]")) {
+    if (
+      markdownString &&
+      markdownString.startsWith("![[") &&
+      markdownString.endsWith("]]")
+    ) {
       MarkdownPreviewView.renderMarkdown(
         markdownString,
         dom.createDiv(),

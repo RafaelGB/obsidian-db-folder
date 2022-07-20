@@ -246,22 +246,32 @@ export function Table(tableData: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
-      {/* INIT NAVBAR */}
-      <HeaderNavBar
-        csvButtonProps={{
-          columns: columns,
-          rows: table.getRowModel().rows,
-          name: tableData.view.diskConfig.yaml.name,
+      <div
+        key={`div-table-navbar`}
+        className={`${c("table sticky-level-1 sticky_first_column")}`}
+        style={{
+          width: table.getCenterTotalSize(),
         }}
-        globalFilterRows={{
-          globalFilter: globalFilter,
-          setGlobalFilter: setGlobalFilter,
-        }}
-        headerGroupProps={{
-          style: { width: table.getCenterTotalSize() },
-        }}
-      />
-      {/* ENDS NAVBAR */}
+      >
+        {/* INIT NAVBAR */}
+        <HeaderNavBar
+          key={`div-header-navbar`}
+          csvButtonProps={{
+            columns: columns,
+            rows: table.getRowModel().rows,
+            name: tableData.view.diskConfig.yaml.name,
+          }}
+          globalFilterRows={{
+            globalFilter: globalFilter,
+            hits: table.getFilteredRowModel().rows.length,
+            setGlobalFilter: setGlobalFilter,
+          }}
+          headerGroupProps={{
+            style: { width: table.getCenterTotalSize() },
+          }}
+        />
+        {/* ENDS NAVBAR */}
+      </div>
       {/* INIT TABLE */}
       <div
         key={`div-table`}
@@ -279,14 +289,8 @@ export function Table(tableData: TableDataType) {
         }}
       >
         <div
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 2,
-            borderTop: "1px solid var(--background-modifier-border)",
-            display: "table-header-group",
-          }}
-          key={`div-table-sticky`}
+          key={`div-table-header-group-sticky`}
+          className={c("table-header-group sticky-level-2")}
         >
           {/* INIT HEADERS */}
           {table
@@ -300,7 +304,10 @@ export function Table(tableData: TableDataType) {
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
                 >
-                  <DndProvider backend={HTML5Backend}>
+                  <DndProvider
+                    key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
+                    backend={HTML5Backend}
+                  >
                     {headerGroup.headers
                       .filter(
                         (o: Header<RowDataType, TableColumn>) =>
@@ -313,6 +320,7 @@ export function Table(tableData: TableDataType) {
                           headerIndex: number
                         ) => (
                           <TableHeader
+                            key={`${header.id}-${headerIndex}`}
                             table={table}
                             header={header}
                             findColumn={findColumn}
@@ -354,6 +362,7 @@ export function Table(tableData: TableDataType) {
         </div>
         {/* INIT BODY */}
         <div
+          key={`div-tbody`}
           style={{
             display: "table-row-group",
           }}
@@ -361,7 +370,11 @@ export function Table(tableData: TableDataType) {
           {table
             .getRowModel()
             .rows.map((row: Row<RowDataType>, rowIndex: number) => (
-              <TableCell row={row} rowIndex={rowIndex} />
+              <TableCell
+                key={`table-cell-${rowIndex}`}
+                row={row}
+                rowIndex={rowIndex}
+              />
             ))}
 
           {/* ENDS BODY */}
@@ -369,8 +382,8 @@ export function Table(tableData: TableDataType) {
         {/* ENDS TABLE */}
       </div>
       {/* INIT NEW ROW */}
-      <div className={`${c("tr add-row")}`} key={`div-add-row`}>
-        <div className={`${c("td")}`} key={`div-add-row-cell`}>
+      <div key={`div-add-row`} className={`${c("tr add-row")}`}>
+        <div key={`div-add-row-cell`} className={`${c("td")}`}>
           <input
             type="text"
             ref={newRowRef}
@@ -382,9 +395,9 @@ export function Table(tableData: TableDataType) {
           />
         </div>
         <div
+          key={`div-add-row-cell-button`}
           className={`${c("td")}`}
           onClick={handleAddNewRow}
-          key={`div-add-row-cell-button`}
         >
           <span className="svg-icon svg-gray" style={{ marginRight: 4 }}>
             <PlusIcon />
@@ -392,8 +405,8 @@ export function Table(tableData: TableDataType) {
           New
         </div>
         <div
-          className={`${c("padding-left")}`}
           key={`div-add-row-cell-padding-left`}
+          className={`${c("padding-left")}`}
         >
           <Select
             styles={CustomTemplateSelectorStyles}

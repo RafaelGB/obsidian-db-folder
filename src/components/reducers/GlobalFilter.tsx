@@ -44,7 +44,7 @@ function DebouncedInput({
  */
 export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
   // TODO add typing to props
-  const { globalFilter, setGlobalFilter } = globalFilterProps;
+  const { hits, globalFilter, setGlobalFilter } = globalFilterProps;
   const [value, setValue] = React.useState(globalFilter);
 
   return (
@@ -54,7 +54,7 @@ export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
         value={globalFilter ?? ""}
         onChange={(value) => setGlobalFilter(String(value))}
         className="p-2 font-lg shadow border border-block"
-        placeholder="Search all columns..."
+        placeholder={`Search... (${hits})`}
       />
     </span>
   );
