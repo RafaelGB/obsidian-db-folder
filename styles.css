@@ -382,11 +382,23 @@
   background-color: var(--background-secondary);
 }
 
-.database-plugin__navbar {
-  position: "sticky";
+.database-plugin__sticky-level-1 {
+  position: sticky;
   top: 0;
   z-index: 2;
-  border-top: "1px solid var(--background-modifier-border)";
+}
+.database-plugin__sticky-level-2 {
+  position: sticky;
+  top: 4rem;
+  z-index: 2;
+}
+
+.database-plugin__table-header-group {
+  border-top: 1px solid var(--background-modifier-border);
+  display: table-header-group;
+}
+
+.database-plugin__navbar {
   flex: 1 0 auto;
   background-color: var(--background-secondary);
 }

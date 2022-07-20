@@ -7,13 +7,13 @@ import React from "react";
 export default function TableCell(headerProps: TableCellProps) {
   const { row, rowIndex } = headerProps;
   return (
-    <div className={`${c("tr")}`} key={`${row.id}-${rowIndex}`}>
+    <div key={`cell-tr-${rowIndex}`} className={`${c("tr")}`}>
       {row
         .getVisibleCells()
-        .map((cell: Cell<RowDataType, unknown>, cellIndex: number) => {
+        .map((cell: Cell<RowDataType, any>, cellIndex: number) => {
           return (
             <div
-              key={`${cell.id}-${cellIndex}`}
+              key={`cell-td-${cell.id}-${cellIndex}`}
               className={`${c("td")} data-input`}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}

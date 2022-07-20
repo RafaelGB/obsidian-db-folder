@@ -23,29 +23,46 @@ export function NavBar(navBarProps: NavBarProps) {
     setAnchorEl(event.currentTarget);
   };
 
-  return (
-    <Box
-      sx={{ flexGrow: 1 }}
-      style={{
-        top: 0,
-        alignSelf: "flex-start",
-        zIndex: 1,
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      open={open}
+      onClose={handleMenuClose}
+      onClick={handleMenuClose}
+      onBlur={handleMenuClose}
+      PaperProps={{
+        style: {
+          maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
+          width: "20ch",
+        },
+      }}
+      MenuListProps={{
+        "aria-labelledby": "long-button",
       }}
     >
+      <MenuItem>
+        {/* CSV buttton download */}
+        <CsvButton {...navBarProps.csvButtonProps} />
+      </MenuItem>
+    </Menu>
+  );
+  return (
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
         style={{
           color: StyleVariables.TEXT_MUTED,
           backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
-          boxShadow: "none",
-          position: "fixed",
-          left: 0,
           width: "calc(100% - 20px)",
         }}
       >
         <Toolbar>
           <IconButton
-            aria-label="more"
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="Open table options"
+            sx={{ mr: 2 }}
             id="long-button"
             aria-controls={open ? "long-menu" : undefined}
             aria-expanded={open ? "true" : undefined}
@@ -54,32 +71,11 @@ export function NavBar(navBarProps: NavBarProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleMenuClose}
-            onClick={handleMenuClose}
-            onBlur={handleMenuClose}
-            PaperProps={{
-              style: {
-                maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
-                width: "20ch",
-              },
-            }}
-            MenuListProps={{
-              "aria-labelledby": "long-button",
-            }}
-          >
-            <MenuItem>
-              {/* CSV buttton download */}
-              <CsvButton {...navBarProps.csvButtonProps} />
-            </MenuItem>
-          </Menu>
+          {renderMenu}
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
         </Toolbar>
       </AppBar>
-      <Toolbar />
     </Box>
   );
 }
@@ -87,7 +83,7 @@ export function HeaderNavBar(props: NavBarProps) {
   return (
     <div
       key="div-navbar-header-row"
-      className={`${c("tr navbar")}`}
+      className={`${c("tr")}`}
       {...props.headerGroupProps}
     >
       <div className={`${c("th navbar")}`} key="div-navbar-header-cell">
