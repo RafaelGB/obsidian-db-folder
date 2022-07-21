@@ -33,8 +33,6 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
           key: hooks.keyState,
         });
         hooks.setExpanded(false);
-        delete hooks.columnWidthState.widthRecord[column.id];
-        hooks.setColumnWidthState(hooks.columnWidthState);
       },
       icon: <TrashIcon />,
       label: "Delete",
