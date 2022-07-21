@@ -140,7 +140,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.diskConfig.yaml
       );
       const initialState: InitialState = obtainInitialState(columns, this.rows);
-
       // Define table properties
       const tableProps: TableDataType = {
         columns: columns,

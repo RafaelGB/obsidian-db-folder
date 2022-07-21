@@ -5,7 +5,7 @@ import {
   MetadataColumns,
   MetadataDatabaseColumns,
 } from "helpers/Constants";
-import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowSelectOption } from "cdm/ComponentsModel";
@@ -14,6 +14,8 @@ import { dbTrim } from "helpers/StylesHelper";
 import { TFile } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { DatabaseView } from "DatabaseView";
+import { obtainAllPossibleRows } from "helpers/VaultManagement";
 
 /**
  * Add mandatory and configured metadata columns of the table
@@ -118,19 +120,24 @@ export async function obtainColumnsFromFile(
   return columns;
 }
 
-export function obtainColumnsFromRows(
-  rows: RowDataType[]
-): Record<string, DatabaseColumn> {
+export async function obtainColumnsFromRows(
+  view: DatabaseView
+): Promise<Record<string, DatabaseColumn>> {
   const columns: Record<string, DatabaseColumn> = {};
+  const rows = await obtainAllPossibleRows(
+    view.file.parent.path,
+    view.diskConfig.yaml
+  );
   // Obtain unique keys from source
   const keys = rows.reduce((acc, row) => {
-    const keys = Object.keys(row);
-    return [...acc, ...keys];
+    const keys = Object.keys(row).map((key) => key.toLowerCase());
+    // Remove duplicates
+    return [...new Set([...acc, ...keys])];
   }, [] as string[]);
   // Add keys to columns
   keys
     // Check metadata columns to not be added
-    .filter((key) => !(key.startsWith("__") && key.endsWith("__")))
+    .filter((key) => validateColumnKey(key))
     .forEach((key, index) => {
       columns[key] = {
         input: DataTypes.TEXT,
@@ -190,6 +197,12 @@ function columnOptions(
   }
 }
 
+function validateColumnKey(columnKey: string): boolean {
+  if (columnKey.startsWith("__") && columnKey.endsWith("__")) {
+    return false;
+  }
+  return true;
+}
 function sortColumnsByPosition(columns: TableColumn[]): TableColumn[] {
   return columns.sort((a, b) => {
     if (a.position < b.position) {

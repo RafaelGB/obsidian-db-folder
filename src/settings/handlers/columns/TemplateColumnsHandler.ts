@@ -2,7 +2,6 @@ import { RowDataType } from "cdm/FolderModel";
 import { obtainColumnsFromFile, obtainColumnsFromRows } from "components/Columns";
 import { resolve_tfile } from "helpers/FileManagement";
 import { Notice, Setting } from "obsidian";
-import { VaultManagerDB } from "services/FileManagerService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 
@@ -57,7 +56,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                     button.setIcon("create-new")
                         .setTooltip("Load columns from file")
                         .onClick(async (): Promise<void> => {
-                            const columns = obtainColumnsFromRows(view.rows);
+                            const columns = await obtainColumnsFromRows(view);
                             view.diskConfig.yaml.columns = columns;
                             view.diskConfig.saveOnDisk();
                             new Notice(`${Object.keys(columns).length} Columns were loaded from all fields avaliable in the current source! Close this dialog to show the database changes`);

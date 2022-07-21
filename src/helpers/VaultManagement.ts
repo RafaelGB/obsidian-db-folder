@@ -78,7 +78,6 @@ export function getNormalizedPath(path: string): NormalizedPath {
 export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], dbYaml: DatabaseYaml): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
-  let id = 0;
 
   let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
@@ -87,11 +86,29 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
     folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
   }
   folderFiles.map((page) => {
-    const noteInfo = new NoteInfo(page, ++id);
+    const noteInfo = new NoteInfo(page);
     rows.push(noteInfo.getRowDataType(columns, dbYaml.config));
   });
 
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
+  return rows;
+}
+
+export async function obtainAllPossibleRows(folderPath: string, dbYaml: DatabaseYaml): Promise<Array<RowDataType>> {
+  LOGGER.debug(`=> obtainAllPossibleRows.  folderPath:${folderPath}`);
+  const rows: Array<RowDataType> = [];
+  let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
+  folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  // Config filters asociated with the database
+  if (dbYaml.filters) {
+    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
+  }
+  folderFiles.map((page) => {
+    const noteInfo = new NoteInfo(page);
+    rows.push(noteInfo.getAllRowDataType(dbYaml.config));
+  });
+
+  LOGGER.debug(`<= obtainAllPossibleRows.  number of rows:${rows.length}`);
   return rows;
 }
 
