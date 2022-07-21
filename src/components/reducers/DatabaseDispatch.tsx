@@ -91,15 +91,11 @@ export function databaseReducer(state: TableDataType, action: any) {
         ...rowRecord.frontmatter,
         ...rowRecord.inline,
         ...metadata,
-        id: state.view.rows.length + 1,
-        __note__: new NoteInfo(
-          {
-            ...rowRecord.frontmatter,
-            ...rowRecord.inline,
-            file: { path: filename },
-          },
-          state.view.rows.length + 1
-        ),
+        __note__: new NoteInfo({
+          ...rowRecord.frontmatter,
+          ...rowRecord.inline,
+          file: { path: filename },
+        }),
         [MetadataColumns.FILE]: `[[${filename}|${action.filename}]]`,
       };
       // TODO add typing
@@ -438,15 +434,12 @@ export function databaseReducer(state: TableDataType, action: any) {
             ? `${state.view.file.parent.path}/${action.value}/${action.file.name}`
             : `${state.view.file.parent.path}/${action.file.name}`;
 
-        action.row.original.__note__ = new NoteInfo(
-          {
-            ...action.row,
-            file: {
-              path: auxPath,
-            },
+        action.row.original.__note__ = new NoteInfo({
+          ...action.row,
+          file: {
+            path: auxPath,
           },
-          action.row.index
-        );
+        });
         // Update original cell value
         const update_option_cell_index = state.columns.findIndex(
           (column) => column.id === action.columnId
