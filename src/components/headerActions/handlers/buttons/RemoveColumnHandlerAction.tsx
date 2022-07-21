@@ -3,8 +3,6 @@ import { AbstractHeaderAction } from "components/headerActions/handlers/Abstract
 import TrashIcon from "components/img/Trash";
 import React from "react";
 import { ActionTypes } from "helpers/Constants";
-import { Column } from "@tanstack/react-table";
-import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { TableColumn } from "cdm/FolderModel";
 
 export default class RemoveColumnHandlerAction extends AbstractHeaderAction {

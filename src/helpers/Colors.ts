@@ -1,3 +1,5 @@
+import { HSLColor } from "react-color";
+
 export function randomColor() {
   return `hsl(${Math.floor(Math.random() * 360)}, 95%, 90%)`;
 }
@@ -17,4 +19,8 @@ export function grey(value: number) {
   };
 
   return reference[value as keyof typeof reference];
+}
+
+export function castHslToString(color: HSLColor): string {
+  return `hsl(${color.h},${color.s * 100}%,${color.l * 100}%)`;
 }
