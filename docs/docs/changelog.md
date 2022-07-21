@@ -1,6 +1,16 @@
 # 2.0.0
+### Shiny new things
+- new option of resizing a column. The Size is persisted. [ISSUE#50](https://github.com/RafaelGB/obsidian-db-folder/issues/50)
+- Performance improvements of rendering components x5 [ISSUE#189](https://github.com/RafaelGB/obsidian-db-folder/issues/189)
 ### No longer broken
 - Control label value before save changes [ISSUE#203](https://github.com/RafaelGB/obsidian-db-folder/issues/203)
+### Developers
+- Migration of React to React 18.x
+- Migration of react-table-v7 to react-table-v8 (typescript native, compatibility with React 18.x)
+- DnD library modified from react-beautiful-dnd to react-dnd ( compatibility with React 18.x )
+- Material-ui migrated from Material-UI to MUI ( compatibility with React 18.x )
+- Refactor of all components to be adapted to React 18.x
+- Size of plugin from 16mb to 5mb
 # 1.8.2
 ### No longer broken
 - Hotfix of critical mapping bug [ISSUE#190](https://github.com/RafaelGB/obsidian-db-folder/issues/190)
