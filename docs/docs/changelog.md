@@ -1,4 +1,4 @@
-# 2.0.0
+# 2.0.0-beta.1
 ### Shiny new things
 - new option of resizing a column. The Size is persisted. [ISSUE#50](https://github.com/RafaelGB/obsidian-db-folder/issues/50)
 - Performance improvements of rendering components x5 [ISSUE#189](https://github.com/RafaelGB/obsidian-db-folder/issues/189)
