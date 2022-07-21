@@ -95,6 +95,12 @@
   text-align: -webkit-center;
   vertical-align: middle;
 }
+/** children of data-input fills parent div*/
+.data-input > input {
+  display: block;
+  width: 100%;
+  border: none;
+}
 
 .data-input * {
   margin: initial;
