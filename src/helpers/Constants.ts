@@ -165,7 +165,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     ' column1:',
     '  input: text',
     '  key: column1',
-    '  accessor: column1',
+    '  accessorKey: column1',
     '  label: Column 1',
     '  position: 0',
     '  config:',
