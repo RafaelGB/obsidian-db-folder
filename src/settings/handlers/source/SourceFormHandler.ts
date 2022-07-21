@@ -4,7 +4,7 @@ import { generateDataviewTableQuery } from "helpers/QueryHelper";
 import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-import { add_dropdown, add_text } from "settings/SettingsComponents";
+import { add_dropdown } from "settings/SettingsComponents";
 import { FileSuggest } from "settings/suggesters/FileSuggester";
 
 export class SourceFormHandler extends AbstractSettingsHandler {

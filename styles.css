@@ -96,9 +96,10 @@
   vertical-align: middle;
 }
 /** children of data-input fills parent div*/
-.data-input > input {
+.data-input > * {
   display: block;
   width: 100%;
+  min-height: 10px;
   border: none;
 }
 
