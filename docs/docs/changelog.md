@@ -1,3 +1,9 @@
+# 2.0.0-beta.2
+### Improved
+- unwanted columns when populating based on all fields removed. Also the memory consumption of the table is reduced significantly [ISSUE#176](https://github.com/RafaelGB/obsidian-db-folder/issues/176)
+### No longer broken
+- empty cells can be selected again
+- Now table config wraps the value with quotes [ISSUE#207](https://github.com/RafaelGB/obsidian-db-folder/issues/207)
 # 2.0.0-beta.1
 ### Shiny new things
 - new option of resizing a column. The Size is persisted. [ISSUE#50](https://github.com/RafaelGB/obsidian-db-folder/issues/50)
