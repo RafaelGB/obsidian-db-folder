@@ -1,8 +1,8 @@
 import { ColorPickerProps } from "cdm/StyleModel";
 import React from "react";
 import { ColorResult, SketchPicker } from "react-color";
-import { castHslToString } from "components/styles/ColumnWidthStyle";
 import { c } from "helpers/StylesHelper";
+import { castHslToString } from "helpers/Colors";
 
 export function ColorPicker(colorPickerProps: ColorPickerProps) {
   const { view, options, option, columnKey } = colorPickerProps;

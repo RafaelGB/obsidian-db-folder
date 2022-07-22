@@ -4,8 +4,6 @@ import ArrowLeftIcon from "components/img/ArrowLeft";
 import ArrowRightIcon from "components/img/ArrowRight";
 import React from "react";
 import { ActionTypes } from "helpers/Constants";
-import { Column } from "@tanstack/react-table";
-import { getColumnWidthStyle } from "components/styles/ColumnWidthStyle";
 import { TableColumn } from "cdm/FolderModel";
 
 export default class AddColumnHandlerAction extends AbstractHeaderAction {
@@ -85,11 +83,6 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
     }
     const columnId = `newColumn${columnNumber}`;
     const columnLabel = `New Column ${columnNumber}`;
-    hooks.columnWidthState.widthRecord[columnId] = getColumnWidthStyle(
-      table.getRowModel().rows,
-      column
-    );
-    hooks.setColumnWidthState(hooks.columnWidthState);
     return { name: columnId, position: wantedPosition, label: columnLabel };
   }
 }

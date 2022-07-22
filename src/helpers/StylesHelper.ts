@@ -1,5 +1,4 @@
-import { ColumnWidthState } from "cdm/StyleModel";
-import { DatabaseCore, MetadataLabels, WidthVariables } from "helpers/Constants";
+import { DatabaseCore, MetadataLabels } from "helpers/Constants";
 
 /**
  * Wrap the classname of css elements
@@ -26,19 +25,6 @@ export function shortId() {
  */
 export function dbTrim(str: string) {
     return str.trim().replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "_");
-}
-
-/**
- * Calculate summatory of column widths
- * @param state 
- * @returns 
- */
-export function getTotalWidth(state: ColumnWidthState): number {
-    let totalWidth = 0;
-    Object.keys(state.widthRecord).forEach((key) => {
-        totalWidth += state.widthRecord[key];
-    });
-    return totalWidth;
 }
 
 /**
