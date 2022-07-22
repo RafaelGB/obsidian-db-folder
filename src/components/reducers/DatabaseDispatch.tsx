@@ -47,6 +47,7 @@ export function databaseReducer(state: TableDataType, action: any) {
         label: action.option,
         backgroundColor: action.backgroundColor,
       };
+
       state.columns[optionIndex].options.push(newOption);
       state.view.diskConfig.updateColumnProperties(action.columnId, {
         options: state.columns[optionIndex].options,

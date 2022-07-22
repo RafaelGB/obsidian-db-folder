@@ -62,32 +62,33 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
 
   function handleOptionBlur(e: any) {
     if (e.target.value !== "") {
+      addNewOption(e);
+    }
+    setShowAdd(false);
+  }
+  /**
+   *
+   * @param e Handler for click event on cell
+   */
+  function handleOptionKeyDown(e: any) {
+    if (e.key === "Enter" && e.target.value !== "") {
+      addNewOption(e);
+      setShowAdd(false);
+    }
+  }
+  function addNewOption(e: any) {
+    // check if option already exists
+    const alreadyExist = column.options.find((option: { label: string }) => {
+      if (option.label === e.target.value) {
+      }
+    });
+    if (!alreadyExist) {
       dispatch({
         type: ActionTypes.ADD_OPTION_TO_COLUMN,
         option: e.target.value,
         backgroundColor: randomColor(),
         columnId: column.id,
       });
-    }
-    setShowAdd(false);
-  }
-
-  /**
-   *
-   * @param e Handler for click event on cell
-   */
-  function handleOptionKeyDown(e: any) {
-    if (e.key === "Enter") {
-      if (e.target.value !== "") {
-        dispatch({
-          columns: columns,
-          option: e.target.value,
-          backgroundColor: randomColor(),
-          columnId: column.id,
-          type: ActionTypes.ADD_OPTION_TO_COLUMN,
-        });
-      }
-      setShowAdd(false);
     }
   }
 
