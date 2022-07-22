@@ -72,7 +72,6 @@ const TagsPortal = (tagsProps: TagsProps) => {
     newValue
       .filter(
         (tag: any) =>
-          tag.__isNew__ &&
           !column.options.find((option: any) => option.label === tag.value)
       )
       .forEach((tag: any) => {
