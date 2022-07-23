@@ -87,7 +87,7 @@ export function Table(tableData: TableDataType) {
   const [columnSizing, setColumnSizing] = React.useState(
     getInitialColumnSizing(columns)
   );
-
+  const [persistSizingTimeout, setPersistSizingTimeout] = React.useState(null);
   // Drag and drop
   const findColumn = React.useCallback(
     (id: string) => {
@@ -187,13 +187,24 @@ export function Table(tableData: TableDataType) {
       } else {
         list = updater;
       }
-      Object.keys(list)
-        .filter((key) => list[key] !== undefined)
-        .map((key) => {
-          view.diskConfig.updateColumnProperties(key, {
-            width: list[key],
-          });
-        });
+      // cancelling previous timeout
+      if (persistSizingTimeout) {
+        clearTimeout(persistSizingTimeout);
+      }
+      // setting new timeout
+      setPersistSizingTimeout(
+        setTimeout(() => {
+          Object.keys(list)
+            .filter((key) => list[key] !== undefined)
+            .map((key) => {
+              view.diskConfig.updateColumnProperties(key, {
+                width: list[key],
+              });
+            });
+          // timeout until event is triggered after user has stopped typing
+        }, 1500)
+      );
+
       setColumnSizing(updater);
     },
     onColumnOrderChange: setColumnOrder,
