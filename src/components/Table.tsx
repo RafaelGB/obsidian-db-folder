@@ -14,6 +14,7 @@ import {
   Row,
   SortingState,
   getSortedRowModel,
+  ColumnSizingState,
 } from "@tanstack/react-table";
 import {
   TableDataType,
@@ -28,7 +29,9 @@ import {
   ActionTypes,
   DatabaseCore,
   DatabaseLimits,
+  DnDConfiguration,
   MetadataColumns,
+  ResizeConfiguration,
 } from "helpers/Constants";
 import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
@@ -73,10 +76,6 @@ export function Table(tableData: TableDataType) {
   const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
   /** Table services */
-  // Resize
-  const [columnResizeMode, setColumnResizeMode] =
-    React.useState<ColumnResizeMode>("onChange");
-
   // Sorting
   const [sorting, setSorting] = React.useState<SortingState>(
     tableData.initialState.sortBy
@@ -84,7 +83,10 @@ export function Table(tableData: TableDataType) {
 
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const columnSizing = getInitialColumnSizing(columns);
+  // Resizing
+  const [columnSizing, setColumnSizing] = React.useState(
+    getInitialColumnSizing(columns)
+  );
 
   // Drag and drop
   const findColumn = React.useCallback(
@@ -170,7 +172,7 @@ export function Table(tableData: TableDataType) {
   const table: Table<RowDataType> = useReactTable({
     data,
     columns,
-    columnResizeMode,
+    columnResizeMode: ResizeConfiguration.RESIZE_MODE,
     state: {
       globalFilter: globalFilter,
       columnOrder: columnOrder,
@@ -179,11 +181,20 @@ export function Table(tableData: TableDataType) {
     },
     onSortingChange: setSorting,
     onColumnSizingChange: (updater) => {
-      dataDispatch({
-        type: ActionTypes.MODIFY_COLUMN_SIZE,
-        updater: updater,
-        columnSizing: columnSizing,
-      });
+      let list: ColumnSizingState = null;
+      if (typeof updater === "function") {
+        list = updater(columnSizing);
+      } else {
+        list = updater;
+      }
+      Object.keys(list)
+        .filter((key) => list[key] !== undefined)
+        .map((key) => {
+          view.diskConfig.updateColumnProperties(key, {
+            width: list[key],
+          });
+        });
+      setColumnSizing(updater);
     },
     onColumnOrderChange: setColumnOrder,
     globalFilterFn: fuzzyFilter,
@@ -325,7 +336,6 @@ export function Table(tableData: TableDataType) {
                             header={header}
                             findColumn={findColumn}
                             headerIndex={headerIndex}
-                            columnResizeMode={columnResizeMode}
                             setColumnOrder={setColumnOrder}
                           />
                         )
