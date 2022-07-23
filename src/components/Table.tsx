@@ -5,7 +5,6 @@ import {
   getFilteredRowModel,
   getExpandedRowModel,
   ColumnDef,
-  ColumnResizeMode,
   ColumnOrderState,
   flexRender,
   Table,
@@ -29,7 +28,6 @@ import {
   ActionTypes,
   DatabaseCore,
   DatabaseLimits,
-  DnDConfiguration,
   MetadataColumns,
   ResizeConfiguration,
 } from "helpers/Constants";
@@ -54,6 +52,7 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   maxSize: DatabaseLimits.MAX_COLUMN_HEIGHT,
   cell: DefaultCell,
   header: DefaultHeader,
+  sortingFn: "alphanumeric",
 };
 
 /**
@@ -179,6 +178,7 @@ export function Table(tableData: TableDataType) {
       columnSizing: columnSizing,
       sorting: sorting,
     },
+
     onSortingChange: setSorting,
     onColumnSizingChange: (updater) => {
       let list: ColumnSizingState = null;
