@@ -17,7 +17,6 @@ export const ActionTypes = Object.freeze({
   ENABLE_RESET: 'enable_reset',
   SETTINGS_COLUMN: 'settings_column',
   MODIFY_COLUMN_CONFIG: 'modify_column_config',
-  MODIFY_COLUMN_SIZE: 'modify_column_size',
   SET_SORT_BY: 'set_sort_by',
 });
 
@@ -218,10 +217,12 @@ export const CellSizeOptions = Object.freeze({
   WIDE: 'wide'
 })
 
+export const DnDConfiguration = Object.freeze({
+  DRAG_TYPE: "column",
+});
 
-export const WidthVariables = Object.freeze({
-  ICON_SPACING: 17,
-  MAGIC_SPACING: 10
+export const ResizeConfiguration = Object.freeze({
+  RESIZE_MODE: "onChange",
 });
 
 export const OperatorFilter = Object.freeze({

@@ -4,21 +4,17 @@ import { c } from "helpers/StylesHelper";
 import { TableHeaderProps } from "cdm/HeaderModel";
 import { useDrag, useDrop } from "react-dnd";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
-import { ActionTypes } from "helpers/Constants";
-interface Item {
+import { DnDConfiguration } from "helpers/Constants";
+
+interface DragItem {
+  index: number;
   id: string;
-  originalIndex: number;
+  type: string;
 }
 
 export default function TableHeader(headerProps: TableHeaderProps) {
-  const {
-    table,
-    header,
-    findColumn,
-    headerIndex,
-    columnResizeMode,
-    setColumnOrder,
-  } = headerProps;
+  const { table, header, findColumn, headerIndex, setColumnOrder } =
+    headerProps;
   const { id } = header.column.columnDef as TableColumn;
   const { dispatch, columns, view } = table.options.meta as TableDataType;
   const originalIndex = columns.findIndex((col) => col.id === id);
@@ -34,11 +30,12 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     view.diskConfig.reorderColumns(initialOrder);
   }
 
-  const [{ isDragging }, drag] = useDrag(
+  const [{ isDragging, handlerId }, drag] = useDrag(
     () => ({
-      type: "card",
+      type: DnDConfiguration.DRAG_TYPE,
       item: { id, originalIndex },
       collect: (monitor) => ({
+        handlerId: monitor.getHandlerId(),
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
@@ -54,8 +51,8 @@ export default function TableHeader(headerProps: TableHeaderProps) {
 
   const [, drop] = useDrop(
     () => ({
-      accept: "card",
-      hover({ id: draggedId }: Item) {
+      accept: DnDConfiguration.DRAG_TYPE,
+      hover({ id: draggedId }: DragItem) {
         if (draggedId !== id) {
           const { index: overIndex } = findColumn(id);
           moveColumn(overIndex, draggedId);
@@ -70,6 +67,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
   return (
     <div
       ref={DnDref}
+      data-handler-id={handlerId}
       key={`${header.id}-${headerIndex}`}
       className={`${c("th noselect")} header`}
       style={{
@@ -88,14 +86,6 @@ export default function TableHeader(headerProps: TableHeaderProps) {
           className: `resizer ${
             header.column.getIsResizing() ? "isResizing" : ""
           }`,
-          style: {
-            transform:
-              columnResizeMode === "onEnd" && header.column.getIsResizing()
-                ? `translateX(${
-                    table.getState().columnSizingInfo.deltaOffset
-                  }px)`
-                : "",
-          },
         }}
       />
     </div>
