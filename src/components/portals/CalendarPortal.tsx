@@ -59,11 +59,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       placeholderText="Pick a date..."
     />
   ) : (
-    <span
-      className={`${c("calendar")}`}
-      onClick={handleOnClick}
-      placeholder={"Pick a date..."}
-    >
+    <span className={`${c("calendar")}`} onClick={handleOnClick}>
       {DateTime.isDateTime(calendarState)
         ? (calendarState as unknown as DateTime).toFormat("yyyy-MM-dd")
         : null}

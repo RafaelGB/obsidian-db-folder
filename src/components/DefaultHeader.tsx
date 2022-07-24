@@ -54,6 +54,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const created: boolean = false;
   /** Properties of header */
   const { column, header, table } = headerProps;
+
   /** Column values */
   const { id, dataType, options, position, label, config } =
     column.columnDef as TableColumn;

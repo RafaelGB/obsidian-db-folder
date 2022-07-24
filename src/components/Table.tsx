@@ -46,13 +46,14 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TableCell from "components/TableCell";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
+import customSortingFn from "components/behavior/CustomSortingFn";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
   maxSize: DatabaseLimits.MAX_COLUMN_HEIGHT,
   cell: DefaultCell,
   header: DefaultHeader,
-  sortingFn: "alphanumeric",
+  sortingFn: customSortingFn,
 };
 
 /**

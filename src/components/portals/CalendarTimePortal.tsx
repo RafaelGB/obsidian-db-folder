@@ -41,7 +41,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   };
 
   return column.isMetadata ? (
-    <span className="calendar-time" placeholder="Pick a datetime">
+    <span className="calendar-time">
       {DateTime.isDateTime(calendarTimeState)
         ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
         : null}
