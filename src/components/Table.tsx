@@ -428,7 +428,6 @@ export function Table(tableData: TableDataType) {
             <div
               key={`div-add-row-cell-button-internal-table-tr`}
               className={`${c("tr")}`}
-              style={{ display: "flex", justifyContent: "center" }}
             >
               <div
                 key={`div-add-row-cell-button-internal-table-td-icon`}

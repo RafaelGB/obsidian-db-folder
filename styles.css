@@ -275,7 +275,6 @@
 .database-plugin__add-row {
   color: var(--text-accent);
   padding: 0.5rem;
-  display: -ms-inline-grid;
   align-items: center;
   font-size: 0.875rem;
   cursor: pointer;
@@ -292,6 +291,7 @@
   color: var(--text-muted);
   flex-direction: row;
   align-items: center;
+  display: inline-grid;
 }
 
 .database-plugin__th {
@@ -364,6 +364,7 @@
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
+  height: 1px; /** Hack to prevent collapsing of table cells */
 }
 
 .database-plugin__th:last-child {
