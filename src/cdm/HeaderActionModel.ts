@@ -1,4 +1,3 @@
-import { SortedType } from "cdm/DatabaseModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 
 export type HeaderActionResponse = {

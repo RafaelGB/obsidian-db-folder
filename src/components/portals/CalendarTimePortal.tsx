@@ -44,7 +44,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
     <span className="calendar-time">
       {DateTime.isDateTime(calendarTimeState)
         ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
-        : "Invalid metadata date!"}
+        : null}
     </span>
   ) : (
     <div className="calendar-time">

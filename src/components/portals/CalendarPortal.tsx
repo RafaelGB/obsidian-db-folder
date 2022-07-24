@@ -56,12 +56,13 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       popperContainer={CalendarContainer}
       onBlur={() => setShowDatePicker(false)}
       autoFocus
+      placeholderText="Pick a date..."
     />
   ) : (
     <span className={`${c("calendar")}`} onClick={handleOnClick}>
       {DateTime.isDateTime(calendarState)
         ? (calendarState as unknown as DateTime).toFormat("yyyy-MM-dd")
-        : "Pick a date..."}
+        : null}
     </span>
   );
 };
