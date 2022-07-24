@@ -1,3 +1,13 @@
+# 2.0.0-beta.3
+### Improved
+- Delay of DnD improvements in the UI [ISSUE#214](https://github.com/RafaelGB/obsidian-db-folder/issues/214)
+- Resizing of column is smoother [ISSUE#210](https://github.com/RafaelGB/obsidian-db-folder/issues/210)
+### Visual
+- new row button is aligned again with the new UI [ISSUE#208](https://github.com/RafaelGB/obsidian-db-folder/issues/208)
+- Cell content is aligned again with the new UI [ISSUE#215](https://github.com/RafaelGB/obsidian-db-folder/issues/215) [artisticat1](https://github.com/artisticat1)
+### No longer broken
+- Control duplicates on tags and select columns [ISSUE#209](https://github.com/RafaelGB/obsidian-db-folder/issues/209)
+- Sorting works with empty cells using a custom comparator (react-table not support it yet) [ISSUE#212](https://github.com/RafaelGB/obsidian-db-folder/issues/212
 # 2.0.0-beta.2
 ### Improved
 - unwanted columns when populating based on all fields removed. Also the memory consumption of the table is reduced significantly [ISSUE#176](https://github.com/RafaelGB/obsidian-db-folder/issues/176)
