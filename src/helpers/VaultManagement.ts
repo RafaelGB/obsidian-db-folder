@@ -272,7 +272,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `$1 ${DataviewService.parseLiteral(newValue, DataTypes.MARKDOWN, state.view.diskConfig.yaml.config) as string, true}`
+      newValue: `$1 ${DataviewService.parseLiteral(newValue, DataTypes.MARKDOWN, state.view.diskConfig.yaml.config, true)}`
     };
     await VaultManagerDB.editNoteContent(noteObject);
     await persistFrontmatter();
