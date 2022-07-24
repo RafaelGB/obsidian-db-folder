@@ -114,6 +114,10 @@
 .data-input:hover {
   background-color: var(--background-secondary);
 }
+span.is-loaded {
+  display: flex;
+  align-items: center;
+}
 
 .database-plugin__checkbox {
   place-self: center;
@@ -176,6 +180,7 @@
 
 .database-plugin__markdown-preview-view {
   padding: 0;
+  height: fit-content;
 }
 
 .svg-icon-sm svg {
@@ -459,8 +464,10 @@
   gap: 0.3rem;
 }
 
-.text-align-right {
-  text-align: right;
+span.text-align-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .cell-padding {
