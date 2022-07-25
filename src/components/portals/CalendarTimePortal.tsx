@@ -5,15 +5,16 @@ import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@mui/material";
 import { CalendarProps } from "cdm/ComponentsModel";
-import { TableDataType } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   const { column, cellProperties, intialState } = calendarTimeProps;
   const { row, table } = cellProperties;
+  const tableColumn = column.columnDef as TableColumn;
   const dataDispatch = (table.options.meta as TableDataType).dispatch;
   // Calendar state
   const [calendarTimeState, setCalendarTimeState] = useState(
-    intialState.view.rows[row.index][column.key]
+    intialState.view.rows[row.index][tableColumn.key]
   );
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -32,7 +33,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: column.key,
+      key: tableColumn.key,
       value: DateTime.fromJSDate(date).toISO(),
       row: row,
       columnId: column.id,
@@ -47,7 +48,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
 
-  return showDatePicker && !column.isMetadata ? (
+  return showDatePicker && !tableColumn.isMetadata ? (
     <div className="calendar-time">
       <DatePicker
         dateFormat="yyyy-MM-dd h:mm aa"
@@ -66,7 +67,11 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
       />
     </div>
   ) : (
-    <span className="calendar-time" onClick={handleSpanOnClick}>
+    <span
+      className="calendar-time"
+      onClick={handleSpanOnClick}
+      style={{ width: column.getSize() }}
+    >
       {DateTime.isDateTime(calendarTimeState)
         ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
         : null}

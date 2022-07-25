@@ -217,7 +217,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         return (
           <CalendarPortal
             intialState={tableData}
-            column={column.columnDef as TableColumn}
+            column={column}
             cellProperties={cellProperties}
           />
         );
@@ -227,7 +227,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         return (
           <CalendarTimePortal
             intialState={tableData}
-            column={column.columnDef as TableColumn}
+            column={column}
             cellProperties={cellProperties}
           />
         );
@@ -239,7 +239,7 @@ export default function DefaultCell(cellProperties: CellProps) {
             <PopperSelectPortal
               dispatch={dataDispatch}
               row={row}
-              column={column.columnDef as TableColumn}
+              column={column}
               columns={columns}
               note={note}
               intialState={tableData}
@@ -252,7 +252,7 @@ export default function DefaultCell(cellProperties: CellProps) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <TagsPortal
               intialState={tableData}
-              column={column.columnDef as TableColumn}
+              column={column}
               columns={columns}
               dispatch={dataDispatch}
               cellProperties={cellProperties}
