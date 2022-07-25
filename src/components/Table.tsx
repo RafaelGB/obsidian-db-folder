@@ -270,7 +270,6 @@ export function Table(tableData: TableDataType) {
     });
     setRowTemplateState(settingsValue);
   }
-
   LOGGER.debug(`<= Table`);
   return (
     <>

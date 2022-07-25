@@ -148,14 +148,9 @@ export function databaseReducer(state: TableDataType, action: any) {
             action.newKey,
             state,
             UpdateRowOptions.COLUMN_KEY
-          ).catch((err) => {
-            throw err;
-          });
+          );
         })
-      ).catch((err) => {
-        throw err;
-      });
-
+      );
       return update(state, {
         skipReset: { $set: true },
         // Modify column visually with the new label

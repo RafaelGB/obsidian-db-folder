@@ -9,6 +9,7 @@ import header_action_button_section from "components/headerActions/HeaderActionB
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { Column } from "@tanstack/react-table";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
@@ -48,11 +49,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       setExpanded(true);
     }
   }, [created]);
-
-  useEffect(() => {
-    // Throw event if label is changed
-    setLabelState(labelState);
-  }, [labelState]);
 
   /**
    * Array of action buttons asociated to the header
@@ -108,6 +104,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     const futureOrder = table
       .getAllColumns()
       .map((o: any) => (o.id === column.id ? newKey : o.id));
+    table.setColumnOrder(futureOrder);
+    setkeyState(newKey);
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,
       columnId: column.id,
@@ -115,8 +113,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       newKey: newKey,
       label: labelState,
     });
-    setkeyState(newKey);
-    table.setColumnOrder(futureOrder);
   }
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
