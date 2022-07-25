@@ -97,7 +97,6 @@
 }
 /** children of data-input fills parent div*/
 .data-input > * {
-  display: block;
   border: none;
   height: 100%;
   width: 100%;
@@ -114,9 +113,13 @@
 .data-input:hover {
   background-color: var(--background-secondary);
 }
-span.is-loaded {
+
+span.is-loaded,
+span.database-plugin__calendar,
+div.database-plugin__checkbox {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .database-plugin__checkbox {
