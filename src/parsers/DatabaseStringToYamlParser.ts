@@ -1,4 +1,4 @@
-import { ParserException } from "errors/ParserException";
+import ParserException from "errors/ParserException";
 import { parseYaml } from "obsidian";
 
 // Interface of handlers

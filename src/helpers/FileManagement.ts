@@ -1,4 +1,4 @@
-import { HelperError } from "errors/HelperError";
+import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 
 export function resolve_tfile(file_str: string): TFile {
@@ -6,10 +6,10 @@ export function resolve_tfile(file_str: string): TFile {
 
     const file = app.vault.getAbstractFileByPath(file_str);
     if (!file) {
-        throw new HelperError(`File "${file_str}" doesn't exist`);
+        throw new HelperException(`File "${file_str}" doesn't exist`);
     }
     if (!(file instanceof TFile)) {
-        throw new HelperError(`${file_str} is a folder, not a file`);
+        throw new HelperException(`${file_str} is a folder, not a file`);
     }
 
     return file;
@@ -23,7 +23,7 @@ export function resolve_tfolder(folder_str: string): TFolder {
         folder = resolve_tfolder(folder_str.split("/").slice(0, -1).join("/"));
     }
     if (!(folder instanceof TFolder)) {
-        throw new HelperError(`${folder_str} is a file, not a folder`);
+        throw new HelperException(`${folder_str} is a file, not a folder`);
     }
     return folder;
 }
