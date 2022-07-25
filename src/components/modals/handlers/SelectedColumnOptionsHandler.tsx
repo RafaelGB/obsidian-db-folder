@@ -6,6 +6,7 @@ import { randomColor } from "helpers/Colors";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import React from "react";
 import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
   settingTitle: string = "Column Options";
@@ -78,10 +79,8 @@ export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
             columnSettingsManager.reset(columnHandlerResponse);
           });
       });
-
-      ReactDOM.render(
-        <ColorPicker {...colorPickerProps} />,
-        optionContainer.settingEl.createDiv()
+      createRoot(optionContainer.settingEl.createDiv()).render(
+        <ColorPicker {...colorPickerProps} />
       );
     });
 

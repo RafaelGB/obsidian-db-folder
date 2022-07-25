@@ -9,12 +9,13 @@ import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
-import { TableColumn } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
   const { intialState, column, dispatch, cellProperties, columns } = tagsProps;
-  const { row } = cellProperties;
+  const { row, table } = cellProperties;
   const tableColumn = column.columnDef as TableColumn;
+  const state = table.options.meta as TableDataType;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
@@ -36,16 +37,21 @@ const TagsPortal = (tagsProps: TagsProps) => {
     } else {
       // In case of new tag, generate random color
       const color = randomColor();
-      dispatch({
-        columns: columns,
-        option: tag,
+      const newOption: RowSelectOption = {
+        label: tag,
         backgroundColor: color,
-        columnId: column.id,
-        type: ActionTypes.ADD_OPTION_TO_COLUMN,
+      };
+      const currentColumn = state.columns.find(
+        (col: TableColumn) => col.key === tableColumn.key
+      );
+      currentColumn.options.push(newOption);
+      state.view.diskConfig.updateColumnProperties(column.id, {
+        options: currentColumn.options,
       });
       return color;
     }
   }
+
   const defaultValue = tagsState.map((tag: string) => ({
     label: tag,
     value: tag,

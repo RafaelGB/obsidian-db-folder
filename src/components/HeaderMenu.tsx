@@ -8,7 +8,7 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
-import { TableColumn } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
@@ -283,7 +283,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     className="menu-item sort-button"
                     onClick={() => {
                       new ColumnModal(
-                        (table.options.meta as any).view,
+                        (table.options.meta as TableDataType).view,
                         headerMenuProps
                       ).open();
                       setExpanded(false);
