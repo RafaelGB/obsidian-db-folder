@@ -6,7 +6,7 @@ import {
 } from "components/Columns";
 import { createDatabase } from "components/index/Database";
 import { DbFolderError } from "errors/AbstractError";
-import { DatabaseCore, DataTypes, StyleClasses } from "helpers/Constants";
+import { DatabaseCore, InputType, StyleClasses } from "helpers/Constants";
 import obtainInitialState from "helpers/InitialState";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import DBFolderPlugin from "main";
@@ -49,7 +49,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   setViewData(data: string, clear: boolean): void {
     if (!isDatabaseNote(data)) {
       this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
-        DataTypes.MARKDOWN;
+        InputType.MARKDOWN;
       this.plugin.removeView(this);
       this.plugin.setMarkdownView(this.leaf, false);
 
@@ -88,7 +88,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
           .onClick(() => {
             this.plugin.databaseFileModes[
               (this.leaf as any).id || this.file.path
-            ] = DataTypes.MARKDOWN;
+            ] = InputType.MARKDOWN;
             this.plugin.setMarkdownView(this.leaf);
           });
       })

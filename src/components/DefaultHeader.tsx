@@ -12,7 +12,7 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
-import { ActionTypes, DataTypes, MetadataColumns } from "helpers/Constants";
+import { ActionTypes, InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
@@ -71,30 +71,30 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
 
   let propertyIcon: JSX.Element;
   switch (input) {
-    case DataTypes.NUMBER:
+    case InputType.NUMBER:
       propertyIcon = <HashIcon />;
       break;
-    case DataTypes.TEXT:
+    case InputType.TEXT:
       propertyIcon = <TextIcon />;
       break;
-    case DataTypes.SELECT:
+    case InputType.SELECT:
       setOptionsOfSelectDataType(options, table.getRowModel().rows, id);
       propertyIcon = <MultiIcon />;
       break;
-    case DataTypes.CALENDAR:
+    case InputType.CALENDAR:
       propertyIcon = <CalendarIcon />;
       break;
-    case DataTypes.CALENDAR_TIME:
+    case InputType.CALENDAR_TIME:
       propertyIcon = <CalendarTimeIcon />;
       break;
-    case DataTypes.MARKDOWN:
+    case InputType.MARKDOWN:
       propertyIcon = <MarkdownObsidian />;
       break;
-    case DataTypes.TAGS:
+    case InputType.TAGS:
       propertyIcon = <TagsIcon />;
       break;
-    case DataTypes.TASK:
-    case DataTypes.CHECKBOX:
+    case InputType.TASK:
+    case InputType.CHECKBOX:
       propertyIcon = <TaskIcon />;
       break;
     default:

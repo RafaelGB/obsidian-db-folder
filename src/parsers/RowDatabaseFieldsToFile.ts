@@ -1,6 +1,6 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { DataTypes } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DataviewService } from "services/DataviewService";
 export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, localSettings: LocalSettings, deletedColumn?: string): string => {
@@ -35,9 +35,9 @@ function parseLiteralToString(literal: Literal, level: number, localSettings: Lo
         });
     }
     else if (key) {
-        literalBlock.push(`${" ".repeat(level)}${key}: ${DataviewService.parseLiteral(literal, DataTypes.MARKDOWN, localSettings)}`);
+        literalBlock.push(`${" ".repeat(level)}${key}: ${DataviewService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
     } else {
-        literalBlock.push(`${" ".repeat(level)}- ${DataviewService.parseLiteral(literal, DataTypes.MARKDOWN, localSettings)}`);
+        literalBlock.push(`${" ".repeat(level)}- ${DataviewService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
     }
     return literalBlock;
 }

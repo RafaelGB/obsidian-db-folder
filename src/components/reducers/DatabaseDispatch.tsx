@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import update from "immutability-helper";
 import {
   ActionTypes,
-  DataTypes,
+  InputType,
   DEFAULT_COLUMN_CONFIG,
   MetadataColumns,
   TableColumnsTemplate,
@@ -198,27 +198,27 @@ export function databaseReducer(state: TableDataType, action: any) {
         (column) => column.id === action.columnId
       );
       /** Check if type is changed */
-      if (state.columns[typeIndex].input === action.dataType) {
+      if (state.columns[typeIndex].input === action.input) {
         return state;
       }
       /** If changed, then parsed information */
       // Update configuration on disk
       state.view.diskConfig.updateColumnProperties(action.columnId, {
-        input: action.dataType,
+        input: action.input,
       });
       // Parse data
       const parsedData = state.view.rows.map((row: any) => ({
         ...row,
         [action.columnId]: DataviewService.parseLiteral(
           row[action.columnId],
-          action.dataType, // Destination type to parse
+          action.input, // Destination type to parse
           state.view.diskConfig.yaml.config
         ),
       }));
       // Update state
-      switch (action.dataType) {
-        case DataTypes.SELECT:
-        case DataTypes.TAGS:
+      switch (action.input) {
+        case InputType.SELECT:
+        case InputType.TAGS:
           const options: OptionSelect[] = [];
           // Generate selected options
           parsedData.forEach((row) => {
@@ -237,7 +237,7 @@ export function databaseReducer(state: TableDataType, action: any) {
                 ...state.columns.slice(0, typeIndex),
                 {
                   ...state.columns[typeIndex],
-                  input: action.dataType,
+                  input: action.input,
                   options: obtainUniqueOptionValues(options),
                 },
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
@@ -266,7 +266,7 @@ export function databaseReducer(state: TableDataType, action: any) {
             columns: {
               $set: [
                 ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], input: action.dataType },
+                { ...state.columns[typeIndex], input: action.input },
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
               ],
             },
@@ -287,7 +287,7 @@ export function databaseReducer(state: TableDataType, action: any) {
       );
 
       const newLeftColumn: DatabaseColumn = {
-        input: DataTypes.TEXT,
+        input: InputType.TEXT,
         accessorKey: action.columnInfo.name,
         key: action.columnInfo.name,
         label: action.columnInfo.label,
@@ -335,7 +335,7 @@ export function databaseReducer(state: TableDataType, action: any) {
       );
 
       const newRIghtColumn: DatabaseColumn = {
-        input: DataTypes.TEXT,
+        input: InputType.TEXT,
         accessorKey: action.columnInfo.name,
         key: action.columnInfo.name,
         label: action.columnInfo.label,

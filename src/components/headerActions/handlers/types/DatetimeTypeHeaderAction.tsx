@@ -1,7 +1,7 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { ActionTypes, DataTypes, MetadataLabels } from "helpers/Constants";
+import { ActionTypes, InputType, MetadataLabels } from "helpers/Constants";
 import CalendarTimeIcon from "components/img/CalendarTime";
 
 export default class DatetimeTypeHeaderAction extends AbstractHeaderAction {
@@ -20,7 +20,7 @@ export default class DatetimeTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: DataTypes.CALENDAR_TIME,
+          dataType: InputType.CALENDAR_TIME,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);

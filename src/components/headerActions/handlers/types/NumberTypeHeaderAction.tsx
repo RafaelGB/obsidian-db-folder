@@ -2,7 +2,7 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import HashIcon from "components/img/Hash";
 import React from "react";
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, InputType } from "helpers/Constants";
 
 export default class NumberTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -20,13 +20,13 @@ export default class NumberTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: DataTypes.NUMBER,
+          dataType: InputType.NUMBER,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);
       },
       icon: <HashIcon />,
-      label: DataTypes.NUMBER,
+      label: InputType.NUMBER,
     };
     this.globalHeaderActionResponse.buttons.push(checkBoxType);
   }

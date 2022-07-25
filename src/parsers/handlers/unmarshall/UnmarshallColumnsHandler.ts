@@ -1,6 +1,6 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DiskHandlerResponse } from "cdm/MashallModel";
-import { DataTypes, YAML_INDENT } from "helpers/Constants";
+import { InputType, YAML_INDENT } from "helpers/Constants";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
 
 export class UnmarshallColumnsHandler extends AbstractDiskHandler {
@@ -39,8 +39,8 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
 function unmarshallParticularInputInfo(column: DatabaseColumn): string[] {
     const particularInputString: string[] = [];
     switch (column.input) {
-        case DataTypes.SELECT:
-        case DataTypes.TAGS:
+        case InputType.SELECT:
+        case InputType.TAGS:
             // Lvl3: select column properties
             if (column.options && Array.isArray(column.options)) {
                 particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);

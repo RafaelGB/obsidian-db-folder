@@ -1,7 +1,7 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, InputType } from "helpers/Constants";
 import TagsIcon from "components/img/TagsIcon";
 
 export default class TagsTypeHeaderAction extends AbstractHeaderAction {
@@ -20,13 +20,13 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: DataTypes.TAGS,
+          dataType: InputType.TAGS,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);
       },
       icon: <TagsIcon />,
-      label: DataTypes.TAGS,
+      label: InputType.TAGS,
     };
     this.globalHeaderActionResponse.buttons.push(checkBoxType);
   }

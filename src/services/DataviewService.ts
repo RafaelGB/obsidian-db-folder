@@ -1,5 +1,5 @@
 import { FilterCondition } from "cdm/DatabaseModel";
-import { DataTypes, getOperatorFilterValue, MarkdownBreakerRules, OperatorFilter } from "helpers/Constants";
+import { InputType, getOperatorFilterValue, MarkdownBreakerRules, OperatorFilter } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { DataviewApi, getAPI, isPluginEnabled } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
@@ -80,26 +80,26 @@ class DataviewProxy {
             .type} to ${dataTypeDst}`);
         // Check empty or undefined literals
         switch (dataTypeDst) {
-            case DataTypes.TEXT:
+            case InputType.TEXT:
                 parsedLiteral = this.parseToString(wrapped);
                 break;
-            case DataTypes.MARKDOWN:
+            case InputType.MARKDOWN:
                 parsedLiteral = this.parseToMarkdown(wrapped, localSettings, isInline);
                 break;
-            case DataTypes.TAGS:
+            case InputType.TAGS:
                 parsedLiteral = this.parseToOptionsArray(wrapped);
                 break;
-            case DataTypes.CALENDAR:
-            case DataTypes.CALENDAR_TIME:
+            case InputType.CALENDAR:
+            case InputType.CALENDAR_TIME:
                 parsedLiteral = this.parseToCalendar(wrapped);
                 break;
-            case DataTypes.NUMBER:
+            case InputType.NUMBER:
                 parsedLiteral = this.parseToNumber(wrapped);
                 break;
-            case DataTypes.CHECKBOX:
+            case InputType.CHECKBOX:
                 parsedLiteral = this.parseToBoolean(wrapped);
                 break;
-            case DataTypes.TASK:
+            case InputType.TASK:
                 // Do nothing
                 break;
             default:

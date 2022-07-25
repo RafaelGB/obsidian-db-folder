@@ -1,6 +1,6 @@
 import { DiskHandlerResponse } from "cdm/MashallModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { DataTypes, YAML_INDENT } from "helpers/Constants";
+import { InputType, YAML_INDENT } from "helpers/Constants";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
 import { DataviewService } from "services/DataviewService";
 
@@ -28,5 +28,5 @@ export class UnmarshallConfigHandler extends AbstractDiskHandler {
 }
 
 function parseValue(value: string, localSettings: LocalSettings): string {
-    return DataviewService.parseLiteral(value, DataTypes.MARKDOWN, localSettings).toString();
+    return DataviewService.parseLiteral(value, InputType.MARKDOWN, localSettings).toString();
 }
