@@ -178,167 +178,172 @@ export async function updateRowFileProxy(file: TFile, columnId: string, newValue
  */
 export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, state: TableDataType, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
-  const content = await VaultManagerDB.obtainContentFromTfile(file);
-  const frontmatterKeys = await VaultManagerDB.obtainFrontmatterKeys(content);
-  const rowFields = obtainRowDatabaseFields(file, state.columns, frontmatterKeys);
-  const column = state.columns.find(c => c.key === columnId);
-  // Adds an empty frontmatter at the beginning of the file
-  async function addFrontmatter(): Promise<void> {
-    /* Regex explanation
-    * group 1 all content
-    */
-    const frontmatterRegex = /(^[\s\S]*$)/g;
+  try {
+    const content = await VaultManagerDB.obtainContentFromTfile(file);
+    const frontmatterKeys = await VaultManagerDB.obtainFrontmatterKeys(content);
+    const rowFields = obtainRowDatabaseFields(file, state.columns, frontmatterKeys);
+    const column = state.columns.find(c => c.key === columnId);
+    // Adds an empty frontmatter at the beginning of the file
+    async function addFrontmatter(): Promise<void> {
+      /* Regex explanation
+      * group 1 all content
+      */
+      const frontmatterRegex = /(^[\s\S]*$)/g;
 
 
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterRegex,
-      newValue: `---\n---\n$1`
-    };
-    // update content on disk and in memory
-    await VaultManagerDB.editNoteContent(noteObject);
-  }
-  /*******************************************************************************************
-   *                              FRONTMATTER GROUP FUNCTIONS
-   *******************************************************************************************/
-  // Modify value of a column
-  async function columnValue(): Promise<void> {
-    if (column.config.isInline) {
-      await inlineColumnEdit();
-      return;
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: frontmatterRegex,
+        newValue: `---\n---\n$1`
+      };
+      // update content on disk and in memory
+      await VaultManagerDB.editNoteContent(noteObject);
     }
-    rowFields.frontmatter[columnId] = newValue;
-    await persistFrontmatter();
-    await inlineRemoveColumn();
-  }
-
-  // Modify key of a column
-  async function columnKey(): Promise<void> {
-    if (column.config.isInline) {
-      // Go to inline mode
-      await inlineColumnKey();
-      return;
-    }
-    // If field does not exist yet, ignore it
-    if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)
-      && !Object.prototype.hasOwnProperty.call(rowFields.inline, columnId)) {
-      return;
-    }
-
-    // Check if the column is already in the frontmatter
-    // assign an empty value to the new key
-    rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, state.view.diskConfig.yaml.config) as string] = rowFields.frontmatter[columnId] ?? "";
-    delete rowFields.frontmatter[columnId];
-    await persistFrontmatter(columnId);
-  }
-
-  // Remove a column
-  async function removeColumn(): Promise<void> {
-    if (column.config.isInline) {
+    /*******************************************************************************************
+     *                              FRONTMATTER GROUP FUNCTIONS
+     *******************************************************************************************/
+    // Modify value of a column
+    async function columnValue(): Promise<void> {
+      if (column.config.isInline) {
+        await inlineColumnEdit();
+        return;
+      }
+      rowFields.frontmatter[columnId] = newValue;
+      await persistFrontmatter();
       await inlineRemoveColumn();
-      return;
     }
-    delete rowFields.frontmatter[columnId];
-    await persistFrontmatter(columnId);
-  }
 
-  async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-    const frontmatterGroupRegex = /^---[\s\S]+?---/g;
-    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, state.view.diskConfig.yaml.config, deletedColumn);
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterGroupRegex,
-      newValue: `${frontmatterFieldsText}`
-    };
-    await VaultManagerDB.editNoteContent(noteObject);
-  }
+    // Modify key of a column
+    async function columnKey(): Promise<void> {
+      if (column.config.isInline) {
+        // Go to inline mode
+        await inlineColumnKey();
+        return;
+      }
+      // If field does not exist yet, ignore it
+      if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)
+        && !Object.prototype.hasOwnProperty.call(rowFields.inline, columnId)) {
+        return;
+      }
 
-  /*******************************************************************************************
-   *                              INLINE GROUP FUNCTIONS
-   *******************************************************************************************/
-  async function inlineColumnEdit(): Promise<void> {
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
-    if (!inlineFieldRegex.test(content)) {
-      await inlineAddColumn();
-      return;
+      // Check if the column is already in the frontmatter
+      // assign an empty value to the new key
+      rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, state.view.diskConfig.yaml.config) as string] = rowFields.frontmatter[columnId] ?? "";
+      delete rowFields.frontmatter[columnId];
+      await persistFrontmatter(columnId);
     }
-    /* Regex explanation
-    * group 1 is inline field checking that starts in new line
-    * group 2 is the current value of inline field
-    */
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: inlineFieldRegex,
-      newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, state.view.diskConfig.yaml.config, true)}`
-    };
-    await VaultManagerDB.editNoteContent(noteObject);
-    await persistFrontmatter();
-  }
 
-  async function inlineColumnKey(): Promise<void> {
-    if (!Object.keys(rowFields.inline).contains(columnId)) {
-      return;
+    // Remove a column
+    async function removeColumn(): Promise<void> {
+      if (column.config.isInline) {
+        await inlineRemoveColumn();
+        return;
+      }
+      delete rowFields.frontmatter[columnId];
+      await persistFrontmatter(columnId);
     }
-    /* Regex explanation
-    * group 1 is inline field checking that starts in new line
-    * group 2 is the current value of inline field
-    */
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: inlineFieldRegex,
-      newValue: `${newValue}::$2`
-    };
-    await VaultManagerDB.editNoteContent(noteObject);
-    await persistFrontmatter();
-  }
 
-  async function inlineAddColumn(): Promise<void> {
-    const inlineAddRegex = new RegExp(`(^---[\\s\\S]+?---\\n)+(.*)`, 'g');
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: inlineAddRegex,
-      newValue: `$1${columnId}:: ${newValue}\n$2`
-    };
-    await persistFrontmatter();
-    await VaultManagerDB.editNoteContent(noteObject);
-  }
-
-  async function inlineRemoveColumn(): Promise<void> {
-    /* Regex explanation
-    * group 1 is inline field checking that starts in new line
-    * group 2 is the current value of inline field
-    */
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
-    const noteObject = {
-      action: 'remove',
-      file: file,
-      regexp: inlineFieldRegex
-    };
-    await VaultManagerDB.editNoteContent(noteObject);
-  }
-  // Record of options
-  const updateOptions: Record<string, any> = {};
-  updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
-  updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
-  updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
-  updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
-  // Execute action
-  if (updateOptions[option]) {
-    // Check if file has frontmatter
-    if (!hasFrontmatterKey(content)) {
-      // If not, add it
-      await addFrontmatter();
+    async function persistFrontmatter(deletedColumn?: string): Promise<void> {
+      const frontmatterGroupRegex = /^---[\s\S]+?---/g;
+      const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, state.view.diskConfig.yaml.config, deletedColumn);
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: frontmatterGroupRegex,
+        newValue: `${frontmatterFieldsText}`
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
     }
-    // Then execute the action
-    await updateOptions[option]();
-  } else {
-    throw `Error: option ${option} not supported yet`;
+
+    /*******************************************************************************************
+     *                              INLINE GROUP FUNCTIONS
+     *******************************************************************************************/
+    async function inlineColumnEdit(): Promise<void> {
+      const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
+      if (!inlineFieldRegex.test(content)) {
+        await inlineAddColumn();
+        return;
+      }
+      /* Regex explanation
+      * group 1 is inline field checking that starts in new line
+      * group 2 is the current value of inline field
+      */
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: inlineFieldRegex,
+        newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, state.view.diskConfig.yaml.config, true)}`
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
+      await persistFrontmatter();
+    }
+
+    async function inlineColumnKey(): Promise<void> {
+      if (!Object.keys(rowFields.inline).contains(columnId)) {
+        return;
+      }
+      /* Regex explanation
+      * group 1 is inline field checking that starts in new line
+      * group 2 is the current value of inline field
+      */
+      const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: inlineFieldRegex,
+        newValue: `${newValue}::$2`
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
+      await persistFrontmatter();
+    }
+
+    async function inlineAddColumn(): Promise<void> {
+      const inlineAddRegex = new RegExp(`(^---[\\s\\S]+?---\\n)+(.*)`, 'g');
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: inlineAddRegex,
+        newValue: `$1${columnId}:: ${newValue}\n$2`
+      };
+      await persistFrontmatter();
+      await VaultManagerDB.editNoteContent(noteObject);
+    }
+
+    async function inlineRemoveColumn(): Promise<void> {
+      /* Regex explanation
+      * group 1 is inline field checking that starts in new line
+      * group 2 is the current value of inline field
+      */
+      const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
+      const noteObject = {
+        action: 'remove',
+        file: file,
+        regexp: inlineFieldRegex
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
+    }
+    // Record of options
+    const updateOptions: Record<string, any> = {};
+    updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
+    updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
+    updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
+    updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
+    // Execute action
+    if (updateOptions[option]) {
+      // Check if file has frontmatter
+      if (!hasFrontmatterKey(content)) {
+        // If not, add it
+        await addFrontmatter();
+      }
+      // Then execute the action
+      await updateOptions[option]();
+    } else {
+      throw `Error: option ${option} not supported yet`;
+    }
+  } catch (e) {
+    LOGGER.error(`updateRowFile.  Error:${e}`);
+    new Notice(`Error trying to save your changes.\n${e}`, 6000);
   }
   LOGGER.info(`<= updateRowFile.asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option} `);
 }

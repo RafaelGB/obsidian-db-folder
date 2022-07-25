@@ -20,7 +20,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     intialState.view.rows[row.index][column.key]
   );
 
-  function handleOnClick(event: any) {
+  function handleSpanOnClick(event: any) {
     event.preventDefault();
     setShowDatePicker(true);
   }
@@ -59,7 +59,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       placeholderText="Pick a date..."
     />
   ) : (
-    <span className={`${c("calendar")}`} onClick={handleOnClick}>
+    <span className={`${c("calendar")}`} onClick={handleSpanOnClick}>
       {DateTime.isDateTime(calendarState)
         ? (calendarState as unknown as DateTime).toFormat("yyyy-MM-dd")
         : null}
