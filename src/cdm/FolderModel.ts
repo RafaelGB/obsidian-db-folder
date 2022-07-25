@@ -43,10 +43,12 @@ export interface ConfigColumn {
 }
 
 export interface BaseColumn {
-    csvCandidate?: boolean;
     accessorKey: string;
     label: string;
     key: string;
+    input: string;
+    csvCandidate?: boolean;
+    options?: RowSelectOption[];
     width?: number;
     position?: number;
     isMetadata?: boolean;
@@ -58,7 +60,6 @@ export interface TableColumn extends BaseColumn {
     isSortedDesc?: boolean;
     isSorted?: boolean;
     id: string;
-    dataType: string;
     options?: RowSelectOption[];
     Cell?: any;
     getHeaderProps?: any;

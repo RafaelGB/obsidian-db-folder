@@ -56,7 +56,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const { column, header, table } = headerProps;
 
   /** Column values */
-  const { id, dataType, options, position, label, config } =
+  const { id, input, options, position, label, config } =
     column.columnDef as TableColumn;
   /** reducer asociated to database */
   // TODO typying improve
@@ -70,7 +70,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   });
 
   let propertyIcon: JSX.Element;
-  switch (dataType) {
+  switch (input) {
     case DataTypes.NUMBER:
       propertyIcon = <HashIcon />;
       break;

@@ -24,7 +24,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     setLabelState,
   } = headerMenuProps;
 
-  const { key, isMetadata, dataType } = column.columnDef as TableColumn;
+  const { key, isMetadata, input } = column.columnDef as TableColumn;
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(key));
   const [popperElement, setPopperElement] = useState(null);
@@ -220,7 +220,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                       {propertyIcon}
                     </span>
                     <span style={{ textTransform: "capitalize" }}>
-                      {getLabelHeader(dataType)}
+                      {getLabelHeader(input)}
                     </span>
                   </div>
                   {showType && (
@@ -277,7 +277,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 </div>
               ))}
             </div>
-            {(!isMetadata || dataType === DataTypes.TASK) && (
+            {(!isMetadata || input === DataTypes.TASK) && (
               <div
                 style={{
                   borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,

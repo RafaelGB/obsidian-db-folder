@@ -198,7 +198,7 @@ export function databaseReducer(state: TableDataType, action: any) {
         (column) => column.id === action.columnId
       );
       /** Check if type is changed */
-      if (state.columns[typeIndex].dataType === action.dataType) {
+      if (state.columns[typeIndex].input === action.dataType) {
         return state;
       }
       /** If changed, then parsed information */
@@ -237,7 +237,7 @@ export function databaseReducer(state: TableDataType, action: any) {
                 ...state.columns.slice(0, typeIndex),
                 {
                   ...state.columns[typeIndex],
-                  dataType: action.dataType,
+                  input: action.dataType,
                   options: obtainUniqueOptionValues(options),
                 },
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
@@ -266,7 +266,7 @@ export function databaseReducer(state: TableDataType, action: any) {
             columns: {
               $set: [
                 ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], dataType: action.dataType },
+                { ...state.columns[typeIndex], input: action.dataType },
                 ...state.columns.slice(typeIndex + 1, state.columns.length),
               ],
             },
@@ -304,7 +304,7 @@ export function databaseReducer(state: TableDataType, action: any) {
             ...state.columns.slice(0, leftIndex),
             {
               ...TableColumnsTemplate,
-              dataType: newLeftColumn.input,
+              input: newLeftColumn.input,
               id: newLeftColumn.key,
               label: newLeftColumn.label,
               key: newLeftColumn.key,
@@ -353,7 +353,8 @@ export function databaseReducer(state: TableDataType, action: any) {
             ...state.columns.slice(0, rightIndex + 1),
             {
               ...TableColumnsTemplate,
-              dataType: newRIghtColumn.input,
+              ...newRIghtColumn,
+              input: newRIghtColumn.input,
               id: newRIghtColumn.key,
               label: newRIghtColumn.label,
               key: newRIghtColumn.key,
