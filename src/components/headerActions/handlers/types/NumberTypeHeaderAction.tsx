@@ -20,7 +20,7 @@ export default class NumberTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: InputType.NUMBER,
+          input: InputType.NUMBER,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);

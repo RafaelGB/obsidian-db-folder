@@ -20,7 +20,7 @@ export default class TextTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: InputType.TEXT,
+          input: InputType.TEXT,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);

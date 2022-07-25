@@ -20,7 +20,7 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: InputType.TAGS,
+          input: InputType.TAGS,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);

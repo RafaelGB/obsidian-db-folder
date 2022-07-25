@@ -20,7 +20,7 @@ export default class DateTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: InputType.CALENDAR,
+          input: InputType.CALENDAR,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);
