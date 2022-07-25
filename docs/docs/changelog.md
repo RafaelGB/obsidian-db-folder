@@ -1,6 +1,7 @@
 # 2.0.0
 ### No longer broken
 - Edit inline fields are correctly saved [ISSUE#182](https://github.com/RafaelGB/obsidian-db-folder/issues/182)
+- Where you add/delete new columns, there was ocasions where column order was not updated and provoked unselected columns [ISSUE#102](https://github.com/RafaelGB/obsidian-db-folder/issues/102)
 # 2.0.0-beta.3
 ### Improved
 - Delay of DnD improvements in the UI [ISSUE#214](https://github.com/RafaelGB/obsidian-db-folder/issues/214)
