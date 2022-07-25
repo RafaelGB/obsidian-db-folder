@@ -173,7 +173,11 @@ export default function DefaultCell(cellProperties: CellProps) {
             ref={editableMdRef}
           />
         ) : (
-          <span ref={containerCellRef} onClick={handleEditableOnclick} />
+          <span
+            ref={containerCellRef}
+            onClick={handleEditableOnclick}
+            style={{ width: column.getSize() }}
+          />
         );
 
       /** Number option */
@@ -187,7 +191,11 @@ export default function DefaultCell(cellProperties: CellProps) {
             className="text-align-right"
           />
         ) : (
-          <span className="text-align-right" onClick={handleEditableOnclick}>
+          <span
+            className="text-align-right"
+            onClick={handleEditableOnclick}
+            style={{ width: column.getSize() }}
+          >
             {(contextValue.value && contextValue.value.toString()) || ""}
           </span>
         );
