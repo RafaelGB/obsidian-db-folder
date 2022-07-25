@@ -15,10 +15,16 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   const [calendarTimeState, setCalendarTimeState] = useState(
     intialState.view.rows[row.index][column.key]
   );
-  // Selector popper state
+  /** state of cell value */
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
+
+  function handleSpanOnClick(event: any) {
+    event.preventDefault();
+    setShowDatePicker(true);
+  }
 
   function handleCalendarChange(date: Date) {
     const newValue = DateTime.fromJSDate(date);
@@ -33,6 +39,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
     });
 
     setCalendarTimeState(newValue);
+    setShowDatePicker(false);
   }
 
   const CalendarContainer = (containerProps: any) => {
@@ -40,13 +47,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
 
-  return column.isMetadata ? (
-    <span className="calendar-time">
-      {DateTime.isDateTime(calendarTimeState)
-        ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
-        : null}
-    </span>
-  ) : (
+  return showDatePicker && !column.isMetadata ? (
     <div className="calendar-time">
       <DatePicker
         dateFormat="yyyy-MM-dd h:mm aa"
@@ -57,12 +58,19 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
         }
         onChange={handleCalendarChange}
         popperContainer={CalendarContainer}
+        onBlur={() => setShowDatePicker(false)}
         timeFormat="HH:mm"
         timeCaption="time"
         showTimeSelect
         placeholderText="Pick a moment..."
       />
     </div>
+  ) : (
+    <span className="calendar-time" onClick={handleSpanOnClick}>
+      {DateTime.isDateTime(calendarTimeState)
+        ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
+        : null}
+    </span>
   );
 };
 

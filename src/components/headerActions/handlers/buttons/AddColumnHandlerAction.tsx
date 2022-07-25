@@ -27,7 +27,6 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
     newButtons.push(
       {
         onClick: (e: any) => {
-          table.getAllColumns();
           (table.options.meta as any).dispatch({
             type: ActionTypes.ADD_COLUMN_TO_LEFT,
             columnId: column.id,
