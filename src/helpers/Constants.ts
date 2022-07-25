@@ -1,4 +1,4 @@
-import { MetadataColumnsModel } from "cdm/DatabaseModel";
+import { DatabaseColumn, MetadataColumnsModel } from "cdm/DatabaseModel";
 import { ConfigColumn, TableColumn } from "cdm/FolderModel";
 import { DatabaseSettings } from "cdm/SettingsModel";
 
@@ -21,7 +21,7 @@ export const ActionTypes = Object.freeze({
 });
 
 /** Flavours of data types */
-export const DataTypes = Object.freeze({
+export const InputType = Object.freeze({
   NUMBER: 'number',
   TEXT: 'text',
   SELECT: 'select',
@@ -77,7 +77,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   FILE:
   {
     key: MetadataColumns.FILE,
-    input: DataTypes.MARKDOWN,
+    input: InputType.MARKDOWN,
     label: MetadataLabels.FILE,
     accessorKey: MetadataColumns.FILE,
     isMetadata: true,
@@ -91,7 +91,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
-    input: DataTypes.NEW_COLUMN,
+    input: InputType.NEW_COLUMN,
     label: MetadataLabels.ADD_COLUMN,
     accessorKey: MetadataColumns.ADD_COLUMN,
     isMetadata: true,
@@ -102,7 +102,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   CREATED: {
     key: MetadataColumns.CREATED,
-    input: DataTypes.CALENDAR_TIME,
+    input: InputType.CALENDAR_TIME,
     label: MetadataLabels.CREATED,
     accessorKey: MetadataColumns.CREATED,
     isMetadata: true,
@@ -113,7 +113,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
-    input: DataTypes.CALENDAR_TIME,
+    input: InputType.CALENDAR_TIME,
     label: MetadataLabels.MODIFIED,
     accessorKey: MetadataColumns.MODIFIED,
     isMetadata: true,
@@ -124,7 +124,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   TASKS: {
     key: MetadataColumns.TASKS,
-    input: DataTypes.TASK,
+    input: InputType.TASK,
     label: MetadataLabels.TASK,
     accessorKey: MetadataColumns.TASKS,
     isMetadata: true,
@@ -135,13 +135,15 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
 });
 
-export const TableColumnsTemplate: Partial<TableColumn> =
+export const TableColumnsTemplate: Pick<DatabaseColumn | TableColumn, "isMetadata" | "skipPersist" | "isDragDisabled" | "options" | "csvCandidate" | "input" | "config"> =
 {
   isMetadata: false,
   skipPersist: false,
   isDragDisabled: false,
   options: [],
   csvCandidate: true,
+  input: InputType.TEXT,
+  config: DEFAULT_COLUMN_CONFIG
 }
 
 export const DatabaseCore = Object.freeze({

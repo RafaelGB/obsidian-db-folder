@@ -5,7 +5,7 @@ import CrossIcon from "components/img/CrossIcon";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, InputType } from "helpers/Constants";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
@@ -14,9 +14,9 @@ export default class SortHandlerAction extends AbstractHeaderAction {
     this.globalHeaderActionResponse = headerActionResponse;
     const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
       .column.columnDef as TableColumn;
-    switch (column.dataType) {
-      case DataTypes.TAGS:
-      case DataTypes.TASK:
+    switch (column.input) {
+      case InputType.TAGS:
+      case InputType.TASK:
         // DO NOTHING
         break;
       default:

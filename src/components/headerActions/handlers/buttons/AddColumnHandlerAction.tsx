@@ -27,13 +27,12 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
     newButtons.push(
       {
         onClick: (e: any) => {
+          table.getAllColumns();
           (table.options.meta as any).dispatch({
             type: ActionTypes.ADD_COLUMN_TO_LEFT,
             columnId: column.id,
             focus: false,
-            columnInfo: this.adjustWidthOfTheColumnsWhenAdd(
-              column.position - 1
-            ),
+            columnInfo: this.generateNewColumnInfo(column.position - 1),
           });
           hooks.setExpanded(false);
         },
@@ -46,9 +45,7 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
             type: ActionTypes.ADD_COLUMN_TO_RIGHT,
             columnId: column.id,
             focus: false,
-            columnInfo: this.adjustWidthOfTheColumnsWhenAdd(
-              column.position + 1
-            ),
+            columnInfo: this.generateNewColumnInfo(column.position + 1),
           });
           hooks.setExpanded(false);
         },
@@ -64,12 +61,9 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
    * @param wantedPosition
    * @returns
    */
-  private adjustWidthOfTheColumnsWhenAdd(wantedPosition: number) {
-    const { hooks } = this.globalHeaderActionResponse;
+  private generateNewColumnInfo(wantedPosition: number) {
     const { table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
-      .column.columnDef as TableColumn;
     let columnNumber =
       (table.options.meta as any).columns.length -
       (table.options.meta as any).shadowColumns.length;

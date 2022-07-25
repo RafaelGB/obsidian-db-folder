@@ -1,7 +1,7 @@
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { RowSelectOption } from 'cdm/ComponentsModel';
-import { DataTypes, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
+import { InputType, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class MarshallColumnsHandler extends AbstractYamlHandler {
@@ -14,7 +14,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
             this.addError(`There was not columns in yaml. Default will be loaded`);
             yaml.columns = {
                 Column1: {
-                    input: DataTypes.TEXT,
+                    input: InputType.TEXT,
                     accessorKey: 'Column1',
                     key: 'Column1',
                     label: 'Column 1',
@@ -30,7 +30,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                 /** BASE COLUMN INFO */
                 if (!column.input) {
                     this.addError(`There was not input in column ${key}`);
-                    column.input = DataTypes.TEXT;
+                    column.input = InputType.TEXT;
                 } else {
                     column = marshallParticularInputInfo(column);
                     // PARTICULAR INPUT INFO
@@ -71,8 +71,8 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
 
 function marshallParticularInputInfo(column: DatabaseColumn): DatabaseColumn {
     switch (column.input) {
-        case DataTypes.SELECT:
-        case DataTypes.TAGS:
+        case InputType.SELECT:
+        case InputType.TAGS:
             if (!column.options || !Array.isArray(column.options)) {
                 column.options = [];
             } else {
@@ -97,7 +97,7 @@ function marshallParticularInputInfo(column: DatabaseColumn): DatabaseColumn {
 
 function marshallParticularConfigInfo(column: DatabaseColumn): DatabaseColumn {
     switch (column.input) {
-        case DataTypes.TEXT:
+        case InputType.TEXT:
             if (column.config.enable_media_view === undefined) {
                 column.config.enable_media_view = DEFAULT_COLUMN_CONFIG.enable_media_view;
             }
@@ -107,7 +107,7 @@ function marshallParticularConfigInfo(column: DatabaseColumn): DatabaseColumn {
             if (column.config.media_height === undefined) {
                 column.config.media_height = DEFAULT_COLUMN_CONFIG.media_height;
             }
-        case DataTypes.TASK:
+        case InputType.TASK:
             if (column.config.task_hide_completed === undefined) {
                 column.config.task_hide_completed = DEFAULT_COLUMN_CONFIG.task_hide_completed;
                 break;

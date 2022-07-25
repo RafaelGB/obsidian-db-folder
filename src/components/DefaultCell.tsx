@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Cell } from "@tanstack/react-table";
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 
 import { LOGGER } from "services/Logger";
@@ -24,7 +23,7 @@ export default function DefaultCell(cellProperties: CellProps) {
   /** Columns information */
   const columns = (table.options.meta as TableDataType).columns;
   /** Type of cell */
-  const dataType = (column.columnDef as TableColumn).dataType;
+  const input = (column.columnDef as TableColumn).input;
   /** Note info of current Cell */
   const note: NoteInfo = (row.original as RowDataType).__note__;
   /** Ref to cell container */
@@ -43,19 +42,19 @@ export default function DefaultCell(cellProperties: CellProps) {
   const tableData = table.options.meta as TableDataType;
   /** states for selector option  */
   LOGGER.debug(
-    `<=> Cell.rendering dataType: ${dataType}. value: ${contextValue.value}`
+    `<=> Cell.rendering input: ${input}. value: ${contextValue.value}`
   );
   // set contextValue when cell is loaded
   useEffect(() => {
     LOGGER.debug(
-      `default useEffect. dataType:${dataType} - value: ${contextValue.value} cellValue: ${cellValue}`
+      `default useEffect. input:${input} - value: ${contextValue.value} cellValue: ${cellValue}`
     );
     if (dirtyCell) {
       // End useEffect
       return;
     }
-    switch (dataType) {
-      case DataTypes.TASK:
+    switch (input) {
+      case InputType.TASK:
         // Check if there are tasks in the cell
         if (contextValue.value === "") break;
         taskRef.current.innerHTML = "";
@@ -73,8 +72,8 @@ export default function DefaultCell(cellProperties: CellProps) {
         );
 
         break;
-      case DataTypes.MARKDOWN:
-      case DataTypes.TEXT:
+      case InputType.MARKDOWN:
+      case InputType.TEXT:
         if (containerCellRef.current !== null) {
           containerCellRef.current.innerHTML = "";
           renderMarkdown(
@@ -103,7 +102,7 @@ export default function DefaultCell(cellProperties: CellProps) {
     if (
       !dirtyCell &&
       containerCellRef.current !== undefined &&
-      dataType !== DataTypes.MARKDOWN
+      input !== InputType.MARKDOWN
     ) {
       LOGGER.debug(
         `useEffect hooked with dirtyCell. Value:${contextValue.value}`
@@ -162,9 +161,9 @@ export default function DefaultCell(cellProperties: CellProps) {
   }
 
   function getCellElement() {
-    switch (dataType) {
+    switch (input) {
       /** Plain text option */
-      case DataTypes.TEXT:
+      case InputType.TEXT:
         return dirtyCell ? (
           <input
             value={(contextValue.value && contextValue.value.toString()) || ""}
@@ -178,7 +177,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         );
 
       /** Number option */
-      case DataTypes.NUMBER:
+      case InputType.NUMBER:
         return dirtyCell ? (
           <input
             value={(contextValue.value && contextValue.value.toString()) || ""}
@@ -194,7 +193,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         );
 
       /** Markdown option */
-      case DataTypes.MARKDOWN:
+      case InputType.MARKDOWN:
         if (cellValue !== contextValue.value.toString()) {
           setContextValue({
             value: cellValue,
@@ -206,7 +205,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         );
 
       /** Calendar option */
-      case DataTypes.CALENDAR:
+      case InputType.CALENDAR:
         return (
           <CalendarPortal
             intialState={tableData}
@@ -216,7 +215,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         );
 
       /** Calendar with time option */
-      case DataTypes.CALENDAR_TIME:
+      case InputType.CALENDAR_TIME:
         return (
           <CalendarTimePortal
             intialState={tableData}
@@ -226,7 +225,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         );
 
       /** Selector option */
-      case DataTypes.SELECT:
+      case InputType.SELECT:
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal
@@ -240,7 +239,7 @@ export default function DefaultCell(cellProperties: CellProps) {
           </CellContext.Provider>
         );
       /** Tags option */
-      case DataTypes.TAGS:
+      case InputType.TAGS:
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <TagsPortal
@@ -253,12 +252,12 @@ export default function DefaultCell(cellProperties: CellProps) {
           </CellContext.Provider>
         );
 
-      case DataTypes.TASK:
+      case InputType.TASK:
         if ((column.columnDef as TableColumn).config.task_hide_completed) {
         }
         return <div ref={taskRef}></div>;
 
-      case DataTypes.CHECKBOX:
+      case InputType.CHECKBOX:
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CheckboxCell
@@ -268,12 +267,12 @@ export default function DefaultCell(cellProperties: CellProps) {
             />
           </CellContext.Provider>
         );
-      case DataTypes.NEW_COLUMN:
+      case InputType.NEW_COLUMN:
         // Do nothing
         break;
       /** Default option */
       default:
-        LOGGER.warn(`Unknown data type: ${dataType}`);
+        LOGGER.warn(`Unknown input type: ${input}`);
     }
     return <span></span>;
   }

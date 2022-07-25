@@ -1,7 +1,7 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, InputType } from "helpers/Constants";
 import TaskIcon from "components/img/TaskIcon";
 
 export default class CheckboxTypeHandlerAction extends AbstractHeaderAction {
@@ -20,13 +20,13 @@ export default class CheckboxTypeHandlerAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: DataTypes.CHECKBOX,
+          input: InputType.CHECKBOX,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);
       },
       icon: <TaskIcon />,
-      label: DataTypes.CHECKBOX,
+      label: InputType.CHECKBOX,
     };
     this.globalHeaderActionResponse.buttons.push(checkBoxType);
   }

@@ -1,5 +1,5 @@
 import {
-  DataTypes,
+  InputType,
   DEFAULT_COLUMN_CONFIG,
   DatabaseLimits,
   MetadataColumns,
@@ -140,7 +140,7 @@ export async function obtainColumnsFromRows(
     .filter((key) => validateColumnKey(key))
     .forEach((key, index) => {
       columns[key] = {
-        input: DataTypes.TEXT,
+        input: InputType.TEXT,
         accessorKey: key,
         label: key,
         key: key,
@@ -154,19 +154,19 @@ export async function obtainColumnsFromRows(
 
 function getInputInFuctionOfLiteral(literal: Literal) {
   const wrappedLiteral = DataviewService.wrapLiteral(literal);
-  let input = DataTypes.TEXT;
+  let input = InputType.TEXT;
   switch (wrappedLiteral.type) {
-    case DataTypes.NUMBER:
-      input = DataTypes.NUMBER;
+    case InputType.NUMBER:
+      input = InputType.NUMBER;
       break;
     case "date":
-      input = DataTypes.CALENDAR;
+      input = InputType.CALENDAR;
       break;
     case "duration":
-      input = DataTypes.CALENDAR_TIME;
+      input = InputType.CALENDAR_TIME;
       break;
     default:
-      input = DataTypes.TEXT;
+      input = InputType.TEXT;
   }
   return input;
 }
@@ -178,7 +178,7 @@ function columnOptions(
 ): TableColumn {
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = column.options ?? [];
-  if ((Object.values(DataTypes) as Array<string>).includes(column.input)) {
+  if ((Object.values(InputType) as Array<string>).includes(column.input)) {
     LOGGER.debug(`<= columnOptions`, `return ${column.input} column`);
     return {
       ...(column as Partial<TableColumn>),
@@ -188,7 +188,7 @@ function columnOptions(
       csvCandidate: column.csvCandidate ?? true,
       id: columnKey,
       label: column.label,
-      dataType: column.input,
+      input: column.input,
       options: options,
       config: column.config,
     };

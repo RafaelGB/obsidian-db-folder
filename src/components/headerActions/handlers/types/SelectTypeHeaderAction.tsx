@@ -2,7 +2,7 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import MultiIcon from "components/img/Multi";
 import React from "react";
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, InputType } from "helpers/Constants";
 
 export default class SelectTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -20,13 +20,13 @@ export default class SelectTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: DataTypes.SELECT,
+          input: InputType.SELECT,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);
       },
       icon: <MultiIcon />,
-      label: DataTypes.SELECT,
+      label: InputType.SELECT,
     };
     this.globalHeaderActionResponse.buttons.push(selectType);
   }

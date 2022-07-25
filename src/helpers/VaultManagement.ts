@@ -3,7 +3,7 @@ import { Notice, TFile } from 'obsidian';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, DataTypes, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
+import { DatabaseCore, InputType, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
 import { generateDataviewTableQuery } from 'helpers/QueryHelper';
 import obtainRowDatabaseFields from 'parsers/FileToRowDatabaseFields';
 import { parseFrontmatterFieldsToString } from 'parsers/RowDatabaseFieldsToFile';
@@ -228,7 +228,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
     // Check if the column is already in the frontmatter
     // assign an empty value to the new key
-    rowFields.frontmatter[DataviewService.parseLiteral(newValue, DataTypes.TEXT, state.view.diskConfig.yaml.config) as string] = rowFields.frontmatter[columnId] ?? "";
+    rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, state.view.diskConfig.yaml.config) as string] = rowFields.frontmatter[columnId] ?? "";
     delete rowFields.frontmatter[columnId];
     await persistFrontmatter(columnId);
   }
@@ -272,7 +272,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `$1 ${DataviewService.parseLiteral(newValue, DataTypes.MARKDOWN, state.view.diskConfig.yaml.config, true)}`
+      newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, state.view.diskConfig.yaml.config, true)}`
     };
     await VaultManagerDB.editNoteContent(noteObject);
     await persistFrontmatter();

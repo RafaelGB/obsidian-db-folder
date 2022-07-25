@@ -2,7 +2,7 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import TextIcon from "components/img/Text";
 import React from "react";
-import { ActionTypes, DataTypes } from "helpers/Constants";
+import { ActionTypes, InputType } from "helpers/Constants";
 
 export default class TextTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -20,13 +20,13 @@ export default class TextTypeHeaderAction extends AbstractHeaderAction {
         (table.options.meta as any).dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
-          dataType: DataTypes.TEXT,
+          input: InputType.TEXT,
         });
         hooks.setShowType(false);
         hooks.setExpanded(false);
       },
       icon: <TextIcon />,
-      label: DataTypes.TEXT,
+      label: InputType.TEXT,
     };
     this.globalHeaderActionResponse.buttons.push(textBoxType);
   }

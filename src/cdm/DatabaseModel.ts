@@ -7,8 +7,6 @@ import { RowSelectOption } from "cdm/ComponentsModel";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {
-    input: string;
-    options?: RowSelectOption[];
     [key: string]: RowType;
 }
 

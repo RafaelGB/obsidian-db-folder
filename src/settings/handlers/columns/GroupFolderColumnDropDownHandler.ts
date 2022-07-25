@@ -1,4 +1,4 @@
-import { DataTypes } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown } from "settings/SettingsComponents";
 
@@ -11,7 +11,7 @@ export class GroupFolderColumnDropDownHandler extends AbstractSettingsHandler {
             const current_group_folder = view.diskConfig.yaml.config.group_folder_column;
             const options: Record<string, string> = { none: '' };
             Object.keys(columns)
-                .filter(f => columns[f].input === DataTypes.SELECT)
+                .filter(f => columns[f].input === InputType.SELECT)
                 .forEach(key => {
                     options[key] = columns[key].label;
                 });

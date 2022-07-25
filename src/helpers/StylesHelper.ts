@@ -32,11 +32,11 @@ export function dbTrim(str: string) {
  * @param dataType 
  * @returns 
  */
-export function getLabelHeader(dataType: string) {
+export function getLabelHeader(input: string) {
     const labelCandidate = Object.entries(MetadataLabels).find(([key, value]) => {
-        if (key === dataType.toUpperCase()) {
+        if (key === input.toUpperCase()) {
             return true;
         }
     });
-    return labelCandidate === undefined ? dataType : labelCandidate[1];
+    return labelCandidate === undefined ? input : labelCandidate[1];
 }
