@@ -8,7 +8,7 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
-import { TableColumn } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
@@ -53,14 +53,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     // Throw event if label is changed
     setLabelState(labelState);
   }, [labelState]);
-
-  useEffect(() => {
-    // Throw event if inputRef changed to focus on when it exists
-    if (inputRef) {
-      inputRef.focus();
-      inputRef.select();
-    }
-  }, [inputRef]);
 
   /**
    * Array of action buttons asociated to the header
@@ -291,7 +283,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     className="menu-item sort-button"
                     onClick={() => {
                       new ColumnModal(
-                        (table.options.meta as any).view,
+                        (table.options.meta as TableDataType).view,
                         headerMenuProps
                       ).open();
                       setExpanded(false);

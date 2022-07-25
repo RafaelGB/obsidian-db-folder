@@ -1,7 +1,7 @@
 import { RowType } from "cdm/RowTypeModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { TableOptions } from "@tanstack/react-table";
+import { Column, TableOptions } from "@tanstack/react-table";
 import { BaseColumn, RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
 import { RowSelectOption } from "cdm/ComponentsModel";
 
@@ -41,7 +41,7 @@ export type OptionSelect = {
 }
 export type BaseComponentProps = {
     intialState: TableDataType;
-    column: TableColumn;
+    column: Column<RowDataType, unknown>;
 }
 
 export type SortedType = {

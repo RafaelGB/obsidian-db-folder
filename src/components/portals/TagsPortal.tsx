@@ -9,16 +9,19 @@ import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
   const { intialState, column, dispatch, cellProperties, columns } = tagsProps;
-  const { row } = cellProperties;
+  const { row, table } = cellProperties;
+  const tableColumn = column.columnDef as TableColumn;
+  const state = table.options.meta as TableDataType;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    Array.isArray(intialState.view.rows[row.index][column.key])
-      ? (intialState.view.rows[row.index][column.key] as Literal[])
+    Array.isArray(intialState.view.rows[row.index][tableColumn.key])
+      ? (intialState.view.rows[row.index][tableColumn.key] as Literal[])
       : []
   );
 
@@ -26,7 +29,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
   const note: NoteInfo = (cellProperties.row.original as any).__note__;
 
   function getColor(tag: string) {
-    const match = column.options.find(
+    const match = tableColumn.options.find(
       (option: { label: string }) => option.label === tag
     );
     if (match) {
@@ -34,23 +37,28 @@ const TagsPortal = (tagsProps: TagsProps) => {
     } else {
       // In case of new tag, generate random color
       const color = randomColor();
-      dispatch({
-        columns: columns,
-        option: tag,
+      const newOption: RowSelectOption = {
+        label: tag,
         backgroundColor: color,
-        columnId: column.id,
-        type: ActionTypes.ADD_OPTION_TO_COLUMN,
+      };
+      const currentColumn = state.columns.find(
+        (col: TableColumn) => col.key === tableColumn.key
+      );
+      currentColumn.options.push(newOption);
+      state.view.diskConfig.updateColumnProperties(column.id, {
+        options: currentColumn.options,
       });
       return color;
     }
   }
+
   const defaultValue = tagsState.map((tag: string) => ({
     label: tag,
     value: tag,
     color: getColor(tag),
   }));
 
-  const multiOptions = column.options.map((option: RowSelectOption) => ({
+  const multiOptions = tableColumn.options.map((option: RowSelectOption) => ({
     value: option.label,
     label: option.label,
     color: option.backgroundColor,
@@ -63,7 +71,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
     dispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: column.key,
+      key: tableColumn.key,
       value: arrayTags,
       row: cellProperties.row,
       columnId: column.id,
@@ -72,7 +80,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
     newValue
       .filter(
         (tag: any) =>
-          !column.options.find((option: any) => option.label === tag.value)
+          !tableColumn.options.find((option: any) => option.label === tag.value)
       )
       .forEach((tag: any) => {
         dispatch({
@@ -118,6 +126,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
                 c("tags-container") + " cell-padding d-flex flex-wrap-wrap"
               }
               onClick={() => setShowSelectTags(true)}
+              style={{ width: column.getSize() }}
             >
               {tagsState.map((tag: string) => (
                 <div key={`key-${tag}`}>

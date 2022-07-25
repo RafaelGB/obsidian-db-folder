@@ -345,7 +345,7 @@ div.database-plugin__checkbox {
   flex-wrap: nowrap;
 }
 
-.database-plugin__cell_size_compact .database-plugin__td span.data-input {
+.database-plugin__cell_size_compact .data-input {
   white-space: nowrap;
 }
 

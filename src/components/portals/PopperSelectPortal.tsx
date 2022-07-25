@@ -8,6 +8,7 @@ import { usePopper } from "react-popper";
 import { PopperProps } from "cdm/ComponentsModel";
 import { CellContext } from "components/contexts/CellContext";
 import CrossIcon from "components/img/CrossIcon";
+import { TableColumn } from "cdm/FolderModel";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
   const { dispatch, row, column, columns, note, intialState } = popperProps;
@@ -24,6 +25,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector popper state
   const [domReady, setDomReady] = useState(false);
 
+  const tableColumn = column.columnDef as TableColumn;
   React.useEffect(() => {
     setDomReady(true);
   });
@@ -32,7 +34,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     dispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
       file: note.getFile(),
-      key: column.key,
+      key: tableColumn.key,
       value: "",
       row: row,
       columnId: column.id,
@@ -50,7 +52,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     dispatch({
       type: ActionTypes.UPDATE_OPTION_CELL,
       file: note.getFile(),
-      key: column.key,
+      key: tableColumn.key,
       value: option.label,
       row: row,
       columnId: column.id,
@@ -78,10 +80,12 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   }
   function addNewOption(e: any) {
     // check if option already exists
-    const alreadyExist = column.options.find((option: { label: string }) => {
-      if (option.label === e.target.value) {
+    const alreadyExist = tableColumn.options.find(
+      (option: { label: string }) => {
+        if (option.label === e.target.value) {
+        }
       }
-    });
+    );
     if (!alreadyExist) {
       dispatch({
         type: ActionTypes.ADD_OPTION_TO_COLUMN,
@@ -93,7 +97,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   }
 
   function getColor() {
-    const match = column.options.find(
+    const match = tableColumn.options.find(
       (option: { label: string }) => option.label === contextValue.value
     );
     return (match && match.backgroundColor) || grey(200);
@@ -125,7 +129,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
               className="d-flex flex-wrap-wrap"
               style={{ marginTop: "-0.5rem" }}
             >
-              {column.options.map((option: any) => (
+              {tableColumn.options.map((option: any) => (
                 <div
                   key={option.label}
                   className="cursor-pointer"
@@ -198,6 +202,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
         ref={setSelectRef}
         className="cell-padding d-flex cursor-default align-items-center flex-1"
         onClick={() => setShowSelect(true)}
+        style={{ width: column.getSize() }}
       >
         {contextValue.value && (
           <Relationship

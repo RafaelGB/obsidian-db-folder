@@ -6,18 +6,19 @@ import NoteInfo from "services/NoteInfo";
 import { Portal } from "@mui/material";
 import { c } from "helpers/StylesHelper";
 import { CalendarProps } from "cdm/ComponentsModel";
-import { TableDataType } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
   const { column, cellProperties, intialState } = calendarProps;
   const { row, table } = cellProperties;
+  const tableColumn = column.columnDef as TableColumn;
   const dataDispatch = (table.options.meta as TableDataType).dispatch;
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
   const [calendarState, setCalendarState] = useState(
-    intialState.view.rows[row.index][column.key]
+    intialState.view.rows[row.index][tableColumn.key]
   );
 
   function handleSpanOnClick(event: any) {
@@ -31,7 +32,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: column.key,
+      key: tableColumn.key,
       value: newValue.toFormat("yyyy-MM-dd"),
       row: row,
       columnId: column.id,
@@ -59,7 +60,11 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       placeholderText="Pick a date..."
     />
   ) : (
-    <span className={`${c("calendar")}`} onClick={handleSpanOnClick}>
+    <span
+      className={`${c("calendar")}`}
+      onClick={handleSpanOnClick}
+      style={{ width: column.getSize() }}
+    >
       {DateTime.isDateTime(calendarState)
         ? (calendarState as unknown as DateTime).toFormat("yyyy-MM-dd")
         : null}
