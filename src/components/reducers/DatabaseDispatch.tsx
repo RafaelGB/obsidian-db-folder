@@ -148,9 +148,13 @@ export function databaseReducer(state: TableDataType, action: any) {
             action.newKey,
             state,
             UpdateRowOptions.COLUMN_KEY
-          );
+          ).catch((err) => {
+            throw err;
+          });
         })
-      );
+      ).catch((err) => {
+        throw err;
+      });
 
       return update(state, {
         skipReset: { $set: true },
@@ -385,9 +389,13 @@ export function databaseReducer(state: TableDataType, action: any) {
               undefined, // delete does not need this field
               state,
               UpdateRowOptions.REMOVE_COLUMN
-            );
+            ).catch((err) => {
+              throw err;
+            });
           })
-        );
+        ).catch((err) => {
+          throw err;
+        });
       }
       // Update state
       return update(state, {
@@ -474,7 +482,6 @@ export function databaseReducer(state: TableDataType, action: any) {
         state,
         UpdateRowOptions.COLUMN_VALUE
       );
-
       const update_option_cell_column_key =
         state.columns[update_cell_index].key;
       return update(state, {

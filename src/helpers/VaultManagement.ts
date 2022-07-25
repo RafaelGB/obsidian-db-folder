@@ -11,6 +11,7 @@ import { DataviewService } from 'services/DataviewService';
 import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
+import { EditionError } from 'errors/ErrorTypes';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -163,9 +164,8 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
 }
 
 export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
-  await updateRowFile(file, columnId, newValue, state, option).catch(e => {
-    LOGGER.error(`updateRowFileProxy.  Error:${e}`);
-    throw e;
+  await updateRowFile(file, columnId, newValue, state, option).catch((err) => {
+    throw err;
   });
 }
 
@@ -180,7 +180,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   try {
     const content = await VaultManagerDB.obtainContentFromTfile(file);
-    const frontmatterKeys = await VaultManagerDB.obtainFrontmatterKeys(content);
+    const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
     const rowFields = obtainRowDatabaseFields(file, state.columns, frontmatterKeys);
     const column = state.columns.find(c => c.key === columnId);
     // Adds an empty frontmatter at the beginning of the file
@@ -342,8 +342,8 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       throw `Error: option ${option} not supported yet`;
     }
   } catch (e) {
-    LOGGER.error(`updateRowFile.  Error:${e}`);
-    new Notice(`Error trying to save your changes.\n${e}`, 6000);
+    LOGGER.error(`${EditionError.YamlRead} - ${e}`);
+    new Notice(`${EditionError.YamlRead} : ${e.message}`, 6000);
   }
   LOGGER.info(`<= updateRowFile.asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option} `);
 }
@@ -368,14 +368,14 @@ export async function moveFile(folderPath: string, action: any): Promise<void> {
     // Handle error
     throw error;
   }
-  const filePath = `${folderPath}/${action.file.name}`;
+  const filePath = `${folderPath} / ${action.file.name}`;
   await app.fileManager.renameFile(action.file, filePath);
 }
 
 export async function createFolder(folderPath: string): Promise<void> {
   await app.vault.adapter.exists(folderPath).then(async exists => {
     if (!exists) {
-      await app.vault.createFolder(`${folderPath}/`);
+      await app.vault.createFolder(`${folderPath} / `);
     }
   });
 }
