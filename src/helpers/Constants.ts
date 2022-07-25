@@ -1,4 +1,4 @@
-import { MetadataColumnsModel } from "cdm/DatabaseModel";
+import { DatabaseColumn, MetadataColumnsModel } from "cdm/DatabaseModel";
 import { ConfigColumn, TableColumn } from "cdm/FolderModel";
 import { DatabaseSettings } from "cdm/SettingsModel";
 
@@ -135,13 +135,15 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
 });
 
-export const TableColumnsTemplate: Partial<TableColumn> =
+export const TableColumnsTemplate: Pick<DatabaseColumn | TableColumn, "isMetadata" | "skipPersist" | "isDragDisabled" | "options" | "csvCandidate" | "input" | "config"> =
 {
   isMetadata: false,
   skipPersist: false,
   isDragDisabled: false,
   options: [],
   csvCandidate: true,
+  input: InputType.TEXT,
+  config: DEFAULT_COLUMN_CONFIG
 }
 
 export const DatabaseCore = Object.freeze({

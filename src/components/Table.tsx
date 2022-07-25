@@ -99,8 +99,13 @@ export function Table(tableData: TableDataType) {
     },
     [columns]
   );
-  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>([]);
-
+  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
+    columns.map((c) => c.id)
+  );
+  // Niveling number of columns
+  if (columnOrder.length !== columns.length) {
+    setColumnOrder(columns.map((c) => c.id));
+  }
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

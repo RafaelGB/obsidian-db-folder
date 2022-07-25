@@ -335,12 +335,11 @@ export function databaseReducer(state: TableDataType, action: any) {
       );
 
       const newRIghtColumn: DatabaseColumn = {
-        input: InputType.TEXT,
+        ...TableColumnsTemplate,
         accessorKey: action.columnInfo.name,
         key: action.columnInfo.name,
         label: action.columnInfo.label,
         position: action.columnInfo.position,
-        config: DEFAULT_COLUMN_CONFIG,
       };
       // Update configuration on disk
       state.view.diskConfig.addColumn(action.columnInfo.name, newRIghtColumn);
@@ -353,15 +352,11 @@ export function databaseReducer(state: TableDataType, action: any) {
             ...state.columns.slice(0, rightIndex + 1),
             {
               ...TableColumnsTemplate,
-              ...newRIghtColumn,
-              input: newRIghtColumn.input,
               id: newRIghtColumn.key,
               label: newRIghtColumn.label,
               key: newRIghtColumn.key,
               accessorKey: newRIghtColumn.accessorKey,
               position: newRIghtColumn.position,
-              csvCandidate: true,
-              config: newRIghtColumn.config,
             },
             ...state.columns.slice(rightIndex + 1, state.columns.length),
           ],
