@@ -1,4 +1,4 @@
-import { ParserError } from "errors/ParserError";
+import ParserException from "errors/ParserException";
 import { parseYaml } from "obsidian";
 
 // Interface of handlers
@@ -21,7 +21,7 @@ const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
         const yaml = parseYaml(yamlText);
         return validateYaml(yaml);
     } catch (e: any) {
-        throw new ParserError("Error parsing yaml",
+        throw new ParserException("Error parsing yaml",
             { exception: [e] });
     }
 }

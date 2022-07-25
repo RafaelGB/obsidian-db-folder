@@ -2,7 +2,7 @@ import { Notice } from "obsidian";
 import { generateErrorComponent } from "components/ErrorComponents"
 import ReactDOM from 'react-dom';
 
-export abstract class DbFolderError extends Error {
+export abstract class DbFolderException extends Error {
     protected messageErrors: Record<string, string[]> = {};
 
     constructor(message: string, errors: Record<string, string[]>) {
@@ -10,7 +10,7 @@ export abstract class DbFolderError extends Error {
         if (Object.keys(errors).length > 0) {
             this.messageErrors = errors;
         }
-        Object.setPrototypeOf(this, DbFolderError.prototype);
+        Object.setPrototypeOf(this, DbFolderException.prototype);
     }
 
     /**

@@ -5,7 +5,7 @@ import {
   obtainMetadataColumns,
 } from "components/Columns";
 import { createDatabase } from "components/index/Database";
-import { DbFolderError } from "errors/AbstractError";
+import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, InputType, StyleClasses } from "helpers/Constants";
 import obtainInitialState from "helpers/InitialState";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
@@ -156,7 +156,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     } catch (e: unknown) {
       LOGGER.error(`initDatabase ${this.file.path}`, e);
-      if (e instanceof DbFolderError) {
+      if (e instanceof DbFolderException) {
         e.render(this.tableContainer);
       } else {
         throw e;
