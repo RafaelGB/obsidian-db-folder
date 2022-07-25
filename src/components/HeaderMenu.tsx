@@ -54,14 +54,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     setLabelState(labelState);
   }, [labelState]);
 
-  useEffect(() => {
-    // Throw event if inputRef changed to focus on when it exists
-    if (inputRef) {
-      inputRef.focus();
-      inputRef.select();
-    }
-  }, [inputRef]);
-
   /**
    * Array of action buttons asociated to the header
    */
