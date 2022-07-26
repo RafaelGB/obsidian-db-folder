@@ -211,6 +211,7 @@ function validateColumnKey(columnKey: string): boolean {
   }
   return true;
 }
+
 function sortColumnsByPosition(columns: TableColumn[]): TableColumn[] {
   return columns.sort((a, b) => {
     if (a.position < b.position) {
