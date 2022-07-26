@@ -436,7 +436,6 @@ export function Table(tableData: TableDataType) {
         <div
           key={`div-add-row-cell-padding-left`}
           className={`${c("td padding-left")}`}
-          style={{ minWidth: "17rem" }}
         >
           <Select
             styles={CustomTemplateSelectorStyles}
