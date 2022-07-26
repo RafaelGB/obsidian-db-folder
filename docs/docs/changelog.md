@@ -1,5 +1,9 @@
-# 2.0.0
+# 2.0.0-beta.4
+### Improved
+- Resizing do not move the column. It has its own slider
+- The plugin shows a message when the edition fails including the error message. Common causes were added to the documentation [ISSUE#196](https://github.com/RafaelGB/obsidian-db-folder/issues/196)
 ### No longer broken
+- do not lose the width property when a column is renamed [ISSUE#222](https://github.com/RafaelGB/obsidian-db-folder/issues/222)
 - Edit inline fields are correctly saved [ISSUE#182](https://github.com/RafaelGB/obsidian-db-folder/issues/182)
 - Where you add/delete new columns, there was ocasions where column order was not updated and provoked unselected columns [ISSUE#102](https://github.com/RafaelGB/obsidian-db-folder/issues/102)
 # 2.0.0-beta.3
