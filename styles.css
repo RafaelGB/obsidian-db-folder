@@ -286,20 +286,23 @@ div.database-plugin__checkbox {
   align-items: center;
   font-size: 0.875rem;
   cursor: pointer;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--background-primary);
 }
 
-.database-plugin__add-row:hover {
+.database-plugin__add-row .svg-icon:hover {
   background-color: var(--background-secondary);
   color: var(--text-accent-hover);
+  padding: 0.6rem;
 }
 
 .database-plugin__add-row .database-plugin__td {
   border: none;
   background-color: transparent;
   color: var(--text-muted);
-  flex-direction: row;
-  align-items: center;
-  display: inline-grid;
+  display: inline-flex;
+  vertical-align: middle;
 }
 
 .database-plugin__th {
@@ -314,6 +317,7 @@ div.database-plugin__checkbox {
 .database-plugin__th:hover {
   background-color: var(--background-secondary);
   color: var(--text-normal);
+  padding: 0.3rem;
 }
 
 .database-plugin__th-content {
