@@ -66,8 +66,6 @@ export default function TableHeader(headerProps: TableHeaderProps) {
   drag(drop(DnDref));
   return (
     <div
-      ref={DnDref}
-      data-handler-id={handlerId}
       key={`${header.id}-${headerIndex}`}
       className={`${c("th noselect")} header`}
       style={{
@@ -75,9 +73,15 @@ export default function TableHeader(headerProps: TableHeaderProps) {
         opacity,
       }}
     >
-      {header.isPlaceholder
-        ? null
-        : flexRender(header.column.columnDef.header, header.getContext())}
+      <div
+        ref={DnDref}
+        data-handler-id={handlerId}
+        key={`${header.id}-${headerIndex}-dnd`}
+      >
+        {header.isPlaceholder
+          ? null
+          : flexRender(header.column.columnDef.header, header.getContext())}
+      </div>
       <div
         key={`${header.id}-${headerIndex}-resizer`}
         {...{
