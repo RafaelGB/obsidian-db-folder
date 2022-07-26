@@ -9,7 +9,6 @@ import header_action_button_section from "components/headerActions/HeaderActionB
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
-import { Column } from "@tanstack/react-table";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
