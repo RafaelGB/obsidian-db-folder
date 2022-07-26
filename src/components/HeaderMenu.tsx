@@ -101,10 +101,21 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       setLabelStateInvalid(true);
       return;
     }
-    const futureOrder = table
+
+    // Update state of ordered
+    const updateOrderWithNewKey = table
       .getAllColumns()
       .map((o: any) => (o.id === column.id ? newKey : o.id));
-    table.setColumnOrder(futureOrder);
+    table.setColumnOrder(updateOrderWithNewKey);
+
+    // Update state of sizing
+    const updateSizeWithNewKey: Record<string, number> = {};
+    table.getAllColumns().forEach((o: any) => {
+      const key = o.id === column.id ? newKey : o.id;
+      updateSizeWithNewKey[key] = o.getSize();
+    });
+    table.setColumnSizing(updateSizeWithNewKey);
+
     setkeyState(newKey);
     dispatch({
       type: ActionTypes.UPDATE_COLUMN_LABEL,
@@ -114,6 +125,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       label: labelState,
     });
   }
+
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
       persistLabelChange();

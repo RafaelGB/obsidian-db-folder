@@ -134,6 +134,7 @@ export function databaseReducer(state: TableDataType, action: any) {
       const update_column_label_index = state.columns.findIndex(
         (column: any) => column.id === action.columnId
       );
+
       // Update configuration & row files on disk
       state.view.diskConfig.updateColumnKey(
         action.columnId,
