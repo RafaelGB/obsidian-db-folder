@@ -49,7 +49,6 @@ export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
 
   return (
     <span>
-      Search:{" "}
       <DebouncedInput
         value={globalFilter ?? ""}
         onChange={(value) => setGlobalFilter(String(value))}

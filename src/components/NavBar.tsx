@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
+import Typography from "@mui/material/Typography";
 
 export function NavBar(navBarProps: NavBarProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -72,6 +73,14 @@ export function NavBar(navBarProps: NavBarProps) {
             <MenuIcon />
           </IconButton>
           {renderMenu}
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ display: { xs: "none", sm: "block" } }}
+          >
+            {navBarProps.csvButtonProps.name}
+          </Typography>
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
         </Toolbar>
