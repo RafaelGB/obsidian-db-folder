@@ -425,30 +425,9 @@ export function Table(tableData: TableDataType) {
           className={`${c("td")}`}
           onClick={handleAddNewRow}
         >
-          <div
-            key={`div-add-row-cell-button-internal-table`}
-            className={`${c("table")}`}
-          >
-            <div
-              key={`div-add-row-cell-button-internal-table-tr`}
-              className={`${c("tr")}`}
-            >
-              <div
-                key={`div-add-row-cell-button-internal-table-td-icon`}
-                className={`${c("td")}`}
-              >
-                <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
-                  <PlusIcon />
-                </span>
-              </div>
-              <div
-                key={`div-add-row-cell-button-internal-table-td-text`}
-                className={`${c("td")}`}
-              >
-                New
-              </div>
-            </div>
-          </div>
+          <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
+            <PlusIcon />
+          </span>
         </div>
         <div
           key={`div-add-row-cell-padding-left`}
