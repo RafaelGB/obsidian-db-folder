@@ -294,7 +294,7 @@ div.database-plugin__checkbox {
 .database-plugin__add-row .svg-icon:hover {
   background-color: var(--background-secondary);
   color: var(--text-accent-hover);
-  padding: 0.6rem;
+  padding: 0.3rem;
 }
 
 .database-plugin__add-row .database-plugin__td {
@@ -317,7 +317,6 @@ div.database-plugin__checkbox {
 .database-plugin__th:hover {
   background-color: var(--background-secondary);
   color: var(--text-normal);
-  padding: 0.3rem;
 }
 
 .database-plugin__th-content {

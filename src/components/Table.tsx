@@ -250,14 +250,18 @@ export function Table(tableData: TableDataType) {
   const [rowTemplateState, setRowTemplateState] = React.useState(
     view.diskConfig.yaml.config.current_row_template
   );
-  const rowTemplatesOptions = get_tfiles_from_folder(
-    view.diskConfig.yaml.config.row_templates_folder
-  ).map((tfile) => {
-    return {
-      value: tfile.path,
-      label: tfile.path,
-    };
-  });
+  const rowTemplatesOptions = React.useMemo(
+    () =>
+      get_tfiles_from_folder(
+        view.diskConfig.yaml.config.row_templates_folder
+      ).map((tfile) => {
+        return {
+          value: tfile.path,
+          label: tfile.path,
+        };
+      }),
+    []
+  );
 
   function handleChangeRowTemplate(
     newValue: OnChangeValue<RowTemplateOption, false>,
@@ -432,6 +436,7 @@ export function Table(tableData: TableDataType) {
         <div
           key={`div-add-row-cell-padding-left`}
           className={`${c("td padding-left")}`}
+          style={{ minWidth: "17rem" }}
         >
           <Select
             styles={CustomTemplateSelectorStyles}
@@ -443,10 +448,11 @@ export function Table(tableData: TableDataType) {
             isClearable={true}
             isMulti={false}
             onChange={handleChangeRowTemplate}
-            defaultValue={{ label: "Choose a Template", value: "None" }}
+            placeholder={<div>Without template. Select one to use...</div>}
             menuPortalTarget={document.body}
             menuShouldBlockScroll={true}
             isSearchable
+            menuPlacement="top"
           />
         </div>
         {/* ENDS NEW ROW */}

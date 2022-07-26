@@ -9,6 +9,14 @@ const CustomTemplateSelectorStyles: StylesConfig<any, true, GroupBase<any>> = {
             width: 'auto',
         }
     },
+    placeholder: (styles) => {
+        return {
+            ...styles,
+            fontSize: '12px',
+            textAlign: 'left',
+            minWidth: '17rem',
+        }
+    }
 }
 
 export default CustomTemplateSelectorStyles;
