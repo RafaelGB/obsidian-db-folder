@@ -97,11 +97,19 @@ export async function obtainColumnsFromFile(
   file: TFile
 ): Promise<Record<string, DatabaseColumn>> {
   const columns: Record<string, DatabaseColumn> = {};
-  const propertiesOfFile = DataviewService.getDataviewAPI().page(file.path);
+  const rawProperties = DataviewService.getDataviewAPI().page(file.path);
   // Check if propertiesOfFile is empty
-  if (propertiesOfFile.length === 0) {
-    return columns;
+  if (rawProperties.length === 0) {
+    return {};
   }
+  const propertiesOfFile: Record<string, Literal> = {};
+  // Reduce propertiesOfFile to unique keys
+  Object.entries(rawProperties).forEach(([key, value]) => {
+    const lowercaseKey = key.toLowerCase();
+    if (!propertiesOfFile[lowercaseKey]) {
+      propertiesOfFile[lowercaseKey] = value;
+    }
+  });
 
   Object.entries(propertiesOfFile).forEach(([key, value], index) => {
     const input = getInputInFuctionOfLiteral(value);
@@ -203,6 +211,7 @@ function validateColumnKey(columnKey: string): boolean {
   }
   return true;
 }
+
 function sortColumnsByPosition(columns: TableColumn[]): TableColumn[] {
   return columns.sort((a, b) => {
     if (a.position < b.position) {
