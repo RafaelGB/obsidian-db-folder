@@ -1,13 +1,20 @@
 import React from "react";
 import "regenerator-runtime/runtime";
 import { GlobalFilterProps } from "cdm/MenuBarModel";
+import {
+  Search,
+  SearchIconWrapper,
+} from "components/styles/NavBarSearchStyles";
+import SearchIcon from "@mui/icons-material/Search";
+import { styled } from "@mui/material/styles";
+import InputBase from "@mui/material/InputBase";
 
 // A debounced input react component
 function DebouncedInput({
   value: initialValue,
   onChange,
   debounce = 500,
-  ...props
+  placeholder,
 }: {
   value: string | number;
   onChange: (value: string | number) => void;
@@ -28,10 +35,10 @@ function DebouncedInput({
   }, [value]);
 
   return (
-    <input
-      {...props}
+    <InputBase
       value={value}
       onChange={(e) => setValue(e.target.value)}
+      placeholder={placeholder}
     />
   );
 }
@@ -43,18 +50,31 @@ function DebouncedInput({
  * @returns
  */
 export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
-  // TODO add typing to props
   const { hits, globalFilter, setGlobalFilter } = globalFilterProps;
-  const [value, setValue] = React.useState(globalFilter);
 
+  const CustomDebouncedInput = styled(DebouncedInput)(({ theme }) => ({
+    color: "inherit",
+    "& .MuiInputBase-input": {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      transition: theme.transitions.create("width"),
+      width: "100%",
+      [theme.breakpoints.up("md")]: {
+        width: "20ch",
+      },
+    },
+  }));
   return (
-    <span>
-      <DebouncedInput
+    <Search>
+      <SearchIconWrapper>
+        <SearchIcon />
+      </SearchIconWrapper>
+      <CustomDebouncedInput
         value={globalFilter ?? ""}
         onChange={(value) => setGlobalFilter(String(value))}
-        className="p-2 font-lg shadow border border-block"
         placeholder={`Search... (${hits})`}
       />
-    </span>
+    </Search>
   );
 }
