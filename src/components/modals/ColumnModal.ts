@@ -69,7 +69,7 @@ export class ColumnSettingsManager {
     }
 
     reset(response: ColumnHandlerResponse) {
-        const columnElement = document.getElementById(StyleClasses.COLUMN_MODAL_BODY);
+        const columnElement = activeDocument.getElementById(StyleClasses.COLUMN_MODAL_BODY);
         // remove all sections
         columnElement.empty();
         response.containerEl = columnElement;

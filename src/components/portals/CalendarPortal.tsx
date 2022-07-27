@@ -42,7 +42,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   }
 
   const CalendarContainer = (containerProps: any) => {
-    const el = document.getElementById("popper-container");
+    const el = activeDocument.getElementById("popper-container");
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
   return showDatePicker ? (

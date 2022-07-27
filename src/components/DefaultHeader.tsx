@@ -165,7 +165,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
               labelState={labelState}
               setLabelState={setLabelState}
             />,
-            document.getElementById("popper-container")
+            activeDocument.getElementById("popper-container")
           )
         : null}
     </>

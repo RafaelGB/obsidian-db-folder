@@ -93,7 +93,7 @@ export class SettingsManager {
   }
 
   reset(response: SettingHandlerResponse) {
-    const settingsElement = document.getElementById(StyleClasses.SETTINGS_MODAL_BODY);
+    const settingsElement = activeDocument.getElementById(StyleClasses.SETTINGS_MODAL_BODY);
     // remove all sections
     settingsElement.empty();
 
