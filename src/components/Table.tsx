@@ -214,7 +214,7 @@ export function Table(tableData: TableDataType) {
       setColumnSizing(updater);
     },
     onColumnOrderChange: setColumnOrder,
-    globalFilterFn: fuzzyFilter,
+    globalFilterFn: "includesString",
     meta: tableData,
     defaultColumn: defaultColumn,
     getExpandedRowModel: getExpandedRowModel(),
