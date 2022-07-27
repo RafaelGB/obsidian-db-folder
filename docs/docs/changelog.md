@@ -1,3 +1,15 @@
+# 2.0.0
+### Shiny new things
+- New style for navBar & "new row" button [ISSUE#206](https://github.com/RafaelGB/obsidian-db-folder/issues/206). Now the name of your ddbb is displayed in the navBar. To change it, just edit it into the settings.
+### Improved
+- Strategy of the filtering modifications. See more in this discussion [DISCUSSION#225](https://github.com/RafaelGB/obsidian-db-folder/discussions/225)
+
+### Visual
+- row template selector dark mode support [ISSUE#177](https://github.com/RafaelGB/obsidian-db-folder/issues/177)
+- Improve the empty template width [ISSUE#175](https://github.com/RafaelGB/obsidian-db-folder/issues/175)
+- Empty calendar cells will not show placeholder message. Just when are selected. [ISSUE#159](https://github.com/RafaelGB/obsidian-db-folder/issues/159)
+### No longer broken
+- Controling the duplicated columns using the file template option to create them. [ISSUE#224](https://github.com/RafaelGB/obsidian-db-folder/issues/224)
 # 2.0.0-beta.4
 ### Improved
 - Resizing do not move the column. It has its own slider

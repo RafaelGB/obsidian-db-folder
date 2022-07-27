@@ -440,14 +440,18 @@ export function Table(tableData: TableDataType) {
           <Select
             styles={CustomTemplateSelectorStyles}
             options={rowTemplatesOptions}
-            value={{
-              label: rowTemplateState,
-              value: rowTemplateState,
-            }}
+            value={
+              rowTemplateState
+                ? {
+                    label: rowTemplateState,
+                    value: rowTemplateState,
+                  }
+                : null
+            }
             isClearable={true}
             isMulti={false}
             onChange={handleChangeRowTemplate}
-            placeholder={<div>Without template. Select one to use...</div>}
+            placeholder={"Without template. Select one to use..."}
             menuPortalTarget={document.body}
             menuShouldBlockScroll={true}
             isSearchable
