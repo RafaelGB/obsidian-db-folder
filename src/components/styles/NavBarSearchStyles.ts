@@ -28,6 +28,7 @@ export const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 export const DebouncedInputWrapper = styled('div')(({ theme }) => ({
     color: "inherit",
+    opacity: 0.6,
     "& div *": {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon

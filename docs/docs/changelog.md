@@ -1,4 +1,5 @@
 # 2.0.1
+### No longer broken
 -  Fixed selection problem with datetime columns introduced in 2.0.0.
 # 2.0.0
 ### Shiny new things

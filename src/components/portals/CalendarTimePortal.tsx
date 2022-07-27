@@ -63,6 +63,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
         timeFormat="HH:mm"
         timeCaption="time"
         showTimeSelect
+        autoFocus
         placeholderText="Pick a moment..."
       />
     </div>
