@@ -47,8 +47,8 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
     const el = document.getElementById("popper-container");
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
-
-  return showDatePicker && !tableColumn.isMetadata ? (
+  return showDatePicker &&
+    (tableColumn.isMetadata === undefined || !tableColumn.isMetadata) ? (
     <div className="calendar-time">
       <DatePicker
         dateFormat="yyyy-MM-dd h:mm aa"

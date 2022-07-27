@@ -1,3 +1,5 @@
+# 2.0.1
+-  Fixed selection problem with datetime columns introduced in 2.0.0.
 # 2.0.0
 ### Shiny new things
 - New style for navBar & "new row" button [ISSUE#206](https://github.com/RafaelGB/obsidian-db-folder/issues/206). Now the name of your ddbb is displayed in the navBar. To change it, just edit it into the settings.
