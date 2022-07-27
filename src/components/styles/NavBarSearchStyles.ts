@@ -1,4 +1,3 @@
-import InputBase from "@mui/material/InputBase";
 import { alpha, styled } from "@mui/material/styles";
 
 export const Search = styled('div')(({ theme }) => ({
@@ -25,4 +24,18 @@ export const SearchIconWrapper = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+}));
+
+export const DebouncedInputWrapper = styled('div')(({ theme }) => ({
+    color: "inherit",
+    "& div *": {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create("width"),
+        width: "100%",
+        [theme.breakpoints.up("md")]: {
+            width: "20ch",
+        },
+    },
 }));
