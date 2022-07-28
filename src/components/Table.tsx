@@ -37,16 +37,15 @@ import DefaultCell from "components/DefaultCell";
 import DefaultHeader from "components/DefaultHeader";
 import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
-import fuzzyFilter from "components/filters/GlobalFilterFn";
 import TableHeader from "components/TableHeader";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { ActionMeta, OnChangeValue } from "react-select";
-import { get_tfiles_from_folder } from "helpers/FileManagement";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TableCell from "components/TableCell";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import customSortingFn from "components/behavior/CustomSortingFn";
+import useRowTemplateStore from "stateManagement/useRowTemplateStore";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -150,8 +149,7 @@ export function Table(tableData: TableDataType) {
           );
 
         if (!target) return;
-
-        (stateManager.app as any).openWithDefaultApp(target.path);
+        (app as any).openWithDefaultApp(target.path);
 
         return;
       }
@@ -162,11 +160,7 @@ export function Table(tableData: TableDataType) {
         const inNewLeaf = e.button === 1 || e.ctrlKey || e.metaKey;
         const isUnresolved = closestAnchor.hasClass("is-unresolved");
 
-        stateManager.app.workspace.openLinkText(
-          destination,
-          filePath,
-          inNewLeaf
-        );
+        app.workspace.openLinkText(destination, filePath, inNewLeaf);
 
         return;
       }
@@ -247,22 +241,11 @@ export function Table(tableData: TableDataType) {
     newRowRef.current.value = "";
   }
   // Manage Templates
-  const [rowTemplateState, setRowTemplateState] = React.useState(
-    view.diskConfig.yaml.config.current_row_template
-  );
-  const rowTemplatesOptions = React.useMemo(
-    () =>
-      get_tfiles_from_folder(
-        view.diskConfig.yaml.config.row_templates_folder
-      ).map((tfile) => {
-        return {
-          value: tfile.path,
-          label: tfile.path,
-        };
-      }),
-    []
-  );
 
+  const rowTemplate = useRowTemplateStore(
+    view.diskConfig.yaml.config.current_row_template,
+    view.diskConfig.yaml.config.row_templates_folder
+  );
   function handleChangeRowTemplate(
     newValue: OnChangeValue<RowTemplateOption, false>,
     actionMeta: ActionMeta<RowTemplateOption>
@@ -272,7 +255,7 @@ export function Table(tableData: TableDataType) {
       type: ActionTypes.CHANGE_ROW_TEMPLATE,
       template: settingsValue,
     });
-    setRowTemplateState(settingsValue);
+    rowTemplate.update(settingsValue);
   }
   LOGGER.debug(`<= Table`);
   return (
@@ -439,12 +422,12 @@ export function Table(tableData: TableDataType) {
         >
           <Select
             styles={CustomTemplateSelectorStyles}
-            options={rowTemplatesOptions}
+            options={rowTemplate.options}
             value={
-              rowTemplateState
+              rowTemplate.template
                 ? {
-                    label: rowTemplateState,
-                    value: rowTemplateState,
+                    label: rowTemplate.template,
+                    value: rowTemplate.template,
                   }
                 : null
             }

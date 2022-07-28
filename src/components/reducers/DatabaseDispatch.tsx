@@ -25,7 +25,6 @@ import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { RowSelectOption } from "cdm/ComponentsModel";
-import { ColumnSizingState } from "@tanstack/react-table";
 
 export function databaseReducer(state: TableDataType, action: any) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
