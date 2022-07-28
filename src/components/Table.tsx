@@ -45,7 +45,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TableCell from "components/TableCell";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import customSortingFn from "components/behavior/CustomSortingFn";
-import useRowTemplateStore from "stateManagement/useRowTemplateStore";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -68,12 +67,14 @@ export function Table(tableData: TableDataType) {
   const data = tableData.view.rows;
   const columns = tableData.columns;
 
-  /** Reducer */
-  const dataDispatch = tableData.dispatch;
   /** Plugin services */
   const view: DatabaseView = tableData.view;
   const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
+
+  /** Reducer */
+  const dataDispatch = tableData.dispatch;
+  const useTableStore = view.useTableStore();
   /** Table services */
   // Sorting
   const [sorting, setSorting] = React.useState<SortingState>(
@@ -240,12 +241,7 @@ export function Table(tableData: TableDataType) {
     setInputNewRow("");
     newRowRef.current.value = "";
   }
-  // Manage Templates
 
-  const rowTemplate = useRowTemplateStore(
-    view.diskConfig.yaml.config.current_row_template,
-    view.diskConfig.yaml.config.row_templates_folder
-  );
   function handleChangeRowTemplate(
     newValue: OnChangeValue<RowTemplateOption, false>,
     actionMeta: ActionMeta<RowTemplateOption>
@@ -255,7 +251,7 @@ export function Table(tableData: TableDataType) {
       type: ActionTypes.CHANGE_ROW_TEMPLATE,
       template: settingsValue,
     });
-    rowTemplate.update(settingsValue);
+    useTableStore.rowTemplate.update(settingsValue);
   }
   LOGGER.debug(`<= Table`);
   return (
@@ -422,12 +418,12 @@ export function Table(tableData: TableDataType) {
         >
           <Select
             styles={CustomTemplateSelectorStyles}
-            options={rowTemplate.options}
+            options={useTableStore.rowTemplate.options}
             value={
-              rowTemplate.template
+              useTableStore.rowTemplate.template
                 ? {
-                    label: rowTemplate.template,
-                    value: rowTemplate.template,
+                    label: useTableStore.rowTemplate.template,
+                    value: useTableStore.rowTemplate.template,
                   }
                 : null
             }

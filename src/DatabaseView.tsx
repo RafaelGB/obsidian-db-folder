@@ -1,5 +1,6 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { InitialState, RowDataType, TableDataType } from "cdm/FolderModel";
+import { TableStateInterface } from "cdm/TableStateInterface";
 import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
@@ -23,6 +24,7 @@ import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
+import useRowTemplateStore from "stateManagement/useRowTemplateStore";
 import StateManager from "StateManager";
 export const databaseIcon = "blocks";
 
@@ -33,6 +35,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
   rootContainer: Root | null = null;
   diskConfig: DatabaseInfo;
   rows: Array<RowDataType>;
+  private tableState: TableStateInterface;
+
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
     this.plugin = plugin;
@@ -149,7 +153,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
         stateManager: this.plugin.getStateManager(this.file),
         initialState: initialState,
       };
-
       // Render database
       const table = createDatabase(tableProps);
       this.rootContainer.render(table);
@@ -162,6 +165,15 @@ export class DatabaseView extends TextFileView implements HoverParent {
         throw e;
       }
     }
+  }
+
+  useTableStore(): TableStateInterface {
+    return {
+      rowTemplate: useRowTemplateStore(
+        this.diskConfig.yaml.config.current_row_template,
+        this.diskConfig.yaml.config.row_templates_folder
+      ),
+    };
   }
 
   destroy() {

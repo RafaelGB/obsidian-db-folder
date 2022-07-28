@@ -1,6 +1,8 @@
 import { DatabaseSettings } from "cdm/SettingsModel";
+import { TableStateInterface } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { App, TFile } from 'obsidian';
+import useRowTemplateStore from "stateManagement/useRowTemplateStore";
 export default class StateManager {
   private onEmpty: () => void;
   private getGlobalSettings: () => DatabaseSettings;
