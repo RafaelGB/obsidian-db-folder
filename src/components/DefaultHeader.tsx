@@ -14,7 +14,11 @@ import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
 import { ActionTypes, InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
-import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
+import {
+  DatabaseHeaderProps,
+  TableColumn,
+  TableDataType,
+} from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { RowSelectOption } from "cdm/ComponentsModel";
@@ -103,9 +107,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
 
   function adjustWidthOfTheColumn(position: number) {
     let columnNumber =
-      (table.options.meta as any).columns.length +
+      (table.options.meta as TableDataType).view.columns.length +
       1 -
-      (table.options.meta as any).shadowColumns.length;
+      (table.options.meta as TableDataType).shadowColumns.length;
     // Check if column name already exists
     while (
       table

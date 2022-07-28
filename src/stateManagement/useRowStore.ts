@@ -1,0 +1,3 @@
+interface pruebas {
+    prueba: string;
+}

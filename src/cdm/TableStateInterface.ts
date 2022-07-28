@@ -1,3 +1,7 @@
+export interface RowState {
+
+}
+
 export interface RowTemplateState {
     template: string;
     folder: string;

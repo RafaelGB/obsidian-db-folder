@@ -4,7 +4,7 @@ import ArrowLeftIcon from "components/img/ArrowLeft";
 import ArrowRightIcon from "components/img/ArrowRight";
 import React from "react";
 import { ActionTypes } from "helpers/Constants";
-import { TableColumn } from "cdm/FolderModel";
+import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 export default class AddColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -64,8 +64,8 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
     const { table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     let columnNumber =
-      (table.options.meta as any).columns.length -
-      (table.options.meta as any).shadowColumns.length;
+      (table.options.meta as TableDataType).view.columns.length -
+      (table.options.meta as TableDataType).shadowColumns.length;
     // Check if column name already exists
     while (
       table

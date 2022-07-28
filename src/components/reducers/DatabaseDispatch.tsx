@@ -39,7 +39,7 @@ export function databaseReducer(state: TableDataType, action: any) {
      * Add option to column
      */
     case ActionTypes.ADD_OPTION_TO_COLUMN:
-      const optionIndex = state.columns.findIndex(
+      const optionIndex = state.view.columns.findIndex(
         (column: TableColumn) => column.id === action.columnId
       );
       const newOption: RowSelectOption = {
@@ -47,16 +47,18 @@ export function databaseReducer(state: TableDataType, action: any) {
         backgroundColor: action.backgroundColor,
       };
 
-      state.columns[optionIndex].options.push(newOption);
+      state.view.columns[optionIndex].options.push(newOption);
       state.view.diskConfig.updateColumnProperties(action.columnId, {
-        options: state.columns[optionIndex].options,
+        options: state.view.columns[optionIndex].options,
       });
 
       return update(state, {
-        columns: {
-          [optionIndex]: {
-            options: {
-              $set: state.columns[optionIndex].options,
+        view: {
+          columns: {
+            [optionIndex]: {
+              options: {
+                $set: state.view.columns[optionIndex].options,
+              },
             },
           },
         },
@@ -67,7 +69,7 @@ export function databaseReducer(state: TableDataType, action: any) {
     case ActionTypes.ADD_ROW:
       const filename = `${state.view.file.parent.path}/${action.filename}.md`;
       const rowRecord: RowDatabaseFields = { inline: {}, frontmatter: {} };
-      state.columns
+      state.view.columns
         .filter((column: TableColumn) => !column.isMetadata)
         .forEach((column: TableColumn) => {
           if (column.config.isInline) {
@@ -130,7 +132,7 @@ export function databaseReducer(state: TableDataType, action: any) {
      * Update key of column in all rows
      */
     case ActionTypes.UPDATE_COLUMN_LABEL:
-      const update_column_label_index = state.columns.findIndex(
+      const update_column_label_index = state.view.columns.findIndex(
         (column: any) => column.id === action.columnId
       );
 
@@ -154,23 +156,23 @@ export function databaseReducer(state: TableDataType, action: any) {
       return update(state, {
         skipReset: { $set: true },
         // Modify column visually with the new label
-        columns: {
-          $set: [
-            ...state.columns.slice(0, update_column_label_index),
-            {
-              ...state.columns[update_column_label_index],
-              label: action.label,
-              id: action.newKey,
-              key: action.newKey,
-              accessorKey: action.newKey,
-            },
-            ...state.columns.slice(
-              update_column_label_index + 1,
-              state.columns.length
-            ),
-          ],
-        },
         view: {
+          columns: {
+            $set: [
+              ...state.view.columns.slice(0, update_column_label_index),
+              {
+                ...state.view.columns[update_column_label_index],
+                label: action.label,
+                id: action.newKey,
+                key: action.newKey,
+                accessorKey: action.newKey,
+              },
+              ...state.view.columns.slice(
+                update_column_label_index + 1,
+                state.view.columns.length
+              ),
+            ],
+          },
           // Modify data visually with the new key
           rows: {
             $set: state.view.rows.map((row: RowDataType) => {
@@ -193,11 +195,11 @@ export function databaseReducer(state: TableDataType, action: any) {
      * Update type on disk
      */
     case ActionTypes.UPDATE_COLUMN_TYPE:
-      const typeIndex = state.columns.findIndex(
+      const typeIndex = state.view.columns.findIndex(
         (column) => column.id === action.columnId
       );
       /** Check if type is changed */
-      if (state.columns[typeIndex].input === action.input) {
+      if (state.view.columns[typeIndex].input === action.input) {
         return state;
       }
       /** If changed, then parsed information */
@@ -231,18 +233,22 @@ export function databaseReducer(state: TableDataType, action: any) {
           // Update column to SELECT type
           return update(state, {
             skipReset: { $set: true },
-            columns: {
-              $set: [
-                ...state.columns.slice(0, typeIndex),
-                {
-                  ...state.columns[typeIndex],
-                  input: action.input,
-                  options: obtainUniqueOptionValues(options),
-                },
-                ...state.columns.slice(typeIndex + 1, state.columns.length),
-              ],
-            },
             view: {
+              columns: {
+                $set: [
+                  ...state.view.columns.slice(0, typeIndex),
+                  {
+                    ...state.view.columns[typeIndex],
+                    input: action.input,
+                    options: obtainUniqueOptionValues(options),
+                  },
+                  ...state.view.columns.slice(
+                    typeIndex + 1,
+                    state.view.columns.length
+                  ),
+                ],
+              },
+
               // Update data associated to column
               rows: {
                 $set: parsedData,
@@ -262,14 +268,18 @@ export function databaseReducer(state: TableDataType, action: any) {
            */
           return update(state, {
             skipReset: { $set: true },
-            columns: {
-              $set: [
-                ...state.columns.slice(0, typeIndex),
-                { ...state.columns[typeIndex], input: action.input },
-                ...state.columns.slice(typeIndex + 1, state.columns.length),
-              ],
-            },
             view: {
+              columns: {
+                $set: [
+                  ...state.view.columns.slice(0, typeIndex),
+                  { ...state.view.columns[typeIndex], input: action.input },
+                  ...state.view.columns.slice(
+                    typeIndex + 1,
+                    state.view.columns.length
+                  ),
+                ],
+              },
+
               rows: {
                 $set: parsedData,
               },
@@ -281,7 +291,7 @@ export function databaseReducer(state: TableDataType, action: any) {
      * and save it on disk
      */
     case ActionTypes.ADD_COLUMN_TO_LEFT:
-      const leftIndex = state.columns.findIndex(
+      const leftIndex = state.view.columns.findIndex(
         (column) => column.id === action.columnId
       );
 
@@ -298,25 +308,26 @@ export function databaseReducer(state: TableDataType, action: any) {
       // Update state
       return update(state, {
         skipReset: { $set: true },
-        columns: {
-          $set: [
-            ...state.columns.slice(0, leftIndex),
-            {
-              ...TableColumnsTemplate,
-              input: newLeftColumn.input,
-              id: newLeftColumn.key,
-              label: newLeftColumn.label,
-              key: newLeftColumn.key,
-              accessorKey: newLeftColumn.accessorKey,
-              position: newLeftColumn.position,
-              csvCandidate: true,
-              config: newLeftColumn.config,
-            },
-            ...state.columns.slice(leftIndex, state.columns.length),
-          ],
-        },
-        // Update view yaml
         view: {
+          columns: {
+            $set: [
+              ...state.view.columns.slice(0, leftIndex),
+              {
+                ...TableColumnsTemplate,
+                input: newLeftColumn.input,
+                id: newLeftColumn.key,
+                label: newLeftColumn.label,
+                key: newLeftColumn.key,
+                accessorKey: newLeftColumn.accessorKey,
+                position: newLeftColumn.position,
+                csvCandidate: true,
+                config: newLeftColumn.config,
+              },
+              ...state.view.columns.slice(leftIndex, state.view.columns.length),
+            ],
+          },
+          // Update view yaml
+
           diskConfig: {
             yaml: {
               $set: state.view.diskConfig.yaml,
@@ -329,7 +340,7 @@ export function databaseReducer(state: TableDataType, action: any) {
      * and save it on disk
      */
     case ActionTypes.ADD_COLUMN_TO_RIGHT:
-      const rightIndex = state.columns.findIndex(
+      const rightIndex = state.view.columns.findIndex(
         (column) => column.id === action.columnId
       );
 
@@ -345,23 +356,27 @@ export function databaseReducer(state: TableDataType, action: any) {
 
       return update(state, {
         skipReset: { $set: true },
-        // Add column visually to the right of the column with the given id
-        columns: {
-          $set: [
-            ...state.columns.slice(0, rightIndex + 1),
-            {
-              ...TableColumnsTemplate,
-              id: newRIghtColumn.key,
-              label: newRIghtColumn.label,
-              key: newRIghtColumn.key,
-              accessorKey: newRIghtColumn.accessorKey,
-              position: newRIghtColumn.position,
-            },
-            ...state.columns.slice(rightIndex + 1, state.columns.length),
-          ],
-        },
-        // Update view yaml
         view: {
+          // Add column visually to the right of the column with the given id
+          columns: {
+            $set: [
+              ...state.view.columns.slice(0, rightIndex + 1),
+              {
+                ...TableColumnsTemplate,
+                id: newRIghtColumn.key,
+                label: newRIghtColumn.label,
+                key: newRIghtColumn.key,
+                accessorKey: newRIghtColumn.accessorKey,
+                position: newRIghtColumn.position,
+              },
+              ...state.view.columns.slice(
+                rightIndex + 1,
+                state.view.columns.length
+              ),
+            ],
+          },
+          // Update view yaml
+
           diskConfig: {
             yaml: {
               $set: state.view.diskConfig.yaml,
@@ -370,7 +385,7 @@ export function databaseReducer(state: TableDataType, action: any) {
         },
       });
     case ActionTypes.DELETE_COLUMN:
-      const deleteIndex = state.columns.findIndex(
+      const deleteIndex = state.view.columns.findIndex(
         (column) => column.id === action.columnId
       );
       // Update configuration on disk
@@ -395,13 +410,17 @@ export function databaseReducer(state: TableDataType, action: any) {
       // Update state
       return update(state, {
         skipReset: { $set: true },
-        columns: {
-          $set: [
-            ...state.columns.slice(0, deleteIndex),
-            ...state.columns.slice(deleteIndex + 1, state.columns.length),
-          ],
-        },
         view: {
+          columns: {
+            $set: [
+              ...state.view.columns.slice(0, deleteIndex),
+              ...state.view.columns.slice(
+                deleteIndex + 1,
+                state.view.columns.length
+              ),
+            ],
+          },
+
           // Update data associated to column
           rows: {
             $set: state.view.rows.map((row) => {
@@ -441,11 +460,11 @@ export function databaseReducer(state: TableDataType, action: any) {
           },
         });
         // Update original cell value
-        const update_option_cell_index = state.columns.findIndex(
+        const update_option_cell_index = state.view.columns.findIndex(
           (column) => column.id === action.columnId
         );
         const update_option_cell_column_key =
-          state.columns[update_option_cell_index].key;
+          state.view.columns[update_option_cell_index].key;
         return update(state, {
           view: {
             rows: {
@@ -466,7 +485,7 @@ export function databaseReducer(state: TableDataType, action: any) {
      */
     case ActionTypes.UPDATE_CELL:
       // Obtain current column index
-      const update_cell_index = state.columns.findIndex(
+      const update_cell_index = state.view.columns.findIndex(
         (column) => column.id === action.columnId
       );
       // Save on disk
@@ -478,7 +497,7 @@ export function databaseReducer(state: TableDataType, action: any) {
         UpdateRowOptions.COLUMN_VALUE
       );
       const update_option_cell_column_key =
-        state.columns[update_cell_index].key;
+        state.view.columns[update_cell_index].key;
       return update(state, {
         view: {
           rows: {
@@ -498,20 +517,24 @@ export function databaseReducer(state: TableDataType, action: any) {
 
     case ActionTypes.SET_SORT_BY:
       const sortArray: SortedType[] = action.sortArray;
-      const modifiedColumns: TableColumn[] = state.columns.map((column) => {
-        const sortedColumn = sortArray.find((sort) => sort.id === column.id);
-        if (sortedColumn) {
-          column.isSorted = true;
-          column.isSortedDesc = sortedColumn.desc;
-        } else {
-          column.isSorted = false;
+      const modifiedColumns: TableColumn[] = state.view.columns.map(
+        (column) => {
+          const sortedColumn = sortArray.find((sort) => sort.id === column.id);
+          if (sortedColumn) {
+            column.isSorted = true;
+            column.isSortedDesc = sortedColumn.desc;
+          } else {
+            column.isSorted = false;
+          }
+          return column;
         }
-        return column;
-      });
+      );
       state.initialState.sortBy = action.sortArray;
       return update(state, {
-        columns: {
-          $set: modifiedColumns,
+        view: {
+          columns: {
+            $set: modifiedColumns,
+          },
         },
         initialState: {
           $set: state.initialState,
@@ -527,16 +550,18 @@ export function databaseReducer(state: TableDataType, action: any) {
         action.columnId,
         action.columnConfig
       );
-      const toggleInlineIndex = state.columns.findIndex(
+      const toggleInlineIndex = state.view.columns.findIndex(
         (column) => column.id === action.columnId
       );
 
       return update(state, {
         skipReset: { $set: true },
-        columns: {
-          [toggleInlineIndex]: {
-            config: {
-              $set: action.columnConfig,
+        view: {
+          columns: {
+            [toggleInlineIndex]: {
+              config: {
+                $set: action.columnConfig,
+              },
             },
           },
         },
@@ -553,7 +578,7 @@ export function getDispatch(tableData: TableDataType) {
 
   useEffect(() => {
     dataDispatch({ type: ActionTypes.ENABLE_RESET });
-  }, [state.view.rows, state.columns]);
+  }, [state.view.rows, state.view.columns]);
 
   return { state, dataDispatch };
 }

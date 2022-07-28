@@ -76,7 +76,6 @@ export type InitialState = {
 }
 
 export type TableDataType = {
-    columns: TableColumn[],
     shadowColumns: TableColumn[],
     skipReset: boolean,
     view: DatabaseView,

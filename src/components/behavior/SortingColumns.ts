@@ -5,7 +5,7 @@ import { LOGGER } from "services/Logger";
 export function generateSortedColumns(tableDataType: TableDataType, currentCol: TableColumn, isSortedDesc: boolean): SortedType[] {
     LOGGER.debug(`=>generateSortedColumns currentCol ${currentCol.id} isSortedDesc ${isSortedDesc}`);
     const sortArray: SortedType[] = [];
-    tableDataType.columns
+    tableDataType.view.columns
         // Filter if col is already sorted or is current col
         .filter(col => col.id === currentCol.id || col.isSorted)
         .forEach((col) => {

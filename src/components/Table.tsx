@@ -61,11 +61,11 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
  */
 export function Table(tableData: TableDataType) {
   LOGGER.debug(
-    `=> Table. number of columns: ${tableData.columns.length}. number of rows: ${tableData.view.rows.length}`
+    `=> Table. number of columns: ${tableData.view.columns.length}. number of rows: ${tableData.view.rows.length}`
   );
   /** Main information about the table */
   const data = tableData.view.rows;
-  const columns = tableData.columns;
+  const columns = tableData.view.columns;
 
   /** Plugin services */
   const view: DatabaseView = tableData.view;
