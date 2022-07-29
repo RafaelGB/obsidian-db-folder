@@ -17,7 +17,7 @@ export default class SelectTypeHeaderAction extends AbstractHeaderAction {
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const selectType = {
       onClick: (e: any) => {
-        (table.options.meta as any).dispatch({
+        table.options.meta.dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
           input: InputType.SELECT,

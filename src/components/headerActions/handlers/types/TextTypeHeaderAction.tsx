@@ -17,7 +17,7 @@ export default class TextTypeHeaderAction extends AbstractHeaderAction {
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const textBoxType = {
       onClick: (e: any) => {
-        (table.options.meta as any).dispatch({
+        table.options.meta.dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
           input: InputType.TEXT,

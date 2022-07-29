@@ -8,13 +8,13 @@ import { CalendarProps } from "cdm/ComponentsModel";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
-  const { column, cellProperties, intialState } = calendarTimeProps;
+  const { column, cellProperties, meta } = calendarTimeProps;
   const { row, table } = cellProperties;
   const tableColumn = column.columnDef as TableColumn;
-  const dataDispatch = (table.options.meta as TableDataType).dispatch;
+  const dataDispatch = table.options.meta.dispatch;
   // Calendar state
   const [calendarTimeState, setCalendarTimeState] = useState(
-    intialState.view.rows[row.index][tableColumn.key]
+    meta.view.rows[row.index][tableColumn.key]
   );
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);

@@ -9,16 +9,16 @@ import { CalendarProps } from "cdm/ComponentsModel";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
-  const { column, cellProperties, intialState } = calendarProps;
+  const { column, cellProperties, meta } = calendarProps;
   const { row, table } = cellProperties;
   const tableColumn = column.columnDef as TableColumn;
-  const dataDispatch = (table.options.meta as TableDataType).dispatch;
+  const dataDispatch = meta.dispatch;
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
   const [calendarState, setCalendarState] = useState(
-    intialState.view.rows[row.index][tableColumn.key]
+    meta.view.rows[row.index][tableColumn.key]
   );
 
   function handleSpanOnClick(event: any) {

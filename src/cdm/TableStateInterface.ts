@@ -15,7 +15,7 @@ export interface DataState {
     remove: (row: RowDataType) => void;
 }
 export interface ColumnsState {
-    columns: TableColumn[];
+    state: TableColumn[];
     add: (column: TableColumn, position: number) => void;
     remove: (column: TableColumn) => void;
 }

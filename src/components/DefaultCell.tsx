@@ -17,11 +17,11 @@ import { CellProps } from "cdm/CellModel";
 
 export default function DefaultCell(cellProperties: CellProps) {
   const { cell, column, row, table } = cellProperties;
-  const dataDispatch = (table.options.meta as TableDataType).dispatch;
+  const dataDispatch = table.options.meta.dispatch;
   /** Initial state of cell */
   const cellValue = cell.getValue();
   /** Columns information */
-  const columns = (table.options.meta as TableDataType).view.columns;
+  const columns = table.options.meta.tableState.columns.state;
   /** Type of cell */
   const input = (column.columnDef as TableColumn).input;
   /** Note info of current Cell */
@@ -39,7 +39,7 @@ export default function DefaultCell(cellProperties: CellProps) {
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
-  const tableData = table.options.meta as TableDataType;
+  const meta = table.options.meta;
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering input: ${input}. value: ${contextValue.value}`
@@ -67,8 +67,8 @@ export default function DefaultCell(cellProperties: CellProps) {
           contextValue.value,
           false,
           taskRef.current,
-          tableData.view,
-          tableData.view.file.path
+          meta.view,
+          meta.view.file.path
         );
 
         break;
@@ -216,7 +216,7 @@ export default function DefaultCell(cellProperties: CellProps) {
       case InputType.CALENDAR:
         return (
           <CalendarPortal
-            intialState={tableData}
+            meta={meta}
             column={column}
             cellProperties={cellProperties}
           />
@@ -226,7 +226,7 @@ export default function DefaultCell(cellProperties: CellProps) {
       case InputType.CALENDAR_TIME:
         return (
           <CalendarTimePortal
-            intialState={tableData}
+            meta={meta}
             column={column}
             cellProperties={cellProperties}
           />
@@ -242,7 +242,7 @@ export default function DefaultCell(cellProperties: CellProps) {
               column={column}
               columns={columns}
               note={note}
-              intialState={tableData}
+              meta={meta}
             />
           </CellContext.Provider>
         );
@@ -251,7 +251,7 @@ export default function DefaultCell(cellProperties: CellProps) {
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <TagsPortal
-              intialState={tableData}
+              meta={meta}
               column={column}
               columns={columns}
               dispatch={dataDispatch}
@@ -269,8 +269,8 @@ export default function DefaultCell(cellProperties: CellProps) {
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <CheckboxCell
-              intialState={tableData}
-              column={column.columnDef as TableColumn}
+              meta={meta}
+              column={column}
               cellProperties={cellProperties}
             />
           </CellContext.Provider>

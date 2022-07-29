@@ -27,7 +27,7 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
     const newButtons: any[] = [];
     newButtons.push({
       onClick: (e: any) => {
-        (table.options.meta as any).dispatch({
+        table.options.meta.dispatch({
           type: ActionTypes.DELETE_COLUMN,
           columnId: column.id,
           key: hooks.keyState,

@@ -16,7 +16,7 @@ export async function renderMarkdown(
   depth: number
 ) {
   try {
-    const view: DatabaseView = (cell.table.options.meta as TableDataType).view;
+    const view: DatabaseView = cell.table.options.meta.view;
     const column = cell.column.columnDef as TableColumn;
     const { media_height, media_width, enable_media_view } = column.config;
     if (enable_media_view && isValidHttpUrl(markdownString)) {

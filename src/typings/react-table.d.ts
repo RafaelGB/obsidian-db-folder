@@ -1,10 +1,13 @@
-import 'react-table';
+import '@tanstack/table-table';
+import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { TableStateInterface } from "cdm/TableStateInterface";
+import { DatabaseView } from 'DatabaseView';
 
-// TODO remove this when up to react-table v8
-declare module 'react-table' {
-    export interface UseTableInstanceProps<D extends object> {
-        preGlobalFilteredRows: any,
-        setGlobalFilter: any,
-        setColumnOrder: any
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowDataType> {
+        tableState: TableStateInterface;
+        dispatch: (action: any) => void;
+        view: DatabaseView;
+        shadowColumns: TableColumn[];
     }
 }

@@ -16,7 +16,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
   const { table, header, findColumn, headerIndex, setColumnOrder } =
     headerProps;
   const { id } = header.column.columnDef as TableColumn;
-  const { dispatch, view } = table.options.meta as TableDataType;
+  const { dispatch, view } = table.options.meta;
   const columns = view.columns;
   const originalIndex = columns.findIndex((col) => col.id === id);
   //DnD

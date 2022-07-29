@@ -206,7 +206,12 @@ export function Table(tableData: TableDataType) {
     },
     onColumnOrderChange: setColumnOrder,
     globalFilterFn: "includesString",
-    meta: tableData,
+    meta: {
+      tableState: useTableStore,
+      dispatch: dataDispatch,
+      view: view,
+      shadowColumns: tableData.shadowColumns,
+    },
     defaultColumn: defaultColumn,
     getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),

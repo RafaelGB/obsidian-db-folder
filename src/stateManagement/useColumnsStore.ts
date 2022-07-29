@@ -5,13 +5,13 @@ import create from "zustand";
 const useColumnsStore = (columns: TableColumn[]) => {
     return create<ColumnsState>()(
         (set) => ({
-            columns: columns,
-            add: (column: TableColumn, position: number) => set((state) => {
-                const newColumns = [...state.columns];
+            state: columns,
+            add: (column: TableColumn, position: number) => set((updater) => {
+                const newColumns = [...updater.state];
                 newColumns.splice(position, 0, column);
-                return { columns: newColumns };
+                return { state: newColumns };
             }),
-            remove: (column: TableColumn) => set((state) => ({ columns: state.columns.filter((c) => c.id !== column.id) })),
+            remove: (column: TableColumn) => set((updater) => ({ state: updater.state.filter((c) => c.id !== column.id) })),
         }),
     )();
 }

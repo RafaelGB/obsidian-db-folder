@@ -3,13 +3,13 @@ import { CellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
 import { CheckboxProps } from "cdm/CheckboxModel";
-import { TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 
 export function CheckboxCell(props: CheckboxProps) {
   const { column, cellProperties } = props;
   const { row, table } = cellProperties;
-  const dataDispatch = (table.options.meta as TableDataType).dispatch;
+  const dataDispatch = table.options.meta.dispatch;
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
   /** state of cell value */
@@ -21,7 +21,7 @@ export function CheckboxCell(props: CheckboxProps) {
     dataDispatch({
       type: ActionTypes.UPDATE_CELL,
       file: note.getFile(),
-      key: column.key,
+      key: (column.columnDef as TableColumn).key,
       value: newValue,
       row: row,
       columnId: column.id,

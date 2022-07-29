@@ -1,7 +1,7 @@
 import { RowType } from "cdm/RowTypeModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { Column, TableOptions } from "@tanstack/react-table";
+import { Column, TableMeta, TableOptions } from "@tanstack/react-table";
 import { BaseColumn, RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
 import { RowSelectOption } from "cdm/ComponentsModel";
 
@@ -40,7 +40,7 @@ export type OptionSelect = {
     backgroundColor: string;
 }
 export type BaseComponentProps = {
-    intialState: TableDataType;
+    meta: TableMeta<RowDataType>;
     column: Column<RowDataType, unknown>;
 }
 

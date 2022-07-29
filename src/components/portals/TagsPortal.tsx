@@ -12,16 +12,15 @@ import NoteInfo from "services/NoteInfo";
 import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { intialState, column, dispatch, cellProperties, columns } = tagsProps;
+  const { meta, column, dispatch, cellProperties, columns } = tagsProps;
   const { row, table } = cellProperties;
   const tableColumn = column.columnDef as TableColumn;
-  const state = table.options.meta as TableDataType;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    Array.isArray(intialState.view.rows[row.index][tableColumn.key])
-      ? (intialState.view.rows[row.index][tableColumn.key] as Literal[])
+    Array.isArray(table.options.meta.view.rows[row.index][tableColumn.key])
+      ? (table.options.meta.view.rows[row.index][tableColumn.key] as Literal[])
       : []
   );
 
@@ -41,11 +40,11 @@ const TagsPortal = (tagsProps: TagsProps) => {
         label: tag,
         backgroundColor: color,
       };
-      const currentColumn = state.view.columns.find(
+      const currentColumn = table.options.meta.view.columns.find(
         (col: TableColumn) => col.key === tableColumn.key
       );
       currentColumn.options.push(newOption);
-      state.view.diskConfig.updateColumnProperties(column.id, {
+      table.options.meta.view.diskConfig.updateColumnProperties(column.id, {
         options: currentColumn.options,
       });
       return color;

@@ -27,7 +27,7 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
     newButtons.push(
       {
         onClick: (e: any) => {
-          (table.options.meta as any).dispatch({
+          table.options.meta.dispatch({
             type: ActionTypes.ADD_COLUMN_TO_LEFT,
             columnId: column.id,
             focus: false,
@@ -40,7 +40,7 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
       },
       {
         onClick: (e: any) => {
-          (table.options.meta as any).dispatch({
+          table.options.meta.dispatch({
             type: ActionTypes.ADD_COLUMN_TO_RIGHT,
             columnId: column.id,
             focus: false,
@@ -64,8 +64,8 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
     const { table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     let columnNumber =
-      (table.options.meta as TableDataType).view.columns.length -
-      (table.options.meta as TableDataType).shadowColumns.length;
+      table.options.meta.view.columns.length -
+      table.options.meta.shadowColumns.length;
     // Check if column name already exists
     while (
       table

@@ -12,7 +12,7 @@ import { TableColumn, TableDataType } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, header, column } = headerMenuProps.headerProps;
-  const dispatch = (table.options.meta as any).dispatch;
+  const dispatch = table.options.meta.dispatch;
   /** Header props */
   const {
     propertyIcon,
@@ -290,7 +290,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     className="menu-item sort-button"
                     onClick={() => {
                       new ColumnModal(
-                        (table.options.meta as TableDataType).view,
+                        table.options.meta.view,
                         headerMenuProps
                       ).open();
                       setExpanded(false);

@@ -64,7 +64,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     column.columnDef as TableColumn;
   /** reducer asociated to database */
   // TODO typying improve
-  const dispatch = (table.options.meta as any).dispatch;
+  const dispatch = table.options.meta.dispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -107,9 +107,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
 
   function adjustWidthOfTheColumn(position: number) {
     let columnNumber =
-      (table.options.meta as TableDataType).view.columns.length +
+      table.options.meta.view.columns.length +
       1 -
-      (table.options.meta as TableDataType).shadowColumns.length;
+      table.options.meta.shadowColumns.length;
     // Check if column name already exists
     while (
       table

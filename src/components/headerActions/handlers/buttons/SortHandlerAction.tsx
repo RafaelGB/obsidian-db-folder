@@ -38,15 +38,15 @@ export default class SortHandlerAction extends AbstractHeaderAction {
     sortButtons.push(
       {
         onClick: (e: any) => {
-          const sortArray = generateSortedColumns(
-            (table.options.meta as TableDataType).view,
-            tablecolumn,
-            false
-          );
+          const sortArray =
+            table.options.meta.tableState.sorting.generateSorting(
+              tablecolumn,
+              false
+            );
           table.setSorting(sortArray);
           hooks.setExpanded(false);
           // Update state
-          (table.options.meta as TableDataType).dispatch({
+          table.options.meta.dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });
@@ -64,15 +64,15 @@ export default class SortHandlerAction extends AbstractHeaderAction {
       },
       {
         onClick: (e: any) => {
-          const sortArray = generateSortedColumns(
-            (table.options.meta as TableDataType).view,
-            tablecolumn,
-            true
-          );
+          const sortArray =
+            table.options.meta.tableState.sorting.generateSorting(
+              tablecolumn,
+              true
+            );
           table.setSorting(sortArray);
           hooks.setExpanded(false);
           // Update state
-          (table.options.meta as TableDataType).dispatch({
+          table.options.meta.dispatch({
             type: ActionTypes.SET_SORT_BY,
             sortArray: sortArray,
           });

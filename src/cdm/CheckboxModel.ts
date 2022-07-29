@@ -1,8 +1,7 @@
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { CellProps } from "cdm/CellModel";
+import { BaseComponentProps } from "cdm/DatabaseModel";
 
 export type CheckboxProps = {
-    intialState: TableDataType;
-    column: TableColumn;
     cellProperties: CellProps;
-};
+} & BaseComponentProps;

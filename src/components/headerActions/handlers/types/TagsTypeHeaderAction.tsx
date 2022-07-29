@@ -17,7 +17,7 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
     const checkBoxType = {
       onClick: (e: any) => {
-        (table.options.meta as any).dispatch({
+        table.options.meta.dispatch({
           type: ActionTypes.UPDATE_COLUMN_TYPE,
           columnId: column.id,
           input: InputType.TAGS,
