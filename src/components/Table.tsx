@@ -76,10 +76,6 @@ export function Table(tableData: TableDataType) {
   const dataDispatch = tableData.dispatch;
   const useTableStore = view.useTableStore();
   /** Table services */
-  // Sorting
-  const [sorting, setSorting] = React.useState<SortingState>(
-    tableData.initialState.sortBy
-  );
 
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
@@ -177,10 +173,10 @@ export function Table(tableData: TableDataType) {
       globalFilter: globalFilter,
       columnOrder: columnOrder,
       columnSizing: columnSizing,
-      sorting: sorting,
+      sorting: useTableStore.sorting.state,
     },
 
-    onSortingChange: setSorting,
+    onSortingChange: useTableStore.sorting.modify,
     onColumnSizingChange: (updater) => {
       let list: ColumnSizingState = null;
       if (typeof updater === "function") {

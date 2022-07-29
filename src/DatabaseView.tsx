@@ -29,7 +29,10 @@ import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
+import useColumnsStore from "stateManagement/useColumnsStore";
+import useDataStore from "stateManagement/useDataStore";
 import useRowTemplateStore from "stateManagement/useRowTemplateStore";
+import useSortingStore from "stateManagement/useSortingStore";
 import StateManager from "StateManager";
 export const databaseIcon = "blocks";
 
@@ -41,7 +44,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   diskConfig: DatabaseInfo;
   rows: Array<RowDataType>;
   columns: Array<TableColumn>;
-  private tableState: TableStateInterface;
+  initialState: InitialState;
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
@@ -149,17 +152,13 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.columns,
         this.diskConfig.yaml
       );
-      const initialState: InitialState = obtainInitialState(
-        this.columns,
-        this.rows
-      );
+      this.initialState = obtainInitialState(this.columns, this.rows);
       // Define table properties
       const tableProps: TableDataType = {
         shadowColumns: this.columns.filter((col) => col.skipPersist),
         skipReset: false,
         view: this,
         stateManager: this.plugin.getStateManager(this.file),
-        initialState: initialState,
       };
       // Render database
       const table = createDatabase(tableProps);
@@ -181,6 +180,9 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.diskConfig.yaml.config.current_row_template,
         this.diskConfig.yaml.config.row_templates_folder
       ),
+      data: useDataStore(this.rows),
+      sorting: useSortingStore(this.initialState.sortBy, this),
+      columns: useColumnsStore(this.columns),
     };
   }
 

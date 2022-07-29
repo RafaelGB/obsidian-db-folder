@@ -39,7 +39,7 @@ export default class SortHandlerAction extends AbstractHeaderAction {
       {
         onClick: (e: any) => {
           const sortArray = generateSortedColumns(
-            table.options.meta as TableDataType,
+            (table.options.meta as TableDataType).view,
             tablecolumn,
             false
           );
@@ -65,7 +65,7 @@ export default class SortHandlerAction extends AbstractHeaderAction {
       {
         onClick: (e: any) => {
           const sortArray = generateSortedColumns(
-            table.options.meta as TableDataType,
+            (table.options.meta as TableDataType).view,
             tablecolumn,
             true
           );

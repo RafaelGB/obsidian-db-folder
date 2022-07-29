@@ -1,3 +1,0 @@
-interface pruebas {
-    prueba: string;
-}

@@ -529,15 +529,16 @@ export function databaseReducer(state: TableDataType, action: any) {
           return column;
         }
       );
-      state.initialState.sortBy = action.sortArray;
+      state.view.initialState.sortBy = action.sortArray;
       return update(state, {
         view: {
           columns: {
             $set: modifiedColumns,
           },
-        },
-        initialState: {
-          $set: state.initialState,
+
+          initialState: {
+            $set: state.view.initialState,
+          },
         },
       });
 
