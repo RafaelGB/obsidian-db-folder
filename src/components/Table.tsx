@@ -224,7 +224,6 @@ export function Table(tableData: TableDataType) {
     debugColumns:
       tableData.view.plugin.settings.global_settings.enable_debug_mode,
   });
-
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);

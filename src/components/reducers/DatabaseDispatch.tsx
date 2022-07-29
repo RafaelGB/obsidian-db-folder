@@ -515,33 +515,6 @@ export function databaseReducer(state: TableDataType, action: any) {
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
 
-    case ActionTypes.SET_SORT_BY:
-      const sortArray: SortedType[] = action.sortArray;
-      const modifiedColumns: TableColumn[] = state.view.columns.map(
-        (column) => {
-          const sortedColumn = sortArray.find((sort) => sort.id === column.id);
-          if (sortedColumn) {
-            column.isSorted = true;
-            column.isSortedDesc = sortedColumn.desc;
-          } else {
-            column.isSorted = false;
-          }
-          return column;
-        }
-      );
-      state.view.initialState.sortBy = action.sortArray;
-      return update(state, {
-        view: {
-          columns: {
-            $set: modifiedColumns,
-          },
-
-          initialState: {
-            $set: state.view.initialState,
-          },
-        },
-      });
-
     /**
      * Update the configuration of a column
      */

@@ -12,6 +12,14 @@ const useColumnsStore = (columns: TableColumn[]) => {
                 return { state: newColumns };
             }),
             remove: (column: TableColumn) => set((updater) => ({ state: updater.state.filter((c) => c.id !== column.id) })),
+            alterSorting: (column: TableColumn) => set((updater) => {
+                const newColumns = [...updater.state];
+                const index = newColumns.findIndex((c) => c.id === column.id);
+                newColumns[index].isSorted = column.isSorted;
+                newColumns[index].isSortedDesc = column.isSortedDesc;
+                return { state: newColumns };
+            }
+            ),
         }),
     )();
 }

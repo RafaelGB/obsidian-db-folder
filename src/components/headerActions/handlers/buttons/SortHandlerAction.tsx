@@ -1,12 +1,11 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
-import { generateSortedColumns } from "components/behavior/SortingColumns";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import CrossIcon from "components/img/CrossIcon";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
 import { ActionTypes, InputType } from "helpers/Constants";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -43,13 +42,14 @@ export default class SortHandlerAction extends AbstractHeaderAction {
               tablecolumn,
               false
             );
-          table.setSorting(sortArray);
+          tablecolumn.isSorted =
+            tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
+          tablecolumn.isSortedDesc = false;
           hooks.setExpanded(false);
           // Update state
-          table.options.meta.dispatch({
-            type: ActionTypes.SET_SORT_BY,
-            sortArray: sortArray,
-          });
+          table.options.meta.tableState.columns.alterSorting(tablecolumn);
+          table.options.meta.tableState.initialState.alterSortBy(sortArray);
+          table.setSorting(sortArray);
         },
         icon:
           header.column.getIsSorted() === "asc" ? (
@@ -69,13 +69,15 @@ export default class SortHandlerAction extends AbstractHeaderAction {
               tablecolumn,
               true
             );
-          table.setSorting(sortArray);
+          tablecolumn.isSorted =
+            tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
+          tablecolumn.isSortedDesc = true;
+
           hooks.setExpanded(false);
           // Update state
-          table.options.meta.dispatch({
-            type: ActionTypes.SET_SORT_BY,
-            sortArray: sortArray,
-          });
+          table.options.meta.tableState.columns.alterSorting(tablecolumn);
+          table.options.meta.tableState.initialState.alterSortBy(sortArray);
+          table.setSorting(sortArray);
         },
         icon:
           header.column.getIsSorted() === "desc" ? (

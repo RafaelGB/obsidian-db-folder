@@ -1,6 +1,6 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import {
-  InitialState,
+  InitialType,
   RowDataType,
   TableColumn,
   TableDataType,
@@ -13,7 +13,7 @@ import {
 import { createDatabase } from "components/index/Database";
 import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, InputType, StyleClasses } from "helpers/Constants";
-import obtainInitialState from "helpers/InitialState";
+import obtainInitialType from "helpers/InitialType";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import DBFolderPlugin from "main";
 
@@ -31,6 +31,7 @@ import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import useColumnsStore from "stateManagement/useColumnsStore";
 import useDataStore from "stateManagement/useDataStore";
+import useInitialTypeStore from "stateManagement/useInitialTypeStore";
 import useRowTemplateStore from "stateManagement/useRowTemplateStore";
 import useSortingStore from "stateManagement/useSortingStore";
 import StateManager from "StateManager";
@@ -44,7 +45,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   diskConfig: DatabaseInfo;
   rows: Array<RowDataType>;
   columns: Array<TableColumn>;
-  initialState: InitialState;
+  initial: InitialType;
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
@@ -152,7 +153,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.columns,
         this.diskConfig.yaml
       );
-      this.initialState = obtainInitialState(this.columns, this.rows);
+      this.initial = obtainInitialType(this.columns, this.rows);
       // Define table properties
       const tableProps: TableDataType = {
         shadowColumns: this.columns.filter((col) => col.skipPersist),
@@ -176,12 +177,13 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
   useTableStore(): TableStateInterface {
     return {
+      initialState: useInitialTypeStore(this),
       rowTemplate: useRowTemplateStore(
         this.diskConfig.yaml.config.current_row_template,
         this.diskConfig.yaml.config.row_templates_folder
       ),
       data: useDataStore(this.rows),
-      sorting: useSortingStore(this.initialState.sortBy, this),
+      sorting: useSortingStore(this.initial.sortBy, this),
       columns: useColumnsStore(this.columns),
     };
   }

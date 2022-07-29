@@ -71,7 +71,7 @@ export type RowDataType = {
     [key: string]: Literal | NoteInfo
 }
 
-export type InitialState = {
+export type InitialType = {
     sortBy?: ColumnSort[],
 }
 
