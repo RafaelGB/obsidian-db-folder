@@ -12,6 +12,7 @@ import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { EditionError } from 'errors/ErrorTypes';
+import { TableStateInterface } from 'cdm/TableStateInterface';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -163,7 +164,7 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
   }
 }
 
-export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableDataType, option: string): Promise<void> {
+export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableStateInterface, option: string): Promise<void> {
   await updateRowFile(file, columnId, newValue, state, option).catch((err) => {
     throw err;
   });
@@ -176,13 +177,13 @@ export async function updateRowFileProxy(file: TFile, columnId: string, newValue
  * @param newColumnValue 
  * @param option 
  */
-export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, state: TableDataType, option: string): Promise<void> {
+export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, table: TableStateInterface, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   try {
     const content = await VaultManagerDB.obtainContentFromTfile(file);
     const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
-    const rowFields = obtainRowDatabaseFields(file, state.view.columns, frontmatterKeys);
-    const column = state.view.columns.find(c => c.key === columnId);
+    const rowFields = obtainRowDatabaseFields(file, table.columns.state, frontmatterKeys);
+    const column = table.columns.state.find(c => c.key === columnId);
     // Adds an empty frontmatter at the beginning of the file
     async function addFrontmatter(): Promise<void> {
       /* Regex explanation
@@ -229,7 +230,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
       // Check if the column is already in the frontmatter
       // assign an empty value to the new key
-      rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, state.view.diskConfig.yaml.config) as string] = rowFields.frontmatter[columnId] ?? "";
+      rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, table.configState.ddbbConfig) as string] = rowFields.frontmatter[columnId] ?? "";
       delete rowFields.frontmatter[columnId];
       await persistFrontmatter(columnId);
     }
@@ -246,7 +247,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
     async function persistFrontmatter(deletedColumn?: string): Promise<void> {
       const frontmatterGroupRegex = /^---[\s\S]+?---/g;
-      const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, state.view.diskConfig.yaml.config, deletedColumn);
+      const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, table.configState.ddbbConfig, deletedColumn);
       const noteObject = {
         action: 'replace',
         file: file,
@@ -273,7 +274,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
         action: 'replace',
         file: file,
         regexp: inlineFieldRegex,
-        newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, state.view.diskConfig.yaml.config, true)}`
+        newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, table.configState.ddbbConfig, true)}`
       };
       await VaultManagerDB.editNoteContent(noteObject);
       await persistFrontmatter();

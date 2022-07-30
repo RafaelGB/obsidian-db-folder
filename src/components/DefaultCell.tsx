@@ -157,6 +157,7 @@ export default function DefaultCell(cellProperties: CellProps) {
       value: changedValue,
       row: row,
       columnId: (column.columnDef as TableColumn).id,
+      state: table.options.meta.tableState,
     });
   }
 

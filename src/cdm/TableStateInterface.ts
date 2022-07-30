@@ -1,8 +1,11 @@
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
+import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 
 export interface ConfigState {
-
+    ddbbConfig: LocalSettings;
+    global: GlobalSettings;
+    alterConfig: (config: Partial<LocalSettings>) => void;
 }
 export interface InitialState {
     state: InitialType;
@@ -12,6 +15,7 @@ export interface DataState {
     rows: RowDataType[];
     add: (row: RowDataType) => void;
     remove: (row: RowDataType) => void;
+    removeDataOfColumn: (column: TableColumn) => void;
 }
 
 export interface ColumnsState {
@@ -35,6 +39,7 @@ export interface RowTemplateState {
 
 export interface TableStateInterface {
     initialState: InitialState;
+    configState: ConfigState;
     rowTemplate: RowTemplateState;
     data: DataState;
     sorting: ColumnSortingState;

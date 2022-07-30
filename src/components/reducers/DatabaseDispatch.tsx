@@ -148,7 +148,7 @@ export function databaseReducer(state: TableDataType, action: any) {
             row.__note__.getFile(),
             action.columnId,
             action.newKey,
-            state,
+            action.state,
             UpdateRowOptions.COLUMN_KEY
           );
         })
@@ -384,59 +384,6 @@ export function databaseReducer(state: TableDataType, action: any) {
           },
         },
       });
-    case ActionTypes.DELETE_COLUMN:
-      const deleteIndex = state.view.columns.findIndex(
-        (column) => column.id === action.columnId
-      );
-      // Update configuration on disk
-      state.view.diskConfig.removeColumn(action.columnId);
-      if (state.view.diskConfig.yaml.config.remove_field_when_delete_column) {
-        Promise.all(
-          state.view.rows.map(async (row: RowDataType) => {
-            updateRowFileProxy(
-              row.__note__.getFile(),
-              action.key,
-              undefined, // delete does not need this field
-              state,
-              UpdateRowOptions.REMOVE_COLUMN
-            ).catch((err) => {
-              throw err;
-            });
-          })
-        ).catch((err) => {
-          throw err;
-        });
-      }
-      // Update state
-      return update(state, {
-        skipReset: { $set: true },
-        view: {
-          columns: {
-            $set: [
-              ...state.view.columns.slice(0, deleteIndex),
-              ...state.view.columns.slice(
-                deleteIndex + 1,
-                state.view.columns.length
-              ),
-            ],
-          },
-
-          // Update data associated to column
-          rows: {
-            $set: state.view.rows.map((row) => {
-              const newRow = { ...row };
-              delete newRow[action.columnId];
-              return newRow;
-            }),
-          },
-          // Update view yaml
-          diskConfig: {
-            yaml: {
-              $set: state.view.diskConfig.yaml,
-            },
-          },
-        },
-      });
     /**
      * Check if the given option cell is a candidate for moving the file into a subfolder
      */
@@ -493,7 +440,7 @@ export function databaseReducer(state: TableDataType, action: any) {
         action.file,
         action.key,
         action.value,
-        state,
+        action.state,
         UpdateRowOptions.COLUMN_VALUE
       );
       const update_option_cell_column_key =
@@ -514,32 +461,6 @@ export function databaseReducer(state: TableDataType, action: any) {
      */
     case ActionTypes.ENABLE_RESET:
       return update(state, { skipReset: { $set: false } });
-
-    /**
-     * Update the configuration of a column
-     */
-    case ActionTypes.MODIFY_COLUMN_CONFIG:
-      // Altern between inline & frontmatter mode
-      state.view.diskConfig.updateColumnProperties(
-        action.columnId,
-        action.columnConfig
-      );
-      const toggleInlineIndex = state.view.columns.findIndex(
-        (column) => column.id === action.columnId
-      );
-
-      return update(state, {
-        skipReset: { $set: true },
-        view: {
-          columns: {
-            [toggleInlineIndex]: {
-              config: {
-                $set: action.columnConfig,
-              },
-            },
-          },
-        },
-      });
 
     default:
       LOGGER.warn(`<=> databaseReducer: unknown action ${action.type}`);

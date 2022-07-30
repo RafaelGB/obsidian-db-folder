@@ -74,6 +74,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
       value: arrayTags,
       row: cellProperties.row,
       columnId: column.id,
+      state: table.options.meta.tableState,
     });
     // Add new option to column options
     newValue

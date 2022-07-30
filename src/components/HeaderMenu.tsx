@@ -122,6 +122,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       accessorKey: newKey,
       newKey: newKey,
       label: labelState,
+      state: table.options.meta.tableState,
     });
   }
 

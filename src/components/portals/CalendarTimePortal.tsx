@@ -37,6 +37,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
       value: DateTime.fromJSDate(date).toISO(),
       row: row,
       columnId: column.id,
+      state: table.options.meta.tableState,
     });
 
     setCalendarTimeState(newValue);

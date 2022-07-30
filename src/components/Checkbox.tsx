@@ -25,6 +25,7 @@ export function CheckboxCell(props: CheckboxProps) {
       value: newValue,
       row: row,
       columnId: column.id,
+      state: table.options.meta.tableState,
     });
     setChecked(event.target.checked);
     setContextValue({ value: event.target.checked ? 1 : 0, update: true });

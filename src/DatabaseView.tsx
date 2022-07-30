@@ -30,6 +30,7 @@ import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import useColumnsStore from "stateManagement/useColumnsStore";
+import useConfigStore from "stateManagement/useConfigStore";
 import useDataStore from "stateManagement/useDataStore";
 import useInitialTypeStore from "stateManagement/useInitialTypeStore";
 import useRowTemplateStore from "stateManagement/useRowTemplateStore";
@@ -141,6 +142,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       let yamlColumns: Record<string, DatabaseColumn> =
         this.diskConfig.yaml.columns;
+      this.diskConfig.yaml.config;
       // Complete the columns with the metadata columns
       yamlColumns = await obtainMetadataColumns(
         yamlColumns,
@@ -177,6 +179,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
   useTableStore(): TableStateInterface {
     return {
+      configState: useConfigStore(this),
       initialState: useInitialTypeStore(this),
       rowTemplate: useRowTemplateStore(
         this.diskConfig.yaml.config.current_row_template,
@@ -184,7 +187,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       ),
       data: useDataStore(this.rows),
       sorting: useSortingStore(this.initial.sortBy, this),
-      columns: useColumnsStore(this.columns),
+      columns: useColumnsStore(this),
     };
   }
 

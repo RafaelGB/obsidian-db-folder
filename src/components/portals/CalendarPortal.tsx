@@ -36,6 +36,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       value: newValue.toFormat("yyyy-MM-dd"),
       row: row,
       columnId: column.id,
+      state: table.options.meta.tableState,
     });
     setCalendarState(newValue);
     setShowDatePicker(false);
