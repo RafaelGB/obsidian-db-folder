@@ -58,7 +58,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const created: boolean = false;
   /** Properties of header */
   const { column, header, table } = headerProps;
-
+  const columns = table.options.meta.tableState.columns((store) => store.state);
   /** Column values */
   const { id, input, options, position, label, config } =
     column.columnDef as TableColumn;
@@ -107,9 +107,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
 
   function adjustWidthOfTheColumn(position: number) {
     let columnNumber =
-      table.options.meta.view.columns.length +
-      1 -
-      table.options.meta.shadowColumns.length;
+      columns.length + 1 - table.options.meta.shadowColumns.length;
     // Check if column name already exists
     while (
       table

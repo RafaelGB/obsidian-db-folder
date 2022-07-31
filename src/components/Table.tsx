@@ -45,6 +45,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TableCell from "components/TableCell";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import customSortingFn from "components/behavior/CustomSortingFn";
+import useTableStore from "./reducers/TableReducer";
+import useColumnsStore from "stateManagement/useColumnsStore";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -60,23 +62,34 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
  * @returns
  */
 export function Table(tableData: TableDataType) {
-  LOGGER.debug(
-    `=> Table. number of columns: ${tableData.view.columns.length}. number of rows: ${tableData.view.rows.length}`
-  );
   /** Main information about the table */
-  const data = tableData.view.rows;
-  const columns = tableData.view.columns;
+  const view: DatabaseView = tableData.view;
+  const tableStore = useTableStore(view);
+  const columns = tableStore.columns((store) => store.state);
+  const rows = tableStore.data((store) => store.rows);
+  LOGGER.debug(
+    `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
+  );
+  console.log("columns", columns);
+
+  const [ddbbConfig, global] = tableStore.configState((store) => [
+    store.ddbbConfig,
+    store.global,
+  ]);
 
   /** Plugin services */
-  const view: DatabaseView = tableData.view;
   const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
 
   /** Reducer */
   const dataDispatch = tableData.dispatch;
-  const useTableStore = view.useTableStore();
-  /** Table services */
 
+  /** Table services */
+  // Sorting
+  const [sorting, onSortingChange] = tableStore.sorting((store) => [
+    store.state,
+    store.modify,
+  ]);
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
   // Resizing
@@ -102,6 +115,11 @@ export function Table(tableData: TableDataType) {
   if (columnOrder.length !== columns.length) {
     setColumnOrder(columns.map((c) => c.id));
   }
+
+  // new Row Template
+  const [templateRow, templateOptions, templateUpdate] = tableStore.rowTemplate(
+    (store) => [store.template, store.options, store.update]
+  );
   /** Obsidian event to show page preview */
   const onMouseOver = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -166,17 +184,16 @@ export function Table(tableData: TableDataType) {
   );
 
   const table: Table<RowDataType> = useReactTable({
-    data,
     columns,
+    data: rows,
     columnResizeMode: ResizeConfiguration.RESIZE_MODE,
     state: {
       globalFilter: globalFilter,
       columnOrder: columnOrder,
       columnSizing: columnSizing,
-      sorting: useTableStore.sorting.state,
+      sorting: sorting,
     },
-
-    onSortingChange: useTableStore.sorting.modify,
+    onSortingChange: onSortingChange,
     onColumnSizingChange: (updater) => {
       let list: ColumnSizingState = null;
       if (typeof updater === "function") {
@@ -207,7 +224,7 @@ export function Table(tableData: TableDataType) {
     onColumnOrderChange: setColumnOrder,
     globalFilterFn: "includesString",
     meta: {
-      tableState: useTableStore,
+      tableState: tableStore,
       dispatch: dataDispatch,
       view: view,
       shadowColumns: tableData.shadowColumns,
@@ -217,12 +234,9 @@ export function Table(tableData: TableDataType) {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    debugTable:
-      tableData.view.plugin.settings.global_settings.enable_debug_mode,
-    debugHeaders:
-      tableData.view.plugin.settings.global_settings.enable_debug_mode,
-    debugColumns:
-      tableData.view.plugin.settings.global_settings.enable_debug_mode,
+    debugTable: global.enable_debug_mode,
+    debugHeaders: global.enable_debug_mode,
+    debugColumns: global.enable_debug_mode,
   });
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
@@ -251,8 +265,9 @@ export function Table(tableData: TableDataType) {
       type: ActionTypes.CHANGE_ROW_TEMPLATE,
       template: settingsValue,
     });
-    useTableStore.rowTemplate.update(settingsValue);
+    templateUpdate(settingsValue);
   }
+  console.log("ddbbConfig.enable_show_state", ddbbConfig.enable_show_state);
   LOGGER.debug(`<= Table`);
   return (
     <>
@@ -287,10 +302,8 @@ export function Table(tableData: TableDataType) {
         key={`div-table`}
         className={`${c(
           "table noselect cell_size_" +
-            tableData.view.diskConfig.yaml.config.cell_size +
-            (tableData.view.diskConfig.yaml.config.sticky_first_column
-              ? " sticky_first_column"
-              : "")
+            ddbbConfig.cell_size +
+            (ddbbConfig.sticky_first_column ? " sticky_first_column" : "")
         )}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
@@ -418,12 +431,12 @@ export function Table(tableData: TableDataType) {
         >
           <Select
             styles={CustomTemplateSelectorStyles}
-            options={useTableStore.rowTemplate.options}
+            options={templateOptions}
             value={
-              useTableStore.rowTemplate.template
+              templateRow
                 ? {
-                    label: useTableStore.rowTemplate.template,
-                    value: useTableStore.rowTemplate.template,
+                    label: templateRow,
+                    value: templateRow,
                   }
                 : null
             }
@@ -440,7 +453,7 @@ export function Table(tableData: TableDataType) {
         {/* ENDS NEW ROW */}
       </div>
       {/* INIT DEBUG INFO */}
-      {tableData.view.diskConfig.yaml.config.enable_show_state && (
+      {ddbbConfig.enable_show_state && (
         <pre>
           <code>{JSON.stringify(table.getState(), null, 2)}</code>
         </pre>

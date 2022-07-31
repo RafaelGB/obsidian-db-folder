@@ -40,7 +40,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
         label: tag,
         backgroundColor: color,
       };
-      const currentColumn = table.options.meta.view.columns.find(
+      const currentColumn = table.options.meta.tableState.columns.state.find(
         (col: TableColumn) => col.key === tableColumn.key
       );
       currentColumn.options.push(newOption);

@@ -14,6 +14,6 @@ const useConfigStore = (view: DatabaseView) => {
                 set({ ddbbConfig: { ...local_settings, ...config } });
             }
         })
-    )();
+    );
 }
 export default useConfigStore;

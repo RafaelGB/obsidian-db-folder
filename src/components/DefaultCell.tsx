@@ -21,7 +21,7 @@ export default function DefaultCell(cellProperties: CellProps) {
   /** Initial state of cell */
   const cellValue = cell.getValue();
   /** Columns information */
-  const columns = table.options.meta.tableState.columns.state;
+  const columns = table.options.meta.tableState.columns((store) => store.state);
   /** Type of cell */
   const input = (column.columnDef as TableColumn).input;
   /** Note info of current Cell */

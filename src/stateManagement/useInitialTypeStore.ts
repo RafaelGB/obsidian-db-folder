@@ -18,6 +18,6 @@ const useInitialTypeStore = (view: DatabaseView) => {
                 )
             }
         }),
-    )();
+    );
 }
 export default useInitialTypeStore;

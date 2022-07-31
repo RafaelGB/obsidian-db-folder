@@ -1,11 +1,12 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { DataState } from "cdm/TableStateInterface";
+import { DatabaseView } from "DatabaseView";
 import create from "zustand";
 
-const useDataStore = (rows: RowDataType[]) => {
+const useDataStore = (view: DatabaseView) => {
     return create<DataState>()(
         (set) => ({
-            rows: rows,
+            rows: view.rows,
             add: (row: RowDataType) => set((state) => ({ rows: [...state.rows, row] })),
             remove: (row: RowDataType) => set((state) => ({ rows: state.rows.filter((r) => r.__note__.getFile().path !== row.__note__.getFile().path) })),
             removeDataOfColumn: (column: TableColumn) => set((state) => {
@@ -17,6 +18,6 @@ const useDataStore = (rows: RowDataType[]) => {
                 return { rows: newRows };
             }),
         }),
-    )();
+    );
 }
 export default useDataStore;

@@ -63,9 +63,11 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
   private generateNewColumnInfo(wantedPosition: number) {
     const { table } =
       this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    let columnNumber =
-      table.options.meta.view.columns.length -
-      table.options.meta.shadowColumns.length;
+    const columns = table.options.meta.tableState.columns(
+      (store) => store.state
+    );
+
+    let columnNumber = columns.length - table.options.meta.shadowColumns.length;
     // Check if column name already exists
     while (
       table

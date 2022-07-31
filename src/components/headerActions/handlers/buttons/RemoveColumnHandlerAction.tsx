@@ -28,35 +28,30 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
     const newButtons: any[] = [];
     newButtons.push({
       onClick: (e: any) => {
-        table.options.meta.tableState.columns.remove(
-          column.columnDef as TableColumn
+        const ddbbConfig = table.options.meta.tableState.configState(
+          (store) => store.ddbbConfig
         );
-        if (
-          table.options.meta.tableState.configState.ddbbConfig
-            .remove_field_when_delete_column
-        ) {
+        const [rows, removeDataOfColumn] = table.options.meta.tableState.data(
+          (store) => [store.rows, store.removeDataOfColumn]
+        );
+        const remove = table.options.meta.tableState.columns(
+          (store) => store.remove
+        );
+        if (ddbbConfig.remove_field_when_delete_column) {
           Promise.all(
-            table.options.meta.tableState.data.rows.map(
-              async (row: RowDataType) => {
-                updateRowFileProxy(
-                  row.__note__.getFile(),
-                  hooks.keyState,
-                  undefined, // delete does not need this field
-                  table.options.meta.tableState,
-                  UpdateRowOptions.REMOVE_COLUMN
-                );
-              }
-            )
+            rows.map(async (row: RowDataType) => {
+              updateRowFileProxy(
+                row.__note__.getFile(),
+                hooks.keyState,
+                undefined, // delete does not need this field
+                table.options.meta.tableState,
+                UpdateRowOptions.REMOVE_COLUMN
+              );
+            })
           );
         }
-        table.options.meta.tableState.data.removeDataOfColumn(
-          column.columnDef as TableColumn
-        );
-        // table.options.meta.dispatch({
-        //   type: ActionTypes.DELETE_COLUMN,
-        //   columnId: column.id,
-        //   key: hooks.keyState,
-        // });
+        removeDataOfColumn(column.columnDef as TableColumn);
+        remove(column.columnDef as TableColumn);
         hooks.setExpanded(false);
       },
       icon: <TrashIcon />,

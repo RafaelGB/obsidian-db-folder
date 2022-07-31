@@ -5,10 +5,10 @@ import { generateSortedColumns } from "components/behavior/SortingColumns";
 import { DatabaseView } from "DatabaseView";
 import create from "zustand"
 
-const useSortingStore = (sorting: SortingState, view: DatabaseView) => {
+const useSortingStore = (view: DatabaseView) => {
     return create<ColumnSortingState>()(
         (set) => ({
-            state: sorting,
+            state: view.initial.sortBy,
             modify: (alternativeSorting: SortingState) => set((state) => ({ state: alternativeSorting })),
             generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => {
                 return generateSortedColumns(
@@ -18,6 +18,6 @@ const useSortingStore = (sorting: SortingState, view: DatabaseView) => {
                 )
             }
         }),
-    )();
+    );
 }
 export default useSortingStore;

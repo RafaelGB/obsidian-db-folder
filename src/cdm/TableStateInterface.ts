@@ -1,6 +1,7 @@
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { StoreApi, UseBoundStore } from "zustand";
 
 export interface ConfigState {
     ddbbConfig: LocalSettings;
@@ -38,10 +39,10 @@ export interface RowTemplateState {
 }
 
 export interface TableStateInterface {
-    initialState: InitialState;
-    configState: ConfigState;
-    rowTemplate: RowTemplateState;
-    data: DataState;
-    sorting: ColumnSortingState;
-    columns: ColumnsState;
+    initialState: UseBoundStore<StoreApi<InitialState>>;
+    configState: UseBoundStore<StoreApi<ConfigState>>;
+    rowTemplate: UseBoundStore<StoreApi<RowTemplateState>>;
+    data: UseBoundStore<StoreApi<DataState>>;
+    sorting: UseBoundStore<StoreApi<ColumnSortingState>>;
+    columns: UseBoundStore<StoreApi<ColumnsState>>;
 }

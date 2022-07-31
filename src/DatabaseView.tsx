@@ -177,20 +177,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
   }
 
-  useTableStore(): TableStateInterface {
-    return {
-      configState: useConfigStore(this),
-      initialState: useInitialTypeStore(this),
-      rowTemplate: useRowTemplateStore(
-        this.diskConfig.yaml.config.current_row_template,
-        this.diskConfig.yaml.config.row_templates_folder
-      ),
-      data: useDataStore(this.rows),
-      sorting: useSortingStore(this.initial.sortBy, this),
-      columns: useColumnsStore(this),
-    };
-  }
-
   destroy() {
     LOGGER.info(`=>destroy ${this.file.path}`);
     // Remove draggables from render, as the DOM has already detached
