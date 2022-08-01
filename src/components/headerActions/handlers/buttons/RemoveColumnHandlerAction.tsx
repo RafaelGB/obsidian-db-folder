@@ -31,16 +31,15 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
 function removeButton(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { column, table } = headerActionResponse.headerMenuProps.headerProps;
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (store) => store.ddbbConfig
+  );
+  const [rows, removeDataOfColumn] = table.options.meta.tableState.data(
+    (store) => [store.rows, store.removeDataOfColumn]
+  );
+  const remove = table.options.meta.tableState.columns((store) => store.remove);
+
   const onClick = (e: any) => {
-    const ddbbConfig = table.options.meta.tableState.configState(
-      (store) => store.ddbbConfig
-    );
-    const [rows, removeDataOfColumn] = table.options.meta.tableState.data(
-      (store) => [store.rows, store.removeDataOfColumn]
-    );
-    const remove = table.options.meta.tableState.columns(
-      (store) => store.remove
-    );
     if (ddbbConfig.remove_field_when_delete_column) {
       Promise.all(
         rows.map(async (row: RowDataType) => {

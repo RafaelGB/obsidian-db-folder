@@ -70,7 +70,6 @@ export function Table(tableData: TableDataType) {
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
-  console.log("columns", columns);
 
   const [ddbbConfig, global] = tableStore.configState((store) => [
     store.ddbbConfig,
