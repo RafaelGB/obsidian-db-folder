@@ -4,7 +4,8 @@ import ArrowLeftIcon from "components/img/ArrowLeft";
 import ArrowRightIcon from "components/img/ArrowRight";
 import React from "react";
 import { ActionTypes } from "helpers/Constants";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
+import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
 
 export default class AddColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -24,60 +25,74 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
     const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
       .column.columnDef as TableColumn;
     const newButtons: any[] = [];
-    newButtons.push(
-      {
-        onClick: (e: any) => {
-          table.options.meta.dispatch({
-            type: ActionTypes.ADD_COLUMN_TO_LEFT,
-            columnId: column.id,
-            focus: false,
-            columnInfo: this.generateNewColumnInfo(column.position - 1),
-          });
-          hooks.setExpanded(false);
-        },
-        icon: <ArrowLeftIcon />,
-        label: "Insert left",
-      },
-      {
-        onClick: (e: any) => {
-          table.options.meta.dispatch({
-            type: ActionTypes.ADD_COLUMN_TO_RIGHT,
-            columnId: column.id,
-            focus: false,
-            columnInfo: this.generateNewColumnInfo(column.position + 1),
-          });
-          hooks.setExpanded(false);
-        },
-        icon: <ArrowRightIcon />,
-        label: "Insert right",
-      }
-    );
+
+    newButtons.push(addColumnToLeftButton(this.globalHeaderActionResponse));
+    newButtons.push(addColumnToRightButton(this.globalHeaderActionResponse));
     this.globalHeaderActionResponse.buttons.push(...newButtons);
   }
+}
 
-  /**
-   * Adjust width of the columns when add a new column.
-   * @param wantedPosition
-   * @returns
-   */
-  private generateNewColumnInfo(wantedPosition: number) {
-    const { table } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    const columns = table.options.meta.tableState.columns(
-      (store) => store.state
-    );
+/**
+ * Adjust width of the columns when add a new column.
+ * @param wantedPosition
+ * @returns
+ */
+function generateNewColumnInfo(wantedPosition: number, columns: TableColumn[]) {
+  const { table } = this.globalHeaderActionResponse.headerMenuProps.headerProps;
 
-    let columnNumber = columns.length - table.options.meta.shadowColumns.length;
-    // Check if column name already exists
-    while (
-      table
-        .getAllColumns()
-        .find((o: any) => o.id === `newColumn${columnNumber}`)
-    ) {
-      columnNumber++;
-    }
-    const columnId = `newColumn${columnNumber}`;
-    const columnLabel = `New Column ${columnNumber}`;
-    return { name: columnId, position: wantedPosition, label: columnLabel };
+  let columnNumber = columns.length - table.options.meta.shadowColumns.length;
+  // Check if column name already exists
+  while (
+    table.getAllColumns().find((o: any) => o.id === `newColumn${columnNumber}`)
+  ) {
+    columnNumber++;
   }
+  const columnId = `newColumn${columnNumber}`;
+  const columnLabel = `New Column ${columnNumber}`;
+  return { name: columnId, position: wantedPosition, label: columnLabel };
+}
+
+function addColumnToRightButton(headerActionResponse: HeaderActionResponse) {
+  const { hooks } = headerActionResponse;
+  const { table } = headerActionResponse.headerMenuProps.headerProps;
+  const column = headerActionResponse.headerMenuProps.headerProps.column
+    .columnDef as TableColumn;
+
+  const columns = table.options.meta.tableState.columns((store) => store.state);
+  const addColumnToRightOnClick = (e: any) => {
+    table.options.meta.dispatch({
+      type: ActionTypes.ADD_COLUMN_TO_RIGHT,
+      columnId: column.id,
+      focus: false,
+      columnInfo: generateNewColumnInfo(column.position + 1, columns),
+    });
+    hooks.setExpanded(false);
+  };
+  return headerButtonComponent({
+    onClick: addColumnToRightOnClick,
+    icon: <ArrowRightIcon />,
+    label: "Insert right",
+  });
+}
+
+function addColumnToLeftButton(headerActionResponse: HeaderActionResponse) {
+  const { hooks } = headerActionResponse;
+  const { table } = headerActionResponse.headerMenuProps.headerProps;
+  const column = headerActionResponse.headerMenuProps.headerProps.column
+    .columnDef as TableColumn;
+  const columns = table.options.meta.tableState.columns((store) => store.state);
+  const addColumnToLeftOnClick = (e: any) => {
+    table.options.meta.dispatch({
+      type: ActionTypes.ADD_COLUMN_TO_LEFT,
+      columnId: column.id,
+      focus: false,
+      columnInfo: generateNewColumnInfo(column.position - 1, columns),
+    });
+    hooks.setExpanded(false);
+  };
+  return headerButtonComponent({
+    onClick: addColumnToLeftOnClick,
+    icon: <ArrowLeftIcon />,
+    label: "Insert left",
+  });
 }

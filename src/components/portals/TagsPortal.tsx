@@ -9,11 +9,13 @@ import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { meta, column, dispatch, cellProperties, columns } = tagsProps;
+  const { meta, column, dispatch, cellProperties } = tagsProps;
   const { row, table } = cellProperties;
+  const columns = table.options.meta.tableState.columns((store) => store.state);
+
   const tableColumn = column.columnDef as TableColumn;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
@@ -40,7 +42,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
         label: tag,
         backgroundColor: color,
       };
-      const currentColumn = table.options.meta.tableState.columns.state.find(
+      const currentColumn = columns.find(
         (col: TableColumn) => col.key === tableColumn.key
       );
       currentColumn.options.push(newOption);

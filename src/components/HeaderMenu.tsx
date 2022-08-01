@@ -264,18 +264,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 padding: "4px 0px",
               }}
             >
-              {headerButtons.map((button) => (
-                <div
-                  key={button.label}
-                  className="menu-item sort-button"
-                  onMouseDown={button.onClick}
-                >
-                  <span className="svg-icon svg-text icon-margin">
-                    {button.icon}
-                  </span>
-                  {button.label}
-                </div>
-              ))}
+              {headerButtons}
             </div>
             {(!isMetadata || input === InputType.TASK) && (
               <div

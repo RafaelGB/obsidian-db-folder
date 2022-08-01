@@ -254,7 +254,6 @@ export default function DefaultCell(cellProperties: CellProps) {
             <TagsPortal
               meta={meta}
               column={column}
-              columns={columns}
               dispatch={dataDispatch}
               cellProperties={cellProperties}
             />

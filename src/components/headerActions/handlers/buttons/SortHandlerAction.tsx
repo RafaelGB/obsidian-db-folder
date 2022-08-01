@@ -6,6 +6,7 @@ import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
 import { ActionTypes, InputType } from "helpers/Constants";
 import { TableColumn } from "cdm/FolderModel";
+import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -28,69 +29,92 @@ export default class SortHandlerAction extends AbstractHeaderAction {
    * add sort buttons to the column header. Global header action response is updated.
    */
   private addSortButtons(): void {
-    const { hooks } = this.globalHeaderActionResponse;
-    const { table, header, column } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
+    const sortButtons: JSX.Element[] = [];
 
-    const tablecolumn = column.columnDef as TableColumn;
-    const sortButtons: any[] = [];
-    sortButtons.push(
-      {
-        onClick: (e: any) => {
-          const sortArray =
-            table.options.meta.tableState.sorting.generateSorting(
-              tablecolumn,
-              false
-            );
-          tablecolumn.isSorted =
-            tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
-          tablecolumn.isSortedDesc = false;
-          hooks.setExpanded(false);
-          // Update state
-          table.options.meta.tableState.columns.alterSorting(tablecolumn);
-          table.options.meta.tableState.initialState.alterSortBy(sortArray);
-          table.setSorting(sortArray);
-        },
-        icon:
-          header.column.getIsSorted() === "asc" ? (
-            <CrossIcon />
-          ) : (
-            <ArrowUpIcon />
-          ),
-        label:
-          header.column.getIsSorted() === "asc"
-            ? "Remove ascending sort"
-            : "Sort ascending",
-      },
-      {
-        onClick: (e: any) => {
-          const sortArray =
-            table.options.meta.tableState.sorting.generateSorting(
-              tablecolumn,
-              true
-            );
-          tablecolumn.isSorted =
-            tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
-          tablecolumn.isSortedDesc = true;
+    sortButtons.push(sortingUpButton(this.globalHeaderActionResponse));
 
-          hooks.setExpanded(false);
-          // Update state
-          table.options.meta.tableState.columns.alterSorting(tablecolumn);
-          table.options.meta.tableState.initialState.alterSortBy(sortArray);
-          table.setSorting(sortArray);
-        },
-        icon:
-          header.column.getIsSorted() === "desc" ? (
-            <CrossIcon />
-          ) : (
-            <ArrowDownIcon />
-          ),
-        label:
-          header.column.getIsSorted() === "desc"
-            ? "Remove descending sort"
-            : "Sort descending",
-      }
-    );
+    sortButtons.push(sortingDownButton(this.globalHeaderActionResponse));
+
     this.globalHeaderActionResponse.buttons.push(...sortButtons);
   }
+}
+
+function sortingUpButton(headerActionResponse: HeaderActionResponse) {
+  const { hooks } = headerActionResponse;
+  const { table, header, column } =
+    headerActionResponse.headerMenuProps.headerProps;
+
+  const tablecolumn = column.columnDef as TableColumn;
+  const generateSorting = table.options.meta.tableState.sorting(
+    (store: any) => store.generateSorting
+  );
+  const alterSorting = table.options.meta.tableState.columns(
+    (store: any) => store.alterSorting
+  );
+  const alterSortBy = table.options.meta.tableState.initialState(
+    (store: any) => store.alterSortBy
+  );
+
+  const sortingUpOnClick = (e: any) => {
+    const sortArray = generateSorting(tablecolumn, false);
+    tablecolumn.isSorted =
+      tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
+    tablecolumn.isSortedDesc = false;
+    hooks.setExpanded(false);
+    // Update state
+    alterSorting(tablecolumn);
+    alterSortBy(sortArray);
+    table.setSorting(sortArray);
+  };
+  return headerButtonComponent({
+    onClick: sortingUpOnClick,
+    icon:
+      header.column.getIsSorted() === "asc" ? <CrossIcon /> : <ArrowUpIcon />,
+    label:
+      header.column.getIsSorted() === "asc"
+        ? "Remove ascending sort"
+        : "Sort ascending",
+  });
+}
+
+function sortingDownButton(headerActionResponse: HeaderActionResponse) {
+  const { hooks } = headerActionResponse;
+  const { table, header, column } =
+    headerActionResponse.headerMenuProps.headerProps;
+
+  const tablecolumn = column.columnDef as TableColumn;
+  const generateSorting = table.options.meta.tableState.sorting(
+    (store: any) => store.generateSorting
+  );
+  const alterSorting = table.options.meta.tableState.columns(
+    (store: any) => store.alterSorting
+  );
+  const alterSortBy = table.options.meta.tableState.initialState(
+    (store: any) => store.alterSortBy
+  );
+  const sortingDownOnClick = (e: any) => {
+    const sortArray = generateSorting(tablecolumn, true);
+    tablecolumn.isSorted =
+      tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
+    tablecolumn.isSortedDesc = true;
+
+    hooks.setExpanded(false);
+    // Update state
+    alterSorting(tablecolumn);
+    alterSortBy(sortArray);
+    table.setSorting(sortArray);
+  };
+  return headerButtonComponent({
+    onClick: sortingDownOnClick,
+    icon:
+      header.column.getIsSorted() === "desc" ? (
+        <CrossIcon />
+      ) : (
+        <ArrowDownIcon />
+      ),
+    label:
+      header.column.getIsSorted() === "desc"
+        ? "Remove descending sort"
+        : "Sort descending",
+  });
 }

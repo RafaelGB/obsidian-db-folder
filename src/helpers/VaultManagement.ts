@@ -182,8 +182,10 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   try {
     const content = await VaultManagerDB.obtainContentFromTfile(file);
     const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
-    const rowFields = obtainRowDatabaseFields(file, table.columns.state, frontmatterKeys);
-    const column = table.columns.state.find(c => c.key === columnId);
+    const columns = table.columns(store => store.state);
+    const ddbbConfig = table.configState(store => store.ddbbConfig);
+    const rowFields = obtainRowDatabaseFields(file, columns, frontmatterKeys);
+    const column = columns.find(c => c.key === columnId);
     // Adds an empty frontmatter at the beginning of the file
     async function addFrontmatter(): Promise<void> {
       /* Regex explanation
@@ -230,7 +232,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
       // Check if the column is already in the frontmatter
       // assign an empty value to the new key
-      rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, table.configState.ddbbConfig) as string] = rowFields.frontmatter[columnId] ?? "";
+      rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, ddbbConfig) as string] = rowFields.frontmatter[columnId] ?? "";
       delete rowFields.frontmatter[columnId];
       await persistFrontmatter(columnId);
     }
@@ -247,7 +249,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
     async function persistFrontmatter(deletedColumn?: string): Promise<void> {
       const frontmatterGroupRegex = /^---[\s\S]+?---/g;
-      const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, table.configState.ddbbConfig, deletedColumn);
+      const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
       const noteObject = {
         action: 'replace',
         file: file,
@@ -274,7 +276,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
         action: 'replace',
         file: file,
         regexp: inlineFieldRegex,
-        newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, table.configState.ddbbConfig, true)}`
+        newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}`
       };
       await VaultManagerDB.editNoteContent(noteObject);
       await persistFrontmatter();
