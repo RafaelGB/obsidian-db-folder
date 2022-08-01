@@ -26,6 +26,9 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector popper state
   const [domReady, setDomReady] = useState(false);
 
+  const addOptionToColumn = table.options.meta.tableState.columns(
+    (state) => state.addOptionToColumn
+  );
   const tableColumn = column.columnDef as TableColumn;
   React.useEffect(() => {
     setDomReady(true);
@@ -88,12 +91,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       }
     );
     if (!alreadyExist) {
-      dispatch({
-        type: ActionTypes.ADD_OPTION_TO_COLUMN,
-        option: e.target.value,
-        backgroundColor: randomColor(),
-        columnId: column.id,
-      });
+      addOptionToColumn(tableColumn, e.target.value, randomColor());
     }
   }
 

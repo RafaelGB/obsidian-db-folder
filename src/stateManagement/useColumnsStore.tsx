@@ -1,3 +1,4 @@
+import { RowSelectOption } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState } from "cdm/TableStateInterface";
@@ -69,6 +70,26 @@ const useColumnsStore = (view: DatabaseView) => {
         newColumns[index].isSorted = column.isSorted;
         newColumns[index].isSortedDesc = column.isSortedDesc;
         return { columns: newColumns };
+      }),
+    addOptionToColumn: (
+      column: TableColumn,
+      option: string,
+      backgroundColor: string
+    ) =>
+      set((updater) => {
+        const optionIndex = updater.columns.findIndex(
+          (col: TableColumn) => col.id === column.id
+        );
+        const newOption: RowSelectOption = {
+          label: option,
+          backgroundColor: backgroundColor,
+        };
+
+        updater.columns[optionIndex].options.push(newOption);
+        view.diskConfig.updateColumnProperties(column.id, {
+          options: updater.columns[optionIndex].options,
+        });
+        return { columns: updater.columns };
       }),
   }));
 };

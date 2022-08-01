@@ -26,6 +26,7 @@ export interface ColumnsState {
     addToRight: (column: TableColumn) => void;
     remove: (column: TableColumn) => void;
     alterSorting: (column: TableColumn) => void;
+    addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
 }
 export interface ColumnSortingState {
     state: SortingState;

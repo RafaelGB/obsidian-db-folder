@@ -14,8 +14,8 @@ import { TableColumn } from "cdm/FolderModel";
 const TagsPortal = (tagsProps: TagsProps) => {
   const { column, dispatch, cellProperties } = tagsProps;
   const { row, table } = cellProperties;
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
+  const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.addOptionToColumn]
   );
   const rows = table.options.meta.tableState.data((state) => state.rows);
   const tableColumn = column.columnDef as TableColumn;
@@ -87,13 +87,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
           !tableColumn.options.find((option: any) => option.label === tag.value)
       )
       .forEach((tag: any) => {
-        dispatch({
-          columns: columns,
-          option: tag.value,
-          backgroundColor: randomColor(),
-          columnId: column.id,
-          type: ActionTypes.ADD_OPTION_TO_COLUMN,
-        });
+        addOptionToColumn(tableColumn, tag.value, randomColor());
       });
     setTagsState(arrayTags);
   };

@@ -3,28 +3,17 @@ import update from "immutability-helper";
 import {
   ActionTypes,
   InputType,
-  DEFAULT_COLUMN_CONFIG,
   MetadataColumns,
-  TableColumnsTemplate,
   UpdateRowOptions,
 } from "helpers/Constants";
 import { TableColumn, TableDataType, RowDataType } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
-import { VaultManagerDB } from "services/FileManagerService";
 import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { randomColor } from "helpers/Colors";
-import {
-  DatabaseColumn,
-  OptionSelect,
-  RowDatabaseFields,
-  SortedType,
-} from "cdm/DatabaseModel";
+import { OptionSelect } from "cdm/DatabaseModel";
 import NoteInfo from "services/NoteInfo";
 import { DataviewService } from "services/DataviewService";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { DateTime } from "luxon";
-import { RowSelectOption } from "cdm/ComponentsModel";
 
 export function databaseReducer(state: TableDataType, action: any) {
   LOGGER.debug(`<=>databaseReducer action: ${action.type}`, action);
@@ -35,34 +24,6 @@ export function databaseReducer(state: TableDataType, action: any) {
     return state;
   }
   switch (action.type) {
-    /**
-     * Add option to column
-     */
-    case ActionTypes.ADD_OPTION_TO_COLUMN:
-      const optionIndex = state.view.columns.findIndex(
-        (column: TableColumn) => column.id === action.columnId
-      );
-      const newOption: RowSelectOption = {
-        label: action.option,
-        backgroundColor: action.backgroundColor,
-      };
-
-      state.view.columns[optionIndex].options.push(newOption);
-      state.view.diskConfig.updateColumnProperties(action.columnId, {
-        options: state.view.columns[optionIndex].options,
-      });
-
-      return update(state, {
-        view: {
-          columns: {
-            [optionIndex]: {
-              options: {
-                $set: state.view.columns[optionIndex].options,
-              },
-            },
-          },
-        },
-      });
     /**
      * Modify column label of its header.
      * Update key of column in all rows
