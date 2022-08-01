@@ -11,7 +11,8 @@ import CrossIcon from "components/img/CrossIcon";
 import { TableColumn } from "cdm/FolderModel";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { dispatch, row, column, columns, note, meta } = popperProps;
+  const { dispatch, column, note, cellProperties } = popperProps;
+  const { row, table } = cellProperties;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(CellContext);
   // Selector reference state
@@ -38,7 +39,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       value: "",
       row: row,
       columnId: column.id,
-      state: meta,
+      state: table.options.meta,
     });
     setContextValue({ value: "", update: true });
     setShowSelect(false);
@@ -56,7 +57,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       value: option.label,
       row: row,
       columnId: column.id,
-      state: meta,
+      state: table.options.meta,
     });
     setContextValue({ value: option.label, update: true });
     setShowSelect(false);

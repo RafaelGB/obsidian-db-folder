@@ -10,6 +10,7 @@ const useConfigStore = (view: DatabaseView) => {
             ddbbConfig: local_settings,
             global: global_settings,
             alterConfig: (config: Partial<LocalSettings>) => {
+                view.diskConfig.updateConfiglab(config);
                 view.plugin.updateSettings({ local_settings: { ...local_settings, ...config } });
                 set({ ddbbConfig: { ...local_settings, ...config } });
             }

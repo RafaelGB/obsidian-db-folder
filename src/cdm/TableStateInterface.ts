@@ -14,8 +14,8 @@ export interface InitialState {
 }
 export interface DataState {
     rows: RowDataType[];
-    add: (row: RowDataType) => void;
-    remove: (row: RowDataType) => void;
+    addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
+    removeRow: (row: RowDataType) => void;
     removeDataOfColumn: (column: TableColumn) => void;
 }
 

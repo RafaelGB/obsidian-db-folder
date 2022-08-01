@@ -40,7 +40,6 @@ export type OptionSelect = {
     backgroundColor: string;
 }
 export type BaseComponentProps = {
-    meta: TableMeta<RowDataType>;
     column: Column<RowDataType, unknown>;
 }
 

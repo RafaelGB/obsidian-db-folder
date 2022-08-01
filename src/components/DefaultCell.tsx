@@ -218,21 +218,13 @@ export default function DefaultCell(cellProperties: CellProps) {
       /** Calendar option */
       case InputType.CALENDAR:
         return (
-          <CalendarPortal
-            meta={meta}
-            column={column}
-            cellProperties={cellProperties}
-          />
+          <CalendarPortal column={column} cellProperties={cellProperties} />
         );
 
       /** Calendar with time option */
       case InputType.CALENDAR_TIME:
         return (
-          <CalendarTimePortal
-            meta={meta}
-            column={column}
-            cellProperties={cellProperties}
-          />
+          <CalendarTimePortal column={column} cellProperties={cellProperties} />
         );
 
       /** Selector option */
@@ -241,11 +233,9 @@ export default function DefaultCell(cellProperties: CellProps) {
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal
               dispatch={dataDispatch}
-              row={row}
               column={column}
-              columns={columns}
               note={note}
-              meta={meta}
+              cellProperties={cellProperties}
             />
           </CellContext.Provider>
         );
@@ -254,7 +244,6 @@ export default function DefaultCell(cellProperties: CellProps) {
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
             <TagsPortal
-              meta={meta}
               column={column}
               dispatch={dataDispatch}
               cellProperties={cellProperties}
@@ -270,11 +259,7 @@ export default function DefaultCell(cellProperties: CellProps) {
       case InputType.CHECKBOX:
         return (
           <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <CheckboxCell
-              meta={meta}
-              column={column}
-              cellProperties={cellProperties}
-            />
+            <CheckboxCell column={column} cellProperties={cellProperties} />
           </CellContext.Provider>
         );
       case InputType.NEW_COLUMN:

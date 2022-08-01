@@ -5,16 +5,18 @@ import DatePicker from "react-datepicker";
 import NoteInfo from "services/NoteInfo";
 import { Portal } from "@mui/material";
 import { CalendarProps } from "cdm/ComponentsModel";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 
 const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
-  const { column, cellProperties, meta } = calendarTimeProps;
+  const { column, cellProperties } = calendarTimeProps;
   const { row, table } = cellProperties;
   const tableColumn = column.columnDef as TableColumn;
-  const dataDispatch = table.options.meta.dispatch;
+  const dataDispatch = (action: any) =>
+    console.log(`TODO migrate dispatch to table${action.type}`);
+  const rows = table.options.meta.tableState.data((state) => state.rows);
   // Calendar state
   const [calendarTimeState, setCalendarTimeState] = useState(
-    meta.view.rows[row.index][tableColumn.key]
+    rows[row.index][tableColumn.key]
   );
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);

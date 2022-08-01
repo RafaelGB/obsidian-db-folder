@@ -8,8 +8,7 @@ export type RowSelectOption = {
 }
 export type PopperProps = {
     dispatch: (action: any) => void;
-    row: any;
-    columns: any;
+    cellProperties: CellProps;
     note: NoteInfo;
 } & BaseComponentProps;
 

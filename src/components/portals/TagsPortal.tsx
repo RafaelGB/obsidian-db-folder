@@ -12,19 +12,19 @@ import NoteInfo from "services/NoteInfo";
 import { TableColumn } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { meta, column, dispatch, cellProperties } = tagsProps;
+  const { column, dispatch, cellProperties } = tagsProps;
   const { row, table } = cellProperties;
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
   );
-
+  const rows = table.options.meta.tableState.data((state) => state.rows);
   const tableColumn = column.columnDef as TableColumn;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    Array.isArray(table.options.meta.view.rows[row.index][tableColumn.key])
-      ? (table.options.meta.view.rows[row.index][tableColumn.key] as Literal[])
+    Array.isArray(rows[row.index][tableColumn.key])
+      ? (rows[row.index][tableColumn.key] as Literal[])
       : []
   );
 

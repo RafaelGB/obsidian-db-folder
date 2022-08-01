@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { randomColor } from "helpers/Colors";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
@@ -12,13 +12,9 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
-import { ActionTypes, InputType, MetadataColumns } from "helpers/Constants";
+import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
-import {
-  DatabaseHeaderProps,
-  TableColumn,
-  TableDataType,
-} from "cdm/FolderModel";
+import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { RowSelectOption } from "cdm/ComponentsModel";
@@ -58,9 +54,12 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const created: boolean = false;
   /** Properties of header */
   const { column, header, table } = headerProps;
-  const [columns, shadowColumns] = table.options.meta.tableState.columns(
-    (state) => [state.columns, state.shadowColumns]
-  );
+  const [columns, shadowColumns, addToLeft] =
+    table.options.meta.tableState.columns((state) => [
+      state.columns,
+      state.shadowColumns,
+      state.addToLeft,
+    ]);
   /** Column values */
   const { id, input, options, position, label, config } =
     column.columnDef as TableColumn;
@@ -126,12 +125,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   }
 
   function handlerAddColumnToLeft(e: any) {
-    dispatch({
-      type: ActionTypes.ADD_COLUMN_TO_LEFT,
-      columnId: MetadataColumns.ADD_COLUMN,
-      focus: true,
-      columnInfo: adjustWidthOfTheColumn(position - 1),
-    });
+    addToLeft(columns.find((o: any) => o.id === MetadataColumns.ADD_COLUMN));
   }
 
   LOGGER.debug(`<=Header ${label}`);

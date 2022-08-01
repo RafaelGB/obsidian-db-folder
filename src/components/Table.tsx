@@ -63,16 +63,16 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
 export function Table(tableData: TableDataType) {
   /** Main information about the table */
   const { view, tableStore } = tableData;
-  console.log("tableStore");
   const columns = tableStore.columns((state) => state.columns);
-  const rows = tableStore.data((state) => state.rows);
+  const [rows, addRow] = tableStore.data((state) => [state.rows, state.addRow]);
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
 
-  const [ddbbConfig, global] = tableStore.configState((store) => [
+  const [ddbbConfig, global, alterConfig] = tableStore.configState((store) => [
     store.ddbbConfig,
     store.global,
+    store.alterConfig,
   ]);
 
   /** Plugin services */
@@ -80,7 +80,8 @@ export function Table(tableData: TableDataType) {
   const filePath = stateManager.file.path;
 
   /** Reducer */
-  const dataDispatch = (cosa: any) => console.log("dataDispatch");
+  const dataDispatch = (action: any) =>
+    console.log(`TODO migrar dataDispatch ${action.type}`);
 
   /** Table services */
   // Sorting
@@ -245,26 +246,20 @@ export function Table(tableData: TableDataType) {
   }
 
   function handleAddNewRow() {
-    dataDispatch({
-      type: ActionTypes.ADD_ROW,
-      filename: inputNewRow,
-    });
+    addRow(inputNewRow, columns, ddbbConfig);
     setInputNewRow("");
     newRowRef.current.value = "";
   }
 
   function handleChangeRowTemplate(
-    newValue: OnChangeValue<RowTemplateOption, false>,
-    actionMeta: ActionMeta<RowTemplateOption>
+    newValue: OnChangeValue<RowTemplateOption, false>
   ) {
     const settingsValue = !!newValue ? newValue.value : "";
-    dataDispatch({
-      type: ActionTypes.CHANGE_ROW_TEMPLATE,
-      template: settingsValue,
-    });
     templateUpdate(settingsValue);
+    alterConfig({
+      current_row_template: settingsValue,
+    });
   }
-  console.log("ddbbConfig.enable_show_state", ddbbConfig.enable_show_state);
   LOGGER.debug(`<= Table`);
   return (
     <>
