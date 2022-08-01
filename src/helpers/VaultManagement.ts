@@ -182,7 +182,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   try {
     const content = await VaultManagerDB.obtainContentFromTfile(file);
     const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
-    const columns = table.columns(store => store.state);
+    const columns = table.columns(state => state.columns);
     const ddbbConfig = table.configState(store => store.ddbbConfig);
     const rowFields = obtainRowDatabaseFields(file, columns, frontmatterKeys);
     const column = columns.find(c => c.key === columnId);

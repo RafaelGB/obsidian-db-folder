@@ -58,7 +58,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const created: boolean = false;
   /** Properties of header */
   const { column, header, table } = headerProps;
-  const columns = table.options.meta.tableState.columns((store) => store.state);
+  const [columns, shadowColumns] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.shadowColumns]
+  );
   /** Column values */
   const { id, input, options, position, label, config } =
     column.columnDef as TableColumn;
@@ -70,7 +72,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const [referenceElement, setReferenceElement] = useState(null);
   const [labelState, setLabelState] = useState(label);
   React.useEffect(() => {
-    setDomReady(true);
+    if (!domReady) {
+      setDomReady(true);
+    }
   });
 
   let propertyIcon: JSX.Element;
@@ -106,8 +110,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   }
 
   function adjustWidthOfTheColumn(position: number) {
-    let columnNumber =
-      columns.length + 1 - table.options.meta.shadowColumns.length;
+    let columnNumber = columns.length + 1 - shadowColumns.length;
     // Check if column name already exists
     while (
       table

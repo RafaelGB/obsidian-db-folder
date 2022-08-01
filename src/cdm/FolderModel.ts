@@ -6,6 +6,7 @@ import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
 import { Column, ColumnSort, Header, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { TableStateInterface } from "./TableStateInterface";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -76,11 +77,10 @@ export type InitialType = {
 }
 
 export type TableDataType = {
-    shadowColumns: TableColumn[],
     skipReset: boolean,
     view: DatabaseView,
     stateManager: StateManager,
-    dispatch?: Dispatch<any>,
+    tableStore?: TableStateInterface
 }
 
 export interface DatabaseHeaderProps {

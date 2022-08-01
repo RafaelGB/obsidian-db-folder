@@ -2,9 +2,11 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { DataState } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import create from "zustand";
+import { persist } from "zustand/middleware";
+
 
 const useDataStore = (view: DatabaseView) => {
-    return create<DataState>()(
+    return create<DataState>()(persist(
         (set) => ({
             rows: view.rows,
             add: (row: RowDataType) => set((state) => ({ rows: [...state.rows, row] })),
@@ -18,6 +20,6 @@ const useDataStore = (view: DatabaseView) => {
                 return { rows: newRows };
             }),
         }),
-    );
+    ));
 }
 export default useDataStore;

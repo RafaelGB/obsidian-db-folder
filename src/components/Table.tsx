@@ -46,7 +46,6 @@ import TableCell from "components/TableCell";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import customSortingFn from "components/behavior/CustomSortingFn";
 import useTableStore from "./reducers/TableReducer";
-import useColumnsStore from "stateManagement/useColumnsStore";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -63,10 +62,10 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
  */
 export function Table(tableData: TableDataType) {
   /** Main information about the table */
-  const view: DatabaseView = tableData.view;
-  const tableStore = useTableStore(view);
-  const columns = tableStore.columns((store) => store.state);
-  const rows = tableStore.data((store) => store.rows);
+  const { view, tableStore } = tableData;
+  console.log("tableStore");
+  const columns = tableStore.columns((state) => state.columns);
+  const rows = tableStore.data((state) => state.rows);
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
@@ -81,7 +80,7 @@ export function Table(tableData: TableDataType) {
   const filePath = stateManager.file.path;
 
   /** Reducer */
-  const dataDispatch = tableData.dispatch;
+  const dataDispatch = (cosa: any) => console.log("dataDispatch");
 
   /** Table services */
   // Sorting
@@ -226,7 +225,6 @@ export function Table(tableData: TableDataType) {
       tableState: tableStore,
       dispatch: dataDispatch,
       view: view,
-      shadowColumns: tableData.shadowColumns,
     },
     defaultColumn: defaultColumn,
     getExpandedRowModel: getExpandedRowModel(),

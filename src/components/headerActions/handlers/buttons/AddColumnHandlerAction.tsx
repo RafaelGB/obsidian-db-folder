@@ -19,13 +19,7 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
    * Add sort buttons to the column header. Global header action response is updated.
    */
   private addColumnButtons(): void {
-    const { hooks } = this.globalHeaderActionResponse;
-    const { table } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
-      .column.columnDef as TableColumn;
     const newButtons: any[] = [];
-
     newButtons.push(addColumnToLeftButton(this.globalHeaderActionResponse));
     newButtons.push(addColumnToRightButton(this.globalHeaderActionResponse));
     this.globalHeaderActionResponse.buttons.push(...newButtons);
@@ -37,14 +31,14 @@ export default class AddColumnHandlerAction extends AbstractHeaderAction {
  * @param wantedPosition
  * @returns
  */
-function generateNewColumnInfo(wantedPosition: number, columns: TableColumn[]) {
-  const { table } = this.globalHeaderActionResponse.headerMenuProps.headerProps;
-
-  let columnNumber = columns.length - table.options.meta.shadowColumns.length;
+function generateNewColumnInfo(
+  wantedPosition: number,
+  columns: TableColumn[],
+  shadowColumns: TableColumn[]
+) {
+  let columnNumber = columns.length - shadowColumns.length;
   // Check if column name already exists
-  while (
-    table.getAllColumns().find((o: any) => o.id === `newColumn${columnNumber}`)
-  ) {
+  while (columns.find((o: any) => o.id === `newColumn${columnNumber}`)) {
     columnNumber++;
   }
   const columnId = `newColumn${columnNumber}`;
@@ -58,13 +52,20 @@ function addColumnToRightButton(headerActionResponse: HeaderActionResponse) {
   const column = headerActionResponse.headerMenuProps.headerProps.column
     .columnDef as TableColumn;
 
-  const columns = table.options.meta.tableState.columns((store) => store.state);
+  const [columns, shadowColumns] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.shadowColumns]
+  );
+
   const addColumnToRightOnClick = (e: any) => {
     table.options.meta.dispatch({
       type: ActionTypes.ADD_COLUMN_TO_RIGHT,
       columnId: column.id,
       focus: false,
-      columnInfo: generateNewColumnInfo(column.position + 1, columns),
+      columnInfo: generateNewColumnInfo(
+        column.position + 1,
+        columns,
+        shadowColumns
+      ),
     });
     hooks.setExpanded(false);
   };
@@ -80,14 +81,11 @@ function addColumnToLeftButton(headerActionResponse: HeaderActionResponse) {
   const { table } = headerActionResponse.headerMenuProps.headerProps;
   const column = headerActionResponse.headerMenuProps.headerProps.column
     .columnDef as TableColumn;
-  const columns = table.options.meta.tableState.columns((store) => store.state);
+  const addToLeft = table.options.meta.tableState.columns(
+    (state) => state.addToLeft
+  );
   const addColumnToLeftOnClick = (e: any) => {
-    table.options.meta.dispatch({
-      type: ActionTypes.ADD_COLUMN_TO_LEFT,
-      columnId: column.id,
-      focus: false,
-      columnInfo: generateNewColumnInfo(column.position - 1, columns),
-    });
+    addToLeft(column);
     hooks.setExpanded(false);
   };
   return headerButtonComponent({

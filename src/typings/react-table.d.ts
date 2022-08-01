@@ -8,6 +8,5 @@ declare module '@tanstack/react-table' {
         tableState: TableStateInterface;
         dispatch: (action: any) => void;
         view: DatabaseView;
-        shadowColumns: TableColumn[];
     }
 }

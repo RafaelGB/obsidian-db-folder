@@ -20,8 +20,10 @@ export interface DataState {
 }
 
 export interface ColumnsState {
-    state: TableColumn[];
-    add: (column: TableColumn, position: number) => void;
+    columns: TableColumn[];
+    shadowColumns: TableColumn[];
+    addToLeft: (column: TableColumn) => void;
+    addToRight: (column: TableColumn) => void;
     remove: (column: TableColumn) => void;
     alterSorting: (column: TableColumn) => void;
 }

@@ -46,6 +46,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   diskConfig: DatabaseInfo;
   rows: Array<RowDataType>;
   columns: Array<TableColumn>;
+  shadowColumns: Array<TableColumn>;
   initial: InitialType;
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
@@ -157,8 +158,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       this.initial = obtainInitialType(this.columns, this.rows);
       // Define table properties
+      this.shadowColumns = this.columns.filter((col) => col.skipPersist);
       const tableProps: TableDataType = {
-        shadowColumns: this.columns.filter((col) => col.skipPersist),
         skipReset: false,
         view: this,
         stateManager: this.plugin.getStateManager(this.file),

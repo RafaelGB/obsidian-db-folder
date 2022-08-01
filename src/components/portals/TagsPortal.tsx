@@ -14,7 +14,9 @@ import { TableColumn } from "cdm/FolderModel";
 const TagsPortal = (tagsProps: TagsProps) => {
   const { meta, column, dispatch, cellProperties } = tagsProps;
   const { row, table } = cellProperties;
-  const columns = table.options.meta.tableState.columns((store) => store.state);
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
+  );
 
   const tableColumn = column.columnDef as TableColumn;
   // Tags reference state
