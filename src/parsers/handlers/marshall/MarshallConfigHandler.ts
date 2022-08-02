@@ -2,6 +2,7 @@ import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { LocalSettings } from 'cdm/SettingsModel';
 import { SourceDataTypes, CellSizeOptions, DEFAULT_SETTINGS } from 'helpers/Constants';
 import { Literal } from 'obsidian-dataview';
+import { unEscapeSpecialCharacters } from 'parsers/EscapeHelper';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class MarshallConfigHandler extends AbstractYamlHandler {
@@ -31,7 +32,11 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
     }
 
     loadDefaultConfig<K extends keyof LocalSettings>(key: K, value: Literal, localSettings: LocalSettings): LocalSettings {
-        localSettings[key] = value as any;
+        var unEscapedValue = value
+        if (typeof value === "string") {
+            unEscapedValue = unEscapeSpecialCharacters(value)
+        }
+        localSettings[key] = unEscapedValue as any;
         return localSettings;
     }
 
