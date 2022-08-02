@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { CellContext } from "components/contexts/CellContext";
+import { TableCellContext } from "components/contexts/CellContext";
 import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
 import { CheckboxProps } from "cdm/CheckboxModel";
@@ -7,13 +7,13 @@ import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 
 export function CheckboxCell(props: CheckboxProps) {
-  const { column, cellProperties } = props;
-  const { row, table } = cellProperties;
+  const { column, defaultCell } = props;
+  const { row, table } = defaultCell;
   const dataDispatch = table.options.meta.dispatch;
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
   /** state of cell value */
-  const { contextValue, setContextValue } = useContext(CellContext);
+  const { contextValue, setContextValue } = useContext(TableCellContext);
   const [checked, setChecked] = useState(contextValue.value as boolean);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;

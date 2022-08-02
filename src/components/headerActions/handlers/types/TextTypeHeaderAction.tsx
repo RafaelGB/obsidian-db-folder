@@ -4,6 +4,7 @@ import TextIcon from "components/img/Text";
 import React from "react";
 import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class TextTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -22,15 +23,27 @@ export default class TextTypeHeaderAction extends AbstractHeaderAction {
 function textTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
+  const alterColumnType = table.options.meta.tableState.columns(
+    (state) => state.alterColumnType
+  );
+  const parseDataOfColumn = table.options.meta.tableState.data(
+    (state) => state.parseDataOfColumn
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+
   const tagsOnClick = (e: any) => {
-    table.options.meta.dispatch({
-      type: ActionTypes.UPDATE_COLUMN_TYPE,
-      columnId: column.id,
-      input: InputType.TEXT,
-    });
     hooks.setShowType(false);
     hooks.setExpanded(false);
+    parseDataOfColumn(
+      column.columnDef as TableColumn,
+      InputType.TEXT,
+      ddbbConfig
+    );
+    alterColumnType(column.columnDef as TableColumn, InputType.TEXT);
   };
+
   return headerTypeComponent({
     onClick: tagsOnClick,
     icon: <TextIcon />,

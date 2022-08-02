@@ -4,6 +4,7 @@ import React from "react";
 import { ActionTypes, InputType } from "helpers/Constants";
 import TaskIcon from "components/img/TaskIcon";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class CheckboxTypeHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -22,14 +23,24 @@ export default class CheckboxTypeHandlerAction extends AbstractHeaderAction {
 function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
+  const alterColumnType = table.options.meta.tableState.columns(
+    (state) => state.alterColumnType
+  );
+  const parseDataOfColumn = table.options.meta.tableState.data(
+    (state) => state.parseDataOfColumn
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
   const checkBoxTypeOnClick = (e: any) => {
-    table.options.meta.dispatch({
-      type: ActionTypes.UPDATE_COLUMN_TYPE,
-      columnId: column.id,
-      input: InputType.CHECKBOX,
-    });
     hooks.setShowType(false);
     hooks.setExpanded(false);
+    parseDataOfColumn(
+      column.columnDef as TableColumn,
+      InputType.CHECKBOX,
+      ddbbConfig
+    );
+    alterColumnType(column.columnDef as TableColumn, InputType.CHECKBOX);
   };
   return headerTypeComponent({
     onClick: checkBoxTypeOnClick,

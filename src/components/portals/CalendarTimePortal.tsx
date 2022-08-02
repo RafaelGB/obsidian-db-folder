@@ -8,8 +8,8 @@ import { CalendarProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
 const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
-  const { column, cellProperties } = calendarTimeProps;
-  const { row, table } = cellProperties;
+  const { column, defaultCell } = calendarTimeProps;
+  const { row, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
   const dataDispatch = (action: any) =>
     console.log(`TODO migrate dispatch to table${action.type}`);

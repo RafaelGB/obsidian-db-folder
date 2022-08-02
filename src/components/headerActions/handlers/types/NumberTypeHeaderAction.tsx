@@ -2,8 +2,9 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import HashIcon from "components/img/Hash";
 import React from "react";
-import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
+import { InputLabel, InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class NumberTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -21,14 +22,24 @@ export default class NumberTypeHeaderAction extends AbstractHeaderAction {
 function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
+  const alterColumnType = table.options.meta.tableState.columns(
+    (state) => state.alterColumnType
+  );
+  const parseDataOfColumn = table.options.meta.tableState.data(
+    (state) => state.parseDataOfColumn
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
   const numberOnClick = (e: any) => {
-    table.options.meta.dispatch({
-      type: ActionTypes.UPDATE_COLUMN_TYPE,
-      columnId: column.id,
-      input: InputType.NUMBER,
-    });
     hooks.setShowType(false);
     hooks.setExpanded(false);
+    parseDataOfColumn(
+      column.columnDef as TableColumn,
+      InputType.NUMBER,
+      ddbbConfig
+    );
+    alterColumnType(column.columnDef as TableColumn, InputType.NUMBER);
   };
   return headerTypeComponent({
     onClick: numberOnClick,

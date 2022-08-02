@@ -54,18 +54,14 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const created: boolean = false;
   /** Properties of header */
   const { column, header, table } = headerProps;
-  const [columns, shadowColumns, addToLeft] =
-    table.options.meta.tableState.columns((state) => [
-      state.columns,
-      state.shadowColumns,
-      state.addToLeft,
-    ]);
+  const [columns, addToLeft] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.addToLeft]
+  );
   /** Column values */
-  const { id, input, options, position, label, config } =
-    column.columnDef as TableColumn;
+  const { id, input, options, label, config } = columns.find(
+    (col: TableColumn) => col.id === column.id
+  );
   /** reducer asociated to database */
-  // TODO typying improve
-  const dispatch = table.options.meta.dispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
@@ -106,22 +102,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     default:
       break;
-  }
-
-  function adjustWidthOfTheColumn(position: number) {
-    let columnNumber = columns.length + 1 - shadowColumns.length;
-    // Check if column name already exists
-    while (
-      table
-        .getAllColumns()
-        .find((o: any) => o.id === `newColumn${columnNumber}`)
-    ) {
-      columnNumber++;
-    }
-    const columnName = `newColumn${columnNumber}`;
-    const columnLabel = `New Column ${columnNumber}`;
-    // Add width of the new column
-    return { name: columnName, position: position, label: columnLabel };
   }
 
   function handlerAddColumnToLeft(e: any) {

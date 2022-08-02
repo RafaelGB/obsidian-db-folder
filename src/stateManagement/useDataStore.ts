@@ -6,6 +6,7 @@ import { DatabaseView } from "DatabaseView";
 import { MetadataColumns } from "helpers/Constants";
 import { DateTime } from "luxon";
 import { Literal } from "obsidian-dataview";
+import { DataviewService } from "services/DataviewService";
 import { VaultManagerDB } from "services/FileManagerService";
 import NoteInfo from "services/NoteInfo";
 import create from "zustand";
@@ -50,6 +51,20 @@ const useDataStore = (view: DatabaseView) => {
                 };
                 return { rows: [...state.rows, row] }
             }),
+            parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => {
+                set((updater) => {
+                    const parsedRows = updater.rows.map((row) => ({
+                        ...row,
+                        [column.id]: DataviewService.parseLiteral(
+                            row[column.id] as Literal,
+                            input, // Destination type to parse
+                            ddbbConfig
+                        ),
+                    }));
+                    return { rows: parsedRows };
+                }
+                );
+            },
             removeRow: (row: RowDataType) => set((state) => ({ rows: state.rows.filter((r) => r.__note__.getFile().path !== row.__note__.getFile().path) })),
             removeDataOfColumn: (column: TableColumn) => set((state) => {
                 const newRows = [...state.rows];

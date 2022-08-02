@@ -12,8 +12,8 @@ import NoteInfo from "services/NoteInfo";
 import { TableColumn } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { column, dispatch, cellProperties } = tagsProps;
-  const { row, table } = cellProperties;
+  const { column, dispatch, defaultCell } = tagsProps;
+  const { row, table } = defaultCell;
   const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.addOptionToColumn]
   );
@@ -29,7 +29,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
   );
 
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).__note__;
+  const note: NoteInfo = (defaultCell.row.original as any).__note__;
 
   function getColor(tag: string) {
     const match = tableColumn.options.find(
@@ -76,7 +76,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
       file: note.getFile(),
       key: tableColumn.key,
       value: arrayTags,
-      row: cellProperties.row,
+      row: defaultCell.row,
       columnId: column.id,
       state: table.options.meta.tableState,
     });

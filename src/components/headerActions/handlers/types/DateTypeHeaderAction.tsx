@@ -9,6 +9,7 @@ import {
   MetadataLabels,
 } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class DateTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -27,15 +28,26 @@ export default class DateTypeHeaderAction extends AbstractHeaderAction {
 function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
+  const alterColumnType = table.options.meta.tableState.columns(
+    (state) => state.alterColumnType
+  );
+  const parseDataOfColumn = table.options.meta.tableState.data(
+    (state) => state.parseDataOfColumn
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
   const dateOnClick = (e: any) => {
-    table.options.meta.dispatch({
-      type: ActionTypes.UPDATE_COLUMN_TYPE,
-      columnId: column.id,
-      input: InputType.CALENDAR_TIME,
-    });
     hooks.setShowType(false);
     hooks.setExpanded(false);
+    parseDataOfColumn(
+      column.columnDef as TableColumn,
+      InputType.CALENDAR,
+      ddbbConfig
+    );
+    alterColumnType(column.columnDef as TableColumn, InputType.CALENDAR);
   };
+
   return headerTypeComponent({
     onClick: dateOnClick,
     icon: <CalendarIcon />,

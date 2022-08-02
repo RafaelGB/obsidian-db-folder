@@ -6,15 +6,15 @@ import React, { useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { PopperProps } from "cdm/ComponentsModel";
-import { CellContext } from "components/contexts/CellContext";
+import { TableCellContext } from "components/contexts/CellContext";
 import CrossIcon from "components/img/CrossIcon";
 import { TableColumn } from "cdm/FolderModel";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { dispatch, column, note, cellProperties } = popperProps;
-  const { row, table } = cellProperties;
+  const { dispatch, column, note, defaultCell } = popperProps;
+  const { row, table } = defaultCell;
   /** state of cell value */
-  const { contextValue, setContextValue } = useContext(CellContext);
+  const { contextValue, setContextValue } = useContext(TableCellContext);
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);

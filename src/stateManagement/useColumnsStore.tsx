@@ -1,8 +1,9 @@
 import { RowSelectOption } from "cdm/ComponentsModel";
-import { DatabaseColumn } from "cdm/DatabaseModel";
-import { TableColumn } from "cdm/FolderModel";
+import { DatabaseColumn, OptionSelect } from "cdm/DatabaseModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
+import { randomColor } from "helpers/Colors";
 import {
   DEFAULT_COLUMN_CONFIG,
   InputType,
@@ -60,7 +61,6 @@ const useColumnsStore = (view: DatabaseView) => {
       set((updater) => {
         view.diskConfig.removeColumn(column.id);
         const filtered = updater.columns.filter((c) => c.id !== column.id);
-        console.log("filtered", filtered);
         return { columns: filtered };
       }),
     alterSorting: (column: TableColumn) =>
@@ -91,6 +91,52 @@ const useColumnsStore = (view: DatabaseView) => {
         });
         return { columns: updater.columns };
       }),
+    alterColumnType: (
+      column: TableColumn,
+      input: string,
+      parsedRows?: RowDataType[]
+    ) =>
+      set((updater) => {
+        const typeIndex = updater.columns.findIndex(
+          (col: TableColumn) => col.id === column.id
+        );
+        if (updater.columns[typeIndex].input === input) {
+          // If the type is the same, do nothing
+          return {};
+        }
+        // Save the new type in the disk config
+        view.diskConfig.updateColumnProperties(column.id, {
+          input: input,
+        });
+        updater.columns[typeIndex].input = input;
+        switch (input) {
+          case InputType.SELECT:
+          case InputType.TAGS:
+            const options: OptionSelect[] = [];
+            // Generate selected options
+            parsedRows.forEach((row) => {
+              if (row[column.id]) {
+                options.push({
+                  label: row[column.id]?.toString(),
+                  backgroundColor: randomColor(),
+                });
+              }
+            });
+            updater.columns[typeIndex].options = options;
+            break;
+          default:
+          /**
+           * GENERIC COLUMN TYPE Doesn't have options
+           * Aplied to:
+           * - TEXT
+           * - NUMBER
+           * - CALENDAR
+           * - CALENDAR_TIME
+           * - CHECKBOX
+           */
+        }
+        return { columns: updater.columns };
+      }),
   }));
 };
 /**
@@ -114,3 +160,85 @@ function generateNewColumnInfo(
 }
 
 export default useColumnsStore;
+/** 
+case ActionTypes.UPDATE_COLUMN_TYPE:
+      // Parse data
+      const parsedData = state.view.rows.map((row: any) => ({
+        ...row,
+        [action.columnId]: DataviewService.parseLiteral(
+          row[action.columnId],
+          action.input, // Destination type to parse
+          state.view.diskConfig.yaml.config
+        ),
+      }));
+      // Update state
+      switch (action.input) {
+        case InputType.SELECT:
+        case InputType.TAGS:
+          const options: OptionSelect[] = [];
+          // Generate selected options
+          parsedData.forEach((row) => {
+            if (row[action.columnId]) {
+              options.push({
+                label: row[action.columnId],
+                backgroundColor: randomColor(),
+              });
+            }
+          });
+          // Update column to SELECT type
+          return update(state, {
+            skipReset: { $set: true },
+            view: {
+              columns: {
+                $set: [
+                  ...state.view.columns.slice(0, typeIndex),
+                  {
+                    ...state.view.columns[typeIndex],
+                    input: action.input,
+                    options: obtainUniqueOptionValues(options),
+                  },
+                  ...state.view.columns.slice(
+                    typeIndex + 1,
+                    state.view.columns.length
+                  ),
+                ],
+              },
+
+              // Update data associated to column
+              rows: {
+                $set: parsedData,
+              },
+            },
+          });
+        default:
+          // 
+          //  GENERIC update change
+          //  Update column dataType & parsed data
+          //  Aplied to:
+          //  - TEXT
+          //  - NUMBER
+          //  - CALENDAR
+          //  - CALENDAR_TIME
+          //  - CHECKBOX
+          //
+          return update(state, {
+            skipReset: { $set: true },
+            view: {
+              columns: {
+                $set: [
+                  ...state.view.columns.slice(0, typeIndex),
+                  { ...state.view.columns[typeIndex], input: action.input },
+                  ...state.view.columns.slice(
+                    typeIndex + 1,
+                    state.view.columns.length
+                  ),
+                ],
+              },
+
+              rows: {
+                $set: parsedData,
+              },
+            },
+          });
+      }
+      */

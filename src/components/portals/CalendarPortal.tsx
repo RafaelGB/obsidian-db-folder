@@ -9,8 +9,8 @@ import { CalendarProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
-  const { column, cellProperties } = calendarProps;
-  const { row, table } = cellProperties;
+  const { column, defaultCell } = calendarProps;
+  const { row, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
   const rows = table.options.meta.tableState.data((state) => state.rows);
   const dataDispatch = (action: any) =>

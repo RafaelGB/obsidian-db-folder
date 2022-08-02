@@ -15,6 +15,7 @@ export interface InitialState {
 export interface DataState {
     rows: RowDataType[];
     addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
+    parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     removeRow: (row: RowDataType) => void;
     removeDataOfColumn: (column: TableColumn) => void;
 }
@@ -27,6 +28,7 @@ export interface ColumnsState {
     remove: (column: TableColumn) => void;
     alterSorting: (column: TableColumn) => void;
     addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
+    alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => void;
 }
 export interface ColumnSortingState {
     state: SortingState;
