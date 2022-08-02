@@ -32,11 +32,11 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
     }
 
     loadDefaultConfig<K extends keyof LocalSettings>(key: K, value: Literal, localSettings: LocalSettings): LocalSettings {
-        var escapedValue = value
+        var unEscapedValue = value
         if (typeof value === "string") {
-            escapedValue = unEscapeSpecialCharacters(value)
+            unEscapedValue = unEscapeSpecialCharacters(value)
         }
-        localSettings[key] = escapedValue as any;
+        localSettings[key] = unEscapedValue as any;
         return localSettings;
     }
 
