@@ -170,16 +170,6 @@ export default function DefaultCell(
       columns,
       ddbbConfig
     );
-
-    // dataDispatch({
-    //   type: ActionTypes.UPDATE_CELL,
-    //   file: note.getFile(),
-    //   key: (column.columnDef as TableColumn).key,
-    //   value: changedValue,
-    //   row: row,
-    //   columnId: (column.columnDef as TableColumn).id,
-    //   state: table.options.meta.tableState,
-    // });
   }
 
   function getCellElement() {
@@ -236,11 +226,11 @@ export default function DefaultCell(
 
       /** Calendar option */
       case InputType.CALENDAR:
-        return <CalendarPortal column={column} defaultCell={defaultCell} />;
+        return <CalendarPortal defaultCell={defaultCell} />;
 
       /** Calendar with time option */
       case InputType.CALENDAR_TIME:
-        return <CalendarTimePortal column={column} defaultCell={defaultCell} />;
+        return <CalendarTimePortal defaultCell={defaultCell} />;
 
       /** Selector option */
       case InputType.SELECT:
@@ -248,7 +238,6 @@ export default function DefaultCell(
           <TableCellContext.Provider value={{ contextValue, setContextValue }}>
             <PopperSelectPortal
               dispatch={dataDispatch}
-              column={column}
               note={note}
               defaultCell={defaultCell}
             />
@@ -258,11 +247,7 @@ export default function DefaultCell(
       case InputType.TAGS:
         return (
           <TableCellContext.Provider value={{ contextValue, setContextValue }}>
-            <TagsPortal
-              column={column}
-              dispatch={dataDispatch}
-              defaultCell={defaultCell}
-            />
+            <TagsPortal dispatch={dataDispatch} defaultCell={defaultCell} />
           </TableCellContext.Provider>
         );
 

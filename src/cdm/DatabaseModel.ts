@@ -39,9 +39,6 @@ export type OptionSelect = {
     label: string;
     backgroundColor: string;
 }
-export type BaseComponentProps = {
-    column: Column<RowDataType, unknown>;
-}
 
 export type SortedType = {
     id: string;

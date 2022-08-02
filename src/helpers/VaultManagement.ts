@@ -165,7 +165,7 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
   }
 }
 
-export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
+export async function updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
   await updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
     throw err;
   });

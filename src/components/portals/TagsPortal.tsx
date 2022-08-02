@@ -12,8 +12,8 @@ import NoteInfo from "services/NoteInfo";
 import { TableColumn } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { column, dispatch, defaultCell } = tagsProps;
-  const { row, table } = defaultCell;
+  const { dispatch, defaultCell } = tagsProps;
+  const { row, column, table } = defaultCell;
   const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.addOptionToColumn]
   );

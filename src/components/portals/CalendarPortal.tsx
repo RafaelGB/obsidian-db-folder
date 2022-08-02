@@ -9,8 +9,8 @@ import { CalendarProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
 const CalendarPortal = (calendarProps: CalendarProps) => {
-  const { column, defaultCell } = calendarProps;
-  const { row, table } = defaultCell;
+  const { defaultCell } = calendarProps;
+  const { row, column, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
   const rows = table.options.meta.tableState.data((state) => state.rows);
   const dataDispatch = (action: any) =>
@@ -19,9 +19,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
-  const [calendarState, setCalendarState] = useState(
-    rows[row.index][tableColumn.key]
-  );
+  const calendarValue = rows[row.index][tableColumn.key];
+  const [calendarState, setCalendarState] = useState(calendarValue);
 
   function handleSpanOnClick(event: any) {
     event.preventDefault();

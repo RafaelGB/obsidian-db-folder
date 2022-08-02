@@ -2,27 +2,29 @@ import { ActionTypes } from "helpers/Constants";
 import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
-import NoteInfo from "services/NoteInfo";
 import { Portal } from "@mui/material";
 import { CalendarProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
 const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
-  const { column, defaultCell } = calendarTimeProps;
-  const { row, table } = defaultCell;
+  const { defaultCell } = calendarTimeProps;
+  const { row, table, column } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
-  const dataDispatch = (action: any) =>
-    console.log(`TODO migrate dispatch to table${action.type}`);
-  const rows = table.options.meta.tableState.data((state) => state.rows);
-  // Calendar state
-  const [calendarTimeState, setCalendarTimeState] = useState(
-    rows[row.index][tableColumn.key]
+  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.updateCell,
+  ]);
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
   );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+
+  // Calendar state
+  const calendarTimeState = rows[row.index][tableColumn.key];
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
-
-  /** Note info of current Cell */
-  const note: NoteInfo = row.original.__note__;
 
   function handleSpanOnClick(event: any) {
     event.preventDefault();
@@ -30,19 +32,14 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
-    const newValue = DateTime.fromJSDate(date);
-    // save on disk
-    dataDispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: tableColumn.key,
-      value: DateTime.fromJSDate(date).toISO(),
-      row: row,
-      columnId: column.id,
-      state: table.options.meta.tableState,
-    });
-
-    setCalendarTimeState(newValue);
+    // const newValue = DateTime.fromJSDate(date);
+    updateCell(
+      row.index,
+      tableColumn,
+      DateTime.fromJSDate(date).toISO(),
+      columns,
+      ddbbConfig
+    );
     setShowDatePicker(false);
   }
 

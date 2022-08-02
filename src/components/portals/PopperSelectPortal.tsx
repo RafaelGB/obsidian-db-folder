@@ -11,8 +11,8 @@ import CrossIcon from "components/img/CrossIcon";
 import { TableColumn } from "cdm/FolderModel";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { dispatch, column, note, defaultCell } = popperProps;
-  const { row, table } = defaultCell;
+  const { dispatch, note, defaultCell } = popperProps;
+  const { row, column, table } = defaultCell;
   /** state of cell value */
   const { contextValue, setContextValue } = useContext(TableCellContext);
   // Selector reference state

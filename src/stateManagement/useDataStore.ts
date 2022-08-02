@@ -52,7 +52,7 @@ const useDataStore = (view: DatabaseView) => {
                 };
                 return { rows: [...state.rows, row] }
             }),
-            updateCell: (rowIndex: number, column: TableColumn, value: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
+            updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
                 const rowTFile = state.rows[rowIndex].__note__.getFile();
                 // Save on disk
                 updateRowFileProxy(
@@ -64,7 +64,11 @@ const useDataStore = (view: DatabaseView) => {
                     UpdateRowOptions.COLUMN_VALUE
                 );
 
-                return {};
+                // Update row in memory
+                const row = { ...state.rows[rowIndex] };
+                row[column.key] = value;
+                row[MetadataColumns.MODIFIED] = DateTime.now();
+                return { rows: [...state.rows.slice(0, rowIndex), row, ...state.rows.slice(rowIndex + 1)] };
             }
             ),
             parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => {
