@@ -16,7 +16,7 @@ export interface InitialState {
 export interface DataState {
     rows: RowDataType[];
     addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
-    updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
+    updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => void;
     parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     removeRow: (row: RowDataType) => void;
     removeDataOfColumn: (column: TableColumn) => void;

@@ -9,9 +9,7 @@ export type RowSelectOption = {
 }
 
 export type PopperProps = {
-    dispatch: (action: any) => void;
     defaultCell: CellContext<RowDataType, Literal>;
-    note: NoteInfo;
 }
 
 export type TagsProps = {

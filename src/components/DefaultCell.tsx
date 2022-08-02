@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ActionTypes, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 
 import { LOGGER } from "services/Logger";
@@ -37,8 +37,6 @@ export default function DefaultCell(
   );
   /** Type of cell */
   const input = columns.find((col) => col.id === column.id).input;
-  /** Note info of current Cell */
-  const note: NoteInfo = row.original.__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -233,15 +231,7 @@ export default function DefaultCell(
 
       /** Selector option */
       case InputType.SELECT:
-        return (
-          <TableCellContext.Provider value={{ contextValue, setContextValue }}>
-            <PopperSelectPortal
-              dispatch={dataDispatch}
-              note={note}
-              defaultCell={defaultCell}
-            />
-          </TableCellContext.Provider>
-        );
+        return <PopperSelectPortal defaultCell={defaultCell} />;
       /** Tags option */
       case InputType.TAGS:
         return (
@@ -258,7 +248,7 @@ export default function DefaultCell(
       case InputType.CHECKBOX:
         return (
           <TableCellContext.Provider value={{ contextValue, setContextValue }}>
-            <CheckboxCell column={column} defaultCell={defaultCell} />
+            <CheckboxCell defaultCell={defaultCell} />
           </TableCellContext.Provider>
         );
       case InputType.NEW_COLUMN:

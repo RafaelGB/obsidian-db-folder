@@ -4,7 +4,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { DataState } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
-import { updateRowFileProxy } from "helpers/VaultManagement";
+import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { DateTime } from "luxon";
 import { Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
@@ -52,8 +52,43 @@ const useDataStore = (view: DatabaseView) => {
                 };
                 return { rows: [...state.rows, row] }
             }),
-            updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
-                const rowTFile = state.rows[rowIndex].__note__.getFile();
+            updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => set((state) => {
+                const row = { ...state.rows[rowIndex] };
+                row[column.key] = value;
+                console.log(ddbbConfig.show_metadata_modified);
+                if (ddbbConfig.show_metadata_modified) {
+                    row[MetadataColumns.MODIFIED] = DateTime.now();
+                }
+                let rowTFile = state.rows[rowIndex].__note__.getFile();
+                if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
+                    const moveInfo = {
+                        file: rowTFile,
+                        id: column.id,
+                        value: value,
+                        columns: columns,
+                        ddbbConfig: ddbbConfig,
+                    }
+                    moveFile(`${view.file.parent.path}/${value}`, moveInfo);
+                    // Update row file
+                    row[
+                        MetadataColumns.FILE
+                    ] = `[[${view.file.parent.path}/${value}/${rowTFile.name}|${rowTFile.basename}]]`;
+                    // Check if action.value is a valid folder name
+                    const auxPath =
+                        value !== ""
+                            ? `${view.file.parent.path}/${value}/${rowTFile.name}`
+                            : `${view.file.parent.path}/${rowTFile.name}`;
+
+                    row.__note__ = new NoteInfo({
+                        ...row,
+                        file: {
+                            path: auxPath,
+                        },
+                    });
+                    // Update rows
+                    return { rows: [...state.rows.slice(0, rowIndex), row, ...state.rows.slice(rowIndex + 1)] };
+                }
+
                 // Save on disk
                 updateRowFileProxy(
                     rowTFile,
@@ -64,10 +99,6 @@ const useDataStore = (view: DatabaseView) => {
                     UpdateRowOptions.COLUMN_VALUE
                 );
 
-                // Update row in memory
-                const row = { ...state.rows[rowIndex] };
-                row[column.key] = value;
-                row[MetadataColumns.MODIFIED] = DateTime.now();
                 return { rows: [...state.rows.slice(0, rowIndex), row, ...state.rows.slice(rowIndex + 1)] };
             }
             ),
@@ -98,3 +129,59 @@ const useDataStore = (view: DatabaseView) => {
     );
 }
 export default useDataStore;
+
+/**
+ * 
+ * dispatch({
+      type: ActionTypes.UPDATE_OPTION_CELL,
+      file: note.getFile(),
+      key: tableColumn.key,
+      value: option.label,
+      row: row,
+      columnId: column.id,
+      state: table.options.meta,
+    });
+
+
+    
+ * case ActionTypes.UPDATE_OPTION_CELL:
+      // check if this column is configured as a group folder
+      if (dbconfig.group_folder_column === action.key) {
+        moveFile(`${state.view.file.parent.path}/${action.value}`, action);
+        action.row[
+          MetadataColumns.FILE
+        ] = `[[${state.view.file.parent.path}/${action.value}/${action.file.name}|${action.file.basename}]]`;
+        // Check if action.value is a valid folder name
+        const auxPath =
+          action.value !== ""
+            ? `${state.view.file.parent.path}/${action.value}/${action.file.name}`
+            : `${state.view.file.parent.path}/${action.file.name}`;
+
+        action.row.original.__note__ = new NoteInfo({
+          ...action.row,
+          file: {
+            path: auxPath,
+          },
+        });
+        // Update original cell value
+        const update_option_cell_index = state.view.columns.findIndex(
+          (column) => column.id === action.columnId
+        );
+        const update_option_cell_column_key =
+          state.view.columns[update_option_cell_index].key;
+        return update(state, {
+          view: {
+            rows: {
+              [action.row.index]: {
+                $merge: {
+                  [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
+                  note: action.row.original.__note__,
+                  [update_option_cell_column_key]: action.value,
+                },
+              },
+            },
+          },
+        });
+      }
+      break;
+ */

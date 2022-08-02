@@ -24,8 +24,6 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
-  /** Note info of current Cell */
-  const note: NoteInfo = row.original.__note__;
   const calendarValue = rows[row.index][tableColumn.key];
 
   function handleSpanOnClick(event: any) {

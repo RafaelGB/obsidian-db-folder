@@ -355,13 +355,19 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
  * @param folderPath 
  * @param action 
  */
-export async function moveFile(folderPath: string, action: any): Promise<void> {
+export async function moveFile(folderPath: string, info: {
+  file: TFile,
+  id: string,
+  value: Literal,
+  columns: TableColumn[],
+  ddbbConfig: LocalSettings
+}): Promise<void> {
   await updateRowFile(
-    action.file,
-    action.key,
-    action.value,
-    action.columns,
-    action.ddbbConfig,
+    info.file,
+    info.id,
+    info.value,
+    info.columns,
+    info.ddbbConfig,
     UpdateRowOptions.COLUMN_VALUE
   );
   try {
@@ -371,8 +377,8 @@ export async function moveFile(folderPath: string, action: any): Promise<void> {
     // Handle error
     throw error;
   }
-  const filePath = `${folderPath} / ${action.file.name}`;
-  await app.fileManager.renameFile(action.file, filePath);
+  const filePath = `${folderPath} / ${info.file.name}`;
+  await app.fileManager.renameFile(info.file, filePath);
 }
 
 export async function createFolder(folderPath: string): Promise<void> {
