@@ -13,6 +13,7 @@ import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { EditionError } from 'errors/ErrorTypes';
 import { TableStateInterface } from 'cdm/TableStateInterface';
+import { LocalSettings } from 'cdm/SettingsModel';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -164,8 +165,8 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
   }
 }
 
-export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, state: TableStateInterface, option: string): Promise<void> {
-  await updateRowFile(file, columnId, newValue, state, option).catch((err) => {
+export async function updateRowFileProxy(file: TFile, columnId: string, newValue: string, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
+  await updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
     throw err;
   });
 }
@@ -177,13 +178,11 @@ export async function updateRowFileProxy(file: TFile, columnId: string, newValue
  * @param newColumnValue 
  * @param option 
  */
-export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, table: TableStateInterface, option: string): Promise<void> {
+export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   try {
     const content = await VaultManagerDB.obtainContentFromTfile(file);
     const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
-    const columns = table.columns(state => state.columns);
-    const ddbbConfig = table.configState(store => store.ddbbConfig);
     const rowFields = obtainRowDatabaseFields(file, columns, frontmatterKeys);
     const column = columns.find(c => c.key === columnId);
     // Adds an empty frontmatter at the beginning of the file
@@ -361,7 +360,8 @@ export async function moveFile(folderPath: string, action: any): Promise<void> {
     action.file,
     action.key,
     action.value,
-    action.state,
+    action.columns,
+    action.ddbbConfig,
     UpdateRowOptions.COLUMN_VALUE
   );
   try {

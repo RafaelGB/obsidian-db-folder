@@ -3,7 +3,8 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
-import { MetadataColumns } from "helpers/Constants";
+import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
+import { updateRowFileProxy } from "helpers/VaultManagement";
 import { DateTime } from "luxon";
 import { Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
@@ -51,6 +52,21 @@ const useDataStore = (view: DatabaseView) => {
                 };
                 return { rows: [...state.rows, row] }
             }),
+            updateCell: (rowIndex: number, column: TableColumn, value: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
+                const rowTFile = state.rows[rowIndex].__note__.getFile();
+                // Save on disk
+                updateRowFileProxy(
+                    rowTFile,
+                    column.id,
+                    value,
+                    columns,
+                    ddbbConfig,
+                    UpdateRowOptions.COLUMN_VALUE
+                );
+
+                return {};
+            }
+            ),
             parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => {
                 set((updater) => {
                     const parsedRows = updater.rows.map((row) => ({
@@ -78,3 +94,31 @@ const useDataStore = (view: DatabaseView) => {
     );
 }
 export default useDataStore;
+/**
+ * case ActionTypes.UPDATE_CELL:
+      // Obtain current column index
+      const update_cell_index = state.view.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      // Save on disk
+      updateRowFileProxy(
+        action.file,
+        action.key,
+        action.value,
+        action.state,
+        UpdateRowOptions.COLUMN_VALUE
+      );
+      const update_option_cell_column_key =
+        state.view.columns[update_cell_index].key;
+      return update(state, {
+        view: {
+          rows: {
+            [action.row.index]: {
+              $merge: {
+                [update_option_cell_column_key]: action.value,
+              },
+            },
+          },
+        },
+      });
+ */

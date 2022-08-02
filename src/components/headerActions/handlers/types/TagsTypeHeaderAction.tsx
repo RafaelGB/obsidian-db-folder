@@ -33,11 +33,6 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
   const tagsOnClick = (e: any) => {
-    table.options.meta.dispatch({
-      type: ActionTypes.UPDATE_COLUMN_TYPE,
-      columnId: column.id,
-      input: InputType.TAGS,
-    });
     hooks.setShowType(false);
     hooks.setExpanded(false);
     parseDataOfColumn(

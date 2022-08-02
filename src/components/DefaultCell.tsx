@@ -13,7 +13,7 @@ import { renderMarkdown } from "components/markdown/MarkdownRenderer";
 import { CheckboxCell } from "components/Checkbox";
 import TagsPortal from "components/portals/TagsPortal";
 import { DataviewService } from "services/DataviewService";
-import { Cell, CellContext } from "@tanstack/react-table";
+import { CellContext } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview";
 import { Grouping } from "obsidian-dataview/lib/data-model/value";
 import { SListItem } from "obsidian-dataview/lib/data-model/serialized/markdown";
@@ -29,10 +29,16 @@ export default function DefaultCell(
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
   );
+  const updateCell = table.options.meta.tableState.data(
+    (state) => state.updateCell
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
   /** Type of cell */
   const input = columns.find((col) => col.id === column.id).input;
   /** Note info of current Cell */
-  const note: NoteInfo = (row.original as RowDataType).__note__;
+  const note: NoteInfo = row.original.__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -157,15 +163,23 @@ export default function DefaultCell(
 
   function onChange(changedValue: string) {
     // save on disk
-    dataDispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: (column.columnDef as TableColumn).key,
-      value: changedValue,
-      row: row,
-      columnId: (column.columnDef as TableColumn).id,
-      state: table.options.meta.tableState,
-    });
+    updateCell(
+      row.index,
+      column.columnDef as TableColumn,
+      changedValue,
+      columns,
+      ddbbConfig
+    );
+
+    // dataDispatch({
+    //   type: ActionTypes.UPDATE_CELL,
+    //   file: note.getFile(),
+    //   key: (column.columnDef as TableColumn).key,
+    //   value: changedValue,
+    //   row: row,
+    //   columnId: (column.columnDef as TableColumn).id,
+    //   state: table.options.meta.tableState,
+    // });
   }
 
   function getCellElement() {

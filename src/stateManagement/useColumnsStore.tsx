@@ -9,6 +9,7 @@ import {
   InputType,
   TableColumnsTemplate,
 } from "helpers/Constants";
+import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 import create from "zustand";
 
 const useColumnsStore = (view: DatabaseView) => {
@@ -122,7 +123,8 @@ const useColumnsStore = (view: DatabaseView) => {
                 });
               }
             });
-            updater.columns[typeIndex].options = options;
+            updater.columns[typeIndex].options =
+              obtainUniqueOptionValues(options);
             break;
           default:
           /**
@@ -160,85 +162,3 @@ function generateNewColumnInfo(
 }
 
 export default useColumnsStore;
-/** 
-case ActionTypes.UPDATE_COLUMN_TYPE:
-      // Parse data
-      const parsedData = state.view.rows.map((row: any) => ({
-        ...row,
-        [action.columnId]: DataviewService.parseLiteral(
-          row[action.columnId],
-          action.input, // Destination type to parse
-          state.view.diskConfig.yaml.config
-        ),
-      }));
-      // Update state
-      switch (action.input) {
-        case InputType.SELECT:
-        case InputType.TAGS:
-          const options: OptionSelect[] = [];
-          // Generate selected options
-          parsedData.forEach((row) => {
-            if (row[action.columnId]) {
-              options.push({
-                label: row[action.columnId],
-                backgroundColor: randomColor(),
-              });
-            }
-          });
-          // Update column to SELECT type
-          return update(state, {
-            skipReset: { $set: true },
-            view: {
-              columns: {
-                $set: [
-                  ...state.view.columns.slice(0, typeIndex),
-                  {
-                    ...state.view.columns[typeIndex],
-                    input: action.input,
-                    options: obtainUniqueOptionValues(options),
-                  },
-                  ...state.view.columns.slice(
-                    typeIndex + 1,
-                    state.view.columns.length
-                  ),
-                ],
-              },
-
-              // Update data associated to column
-              rows: {
-                $set: parsedData,
-              },
-            },
-          });
-        default:
-          // 
-          //  GENERIC update change
-          //  Update column dataType & parsed data
-          //  Aplied to:
-          //  - TEXT
-          //  - NUMBER
-          //  - CALENDAR
-          //  - CALENDAR_TIME
-          //  - CHECKBOX
-          //
-          return update(state, {
-            skipReset: { $set: true },
-            view: {
-              columns: {
-                $set: [
-                  ...state.view.columns.slice(0, typeIndex),
-                  { ...state.view.columns[typeIndex], input: action.input },
-                  ...state.view.columns.slice(
-                    typeIndex + 1,
-                    state.view.columns.length
-                  ),
-                ],
-              },
-
-              rows: {
-                $set: parsedData,
-              },
-            },
-          });
-      }
-      */

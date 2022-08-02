@@ -8,11 +8,14 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
-  const { table, header, column } = headerMenuProps.headerProps;
+  const { table, column } = headerMenuProps.headerProps;
   const dispatch = table.options.meta.dispatch;
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
+  );
   /** Header props */
   const {
     propertyIcon,
@@ -24,7 +27,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     setLabelState,
   } = headerMenuProps;
 
-  const { key, isMetadata, input } = column.columnDef as TableColumn;
+  const { key, isMetadata, input } = columns.find(
+    (col) => col.id === column.id
+  );
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(key));
   const [popperElement, setPopperElement] = useState(null);

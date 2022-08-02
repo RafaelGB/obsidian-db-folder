@@ -4,14 +4,9 @@ import { DatabaseSettings } from "cdm/SettingsModel";
 
 /** Table Actions */
 export const ActionTypes = Object.freeze({
-  CHANGE_ROW_TEMPLATE: 'change_row_template',
-  UPDATE_COLUMN_TYPE: 'update_column_type',
   UPDATE_COLUMN_LABEL: 'update_column_label',
   UPDATE_CELL: 'update_cell',
   UPDATE_OPTION_CELL: 'update_option_cell',
-  ADD_COLUMN_TO_LEFT: 'add_column_to_left',
-  ADD_COLUMN_TO_RIGHT: 'add_column_to_right',
-  DELETE_COLUMN: 'delete_column',
   ENABLE_RESET: 'enable_reset',
 });
 
