@@ -39,17 +39,17 @@ export function databaseReducer(state: TableDataType, action: any) {
         action.newKey,
         action.label
       );
-      Promise.all(
-        state.view.rows.map(async (row: RowDataType) => {
-          await updateRowFileProxy(
-            row.__note__.getFile(),
-            action.columnId,
-            action.newKey,
-            action.state,
-            UpdateRowOptions.COLUMN_KEY
-          );
-        })
-      );
+      // Promise.all(
+      //   state.view.rows.map(async (row: RowDataType) => {
+      //     await updateRowFileProxy(
+      //       row.__note__.getFile(),
+      //       action.columnId,
+      //       action.newKey,
+      //       action.state,
+      //       UpdateRowOptions.COLUMN_KEY
+      //     );
+      //   })
+      // );
       return update(state, {
         skipReset: { $set: true },
         // Modify column visually with the new label
@@ -129,36 +129,8 @@ export function databaseReducer(state: TableDataType, action: any) {
           },
         });
       }
-    // Otherwise, update the value of the cell using the normal update method
-    /**
-     * Update the value of a cell in the table and save it on disk
-     */
-    case ActionTypes.UPDATE_CELL:
-      // Obtain current column index
-      const update_cell_index = state.view.columns.findIndex(
-        (column) => column.id === action.columnId
-      );
-      // Save on disk
-      updateRowFileProxy(
-        action.file,
-        action.key,
-        action.value,
-        action.state,
-        UpdateRowOptions.COLUMN_VALUE
-      );
-      const update_option_cell_column_key =
-        state.view.columns[update_cell_index].key;
-      return update(state, {
-        view: {
-          rows: {
-            [action.row.index]: {
-              $merge: {
-                [update_option_cell_column_key]: action.value,
-              },
-            },
-          },
-        },
-      });
+      break;
+
     /**
      * Enable reset
      */

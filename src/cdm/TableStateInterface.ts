@@ -1,6 +1,7 @@
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 
 export interface ConfigState {
@@ -15,7 +16,7 @@ export interface InitialState {
 export interface DataState {
     rows: RowDataType[];
     addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
-    updateCell: (rowIndex: number, column: TableColumn, value: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
+    updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
     parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     removeRow: (row: RowDataType) => void;
     removeDataOfColumn: (column: TableColumn) => void;

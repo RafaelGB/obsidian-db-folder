@@ -98,31 +98,3 @@ const useDataStore = (view: DatabaseView) => {
     );
 }
 export default useDataStore;
-/**
- * case ActionTypes.UPDATE_CELL:
-      // Obtain current column index
-      const update_cell_index = state.view.columns.findIndex(
-        (column) => column.id === action.columnId
-      );
-      // Save on disk
-      updateRowFileProxy(
-        action.file,
-        action.key,
-        action.value,
-        action.state,
-        UpdateRowOptions.COLUMN_VALUE
-      );
-      const update_option_cell_column_key =
-        state.view.columns[update_cell_index].key;
-      return update(state, {
-        view: {
-          rows: {
-            [action.row.index]: {
-              $merge: {
-                [update_option_cell_column_key]: action.value,
-              },
-            },
-          },
-        },
-      });
- */

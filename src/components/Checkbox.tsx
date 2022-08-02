@@ -7,9 +7,19 @@ import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 
 export function CheckboxCell(props: CheckboxProps) {
-  const { column, defaultCell } = props;
-  const { row, table } = defaultCell;
+  const { defaultCell } = props;
+  const { row, column, table } = defaultCell;
   const dataDispatch = table.options.meta.dispatch;
+  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.updateCell,
+  ]);
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
   /** state of cell value */
@@ -18,15 +28,13 @@ export function CheckboxCell(props: CheckboxProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk
-    dataDispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: (column.columnDef as TableColumn).key,
-      value: newValue,
-      row: row,
-      columnId: column.id,
-      state: table.options.meta.tableState,
-    });
+    updateCell(
+      row.index,
+      column.columnDef as TableColumn,
+      newValue,
+      columns,
+      ddbbConfig
+    );
     setChecked(event.target.checked);
     setContextValue({ value: event.target.checked ? 1 : 0, update: true });
   };

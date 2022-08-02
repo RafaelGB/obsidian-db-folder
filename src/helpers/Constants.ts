@@ -5,7 +5,6 @@ import { DatabaseSettings } from "cdm/SettingsModel";
 /** Table Actions */
 export const ActionTypes = Object.freeze({
   UPDATE_COLUMN_LABEL: 'update_column_label',
-  UPDATE_CELL: 'update_cell',
   UPDATE_OPTION_CELL: 'update_option_cell',
   ENABLE_RESET: 'enable_reset',
 });

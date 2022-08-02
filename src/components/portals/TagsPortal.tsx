@@ -17,7 +17,15 @@ const TagsPortal = (tagsProps: TagsProps) => {
   const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.addOptionToColumn]
   );
-  const rows = table.options.meta.tableState.data((state) => state.rows);
+  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.updateCell,
+  ]);
+
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+
   const tableColumn = column.columnDef as TableColumn;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
@@ -71,15 +79,8 @@ const TagsPortal = (tagsProps: TagsProps) => {
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
     const arrayTags = newValue.map((tag: any) => tag.value);
-    dispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: tableColumn.key,
-      value: arrayTags,
-      row: defaultCell.row,
-      columnId: column.id,
-      state: table.options.meta.tableState,
-    });
+    // Update on disk & memory
+    updateCell(row.index, tableColumn, arrayTags, columns, ddbbConfig);
     // Add new option to column options
     newValue
       .filter(

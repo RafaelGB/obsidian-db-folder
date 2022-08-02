@@ -1,4 +1,3 @@
-import { ActionTypes } from "helpers/Constants";
 import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
@@ -12,15 +11,22 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const { defaultCell } = calendarProps;
   const { row, column, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
-  const rows = table.options.meta.tableState.data((state) => state.rows);
-  const dataDispatch = (action: any) =>
-    console.log(`TODO migrate dispatch to table${action.type}`);
+  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.updateCell,
+  ]);
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
   /** Note info of current Cell */
   const note: NoteInfo = row.original.__note__;
   const calendarValue = rows[row.index][tableColumn.key];
-  const [calendarState, setCalendarState] = useState(calendarValue);
 
   function handleSpanOnClick(event: any) {
     event.preventDefault();
@@ -28,18 +34,13 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
-    const newValue = DateTime.fromJSDate(date);
-    // save on disk
-    dataDispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: tableColumn.key,
-      value: newValue.toFormat("yyyy-MM-dd"),
-      row: row,
-      columnId: column.id,
-      state: table.options.meta.tableState,
-    });
-    setCalendarState(newValue);
+    updateCell(
+      row.index,
+      tableColumn,
+      DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
+      columns,
+      ddbbConfig
+    );
     setShowDatePicker(false);
   }
 
@@ -51,8 +52,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     <DatePicker
       dateFormat="yyyy-MM-dd"
       selected={
-        DateTime.isDateTime(calendarState)
-          ? (calendarState as unknown as DateTime).toJSDate()
+        DateTime.isDateTime(calendarValue)
+          ? (calendarValue as unknown as DateTime).toJSDate()
           : null
       }
       onChange={handleCalendarChange}
@@ -67,8 +68,8 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
       onClick={handleSpanOnClick}
       style={{ width: column.getSize() }}
     >
-      {DateTime.isDateTime(calendarState)
-        ? (calendarState as unknown as DateTime).toFormat("yyyy-MM-dd")
+      {DateTime.isDateTime(calendarValue)
+        ? (calendarValue as unknown as DateTime).toFormat("yyyy-MM-dd")
         : null}
     </span>
   );

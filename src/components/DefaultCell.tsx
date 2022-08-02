@@ -162,7 +162,6 @@ export default function DefaultCell(
   };
 
   function onChange(changedValue: string) {
-    // save on disk
     updateCell(
       row.index,
       column.columnDef as TableColumn,

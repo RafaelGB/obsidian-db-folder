@@ -1,4 +1,3 @@
-import { ActionTypes } from "helpers/Constants";
 import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
@@ -32,7 +31,6 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
-    // const newValue = DateTime.fromJSDate(date);
     updateCell(
       row.index,
       tableColumn,
@@ -47,6 +45,7 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
     const el = activeDocument.getElementById("popper-container");
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
+
   return showDatePicker &&
     (tableColumn.isMetadata === undefined || !tableColumn.isMetadata) ? (
     <div className="calendar-time">
