@@ -4,6 +4,7 @@ import { SourceDataTypes, CellSizeOptions, DEFAULT_SETTINGS } from 'helpers/Cons
 import { Literal } from 'obsidian-dataview';
 import { unEscapeSpecialCharacters } from 'parsers/EscapeHelper';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
+import { DataviewService } from 'services/DataviewService';
 
 export class MarshallConfigHandler extends AbstractYamlHandler {
     handlerName = 'configuration';
@@ -32,9 +33,10 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
     }
 
     loadDefaultConfig<K extends keyof LocalSettings>(key: K, value: Literal, localSettings: LocalSettings): LocalSettings {
-        var unEscapedValue = value
-        if (typeof value === "string") {
-            unEscapedValue = unEscapeSpecialCharacters(value)
+        let wrappedLiteral = DataviewService.wrapLiteral(value)
+        let unEscapedValue = wrappedLiteral.value
+        if (wrappedLiteral.type === "string") {
+            unEscapedValue = unEscapeSpecialCharacters(wrappedLiteral.value)
         }
         localSettings[key] = unEscapedValue as any;
         return localSettings;
