@@ -69,7 +69,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    * Array of type headers available to change the data type of the column
    */
   headerActionResponse.buttons = [];
-  const types = header_action_types_section.run(headerActionResponse).buttons;
+  const typesButtons =
+    header_action_types_section.run(headerActionResponse).buttons;
 
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: "right",
@@ -237,21 +238,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                         padding: "4px 0px",
                       }}
                     >
-                      {types.map((type) => (
-                        <div key={type.label}>
-                          <div
-                            className="menu-item sort-button"
-                            onClick={type.onClick}
-                          >
-                            <span className="svg-icon svg-text icon-margin">
-                              {type.icon}
-                            </span>
-                            <span style={{ textTransform: "capitalize" }}>
-                              {type.label}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+                      {typesButtons}
                     </div>
                   )}
                 </div>

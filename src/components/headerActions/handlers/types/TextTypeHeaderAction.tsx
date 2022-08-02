@@ -2,7 +2,8 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import TextIcon from "components/img/Text";
 import React from "react";
-import { ActionTypes, InputType } from "helpers/Constants";
+import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
+import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 
 export default class TextTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -12,22 +13,27 @@ export default class TextTypeHeaderAction extends AbstractHeaderAction {
     return this.goNext(this.globalHeaderActionResponse);
   }
   private addTextType() {
-    const { hooks } = this.globalHeaderActionResponse;
-    const { table, column } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    const textBoxType = {
-      onClick: (e: any) => {
-        table.options.meta.dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          input: InputType.TEXT,
-        });
-        hooks.setShowType(false);
-        hooks.setExpanded(false);
-      },
-      icon: <TextIcon />,
-      label: InputType.TEXT,
-    };
-    this.globalHeaderActionResponse.buttons.push(textBoxType);
+    this.globalHeaderActionResponse.buttons.push(
+      textTypeComponent(this.globalHeaderActionResponse)
+    );
   }
+}
+
+function textTypeComponent(headerActionResponse: HeaderActionResponse) {
+  const { hooks } = headerActionResponse;
+  const { table, column } = headerActionResponse.headerMenuProps.headerProps;
+  const tagsOnClick = (e: any) => {
+    table.options.meta.dispatch({
+      type: ActionTypes.UPDATE_COLUMN_TYPE,
+      columnId: column.id,
+      input: InputType.TEXT,
+    });
+    hooks.setShowType(false);
+    hooks.setExpanded(false);
+  };
+  return headerTypeComponent({
+    onClick: tagsOnClick,
+    icon: <TextIcon />,
+    label: InputLabel.TEXT,
+  });
 }

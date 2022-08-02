@@ -1,18 +1,15 @@
+import { HeaderActionModel } from "cdm/HeaderActionModel";
 import React from "react";
-type HeaderButtonProps = {
-  label: string;
-  icon: React.ReactNode;
-  onClick: (e: any) => void;
-};
-function headerButtonComponent(props: HeaderButtonProps) {
+
+function headerButtonComponent(headerAction: HeaderActionModel) {
   return (
     <div
-      key={props.label}
+      key={headerAction.label}
       className="menu-item sort-button"
-      onMouseDown={props.onClick}
+      onMouseDown={headerAction.onClick}
     >
-      <span className="svg-icon svg-text icon-margin">{props.icon}</span>
-      {props.label}
+      <span className="svg-icon svg-text icon-margin">{headerAction.icon}</span>
+      {headerAction.label}
     </div>
   );
 }

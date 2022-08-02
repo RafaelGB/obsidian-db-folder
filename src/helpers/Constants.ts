@@ -29,6 +29,18 @@ export const InputType = Object.freeze({
   NEW_COLUMN: 'new_column'
 });
 
+export const InputLabel = Object.freeze({
+  NUMBER: 'Number',
+  TEXT: 'Text',
+  SELECT: 'Select',
+  TAGS: 'Tags',
+  MARKDOWN: 'Markdown',
+  CALENDAR: 'Date',
+  CALENDAR_TIME: 'Datetime',
+  TASK: 'Task',
+  CHECKBOX: 'Checkbox'
+});
+
 export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
   MAX_ROWS: 99999,
@@ -54,8 +66,6 @@ export const MetadataLabels = Object.freeze({
   ADD_COLUMN: '+',
   CREATED: 'Created',
   MODIFIED: 'Modified',
-  CALENDAR: 'Date',
-  CALENDAR_TIME: 'Datetime',
   TASK: 'Task',
 });
 

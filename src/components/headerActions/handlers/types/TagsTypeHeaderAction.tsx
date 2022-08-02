@@ -1,8 +1,9 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { ActionTypes, InputType } from "helpers/Constants";
+import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
 import TagsIcon from "components/img/TagsIcon";
+import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 
 export default class TagsTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -12,22 +13,27 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
     return this.goNext(this.globalHeaderActionResponse);
   }
   private addTagsType() {
-    const { hooks } = this.globalHeaderActionResponse;
-    const { table, column } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    const checkBoxType = {
-      onClick: (e: any) => {
-        table.options.meta.dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          input: InputType.TAGS,
-        });
-        hooks.setShowType(false);
-        hooks.setExpanded(false);
-      },
-      icon: <TagsIcon />,
-      label: InputType.TAGS,
-    };
-    this.globalHeaderActionResponse.buttons.push(checkBoxType);
+    this.globalHeaderActionResponse.buttons.push(
+      tagsTypeComponent(this.globalHeaderActionResponse)
+    );
   }
+}
+
+function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
+  const { hooks } = headerActionResponse;
+  const { table, column } = headerActionResponse.headerMenuProps.headerProps;
+  const tagsOnClick = (e: any) => {
+    table.options.meta.dispatch({
+      type: ActionTypes.UPDATE_COLUMN_TYPE,
+      columnId: column.id,
+      input: InputType.TAGS,
+    });
+    hooks.setShowType(false);
+    hooks.setExpanded(false);
+  };
+  return headerTypeComponent({
+    onClick: tagsOnClick,
+    icon: <TagsIcon />,
+    label: InputLabel.TAGS,
+  });
 }
