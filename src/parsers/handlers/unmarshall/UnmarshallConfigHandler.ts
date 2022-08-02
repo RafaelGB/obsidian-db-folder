@@ -1,6 +1,7 @@
 import { DiskHandlerResponse } from "cdm/MashallModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType, YAML_INDENT } from "helpers/Constants";
+import { escapeSpecialCharacters } from "parsers/EscapeHelper";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
 import { DataviewService } from "services/DataviewService";
 
@@ -18,6 +19,8 @@ export class UnmarshallConfigHandler extends AbstractDiskHandler {
                     // Lvl3: config properties
                     this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: "${parseValue(valueInternal as string, config)}"`);
                 });
+            } else if (typeof valueConfig == "string") {
+                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: "${parseValue(escapeSpecialCharacters(valueConfig), config)}"`);
             } else {
                 // Lvl2: config properties
                 this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: "${parseValue(valueConfig, config)}"`);
