@@ -4,7 +4,8 @@ import { DatabaseView } from "DatabaseView";
 import create from "zustand";
 
 const useConfigStore = (view: DatabaseView) => {
-    const { global_settings, local_settings } = view.plugin.settings;
+    const { global_settings } = view.plugin.settings;
+    const local_settings = view.diskConfig.yaml.config;
     return create<ConfigState>()(
         (set) => ({
             ddbbConfig: local_settings,

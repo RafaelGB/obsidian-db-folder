@@ -15,6 +15,7 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
             this.addError(`configuration was null or undefined, using default configuration instead`);
         } else {
             Object.entries(DEFAULT_SETTINGS.local_settings).forEach(([key, value]) => {
+
                 if (this.checkNullable(yaml.config[key as keyof LocalSettings])) {
                     yaml.config = this.loadDefaultConfig(key as keyof LocalSettings, value, yaml.config);
                     if (value !== "") {

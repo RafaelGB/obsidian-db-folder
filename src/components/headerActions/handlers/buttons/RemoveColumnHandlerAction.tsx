@@ -34,6 +34,9 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (store) => store.ddbbConfig
   );
+  const columns = table.options.meta.tableState.columns(
+    (store) => store.columns
+  );
   const [rows, removeDataOfColumn] = table.options.meta.tableState.data(
     (store) => [store.rows, store.removeDataOfColumn]
   );
@@ -47,7 +50,8 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
             row.__note__.getFile(),
             hooks.keyState,
             undefined, // delete does not need this field
-            table.options.meta.tableState,
+            columns,
+            ddbbConfig,
             UpdateRowOptions.REMOVE_COLUMN
           );
         })
