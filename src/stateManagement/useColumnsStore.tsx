@@ -10,6 +10,7 @@ import {
   TableColumnsTemplate,
 } from "helpers/Constants";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
+import { dbTrim } from "helpers/StylesHelper";
 import create from "zustand";
 
 const useColumnsStore = (view: DatabaseView) => {
@@ -137,6 +138,21 @@ const useColumnsStore = (view: DatabaseView) => {
            * - CHECKBOX
            */
         }
+        return { columns: updater.columns };
+      }),
+    alterColumnLabel: (column: TableColumn, label: string) =>
+      set((updater) => {
+        const labelIndex = updater.columns.findIndex(
+          (col: TableColumn) => col.id === column.id
+        );
+        const newKey = dbTrim(label);
+        updater.columns[labelIndex].label = label;
+        updater.columns[labelIndex].id = newKey;
+        updater.columns[labelIndex].key = newKey;
+        updater.columns[labelIndex].accessorKey = newKey;
+
+        // Update configuration & row files on disk
+        view.diskConfig.updateColumnKey(column.id, newKey, label);
         return { columns: updater.columns };
       }),
   }));

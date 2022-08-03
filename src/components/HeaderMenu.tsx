@@ -1,4 +1,4 @@
-import { ActionTypes, InputType, StyleVariables } from "helpers/Constants";
+import { InputType, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useEffect, useState } from "react";
@@ -12,9 +12,14 @@ import { TableColumn } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
-  const dispatch = table.options.meta.dispatch;
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
+  const [columns, alterColumnLabel] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.alterColumnLabel]
+  );
+  const updateDataAfterLabelChange = table.options.meta.tableState.data(
+    (state) => state.updateDataAfterLabelChange
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
   );
   /** Header props */
   const {
@@ -122,14 +127,14 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     table.setColumnSizing(updateSizeWithNewKey);
 
     setkeyState(newKey);
-    dispatch({
-      type: ActionTypes.UPDATE_COLUMN_LABEL,
-      columnId: column.id,
-      accessorKey: newKey,
-      newKey: newKey,
-      label: labelState,
-      state: table.options.meta.tableState,
-    });
+    updateDataAfterLabelChange(
+      column.columnDef as TableColumn,
+      labelState,
+      columns,
+      ddbbConfig
+    );
+
+    alterColumnLabel(column.columnDef as TableColumn, labelState);
   }
 
   function handleKeyDown(e: any) {

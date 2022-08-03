@@ -4,6 +4,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { DataState } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
+import { dbTrim } from "helpers/StylesHelper";
 import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { DateTime } from "luxon";
 import { Literal } from "obsidian-dataview";
@@ -102,6 +103,32 @@ const useDataStore = (view: DatabaseView) => {
                 return { rows: [...state.rows.slice(0, rowIndex), row, ...state.rows.slice(rowIndex + 1)] };
             }
             ),
+            updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
+                const newKey = dbTrim(label);
+                // Save on disk
+                Promise.all(
+                    state.rows.map(async (row: RowDataType) => {
+                        updateRowFileProxy(
+                            row.__note__.getFile(),
+                            column.id,
+                            newKey,
+                            columns,
+                            ddbbConfig,
+                            UpdateRowOptions.COLUMN_KEY
+                        );
+                    }));
+
+                // Save on memory
+                const alterRows = state.rows.map((row) => {
+                    row[newKey] = row[column.id];
+                    delete row[column.id];
+                    return row;
+                });
+
+                return { rows: alterRows };
+            }
+            ),
+
             parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => {
                 set((updater) => {
                     const parsedRows = updater.rows.map((row) => ({
@@ -126,62 +153,67 @@ const useDataStore = (view: DatabaseView) => {
                 return { rows: newRows };
             }),
         }),
+
     );
 }
 export default useDataStore;
-
 /**
- * 
- * dispatch({
-      type: ActionTypes.UPDATE_OPTION_CELL,
-      file: note.getFile(),
-      key: tableColumn.key,
-      value: option.label,
-      row: row,
-      columnId: column.id,
-      state: table.options.meta,
-    });
+ * case ActionTypes.UPDATE_COLUMN_LABEL:
+      const update_column_label_index = state.view.columns.findIndex(
+        (column: any) => column.id === action.columnId
+      );
 
-
-    
- * case ActionTypes.UPDATE_OPTION_CELL:
-      // check if this column is configured as a group folder
-      if (dbconfig.group_folder_column === action.key) {
-        moveFile(`${state.view.file.parent.path}/${action.value}`, action);
-        action.row[
-          MetadataColumns.FILE
-        ] = `[[${state.view.file.parent.path}/${action.value}/${action.file.name}|${action.file.basename}]]`;
-        // Check if action.value is a valid folder name
-        const auxPath =
-          action.value !== ""
-            ? `${state.view.file.parent.path}/${action.value}/${action.file.name}`
-            : `${state.view.file.parent.path}/${action.file.name}`;
-
-        action.row.original.__note__ = new NoteInfo({
-          ...action.row,
-          file: {
-            path: auxPath,
-          },
-        });
-        // Update original cell value
-        const update_option_cell_index = state.view.columns.findIndex(
-          (column) => column.id === action.columnId
-        );
-        const update_option_cell_column_key =
-          state.view.columns[update_option_cell_index].key;
-        return update(state, {
-          view: {
-            rows: {
-              [action.row.index]: {
-                $merge: {
-                  [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
-                  note: action.row.original.__note__,
-                  [update_option_cell_column_key]: action.value,
-                },
+      // Update configuration & row files on disk
+      state.view.diskConfig.updateColumnKey(
+        action.columnId,
+        action.newKey,
+        action.label
+      );
+      // Promise.all(
+      //   state.view.rows.map(async (row: RowDataType) => {
+      //     await updateRowFileProxy(
+      //       row.__note__.getFile(),
+      //       action.columnId,
+      //       action.newKey,
+      //       action.state,
+      //       UpdateRowOptions.COLUMN_KEY
+      //     );
+      //   })
+      // );
+      return update(state, {
+        skipReset: { $set: true },
+        // Modify column visually with the new label
+        view: {
+          columns: {
+            $set: [
+              ...state.view.columns.slice(0, update_column_label_index),
+              {
+                ...state.view.columns[update_column_label_index],
+                label: action.label,
+                id: action.newKey,
+                key: action.newKey,
+                accessorKey: action.newKey,
               },
+              ...state.view.columns.slice(
+                update_column_label_index + 1,
+                state.view.columns.length
+              ),
+            ],
+          },
+          // Modify data visually with the new key
+          rows: {
+            $set: state.view.rows.map((row: RowDataType) => {
+              row[action.newKey] = row[action.columnId];
+              delete row[action.columnId];
+              return row;
+            }),
+          },
+          // Update view yaml state
+          diskConfig: {
+            yaml: {
+              $set: state.view.diskConfig.yaml,
             },
           },
-        });
-      }
-      break;
+        },
+      });
  */

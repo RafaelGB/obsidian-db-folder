@@ -88,50 +88,6 @@ export function databaseReducer(state: TableDataType, action: any) {
       });
 
     /**
-     * Check if the given option cell is a candidate for moving the file into a subfolder
-     */
-    case ActionTypes.UPDATE_OPTION_CELL:
-      // check if this column is configured as a group folder
-      if (dbconfig.group_folder_column === action.key) {
-        moveFile(`${state.view.file.parent.path}/${action.value}`, action);
-        action.row[
-          MetadataColumns.FILE
-        ] = `[[${state.view.file.parent.path}/${action.value}/${action.file.name}|${action.file.basename}]]`;
-        // Check if action.value is a valid folder name
-        const auxPath =
-          action.value !== ""
-            ? `${state.view.file.parent.path}/${action.value}/${action.file.name}`
-            : `${state.view.file.parent.path}/${action.file.name}`;
-
-        action.row.original.__note__ = new NoteInfo({
-          ...action.row,
-          file: {
-            path: auxPath,
-          },
-        });
-        // Update original cell value
-        const update_option_cell_index = state.view.columns.findIndex(
-          (column) => column.id === action.columnId
-        );
-        const update_option_cell_column_key =
-          state.view.columns[update_option_cell_index].key;
-        return update(state, {
-          view: {
-            rows: {
-              [action.row.index]: {
-                $merge: {
-                  [MetadataColumns.FILE]: action.row[MetadataColumns.FILE],
-                  note: action.row.original.__note__,
-                  [update_option_cell_column_key]: action.value,
-                },
-              },
-            },
-          },
-        });
-      }
-      break;
-
-    /**
      * Enable reset
      */
     case ActionTypes.ENABLE_RESET:
