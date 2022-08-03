@@ -1,8 +1,6 @@
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import { Table } from "components/Table";
 import { TableDataType } from "cdm/FolderModel";
-import { databaseReducer } from "components/reducers/DatabaseDispatch";
-import { ActionTypes } from "helpers/Constants";
 import useTableStore from "components/reducers/TableReducer";
 export function createDatabase(tableProps: TableDataType): JSX.Element {
   return <Database {...tableProps} />;

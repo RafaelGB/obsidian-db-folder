@@ -261,24 +261,6 @@ export default class DBFolderPlugin extends Plugin {
 	registerMonkeyPatches() {
 		const self = this;
 
-		this.app.workspace.onLayoutReady(() => {
-			this.register(
-				around((app as any).commands, {
-					executeCommandById(next) {
-						return function (command: string) {
-							const view = app.workspace.getActiveViewOfType(DatabaseView);
-
-							if (view) {
-								//view.emitter.emit('hotkey', command);
-							}
-
-							return next.call(this, command);
-						};
-					},
-				})
-			);
-		});
-
 		// Monkey patch WorkspaceLeaf to open Databases with DatabaseView by default
 		this.register(
 			around(WorkspaceLeaf.prototype, {

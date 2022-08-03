@@ -114,7 +114,7 @@
   background-color: var(--background-secondary);
 }
 
-span.is-loaded,
+.database-plugin__td span.is-loaded,
 span.database-plugin__calendar,
 div.database-plugin__checkbox {
   display: flex;
