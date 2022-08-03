@@ -106,11 +106,13 @@ const useColumnsStore = (view: DatabaseView) => {
           // If the type is the same, do nothing
           return {};
         }
+
+        const alteredColumns = [...updater.columns];
         // Save the new type in the disk config
         view.diskConfig.updateColumnProperties(column.id, {
           input: input,
         });
-        updater.columns[typeIndex].input = input;
+        alteredColumns[typeIndex].input = input;
         switch (input) {
           case InputType.SELECT:
           case InputType.TAGS:
@@ -124,7 +126,7 @@ const useColumnsStore = (view: DatabaseView) => {
                 });
               }
             });
-            updater.columns[typeIndex].options =
+            alteredColumns[typeIndex].options =
               obtainUniqueOptionValues(options);
             break;
           default:
@@ -138,7 +140,7 @@ const useColumnsStore = (view: DatabaseView) => {
            * - CHECKBOX
            */
         }
-        return { columns: updater.columns };
+        return { columns: alteredColumns };
       }),
     alterColumnLabel: (column: TableColumn, label: string) =>
       set((updater) => {

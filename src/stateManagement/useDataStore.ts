@@ -56,7 +56,6 @@ const useDataStore = (view: DatabaseView) => {
             updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => set((state) => {
                 const row = { ...state.rows[rowIndex] };
                 row[column.key] = value;
-                console.log(ddbbConfig.show_metadata_modified);
                 if (ddbbConfig.show_metadata_modified) {
                     row[MetadataColumns.MODIFIED] = DateTime.now();
                 }

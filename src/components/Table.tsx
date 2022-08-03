@@ -57,7 +57,7 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
 export function Table(tableData: TableDataType) {
   /** Main information about the table */
   const { view, tableStore } = tableData;
-  const columns = tableStore.columns((state) => state.columns);
+  const [columns] = tableStore.columns((state) => [state.columns]);
   const [rows, addRow] = tableStore.data((state) => [state.rows, state.addRow]);
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
