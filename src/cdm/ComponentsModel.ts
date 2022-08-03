@@ -13,7 +13,6 @@ export type PopperProps = {
 }
 
 export type TagsProps = {
-    dispatch: (action: any) => void;
     defaultCell: CellContext<RowDataType, Literal>;
 }
 

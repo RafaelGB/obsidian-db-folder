@@ -31,6 +31,10 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
+  const alterEnableRender = table.options.meta.tableState.renderState(
+    (store) => store.alterEnableRender
+  );
+
   const numberOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
@@ -40,6 +44,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
       ddbbConfig
     );
     alterColumnType(column.columnDef as TableColumn, InputType.NUMBER);
+    alterEnableRender(true);
   };
   return headerTypeComponent({
     onClick: numberOnClick,

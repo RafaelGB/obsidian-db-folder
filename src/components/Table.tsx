@@ -69,14 +69,23 @@ export function Table(tableData: TableDataType) {
     store.global,
     store.alterConfig,
   ]);
-
+  const [enableRender, alterEnableRender] = tableStore.renderState((store) => [
+    store.enableRender,
+    store.alterEnableRender,
+  ]);
   /** Plugin services */
   const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
 
   /** Reducer */
-  const dataDispatch = (action: any) =>
-    console.log(`TODO migrar dataDispatch ${action.type}`);
+  const rerender = React.useReducer(() => ({}), {})[1];
+  React.useEffect(() => {
+    if (enableRender) {
+      console.log("=> Table. rerender");
+      alterEnableRender(false);
+      rerender();
+    }
+  });
 
   /** Table services */
   // Sorting
@@ -219,7 +228,6 @@ export function Table(tableData: TableDataType) {
     globalFilterFn: "includesString",
     meta: {
       tableState: tableStore,
-      dispatch: dataDispatch,
       view: view,
     },
     defaultColumn: defaultColumn,
@@ -271,7 +279,7 @@ export function Table(tableData: TableDataType) {
           csvButtonProps={{
             columns: columns,
             rows: table.getRowModel().rows,
-            name: tableData.view.diskConfig.yaml.name,
+            name: view.diskConfig.yaml.name,
           }}
           globalFilterRows={{
             globalFilter: globalFilter,

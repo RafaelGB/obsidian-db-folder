@@ -150,7 +150,6 @@ const useColumnsStore = (view: DatabaseView) => {
         updater.columns[labelIndex].id = newKey;
         updater.columns[labelIndex].key = newKey;
         updater.columns[labelIndex].accessorKey = newKey;
-
         // Update configuration & row files on disk
         view.diskConfig.updateColumnKey(column.id, newKey, label);
         return { columns: updater.columns };

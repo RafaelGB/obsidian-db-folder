@@ -7,12 +7,11 @@ import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
 import { TableColumn } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { dispatch, defaultCell } = tagsProps;
+  const { defaultCell } = tagsProps;
   const { row, column, table } = defaultCell;
   const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.addOptionToColumn]

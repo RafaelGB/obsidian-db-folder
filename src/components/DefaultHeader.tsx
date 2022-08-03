@@ -53,14 +53,13 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   // TODO : add a tooltip to the header
   const created: boolean = false;
   /** Properties of header */
-  const { column, header, table } = headerProps;
+  const { header, table } = headerProps;
   const [columns, addToLeft] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.addToLeft]
   );
   /** Column values */
-  const { id, input, options, label, config } = columns.find(
-    (col: TableColumn) => col.id === column.id
-  );
+  const { id, input, options, label, config } = header.column
+    .columnDef as TableColumn;
   /** reducer asociated to database */
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);

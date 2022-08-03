@@ -22,7 +22,6 @@ export default function DefaultCell(
   defaultCell: CellContext<RowDataType, Literal>
 ) {
   const { cell, column, row, table } = defaultCell;
-  const dataDispatch = table.options.meta.dispatch;
   /** Initial state of cell */
   const cellValue = cell.getValue();
   /** Columns information */
@@ -36,7 +35,7 @@ export default function DefaultCell(
     (state) => state.ddbbConfig
   );
   /** Type of cell */
-  const input = columns.find((col) => col.id === column.id).input;
+  const input = (column.columnDef as TableColumn).input;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -234,11 +233,7 @@ export default function DefaultCell(
         return <PopperSelectPortal defaultCell={defaultCell} />;
       /** Tags option */
       case InputType.TAGS:
-        return (
-          <TableCellContext.Provider value={{ contextValue, setContextValue }}>
-            <TagsPortal dispatch={dataDispatch} defaultCell={defaultCell} />
-          </TableCellContext.Provider>
-        );
+        return <TagsPortal defaultCell={defaultCell} />;
 
       case InputType.TASK:
         if ((column.columnDef as TableColumn).config.task_hide_completed) {

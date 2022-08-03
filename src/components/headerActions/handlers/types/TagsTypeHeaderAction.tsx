@@ -32,6 +32,10 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
+  const alterEnableRender = table.options.meta.tableState.renderState(
+    (store) => store.alterEnableRender
+  );
+
   const tagsOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
@@ -41,6 +45,7 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
       ddbbConfig
     );
     alterColumnType(column.columnDef as TableColumn, InputType.TAGS, rows);
+    alterEnableRender(true);
   };
   return headerTypeComponent({
     onClick: tagsOnClick,

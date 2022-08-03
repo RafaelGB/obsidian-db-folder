@@ -16,7 +16,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
   const { table, header, findColumn, headerIndex, setColumnOrder } =
     headerProps;
   const { id } = header.column.columnDef as TableColumn;
-  const { dispatch, view, tableState } = table.options.meta;
+  const { view, tableState } = table.options.meta;
   const columns = tableState.columns((state) => state.columns);
   const originalIndex = columns.findIndex((col) => col.id === id);
   //DnD
@@ -60,7 +60,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
         }
       },
     }),
-    [findColumn, dispatch]
+    [findColumn]
   );
 
   const opacity = isDragging ? 0 : 1;

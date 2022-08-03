@@ -21,6 +21,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
+
+  const alterEnableRender = table.options.meta.tableState.renderState(
+    (store) => store.alterEnableRender
+  );
   /** Header props */
   const {
     propertyIcon,
@@ -32,9 +36,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     setLabelState,
   } = headerMenuProps;
 
-  const { key, isMetadata, input } = columns.find(
-    (col) => col.id === column.id
-  );
+  const { key, isMetadata, input } = column.columnDef as TableColumn;
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(key));
   const [popperElement, setPopperElement] = useState(null);
@@ -118,14 +120,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       .map((o: any) => (o.id === column.id ? newKey : o.id));
     table.setColumnOrder(updateOrderWithNewKey);
 
-    // Update state of sizing
-    const updateSizeWithNewKey: Record<string, number> = {};
-    table.getAllColumns().forEach((o: any) => {
-      const key = o.id === column.id ? newKey : o.id;
-      updateSizeWithNewKey[key] = o.getSize();
-    });
-    table.setColumnSizing(updateSizeWithNewKey);
-
     setkeyState(newKey);
     updateDataAfterLabelChange(
       column.columnDef as TableColumn,
@@ -135,6 +129,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     );
 
     alterColumnLabel(column.columnDef as TableColumn, labelState);
+    alterEnableRender(true);
   }
 
   function handleKeyDown(e: any) {

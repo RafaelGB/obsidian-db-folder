@@ -32,6 +32,9 @@ function textTypeComponent(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
+  const alterEnableRender = table.options.meta.tableState.renderState(
+    (store) => store.alterEnableRender
+  );
 
   const tagsOnClick = (e: any) => {
     hooks.setShowType(false);
@@ -42,6 +45,7 @@ function textTypeComponent(headerActionResponse: HeaderActionResponse) {
       ddbbConfig
     );
     alterColumnType(column.columnDef as TableColumn, InputType.TEXT);
+    alterEnableRender(true);
   };
 
   return headerTypeComponent({
