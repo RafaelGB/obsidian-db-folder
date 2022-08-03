@@ -7,26 +7,36 @@ import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { ActionTypes } from "helpers/Constants";
 import NoteInfo from "services/NoteInfo";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
-  const { intialState, column, dispatch, cellProperties, columns } = tagsProps;
-  const { row, table } = cellProperties;
+  const { defaultCell } = tagsProps;
+  const { row, column, table } = defaultCell;
+  const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.addOptionToColumn]
+  );
+  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.updateCell,
+  ]);
+
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+
   const tableColumn = column.columnDef as TableColumn;
-  const state = table.options.meta as TableDataType;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    Array.isArray(intialState.view.rows[row.index][tableColumn.key])
-      ? (intialState.view.rows[row.index][tableColumn.key] as Literal[])
+    Array.isArray(rows[row.index][tableColumn.key])
+      ? (rows[row.index][tableColumn.key] as Literal[])
       : []
   );
 
   /** Note info of current Cell */
-  const note: NoteInfo = (cellProperties.row.original as any).__note__;
+  const note: NoteInfo = (defaultCell.row.original as any).__note__;
 
   function getColor(tag: string) {
     const match = tableColumn.options.find(
@@ -41,11 +51,11 @@ const TagsPortal = (tagsProps: TagsProps) => {
         label: tag,
         backgroundColor: color,
       };
-      const currentColumn = state.columns.find(
+      const currentColumn = columns.find(
         (col: TableColumn) => col.key === tableColumn.key
       );
       currentColumn.options.push(newOption);
-      state.view.diskConfig.updateColumnProperties(column.id, {
+      table.options.meta.view.diskConfig.updateColumnProperties(column.id, {
         options: currentColumn.options,
       });
       return color;
@@ -68,14 +78,8 @@ const TagsPortal = (tagsProps: TagsProps) => {
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
     const arrayTags = newValue.map((tag: any) => tag.value);
-    dispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: tableColumn.key,
-      value: arrayTags,
-      row: cellProperties.row,
-      columnId: column.id,
-    });
+    // Update on disk & memory
+    updateCell(row.index, tableColumn, arrayTags, columns, ddbbConfig);
     // Add new option to column options
     newValue
       .filter(
@@ -83,13 +87,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
           !tableColumn.options.find((option: any) => option.label === tag.value)
       )
       .forEach((tag: any) => {
-        dispatch({
-          columns: columns,
-          option: tag.value,
-          backgroundColor: randomColor(),
-          columnId: column.id,
-          type: ActionTypes.ADD_OPTION_TO_COLUMN,
-        });
+        addOptionToColumn(tableColumn, tag.value, randomColor());
       });
     setTagsState(arrayTags);
   };

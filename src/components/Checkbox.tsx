@@ -1,31 +1,34 @@
 import React, { useContext, useState } from "react";
-import { CellContext } from "components/contexts/CellContext";
-import { ActionTypes } from "helpers/Constants";
-import NoteInfo from "services/NoteInfo";
+import { TableCellContext } from "components/contexts/CellContext";
 import { CheckboxProps } from "cdm/CheckboxModel";
-import { TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 
 export function CheckboxCell(props: CheckboxProps) {
-  const { column, cellProperties } = props;
-  const { row, table } = cellProperties;
-  const dataDispatch = (table.options.meta as TableDataType).dispatch;
-  /** Note info of current Cell */
-  const note: NoteInfo = row.original.__note__;
+  const { defaultCell } = props;
+  const { row, column, table } = defaultCell;
+  const updateCell = table.options.meta.tableState.data(
+    (state) => state.updateCell
+  );
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
   /** state of cell value */
-  const { contextValue, setContextValue } = useContext(CellContext);
+  const { contextValue, setContextValue } = useContext(TableCellContext);
   const [checked, setChecked] = useState(contextValue.value as boolean);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk
-    dataDispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: column.key,
-      value: newValue,
-      row: row,
-      columnId: column.id,
-    });
+    updateCell(
+      row.index,
+      column.columnDef as TableColumn,
+      newValue,
+      columns,
+      ddbbConfig
+    );
     setChecked(event.target.checked);
     setContextValue({ value: event.target.checked ? 1 : 0, update: true });
   };

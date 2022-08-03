@@ -1,8 +1,7 @@
-import { TableColumn, TableDataType } from "cdm/FolderModel";
-import { CellProps } from "cdm/CellModel";
 
+import { CellContext } from "@tanstack/react-table";
+import { Literal } from "obsidian-dataview";
+import { RowDataType } from "cdm/FolderModel";
 export type CheckboxProps = {
-    intialState: TableDataType;
-    column: TableColumn;
-    cellProperties: CellProps;
-};
+    defaultCell: CellContext<RowDataType, Literal>;
+}

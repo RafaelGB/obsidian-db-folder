@@ -1,8 +1,10 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { ActionTypes, InputType } from "helpers/Constants";
+import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
 import TagsIcon from "components/img/TagsIcon";
+import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
+import { TableColumn } from "cdm/FolderModel";
 
 export default class TagsTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -12,22 +14,38 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
     return this.goNext(this.globalHeaderActionResponse);
   }
   private addTagsType() {
-    const { hooks } = this.globalHeaderActionResponse;
-    const { table, column } =
-      this.globalHeaderActionResponse.headerMenuProps.headerProps;
-    const checkBoxType = {
-      onClick: (e: any) => {
-        (table.options.meta as any).dispatch({
-          type: ActionTypes.UPDATE_COLUMN_TYPE,
-          columnId: column.id,
-          input: InputType.TAGS,
-        });
-        hooks.setShowType(false);
-        hooks.setExpanded(false);
-      },
-      icon: <TagsIcon />,
-      label: InputType.TAGS,
-    };
-    this.globalHeaderActionResponse.buttons.push(checkBoxType);
+    this.globalHeaderActionResponse.buttons.push(
+      tagsTypeComponent(this.globalHeaderActionResponse)
+    );
   }
+}
+
+function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
+  const { hooks } = headerActionResponse;
+  const { table, column } = headerActionResponse.headerMenuProps.headerProps;
+  const alterColumnType = table.options.meta.tableState.columns(
+    (state) => state.alterColumnType
+  );
+  const [rows, parseDataOfColumn] = table.options.meta.tableState.data(
+    (state) => [state.rows, state.parseDataOfColumn]
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+
+  const tagsOnClick = (e: any) => {
+    hooks.setShowType(false);
+    hooks.setExpanded(false);
+    parseDataOfColumn(
+      column.columnDef as TableColumn,
+      InputType.TAGS,
+      ddbbConfig
+    );
+    alterColumnType(column.columnDef as TableColumn, InputType.TAGS, rows);
+  };
+  return headerTypeComponent({
+    onClick: tagsOnClick,
+    icon: <TagsIcon />,
+    label: InputLabel.TAGS,
+  });
 }

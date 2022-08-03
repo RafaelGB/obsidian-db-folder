@@ -1,19 +1,30 @@
 import PlusIcon from "components/img/Plus";
 import Relationship from "components/RelationShip";
 import { grey, randomColor } from "helpers/Colors";
-import { ActionTypes, StyleVariables } from "helpers/Constants";
-import React, { useContext, useState } from "react";
+import { StyleVariables } from "helpers/Constants";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { PopperProps } from "cdm/ComponentsModel";
-import { CellContext } from "components/contexts/CellContext";
 import CrossIcon from "components/img/CrossIcon";
 import { TableColumn } from "cdm/FolderModel";
 
 const PopperSelectPortal = (popperProps: PopperProps) => {
-  const { dispatch, row, column, columns, note, intialState } = popperProps;
+  const { defaultCell } = popperProps;
+  const { row, column, table } = defaultCell;
+  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.updateCell,
+  ]);
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+  const tableColumn = column.columnDef as TableColumn;
   /** state of cell value */
-  const { contextValue, setContextValue } = useContext(CellContext);
+  const selectState = rows[row.index][tableColumn.key];
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -25,22 +36,24 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector popper state
   const [domReady, setDomReady] = useState(false);
 
-  const tableColumn = column.columnDef as TableColumn;
+  const addOptionToColumn = table.options.meta.tableState.columns(
+    (state) => state.addOptionToColumn
+  );
   React.useEffect(() => {
-    setDomReady(true);
+    if (!domReady) {
+      setDomReady(true);
+    }
   });
 
   function handleRemoveOption(e: any) {
-    dispatch({
-      type: ActionTypes.UPDATE_OPTION_CELL,
-      file: note.getFile(),
-      key: tableColumn.key,
-      value: "",
-      row: row,
-      columnId: column.id,
-      state: intialState,
-    });
-    setContextValue({ value: "", update: true });
+    updateCell(
+      row.index,
+      column.columnDef as TableColumn,
+      "",
+      columns,
+      ddbbConfig,
+      true
+    );
     setShowSelect(false);
   }
 
@@ -49,16 +62,14 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     backgroundColor?: string;
   }) {
     // save on disk & move file if its configured on the column
-    dispatch({
-      type: ActionTypes.UPDATE_OPTION_CELL,
-      file: note.getFile(),
-      key: tableColumn.key,
-      value: option.label,
-      row: row,
-      columnId: column.id,
-      state: intialState,
-    });
-    setContextValue({ value: option.label, update: true });
+    updateCell(
+      row.index,
+      column.columnDef as TableColumn,
+      option.label,
+      columns,
+      ddbbConfig,
+      true
+    );
     setShowSelect(false);
   }
 
@@ -87,18 +98,13 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       }
     );
     if (!alreadyExist) {
-      dispatch({
-        type: ActionTypes.ADD_OPTION_TO_COLUMN,
-        option: e.target.value,
-        backgroundColor: randomColor(),
-        columnId: column.id,
-      });
+      addOptionToColumn(tableColumn, e.target.value, randomColor());
     }
   }
 
   function getColor() {
     const match = tableColumn.options.find(
-      (option: { label: string }) => option.label === contextValue.value
+      (option: { label: string }) => option.label === selectState
     );
     return (match && match.backgroundColor) || grey(200);
   }
@@ -204,9 +210,9 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
         onClick={() => setShowSelect(true)}
         style={{ width: column.getSize() }}
       >
-        {contextValue.value && (
+        {selectState && (
           <Relationship
-            value={contextValue.value.toString()}
+            value={selectState.toString()}
             backgroundColor={getColor()}
           />
         )}

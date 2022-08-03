@@ -1,8 +1,8 @@
 import { ColumnSort } from "@tanstack/react-table";
-import { InitialState, RowDataType, TableColumn } from "cdm/FolderModel";
+import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
 
-function obtainInitialState(columns: TableColumn[], rows: RowDataType[]): InitialState {
-    const initialState: InitialState = {};
+function obtainInitialType(columns: TableColumn[], rows: RowDataType[]): InitialType {
+    const initialType: InitialType = {};
     const sortElemList: ColumnSort[] = [];
     columns.forEach((column: TableColumn) => {
         if (column.isSorted) {
@@ -12,7 +12,7 @@ function obtainInitialState(columns: TableColumn[], rows: RowDataType[]): Initia
             });
         }
     });
-    initialState.sortBy = sortElemList;
-    return initialState;
+    initialType.sortBy = sortElemList;
+    return initialType;
 }
-export default obtainInitialState;
+export default obtainInitialType;

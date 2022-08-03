@@ -1,4 +1,4 @@
-import { ActionTypes, InputType, StyleVariables } from "helpers/Constants";
+import { InputType, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useEffect, useState } from "react";
@@ -8,11 +8,20 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
-  const { table, header, column } = headerMenuProps.headerProps;
-  const dispatch = (table.options.meta as any).dispatch;
+  const { table, column } = headerMenuProps.headerProps;
+  const [columns, alterColumnLabel] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.alterColumnLabel]
+  );
+  const updateDataAfterLabelChange = table.options.meta.tableState.data(
+    (state) => state.updateDataAfterLabelChange
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
+
   /** Header props */
   const {
     propertyIcon,
@@ -69,7 +78,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    * Array of type headers available to change the data type of the column
    */
   headerActionResponse.buttons = [];
-  const types = header_action_types_section.run(headerActionResponse).buttons;
+  const typesButtons =
+    header_action_types_section.run(headerActionResponse).buttons;
 
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: "right",
@@ -107,22 +117,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       .map((o: any) => (o.id === column.id ? newKey : o.id));
     table.setColumnOrder(updateOrderWithNewKey);
 
-    // Update state of sizing
-    const updateSizeWithNewKey: Record<string, number> = {};
-    table.getAllColumns().forEach((o: any) => {
-      const key = o.id === column.id ? newKey : o.id;
-      updateSizeWithNewKey[key] = o.getSize();
-    });
-    table.setColumnSizing(updateSizeWithNewKey);
-
     setkeyState(newKey);
-    dispatch({
-      type: ActionTypes.UPDATE_COLUMN_LABEL,
-      columnId: column.id,
-      accessorKey: newKey,
-      newKey: newKey,
-      label: labelState,
-    });
+    updateDataAfterLabelChange(
+      column.columnDef as TableColumn,
+      labelState,
+      columns,
+      ddbbConfig
+    );
+
+    alterColumnLabel(column.columnDef as TableColumn, labelState);
   }
 
   function handleKeyDown(e: any) {
@@ -236,21 +239,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                         padding: "4px 0px",
                       }}
                     >
-                      {types.map((type) => (
-                        <div key={type.label}>
-                          <div
-                            className="menu-item sort-button"
-                            onClick={type.onClick}
-                          >
-                            <span className="svg-icon svg-text icon-margin">
-                              {type.icon}
-                            </span>
-                            <span style={{ textTransform: "capitalize" }}>
-                              {type.label}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+                      {typesButtons}
                     </div>
                   )}
                 </div>
@@ -263,18 +252,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 padding: "4px 0px",
               }}
             >
-              {headerButtons.map((button) => (
-                <div
-                  key={button.label}
-                  className="menu-item sort-button"
-                  onMouseDown={button.onClick}
-                >
-                  <span className="svg-icon svg-text icon-margin">
-                    {button.icon}
-                  </span>
-                  {button.label}
-                </div>
-              ))}
+              {headerButtons}
             </div>
             {(!isMetadata || input === InputType.TASK) && (
               <div
@@ -290,7 +268,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     className="menu-item sort-button"
                     onClick={() => {
                       new ColumnModal(
-                        (table.options.meta as TableDataType).view,
+                        table.options.meta.view,
                         headerMenuProps
                       ).open();
                       setExpanded(false);

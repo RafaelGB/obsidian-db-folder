@@ -1,25 +1,21 @@
 import NoteInfo from "services/NoteInfo";
-import { BaseComponentProps } from "cdm/DatabaseModel";
-import { CellProps } from "cdm/CellModel";
+import { CellContext } from "@tanstack/react-table";
+import { RowDataType } from "cdm/FolderModel";
+import { Literal } from "obsidian-dataview/lib/data-model/value";
 
 export type RowSelectOption = {
     backgroundColor: string,
     label: string,
 }
-export type PopperProps = {
-    dispatch: (action: any) => void;
-    row: any;
-    columns: any;
-    note: NoteInfo;
-} & BaseComponentProps;
 
+export type PopperProps = {
+    defaultCell: CellContext<RowDataType, Literal>;
+}
 
 export type TagsProps = {
-    dispatch: (action: any) => void;
-    cellProperties: CellProps;
-    columns: any;
-} & BaseComponentProps;
+    defaultCell: CellContext<RowDataType, Literal>;
+}
 
 export type CalendarProps = {
-    cellProperties: CellProps;
-} & BaseComponentProps;
+    defaultCell: CellContext<RowDataType, Literal>;
+}

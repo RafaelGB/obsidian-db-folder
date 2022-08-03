@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { randomColor } from "helpers/Colors";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
@@ -12,7 +12,7 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
-import { ActionTypes, InputType, MetadataColumns } from "helpers/Constants";
+import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
@@ -53,20 +53,22 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   // TODO : add a tooltip to the header
   const created: boolean = false;
   /** Properties of header */
-  const { column, header, table } = headerProps;
-
+  const { header, table } = headerProps;
+  const [columns, addToLeft] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.addToLeft]
+  );
   /** Column values */
-  const { id, input, options, position, label, config } =
-    column.columnDef as TableColumn;
+  const { id, input, options, label, config } = header.column
+    .columnDef as TableColumn;
   /** reducer asociated to database */
-  // TODO typying improve
-  const dispatch = (table.options.meta as any).dispatch;
   const [expanded, setExpanded] = useState(created || false);
   const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [labelState, setLabelState] = useState(label);
   React.useEffect(() => {
-    setDomReady(true);
+    if (!domReady) {
+      setDomReady(true);
+    }
   });
 
   let propertyIcon: JSX.Element;
@@ -101,32 +103,8 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
   }
 
-  function adjustWidthOfTheColumn(position: number) {
-    let columnNumber =
-      (table.options.meta as any).columns.length +
-      1 -
-      (table.options.meta as any).shadowColumns.length;
-    // Check if column name already exists
-    while (
-      table
-        .getAllColumns()
-        .find((o: any) => o.id === `newColumn${columnNumber}`)
-    ) {
-      columnNumber++;
-    }
-    const columnName = `newColumn${columnNumber}`;
-    const columnLabel = `New Column ${columnNumber}`;
-    // Add width of the new column
-    return { name: columnName, position: position, label: columnLabel };
-  }
-
   function handlerAddColumnToLeft(e: any) {
-    dispatch({
-      type: ActionTypes.ADD_COLUMN_TO_LEFT,
-      columnId: MetadataColumns.ADD_COLUMN,
-      focus: true,
-      columnInfo: adjustWidthOfTheColumn(position - 1),
-    });
+    addToLeft(columns.find((o: any) => o.id === MetadataColumns.ADD_COLUMN));
   }
 
   LOGGER.debug(`<=Header ${label}`);

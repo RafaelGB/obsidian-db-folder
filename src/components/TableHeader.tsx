@@ -3,7 +3,7 @@ import { flexRender } from "@tanstack/react-table";
 import { c } from "helpers/StylesHelper";
 import { TableHeaderProps } from "cdm/HeaderModel";
 import { useDrag, useDrop } from "react-dnd";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { DnDConfiguration } from "helpers/Constants";
 
 interface DragItem {
@@ -16,7 +16,8 @@ export default function TableHeader(headerProps: TableHeaderProps) {
   const { table, header, findColumn, headerIndex, setColumnOrder } =
     headerProps;
   const { id } = header.column.columnDef as TableColumn;
-  const { dispatch, columns, view } = table.options.meta as TableDataType;
+  const { view, tableState } = table.options.meta;
+  const columns = tableState.columns((state) => state.columns);
   const originalIndex = columns.findIndex((col) => col.id === id);
   //DnD
   const DnDref = React.useRef<HTMLDivElement>(null);
@@ -59,7 +60,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
         }
       },
     }),
-    [findColumn, dispatch]
+    [findColumn]
   );
 
   const opacity = isDragging ? 0 : 1;

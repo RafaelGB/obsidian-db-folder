@@ -6,7 +6,7 @@ export interface MediaSettings {
 /**
  * Options that affects the behavior of the plugin and defines default values with some fields
  */
-interface GlobalSettings {
+export interface GlobalSettings {
     enable_debug_mode: boolean;
     logger_level_info: string;
     media_settings: MediaSettings;

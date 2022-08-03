@@ -1,21 +1,17 @@
 import { DatabaseSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
-import { App, TFile } from 'obsidian';
+import { TFile } from 'obsidian';
 export default class StateManager {
   private onEmpty: () => void;
   private getGlobalSettings: () => DatabaseSettings;
   private viewSet: Set<DatabaseView> = new Set();
-
-  public app: App;
   public file: TFile;
   constructor(
-    app: App,
     initialView: DatabaseView,
     initialData: string,
     onEmpty: () => void,
     getGlobalSettings: () => DatabaseSettings
   ) {
-    this.app = app;
     this.file = initialView.file;
     this.onEmpty = onEmpty;
     this.getGlobalSettings = getGlobalSettings;

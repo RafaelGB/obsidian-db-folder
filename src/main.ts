@@ -135,7 +135,6 @@ export default class DBFolderPlugin extends Plugin {
 			this.stateManagers.set(
 				file,
 				new StateManager(
-					this.app,
 					view,
 					data,
 					() => this.stateManagers.delete(file),

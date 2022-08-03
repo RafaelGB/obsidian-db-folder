@@ -2,11 +2,10 @@ import { TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
-import { ActionTypes, StyleClasses } from "helpers/Constants";
+import { StyleClasses } from "helpers/Constants";
 import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 import { particular_settings_section, behavior_settings_section } from "components/modals/ColumnSections";
 import { HeaderMenuProps } from "cdm/HeaderModel";
-import { Dispatch } from "react";
 
 export class ColumnModal extends Modal {
     view: DatabaseView;

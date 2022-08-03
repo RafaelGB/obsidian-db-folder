@@ -1,23 +1,23 @@
-import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DatabaseView } from "DatabaseView";
 import { MediaExtensions } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { MarkdownRenderer, MarkdownPreviewView, TFile } from "obsidian";
-import { Cell } from "@tanstack/react-table";
+import { CellContext } from "@tanstack/react-table";
 import { LOGGER } from "services/Logger";
-import { CellProps } from "cdm/CellModel";
-import { TableColumn, TableDataType } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { Literal } from "obsidian-dataview";
 
 export async function renderMarkdown(
-  cell: CellProps,
+  defaultCell: CellContext<RowDataType, Literal>,
   markdownString: string,
   domElement: HTMLDivElement,
   depth: number
 ) {
   try {
-    const view: DatabaseView = (cell.table.options.meta as TableDataType).view;
-    const column = cell.column.columnDef as TableColumn;
+    const { table } = defaultCell;
+    const view: DatabaseView = table.options.meta.view;
+    const column = defaultCell.column.columnDef as TableColumn;
     const { media_height, media_width, enable_media_view } = column.config;
     if (enable_media_view && isValidHttpUrl(markdownString)) {
       markdownString = `![embedded link|${media_height}x${media_width}](${markdownString})`;

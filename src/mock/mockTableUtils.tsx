@@ -2,7 +2,7 @@
 import faker from "@faker-js/faker";
 import React, { useRef, useLayoutEffect } from "react";
 import { randomColor } from "helpers/Colors";
-import { DataTypes, DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
+import { InputType, DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
 import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromFolder } from "components/Columns";
@@ -31,8 +31,6 @@ export async function makeData(count: number): Promise<TableDataType> {
     generateYamlColumns(5)
   );
   return {
-    columns: columns,
-    shadowColumns: [],
     skipReset: false,
     view: null,
     stateManager: null,
@@ -51,7 +49,7 @@ export const generateYamlColumns = (
   for (let i = 0; i < count; i++) {
     const columnKey: string = faker.unique(faker.name.firstName);
     yamlColumns[columnKey] = {
-      input: getRandomEnumValue(DataTypes),
+      input: getRandomEnumValue(InputType),
       accessorKey: columnKey,
       label: `${columnKey} label`,
       key: columnKey,

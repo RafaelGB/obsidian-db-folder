@@ -1,31 +1,41 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ActionTypes, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 
 import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
-import { RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
-import { CellContext } from "components/contexts/CellContext";
+import { TableCellContext } from "components/contexts/CellContext";
 import CalendarPortal from "components/portals/CalendarPortal";
 import CalendarTimePortal from "components/portals/CalendarTimePortal";
 import { renderMarkdown } from "components/markdown/MarkdownRenderer";
 import { CheckboxCell } from "components/Checkbox";
 import TagsPortal from "components/portals/TagsPortal";
 import { DataviewService } from "services/DataviewService";
-import { CellProps } from "cdm/CellModel";
+import { CellContext } from "@tanstack/react-table";
+import { Literal } from "obsidian-dataview";
+import { Grouping } from "obsidian-dataview/lib/data-model/value";
+import { SListItem } from "obsidian-dataview/lib/data-model/serialized/markdown";
 
-export default function DefaultCell(cellProperties: CellProps) {
-  const { cell, column, row, table } = cellProperties;
-  const dataDispatch = (table.options.meta as TableDataType).dispatch;
+export default function DefaultCell(
+  defaultCell: CellContext<RowDataType, Literal>
+) {
+  const { cell, column, row, table } = defaultCell;
   /** Initial state of cell */
   const cellValue = cell.getValue();
   /** Columns information */
-  const columns = (table.options.meta as TableDataType).columns;
+  const columns = table.options.meta.tableState.columns(
+    (state) => state.columns
+  );
+  const updateCell = table.options.meta.tableState.data(
+    (state) => state.updateCell
+  );
+  const ddbbConfig = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig
+  );
   /** Type of cell */
   const input = (column.columnDef as TableColumn).input;
-  /** Note info of current Cell */
-  const note: NoteInfo = (row.original as RowDataType).__note__;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -39,7 +49,7 @@ export default function DefaultCell(cellProperties: CellProps) {
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
-  const tableData = table.options.meta as TableDataType;
+  const meta = table.options.meta;
   /** states for selector option  */
   LOGGER.debug(
     `<=> Cell.rendering input: ${input}. value: ${contextValue.value}`
@@ -59,16 +69,16 @@ export default function DefaultCell(cellProperties: CellProps) {
         if (contextValue.value === "") break;
         taskRef.current.innerHTML = "";
         if ((column.columnDef as TableColumn).config.task_hide_completed) {
-          contextValue.value = contextValue.value.where(
+          contextValue.value = (contextValue.value as any).where(
             (t: any) => !t.completed
           );
         }
         DataviewService.getDataviewAPI().taskList(
-          contextValue.value,
+          contextValue.value as Grouping<SListItem>,
           false,
           taskRef.current,
-          tableData.view,
-          tableData.view.file.path
+          meta.view,
+          meta.view.file.path
         );
 
         break;
@@ -77,8 +87,8 @@ export default function DefaultCell(cellProperties: CellProps) {
         if (containerCellRef.current !== null) {
           containerCellRef.current.innerHTML = "";
           renderMarkdown(
-            cellProperties,
-            cellValue,
+            defaultCell,
+            cellValue?.toString(),
             containerCellRef.current,
             5
           );
@@ -108,8 +118,8 @@ export default function DefaultCell(cellProperties: CellProps) {
         `useEffect hooked with dirtyCell. Value:${contextValue.value}`
       );
       renderMarkdown(
-        cellProperties,
-        contextValue.value,
+        defaultCell,
+        contextValue.value?.toString(),
         containerCellRef.current,
         5
       );
@@ -149,15 +159,13 @@ export default function DefaultCell(cellProperties: CellProps) {
   };
 
   function onChange(changedValue: string) {
-    // save on disk
-    dataDispatch({
-      type: ActionTypes.UPDATE_CELL,
-      file: note.getFile(),
-      key: (column.columnDef as TableColumn).key,
-      value: changedValue,
-      row: row,
-      columnId: (column.columnDef as TableColumn).id,
-    });
+    updateCell(
+      row.index,
+      column.columnDef as TableColumn,
+      changedValue,
+      columns,
+      ddbbConfig
+    );
   }
 
   function getCellElement() {
@@ -214,51 +222,18 @@ export default function DefaultCell(cellProperties: CellProps) {
 
       /** Calendar option */
       case InputType.CALENDAR:
-        return (
-          <CalendarPortal
-            intialState={tableData}
-            column={column}
-            cellProperties={cellProperties}
-          />
-        );
+        return <CalendarPortal defaultCell={defaultCell} />;
 
       /** Calendar with time option */
       case InputType.CALENDAR_TIME:
-        return (
-          <CalendarTimePortal
-            intialState={tableData}
-            column={column}
-            cellProperties={cellProperties}
-          />
-        );
+        return <CalendarTimePortal defaultCell={defaultCell} />;
 
       /** Selector option */
       case InputType.SELECT:
-        return (
-          <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <PopperSelectPortal
-              dispatch={dataDispatch}
-              row={row}
-              column={column}
-              columns={columns}
-              note={note}
-              intialState={tableData}
-            />
-          </CellContext.Provider>
-        );
+        return <PopperSelectPortal defaultCell={defaultCell} />;
       /** Tags option */
       case InputType.TAGS:
-        return (
-          <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <TagsPortal
-              intialState={tableData}
-              column={column}
-              columns={columns}
-              dispatch={dataDispatch}
-              cellProperties={cellProperties}
-            />
-          </CellContext.Provider>
-        );
+        return <TagsPortal defaultCell={defaultCell} />;
 
       case InputType.TASK:
         if ((column.columnDef as TableColumn).config.task_hide_completed) {
@@ -267,13 +242,9 @@ export default function DefaultCell(cellProperties: CellProps) {
 
       case InputType.CHECKBOX:
         return (
-          <CellContext.Provider value={{ contextValue, setContextValue }}>
-            <CheckboxCell
-              intialState={tableData}
-              column={column.columnDef as TableColumn}
-              cellProperties={cellProperties}
-            />
-          </CellContext.Provider>
+          <TableCellContext.Provider value={{ contextValue, setContextValue }}>
+            <CheckboxCell defaultCell={defaultCell} />
+          </TableCellContext.Provider>
         );
       case InputType.NEW_COLUMN:
         // Do nothing

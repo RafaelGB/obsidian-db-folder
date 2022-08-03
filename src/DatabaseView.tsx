@@ -1,5 +1,11 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { InitialState, RowDataType, TableDataType } from "cdm/FolderModel";
+import {
+  InitialType,
+  RowDataType,
+  TableColumn,
+  TableDataType,
+} from "cdm/FolderModel";
+import { TableStateInterface } from "cdm/TableStateInterface";
 import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
@@ -7,7 +13,7 @@ import {
 import { createDatabase } from "components/index/Database";
 import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, InputType, StyleClasses } from "helpers/Constants";
-import obtainInitialState from "helpers/InitialState";
+import obtainInitialType from "helpers/InitialType";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import DBFolderPlugin from "main";
 
@@ -23,6 +29,12 @@ import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
+import useColumnsStore from "stateManagement/useColumnsStore";
+import useConfigStore from "stateManagement/useConfigStore";
+import useDataStore from "stateManagement/useDataStore";
+import useInitialTypeStore from "stateManagement/useInitialTypeStore";
+import useRowTemplateStore from "stateManagement/useRowTemplateStore";
+import useSortingStore from "stateManagement/useSortingStore";
 import StateManager from "StateManager";
 export const databaseIcon = "blocks";
 
@@ -33,6 +45,10 @@ export class DatabaseView extends TextFileView implements HoverParent {
   rootContainer: Root | null = null;
   diskConfig: DatabaseInfo;
   rows: Array<RowDataType>;
+  columns: Array<TableColumn>;
+  shadowColumns: Array<TableColumn>;
+  initial: InitialType;
+
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
     this.plugin = plugin;
@@ -127,29 +143,27 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       let yamlColumns: Record<string, DatabaseColumn> =
         this.diskConfig.yaml.columns;
+      this.diskConfig.yaml.config;
       // Complete the columns with the metadata columns
       yamlColumns = await obtainMetadataColumns(
         yamlColumns,
         this.diskConfig.yaml.config
       );
       // Obtain base information about columns
-      const columns = await obtainColumnsFromFolder(yamlColumns);
+      this.columns = await obtainColumnsFromFolder(yamlColumns);
       this.rows = await adapterTFilesToRows(
         this.file.parent.path,
-        columns,
+        this.columns,
         this.diskConfig.yaml
       );
-      const initialState: InitialState = obtainInitialState(columns, this.rows);
+      this.initial = obtainInitialType(this.columns, this.rows);
       // Define table properties
+      this.shadowColumns = this.columns.filter((col) => col.skipPersist);
       const tableProps: TableDataType = {
-        columns: columns,
-        shadowColumns: columns.filter((col) => col.skipPersist),
         skipReset: false,
         view: this,
         stateManager: this.plugin.getStateManager(this.file),
-        initialState: initialState,
       };
-
       // Render database
       const table = createDatabase(tableProps);
       this.rootContainer.render(table);
