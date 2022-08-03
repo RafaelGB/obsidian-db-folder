@@ -14,7 +14,7 @@ import { dbTrim } from "helpers/StylesHelper";
 import create from "zustand";
 
 const useColumnsStore = (view: DatabaseView) => {
-  return create<ColumnsState>()((set) => ({
+  return create<ColumnsState>()((set, get) => ({
     columns: view.columns,
     shadowColumns: view.shadowColumns,
     addToLeft: (column: TableColumn) =>

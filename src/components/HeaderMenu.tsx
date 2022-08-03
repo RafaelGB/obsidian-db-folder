@@ -22,9 +22,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     (state) => state.ddbbConfig
   );
 
-  const alterEnableRender = table.options.meta.tableState.renderState(
-    (store) => store.alterEnableRender
-  );
   /** Header props */
   const {
     propertyIcon,
@@ -129,7 +126,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     );
 
     alterColumnLabel(column.columnDef as TableColumn, labelState);
-    alterEnableRender(true);
   }
 
   function handleKeyDown(e: any) {

@@ -5,7 +5,6 @@ import useConfigStore from "stateManagement/useConfigStore";
 import useDataStore from "stateManagement/useDataStore";
 import useInitialTypeStore from "stateManagement/useInitialTypeStore";
 import useRowTemplateStore from "stateManagement/useRowTemplateStore";
-import useRenderStore from "stateManagement/userRenderStore";
 import useSortingStore from "stateManagement/useSortingStore";
 
 function useTableStore(view: DatabaseView): TableStateInterface {
@@ -15,12 +14,10 @@ function useTableStore(view: DatabaseView): TableStateInterface {
   const rowTemplate = useRowTemplateStore(view);
   const sorting = useSortingStore(view);
   const columns = useColumnsStore(view);
-  const render = useRenderStore();
   return {
     configState: config,
     initialState: initialType,
     rowTemplate: rowTemplate,
-    renderState: render,
     data: data,
     sorting: sorting,
     columns: columns,

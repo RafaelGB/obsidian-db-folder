@@ -20,7 +20,6 @@ import {
   TableColumn,
   RowTemplateOption,
 } from "cdm/FolderModel";
-import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import {
@@ -37,7 +36,7 @@ import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import TableHeader from "components/TableHeader";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
-import Select, { ActionMeta, OnChangeValue } from "react-select";
+import Select, { OnChangeValue } from "react-select";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TableCell from "components/TableCell";
@@ -69,23 +68,10 @@ export function Table(tableData: TableDataType) {
     store.global,
     store.alterConfig,
   ]);
-  const [enableRender, alterEnableRender] = tableStore.renderState((store) => [
-    store.enableRender,
-    store.alterEnableRender,
-  ]);
+
   /** Plugin services */
   const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
-
-  /** Reducer */
-  const rerender = React.useReducer(() => ({}), {})[1];
-  React.useEffect(() => {
-    if (enableRender) {
-      console.log("=> Table. rerender");
-      alterEnableRender(false);
-      rerender();
-    }
-  });
 
   /** Table services */
   // Sorting
@@ -101,6 +87,9 @@ export function Table(tableData: TableDataType) {
   );
   const [persistSizingTimeout, setPersistSizingTimeout] = React.useState(null);
   // Drag and drop
+  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
+    columns.map((c) => c.id)
+  );
   const findColumn = React.useCallback(
     (id: string) => {
       const findedColumn = columns.filter((c) => `${c.id}` === id)[0];
@@ -109,10 +98,7 @@ export function Table(tableData: TableDataType) {
         index: columns.indexOf(findedColumn),
       };
     },
-    [columns]
-  );
-  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
-    columns.map((c) => c.id)
+    [columnOrder]
   );
   // Niveling number of columns
   if (columnOrder.length !== columns.length) {
@@ -187,7 +173,7 @@ export function Table(tableData: TableDataType) {
   );
 
   const table: Table<RowDataType> = useReactTable({
-    columns,
+    columns: columns,
     data: rows,
     columnResizeMode: ResizeConfiguration.RESIZE_MODE,
     state: {
@@ -239,6 +225,7 @@ export function Table(tableData: TableDataType) {
     debugHeaders: global.enable_debug_mode,
     debugColumns: global.enable_debug_mode,
   });
+
   // Manage input of new row
   const [inputNewRow, setInputNewRow] = React.useState("");
   const newRowRef = React.useRef(null);
@@ -263,6 +250,7 @@ export function Table(tableData: TableDataType) {
       current_row_template: settingsValue,
     });
   }
+
   LOGGER.debug(`<= Table`);
   return (
     <>
