@@ -4,11 +4,7 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { randomColor } from "helpers/Colors";
-import {
-  DEFAULT_COLUMN_CONFIG,
-  InputType,
-  TableColumnsTemplate,
-} from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
 import { dbTrim } from "helpers/StylesHelper";
 import create from "zustand";
@@ -24,20 +20,8 @@ const useColumnsStore = (view: DatabaseView) => {
         shadowColumns: view.shadowColumns,
         addToLeft: null, // chain
         addToRight: null, // chain
-        remove: (column: TableColumn) =>
-          set((updater) => {
-            view.diskConfig.removeColumn(column.id);
-            const filtered = updater.columns.filter((c) => c.id !== column.id);
-            return { columns: filtered };
-          }),
-        alterSorting: (column: TableColumn) =>
-          set((updater) => {
-            const newColumns = [...updater.columns];
-            const index = newColumns.findIndex((c) => c.id === column.id);
-            newColumns[index].isSorted = column.isSorted;
-            newColumns[index].isSortedDesc = column.isSortedDesc;
-            return { columns: newColumns };
-          }),
+        remove: null, // chain
+        alterSorting: null, // chain
         addOptionToColumn: (
           column: TableColumn,
           option: string,
@@ -146,24 +130,5 @@ const useColumnsStore = (view: DatabaseView) => {
     return columnActions.implementation;
   });
 };
-/**
- * Adjust width of the columns when add a new column.
- * @param wantedPosition
- * @returns
- */
-function generateNewColumnInfo(
-  wantedPosition: number,
-  columns: TableColumn[],
-  shadowColumns: TableColumn[]
-) {
-  let columnNumber = columns.length - shadowColumns.length;
-  // Check if column name already exists
-  while (columns.find((o: any) => o.id === `newColumn${columnNumber}`)) {
-    columnNumber++;
-  }
-  const columnId = `newColumn${columnNumber}`;
-  const columnLabel = `New Column ${columnNumber}`;
-  return { name: columnId, position: wantedPosition, label: columnLabel };
-}
 
 export default useColumnsStore;
