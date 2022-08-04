@@ -1,3 +1,11 @@
+# 2.1.0 (beta)
+### Shiny new things
+- The dispatcher of all events was migrated to Zustand! This means a better, more stable, and more efficient way to handle events. [Zustand](https://zustand.js.org/) is a library that provides a simple, efficient, and powerful way to manage state in React. Allowing future changes as formula columns. As PoC, this version update the value of `modified` column every time a cell is changed. [ISSUE#227](https://github.com/RafaelGB/obsidian-db-folder/issues/227)
+### No longer broken
+- qoutes inside of source query are now controlled [ISSUE#233](https://github.com/RafaelGB/obsidian-db-folder/issues/233) [jcdeichmann](https://github.com/jcdeichmann)
+- Fix centered images of all notes [ISSUE#231](https://github.com/RafaelGB/obsidian-db-folder/issues/231)
+- Fix LaTeX formulas presentation incompatibility [ISSUE#228](https://github.com/RafaelGB/obsidian-db-folder/issues/228)
+- now is compatible with windows pane using `activeDocument`[ISSUE#199](https://github.com/RafaelGB/obsidian-db-folder/issues/199)
 # 2.0.1
 ### No longer broken
 -  Fixed selection problem with datetime columns introduced in 2.0.0.
