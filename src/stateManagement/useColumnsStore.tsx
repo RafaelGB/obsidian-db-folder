@@ -159,10 +159,6 @@ const useColumnsStore = (view: DatabaseView) => {
     alterColumnSize: (columnSizing: Record<string, number>) =>
       set((updater) => {
         const alteredColumns = [...updater.columns];
-        console.log(
-          "before",
-          alteredColumns.map((col) => col.config.size)
-        );
         Object.keys(columnSizing)
           .filter((key) => columnSizing[key] !== undefined)
           .map((key) => {
@@ -172,14 +168,10 @@ const useColumnsStore = (view: DatabaseView) => {
             });
             // Persist on memory
             const indexCol = alteredColumns.findIndex(
-              (col: TableColumn) => col.id === key
+              (col: TableColumn) => col.key === key
             );
-            alteredColumns[indexCol].config.size = columnSizing[key];
+            alteredColumns[indexCol].width = columnSizing[key];
           });
-        console.log(
-          "after",
-          alteredColumns.map((col) => col.config.size)
-        );
         return { columns: alteredColumns };
       }),
   }));

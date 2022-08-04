@@ -205,7 +205,7 @@ export function Table(tableData: TableDataType) {
         }, 1500)
       );
 
-      setColumnSizing(updater);
+      setColumnSizing(list);
     },
     onColumnOrderChange: setColumnOrder,
     globalFilterFn: "includesString",
