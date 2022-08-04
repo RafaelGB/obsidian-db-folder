@@ -63,8 +63,6 @@ export interface TableColumn extends BaseColumn {
     id: string;
     options?: RowSelectOption[];
     Cell?: any;
-    getHeaderProps?: any;
-    getResizerProps?: any;
 }
 
 export type RowDataType = {

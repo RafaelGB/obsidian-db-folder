@@ -33,6 +33,7 @@ export interface ColumnsState {
     addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
     alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => void;
     alterColumnLabel: (column: TableColumn, label: string) => void;
+    alterColumnSize: (columnSizing: Record<string, number>) => void;
 }
 export interface ColumnSortingState {
     state: SortingState;

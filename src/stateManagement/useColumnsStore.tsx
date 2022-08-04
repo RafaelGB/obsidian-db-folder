@@ -156,6 +156,24 @@ const useColumnsStore = (view: DatabaseView) => {
         view.diskConfig.updateColumnKey(column.id, newKey, label);
         return { columns: updater.columns };
       }),
+    alterColumnSize: (columnSizing: Record<string, number>) =>
+      set((updater) => {
+        const alteredColumns = [...updater.columns];
+        Object.keys(columnSizing)
+          .filter((key) => columnSizing[key] !== undefined)
+          .map((key) => {
+            // Persist on disk
+            view.diskConfig.updateColumnProperties(key, {
+              width: columnSizing[key],
+            });
+            // Persist on memory
+            const indexCol = alteredColumns.findIndex(
+              (col: TableColumn) => col.key === key
+            );
+            alteredColumns[indexCol].width = columnSizing[key];
+          });
+        return { columns: alteredColumns };
+      }),
   }));
 };
 /**
