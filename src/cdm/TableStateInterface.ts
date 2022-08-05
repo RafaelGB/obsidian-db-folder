@@ -1,9 +1,23 @@
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
 import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 
+export type TableActionResponse<T> = {
+    view: DatabaseView,
+    set: (partial: T | Partial<T> | ((state: T) => T | Partial<T>), replace?: boolean) => void,
+    implementation: T
+}
+
+export type TableAction<T> = {
+    setNext(handler: TableAction<T>): TableAction<T>;
+    handle(settingHandlerResponse: TableActionResponse<T>): TableActionResponse<T>;
+}
+/**
+ * TABLE STATE INTERFACE
+ */
 export interface ConfigState {
     ddbbConfig: LocalSettings;
     global: GlobalSettings;
@@ -33,7 +47,7 @@ export interface ColumnsState {
     addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
     alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => void;
     alterColumnLabel: (column: TableColumn, label: string) => void;
-    alterColumnSize: (columnSizing: Record<string, number>) => void;
+    alterColumnSize: (id: string, width: number) => void;
 }
 export interface ColumnSortingState {
     state: SortingState;

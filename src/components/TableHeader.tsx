@@ -18,13 +18,18 @@ export default function TableHeader(headerProps: TableHeaderProps) {
   const { id } = header.column.columnDef as TableColumn;
   const { view, tableState } = table.options.meta;
   const columns = tableState.columns((state) => state.columns);
-  const originalIndex = columns.findIndex((col) => col.id === id);
+  const originalIndex = React.useMemo(() => {
+    return columns.findIndex((col) => col.id === id);
+  }, [columns]);
   //DnD
   const DnDref = React.useRef<HTMLDivElement>(null);
 
   function moveColumn(source: number, destinationKey: string) {
     const { index: destIndex } = findColumn(destinationKey);
-    const initialOrder = table.getAllColumns().map((d) => d.id);
+    const initialOrder = React.useMemo(() => {
+      return columns.map((d) => d.id);
+    }, [columns]);
+
     initialOrder.splice(destIndex, 1);
     initialOrder.splice(source, 0, columns[destIndex].id);
     setColumnOrder(initialOrder);
