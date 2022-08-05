@@ -5,23 +5,14 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class AlterColumnSizeHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { view, set, implementation } = tableActionResponse;
-        implementation.alterColumnSize = (columnSizing: Record<string, number>) =>
+        implementation.alterColumnSize = (id: string, width: number) =>
             set((updater) => {
-                const alteredColumns = [...updater.columns];
-                Object.keys(columnSizing)
-                    .filter((key) => columnSizing[key] !== undefined)
-                    .map((key) => {
-                        // Persist on disk
-                        view.diskConfig.updateColumnProperties(key, {
-                            width: columnSizing[key],
-                        });
-                        // Persist on memory
-                        const indexCol = alteredColumns.findIndex(
-                            (col: TableColumn) => col.key === key
-                        );
-                        alteredColumns[indexCol].width = columnSizing[key];
-                    });
-                return { columns: alteredColumns };
+                view.diskConfig.updateColumnProperties(id, {
+                    width: width,
+                });
+                const index = implementation.columns.findIndex((column) => column.id === id);
+                updater.columns[index].width = width;
+                return { columns: updater.columns };
             });
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);

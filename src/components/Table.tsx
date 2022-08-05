@@ -47,6 +47,7 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   maxSize: DatabaseLimits.MAX_COLUMN_HEIGHT,
   cell: DefaultCell,
   header: DefaultHeader,
+  enableResizing: true,
 };
 
 /**
@@ -187,12 +188,21 @@ export function Table(tableData: TableDataType) {
     },
     onSortingChange: onSortingChange,
     onColumnSizingChange: (updater) => {
+      const { isResizingColumn, deltaOffset, columnSizingStart } =
+        table.options.state.columnSizingInfo;
       let list: ColumnSizingState = null;
       if (typeof updater === "function") {
         list = updater(columnSizing);
       } else {
         list = updater;
       }
+
+      const columnToUpdate = columnSizingStart.find(
+        (c) => c[0] === isResizingColumn
+      );
+
+      list[columnToUpdate[0]] = columnToUpdate[1] + deltaOffset;
+
       // cancelling previous timeout
       if (persistSizingTimeout) {
         clearTimeout(persistSizingTimeout);
@@ -200,7 +210,7 @@ export function Table(tableData: TableDataType) {
       // setting new timeout
       setPersistSizingTimeout(
         setTimeout(() => {
-          alterColumnSize(list);
+          alterColumnSize(columnToUpdate[0], columnToUpdate[1] + deltaOffset);
           // timeout until event is triggered after user has stopped typing
         }, 1500)
       );
