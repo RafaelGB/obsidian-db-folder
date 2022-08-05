@@ -24,12 +24,12 @@ export default function TableHeader(headerProps: TableHeaderProps) {
   //DnD
   const DnDref = React.useRef<HTMLDivElement>(null);
 
+  const initialOrder = React.useMemo(() => {
+    return columns.map((d) => d.id);
+  }, [columns]);
+
   function moveColumn(source: number, destinationKey: string) {
     const { index: destIndex } = findColumn(destinationKey);
-    const initialOrder = React.useMemo(() => {
-      return columns.map((d) => d.id);
-    }, [columns]);
-
     initialOrder.splice(destIndex, 1);
     initialOrder.splice(source, 0, columns[destIndex].id);
     setColumnOrder(initialOrder);
