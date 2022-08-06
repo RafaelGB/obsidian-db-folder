@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
-import NoteInfo from "services/NoteInfo";
 import { Portal } from "@mui/material";
 import { c } from "helpers/StylesHelper";
 import { CalendarProps } from "cdm/ComponentsModel";
@@ -35,7 +34,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
     updateCell(
       row.index,
       tableColumn,
-      DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
+      DateTime.fromJSDate(date),
       columns,
       ddbbConfig
     );
