@@ -42,7 +42,7 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                 __note__: new NoteInfo({
                     ...rowRecord.frontmatter,
                     ...rowRecord.inline,
-                    file: { path: filename },
+                    file: { path: filepath },
                 }),
                 [MetadataColumns.FILE]: `[[${filepath}|${filename}]]`,
             };
