@@ -12,6 +12,7 @@ export default class AlterColumnSizeHandlerAction extends AbstractTableAction<Co
                 });
                 const index = implementation.columns.findIndex((column) => column.id === id);
                 updater.columns[index].width = width;
+                // DO NOT rerender the columns this way
                 return { columns: updater.columns };
             });
         tableActionResponse.implementation = implementation;
