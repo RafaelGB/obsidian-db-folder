@@ -96,7 +96,7 @@ export function Table(tableData: TableDataType) {
   );
   const findColumn = React.useCallback(
     (id: string) => {
-      const findedColumn = columns.filter((c) => `${c.id}` === id)[0];
+      const findedColumn = columns.find((c) => c.id === id);
       return {
         findedColumn,
         index: columns.indexOf(findedColumn),

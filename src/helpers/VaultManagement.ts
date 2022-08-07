@@ -184,7 +184,9 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
     const content = await VaultManagerDB.obtainContentFromTfile(file);
     const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
     const rowFields = obtainRowDatabaseFields(file, columns, frontmatterKeys);
-    const column = columns.find(c => c.key === columnId);
+    const column = columns.find(
+      c => c.key === (UpdateRowOptions.COLUMN_KEY === option ? newValue : columnId)
+    );
     // Adds an empty frontmatter at the beginning of the file
     async function addFrontmatter(): Promise<void> {
       /* Regex explanation
@@ -344,7 +346,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       throw `Error: option ${option} not supported yet`;
     }
   } catch (e) {
-    LOGGER.error(`${EditionError.YamlRead} - ${e}`);
+    LOGGER.error(`${EditionError.YamlRead}`, e);
     new Notice(`${EditionError.YamlRead} : ${e.message}`, 6000);
   }
   LOGGER.info(`<= updateRowFile.asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option} `);
