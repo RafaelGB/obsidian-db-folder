@@ -29,12 +29,6 @@ import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
-import useColumnsStore from "stateManagement/useColumnsStore";
-import useConfigStore from "stateManagement/useConfigStore";
-import useDataStore from "stateManagement/useDataStore";
-import useInitialTypeStore from "stateManagement/useInitialTypeStore";
-import useRowTemplateStore from "stateManagement/useRowTemplateStore";
-import useSortingStore from "stateManagement/useSortingStore";
 import StateManager from "StateManager";
 export const databaseIcon = "blocks";
 

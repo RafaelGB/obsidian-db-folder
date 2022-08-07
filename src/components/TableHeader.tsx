@@ -13,8 +13,7 @@ interface DragItem {
 }
 
 export default function TableHeader(headerProps: TableHeaderProps) {
-  const { table, header, findColumn, headerIndex, setColumnOrder } =
-    headerProps;
+  const { table, header, findColumn, headerIndex } = headerProps;
   const { id } = header.column.columnDef as TableColumn;
   const { view, tableState } = table.options.meta;
   const { columnOrder } = table.options.state;
@@ -32,7 +31,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     const newColumnOrder = [...columnOrder];
     newColumnOrder.splice(destIndex, 1);
     newColumnOrder.splice(source, 0, columns[destIndex].id);
-    setColumnOrder(newColumnOrder);
+    table.setColumnOrder(newColumnOrder);
     view.diskConfig.reorderColumns(newColumnOrder);
   }
 

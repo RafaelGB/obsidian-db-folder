@@ -20,5 +20,4 @@ export type TableHeaderProps = {
         index: number;
     };
     headerIndex: number;
-    setColumnOrder: React.Dispatch<React.SetStateAction<ColumnOrderState>>;
 };
