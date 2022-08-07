@@ -9,20 +9,19 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { set, implementation } = tableActionResponse;
-        implementation.updateDataAfterLabelChange = (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
+        implementation.updateDataAfterLabelChange = async (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
             const newKey = dbTrim(label);
             // Save on disk
-            Promise.all(
-                state.rows.map(async (row: RowDataType) => {
-                    updateRowFileProxy(
-                        row.__note__.getFile(),
-                        column.id,
-                        newKey,
-                        columns,
-                        ddbbConfig,
-                        UpdateRowOptions.COLUMN_KEY
-                    );
-                }));
+            state.rows.map(async (row: RowDataType) => {
+                await updateRowFileProxy(
+                    row.__note__.getFile(),
+                    column.id,
+                    newKey,
+                    columns,
+                    ddbbConfig,
+                    UpdateRowOptions.COLUMN_KEY
+                );
+            });
 
             // Save on memory
             const alterRows = state.rows.map((row) => {

@@ -17,23 +17,23 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     headerProps;
   const { id } = header.column.columnDef as TableColumn;
   const { view, tableState } = table.options.meta;
+  const { columnOrder } = table.options.state;
   const columns = tableState.columns((state) => state.columns);
+
   const originalIndex = React.useMemo(() => {
-    return columns.findIndex((col) => col.id === id);
-  }, [columns]);
+    return columnOrder.findIndex((colId) => colId === id);
+  }, [columnOrder]);
+
   //DnD
   const DnDref = React.useRef<HTMLDivElement>(null);
 
-  const initialOrder = React.useMemo(() => {
-    return columns.map((d) => d.id);
-  }, [columns]);
-
   function moveColumn(source: number, destinationKey: string) {
     const { index: destIndex } = findColumn(destinationKey);
-    initialOrder.splice(destIndex, 1);
-    initialOrder.splice(source, 0, columns[destIndex].id);
-    setColumnOrder(initialOrder);
-    view.diskConfig.reorderColumns(initialOrder);
+    const newColumnOrder = [...columnOrder];
+    newColumnOrder.splice(destIndex, 1);
+    newColumnOrder.splice(source, 0, columns[destIndex].id);
+    setColumnOrder(newColumnOrder);
+    view.diskConfig.reorderColumns(newColumnOrder);
   }
 
   const [{ isDragging, handlerId }, drag] = useDrag(

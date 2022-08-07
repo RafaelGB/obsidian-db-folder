@@ -118,19 +118,19 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     table.setColumnOrder(updateOrderWithNewKey);
 
     setkeyState(newKey);
-    updateDataAfterLabelChange(
-      column.columnDef as TableColumn,
-      labelState,
-      columns,
-      ddbbConfig
-    );
-
-    alterColumnLabel(column.columnDef as TableColumn, labelState);
+    alterColumnLabel(column.columnDef as TableColumn, labelState).then(() => {
+      updateDataAfterLabelChange(
+        column.columnDef as TableColumn,
+        labelState,
+        columns,
+        ddbbConfig
+      );
+    });
   }
 
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
-      persistLabelChange();
+      inputRef.blur();
     }
   }
 
