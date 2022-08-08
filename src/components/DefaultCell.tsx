@@ -193,6 +193,7 @@ export default function DefaultCell(
         return dirtyCell ? (
           <input
             value={(contextValue.value && contextValue.value.toString()) || ""}
+            ref={editableMdRef}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
             onBlur={handleOnBlur}

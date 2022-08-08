@@ -94,6 +94,16 @@ export function Table(tableData: TableDataType) {
   const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
     columns.map((c) => c.id)
   );
+  const findColumn = React.useCallback(
+    (id: string) => {
+      const findedColumn = columns.find((c) => c.id === id);
+      return {
+        findedColumn,
+        index: columns.indexOf(findedColumn),
+      };
+    },
+    [columns]
+  );
   // Niveling number of columns
   if (columnOrder.length !== columns.length) {
     setColumnOrder(columns.map((c) => c.id));
@@ -247,17 +257,6 @@ export function Table(tableData: TableDataType) {
       current_row_template: settingsValue,
     });
   }
-
-  const findColumn = React.useCallback(
-    (id: string) => {
-      const findedColumn = columns.find((c) => c.id === id);
-      return {
-        findedColumn,
-        index: columns.indexOf(findedColumn),
-      };
-    },
-    [table.options.state.columnOrder]
-  );
   LOGGER.debug(`<= Table`);
   return (
     <>
