@@ -79,9 +79,9 @@ export function Table(tableData: TableDataType) {
 
   /** Table services */
   // Sorting
-  const [sorting, onSortingChange] = tableStore.sorting((store) => [
-    store.state,
-    store.modify,
+  const [sortBy, alterSorting] = tableStore.sorting((store) => [
+    store.sortBy,
+    store.alterSorting,
   ]);
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
@@ -102,7 +102,7 @@ export function Table(tableData: TableDataType) {
         index: columns.indexOf(findedColumn),
       };
     },
-    [columnOrder]
+    [columns]
   );
   // Niveling number of columns
   if (columnOrder.length !== columns.length) {
@@ -184,9 +184,9 @@ export function Table(tableData: TableDataType) {
       globalFilter: globalFilter,
       columnOrder: columnOrder,
       columnSizing: columnSizing,
-      sorting: sorting,
+      sorting: sortBy,
     },
-    onSortingChange: onSortingChange,
+    onSortingChange: alterSorting,
     onColumnSizingChange: (updater) => {
       const { isResizingColumn, deltaOffset, columnSizingStart } =
         table.options.state.columnSizingInfo;
@@ -257,7 +257,6 @@ export function Table(tableData: TableDataType) {
       current_row_template: settingsValue,
     });
   }
-
   LOGGER.debug(`<= Table`);
   return (
     <>
@@ -338,7 +337,6 @@ export function Table(tableData: TableDataType) {
                             header={header}
                             findColumn={findColumn}
                             headerIndex={headerIndex}
-                            setColumnOrder={setColumnOrder}
                           />
                         )
                       )}

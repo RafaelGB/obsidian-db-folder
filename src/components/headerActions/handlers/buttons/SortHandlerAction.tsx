@@ -46,13 +46,13 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
 
   const tablecolumn = column.columnDef as TableColumn;
   const generateSorting = table.options.meta.tableState.sorting(
-    (store: any) => store.generateSorting
+    (store) => store.generateSorting
   );
   const alterSorting = table.options.meta.tableState.columns(
-    (store: any) => store.alterSorting
+    (store) => store.alterSorting
   );
-  const alterSortBy = table.options.meta.tableState.initialState(
-    (store: any) => store.alterSortBy
+  const tableSortBy = table.options.meta.tableState.sorting(
+    (store) => store.alterSorting
   );
 
   const sortingUpOnClick = (e: any) => {
@@ -63,7 +63,7 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
     hooks.setExpanded(false);
     // Update state
     alterSorting(tablecolumn);
-    alterSortBy(sortArray);
+    tableSortBy(sortArray);
     table.setSorting(sortArray);
   };
   return headerButtonComponent({
@@ -84,13 +84,13 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
 
   const tablecolumn = column.columnDef as TableColumn;
   const generateSorting = table.options.meta.tableState.sorting(
-    (store: any) => store.generateSorting
+    (store) => store.generateSorting
   );
   const alterSorting = table.options.meta.tableState.columns(
-    (store: any) => store.alterSorting
+    (store) => store.alterSorting
   );
-  const alterSortBy = table.options.meta.tableState.initialState(
-    (store: any) => store.alterSortBy
+  const tableSortBy = table.options.meta.tableState.sorting(
+    (store) => store.alterSorting
   );
   const sortingDownOnClick = (e: any) => {
     const sortArray = generateSorting(tablecolumn, true);
@@ -101,7 +101,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     hooks.setExpanded(false);
     // Update state
     alterSorting(tablecolumn);
-    alterSortBy(sortArray);
+    tableSortBy(sortArray);
     table.setSorting(sortArray);
   };
   return headerButtonComponent({

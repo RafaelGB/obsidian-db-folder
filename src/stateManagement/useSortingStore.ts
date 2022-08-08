@@ -8,8 +8,8 @@ import create from "zustand"
 const useSortingStore = (view: DatabaseView) => {
     return create<ColumnSortingState>()(
         (set) => ({
-            state: view.initial.sortBy,
-            modify: (alternativeSorting: SortingState) => set((state) => ({ state: alternativeSorting })),
+            sortBy: view.initial.sortBy,
+            alterSorting: (alternativeSorting: SortingState) => set((state) => ({ sortBy: alternativeSorting })),
             generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => {
                 return generateSortedColumns(
                     view,

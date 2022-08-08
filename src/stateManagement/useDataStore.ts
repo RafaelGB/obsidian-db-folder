@@ -23,7 +23,7 @@ function mockDataState(): DataState {
         rows: [],
         addRow: () => { },
         updateCell: () => { },
-        updateDataAfterLabelChange: () => { },
+        updateDataAfterLabelChange: null,
         removeRow: () => { },
         removeDataOfColumn: () => { },
         parseDataOfColumn: () => { },

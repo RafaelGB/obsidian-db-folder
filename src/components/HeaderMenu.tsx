@@ -110,13 +110,12 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       setLabelStateInvalid(true);
       return;
     }
-
     // Update state of ordered
-    const updateOrderWithNewKey = table
-      .getAllColumns()
-      .map((o: any) => (o.id === column.id ? newKey : o.id));
+    const updateOrderWithNewKey = table.options.state.columnOrder.map((o) =>
+      o === column.id ? newKey : o
+    );
     table.setColumnOrder(updateOrderWithNewKey);
-
+    // Update state of altered column
     setkeyState(newKey);
     alterColumnLabel(column.columnDef as TableColumn, labelState).then(() => {
       updateDataAfterLabelChange(

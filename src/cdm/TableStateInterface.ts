@@ -23,10 +23,7 @@ export interface ConfigState {
     global: GlobalSettings;
     alterConfig: (config: Partial<LocalSettings>) => void;
 }
-export interface InitialState {
-    state: InitialType;
-    alterSortBy: (sortBy: ColumnSort[]) => void;
-}
+
 export interface DataState {
     rows: RowDataType[];
     addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
@@ -50,8 +47,8 @@ export interface ColumnsState {
     alterColumnSize: (id: string, width: number) => void;
 }
 export interface ColumnSortingState {
-    state: SortingState;
-    modify: (alternativeSorting: SortingState) => void;
+    sortBy: SortingState;
+    alterSorting: (alternativeSorting: SortingState) => void;
     generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => SortingState;
 }
 export interface RowTemplateState {
@@ -63,7 +60,6 @@ export interface RowTemplateState {
 }
 
 export interface TableStateInterface {
-    initialState: UseBoundStore<StoreApi<InitialState>>;
     configState: UseBoundStore<StoreApi<ConfigState>>;
     rowTemplate: UseBoundStore<StoreApi<RowTemplateState>>;
     data: UseBoundStore<StoreApi<DataState>>;
