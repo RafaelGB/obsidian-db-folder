@@ -5,8 +5,6 @@ import {
 	TFolder,
 	TFile,
 	ViewState,
-	MarkdownView,
-	Menu
 } from 'obsidian';
 
 import {
@@ -23,9 +21,6 @@ import {
 	DbfAPIInterface
 } from 'typings/api';
 
-import {
-	DBFolderAPI
-} from 'api/plugin-api';
 import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
 
 import StateManager from 'StateManager';
@@ -33,6 +28,13 @@ import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
 import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
+import { unmountComponentAtNode } from 'react-dom';
+
+interface WindowRegistry {
+	viewMap: Map<string, DatabaseView>;
+	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
+	appRoot: HTMLElement;
+}
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -54,8 +56,22 @@ export default class DBFolderPlugin extends Plugin {
 
 	stateManagers: Map<TFile, StateManager> = new Map();
 
+	windowRegistry: Map<Window, WindowRegistry> = new Map();
+
 	async onload(): Promise<void> {
 		await this.load_settings();
+
+		this.registerEvent(
+			app.workspace.on('window-open', (_: any, win: Window) => {
+				this.mount(win);
+			})
+		);
+
+		this.registerEvent(
+			app.workspace.on('window-close', (_: any, win: Window) => {
+				this.unmount(win);
+			})
+		);
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new DBFolderSettingTab(this, {
@@ -75,13 +91,24 @@ export default class DBFolderPlugin extends Plugin {
 		this.registerEvents();
 		this.registerMonkeyPatches();
 		this.addMarkdownPostProcessor();
-		this.api = new DBFolderAPI(this.app, this.settings);
+		// Mount an empty component to start; views will be added as we go
+		this.mount(window);
+
+		(app.workspace as any).floatingSplit?.children?.forEach((c: any) => {
+			this.mount(c.win);
+		});
 	}
 
 	async onunload() {
+		this.windowRegistry.forEach((reg, win) => {
+			reg.viewStateReceivers.forEach((fn) => fn([]));
+			this.unmount(win);
+		});
 		LOGGER.info('Unloading DBFolder plugin');
 		// Unmount views first
 		this.stateManagers.clear();
+		this.unmount(window);
+		this.windowRegistry.clear();
 	}
 
 	/** Update plugin settings. */
@@ -123,6 +150,13 @@ export default class DBFolderPlugin extends Plugin {
 	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
 
 	addView(view: DatabaseView, data: string, shouldParseData: boolean) {
+		const win = view.getWindow();
+		const reg = this.windowRegistry.get(win);
+
+		if (!reg) {
+			return;
+		}
+
 		if (!this.viewMap.has(view.id)) {
 			this.viewMap.set(view.id, view);
 		}
@@ -142,8 +176,7 @@ export default class DBFolderPlugin extends Plugin {
 				)
 			);
 		}
-
-		this.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews()));
+		reg.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews(win)));
 	}
 
 	getStateManager(file: TFile) {
@@ -151,16 +184,46 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	removeView(view: DatabaseView) {
+		const entry = Array.from(this.windowRegistry.entries()).find(([, reg]) => {
+			return reg.viewMap.has(view.id);
+		}, []);
+
+		if (!entry) {
+			return;
+		}
+
+		const [win, reg] = entry;
 		const file = view.file;
 
-		if (this.viewMap.has(view.id)) {
-			this.viewMap.delete(view.id);
+		if (reg.viewMap.has(view.id)) {
+			reg.viewMap.delete(view.id);
 		}
 
 		if (this.stateManagers.has(file)) {
 			this.stateManagers.get(file).unregisterView(view);
-			this.viewStateReceivers.forEach((fn: any) => fn(this.getDatabaseViews()));
+			reg.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews(win)));
 		}
+	}
+
+	unmount(win: Window) {
+		if (!this.windowRegistry.has(win)) {
+			return;
+		}
+
+		const reg = this.windowRegistry.get(win);
+
+		for (const view of reg.viewMap.values()) {
+			view.destroy();
+		}
+
+		unmountComponentAtNode(reg.appRoot);
+
+		reg.appRoot.remove();
+		reg.viewMap.clear();
+		reg.viewStateReceivers.length = 0;
+		reg.appRoot = null;
+
+		this.windowRegistry.delete(win);
 	}
 
 	async setMarkdownView(leaf: WorkspaceLeaf, focus = true) {
@@ -174,12 +237,34 @@ export default class DBFolderPlugin extends Plugin {
 		);
 	}
 
-	getDatabaseViews() {
-		return Array.from(this.viewMap.values());
+	getDatabaseViews(win: Window) {
+		const reg = this.windowRegistry.get(win);
+
+		if (reg) {
+			return Array.from(reg.viewMap.values());
+		}
+
+		return [];
 	}
 
 	getDatabaseView(id: string) {
 		return this.viewMap.get(id);
+	}
+
+	mount(win: Window) {
+		if (this.windowRegistry.has(win)) {
+			return;
+		}
+
+		const el = win.document.body.createDiv();
+
+		this.windowRegistry.set(win, {
+			viewMap: new Map(),
+			viewStateReceivers: [],
+			appRoot: el,
+		});
+
+		//Preact.render(createApp(win, this), el);
 	}
 
 	async newDatabase(folder?: TFolder) {
@@ -311,42 +396,42 @@ export default class DBFolderPlugin extends Plugin {
 			})
 		);
 
-		// Add a menu item to go back to database view
-		this.register(
-			around(MarkdownView.prototype, {
-				onPaneMenu(next) {
-					return function (menu: Menu) {
-						const file = this.file;
-						const cache = file
-							? self.app.metadataCache.getFileCache(file)
-							: null;
+		// //Add a menu item to go back to database view
+		// this.register(
+		// 	around(MarkdownView.prototype, {
+		// 		onPaneMenu(next) {
+		// 			return function (menu: Menu) {
+		// 				const file = this.file;
+		// 				const cache = file
+		// 					? self.app.metadataCache.getFileCache(file)
+		// 					: null;
 
-						if (
-							!file ||
-							!cache?.frontmatter ||
-							!cache.frontmatter[DatabaseCore.FRONTMATTER_KEY]
-						) {
-							return next.call(this, menu);
-						}
+		// 				if (
+		// 					!file ||
+		// 					!cache?.frontmatter ||
+		// 					!cache.frontmatter[DatabaseCore.FRONTMATTER_KEY]
+		// 				) {
+		// 					return next.call(this, menu);
+		// 				}
 
-						menu
-							.addItem((item) => {
-								item
-									.setTitle('Open as database folder')
-									.setIcon(databaseIcon)
-									.onClick(() => {
-										self.databaseFileModes[this.leaf.id || file.path] =
-											DatabaseCore.FRONTMATTER_KEY;
-										self.setDatabaseView(this.leaf);
-									});
-							})
-							.addSeparator();
+		// 				menu
+		// 					.addItem((item) => {
+		// 						item
+		// 							.setTitle('Open as database folder')
+		// 							.setIcon(databaseIcon)
+		// 							.onClick(() => {
+		// 								self.databaseFileModes[this.leaf.id || file.path] =
+		// 									DatabaseCore.FRONTMATTER_KEY;
+		// 								self.setDatabaseView(this.leaf);
+		// 							});
+		// 					})
+		// 					.addSeparator();
 
-						next.call(this, menu);
-					};
-				},
-			})
-		);
+		// 				next.call(this, menu);
+		// 			};
+		// 		},
+		// 	})
+		// );
 	}
 
 	// private debuggingMobile(plugin:Plugin){
