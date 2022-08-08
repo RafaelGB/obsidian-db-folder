@@ -91,6 +91,7 @@ export function Table(tableData: TableDataType) {
   );
   const [persistSizingTimeout, setPersistSizingTimeout] = React.useState(null);
   // Drag and drop
+  const DnDRef = React.useRef(null);
   const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
     columns.map((c) => c.id)
   );
@@ -315,10 +316,13 @@ export function Table(tableData: TableDataType) {
                 <div
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
+                  ref={DnDRef}
                 >
                   <DndProvider
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
                     backend={HTML5Backend}
+                    debugMode={global.enable_debug_mode}
+                    context={DnDRef}
                   >
                     {headerGroup.headers
                       .filter(

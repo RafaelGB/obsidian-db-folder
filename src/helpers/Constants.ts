@@ -218,7 +218,7 @@ export const CellSizeOptions = Object.freeze({
 })
 
 export const DnDConfiguration = Object.freeze({
-  DRAG_TYPE: "column",
+  DRAG_TYPE: "dbFolderColumn",
 });
 
 export const ResizeConfiguration = Object.freeze({
