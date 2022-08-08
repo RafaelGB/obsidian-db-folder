@@ -1,3 +1,13 @@
+# 2.1.1 (beta)
+### Improved
+- Resizing of columns performed better. [ISSUE#241](https://github.com/RafaelGB/obsidian-db-folder/issues/241)
+### No longer broken
+- Aligment issues when editing [ISSUE#246](https://github.com/RafaelGB/obsidian-db-folder/issues/246)
+- Rename label does not affect order with zustand [ISSUE#247](https://github.com/RafaelGB/obsidian-db-folder/issues/247)
+- Alter column key after modify the label [ISSUE#248](https://github.com/RafaelGB/obsidian-db-folder/issues/248)
+- New rows accepts editions with zustand [ISSUE#254](https://github.com/RafaelGB/obsidian-db-folder/issues/254)
+- Minor bug updating with zustand [ISSUE#245](https://github.com/RafaelGB/obsidian-db-folder/issues/245)
+- new columns respect order[ISSUE#240](https://github.com/RafaelGB/obsidian-db-folder/issues/240)
 # 2.1.0 (beta)
 ### Shiny new things
 - The dispatcher of all events was migrated to Zustand! This means a better, more stable, and more efficient way to handle events. [Zustand](https://zustand.js.org/) is a library that provides a simple, efficient, and powerful way to manage state in React. Allowing future changes as formula columns. As PoC, this version update the value of `modified` column every time a cell is changed. [ISSUE#227](https://github.com/RafaelGB/obsidian-db-folder/issues/227)
