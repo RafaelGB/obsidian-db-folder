@@ -1,4 +1,4 @@
-import { RowDataType, NormalizedPath, TableDataType, TableColumn } from 'cdm/FolderModel';
+import { RowDataType, NormalizedPath, TableColumn } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
@@ -12,7 +12,6 @@ import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { EditionError } from 'errors/ErrorTypes';
-import { TableStateInterface } from 'cdm/TableStateInterface';
 import { LocalSettings } from 'cdm/SettingsModel';
 
 const noBreakSpace = /\u00A0/g;
@@ -22,35 +21,34 @@ const noBreakSpace = /\u00A0/g;
  * @param data 
  * @returns 
  */
-export function hasFrontmatterKey(data: string | TFile): boolean {
+export function hasFrontmatter(data: string): boolean {
   if (!data) return false;
 
-  if (typeof data === 'string') {
-    const frontmatterRegex = /^---[\s\S]+?---/g;
-    return frontmatterRegex.test(data);
-  }
-
-  if (data instanceof TFile) {
-    const cache = app.metadataCache.getFileCache(data);
-    return !!cache?.frontmatter && !!cache?.frontmatter['kanban-plugin'];
-  }
-
-  return false;
+  const frontmatterRegex = /^---[\s\S]+?---/g;
+  return frontmatterRegex.test(data);
 }
 
 /** Check if file is a database note */
-export function isDatabaseNote(data: string): boolean {
-  if (!data) return false;
-  const match = data.match(/---\s+([\w\W]+?)\s+---/);
+export function isDatabaseNote(data: string | TFile) {
+  if (data instanceof TFile) {
+    if (!data) return false;
 
-  if (!match) {
-    return false;
-  }
+    const cache = app.metadataCache.getFileCache(data);
 
-  if (!match[1].contains(DatabaseCore.FRONTMATTER_KEY)) {
-    return false;
+    return !!cache?.frontmatter && !!cache?.frontmatter[DatabaseCore.FRONTMATTER_KEY];
+  } else {
+    const match = data.match(/---\s+([\w\W]+?)\s+---/);
+
+    if (!match) {
+      return false;
+    }
+
+    if (!match[1].contains(DatabaseCore.FRONTMATTER_KEY)) {
+      return false;
+    }
+
+    return true;
   }
-  return true;
 }
 
 export function getNormalizedPath(path: string): NormalizedPath {
@@ -336,7 +334,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
     // Execute action
     if (updateOptions[option]) {
       // Check if file has frontmatter
-      if (!hasFrontmatterKey(content)) {
+      if (!hasFrontmatter(content)) {
         // If not, add it
         await addFrontmatter();
       }

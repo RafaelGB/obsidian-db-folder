@@ -15,6 +15,7 @@ import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, InputType, StyleClasses } from "helpers/Constants";
 import obtainInitialType from "helpers/InitialType";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
+import { getParentWindow } from "helpers/WindowElement";
 import DBFolderPlugin from "main";
 
 import {
@@ -46,6 +47,13 @@ export class DatabaseView extends TextFileView implements HoverParent {
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
     this.plugin = plugin;
+
+    this.register(
+      this.containerEl.onWindowMigrated(() => {
+        this.plugin.removeView(this);
+        this.plugin.addView(this, this.data, this.isPrimary);
+      })
+    );
   }
 
   /**
@@ -84,6 +92,11 @@ export class DatabaseView extends TextFileView implements HoverParent {
   get isPrimary(): boolean {
     return this.plugin.getStateManager(this.file)?.getAView() === this;
   }
+
+  getWindow() {
+    return getParentWindow(this.containerEl) as Window & typeof globalThis;
+  }
+
   onPaneMenu(menu: Menu, source: string, callSuper: boolean = true): void {
     if (source !== "more-options") {
       super.onPaneMenu(menu, source);
