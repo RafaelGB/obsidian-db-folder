@@ -1,6 +1,6 @@
 // Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
 
-import { App, TAbstractFile, TFile } from "obsidian";
+import { TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "settings/suggesters/suggest";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
 

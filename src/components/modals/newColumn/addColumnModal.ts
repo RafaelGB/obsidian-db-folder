@@ -4,6 +4,7 @@ import { DatabaseView } from "DatabaseView";
 import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
+import { select_new_column_section } from "components/modals/newColumn/SelectNewColumnSection";
 
 export class AddColumnModal extends Modal {
     view: DatabaseView;
@@ -57,7 +58,8 @@ export class AddColumnModalManager {
     }
 
     constructBody(response: AddColumnModalHandlerResponse) {
-
+        /** select new column section */
+        select_new_column_section.run(response);
     }
 
     reset(response: AddColumnModalHandlerResponse) {

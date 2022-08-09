@@ -3,11 +3,11 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { MediaDimensionsHandler } from "components/modals/columnSettings/handlers/MediaDimensionsHandler";
 import { MediaToggleHandler } from "components/modals/columnSettings/handlers/MediaToggleHandler";
 import { InlineToggleHandler } from "components/modals/columnSettings/handlers/InlineToggleHandler";
-import { ColumnHandler } from "components/modals/columnSettings/handlers/AbstractColumnHandler";
 import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/handlers/SelectedColumnOptionsHandler";
 import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
 import { InputType } from "helpers/Constants";
-import { AbstractChain, AbstractHandler } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractHandler } from "patterns/AbstractHandler";
 
 class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
     private input: string = InputType.TEXT;
@@ -22,7 +22,7 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
         return columnHandlerResponse;
     }
     protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
-        const particularHandlers: ColumnHandler[] = [];
+        const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         switch (this.input) {
             case InputType.TASK:
                 // do nothing
@@ -53,7 +53,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
         return columnHandlerResponse;
     }
     protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
-        const particularHandlers: ColumnHandler[] = [];
+        const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         switch (this.input) {
             case InputType.TEXT:
                 particularHandlers.push(new MediaToggleHandler());

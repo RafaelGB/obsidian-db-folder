@@ -1,7 +1,4 @@
-export interface AbstractHandler<T> {
-    setNext(handler: AbstractHandler<T>): AbstractHandler<T>;
-    handle(abstractResponse: T): T;
-}
+import { AbstractHandler } from "patterns/AbstractHandler";
 
 export abstract class AbstractChain<T> {
     /**

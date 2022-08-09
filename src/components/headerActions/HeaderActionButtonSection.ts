@@ -1,8 +1,9 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
-import { AbstractChain, AbstractHandler } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/AbstractFactoryChain";
 import SortHandlerAction from "components/headerActions/handlers/buttons/SortHandlerAction";
 import AddColumnHandlerAction from "components/headerActions/handlers/buttons/AddColumnHandlerAction";
 import RemoveColumnHandlerAction from "components/headerActions/handlers/buttons/RemoveColumnHandlerAction";
+import { AbstractHandler } from "patterns/AbstractHandler";
 
 class HeaderActionButtonSection extends AbstractChain<HeaderActionResponse> {
 

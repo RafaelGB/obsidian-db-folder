@@ -1,14 +1,13 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { ColorPickerProps } from "cdm/StyleModel";
 import { ColorPicker } from "components/ColorPicker";
-import { AbstractColumnHandler } from "components/modals/columnSettings/handlers/AbstractColumnHandler";
 import { randomColor } from "helpers/Colors";
 import { ButtonComponent, Notice, Setting } from "obsidian";
+import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import React from "react";
-import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 
-export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
+export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
   settingTitle: string = "Column Options";
   handle(
     columnHandlerResponse: ColumnSettingsHandlerResponse

@@ -1,7 +1,8 @@
-import { AbstractChain, AbstractHandler } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 import { TemplateFolderNewRowsHandler } from "settings/handlers/rows/TemplateFolderNewRowsHandler";
+import { AbstractHandler } from "patterns/AbstractHandler";
 
 class RowsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
