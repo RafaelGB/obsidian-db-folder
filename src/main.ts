@@ -5,11 +5,13 @@ import {
 	TFolder,
 	TFile,
 	ViewState,
+	Platform,
+	MarkdownView,
 } from 'obsidian';
 
 import {
 	DatabaseView,
-	databaseIcon
+	databaseIcon,
 } from 'DatabaseView';
 
 import {
@@ -29,6 +31,8 @@ import { LOGGER } from 'services/Logger';
 import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 import { unmountComponentAtNode } from 'react-dom';
+import { hasFrontmatterKey } from 'helpers/VaultManagement';
+import { getParentWindow } from 'helpers/WindowElement';
 
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
@@ -311,7 +315,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	registerEvents() {
 		this.registerEvent(
-			this.app.workspace.on('file-menu', (menu, file: TFile) => {
+			this.app.workspace.on('file-menu', (menu, file: TFile, source, leaf) => {
 				// Add a menu item to the folder context menu to create a database
 				if (file instanceof TFolder) {
 					menu.addItem((item) => {
@@ -319,6 +323,62 @@ export default class DBFolderPlugin extends Plugin {
 							.setTitle('New database folder')
 							.setIcon(databaseIcon)
 							.onClick(() => this.newDatabase(file));
+					});
+					return;
+				}
+				if (
+					!Platform.isMobile &&
+					file instanceof TFile &&
+					leaf &&
+					source === 'sidebar-context-menu' &&
+					hasFrontmatterKey(file)
+				) {
+					const views = this.getDatabaseViews(
+						getParentWindow(leaf.view.containerEl)
+					);
+					let haveDatabaseView = false;
+
+					for (const view of views) {
+						if (view.file === file) {
+							view.onPaneMenu(menu, 'more-options', false);
+							haveDatabaseView = true;
+							break;
+						}
+					}
+
+					if (!haveDatabaseView) {
+						menu.addItem((item) => {
+							item
+								.setTitle('Open as database folder')
+								.setIcon(databaseIcon)
+								.setSection('pane')
+								.onClick(() => {
+									this.databaseFileModes[(leaf as any).id || file.path] =
+										DatabaseCore.FRONTMATTER_KEY;
+									this.setDatabaseView(leaf);
+								});
+						});
+
+						return;
+					}
+				}
+
+				if (
+					leaf?.view instanceof MarkdownView &&
+					file instanceof TFile &&
+					source === 'pane-more-options' &&
+					hasFrontmatterKey(file)
+				) {
+					menu.addItem((item) => {
+						item
+							.setTitle('Open as database folder')
+							.setIcon(databaseIcon)
+							.setSection('pane')
+							.onClick(() => {
+								this.databaseFileModes[(leaf as any).id || file.path] =
+									DatabaseCore.FRONTMATTER_KEY;
+								this.setDatabaseView(leaf);
+							});
 					});
 				}
 			})
