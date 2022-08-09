@@ -3,7 +3,7 @@ import { DatabaseView } from "DatabaseView";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { particular_settings_section, behavior_settings_section } from "components/modals/columnSettings/ColumnSections";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 
@@ -51,7 +51,7 @@ export class ColumnSettingsManager {
         const settingBody = containerEl.createDiv();
         settingBody.addClass(StyleClasses.COLUMN_MODAL_BODY);
         settingBody.setAttribute("id", StyleClasses.COLUMN_MODAL_BODY);
-        const initialResponse: ColumnHandlerResponse = {
+        const initialResponse: ColumnSettingsHandlerResponse = {
             containerEl: settingBody,
             view: this.view,
             column: this.column,
@@ -60,14 +60,14 @@ export class ColumnSettingsManager {
         this.constructBody(initialResponse);
     }
 
-    constructBody(settingHandlerResponse: ColumnHandlerResponse) {
+    constructBody(response: ColumnSettingsHandlerResponse) {
         /** behavior section */
-        behavior_settings_section.run(settingHandlerResponse);
+        behavior_settings_section.run(response);
         /** Particular settings section */
-        particular_settings_section.run(settingHandlerResponse);
+        particular_settings_section.run(response);
     }
 
-    reset(response: ColumnHandlerResponse) {
+    reset(response: ColumnSettingsHandlerResponse) {
         const columnElement = activeDocument.getElementById(StyleClasses.COLUMN_MODAL_BODY);
         // remove all sections
         columnElement.empty();

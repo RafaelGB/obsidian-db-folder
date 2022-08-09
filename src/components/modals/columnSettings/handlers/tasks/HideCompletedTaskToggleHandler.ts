@@ -1,9 +1,9 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractColumnHandler } from "components/modals/columnSettings/handlers/AbstractColumnHandler";
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 export class HideCompletedTaskToggleHandler extends AbstractColumnHandler {
     settingTitle: string = 'Hide completed tasks';
-    handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, view } = columnHandlerResponse;
         const inline_togle_promise = async (value: boolean): Promise<void> => {
             column.config.task_hide_completed = value;

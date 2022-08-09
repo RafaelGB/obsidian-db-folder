@@ -1,8 +1,8 @@
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 
 export interface ColumnHandler {
     setNext(handler: ColumnHandler): ColumnHandler;
-    handle(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse;
+    handle(settingHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse;
 }
 
 export abstract class AbstractColumnHandler implements ColumnHandler {
@@ -10,7 +10,7 @@ export abstract class AbstractColumnHandler implements ColumnHandler {
     protected nextHandler: ColumnHandler;
 
 
-    public goNext(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    public goNext(settingHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         // Check next handler
         if (this.nextHandler) {
             return this.nextHandler.handle(settingHandlerResponse);
@@ -24,5 +24,5 @@ export abstract class AbstractColumnHandler implements ColumnHandler {
     }
 
 
-    abstract handle(settingHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse;
+    abstract handle(settingHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse;
 }

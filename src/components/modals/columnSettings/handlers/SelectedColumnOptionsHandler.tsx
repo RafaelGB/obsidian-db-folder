@@ -1,4 +1,4 @@
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { ColorPickerProps } from "cdm/StyleModel";
 import { ColorPicker } from "components/ColorPicker";
 import { AbstractColumnHandler } from "components/modals/columnSettings/handlers/AbstractColumnHandler";
@@ -10,7 +10,9 @@ import { createRoot } from "react-dom/client";
 
 export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
   settingTitle: string = "Column Options";
-  handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+  handle(
+    columnHandlerResponse: ColumnSettingsHandlerResponse
+  ): ColumnSettingsHandlerResponse {
     const { column, containerEl, view, columnSettingsManager } =
       columnHandlerResponse;
 

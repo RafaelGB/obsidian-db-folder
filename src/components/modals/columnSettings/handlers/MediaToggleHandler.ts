@@ -1,9 +1,9 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractColumnHandler } from "components/modals/columnSettings/handlers/AbstractColumnHandler";
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 export class MediaToggleHandler extends AbstractColumnHandler {
     settingTitle: string = 'Enable media links';
-    handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, view, columnSettingsManager } = columnHandlerResponse;
         // pass if modal opened from local settings
         const media_togle_promise = async (value: boolean): Promise<void> => {

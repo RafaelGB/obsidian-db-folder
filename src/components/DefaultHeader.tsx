@@ -12,6 +12,7 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
+import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
@@ -54,9 +55,11 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const created: boolean = false;
   /** Properties of header */
   const { header, table } = headerProps;
-  const [columns, addToLeft] = table.options.meta.tableState.columns(
-    (state) => [state.columns, state.addToLeft]
-  );
+  const { tableState } = table.options.meta;
+  const [columns, addToLeft] = tableState.columns((state) => [
+    state.columns,
+    state.addToLeft,
+  ]);
   /** Column values */
   const { id, input, options, label, config } = header.column
     .columnDef as TableColumn;
@@ -104,7 +107,8 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   }
 
   function handlerAddColumnToLeft(e: any) {
-    addToLeft(columns.find((o: any) => o.id === MetadataColumns.ADD_COLUMN));
+    //addToLeft(columns.find((o: any) => o.id === MetadataColumns.ADD_COLUMN));
+    new AddColumnModal(table.options.meta.view, tableState).open();
   }
 
   LOGGER.debug(`<=Header ${label}`);
