@@ -1,5 +1,5 @@
 import { TableColumn } from "cdm/FolderModel";
-import { ColumnSettingsManager } from "components/modals/ColumnModal";
+import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnModal";
 import { DatabaseView } from "DatabaseView";
 
 export type ColumnHandlerResponse = {

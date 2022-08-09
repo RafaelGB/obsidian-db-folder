@@ -1,11 +1,11 @@
 import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 import { add_setting_header } from "settings/SettingsComponents";
-import { MediaDimensionsHandler } from "components/modals/handlers/MediaDimensionsHandler";
-import { MediaToggleHandler } from "components/modals/handlers/MediaToggleHandler";
-import { InlineToggleHandler } from "components/modals/handlers/InlineToggleHandler";
-import { ColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
-import { SelectedColumnOptionsHandler } from "components/modals/handlers/SelectedColumnOptionsHandler";
-import { HideCompletedTaskToggleHandler } from "components/modals/handlers/tasks/HideCompletedTaskToggleHandler";
+import { MediaDimensionsHandler } from "components/modals/columnSettings/handlers/MediaDimensionsHandler";
+import { MediaToggleHandler } from "components/modals/columnSettings/handlers/MediaToggleHandler";
+import { InlineToggleHandler } from "components/modals/columnSettings/handlers/InlineToggleHandler";
+import { ColumnHandler } from "components/modals/columnSettings/handlers/AbstractColumnHandler";
+import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/handlers/SelectedColumnOptionsHandler";
+import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain, AbstractHandler } from "patterns/AbstractFactoryChain";
 

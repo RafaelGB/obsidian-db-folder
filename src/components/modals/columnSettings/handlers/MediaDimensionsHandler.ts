@@ -1,5 +1,5 @@
 import { Setting } from "obsidian";
-import { AbstractColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
+import { AbstractColumnHandler } from "components/modals/columnSettings/handlers/AbstractColumnHandler";
 import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
 
 export class MediaDimensionsHandler extends AbstractColumnHandler {
