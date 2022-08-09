@@ -348,7 +348,6 @@ export default class DBFolderPlugin extends Plugin {
 					});
 					return;
 				}
-				console.log('file-menu');
 				if (
 					!Platform.isMobile &&
 					file instanceof TFile &&
@@ -367,7 +366,6 @@ export default class DBFolderPlugin extends Plugin {
 						}
 						return false;
 					});
-					console.log('haveDatabaseView', haveDatabaseView);
 					if (!haveDatabaseView) {
 						menu.addItem((item) => {
 							item
