@@ -1,3 +1,7 @@
+# 2.1.2
+### No longer broken
+- drap/drop incompatibility with Obsidian was fixed [ISSUE#239](https://github.com/RafaelGB/obsidian-db-folder/issues/239)
+- Split pane options was recovered [ISSUE#257](https://github.com/RafaelGB/obsidian-db-folder/issues/257)
 # 2.1.1 (beta)
 ### Improved
 - Resizing of columns performed better. [ISSUE#241](https://github.com/RafaelGB/obsidian-db-folder/issues/241)
