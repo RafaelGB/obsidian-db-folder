@@ -31,7 +31,7 @@ import { LOGGER } from 'services/Logger';
 import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 import { unmountComponentAtNode } from 'react-dom';
-import { hasFrontmatterKey } from 'helpers/VaultManagement';
+import { isDatabaseNote } from 'helpers/VaultManagement';
 import { getParentWindow } from 'helpers/WindowElement';
 
 interface WindowRegistry {
@@ -187,6 +187,16 @@ export default class DBFolderPlugin extends Plugin {
 		return this.stateManagers.get(file);
 	}
 
+	getStateManagerFromViewID(id: string, win: Window) {
+		const view = this.getDatabaseView(id, win);
+
+		if (!view) {
+			return null;
+		}
+
+		return this.stateManagers.get(view.file);
+	}
+
 	removeView(view: DatabaseView) {
 		const entry = Array.from(this.windowRegistry.entries()).find(([, reg]) => {
 			return reg.viewMap.has(view.id);
@@ -251,8 +261,20 @@ export default class DBFolderPlugin extends Plugin {
 		return [];
 	}
 
-	getDatabaseView(id: string) {
-		return this.viewMap.get(id);
+	getDatabaseView(id: string, win: Window) {
+		const reg = this.windowRegistry.get(win);
+
+		if (reg?.viewMap.has(id)) {
+			return reg.viewMap.get(id);
+		}
+
+		for (const reg of this.windowRegistry.values()) {
+			if (reg.viewMap.has(id)) {
+				return reg.viewMap.get(id);
+			}
+		}
+
+		return null;
 	}
 
 	mount(win: Window) {
@@ -326,26 +348,26 @@ export default class DBFolderPlugin extends Plugin {
 					});
 					return;
 				}
+				console.log('file-menu');
 				if (
 					!Platform.isMobile &&
 					file instanceof TFile &&
 					leaf &&
 					source === 'sidebar-context-menu' &&
-					hasFrontmatterKey(file)
+					isDatabaseNote(file)
 				) {
 					const views = this.getDatabaseViews(
 						getParentWindow(leaf.view.containerEl)
 					);
-					let haveDatabaseView = false;
 
-					for (const view of views) {
+					const haveDatabaseView = views.some((view) => {
 						if (view.file === file) {
 							view.onPaneMenu(menu, 'more-options', false);
-							haveDatabaseView = true;
-							break;
+							return true;
 						}
-					}
-
+						return false;
+					});
+					console.log('haveDatabaseView', haveDatabaseView);
 					if (!haveDatabaseView) {
 						menu.addItem((item) => {
 							item
@@ -358,7 +380,6 @@ export default class DBFolderPlugin extends Plugin {
 									this.setDatabaseView(leaf);
 								});
 						});
-
 						return;
 					}
 				}
@@ -367,7 +388,7 @@ export default class DBFolderPlugin extends Plugin {
 					leaf?.view instanceof MarkdownView &&
 					file instanceof TFile &&
 					source === 'pane-more-options' &&
-					hasFrontmatterKey(file)
+					isDatabaseNote(file)
 				) {
 					menu.addItem((item) => {
 						item
@@ -455,43 +476,6 @@ export default class DBFolderPlugin extends Plugin {
 				},
 			})
 		);
-
-		// //Add a menu item to go back to database view
-		// this.register(
-		// 	around(MarkdownView.prototype, {
-		// 		onPaneMenu(next) {
-		// 			return function (menu: Menu) {
-		// 				const file = this.file;
-		// 				const cache = file
-		// 					? self.app.metadataCache.getFileCache(file)
-		// 					: null;
-
-		// 				if (
-		// 					!file ||
-		// 					!cache?.frontmatter ||
-		// 					!cache.frontmatter[DatabaseCore.FRONTMATTER_KEY]
-		// 				) {
-		// 					return next.call(this, menu);
-		// 				}
-
-		// 				menu
-		// 					.addItem((item) => {
-		// 						item
-		// 							.setTitle('Open as database folder')
-		// 							.setIcon(databaseIcon)
-		// 							.onClick(() => {
-		// 								self.databaseFileModes[this.leaf.id || file.path] =
-		// 									DatabaseCore.FRONTMATTER_KEY;
-		// 								self.setDatabaseView(this.leaf);
-		// 							});
-		// 					})
-		// 					.addSeparator();
-
-		// 				next.call(this, menu);
-		// 			};
-		// 		},
-		// 	})
-		// );
 	}
 
 	// private debuggingMobile(plugin:Plugin){
