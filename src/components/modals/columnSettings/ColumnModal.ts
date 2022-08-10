@@ -53,7 +53,6 @@ export class ColumnSettingsManager {
         settingBody.setAttribute("id", StyleClasses.COLUMN_MODAL_BODY);
         const initialResponse: ColumnSettingsHandlerResponse = {
             containerEl: settingBody,
-            view: this.view,
             column: this.column,
             columnSettingsManager: this
         };

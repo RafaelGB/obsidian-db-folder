@@ -1,4 +1,4 @@
-import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
+import { AddColumnModalHandlerResponse, AddColumnModalProps } from "cdm/ModalsModel";
 import { TableStateInterface } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { StyleClasses } from "helpers/Constants";
@@ -8,38 +8,38 @@ import { select_new_column_section } from "components/modals/newColumn/SelectNew
 
 export class AddColumnModal extends Modal {
     view: DatabaseView;
-    tableState: TableStateInterface;
     addColumnManager: AddColumnModalManager;
     constructor(
         view: DatabaseView,
-        tableState: TableStateInterface
+        props: AddColumnModalProps
     ) {
         super(view.app);
         this.view = view;
-        this.tableState = tableState;
+        this.addColumnManager = new AddColumnModalManager(this, props);
     }
 
     onOpen() {
         const { contentEl } = this;
         contentEl.empty();
+        this.addColumnManager.constructUI(contentEl);
     }
 
     onClose() {
         const { contentEl } = this;
         contentEl.empty();
-        //this.view.reloadDatabase();
+        //this.view.reloadDatabase();   
     }
 }
 
 export class AddColumnModalManager {
-    view: DatabaseView;
-    tableState: TableStateInterface;
+    addColumnModal: AddColumnModal;
+    props: AddColumnModalProps;
     constructor(
-        view: DatabaseView,
-        tableState: TableStateInterface
+        addColumnModal: AddColumnModal,
+        props: AddColumnModalProps
     ) {
-        this.view = view;
-        this.tableState = tableState;
+        this.addColumnModal = addColumnModal;
+        this.props = props;
     }
     constructUI(containerEl: HTMLElement) {
         /** Common modal headings */
@@ -52,7 +52,6 @@ export class AddColumnModalManager {
         const initialResponse: AddColumnModalHandlerResponse = {
             containerEl: addColumnBody,
             addColumnModalManager: this,
-            view: this.view,
         };
         this.constructBody(initialResponse);
     }

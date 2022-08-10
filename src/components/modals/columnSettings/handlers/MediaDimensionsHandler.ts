@@ -5,7 +5,8 @@ import { AbstractHandlerClass } from "patterns/AbstractHandler";
 export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
     settingTitle: string = 'Dimensions of embeded media';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
-        const { column, containerEl, view, columnSettingsManager } = columnHandlerResponse;
+        const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
+        const { view } = columnSettingsManager;
         const dbSettings = view.plugin.settings;
         const { config } = column
         if (config.enable_media_view) {

@@ -19,6 +19,7 @@ import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { RowSelectOption } from "cdm/ComponentsModel";
+import { AddColumnModalProps } from "cdm/ModalsModel";
 
 /**
  * Generate column Options with Select type
@@ -56,11 +57,13 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   /** Properties of header */
   const { header, table } = headerProps;
   const { tableState } = table.options.meta;
+
   const [columns, addToLeft] = tableState.columns((state) => [
     state.columns,
     state.addToLeft,
   ]);
   /** Column values */
+
   const { id, input, options, label, config } = header.column
     .columnDef as TableColumn;
   /** reducer asociated to database */
@@ -107,8 +110,10 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   }
 
   function handlerAddColumnToLeft(e: any) {
-    //addToLeft(columns.find((o: any) => o.id === MetadataColumns.ADD_COLUMN));
-    new AddColumnModal(table.options.meta.view, tableState).open();
+    const addColumnProps: AddColumnModalProps = {
+      columnsState: { columns, addToLeft },
+    };
+    new AddColumnModal(table.options.meta.view, addColumnProps).open();
   }
 
   LOGGER.debug(`<=Header ${label}`);

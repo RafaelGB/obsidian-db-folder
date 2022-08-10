@@ -12,9 +12,9 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
   handle(
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ): ColumnSettingsHandlerResponse {
-    const { column, containerEl, view, columnSettingsManager } =
+    const { column, containerEl, columnSettingsManager } =
       columnHandlerResponse;
-
+    const { view } = columnSettingsManager;
     let newLabel = "";
     const options = column.options;
     const onClickAddPromise = async (): Promise<void> => {

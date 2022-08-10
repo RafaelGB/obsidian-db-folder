@@ -4,7 +4,8 @@ import { AbstractHandlerClass } from "patterns/AbstractHandler";
 export class InlineToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
     settingTitle: string = 'Inline field';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
-        const { column, containerEl, view } = columnHandlerResponse;
+        const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
+        const { view } = columnSettingsManager;
         const inline_togle_promise = async (value: boolean): Promise<void> => {
             column.config.isInline = value;
             // Persist value
