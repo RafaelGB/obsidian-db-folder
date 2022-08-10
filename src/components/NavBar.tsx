@@ -11,7 +11,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
+import PlusIcon from "components/img/Plus";
+import FilterOnIcon from "components/img/FilterOnIcon";
+import MenuDownIcon from "components/img/MenuDownIcon";
 import Typography from "@mui/material/Typography";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
 
 export function NavBar(navBarProps: NavBarProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -83,6 +88,23 @@ export function NavBar(navBarProps: NavBarProps) {
           </Typography>
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
+          <ButtonGroup variant="text" size="small">
+            <Button size="small">
+              <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
+                <PlusIcon />
+              </span>
+            </Button>
+            <Button size="small">
+              <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
+                <FilterOnIcon />
+              </span>
+            </Button>
+            <Button size="small">
+              <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
+                <MenuDownIcon />
+              </span>
+            </Button>
+          </ButtonGroup>
         </Toolbar>
       </AppBar>
     </Box>

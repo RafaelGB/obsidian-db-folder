@@ -5,7 +5,6 @@ import {
   TableColumn,
   TableDataType,
 } from "cdm/FolderModel";
-import { TableStateInterface } from "cdm/TableStateInterface";
 import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
