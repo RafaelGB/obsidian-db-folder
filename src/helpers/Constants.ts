@@ -190,7 +190,7 @@ export const StyleClasses = Object.freeze({
   COLUMN_MODAL: 'database-column-modal',
   COLUMN_MODAL_BODY: 'database-column-body',
   ADD_COLUMN_MODAL: 'database-add-column-modal',
-  ADD_COLUMN_BODY: 'database-add-column-body',
+  ADD_COLUMN_MODAL_BODY: 'database-add-column-body',
 });
 
 

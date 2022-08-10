@@ -37,8 +37,8 @@ export interface DataState {
 export interface ColumnsState {
     columns: TableColumn[];
     shadowColumns: TableColumn[];
-    addToLeft: (column: TableColumn) => void;
-    addToRight: (column: TableColumn) => void;
+    addToLeft: (column: TableColumn, customName?: string) => void;
+    addToRight: (column: TableColumn, customName?: string) => void;
     remove: (column: TableColumn) => void;
     alterSorting: (column: TableColumn) => void;
     addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;

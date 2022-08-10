@@ -9,6 +9,7 @@ import { select_new_column_section } from "components/modals/newColumn/SelectNew
 export class AddColumnModal extends Modal {
     view: DatabaseView;
     addColumnManager: AddColumnModalManager;
+    enableReset: boolean = false;
     constructor(
         view: DatabaseView,
         props: AddColumnModalProps
@@ -27,7 +28,9 @@ export class AddColumnModal extends Modal {
     onClose() {
         const { contentEl } = this;
         contentEl.empty();
-        //this.view.reloadDatabase();   
+        if (this.enableReset) {
+            this.view.reloadDatabase();
+        }
     }
 }
 
@@ -47,8 +50,8 @@ export class AddColumnModalManager {
         add_setting_header(containerEl, `Add column options`, 'h2');
 
         const addColumnBody = containerEl.createDiv();
-        addColumnBody.addClass(StyleClasses.COLUMN_MODAL_BODY);
-        addColumnBody.setAttribute("id", StyleClasses.COLUMN_MODAL_BODY);
+        addColumnBody.addClass(StyleClasses.ADD_COLUMN_MODAL_BODY);
+        addColumnBody.setAttribute("id", StyleClasses.ADD_COLUMN_MODAL_BODY);
         const initialResponse: AddColumnModalHandlerResponse = {
             containerEl: addColumnBody,
             addColumnModalManager: this,
@@ -62,7 +65,7 @@ export class AddColumnModalManager {
     }
 
     reset(response: AddColumnModalHandlerResponse) {
-        const columnElement = activeDocument.getElementById(StyleClasses.ADD_COLUMN_BODY);
+        const columnElement = activeDocument.getElementById(StyleClasses.ADD_COLUMN_MODAL_BODY);
         // remove all sections
         columnElement.empty();
         this.constructBody(response);

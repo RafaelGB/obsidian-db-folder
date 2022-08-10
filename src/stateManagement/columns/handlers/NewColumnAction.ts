@@ -9,21 +9,21 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { view, set, implementation } = tableActionResponse;
 
-        implementation.addToLeft = (column: TableColumn) =>
+        implementation.addToLeft = (column: TableColumn, customName?: string) =>
             set((updater) => {
                 const index = updater.columns.findIndex(
                     (col) => col.id === column.id
                 );
-                const alteredColumns = this.generateNewColumn(view, updater, index, column.position - 1);
+                const alteredColumns = this.generateNewColumn(view, updater, index, column.position - 1, customName);
                 return { columns: alteredColumns };
             });
 
-        implementation.addToRight = (column: TableColumn) =>
+        implementation.addToRight = (column: TableColumn, customName?: string) =>
             set((updater) => {
                 const index = updater.columns.findIndex(
                     (col) => col.id === column.id
                 );
-                const alteredColumns = this.generateNewColumn(view, updater, index + 1, column.position + 1);
+                const alteredColumns = this.generateNewColumn(view, updater, index + 1, column.position + 1, customName);
                 return { columns: alteredColumns };
             });
 
@@ -39,13 +39,15 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
      * @param desiredPosition 
      * @returns 
      */
-    private generateNewColumn(view: DatabaseView, updater: ColumnsState, index: number, desiredPosition: number): TableColumn[] {
+    private generateNewColumn(view: DatabaseView, updater: ColumnsState, index: number, desiredPosition: number, customName?: string): TableColumn[] {
         const columnInfo = this.generateNewColumnInfo(
             desiredPosition,
             updater.columns,
-            updater.shadowColumns
+            updater.shadowColumns,
+            customName
         );
-        const newLeftColumn: DatabaseColumn = {
+
+        const newColumn: DatabaseColumn = {
             input: InputType.TEXT,
             accessorKey: columnInfo.name,
             key: columnInfo.name,
@@ -53,20 +55,20 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
             position: columnInfo.position,
             config: DEFAULT_COLUMN_CONFIG,
         };
-        view.diskConfig.addColumn(columnInfo.name, newLeftColumn);
+        view.diskConfig.addColumn(columnInfo.name, newColumn);
 
         const newColumns = [
             ...updater.columns.slice(0, index),
             {
                 ...TableColumnsTemplate,
-                input: newLeftColumn.input,
-                id: newLeftColumn.key,
-                label: newLeftColumn.label,
-                key: newLeftColumn.key,
-                accessorKey: newLeftColumn.accessorKey,
-                position: newLeftColumn.position,
+                input: newColumn.input,
+                id: newColumn.key,
+                label: newColumn.label,
+                key: newColumn.key,
+                accessorKey: newColumn.accessorKey,
+                position: newColumn.position,
                 csvCandidate: true,
-                config: newLeftColumn.config,
+                config: newColumn.config,
             },
             ...updater.columns.slice(index, updater.columns.length),
         ];
@@ -81,8 +83,18 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
     private generateNewColumnInfo(
         wantedPosition: number,
         columns: TableColumn[],
-        shadowColumns: TableColumn[]
+        shadowColumns: TableColumn[],
+        customName?: string
     ) {
+        console.log("wantedPosition", wantedPosition);
+        if (customName !== undefined) {
+            return {
+                name: customName,
+                label: customName,
+                position: wantedPosition,
+            };
+        }
+
         let columnNumber = columns.length - shadowColumns.length;
         // Check if column name already exists
         while (columns.find((o: any) => o.id === `newColumn${columnNumber}`)) {
