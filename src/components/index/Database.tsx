@@ -8,10 +8,11 @@ export function createDatabase(tableProps: TableDataType): JSX.Element {
 
 export function Database(tableProps: TableDataType) {
   const tableStore = useTableStore(tableProps.view);
+
   return (
-    <>
+    <React.StrictMode>
       <Table {...tableProps} tableStore={tableStore} />
       <div id="popper-container" key={"popper-container-key"}></div>
-    </>
+    </React.StrictMode>
   );
 }

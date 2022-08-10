@@ -1,9 +1,10 @@
 import { add_setting_header } from 'settings/SettingsComponents';
-import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
+import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
 import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateToggleHandler';
 import { LoggerLevelInfoDropDownHandler } from 'settings/handlers/developer/LoggerLevelInfoDropDownHandler';
-import { AbstractChain, AbstractHandler } from 'patterns/AbstractFactoryChain';
+import { AbstractChain } from 'patterns/AbstractFactoryChain';
+import { AbstractHandler } from 'patterns/AbstractHandler';
 
 /**
  * developer settings section

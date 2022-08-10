@@ -1,28 +1,28 @@
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { add_setting_header } from "settings/SettingsComponents";
-import { MediaDimensionsHandler } from "components/modals/handlers/MediaDimensionsHandler";
-import { MediaToggleHandler } from "components/modals/handlers/MediaToggleHandler";
-import { InlineToggleHandler } from "components/modals/handlers/InlineToggleHandler";
-import { ColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
-import { SelectedColumnOptionsHandler } from "components/modals/handlers/SelectedColumnOptionsHandler";
-import { HideCompletedTaskToggleHandler } from "components/modals/handlers/tasks/HideCompletedTaskToggleHandler";
+import { MediaDimensionsHandler } from "components/modals/columnSettings/handlers/MediaDimensionsHandler";
+import { MediaToggleHandler } from "components/modals/columnSettings/handlers/MediaToggleHandler";
+import { InlineToggleHandler } from "components/modals/columnSettings/handlers/InlineToggleHandler";
+import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/handlers/SelectedColumnOptionsHandler";
+import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
 import { InputType } from "helpers/Constants";
-import { AbstractChain, AbstractHandler } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractHandler } from "patterns/AbstractHandler";
 
-class BehaviorSetttingsSection extends AbstractChain<ColumnHandlerResponse> {
+class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
     private input: string = InputType.TEXT;
-    protected runBefore(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    protected runBefore(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         this.input = columnHandlerResponse.column.input;
         return columnHandlerResponse;
     }
-    protected customHandle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    protected customHandle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const behavior_section = columnHandlerResponse.containerEl.createDiv("column-section-container-behavior");
         add_setting_header(behavior_section, "Behavior", "h3");
         columnHandlerResponse.containerEl = behavior_section;
         return columnHandlerResponse;
     }
-    protected getHandlers(): AbstractHandler<ColumnHandlerResponse>[] {
-        const particularHandlers: ColumnHandler[] = [];
+    protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
+        const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         switch (this.input) {
             case InputType.TASK:
                 // do nothing
@@ -38,22 +38,22 @@ export const behavior_settings_section = new BehaviorSetttingsSection();
 /**
  * Every column type has a different behavior section
  */
-class ParticularSetttingsSection extends AbstractChain<ColumnHandlerResponse> {
+class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
     private input: string = InputType.TEXT;
-    protected runBefore(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    protected runBefore(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         this.input = columnHandlerResponse.column.input;
         return columnHandlerResponse;
     }
 
-    protected customHandle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
+    protected customHandle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const particular_section = columnHandlerResponse.containerEl.createDiv("column-section-container-particular");
         // title of the section
         add_setting_header(particular_section, `Particular properties of "${columnHandlerResponse.column.input}" column type`, 'h3');
         columnHandlerResponse.containerEl = particular_section;
         return columnHandlerResponse;
     }
-    protected getHandlers(): AbstractHandler<ColumnHandlerResponse>[] {
-        const particularHandlers: ColumnHandler[] = [];
+    protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
+        const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         switch (this.input) {
             case InputType.TEXT:
                 particularHandlers.push(new MediaToggleHandler());

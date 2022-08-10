@@ -35,7 +35,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     view.diskConfig.reorderColumns(newColumnOrder);
   }
 
-  const [{ isDragging, handlerId }, drag, dragPreview] = useDrag(
+  const [{ isDragging, handlerId }, drag] = useDrag(
     () => ({
       type: DnDConfiguration.DRAG_TYPE,
       item: { id, originalIndex },

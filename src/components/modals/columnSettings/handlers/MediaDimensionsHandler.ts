@@ -1,11 +1,12 @@
 import { Setting } from "obsidian";
-import { AbstractColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
+import { AbstractHandlerClass } from "patterns/AbstractHandler";
 
-export class MediaDimensionsHandler extends AbstractColumnHandler {
+export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
     settingTitle: string = 'Dimensions of embeded media';
-    handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
-        const { column, containerEl, view, columnSettingsManager } = columnHandlerResponse;
+    handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
+        const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
+        const { view } = columnSettingsManager;
         const dbSettings = view.plugin.settings;
         const { config } = column
         if (config.enable_media_view) {

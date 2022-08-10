@@ -3,7 +3,7 @@ import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useEffect, useState } from "react";
 import { usePopper } from "react-popper";
-import { ColumnModal } from "./modals/ColumnModal";
+import { ColumnModal } from "components/modals/columnSettings/ColumnModal";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";

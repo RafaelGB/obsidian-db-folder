@@ -1,19 +1,20 @@
-import { ColumnHandlerResponse } from "cdm/ModalSettingsModel";
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { ColorPickerProps } from "cdm/StyleModel";
 import { ColorPicker } from "components/ColorPicker";
-import { AbstractColumnHandler } from "components/modals/handlers/AbstractColumnHandler";
 import { randomColor } from "helpers/Colors";
 import { ButtonComponent, Notice, Setting } from "obsidian";
+import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import React from "react";
-import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 
-export class SelectedColumnOptionsHandler extends AbstractColumnHandler {
+export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
   settingTitle: string = "Column Options";
-  handle(columnHandlerResponse: ColumnHandlerResponse): ColumnHandlerResponse {
-    const { column, containerEl, view, columnSettingsManager } =
+  handle(
+    columnHandlerResponse: ColumnSettingsHandlerResponse
+  ): ColumnSettingsHandlerResponse {
+    const { column, containerEl, columnSettingsManager } =
       columnHandlerResponse;
-
+    const { view } = columnSettingsManager;
     let newLabel = "";
     const options = column.options;
     const onClickAddPromise = async (): Promise<void> => {

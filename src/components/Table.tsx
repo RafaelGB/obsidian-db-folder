@@ -67,11 +67,9 @@ export function Table(tableData: TableDataType) {
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
 
-  const [ddbbConfig, global, alterConfig] = tableStore.configState((store) => [
-    store.ddbbConfig,
-    store.global,
-    store.alterConfig,
-  ]);
+  const [ddbbConfig, globalConfig, alterConfig] = tableStore.configState(
+    (store) => [store.ddbbConfig, store.global, store.alterConfig]
+  );
 
   /** Plugin services */
   const stateManager: StateManager = tableData.stateManager;
@@ -91,7 +89,6 @@ export function Table(tableData: TableDataType) {
   );
   const [persistSizingTimeout, setPersistSizingTimeout] = React.useState(null);
   // Drag and drop
-  const DnDRef = React.useRef(null);
   const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
     columns.map((c) => c.id)
   );
@@ -229,9 +226,9 @@ export function Table(tableData: TableDataType) {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    debugTable: global.enable_debug_mode,
-    debugHeaders: global.enable_debug_mode,
-    debugColumns: global.enable_debug_mode,
+    debugTable: globalConfig.enable_debug_mode,
+    debugHeaders: globalConfig.enable_debug_mode,
+    debugColumns: globalConfig.enable_debug_mode,
   });
 
   // Manage input of new row
@@ -316,13 +313,12 @@ export function Table(tableData: TableDataType) {
                 <div
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
-                  ref={DnDRef}
                 >
                   <DndProvider
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
+                    debugMode={globalConfig.enable_debug_mode}
                     backend={HTML5Backend}
-                    debugMode={global.enable_debug_mode}
-                    context={DnDRef}
+                    context={view.getWindow().document.createDocumentFragment()}
                   >
                     {headerGroup.headers
                       .filter(
