@@ -4,10 +4,11 @@ import create from "zustand";
 import data_state_actions from "./data/DataStateActions";
 
 const useDataStore = (view: DatabaseView) => {
-    return create<DataState>()((set) => {
+    return create<DataState>()((set, get) => {
         const tableActionResponse: TableActionResponse<DataState> = {
             view: view,
             set: set,
+            get: get,
             implementation: {
                 ...mockDataState(),
                 rows: view.rows

@@ -8,6 +8,7 @@ import { StoreApi, UseBoundStore } from "zustand";
 export type TableActionResponse<T> = {
     view: DatabaseView,
     set: (partial: T | Partial<T> | ((state: T) => T | Partial<T>), replace?: boolean) => void,
+    get: () => T,
     implementation: T
 }
 
@@ -45,6 +46,9 @@ export interface ColumnsState {
     alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => void;
     alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
     alterColumnSize: (id: string, width: number) => void;
+    info: {
+        getValueOfAllColumnsAsociatedWith: (key: keyof TableColumn) => any[];
+    };
 }
 export interface ColumnSortingState {
     sortBy: SortingState;

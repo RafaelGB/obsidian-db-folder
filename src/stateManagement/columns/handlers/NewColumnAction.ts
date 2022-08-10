@@ -86,7 +86,6 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
         shadowColumns: TableColumn[],
         customName?: string
     ) {
-        console.log("wantedPosition", wantedPosition);
         if (customName !== undefined) {
             return {
                 name: customName,

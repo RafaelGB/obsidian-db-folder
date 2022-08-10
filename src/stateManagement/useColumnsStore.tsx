@@ -4,10 +4,11 @@ import create from "zustand";
 import column_state_actions from "stateManagement/columns/ColumnsStateActions";
 
 const useColumnsStore = (view: DatabaseView) => {
-  return create<ColumnsState>()((set) => {
+  return create<ColumnsState>()((set, get) => {
     const tableActionResponse: TableActionResponse<ColumnsState> = {
       view: view,
       set: set,
+      get: get,
       implementation: {
         ...mockColumnsState(),
         columns: view.columns,
@@ -32,6 +33,9 @@ function mockColumnsState(): ColumnsState {
     alterColumnType: null,
     alterColumnLabel: null,
     alterColumnSize: null,
+    info: {
+      getValueOfAllColumnsAsociatedWith: null,
+    },
   };
 }
 

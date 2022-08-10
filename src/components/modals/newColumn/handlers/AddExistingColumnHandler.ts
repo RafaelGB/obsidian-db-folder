@@ -9,7 +9,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
     settingTitle: string = 'Add existing column';
     handle(response: AddColumnModalHandlerResponse): AddColumnModalHandlerResponse {
         const { containerEl, addColumnModalManager } = response;
-        const { columns, addToLeft } = addColumnModalManager.props.columnsState;
+        const { columns, addToLeft, info } = addColumnModalManager.props.columnsState;
         let selectedColumn: string = "-";
         const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
             resolve(obtainColumnsFromRows(addColumnModalManager.addColumnModal.view));
@@ -17,7 +17,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
 
         promiseOfObtainColumnsFromRows.then((columnsRaw: Record<string, DatabaseColumn>) => {
             // Filter out the columns that are already in the table
-            const currentColumns = columns.map((column) => column.id.toLowerCase());
+            const currentColumns = (info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id.toLowerCase());
             const filteredColumns: Record<string, string> = {};
             Object.keys(columnsRaw).filter((columnName: string) => {
                 return !currentColumns.includes(columnName.toLowerCase())
@@ -46,6 +46,8 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                             addColumnModalManager.addColumnModal.enableReset = true;
                             // Refresh the modal to remove the selected column from the dropdown
                             addColumnModalManager.reset(response);
+                            new Notice(`"${selectedColumn}" added to the table`, 1500);
+
                         });
                 });
         });
