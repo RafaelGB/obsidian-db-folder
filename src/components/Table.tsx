@@ -268,18 +268,11 @@ export function Table(tableData: TableDataType) {
         {/* INIT NAVBAR */}
         <HeaderNavBar
           key={`div-header-navbar`}
-          csvButtonProps={{
-            columns: columns,
-            rows: table.getRowModel().rows,
-            name: view.diskConfig.yaml.name,
-          }}
+          table={table}
           globalFilterRows={{
             globalFilter: globalFilter,
             hits: table.getFilteredRowModel().rows.length,
             setGlobalFilter: setGlobalFilter,
-          }}
-          headerGroupProps={{
-            style: { width: table.getCenterTotalSize() },
           }}
         />
         {/* ENDS NAVBAR */}
@@ -313,12 +306,14 @@ export function Table(tableData: TableDataType) {
                 <div
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
+                  id={"pruebasheader"}
                 >
+                  {/* TODO manage context with documentFragment in any way to fix DnD conflict with Obsidian */}
                   <DndProvider
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
                     debugMode={globalConfig.enable_debug_mode}
                     backend={HTML5Backend}
-                    context={view.getWindow().document.createDocumentFragment()}
+                    context={view.getWindow().createFragment()}
                   >
                     {headerGroup.headers
                       .filter(

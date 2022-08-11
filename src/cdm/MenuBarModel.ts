@@ -1,10 +1,9 @@
-import { Row } from "@tanstack/react-table";
+import { Row, Table } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 
 export type NavBarProps = {
-    csvButtonProps: CsvButtonProps;
+    table: Table<RowDataType>,
     globalFilterRows: GlobalFilterProps;
-    headerGroupProps?: any;
 };
 
 export type CsvButtonProps = {
