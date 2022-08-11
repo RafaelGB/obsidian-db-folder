@@ -1,6 +1,6 @@
 import { SortingState } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
@@ -33,6 +33,9 @@ export interface DataState {
     updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeRow: (row: RowDataType) => void;
     removeDataOfColumn: (column: TableColumn) => void;
+    actions: {
+        dataviewRefresh: (filterConfig: FilterSettings) => void;
+    }
 }
 
 export interface ColumnsState {
