@@ -5,13 +5,14 @@ export class InlineToggleHandler extends AbstractHandlerClass<ColumnSettingsHand
     settingTitle: string = 'Inline field';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
-        const { view } = columnSettingsManager;
+        const { view } = columnSettingsManager.modal;
         const inline_togle_promise = async (value: boolean): Promise<void> => {
             column.config.isInline = value;
             // Persist value
             await view.diskConfig.updateColumnConfig(column.key, {
                 isInline: value
             });
+            columnSettingsManager.modal.enableReset = true;
         }
         add_toggle(
             containerEl,

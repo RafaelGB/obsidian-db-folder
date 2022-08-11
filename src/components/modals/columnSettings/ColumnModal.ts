@@ -7,10 +7,11 @@ import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { particular_settings_section, behavior_settings_section } from "components/modals/columnSettings/ColumnSections";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 
-export class ColumnModal extends Modal {
+export class ColumnSettingsModal extends Modal {
     view: DatabaseView;
     headerMenuProps: HeaderMenuProps;
     columnSettingsManager: ColumnSettingsManager;
+    enableReset: boolean = false;
     constructor(
         view: DatabaseView,
         headerMenuProps: HeaderMenuProps
@@ -18,7 +19,7 @@ export class ColumnModal extends Modal {
         super(view.app);
         this.view = view;
         this.headerMenuProps = headerMenuProps;
-        this.columnSettingsManager = new ColumnSettingsManager(this.view, this.headerMenuProps.headerProps.column.columnDef as TableColumn);
+        this.columnSettingsManager = new ColumnSettingsManager(this);
     }
 
     onOpen() {
@@ -30,30 +31,30 @@ export class ColumnModal extends Modal {
     onClose() {
         const { contentEl } = this;
         contentEl.empty();
-        this.view.reloadDatabase();
+        if (this.enableReset) {
+            this.view.reloadDatabase();
+        }
     }
 }
 export class ColumnSettingsManager {
-    view: DatabaseView;
-    column: TableColumn;
+    modal: ColumnSettingsModal;
     constructor(
-        view: DatabaseView,
-        column: TableColumn
+        modal: ColumnSettingsModal
     ) {
-        this.view = view;
-        this.column = column;
+        this.modal = modal;
     }
     constructUI(containerEl: HTMLElement) {
+        const column = this.modal.headerMenuProps.headerProps.column.columnDef as TableColumn
         /** Common modal headings */
         containerEl.addClass(StyleClasses.COLUMN_MODAL);
-        add_setting_header(containerEl, `Settings of ${this.column.label} column`, 'h2');
+        add_setting_header(containerEl, `Settings of ${column.label} column`, 'h2');
 
         const settingBody = containerEl.createDiv();
         settingBody.addClass(StyleClasses.COLUMN_MODAL_BODY);
         settingBody.setAttribute("id", StyleClasses.COLUMN_MODAL_BODY);
         const initialResponse: ColumnSettingsHandlerResponse = {
             containerEl: settingBody,
-            column: this.column,
+            column: column,
             columnSettingsManager: this
         };
         this.constructBody(initialResponse);
