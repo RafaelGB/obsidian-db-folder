@@ -1,6 +1,6 @@
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState } from "cdm/TableStateInterface";
-import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnModal";
+import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
 
 /**

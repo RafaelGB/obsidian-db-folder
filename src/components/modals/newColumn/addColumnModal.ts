@@ -1,5 +1,4 @@
 import { AddColumnModalHandlerResponse, AddColumnModalProps } from "cdm/ModalsModel";
-import { TableStateInterface } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";

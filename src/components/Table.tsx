@@ -216,7 +216,7 @@ export function Table(tableData: TableDataType) {
       setColumnSizing(list);
     },
     onColumnOrderChange: setColumnOrder,
-    globalFilterFn: "includesString",
+    globalFilterFn: "includesStringSensitive",
     meta: {
       tableState: tableStore,
       view: view,

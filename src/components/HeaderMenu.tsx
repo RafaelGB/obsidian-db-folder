@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
-import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnModal";
+import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
 import { TableColumn } from "cdm/FolderModel";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
