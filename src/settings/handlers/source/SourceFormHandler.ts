@@ -21,7 +21,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                 app.vault.getMarkdownFiles().forEach(file => { filePaths[file.path] = file.basename });
                 const source_form_promise = async (value: string): Promise<void> => {
                     // update settings
-                    view.diskConfig.updateConfig('source_form_result', value);
+                    view.diskConfig.updateConfig({ source_form_result: value });
                 };
                 new Setting(containerEl)
                     .setName('Select a file')
@@ -58,7 +58,7 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
             });
         const source_form_promise = async (value: string): Promise<void> => {
             // update settings
-            view.diskConfig.updateConfig('source_form_result', value.slice(1));
+            view.diskConfig.updateConfig({ source_form_result: value.slice(1) });
         };
 
         add_dropdown(
@@ -76,7 +76,7 @@ function queryHandler(view: DatabaseView, containerEl: HTMLElement) {
     const query_promise = async (value: string): Promise<void> => {
         // update settings
         view.diskConfig.yaml.config.source_form_result = value;
-        view.diskConfig.updateConfig('source_form_result', value);
+        view.diskConfig.updateConfig({ source_form_result: value });
     };
     new Setting(containerEl)
         .setName('Dataview query')

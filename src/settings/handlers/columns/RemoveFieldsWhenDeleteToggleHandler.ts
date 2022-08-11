@@ -8,7 +8,7 @@ export class RemoveFieldsWhenDeleteToggleHandler extends AbstractSettingsHandler
             // Check context to define correct promise
             if (local) {
                 // Persist value
-                view.diskConfig.updateConfig('remove_field_when_delete_column', value);
+                view.diskConfig.updateConfig({ remove_field_when_delete_column: value });
             } else {
                 // switch remove fields on/off
                 const update_local_settings = settingsManager.plugin.settings.local_settings;

@@ -9,7 +9,7 @@ export class FrontmatterQuotesToggleHandler extends AbstractSettingsHandler {
             // Check context to define correct promise
             if (local) {
                 // Persist value
-                view.diskConfig.updateConfig('frontmatter_quote_wrap', value);
+                view.diskConfig.updateConfig({ frontmatter_quote_wrap: value });
             } else {
                 // switch option state on/off
                 const update_local_settings = settingsManager.plugin.settings.local_settings;

@@ -124,16 +124,11 @@ export default class DatabaseInfo {
         this.saveOnDisk();
     }
 
-    async updateConfiglab(partialConfig: Partial<LocalSettings>): Promise<void> {
+    async updateConfig(partialConfig: Partial<LocalSettings>): Promise<void> {
         this.yaml.config = {
             ...this.yaml.config,
             ...partialConfig
         };
-        await this.saveOnDisk();
-    }
-
-    async updateConfig<K extends keyof LocalSettings>(key: K, value: LocalSettings[K]): Promise<void> {
-        this.yaml.config[key] = value;
         await this.saveOnDisk();
     }
 

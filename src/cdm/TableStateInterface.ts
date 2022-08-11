@@ -21,6 +21,7 @@ export type TableAction<T> = {
  */
 export interface ConfigState {
     ddbbConfig: LocalSettings;
+    filters: FilterSettings;
     global: GlobalSettings;
     alterConfig: (config: Partial<LocalSettings>) => void;
 }

@@ -5,16 +5,21 @@ import create from "zustand";
 
 const useConfigStore = (view: DatabaseView) => {
     const { global_settings } = view.plugin.settings;
-    const local_settings = view.diskConfig.yaml.config;
+    const { config, filters } = view.diskConfig.yaml;
     return create<ConfigState>()(
         (set) => ({
-            ddbbConfig: local_settings,
+            ddbbConfig: config,
+            filters: filters,
             global: global_settings,
-            alterConfig: (config: Partial<LocalSettings>) => {
-                view.diskConfig.updateConfiglab(config);
-                view.plugin.updateSettings({ local_settings: { ...local_settings, ...config } });
-                set({ ddbbConfig: { ...local_settings, ...config } });
-            }
+            alterConfig: (alteredConfig: Partial<LocalSettings>) =>
+                set((state) => {
+                    const newConfig = { ...state.ddbbConfig, ...alteredConfig };
+                    view.diskConfig.updateConfig(config);
+
+                    view.plugin.updateSettings({ local_settings: { ...state.ddbbConfig, ...alteredConfig } });
+
+                    return ({ ddbbConfig: newConfig });
+                })
         })
     );
 }
