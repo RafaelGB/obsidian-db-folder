@@ -17,7 +17,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                 value: '',
             });
             // Persist changes
-            view.diskConfig.updateFilters("conditions", filters);
+            view.diskConfig.updateFilters({ conditions: filters });
             // Force refresh of settings
             settingsManager.reset(response);
         }
@@ -37,7 +37,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].field = value;
                             // Persist changes
-                            view.diskConfig.updateFilters("conditions", filters);
+                            view.diskConfig.updateFilters({ conditions: filters });
                         });
                 }).addDropdown((dropdown) => {
                     Object.entries(OperatorFilter).forEach(([key, value]) => {
@@ -47,7 +47,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                     dropdown.onChange(async (value: string): Promise<void> => {
                         filters[index].operator = value;
                         // Persist changes
-                        view.diskConfig.updateFilters("conditions", filters);
+                        view.diskConfig.updateFilters({ conditions: filters });
                     });
                 }).addText(text => {
                     text.setPlaceholder("name of value")
@@ -55,7 +55,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].value = value;
                             // Persist changes
-                            view.diskConfig.updateFilters("conditions", filters);
+                            view.diskConfig.updateFilters({ conditions: filters });
                         });
                 }).addExtraButton((cb) => {
                     cb.setIcon("cross")
@@ -63,7 +63,7 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onClick(async (): Promise<void> => {
                             filters.splice(index, 1);
                             // Persist changes
-                            await view.diskConfig.updateFilters("conditions", filters);
+                            await view.diskConfig.updateFilters({ conditions: filters });
                             // Force refresh of settings
                             settingsManager.reset(response);
                         });

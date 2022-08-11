@@ -23,7 +23,10 @@ export interface ConfigState {
     ddbbConfig: LocalSettings;
     filters: FilterSettings;
     global: GlobalSettings;
-    alterConfig: (config: Partial<LocalSettings>) => void;
+    actions: {
+        alterFilters: (filters: Partial<FilterSettings>) => void;
+        alterConfig: (config: Partial<LocalSettings>) => void;
+    }
 }
 
 export interface DataState {

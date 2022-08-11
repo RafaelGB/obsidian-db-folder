@@ -67,8 +67,8 @@ export function Table(tableData: TableDataType) {
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
 
-  const [ddbbConfig, globalConfig, alterConfig] = tableStore.configState(
-    (store) => [store.ddbbConfig, store.global, store.alterConfig]
+  const [ddbbConfig, globalConfig, configActions] = tableStore.configState(
+    (store) => [store.ddbbConfig, store.global, store.actions]
   );
 
   /** Plugin services */
@@ -251,7 +251,7 @@ export function Table(tableData: TableDataType) {
   ) {
     const settingsValue = !!newValue ? newValue.value : "";
     templateUpdate(settingsValue);
-    alterConfig({
+    configActions.alterConfig({
       current_row_template: settingsValue,
     });
   }

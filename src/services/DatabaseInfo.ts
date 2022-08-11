@@ -147,8 +147,11 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
-    async updateFilters<K extends keyof FilterSettings>(key: K, value: FilterSettings[K]): Promise<void> {
-        this.yaml.filters[key] = value;
+    async updateFilters(partialFilters: Partial<FilterSettings>): Promise<void> {
+        this.yaml.filters = {
+            ...this.yaml.filters,
+            ...partialFilters
+        };
         await this.saveOnDisk();
     }
 }
