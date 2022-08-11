@@ -83,8 +83,8 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
-  if (dbYaml.filters) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
+  if (dbYaml.filters.enabled && dbYaml.filters.conditions.length > 0) {
+    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters.conditions, p));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page);
@@ -101,8 +101,8 @@ export async function obtainAllPossibleRows(folderPath: string, dbYaml: Database
   let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
-  if (dbYaml.filters) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters, p));
+  if (dbYaml.filters.enabled && dbYaml.filters.conditions.length > 0) {
+    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters.conditions, p));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page);

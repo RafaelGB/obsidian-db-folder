@@ -5,10 +5,11 @@ import { add_button } from "settings/SettingsComponents";
 
 export class FilterDataviewHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Add new filter';
-    handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, view } = settingHandlerResponse;
+    handle(response: SettingHandlerResponse): SettingHandlerResponse {
+        const { settingsManager, containerEl, view } = response;
 
-        const filters = view.diskConfig.yaml.filters;
+
+        const filters = view.diskConfig.yaml.filters.conditions;
         const onClickAddPromise = async (): Promise<void> => {
             filters.push({
                 field: '',
@@ -16,9 +17,9 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                 value: '',
             });
             // Persist changes
-            view.diskConfig.updateFilters(filters);
+            view.diskConfig.updateFilters("conditions", filters);
             // Force refresh of settings
-            settingsManager.reset(settingHandlerResponse);
+            settingsManager.reset(response);
         }
         add_button(
             containerEl,
@@ -28,33 +29,33 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
             "Adds an additional filter",
             onClickAddPromise
         );
-        view.diskConfig.yaml.filters.forEach((filter, index) => {
+        view.diskConfig.yaml.filters.conditions.forEach((condition, index) => {
             new Setting(containerEl)
                 .addText(text => {
                     text.setPlaceholder("name of field")
-                        .setValue(filter.field)
+                        .setValue(condition.field)
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].field = value;
                             // Persist changes
-                            view.diskConfig.updateFilters(filters);
+                            view.diskConfig.updateFilters("conditions", filters);
                         });
                 }).addDropdown((dropdown) => {
                     Object.entries(OperatorFilter).forEach(([key, value]) => {
                         dropdown.addOption(key, value);
                     });
-                    dropdown.setValue(filter.operator);
+                    dropdown.setValue(condition.operator);
                     dropdown.onChange(async (value: string): Promise<void> => {
                         filters[index].operator = value;
                         // Persist changes
-                        view.diskConfig.updateFilters(filters);
+                        view.diskConfig.updateFilters("conditions", filters);
                     });
                 }).addText(text => {
                     text.setPlaceholder("name of value")
-                        .setValue(`${filter.value}`)
+                        .setValue(`${condition.value}`)
                         .onChange(async (value: string): Promise<void> => {
                             filters[index].value = value;
                             // Persist changes
-                            view.diskConfig.updateFilters(filters);
+                            view.diskConfig.updateFilters("conditions", filters);
                         });
                 }).addExtraButton((cb) => {
                     cb.setIcon("cross")
@@ -62,12 +63,12 @@ export class FilterDataviewHandler extends AbstractSettingsHandler {
                         .onClick(async (): Promise<void> => {
                             filters.splice(index, 1);
                             // Persist changes
-                            await view.diskConfig.updateFilters(filters);
+                            await view.diskConfig.updateFilters("conditions", filters);
                             // Force refresh of settings
-                            settingsManager.reset(settingHandlerResponse);
+                            settingsManager.reset(response);
                         });
                 });
         });
-        return this.goNext(settingHandlerResponse);
+        return this.goNext(response);
     }
 }

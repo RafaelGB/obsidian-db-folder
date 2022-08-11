@@ -1,5 +1,5 @@
 import { DatabaseView } from "DatabaseView";
-import { RowSelectOption } from "./ComponentsModel";
+import { RowSelectOption } from "cdm/ComponentsModel";
 
 export type ColorPickerProps = {
     view: DatabaseView;

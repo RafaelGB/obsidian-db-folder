@@ -1,4 +1,4 @@
-import { DatabaseColumn, DatabaseYaml, FilterCondition } from 'cdm/DatabaseModel';
+import { DatabaseColumn, DatabaseYaml } from 'cdm/DatabaseModel';
 import {
     Notice,
     TFile
@@ -7,7 +7,7 @@ import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
 import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
-import { LocalSettings } from 'cdm/SettingsModel';
+import { FilterCondition, FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
 
@@ -152,10 +152,8 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
-    async updateFilters(updatedFilters: FilterCondition[]): Promise<void> {
-        LOGGER.info(`=>updateFilters`, `${JSON.stringify(updatedFilters)}`);
-        this.yaml.filters = updatedFilters;
+    async updateFilters<K extends keyof FilterSettings>(key: K, value: FilterSettings[K]): Promise<void> {
+        this.yaml.filters[key] = value;
         await this.saveOnDisk();
-        LOGGER.info(`<=updateFilters`);
     }
 }

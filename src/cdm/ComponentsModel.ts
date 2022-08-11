@@ -1,4 +1,3 @@
-import NoteInfo from "services/NoteInfo";
 import { CellContext } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";

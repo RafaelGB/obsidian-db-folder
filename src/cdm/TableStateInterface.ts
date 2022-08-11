@@ -1,5 +1,5 @@
-import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
+import { SortingState } from "@tanstack/react-table";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
@@ -47,7 +47,7 @@ export interface ColumnsState {
     alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
     alterColumnSize: (id: string, width: number) => void;
     info: {
-        getValueOfAllColumnsAsociatedWith: (key: keyof TableColumn) => any[];
+        getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
     };
 }
 export interface ColumnSortingState {
