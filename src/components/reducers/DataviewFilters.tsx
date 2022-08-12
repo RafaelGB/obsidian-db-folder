@@ -5,6 +5,7 @@ import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import PlusIcon from "components/img/Plus";
+import DataviewFiltersPortal from "components/portals/DataviewFiltersPortal";
 import React from "react";
 
 export default function DataviewFilters(props: { table: Table<RowDataType> }) {
@@ -35,11 +36,7 @@ export default function DataviewFilters(props: { table: Table<RowDataType> }) {
           {filters.enabled ? <FilterOnIcon /> : <FilterOffIcon />}
         </span>
       </Button>
-      <Button size="small">
-        <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
-          <MenuDownIcon />
-        </span>
-      </Button>
+      <DataviewFiltersPortal />
     </ButtonGroup>
   );
 }
