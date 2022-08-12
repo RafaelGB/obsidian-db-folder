@@ -69,6 +69,7 @@ export class SettingsManager {
       local: local,
       errors: {},
       view: view,
+      columns: view.columns
     };
     this.constructSettingBody(settingHandlerResponse);
   }

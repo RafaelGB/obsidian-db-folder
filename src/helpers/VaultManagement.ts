@@ -12,7 +12,7 @@ import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { EditionError } from 'errors/ErrorTypes';
-import { LocalSettings } from 'cdm/SettingsModel';
+import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -76,60 +76,60 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], dbYaml: DatabaseYaml): Promise<Array<RowDataType>> {
+export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], ddbbConfig: LocalSettings, filters: FilterSettings): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
 
-  let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
+  let folderFiles = await sourceDataviewPages(folderPath, ddbbConfig, columns);
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
-  if (dbYaml.filters.enabled && dbYaml.filters.conditions.length > 0) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters.conditions, p));
+  if (filters.enabled && filters.conditions.length > 0) {
+    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page);
-    rows.push(noteInfo.getRowDataType(columns, dbYaml.config));
+    rows.push(noteInfo.getRowDataType(columns, ddbbConfig));
   });
 
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
   return rows;
 }
 
-export async function obtainAllPossibleRows(folderPath: string, dbYaml: DatabaseYaml): Promise<Array<RowDataType>> {
+export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: LocalSettings, filters: FilterSettings, columns: TableColumn[]): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> obtainAllPossibleRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
-  let folderFiles = await sourceDataviewPages(folderPath, dbYaml);
+  let folderFiles = await sourceDataviewPages(folderPath, ddbbConfig, columns);
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
-  if (dbYaml.filters.enabled && dbYaml.filters.conditions.length > 0) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(dbYaml.filters.conditions, p));
+  if (filters.enabled && filters.conditions.length > 0) {
+    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page);
-    rows.push(noteInfo.getAllRowDataType(dbYaml.config));
+    rows.push(noteInfo.getAllRowDataType(ddbbConfig));
   });
 
   LOGGER.debug(`<= obtainAllPossibleRows.  number of rows:${rows.length}`);
   return rows;
 }
 
-export async function sourceDataviewPages(folderPath: string, dbYaml: DatabaseYaml): Promise<DataArray<Record<string, Literal>>> {
+export async function sourceDataviewPages(folderPath: string, ddbbConfig: LocalSettings, columns: TableColumn[]): Promise<DataArray<Record<string, Literal>>> {
   let pagesResult: DataArray<Record<string, Literal>>;
-  switch (dbYaml.config.source_data) {
+  switch (ddbbConfig.source_data) {
     case SourceDataTypes.TAG:
-      pagesResult = DataviewService.getDataviewAPI().pages(`#${dbYaml.config.source_form_result}`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`#${ddbbConfig.source_form_result}`);
       break;
     case SourceDataTypes.INCOMING_LINK:
-      pagesResult = DataviewService.getDataviewAPI().pages(`[[${dbYaml.config.source_form_result}]]`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`[[${ddbbConfig.source_form_result}]]`);
       break;
     case SourceDataTypes.OUTGOING_LINK:
-      pagesResult = DataviewService.getDataviewAPI().pages(`outgoing([[${dbYaml.config.source_form_result}]])`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`outgoing([[${ddbbConfig.source_form_result}]])`);
       break;
     case SourceDataTypes.QUERY:
       pagesResult = await obtainQueryResult(
         generateDataviewTableQuery(
-          dbYaml.columns,
-          dbYaml.config.source_form_result),
+          columns,
+          ddbbConfig.source_form_result),
         folderPath
       );
       break;

@@ -160,7 +160,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       this.rows = await adapterTFilesToRows(
         this.file.parent.path,
         this.columns,
-        this.diskConfig.yaml
+        this.diskConfig.yaml.config,
+        this.diskConfig.yaml.filters
       );
 
       this.initial = obtainInitialType(this.columns, this.rows);

@@ -9,7 +9,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowSelectOption } from "cdm/ComponentsModel";
-import { LocalSettings } from "cdm/SettingsModel";
+import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { dbTrim } from "helpers/StylesHelper";
 import { TFile } from "obsidian";
 import { DataviewService } from "services/DataviewService";
@@ -129,12 +129,17 @@ export async function obtainColumnsFromFile(
 }
 
 export async function obtainColumnsFromRows(
-  view: DatabaseView
+  view: DatabaseView,
+  ddbbConfig: LocalSettings,
+  filters: FilterSettings,
+  tableColumns: TableColumn[]
 ): Promise<Record<string, DatabaseColumn>> {
   const columns: Record<string, DatabaseColumn> = {};
   const rows = await obtainAllPossibleRows(
     view.file.parent.path,
-    view.diskConfig.yaml
+    ddbbConfig,
+    filters,
+    tableColumns
   );
   // Obtain unique keys from source
   const keys = rows.reduce((acc, row) => {

@@ -38,7 +38,7 @@ export interface DataState {
     removeRow: (row: RowDataType) => void;
     removeDataOfColumn: (column: TableColumn) => void;
     actions: {
-        dataviewRefresh: (filterConfig: FilterSettings) => void;
+        dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
     }
 }
 

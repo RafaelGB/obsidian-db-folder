@@ -2,7 +2,6 @@ import { DatabaseCore } from "helpers/Constants";
 import DBFolderPlugin from "main";
 import { MarkdownPostProcessorContext } from "obsidian";
 import DatabaseInfo from "services/DatabaseInfo";
-import { VaultManagerDB } from "services/FileManagerService";
 import { DataviewService } from "services/DataviewService";
 import { obtainColumnsFromFolder, obtainMetadataColumns } from "components/Columns";
 import { adapterTFilesToRows } from "helpers/VaultManagement";
@@ -138,7 +137,8 @@ export class PreviewDatabaseModeService {
         const rows = await adapterTFilesToRows(
             dbFile.parent.path,
             columns,
-            databaseDisk.yaml
+            databaseDisk.yaml.config,
+            databaseDisk.yaml.filters
         );
         const dataviewCols: string[] = columns
             .filter((col) => !col.skipPersist)
