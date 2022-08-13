@@ -1,16 +1,15 @@
 import { Button, ButtonGroup } from "@mui/material";
 import { Table } from "@tanstack/react-table";
-import { RowDataType } from "cdm/FolderModel";
+import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
-import MenuDownIcon from "components/img/MenuDownIcon";
 import PlusIcon from "components/img/Plus";
 import DataviewFiltersPortal from "components/portals/DataviewFiltersPortal";
 import React from "react";
 
-export default function DataviewFilters(props: { table: Table<RowDataType> }) {
+export default function DataviewFilters(props: DataviewFiltersProps) {
   const { table } = props;
-  const { view, tableState } = table.options.meta;
+  const { tableState } = table.options.meta;
   const [ddbbConfig, filters, filterActions] = tableState.configState(
     (state) => [state.ddbbConfig, state.filters, state.actions]
   );
@@ -25,18 +24,26 @@ export default function DataviewFilters(props: { table: Table<RowDataType> }) {
   };
 
   return (
-    <ButtonGroup variant="text" size="small">
-      <Button size="small">
+    <ButtonGroup
+      variant="text"
+      size="small"
+      key={`ButtonGroup-DataviewFilters`}
+    >
+      <Button size="small" key={`Button-Plus-DataviewFilters`}>
         <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
           <PlusIcon />
         </span>
       </Button>
-      <Button size="small" onClick={enableFilterHandler}>
+      <Button
+        size="small"
+        onClick={enableFilterHandler}
+        key={`Button-Enabled-DataviewFilters`}
+      >
         <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
           {filters.enabled ? <FilterOnIcon /> : <FilterOffIcon />}
         </span>
       </Button>
-      <DataviewFiltersPortal />
+      <DataviewFiltersPortal table={table} />
     </ButtonGroup>
   );
 }
