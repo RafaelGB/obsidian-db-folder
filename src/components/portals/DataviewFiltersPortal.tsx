@@ -5,7 +5,6 @@ import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 
 import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
@@ -33,16 +32,15 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const [domReady, setDomReady] = useState(false);
 
   const [possibleColumns, setPossibleColumns] = useState([] as string[]);
-  React.useCallback(
-    () =>
-      new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
-        resolve(obtainColumnsFromRows(view, ddbbConfig, filters, columns));
-      }).then((columns) => {
-        console.log("Possible columns", columns);
-        setPossibleColumns(Object.keys(columns));
-      }),
-    []
-  );
+
+  React.useEffect(() => {
+    new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
+      resolve(obtainColumnsFromRows(view, ddbbConfig, filters, columns));
+    }).then((columns) => {
+      console.log("Possible columns", columns);
+      setPossibleColumns(Object.keys(columns));
+    });
+  }, [ddbbConfig, filters, columns]);
 
   React.useEffect(() => {
     if (!domReady) {
@@ -67,7 +65,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
           return (
             <MenuItem
               value={key}
-              key={`MenuItem-${key}-${selectorProps.index}`}
+              key={`MenuItem-existedColumnSelector-${key}-${selectorProps.index}`}
             >
               {key}
             </MenuItem>
@@ -88,7 +86,14 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         //onChange={handleChange}
       >
         {Object.entries(OperatorFilter).map(([key, value]) => {
-          return <MenuItem value={key}>{value}</MenuItem>;
+          return (
+            <MenuItem
+              value={key}
+              key={`MenuItem-OperatorSelector-${key}-${selectorProps.index}`}
+            >
+              {value}
+            </MenuItem>
+          );
         })}
       </Select>
     </FormControl>
@@ -163,8 +168,12 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         onClick={() => setShowFilters(true)}
         key={`Button-FilterConditions-DataviewFilters`}
       >
-        <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
-          <div ref={setFiltersRef}>
+        <span
+          className="svg-icon svg-gray"
+          style={{ marginRight: 8 }}
+          key={`Span-FilterConditions-Ref-Portal`}
+        >
+          <div ref={setFiltersRef} key={`Div-FilterConditions-Ref-Portal`}>
             <MenuDownIcon />
           </div>
         </span>

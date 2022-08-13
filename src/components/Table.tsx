@@ -306,7 +306,6 @@ export function Table(tableData: TableDataType) {
                 <div
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
-                  id={"pruebasheader"}
                 >
                   {/* TODO manage context with documentFragment in any way to fix DnD conflict with Obsidian */}
                   <DndProvider

@@ -1,5 +1,4 @@
 import { Button, ButtonGroup } from "@mui/material";
-import { Table } from "@tanstack/react-table";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
