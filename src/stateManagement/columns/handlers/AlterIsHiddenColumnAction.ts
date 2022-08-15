@@ -4,13 +4,19 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterIsHiddenColumnHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
-        const { set, implementation } = tableActionResponse;
+        const { set, implementation, view } = tableActionResponse;
         implementation.actions.alterIsHidden = (column: TableColumn, isHidden: boolean) =>
             set((updater) => {
-                const newColumns = [...updater.columns];
-                const index = newColumns.findIndex((c) => c.id === column.id);
-                newColumns[index].isHidden = isHidden;
-                return { columns: newColumns };
+                // Update on disk
+                view.diskConfig.updateColumnProperties(column.id, { isHidden: isHidden });
+                // Update in memory (without reloading components)
+                updater.columns = updater.columns.map((c) => {
+                    if (c.id === column.id) {
+                        c.isHidden = isHidden;
+                    }
+                    return c;
+                });
+                return { columns: updater.columns };
             });
 
         tableActionResponse.implementation = implementation;

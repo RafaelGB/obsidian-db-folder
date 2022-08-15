@@ -8,8 +8,7 @@ export class HideColumnsHandler extends AbstractHandlerClass<AddColumnModalHandl
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { view } = addColumnModalManager.addColumnModal
-    const { columns } = addColumnModalManager.props.columnsState;
+    const { columns, actions } = addColumnModalManager.props.columnsState;
 
     /******************
      * SHOW COLUMN MENU
@@ -19,7 +18,8 @@ export class HideColumnsHandler extends AbstractHandlerClass<AddColumnModalHandl
       .filter(c => !c.isMetadata)
       .forEach((column) => {
         const toggleHandler = (shown: boolean): void => {
-          view.diskConfig.updateColumnProperties(column.id, { isHidden: shown });
+          actions.alterIsHidden(column, !shown);
+          addColumnModalManager.addColumnModal.enableReset = true;
         }
 
         new Setting(containerEl)

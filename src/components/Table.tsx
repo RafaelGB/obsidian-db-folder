@@ -81,6 +81,12 @@ export function Table(tableData: TableDataType) {
     store.sortBy,
     store.alterSorting,
   ]);
+  // Visibility
+  const initLab: Record<string, boolean> = {};
+  columns.map(
+    (c) => (initLab[c.id] = c.isHidden === undefined ? true : !c.isHidden)
+  );
+  const [columnVisibility, setColumnVisibility] = React.useState(initLab);
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
   // Resizing
@@ -183,7 +189,9 @@ export function Table(tableData: TableDataType) {
       columnOrder: columnOrder,
       columnSizing: columnSizing,
       sorting: sortBy,
+      columnVisibility: columnVisibility,
     },
+    onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: alterSorting,
     onColumnSizingChange: (updater) => {
       const { isResizingColumn, deltaOffset, columnSizingStart } =
