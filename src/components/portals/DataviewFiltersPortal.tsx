@@ -12,6 +12,7 @@ import { obtainColumnsFromRows } from "components/Columns";
 import CrossIcon from "components/img/CrossIcon";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { OperatorFilter, StyleVariables } from "helpers/Constants";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
@@ -183,7 +184,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
               ...styles.popper,
               zIndex: 4,
               minWidth: 200,
-              maxWidth: 420,
+              maxWidth: 450,
               padding: "0.75rem",
               background: StyleVariables.BACKGROUND_SECONDARY,
             }}
@@ -198,7 +199,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                     columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
                     key={`Grid-container-${index}`}
                   >
-                    <Grid item xs={4} key={`Grid-field-${index}`}>
+                    <Grid item xs={3.5} key={`Grid-field-${index}`}>
                       {existedColumnSelector({
                         currentCol: field,
                         index: index,
@@ -209,7 +210,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                     </Grid>
                     {/* if value exists, show it */}
                     {value !== undefined && (
-                      <Grid item xs={4} key={`Grid-value-${index}`}>
+                      <Grid item xs={3.5} key={`Grid-value-${index}`}>
                         <ValueFilterComponent
                           value={value}
                           handler={onChangeFilterValueHandler(index)}
@@ -217,14 +218,15 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                       </Grid>
                     )}
                     {/* Remove button */}
-                    <Grid item xs={0.25} key={`Grid-remove-${index}`}>
+                    <Grid item xs={1.5} key={`Grid-remove-${index}`}>
                       <Button
                         variant="contained"
                         color="secondary"
                         size="small"
                         onClick={deleteConditionHadler(index)}
+                        endIcon={<DeleteIcon />}
                       >
-                        <CrossIcon />
+                        Delete
                       </Button>
                     </Grid>
                   </Grid>
