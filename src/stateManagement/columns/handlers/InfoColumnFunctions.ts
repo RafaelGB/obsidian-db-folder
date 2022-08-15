@@ -6,7 +6,7 @@ export default class InfoColumnFunctions extends AbstractTableAction<ColumnsStat
     handle(response: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { get, implementation } = response;
         implementation.info = {
-            getValueOfAllColumnsAsociatedWith: (key: keyof TableColumn) => {
+            getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => {
                 return get().columns.map(col => col[key]);
             }
         };

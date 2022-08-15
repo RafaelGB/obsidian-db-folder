@@ -16,7 +16,7 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
             // Check context to define correct promise
             if (local) {
                 // Persist value
-                view.diskConfig.updateConfig('show_metadata_created', value);
+                view.diskConfig.updateConfig({ show_metadata_created: value });
             } else {
                 // switch show created on/off
                 const update_local_settings = settingsManager.plugin.settings.local_settings;
@@ -43,7 +43,7 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
             // Check context to define correct promise
             if (local) {
                 // Persist value
-                view.diskConfig.updateConfig('show_metadata_modified', value);
+                view.diskConfig.updateConfig({ show_metadata_modified: value });
             } else {
                 // switch show modified on/off
                 const update_local_settings = settingsManager.plugin.settings.local_settings;
@@ -70,7 +70,7 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
             // Check context to define correct promise
             if (local) {
                 // Persist value
-                view.diskConfig.updateConfig('show_metadata_tasks', value);
+                view.diskConfig.updateConfig({ show_metadata_tasks: value });
             } else {
                 // switch show task on/off
                 const update_local_settings = settingsManager.plugin.settings.local_settings;

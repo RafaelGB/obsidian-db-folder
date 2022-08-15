@@ -1,4 +1,4 @@
-import { DatabaseColumn, DatabaseYaml, FilterCondition } from 'cdm/DatabaseModel';
+import { DatabaseColumn, DatabaseYaml } from 'cdm/DatabaseModel';
 import {
     Notice,
     TFile
@@ -7,7 +7,7 @@ import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
 import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
-import { LocalSettings } from 'cdm/SettingsModel';
+import { FilterCondition, FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
 
@@ -124,16 +124,11 @@ export default class DatabaseInfo {
         this.saveOnDisk();
     }
 
-    async updateConfiglab(partialConfig: Partial<LocalSettings>): Promise<void> {
+    async updateConfig(partialConfig: Partial<LocalSettings>): Promise<void> {
         this.yaml.config = {
             ...this.yaml.config,
             ...partialConfig
         };
-        await this.saveOnDisk();
-    }
-
-    async updateConfig<K extends keyof LocalSettings>(key: K, value: LocalSettings[K]): Promise<void> {
-        this.yaml.config[key] = value;
         await this.saveOnDisk();
     }
 
@@ -152,10 +147,11 @@ export default class DatabaseInfo {
         await this.saveOnDisk();
     }
 
-    async updateFilters(updatedFilters: FilterCondition[]): Promise<void> {
-        LOGGER.info(`=>updateFilters`, `${JSON.stringify(updatedFilters)}`);
-        this.yaml.filters = updatedFilters;
+    async updateFilters(partialFilters: Partial<FilterSettings>): Promise<void> {
+        this.yaml.filters = {
+            ...this.yaml.filters,
+            ...partialFilters
+        };
         await this.saveOnDisk();
-        LOGGER.info(`<=updateFilters`);
     }
 }

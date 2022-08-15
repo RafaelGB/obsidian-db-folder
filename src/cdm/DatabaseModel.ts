@@ -1,9 +1,8 @@
 import { RowType } from "cdm/RowTypeModel"
-import { LocalSettings } from "cdm/SettingsModel";
+import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { Column, TableMeta, TableOptions } from "@tanstack/react-table";
-import { BaseColumn, RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
-import { RowSelectOption } from "cdm/ComponentsModel";
+import { TableOptions } from "@tanstack/react-table";
+import { BaseColumn, RowDataType } from "cdm/FolderModel";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {
@@ -21,18 +20,12 @@ export interface DatabaseYaml {
     /** database local configuration */
     config: LocalSettings;
     /** dataview filters */
-    filters: FilterCondition[];
+    filters: FilterSettings;
 }
 
 export type RowDatabaseFields = {
     frontmatter: Record<string, Literal>;
     inline: Record<string, Literal>;
-}
-
-export type FilterCondition = {
-    field: string;
-    operator: string;
-    value?: any;
 }
 
 export type OptionSelect = {

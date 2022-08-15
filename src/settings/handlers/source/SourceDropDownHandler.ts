@@ -8,7 +8,7 @@ export class SourceDropDownHandler extends AbstractSettingsHandler {
         const { settingsManager, containerEl, view } = settingHandlerResponse;
         const source_dropdown_promise = async (value: string): Promise<void> => {
             // update settings
-            view.diskConfig.updateConfig('source_data', value);
+            view.diskConfig.updateConfig({ source_data: value });
             // Force refresh of settings
             settingsManager.reset(settingHandlerResponse);
         };

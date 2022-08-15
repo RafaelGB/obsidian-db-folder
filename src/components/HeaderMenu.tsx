@@ -3,12 +3,12 @@ import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { useEffect, useState } from "react";
 import { usePopper } from "react-popper";
-import { ColumnModal } from "components/modals/columnSettings/ColumnModal";
-import { HeaderMenuProps } from "cdm/HeaderModel";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
-import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
+import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
 import { TableColumn } from "cdm/FolderModel";
+import { HeaderActionResponse } from "cdm/HeaderActionModel";
+import { HeaderMenuProps } from "cdm/HeaderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
@@ -266,7 +266,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   <div
                     className="menu-item sort-button"
                     onClick={() => {
-                      new ColumnModal(
+                      new ColumnSettingsModal(
                         table.options.meta.view,
                         headerMenuProps
                       ).open();

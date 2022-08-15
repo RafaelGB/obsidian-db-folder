@@ -5,13 +5,14 @@ export class HideCompletedTaskToggleHandler extends AbstractHandlerClass<ColumnS
     settingTitle: string = 'Hide completed tasks';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
-        const { view } = columnSettingsManager;
+        const { view } = columnSettingsManager.modal;
         const inline_togle_promise = async (value: boolean): Promise<void> => {
             column.config.task_hide_completed = value;
             // Persist value
             await view.diskConfig.updateColumnConfig(column.key, {
                 task_hide_completed: value
             });
+            columnSettingsManager.modal.enableReset = true;
         }
         add_toggle(
             containerEl,

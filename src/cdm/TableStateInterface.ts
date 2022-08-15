@@ -1,6 +1,6 @@
-import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
-import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { SortingState } from "@tanstack/react-table";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
@@ -21,8 +21,12 @@ export type TableAction<T> = {
  */
 export interface ConfigState {
     ddbbConfig: LocalSettings;
+    filters: FilterSettings;
     global: GlobalSettings;
-    alterConfig: (config: Partial<LocalSettings>) => void;
+    actions: {
+        alterFilters: (filters: Partial<FilterSettings>) => void;
+        alterConfig: (config: Partial<LocalSettings>) => void;
+    }
 }
 
 export interface DataState {
@@ -33,6 +37,9 @@ export interface DataState {
     updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeRow: (row: RowDataType) => void;
     removeDataOfColumn: (column: TableColumn) => void;
+    actions: {
+        dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
+    }
 }
 
 export interface ColumnsState {
@@ -47,7 +54,7 @@ export interface ColumnsState {
     alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
     alterColumnSize: (id: string, width: number) => void;
     info: {
-        getValueOfAllColumnsAsociatedWith: (key: keyof TableColumn) => any[];
+        getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
     };
 }
 export interface ColumnSortingState {

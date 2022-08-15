@@ -12,8 +12,12 @@ import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import MenuIcon from "components/img/MenuIcon";
 import Typography from "@mui/material/Typography";
+import DataviewFilters from "./reducers/DataviewFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
+  const { table } = navBarProps;
+  const { view, tableState } = table.options.meta;
+  const columns = tableState.columns((state) => state.columns);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleMenuClose = () => {
@@ -43,7 +47,11 @@ export function NavBar(navBarProps: NavBarProps) {
     >
       <MenuItem>
         {/* CSV buttton download */}
-        <CsvButton {...navBarProps.csvButtonProps} />
+        <CsvButton
+          columns={columns}
+          rows={table.getRowModel().rows}
+          name={view.diskConfig.yaml.name}
+        />
       </MenuItem>
     </Menu>
   );
@@ -79,24 +87,28 @@ export function NavBar(navBarProps: NavBarProps) {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            {navBarProps.csvButtonProps.name}
+            {view.diskConfig.yaml.name}
           </Typography>
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
+          <DataviewFilters table={table} />
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
-export function HeaderNavBar(props: NavBarProps) {
+export function HeaderNavBar(headerNavBarProps: NavBarProps) {
+  const { table } = headerNavBarProps;
   return (
     <div
       key="div-navbar-header-row"
       className={`${c("tr")}`}
-      {...props.headerGroupProps}
+      style={{
+        width: table.getCenterTotalSize(),
+      }}
     >
       <div className={`${c("th navbar")}`} key="div-navbar-header-cell">
-        <NavBar {...props} />
+        <NavBar {...headerNavBarProps} />
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ export class TemplateFolderNewRowsHandler extends AbstractSettingsHandler {
                     .setValue(local ? view.diskConfig.yaml.config.row_templates_folder : settingsManager.plugin.settings.local_settings.row_templates_folder)
                     .onChange((new_folder) => {
                         if (local) {
-                            view.diskConfig.updateConfig('row_templates_folder', new_folder);
+                            view.diskConfig.updateConfig({ row_templates_folder: new_folder });
                         } else {
                             const update_local_settings = settingsManager.plugin.settings.local_settings;
                             update_local_settings.row_templates_folder = new_folder;

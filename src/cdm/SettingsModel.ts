@@ -3,6 +3,12 @@ export interface MediaSettings {
     width: number;
     height: number;
 }
+
+export type FilterCondition = {
+    field: string;
+    operator: string;
+    value?: any;
+}
 /**
  * Options that affects the behavior of the plugin and defines default values with some fields
  */
@@ -11,6 +17,7 @@ export interface GlobalSettings {
     logger_level_info: string;
     media_settings: MediaSettings;
 }
+
 export interface LocalSettings {
     enable_show_state: boolean;
     group_folder_column: string;
@@ -25,6 +32,11 @@ export interface LocalSettings {
     frontmatter_quote_wrap: boolean;
     row_templates_folder: string;
     current_row_template: string;
+}
+
+export interface FilterSettings {
+    enabled: boolean;
+    conditions: FilterCondition[];
 }
 
 export interface DatabaseSettings {

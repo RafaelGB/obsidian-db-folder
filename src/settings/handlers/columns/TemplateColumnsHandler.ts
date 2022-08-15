@@ -8,7 +8,7 @@ import { add_setting_header } from "settings/SettingsComponents";
 export class TemplateColumnsHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Header templates';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { local, containerEl, view } = settingHandlerResponse;
+        const { local, containerEl, view, columns } = settingHandlerResponse;
         const template_section = containerEl.createDiv("configuration-section-container-columns-template");
         // Local exclusivey
         if (local) {
@@ -56,8 +56,12 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                     button.setIcon("create-new")
                         .setTooltip("Load columns from file")
                         .onClick(async (): Promise<void> => {
-                            const columns = await obtainColumnsFromRows(view);
-                            view.diskConfig.yaml.columns = columns;
+                            const allColumns = await obtainColumnsFromRows(
+                                view,
+                                view.diskConfig.yaml.config,
+                                view.diskConfig.yaml.filters,
+                                columns);
+                            view.diskConfig.yaml.columns = allColumns;
                             view.diskConfig.saveOnDisk();
                             new Notice(`${Object.keys(columns).length} Columns were loaded from all fields avaliable in the current source! Close this dialog to show the database changes`);
                         });

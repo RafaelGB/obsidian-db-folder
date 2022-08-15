@@ -67,8 +67,8 @@ export function Table(tableData: TableDataType) {
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
 
-  const [ddbbConfig, globalConfig, alterConfig] = tableStore.configState(
-    (store) => [store.ddbbConfig, store.global, store.alterConfig]
+  const [ddbbConfig, globalConfig, configActions] = tableStore.configState(
+    (store) => [store.ddbbConfig, store.global, store.actions]
   );
 
   /** Plugin services */
@@ -216,7 +216,7 @@ export function Table(tableData: TableDataType) {
       setColumnSizing(list);
     },
     onColumnOrderChange: setColumnOrder,
-    globalFilterFn: "includesString",
+    globalFilterFn: "includesStringSensitive",
     meta: {
       tableState: tableStore,
       view: view,
@@ -251,7 +251,7 @@ export function Table(tableData: TableDataType) {
   ) {
     const settingsValue = !!newValue ? newValue.value : "";
     templateUpdate(settingsValue);
-    alterConfig({
+    configActions.alterConfig({
       current_row_template: settingsValue,
     });
   }
@@ -268,18 +268,11 @@ export function Table(tableData: TableDataType) {
         {/* INIT NAVBAR */}
         <HeaderNavBar
           key={`div-header-navbar`}
-          csvButtonProps={{
-            columns: columns,
-            rows: table.getRowModel().rows,
-            name: view.diskConfig.yaml.name,
-          }}
+          table={table}
           globalFilterRows={{
             globalFilter: globalFilter,
             hits: table.getFilteredRowModel().rows.length,
             setGlobalFilter: setGlobalFilter,
-          }}
-          headerGroupProps={{
-            style: { width: table.getCenterTotalSize() },
           }}
         />
         {/* ENDS NAVBAR */}
@@ -314,11 +307,12 @@ export function Table(tableData: TableDataType) {
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
                 >
+                  {/* TODO manage context with documentFragment in any way to fix DnD conflict with Obsidian */}
                   <DndProvider
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
                     debugMode={globalConfig.enable_debug_mode}
                     backend={HTML5Backend}
-                    context={view.getWindow().document.createDocumentFragment()}
+                    context={view.getWindow().createFragment()}
                   >
                     {headerGroup.headers
                       .filter(

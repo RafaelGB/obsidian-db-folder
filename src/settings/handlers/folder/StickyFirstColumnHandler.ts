@@ -7,7 +7,7 @@ export class StickyFirstColumnHandler extends AbstractSettingsHandler {
         const { settingsManager, containerEl, view } = settingHandlerResponse;
         const sticky_first_column_toggle_promise = async (value: boolean): Promise<void> => {
             // update settings
-            view.diskConfig.updateConfig('sticky_first_column', value);
+            view.diskConfig.updateConfig({ sticky_first_column: value });
         };
 
         add_toggle(

@@ -14,7 +14,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
   ): ColumnSettingsHandlerResponse {
     const { column, containerEl, columnSettingsManager } =
       columnHandlerResponse;
-    const { view } = columnSettingsManager;
+    const { view } = columnSettingsManager.modal;
     let newLabel = "";
     const options = column.options;
     const onClickAddPromise = async (): Promise<void> => {
@@ -38,6 +38,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       });
       // Force refresh of settings
       columnSettingsManager.reset(columnHandlerResponse);
+      columnSettingsManager.modal.enableReset = true;
     };
 
     new Setting(containerEl)

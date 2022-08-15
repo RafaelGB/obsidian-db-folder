@@ -1,4 +1,4 @@
-import { ColumnOrderState, Header, Table } from "@tanstack/react-table";
+import { Header, Table } from "@tanstack/react-table";
 import { DatabaseHeaderProps, RowDataType, TableColumn } from "cdm/FolderModel";
 
 export type HeaderMenuProps = {

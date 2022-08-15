@@ -9,7 +9,7 @@ export class TableStateToggleHandler extends AbstractSettingsHandler {
                 // Check context to define correct promise
                 if (local) {
                     // Persist value
-                    view.diskConfig.updateConfig('enable_show_state', value);
+                    view.diskConfig.updateConfig({ enable_show_state: value });
                 } else {
                     // switch table state on/off
                     const update_local_settings = settingsManager.plugin.settings.local_settings;

@@ -16,7 +16,7 @@ export class GroupFolderColumnDropDownHandler extends AbstractSettingsHandler {
                     options[key] = columns[key].label;
                 });
             const group_folder_column_dropdown_promise = async (value: string): Promise<void> => {
-                view.diskConfig.updateConfig('group_folder_column', value);
+                view.diskConfig.updateConfig({ group_folder_column: value });
             }
 
             add_dropdown(

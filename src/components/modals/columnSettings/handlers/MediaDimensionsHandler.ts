@@ -4,9 +4,9 @@ import { AbstractHandlerClass } from "patterns/AbstractHandler";
 
 export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
     settingTitle: string = 'Dimensions of embeded media';
-    handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
-        const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
-        const { view } = columnSettingsManager;
+    handle(response: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
+        const { column, containerEl, columnSettingsManager } = response;
+        const { view } = columnSettingsManager.modal;
         const dbSettings = view.plugin.settings;
         const { config } = column
         if (config.enable_media_view) {
@@ -26,6 +26,7 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
                             await view.diskConfig.updateColumnConfig(column.key, {
                                 media_height: validatedNumber
                             });
+                            columnSettingsManager.modal.enableReset = true;
                         })
                 }).addText(text => {
                     text.setPlaceholder("Width")
@@ -49,11 +50,11 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
                                 media_height: dbSettings.global_settings.media_settings.height
                             });
                             // Force refresh of settings
-                            columnSettingsManager.reset(columnHandlerResponse);
+                            columnSettingsManager.reset(response);
                         });
                 });
 
         }
-        return this.goNext(columnHandlerResponse);
+        return this.goNext(response);
     }
 }

@@ -5,7 +5,6 @@ import {
   TableColumn,
   TableDataType,
 } from "cdm/FolderModel";
-import { TableStateInterface } from "cdm/TableStateInterface";
 import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
@@ -161,8 +160,10 @@ export class DatabaseView extends TextFileView implements HoverParent {
       this.rows = await adapterTFilesToRows(
         this.file.parent.path,
         this.columns,
-        this.diskConfig.yaml
+        this.diskConfig.yaml.config,
+        this.diskConfig.yaml.filters
       );
+
       this.initial = obtainInitialType(this.columns, this.rows);
       // Define table properties
       this.shadowColumns = this.columns.filter((col) => col.skipPersist);

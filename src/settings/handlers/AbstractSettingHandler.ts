@@ -1,3 +1,4 @@
+import { TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { SettingsManager } from "Settings";
 
@@ -12,6 +13,7 @@ export type SettingHandlerResponse = {
     local: boolean,
     errors: Record<string, string[]>,
     view?: DatabaseView,
+    columns: TableColumn[],
 }
 
 export abstract class AbstractSettingsHandler implements SettingHandler {

@@ -6,6 +6,7 @@ import UpdateDataAfterLabelChangeHandlerAction from "stateManagement/data/handle
 import RemoveRowHandlerAction from "stateManagement/data/handlers/RemoveRowHandlerAction";
 import RemoveDataOfColumnHandlerAction from "stateManagement/data/handlers/RemoveDataOfColumnHandlerAction";
 import ParseDataOfColumnHandlerAction from "stateManagement/data/handlers/ParseDataOfColumnHandlerAction";
+import DataviewRefreshHandlerAction from "stateManagement/data/handlers/DataviewRefreshHandlerAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
 
 class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
@@ -16,7 +17,8 @@ class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
             new ParseDataOfColumnHandlerAction(),
             new UpdateDataAfterLabelChangeHandlerAction(),
             new RemoveRowHandlerAction(),
-            new RemoveDataOfColumnHandlerAction()
+            new RemoveDataOfColumnHandlerAction(),
+            new DataviewRefreshHandlerAction()
         ];
     }
 }

@@ -1,19 +1,27 @@
-import { LocalSettings } from "cdm/SettingsModel";
+import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { ConfigState } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import create from "zustand";
 
 const useConfigStore = (view: DatabaseView) => {
     const { global_settings } = view.plugin.settings;
-    const local_settings = view.diskConfig.yaml.config;
+    const { config, filters } = view.diskConfig.yaml;
     return create<ConfigState>()(
         (set) => ({
-            ddbbConfig: local_settings,
+            ddbbConfig: config,
+            filters: filters,
             global: global_settings,
-            alterConfig: (config: Partial<LocalSettings>) => {
-                view.diskConfig.updateConfiglab(config);
-                view.plugin.updateSettings({ local_settings: { ...local_settings, ...config } });
-                set({ ddbbConfig: { ...local_settings, ...config } });
+            actions: {
+                alterFilters: (partialFilters: Partial<FilterSettings>) =>
+                    set((state) => {
+                        view.diskConfig.updateFilters(partialFilters);
+                        return ({ filters: { ...state.filters, ...partialFilters } });
+                    }),
+                alterConfig: (alteredConfig: Partial<LocalSettings>) =>
+                    set((state) => {
+                        view.diskConfig.updateConfig(alteredConfig);
+                        return ({ ddbbConfig: { ...state.ddbbConfig, ...alteredConfig } });
+                    }),
             }
         })
     );

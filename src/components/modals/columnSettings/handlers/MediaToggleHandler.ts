@@ -5,7 +5,7 @@ export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandl
     settingTitle: string = 'Enable media links';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
-        const { view } = columnSettingsManager;
+        const { view } = columnSettingsManager.modal;
         // pass if modal opened from local settings
         const media_togle_promise = async (value: boolean): Promise<void> => {
             column.config.enable_media_view = value;
@@ -16,6 +16,7 @@ export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandl
             });
             // Force refresh of settings
             columnSettingsManager.reset(columnHandlerResponse);
+            columnSettingsManager.modal.enableReset = true;
         }
         add_toggle(
             containerEl,

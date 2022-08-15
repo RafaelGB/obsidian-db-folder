@@ -1,3 +1,4 @@
+import { TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { SourceDataTypes } from "helpers/Constants";
 import { generateDataviewTableQuery } from "helpers/QueryHelper";
@@ -10,7 +11,7 @@ import { FileSuggest } from "settings/suggesters/FileSuggester";
 export class SourceFormHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Form in function of source data';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { containerEl, view } = settingHandlerResponse;
+        const { containerEl, view, columns } = settingHandlerResponse;
         switch (view.diskConfig.yaml.config.source_data) {
             case SourceDataTypes.TAG:
                 tagHandler(view, containerEl);
@@ -21,7 +22,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                 app.vault.getMarkdownFiles().forEach(file => { filePaths[file.path] = file.basename });
                 const source_form_promise = async (value: string): Promise<void> => {
                     // update settings
-                    view.diskConfig.updateConfig('source_form_result', value);
+                    view.diskConfig.updateConfig({ source_form_result: value });
                 };
                 new Setting(containerEl)
                     .setName('Select a file')
@@ -37,7 +38,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                     });
                 break;
             case SourceDataTypes.QUERY:
-                queryHandler(view, containerEl);
+                queryHandler(view, containerEl, columns);
             default:
             //Current folder
         }
@@ -58,7 +59,7 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
             });
         const source_form_promise = async (value: string): Promise<void> => {
             // update settings
-            view.diskConfig.updateConfig('source_form_result', value.slice(1));
+            view.diskConfig.updateConfig({ source_form_result: value.slice(1) });
         };
 
         add_dropdown(
@@ -72,11 +73,11 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
     }
 }
 
-function queryHandler(view: DatabaseView, containerEl: HTMLElement) {
+function queryHandler(view: DatabaseView, containerEl: HTMLElement, columns: TableColumn[]) {
     const query_promise = async (value: string): Promise<void> => {
         // update settings
         view.diskConfig.yaml.config.source_form_result = value;
-        view.diskConfig.updateConfig('source_form_result', value);
+        view.diskConfig.updateConfig({ source_form_result: value });
     };
     new Setting(containerEl)
         .setName('Dataview query')
@@ -90,7 +91,7 @@ function queryHandler(view: DatabaseView, containerEl: HTMLElement) {
                 .setTooltip("Validate query")
                 .onClick(async (): Promise<void> => {
                     const query = generateDataviewTableQuery(
-                        view.diskConfig.yaml.columns,
+                        columns,
                         view.diskConfig.yaml.config.source_form_result);
                     if (query) {
                         DataviewService.getDataviewAPI().tryQuery(query)
