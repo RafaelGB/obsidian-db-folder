@@ -11,10 +11,13 @@ import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import CrossIcon from "components/img/CrossIcon";
 import MenuDownIcon from "components/img/MenuDownIcon";
+import AddIcon from "@mui/icons-material/Add";
 import { OperatorFilter, StyleVariables } from "helpers/Constants";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
+import { Notice } from "obsidian";
+import MenuUpIcon from "components/img/MenuUpIcon";
 
 const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const { table } = props;
@@ -131,6 +134,38 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     );
   };
 
+  const onChangeFilterValueHandler =
+    (valueIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const alteredFilterState = { ...filters };
+      alteredFilterState.conditions[valueIndex].value = event.target.value;
+      configActions.alterFilters(alteredFilterState);
+      dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
+    };
+
+  const deleteConditionHadler = (conditionIndex: number) => () => {
+    const alteredFilterState = { ...filters };
+    alteredFilterState.conditions.splice(conditionIndex, 1);
+    configActions.alterFilters(alteredFilterState);
+    dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
+  };
+  const addConditionHandler = () => {
+    // Check if there is a condition to add
+    if (possibleColumns.length <= 0) {
+      new Notice(
+        "No columns available yet. Include a field in one of your notes before add a filter",
+        3000
+      );
+      return;
+    }
+
+    const alteredFilterState = { ...filters };
+    alteredFilterState.conditions.push({
+      field: possibleColumns[0],
+      operator: "EQUAL",
+      value: "",
+    });
+    configActions.alterFilters(alteredFilterState);
+  };
   const currentFilters = () => {
     return (
       <div>
@@ -175,11 +210,9 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                     {/* if value exists, show it */}
                     {value !== undefined && (
                       <Grid item xs={4} key={`Grid-value-${index}`}>
-                        <Input
-                          key={`Grid-value-input-${index}`}
-                          type="text"
-                          className="form-control"
+                        <ValueFilterComponent
                           value={value}
+                          handler={onChangeFilterValueHandler(index)}
                         />
                       </Grid>
                     )}
@@ -189,6 +222,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                         variant="contained"
                         color="secondary"
                         size="small"
+                        onClick={deleteConditionHadler(index)}
                       >
                         <CrossIcon />
                       </Button>
@@ -197,6 +231,20 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                 );
               })}
             </Box>
+            {/* Add button */}
+            <Button
+              size="small"
+              key={`Button-Plus-DataviewFilters`}
+              variant="outlined"
+              startIcon={<AddIcon />}
+              style={{
+                borderColor: StyleVariables.TEXT_NORMAL,
+                color: StyleVariables.TEXT_NORMAL,
+              }}
+              onClick={addConditionHandler}
+            >
+              Add filter
+            </Button>
           </div>
         )}
       </div>
@@ -216,7 +264,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
           key={`Span-FilterConditions-Ref-Portal`}
         >
           <div ref={setFiltersRef} key={`Div-FilterConditions-Ref-Portal`}>
-            <MenuDownIcon />
+            {showFilters ? <MenuUpIcon /> : <MenuDownIcon />}
           </div>
         </span>
       </Button>
@@ -231,4 +279,33 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   );
 };
 
+function ValueFilterComponent(props: {
+  handler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+}) {
+  const [value, setValue] = useState(props.value);
+  const [valueTimeout, setValueTimeout] = useState(null);
+  const proxyHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (valueTimeout) {
+      clearTimeout(valueTimeout);
+    }
+    // first update the input text as user type
+    setValue(event.target.value);
+    // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
+    setValueTimeout(
+      setTimeout(() => {
+        props.handler(event);
+        // timeout until event is triggered after user has stopped typing
+      }, 1500)
+    );
+  };
+  return (
+    <Input
+      type="text"
+      className="form-control"
+      value={value}
+      onChange={proxyHandler}
+    />
+  );
+}
 export default DataviewFiltersPortal;

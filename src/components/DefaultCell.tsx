@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
-
 import { LOGGER } from "services/Logger";
-import NoteInfo from "services/NoteInfo";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import PopperSelectPortal from "components/portals/PopperSelectPortal";
 import { TableCellContext } from "components/contexts/CellContext";

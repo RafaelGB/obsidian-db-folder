@@ -2,7 +2,6 @@ import { Button, ButtonGroup } from "@mui/material";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
-import PlusIcon from "components/img/Plus";
 import DataviewFiltersPortal from "components/portals/DataviewFiltersPortal";
 import React from "react";
 
@@ -28,11 +27,6 @@ export default function DataviewFilters(props: DataviewFiltersProps) {
       size="small"
       key={`ButtonGroup-DataviewFilters`}
     >
-      <Button size="small" key={`Button-Plus-DataviewFilters`}>
-        <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
-          <PlusIcon />
-        </span>
-      </Button>
       <Button
         size="small"
         onClick={enableFilterHandler}
