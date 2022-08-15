@@ -46,7 +46,7 @@ export class AddColumnModalManager {
     constructUI(containerEl: HTMLElement) {
         /** Common modal headings */
         containerEl.addClass(StyleClasses.ADD_COLUMN_MODAL);
-        add_setting_header(containerEl, `Add column options`, 'h2');
+        add_setting_header(containerEl, `Columns menu`, 'h2');
 
         const addColumnBody = containerEl.createDiv();
         addColumnBody.addClass(StyleClasses.ADD_COLUMN_MODAL_BODY);

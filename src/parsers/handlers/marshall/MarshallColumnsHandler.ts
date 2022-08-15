@@ -51,6 +51,10 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     column.skipPersist = false;
                 }
 
+                if (column.isHidden === undefined) {
+                    column.isHidden = false;
+                }
+
                 /** CONFIG COLUMN INFO */
                 if (!column.config && !(column.config instanceof Object)) {
                     column.config = DEFAULT_COLUMN_CONFIG;

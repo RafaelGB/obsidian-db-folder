@@ -56,6 +56,9 @@ export interface ColumnsState {
     info: {
         getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
     };
+    actions: {
+        alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
+    }
 }
 export interface ColumnSortingState {
     sortBy: SortingState;

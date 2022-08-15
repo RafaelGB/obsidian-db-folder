@@ -51,7 +51,8 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
 
                         });
                 });
+            this.goNext(response);
         });
-        return this.goNext(response);
+        return null;
     }
 }
