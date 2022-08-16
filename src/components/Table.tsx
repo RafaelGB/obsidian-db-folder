@@ -58,10 +58,9 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
 export function Table(tableData: TableDataType) {
   /** Main information about the table */
   const { view, tableStore } = tableData;
-  const [columns, alterColumnSize] = tableStore.columns((state) => [
-    state.columns,
-    state.alterColumnSize,
-  ]);
+  const [columns, alterColumnSize, columnsInfo] = tableStore.columns(
+    (state) => [state.columns, state.alterColumnSize, state.info]
+  );
   const [rows, addRow] = tableStore.data((state) => [state.rows, state.addRow]);
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
@@ -82,11 +81,9 @@ export function Table(tableData: TableDataType) {
     store.alterSorting,
   ]);
   // Visibility
-  const initLab: Record<string, boolean> = {};
-  columns.map(
-    (c) => (initLab[c.id] = c.isHidden === undefined ? true : !c.isHidden)
+  const [columnVisibility, setColumnVisibility] = React.useState(
+    columnsInfo.getVisibilityRecord()
   );
-  const [columnVisibility, setColumnVisibility] = React.useState(initLab);
   // Filtering
   const [globalFilter, setGlobalFilter] = React.useState("");
   // Resizing

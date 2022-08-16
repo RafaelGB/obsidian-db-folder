@@ -19,6 +19,7 @@ const useDataStore = (view: DatabaseView) => {
     });
 }
 
+// TODO - find a better way to mock this
 function mockDataState(): DataState {
     return {
         rows: [],

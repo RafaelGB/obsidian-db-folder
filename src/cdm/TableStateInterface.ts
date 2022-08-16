@@ -55,6 +55,7 @@ export interface ColumnsState {
     alterColumnSize: (id: string, width: number) => void;
     info: {
         getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
+        getVisibilityRecord: () => Record<string, boolean>;
     };
     actions: {
         alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
