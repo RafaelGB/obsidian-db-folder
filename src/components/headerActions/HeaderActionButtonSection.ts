@@ -3,6 +3,7 @@ import { AbstractChain } from "patterns/AbstractFactoryChain";
 import SortHandlerAction from "components/headerActions/handlers/buttons/SortHandlerAction";
 import AddColumnHandlerAction from "components/headerActions/handlers/buttons/AddColumnHandlerAction";
 import RemoveColumnHandlerAction from "components/headerActions/handlers/buttons/RemoveColumnHandlerAction";
+import HideColumnHandlerAction from "components/headerActions/handlers/buttons/HideColumnHandlerAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
 
 class HeaderActionButtonSection extends AbstractChain<HeaderActionResponse> {
@@ -11,6 +12,7 @@ class HeaderActionButtonSection extends AbstractChain<HeaderActionResponse> {
         return [
             new SortHandlerAction(),
             new AddColumnHandlerAction(),
+            new HideColumnHandlerAction(),
             new RemoveColumnHandlerAction()
         ];
     }

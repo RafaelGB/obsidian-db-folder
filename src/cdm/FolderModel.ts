@@ -52,6 +52,7 @@ export interface BaseColumn {
     width?: number;
     position?: number;
     isMetadata?: boolean;
+    isHidden?: boolean;
     skipPersist?: boolean;
     isDragDisabled?: boolean;
     config: ConfigColumn;

@@ -4,7 +4,7 @@ import CrossIcon from "components/img/CrossIcon";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
-import { ActionTypes, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
 

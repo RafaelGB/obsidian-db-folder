@@ -21,6 +21,7 @@ const useColumnsStore = (view: DatabaseView) => {
   });
 };
 
+// TODO - find a better way to mock this
 function mockColumnsState(): ColumnsState {
   return {
     columns: [],
@@ -33,8 +34,12 @@ function mockColumnsState(): ColumnsState {
     alterColumnType: null,
     alterColumnLabel: null,
     alterColumnSize: null,
+    actions: {
+      alterIsHidden: null,
+    },
     info: {
       getValueOfAllColumnsAsociatedWith: null,
+      getVisibilityRecord: null,
     },
   };
 }

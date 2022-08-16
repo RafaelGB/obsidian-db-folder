@@ -2,7 +2,6 @@ import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { MetadataColumns } from "helpers/Constants";
 import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
-import React from "react";
 
 export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
   settingTitle: string = "Add empty column";
