@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import NoteInfo from "services/NoteInfo";
 import { TableColumn } from "cdm/FolderModel";
 
 const TagsPortal = (tagsProps: TagsProps) => {
@@ -34,9 +33,6 @@ const TagsPortal = (tagsProps: TagsProps) => {
       ? (rows[row.index][tableColumn.key] as Literal[])
       : []
   );
-
-  /** Note info of current Cell */
-  const note: NoteInfo = (defaultCell.row.original as any).__note__;
 
   function getColor(tag: string) {
     const match = tableColumn.options.find(
