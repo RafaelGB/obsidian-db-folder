@@ -1,3 +1,13 @@
+# 2.2.0
+### Shiny new things
+- Refactor of filters. With the new architecture of events (Zustand), it is now possible to use filters in a dynamic way, so they were moved to the navbar menu and the changes doe not need to refresh the page. [ISSUE#73](https://github.com/RafaelGB/obsidian-db-folder/issues/73)
+- Button of enable/disable filters could be use as refresh button [ISSUE#163](https://github.com/RafaelGB/obsidian-db-folder/issues/163)
+- New menu of add columns. You can now choose between existing columns or create a new one. [ISSUE#112](https://github.com/RafaelGB/obsidian-db-folder/issues/112)
+- Option of hide/show columns. To enable show columns will be a section inside the new add column menu[ISSUE#79](https://github.com/RafaelGB/obsidian-db-folder/issues/79)
+### Improved
+- Tags could be sorted and filtered with the global search now [ISSUE#260](https://github.com/RafaelGB/obsidian-db-folder/issues/260)
+### No longer broken
+- Minor bugs with global search. Now is case sensitive and sanitized
 # 2.1.2
 ### No longer broken
 - drap/drop incompatibility with Obsidian was fixed [ISSUE#239](https://github.com/RafaelGB/obsidian-db-folder/issues/239)
