@@ -131,12 +131,16 @@ class DataviewProxy {
     }
 
     private parseToCalendar(wrapped: WrappedLiteral): DateTime {
-        if (DateTime.isDateTime(wrapped.value)) {
-            if (wrapped.type === 'string') {
-                return DateTime.fromISO(wrapped.value);
-            } else {
-                return wrapped.value;
+        if (wrapped.type === 'string') {
+            const calendarCandidate = DateTime.fromISO(wrapped.value);
+            if (calendarCandidate.isValid) {
+                return calendarCandidate;
             }
+            return null;
+        }
+
+        if (DateTime.isDateTime(wrapped.value)) {
+            return wrapped.value;
         } else {
             return null;
         }
