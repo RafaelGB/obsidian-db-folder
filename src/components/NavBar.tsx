@@ -1,5 +1,6 @@
 import * as React from "react";
 import CsvButton from "components/CsvButton";
+import MenuIcon from "components/img/MenuIcon";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import { NavBarConfig, StyleVariables } from "helpers/Constants";
@@ -10,7 +11,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
-import MenuIcon from "components/img/MenuIcon";
 import Typography from "@mui/material/Typography";
 import DataviewFilters from "./reducers/DataviewFilters";
 
@@ -20,6 +20,7 @@ export function NavBar(navBarProps: NavBarProps) {
   const columns = tableState.columns((state) => state.columns);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  console.log(`NavBar menu is open? => ${open}`);
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -28,33 +29,6 @@ export function NavBar(navBarProps: NavBarProps) {
     setAnchorEl(event.currentTarget);
   };
 
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      open={open}
-      onClose={handleMenuClose}
-      onClick={handleMenuClose}
-      onBlur={handleMenuClose}
-      PaperProps={{
-        style: {
-          maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
-          width: "20ch",
-        },
-      }}
-      MenuListProps={{
-        "aria-labelledby": "long-button",
-      }}
-    >
-      <MenuItem>
-        {/* CSV buttton download */}
-        <CsvButton
-          columns={columns}
-          rows={table.getRowModel().rows}
-          name={view.diskConfig.yaml.name}
-        />
-      </MenuItem>
-    </Menu>
-  );
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -80,7 +54,29 @@ export function NavBar(navBarProps: NavBarProps) {
           >
             <MenuIcon />
           </IconButton>
-          {renderMenu}
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+            PaperProps={{
+              style: {
+                maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
+                width: "20ch",
+              },
+            }}
+            MenuListProps={{
+              "aria-labelledby": "long-button",
+            }}
+          >
+            <MenuItem>
+              {/* CSV buttton download */}
+              <CsvButton
+                columns={columns}
+                rows={table.getRowModel().rows}
+                name={view.diskConfig.yaml.name}
+              />
+            </MenuItem>
+          </Menu>
           <Typography
             variant="h6"
             noWrap
