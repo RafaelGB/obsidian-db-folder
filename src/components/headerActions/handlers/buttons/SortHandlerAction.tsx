@@ -15,7 +15,6 @@ export default class SortHandlerAction extends AbstractHeaderAction {
     const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
       .column.columnDef as TableColumn;
     switch (column.input) {
-      case InputType.TAGS:
       case InputType.TASK:
         // DO NOTHING
         break;
