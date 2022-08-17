@@ -41,6 +41,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TableCell from "components/TableCell";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
+import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -221,7 +222,9 @@ export function Table(tableData: TableDataType) {
       setColumnSizing(list);
     },
     onColumnOrderChange: setColumnOrder,
-    globalFilterFn: "includesStringSensitive",
+    // Hack to force react-table to use all columns when filtering
+    getColumnCanGlobalFilter: (column) => true,
+    globalFilterFn: globalDatabaseFilterFn(ddbbConfig),
     meta: {
       tableState: tableStore,
       view: view,

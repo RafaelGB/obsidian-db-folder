@@ -15,13 +15,11 @@ import TagsIcon from "components/img/TagsIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
-import { DatabaseHeaderProps, RowDataType, TableColumn } from "cdm/FolderModel";
+import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { AddColumnModalProps } from "cdm/ModalsModel";
-import { AccessorFn, Row } from "@tanstack/react-table";
-import { Literal } from "obsidian-dataview";
 
 /**
  * Generate column Options with Select type
@@ -103,9 +101,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       propertyIcon = <MarkdownObsidian />;
       break;
     case InputType.TAGS:
-      header.column.accessorFn = (originalRow: RowDataType, index: number) => {
-        return originalRow[id] as Literal;
-      };
       propertyIcon = <TagsIcon />;
       break;
     case InputType.TASK:
