@@ -4,7 +4,7 @@ import { add_toggle } from "settings/SettingsComponents";
 export class StickyFirstColumnHandler extends AbstractSettingsHandler {
     settingTitle = 'Sticky first column';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, view } = settingHandlerResponse;
+        const { containerEl, view } = settingHandlerResponse;
         const sticky_first_column_toggle_promise = async (value: boolean): Promise<void> => {
             // update settings
             view.diskConfig.updateConfig({ sticky_first_column: value });

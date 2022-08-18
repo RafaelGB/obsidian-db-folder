@@ -92,6 +92,7 @@ export default function TableHeader(headerProps: TableHeaderProps) {
         {...{
           onMouseDown: header.getResizeHandler(),
           onTouchStart: header.getResizeHandler(),
+
           className: `resizer ${
             header.column.getIsResizing() ? "isResizing" : ""
           }`,

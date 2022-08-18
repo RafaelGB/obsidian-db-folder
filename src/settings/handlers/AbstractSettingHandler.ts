@@ -13,7 +13,7 @@ export type SettingHandlerResponse = {
     local: boolean,
     errors: Record<string, string[]>,
     view?: DatabaseView,
-    columns: TableColumn[],
+    columns?: TableColumn[],
 }
 
 export abstract class AbstractSettingsHandler implements SettingHandler {

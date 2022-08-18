@@ -320,7 +320,12 @@ export function Table(tableData: TableDataType) {
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
                     debugMode={globalConfig.enable_debug_mode}
                     backend={HTML5Backend}
-                    context={view.getWindow().createFragment()}
+                    context={
+                      (globalConfig.enable_debug_mode,
+                      globalConfig.enable_dnd
+                        ? activeWindow
+                        : activeDocument.createElement("div"))
+                    }
                   >
                     {headerGroup.headers
                       .filter(
