@@ -1,3 +1,12 @@
+# 2.2.1
+### Visual
+- Opacity of new row form with sticky first column option [ISSUE#251](https://github.com/RafaelGB/obsidian-db-folder/issues/251)
+### No longer broken
+- menu of CSV button adapted to new version of MUI [ISSUE#263](https://github.com/RafaelGB/obsidian-db-folder/issues/263])
+- Cast between calendar and text works well now. Does not require a refresh [ISSUE#266](https://github.com/RafaelGB/obsidian-db-folder/discussions/266)
+- Global menu is avaliable again
+### Developers
+- Added an option to use DnD columns again with a toggle button. We are working on a better solution but while we are at it, at least this option is available
 # 2.2.0
 ### Shiny new things
 - Refactor of filters. With the new architecture of events (Zustand), it is now possible to use filters in a dynamic way, so they were moved to the navbar menu and the changes doe not need to refresh the page. [ISSUE#73](https://github.com/RafaelGB/obsidian-db-folder/issues/73)
