@@ -67,10 +67,13 @@ export class SettingsManager {
       settingsManager: this,
       containerEl: settingBody,
       local: local,
-      errors: {},
-      view: view,
-      columns: view.columns
+      errors: {}
     };
+    if (view) {
+      settingHandlerResponse.view = view;
+      settingHandlerResponse.columns = view.columns;
+
+    }
     this.constructSettingBody(settingHandlerResponse);
   }
 

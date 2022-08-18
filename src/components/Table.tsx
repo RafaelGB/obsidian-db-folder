@@ -318,7 +318,10 @@ export function Table(tableData: TableDataType) {
                   {/* TODO manage context with documentFragment in any way to fix DnD conflict with Obsidian */}
                   <DndProvider
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
-                    manager={DnDTableManager(globalConfig.enable_debug_mode)}
+                    manager={DnDTableManager(
+                      globalConfig.enable_debug_mode,
+                      globalConfig.enable_dnd ? activeDocument : null
+                    )}
                   >
                     {headerGroup.headers
                       .filter(

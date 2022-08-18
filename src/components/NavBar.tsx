@@ -20,7 +20,6 @@ export function NavBar(navBarProps: NavBarProps) {
   const columns = tableState.columns((state) => state.columns);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  console.log(`NavBar menu is open? => ${open}`);
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
