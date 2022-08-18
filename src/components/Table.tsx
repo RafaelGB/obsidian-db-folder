@@ -38,10 +38,10 @@ import TableHeader from "components/TableHeader";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { OnChangeValue } from "react-select";
 import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import TableCell from "components/TableCell";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
-import { DnDTableManager } from "helpers/DragAndDropHelper";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -318,10 +318,14 @@ export function Table(tableData: TableDataType) {
                   {/* TODO manage context with documentFragment in any way to fix DnD conflict with Obsidian */}
                   <DndProvider
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
-                    manager={DnDTableManager(
-                      globalConfig.enable_debug_mode,
-                      globalConfig.enable_dnd ? activeDocument : null
-                    )}
+                    debugMode={globalConfig.enable_debug_mode}
+                    backend={HTML5Backend}
+                    context={
+                      (globalConfig.enable_debug_mode,
+                      globalConfig.enable_dnd
+                        ? activeWindow
+                        : activeDocument.createElement("div"))
+                    }
                   >
                     {headerGroup.headers
                       .filter(
