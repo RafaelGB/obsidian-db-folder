@@ -96,13 +96,16 @@ export function HeaderNavBar(headerNavBarProps: NavBarProps) {
   const { table } = headerNavBarProps;
   return (
     <div
-      key="div-navbar-header-row"
-      className={`${c("tr")}`}
+      key={`div-navbar-header-row`}
+      className={`${c("tr sticky-level-1")}`}
       style={{
         width: table.getCenterTotalSize(),
       }}
     >
-      <div className={`${c("th navbar")}`} key="div-navbar-header-cell">
+      <div
+        className={`${c("th navbar sticky-level-1")}`}
+        key="div-navbar-header-cell"
+      >
         <NavBar {...headerNavBarProps} />
       </div>
     </div>
