@@ -268,7 +268,7 @@ export function Table(tableData: TableDataType) {
     <>
       <div
         key={`div-table-navbar`}
-        className={`${c("table sticky-level-1 sticky_first_column")}`}
+        className={`${c("table sticky-level-1")}`}
         style={{
           width: table.getCenterTotalSize(),
         }}
