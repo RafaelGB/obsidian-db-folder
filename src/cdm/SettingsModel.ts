@@ -17,10 +17,10 @@ export interface GlobalSettings {
     logger_level_info: string;
     media_settings: MediaSettings;
     enable_dnd: boolean;
+    enable_show_state: boolean;
 }
 
 export interface LocalSettings {
-    enable_show_state: boolean;
     group_folder_column: string;
     cell_size: string;
     sticky_first_column: boolean;

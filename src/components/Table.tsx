@@ -456,7 +456,7 @@ export function Table(tableData: TableDataType) {
         {/* ENDS NEW ROW */}
       </div>
       {/* INIT DEBUG INFO */}
-      {ddbbConfig.enable_show_state && (
+      {globalConfig.enable_show_state && (
         <pre>
           <code>{JSON.stringify(table.getState(), null, 2)}</code>
         </pre>
