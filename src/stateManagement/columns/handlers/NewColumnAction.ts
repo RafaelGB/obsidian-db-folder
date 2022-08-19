@@ -3,6 +3,8 @@ import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { DEFAULT_COLUMN_CONFIG, InputType, TableColumnsTemplate } from "helpers/Constants";
+import { dbTrim } from "helpers/StylesHelper";
+import { Notice } from "obsidian";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class InsertColumnHandlerAction extends AbstractTableAction<ColumnsState> {
@@ -87,8 +89,21 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
         customName?: string
     ) {
         if (customName !== undefined) {
+            let sufixAdded = false;
+            let copyIndex = 1;
+            const originalName = customName;
+
+            while (columns.find((o) => o.id === customName)) {
+                customName = `${originalName} ${copyIndex}`;
+                copyIndex++;
+                sufixAdded = true;
+            }
+
+            if (sufixAdded) {
+                new Notice(`The column name already exist. Sufix was added`, 1500);
+            }
             return {
-                name: customName,
+                name: dbTrim(customName),
                 label: customName,
                 position: wantedPosition,
             };
@@ -96,7 +111,7 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
 
         let columnNumber = columns.length - shadowColumns.length;
         // Check if column name already exists
-        while (columns.find((o: any) => o.id === `newColumn${columnNumber}`)) {
+        while (columns.find((o) => o.id === `newColumn${columnNumber}`)) {
             columnNumber++;
         }
         const columnId = `newColumn${columnNumber}`;

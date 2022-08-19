@@ -40,8 +40,7 @@ export default class SortHandlerAction extends AbstractHeaderAction {
 
 function sortingUpButton(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
-  const { table, header, column } =
-    headerActionResponse.headerMenuProps.headerProps;
+  const { table, column } = headerActionResponse.headerMenuProps.headerProps;
 
   const tablecolumn = column.columnDef as TableColumn;
   const [sortingInfo, sortingActions] = table.options.meta.tableState.sorting(
@@ -62,14 +61,11 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
     sortingActions.alterSorting(sortArray);
     table.setSorting(sortArray);
   };
+  const isAscSorted = column.getIsSorted() === "asc";
   return headerButtonComponent({
     onClick: sortingUpOnClick,
-    icon:
-      header.column.getIsSorted() === "asc" ? <CrossIcon /> : <ArrowUpIcon />,
-    label:
-      header.column.getIsSorted() === "asc"
-        ? "Remove ascending sort"
-        : "Sort ascending",
+    icon: isAscSorted ? <CrossIcon /> : <ArrowUpIcon />,
+    label: isAscSorted ? "Remove ascending sort" : "Sort ascending",
   });
 }
 
