@@ -23,8 +23,8 @@ export default class TextTypeHeaderAction extends AbstractHeaderAction {
 function textTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const alterColumnType = table.options.meta.tableState.columns(
-    (state) => state.alterColumnType
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
@@ -40,7 +40,10 @@ function textTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.TEXT,
       ddbbConfig
     );
-    alterColumnType(column.columnDef as TableColumn, InputType.TEXT);
+    columnActions.alterColumnType(
+      column.columnDef as TableColumn,
+      InputType.TEXT
+    );
   };
 
   return headerTypeComponent({

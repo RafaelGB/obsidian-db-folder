@@ -6,7 +6,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class AlterOptionToColumnHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { view, set, implementation } = tableActionResponse;
-        implementation.addOptionToColumn = (
+        implementation.actions.addOptionToColumn = (
             column: TableColumn,
             option: string,
             backgroundColor: string

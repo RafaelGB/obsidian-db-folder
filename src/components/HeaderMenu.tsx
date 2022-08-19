@@ -12,8 +12,8 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
-  const [columns, alterColumnLabel] = table.options.meta.tableState.columns(
-    (state) => [state.columns, state.alterColumnLabel]
+  const [columns, columnActions] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.actions]
   );
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
@@ -117,14 +117,16 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     table.setColumnOrder(updateOrderWithNewKey);
     // Update state of altered column
     setkeyState(newKey);
-    alterColumnLabel(column.columnDef as TableColumn, labelState).then(() => {
-      dataActions.updateDataAfterLabelChange(
-        column.columnDef as TableColumn,
-        labelState,
-        columns,
-        ddbbConfig
-      );
-    });
+    columnActions
+      .alterColumnLabel(column.columnDef as TableColumn, labelState)
+      .then(() => {
+        dataActions.updateDataAfterLabelChange(
+          column.columnDef as TableColumn,
+          labelState,
+          columns,
+          ddbbConfig
+        );
+      });
   }
 
   function handleKeyDown(e: any) {

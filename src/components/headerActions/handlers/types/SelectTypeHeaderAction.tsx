@@ -22,8 +22,8 @@ export default class SelectTypeHeaderAction extends AbstractHeaderAction {
 function selectTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const alterColumnType = table.options.meta.tableState.columns(
-    (state) => state.alterColumnType
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
   const [rows, dataActions] = table.options.meta.tableState.data((state) => [
     state.rows,
@@ -40,7 +40,11 @@ function selectTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.SELECT,
       ddbbConfig
     );
-    alterColumnType(column.columnDef as TableColumn, InputType.SELECT, rows);
+    columnActions.alterColumnType(
+      column.columnDef as TableColumn,
+      InputType.SELECT,
+      rows
+    );
   };
   return headerTypeComponent({
     onClick: selectOnClick,

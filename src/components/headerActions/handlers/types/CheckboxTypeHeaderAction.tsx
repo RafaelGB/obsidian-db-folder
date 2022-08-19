@@ -23,8 +23,8 @@ export default class CheckboxTypeHandlerAction extends AbstractHeaderAction {
 function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const alterColumnType = table.options.meta.tableState.columns(
-    (state) => state.alterColumnType
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
@@ -40,7 +40,10 @@ function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.CHECKBOX,
       ddbbConfig
     );
-    alterColumnType(column.columnDef as TableColumn, InputType.CHECKBOX);
+    columnActions.alterColumnType(
+      column.columnDef as TableColumn,
+      InputType.CHECKBOX
+    );
   };
   return headerTypeComponent({
     onClick: checkBoxTypeOnClick,

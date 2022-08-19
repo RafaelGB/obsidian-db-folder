@@ -59,9 +59,11 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
 export function Table(tableData: TableDataType) {
   /** Main information about the table */
   const { view, tableStore } = tableData;
-  const [columns, alterColumnSize, columnsInfo] = tableStore.columns(
-    (state) => [state.columns, state.alterColumnSize, state.info]
-  );
+  const [columns, columnActions, columnsInfo] = tableStore.columns((state) => [
+    state.columns,
+    state.actions,
+    state.info,
+  ]);
   const [rows, dataActions] = tableStore.data((state) => [
     state.rows,
     state.actions,
@@ -217,7 +219,10 @@ export function Table(tableData: TableDataType) {
       // setting new timeout
       setPersistSizingTimeout(
         setTimeout(() => {
-          alterColumnSize(columnToUpdate[0], columnToUpdate[1] + deltaOffset);
+          columnActions.alterColumnSize(
+            columnToUpdate[0],
+            columnToUpdate[1] + deltaOffset
+          );
           // timeout until event is triggered after user has stopped typing
         }, 1500)
       );

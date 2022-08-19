@@ -41,7 +41,9 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
     store.rows,
     store.actions,
   ]);
-  const remove = table.options.meta.tableState.columns((store) => store.remove);
+  const columnActions = table.options.meta.tableState.columns(
+    (store) => store.actions
+  );
 
   const onClick = (e: any) => {
     if (ddbbConfig.remove_field_when_delete_column) {
@@ -59,7 +61,7 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
       );
     }
     dataActions.removeDataOfColumn(column.columnDef as TableColumn);
-    remove(column.columnDef as TableColumn);
+    columnActions.remove(column.columnDef as TableColumn);
     hooks.setExpanded(false);
   };
 

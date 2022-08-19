@@ -9,7 +9,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { columns, addToLeft } = addColumnModalManager.props.columnsState;
+    const { columns, actions } = addColumnModalManager.props.columnsState;
 
     /**************
      * EMPTY COLUMN
@@ -22,7 +22,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
           .setIcon("create-new")
           .setTooltip("Add new column")
           .onClick(async (): Promise<void> => {
-            addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN));
+            actions.addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN));
             addColumnModalManager.addColumnModal.close();
           });
       });

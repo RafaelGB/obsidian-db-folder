@@ -23,8 +23,8 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
 function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const alterColumnType = table.options.meta.tableState.columns(
-    (state) => state.alterColumnType
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
   const [rows, dataActions] = table.options.meta.tableState.data((state) => [
     state.rows,
@@ -42,7 +42,11 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.TAGS,
       ddbbConfig
     );
-    alterColumnType(column.columnDef as TableColumn, InputType.TAGS, rows);
+    columnActions.alterColumnType(
+      column.columnDef as TableColumn,
+      InputType.TAGS,
+      rows
+    );
   };
   return headerTypeComponent({
     onClick: tagsOnClick,

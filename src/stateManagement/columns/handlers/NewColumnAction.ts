@@ -9,7 +9,7 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { view, set, implementation } = tableActionResponse;
 
-        implementation.addToLeft = (column: TableColumn, customName?: string) =>
+        implementation.actions.addToLeft = (column: TableColumn, customName?: string) =>
             set((updater) => {
                 const index = updater.columns.findIndex(
                     (col) => col.id === column.id
@@ -18,7 +18,7 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
                 return { columns: alteredColumns };
             });
 
-        implementation.addToRight = (column: TableColumn, customName?: string) =>
+        implementation.actions.addToRight = (column: TableColumn, customName?: string) =>
             set((updater) => {
                 const index = updater.columns.findIndex(
                     (col) => col.id === column.id

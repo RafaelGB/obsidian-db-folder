@@ -28,8 +28,8 @@ export default class DateTypeHeaderAction extends AbstractHeaderAction {
 function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const alterColumnType = table.options.meta.tableState.columns(
-    (state) => state.alterColumnType
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
@@ -45,7 +45,10 @@ function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.CALENDAR,
       ddbbConfig
     );
-    alterColumnType(column.columnDef as TableColumn, InputType.CALENDAR);
+    columnActions.alterColumnType(
+      column.columnDef as TableColumn,
+      InputType.CALENDAR
+    );
   };
 
   return headerTypeComponent({

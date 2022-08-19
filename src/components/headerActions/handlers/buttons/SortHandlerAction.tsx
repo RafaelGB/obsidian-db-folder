@@ -47,8 +47,8 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
   const generateSorting = table.options.meta.tableState.sorting(
     (store) => store.generateSorting
   );
-  const alterSorting = table.options.meta.tableState.columns(
-    (store) => store.alterSorting
+  const columnActions = table.options.meta.tableState.columns(
+    (store) => store.actions
   );
   const tableSortBy = table.options.meta.tableState.sorting(
     (store) => store.alterSorting
@@ -61,7 +61,7 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
     tablecolumn.isSortedDesc = false;
     hooks.setExpanded(false);
     // Update state
-    alterSorting(tablecolumn);
+    columnActions.alterSorting(tablecolumn);
     tableSortBy(sortArray);
     table.setSorting(sortArray);
   };
@@ -85,8 +85,8 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
   const generateSorting = table.options.meta.tableState.sorting(
     (store) => store.generateSorting
   );
-  const alterSorting = table.options.meta.tableState.columns(
-    (store) => store.alterSorting
+  const columnActions = table.options.meta.tableState.columns(
+    (store) => store.actions
   );
   const tableSortBy = table.options.meta.tableState.sorting(
     (store) => store.alterSorting
@@ -99,7 +99,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
 
     hooks.setExpanded(false);
     // Update state
-    alterSorting(tablecolumn);
+    columnActions.alterSorting(tablecolumn);
     tableSortBy(sortArray);
     table.setSorting(sortArray);
   };

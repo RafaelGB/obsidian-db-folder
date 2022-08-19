@@ -10,7 +10,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
     handle(response: AddColumnModalHandlerResponse): AddColumnModalHandlerResponse {
         const { containerEl, addColumnModalManager } = response;
         const { filters, ddbbConfig } = addColumnModalManager.props;
-        const { columns, addToLeft, info } = addColumnModalManager.props.columnsState;
+        const { columns, actions, info } = addColumnModalManager.props.columnsState;
         let selectedColumn: string = "-";
         const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
             resolve(obtainColumnsFromRows(addColumnModalManager.addColumnModal.view, ddbbConfig, filters, columns));
@@ -43,7 +43,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                                 new Notice("You need to select a column to add", 1500);
                                 return;
                             }
-                            addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN), selectedColumn);
+                            actions.addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN), selectedColumn);
                             addColumnModalManager.addColumnModal.enableReset = true;
                             // Refresh the modal to remove the selected column from the dropdown
                             addColumnModalManager.reset(response);
