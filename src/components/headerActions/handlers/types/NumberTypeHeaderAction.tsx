@@ -25,8 +25,8 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   const alterColumnType = table.options.meta.tableState.columns(
     (state) => state.alterColumnType
   );
-  const parseDataOfColumn = table.options.meta.tableState.data(
-    (state) => state.parseDataOfColumn
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
@@ -35,7 +35,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   const numberOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
-    parseDataOfColumn(
+    dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.NUMBER,
       ddbbConfig

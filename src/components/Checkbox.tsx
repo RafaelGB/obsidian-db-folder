@@ -7,8 +7,8 @@ import { c } from "helpers/StylesHelper";
 export function CheckboxCell(props: CheckboxProps) {
   const { defaultCell } = props;
   const { row, column, table } = defaultCell;
-  const updateCell = table.options.meta.tableState.data(
-    (state) => state.updateCell
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
@@ -22,7 +22,7 @@ export function CheckboxCell(props: CheckboxProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk
-    updateCell(
+    dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
       newValue,

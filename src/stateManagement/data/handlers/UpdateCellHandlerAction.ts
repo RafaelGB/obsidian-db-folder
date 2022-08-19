@@ -11,7 +11,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, implementation } = tableActionResponse;
-        implementation.updateCell = (
+        implementation.actions.updateCell = (
             rowIndex: number,
             column: TableColumn,
             value: Literal,

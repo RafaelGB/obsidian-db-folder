@@ -31,13 +31,13 @@ export interface ConfigState {
 
 export interface DataState {
     rows: RowDataType[];
-    addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
-    updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => void;
-    parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
-    updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-    removeRow: (row: RowDataType) => void;
-    removeDataOfColumn: (column: TableColumn) => void;
     actions: {
+        addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
+        updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => void;
+        parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
+        updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
+        removeRow: (row: RowDataType) => void;
+        removeDataOfColumn: (column: TableColumn) => void;
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
     }
 }

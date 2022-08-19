@@ -10,9 +10,9 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   const { defaultCell } = calendarProps;
   const { row, column, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
-  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
     state.rows,
-    state.updateCell,
+    state.actions,
   ]);
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
@@ -31,7 +31,7 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
-    updateCell(
+    dataActions.updateCell(
       row.index,
       tableColumn,
       DateTime.fromJSDate(date),

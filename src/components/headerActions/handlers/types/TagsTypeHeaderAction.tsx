@@ -26,9 +26,10 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   const alterColumnType = table.options.meta.tableState.columns(
     (state) => state.alterColumnType
   );
-  const [rows, parseDataOfColumn] = table.options.meta.tableState.data(
-    (state) => [state.rows, state.parseDataOfColumn]
-  );
+  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.actions,
+  ]);
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
@@ -36,7 +37,7 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   const tagsOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
-    parseDataOfColumn(
+    dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.TAGS,
       ddbbConfig

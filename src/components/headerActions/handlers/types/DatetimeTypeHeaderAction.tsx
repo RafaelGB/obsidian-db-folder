@@ -31,8 +31,8 @@ function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
   const alterColumnType = table.options.meta.tableState.columns(
     (state) => state.alterColumnType
   );
-  const parseDataOfColumn = table.options.meta.tableState.data(
-    (state) => state.parseDataOfColumn
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
@@ -40,7 +40,7 @@ function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
   const datetimeOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
-    parseDataOfColumn(
+    dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.CALENDAR_TIME,
       ddbbConfig

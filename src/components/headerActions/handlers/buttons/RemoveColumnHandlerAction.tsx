@@ -37,9 +37,10 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
   const columns = table.options.meta.tableState.columns(
     (store) => store.columns
   );
-  const [rows, removeDataOfColumn] = table.options.meta.tableState.data(
-    (store) => [store.rows, store.removeDataOfColumn]
-  );
+  const [rows, dataActions] = table.options.meta.tableState.data((store) => [
+    store.rows,
+    store.actions,
+  ]);
   const remove = table.options.meta.tableState.columns((store) => store.remove);
 
   const onClick = (e: any) => {
@@ -57,7 +58,7 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
         })
       );
     }
-    removeDataOfColumn(column.columnDef as TableColumn);
+    dataActions.removeDataOfColumn(column.columnDef as TableColumn);
     remove(column.columnDef as TableColumn);
     hooks.setExpanded(false);
   };

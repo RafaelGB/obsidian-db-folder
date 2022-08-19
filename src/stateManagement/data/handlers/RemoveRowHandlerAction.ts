@@ -5,7 +5,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class RemoveRowHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { set, implementation } = tableActionResponse;
-        implementation.removeRow = (row: RowDataType) =>
+        implementation.actions.removeRow = (row: RowDataType) =>
             set((state) => (
                 {
                     rows: state.rows.filter(

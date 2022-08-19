@@ -15,9 +15,9 @@ const TagsPortal = (tagsProps: TagsProps) => {
   const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.addOptionToColumn]
   );
-  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
     state.rows,
-    state.updateCell,
+    state.actions,
   ]);
 
   const ddbbConfig = table.options.meta.tableState.configState(
@@ -75,7 +75,13 @@ const TagsPortal = (tagsProps: TagsProps) => {
   ) => {
     const arrayTags = newValue.map((tag: any) => tag.value);
     // Update on disk & memory
-    updateCell(row.index, tableColumn, arrayTags, columns, ddbbConfig);
+    dataActions.updateCell(
+      row.index,
+      tableColumn,
+      arrayTags,
+      columns,
+      ddbbConfig
+    );
     // Add new option to column options
     newValue
       .filter(

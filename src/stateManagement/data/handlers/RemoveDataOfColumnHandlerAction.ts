@@ -5,7 +5,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class RemoveDataOfColumnHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { set, implementation } = tableActionResponse;
-        implementation.removeDataOfColumn = (column: TableColumn) => set((state) => {
+        implementation.actions.removeDataOfColumn = (column: TableColumn) => set((state) => {
             const newRows = [...state.rows];
             newRows.forEach((row) => {
                 delete row[column.id];

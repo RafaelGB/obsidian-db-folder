@@ -15,8 +15,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const [columns, alterColumnLabel] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.alterColumnLabel]
   );
-  const updateDataAfterLabelChange = table.options.meta.tableState.data(
-    (state) => state.updateDataAfterLabelChange
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
@@ -118,7 +118,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     // Update state of altered column
     setkeyState(newKey);
     alterColumnLabel(column.columnDef as TableColumn, labelState).then(() => {
-      updateDataAfterLabelChange(
+      dataActions.updateDataAfterLabelChange(
         column.columnDef as TableColumn,
         labelState,
         columns,

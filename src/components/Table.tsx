@@ -62,7 +62,10 @@ export function Table(tableData: TableDataType) {
   const [columns, alterColumnSize, columnsInfo] = tableStore.columns(
     (state) => [state.columns, state.alterColumnSize, state.info]
   );
-  const [rows, addRow] = tableStore.data((state) => [state.rows, state.addRow]);
+  const [rows, dataActions] = tableStore.data((state) => [
+    state.rows,
+    state.actions,
+  ]);
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
@@ -249,7 +252,7 @@ export function Table(tableData: TableDataType) {
   }
 
   function handleAddNewRow() {
-    addRow(inputNewRow, columns, ddbbConfig);
+    dataActions.addRow(inputNewRow, columns, ddbbConfig);
     setInputNewRow("");
     newRowRef.current.value = "";
   }

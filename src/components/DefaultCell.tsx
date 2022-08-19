@@ -26,8 +26,8 @@ export default function DefaultCell(
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
   );
-  const updateCell = table.options.meta.tableState.data(
-    (state) => state.updateCell
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
@@ -157,7 +157,7 @@ export default function DefaultCell(
   };
 
   function onChange(changedValue: string) {
-    updateCell(
+    dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
       changedValue,
