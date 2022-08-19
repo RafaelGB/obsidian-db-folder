@@ -1,4 +1,7 @@
+import { Row } from "@tanstack/react-table"
+import { RowDataType } from "./FolderModel"
+
 export type TableCellProps = {
-    row: any,
-    rowIndex: any
+    row: Row<RowDataType>,
+    rowIndex: number
 }

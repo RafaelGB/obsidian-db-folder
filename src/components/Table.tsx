@@ -39,7 +39,7 @@ import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { OnChangeValue } from "react-select";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import TableCell from "components/TableCell";
+import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 
@@ -395,7 +395,7 @@ export function Table(tableData: TableDataType) {
           {table
             .getRowModel()
             .rows.map((row: Row<RowDataType>, rowIndex: number) => (
-              <TableCell
+              <TableRow
                 key={`table-cell-${rowIndex}`}
                 row={row}
                 rowIndex={rowIndex}
