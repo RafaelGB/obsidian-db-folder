@@ -82,9 +82,9 @@ export function Table(tableData: TableDataType) {
 
   /** Table services */
   // Sorting
-  const [sortBy, alterSorting] = tableStore.sorting((store) => [
+  const [sortBy, sortActions] = tableStore.sorting((store) => [
     store.sortBy,
-    store.alterSorting,
+    store.actions,
   ]);
   // Visibility
   const [columnVisibility, setColumnVisibility] = React.useState(
@@ -195,7 +195,7 @@ export function Table(tableData: TableDataType) {
       columnVisibility: columnVisibility,
     },
     onColumnVisibilityChange: setColumnVisibility,
-    onSortingChange: alterSorting,
+    onSortingChange: sortActions.alterSorting,
     onColumnSizingChange: (updater) => {
       const { isResizingColumn, deltaOffset, columnSizingStart } =
         table.options.state.columnSizingInfo;

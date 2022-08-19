@@ -9,13 +9,17 @@ const useSortingStore = (view: DatabaseView) => {
     return create<ColumnSortingState>()(
         (set) => ({
             sortBy: view.initial.sortBy,
-            alterSorting: (alternativeSorting: SortingState) => set((state) => ({ sortBy: alternativeSorting })),
-            generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => {
-                return generateSortedColumns(
-                    view,
-                    currentCol,
-                    isSortedDesc
-                )
+            actions: {
+                alterSorting: (alternativeSorting: SortingState) => set((state) => ({ sortBy: alternativeSorting }))
+            },
+            info: {
+                generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => {
+                    return generateSortedColumns(
+                        view,
+                        currentCol,
+                        isSortedDesc
+                    )
+                }
             }
         }),
     );

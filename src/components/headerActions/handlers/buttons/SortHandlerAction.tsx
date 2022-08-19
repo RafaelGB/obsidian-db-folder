@@ -44,25 +44,22 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
     headerActionResponse.headerMenuProps.headerProps;
 
   const tablecolumn = column.columnDef as TableColumn;
-  const generateSorting = table.options.meta.tableState.sorting(
-    (store) => store.generateSorting
+  const [sortingInfo, sortingActions] = table.options.meta.tableState.sorting(
+    (store) => [store.info, store.actions]
   );
   const columnActions = table.options.meta.tableState.columns(
     (store) => store.actions
   );
-  const tableSortBy = table.options.meta.tableState.sorting(
-    (store) => store.alterSorting
-  );
 
   const sortingUpOnClick = (e: any) => {
-    const sortArray = generateSorting(tablecolumn, false);
+    const sortArray = sortingInfo.generateSorting(tablecolumn, false);
     tablecolumn.isSorted =
       tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = false;
     hooks.setExpanded(false);
     // Update state
     columnActions.alterSorting(tablecolumn);
-    tableSortBy(sortArray);
+    sortingActions.alterSorting(sortArray);
     table.setSorting(sortArray);
   };
   return headerButtonComponent({
@@ -82,17 +79,15 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     headerActionResponse.headerMenuProps.headerProps;
 
   const tablecolumn = column.columnDef as TableColumn;
-  const generateSorting = table.options.meta.tableState.sorting(
-    (store) => store.generateSorting
+  const [sortingInfo, sortingActions] = table.options.meta.tableState.sorting(
+    (store) => [store.info, store.actions]
   );
   const columnActions = table.options.meta.tableState.columns(
     (store) => store.actions
   );
-  const tableSortBy = table.options.meta.tableState.sorting(
-    (store) => store.alterSorting
-  );
+
   const sortingDownOnClick = (e: any) => {
-    const sortArray = generateSorting(tablecolumn, true);
+    const sortArray = sortingInfo.generateSorting(tablecolumn, true);
     tablecolumn.isSorted =
       tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = true;
@@ -100,7 +95,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     hooks.setExpanded(false);
     // Update state
     columnActions.alterSorting(tablecolumn);
-    tableSortBy(sortArray);
+    sortingActions.alterSorting(sortArray);
     table.setSorting(sortArray);
   };
   return headerButtonComponent({

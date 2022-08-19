@@ -63,8 +63,12 @@ export interface ColumnsState {
 }
 export interface ColumnSortingState {
     sortBy: SortingState;
-    alterSorting: (alternativeSorting: SortingState) => void;
-    generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => SortingState;
+    actions: {
+        alterSorting: (alternativeSorting: SortingState) => void;
+    },
+    info: {
+        generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => SortingState;
+    }
 }
 export interface RowTemplateState {
     template: string;
