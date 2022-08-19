@@ -69,6 +69,6 @@
 		"react-datepicker": "4.8.0",
 		"regenerator-runtime": "0.13.9",
 		"luxon": "3.0.1",
-		"zustand": "4.0.0"
+		"zustand": "4.1.0"
 	}
 }

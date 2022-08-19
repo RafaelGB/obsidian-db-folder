@@ -23,12 +23,13 @@ export default class TagsTypeHeaderAction extends AbstractHeaderAction {
 function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const alterColumnType = table.options.meta.tableState.columns(
-    (state) => state.alterColumnType
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
-  const [rows, parseDataOfColumn] = table.options.meta.tableState.data(
-    (state) => [state.rows, state.parseDataOfColumn]
-  );
+  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.actions,
+  ]);
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
@@ -36,12 +37,16 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   const tagsOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
-    parseDataOfColumn(
+    dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.TAGS,
       ddbbConfig
     );
-    alterColumnType(column.columnDef as TableColumn, InputType.TAGS, rows);
+    columnActions.alterColumnType(
+      column.columnDef as TableColumn,
+      InputType.TAGS,
+      rows
+    );
   };
   return headerTypeComponent({
     onClick: tagsOnClick,

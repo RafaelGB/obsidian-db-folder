@@ -12,7 +12,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class AddRowlHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, implementation } = tableActionResponse;
-        implementation.addRow = (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
+        implementation.actions.addRow = (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
             const filepath = `${view.file.parent.path}/${filename}.md`;
             const rowRecord: RowDatabaseFields = { inline: {}, frontmatter: {} };
             columns

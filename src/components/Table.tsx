@@ -39,7 +39,7 @@ import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { OnChangeValue } from "react-select";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import TableCell from "components/TableCell";
+import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 
@@ -59,10 +59,15 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
 export function Table(tableData: TableDataType) {
   /** Main information about the table */
   const { view, tableStore } = tableData;
-  const [columns, alterColumnSize, columnsInfo] = tableStore.columns(
-    (state) => [state.columns, state.alterColumnSize, state.info]
-  );
-  const [rows, addRow] = tableStore.data((state) => [state.rows, state.addRow]);
+  const [columns, columnActions, columnsInfo] = tableStore.columns((state) => [
+    state.columns,
+    state.actions,
+    state.info,
+  ]);
+  const [rows, dataActions] = tableStore.data((state) => [
+    state.rows,
+    state.actions,
+  ]);
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
@@ -77,9 +82,9 @@ export function Table(tableData: TableDataType) {
 
   /** Table services */
   // Sorting
-  const [sortBy, alterSorting] = tableStore.sorting((store) => [
+  const [sortBy, sortActions] = tableStore.sorting((store) => [
     store.sortBy,
-    store.alterSorting,
+    store.actions,
   ]);
   // Visibility
   const [columnVisibility, setColumnVisibility] = React.useState(
@@ -190,7 +195,7 @@ export function Table(tableData: TableDataType) {
       columnVisibility: columnVisibility,
     },
     onColumnVisibilityChange: setColumnVisibility,
-    onSortingChange: alterSorting,
+    onSortingChange: sortActions.alterSorting,
     onColumnSizingChange: (updater) => {
       const { isResizingColumn, deltaOffset, columnSizingStart } =
         table.options.state.columnSizingInfo;
@@ -214,7 +219,10 @@ export function Table(tableData: TableDataType) {
       // setting new timeout
       setPersistSizingTimeout(
         setTimeout(() => {
-          alterColumnSize(columnToUpdate[0], columnToUpdate[1] + deltaOffset);
+          columnActions.alterColumnSize(
+            columnToUpdate[0],
+            columnToUpdate[1] + deltaOffset
+          );
           // timeout until event is triggered after user has stopped typing
         }, 1500)
       );
@@ -249,7 +257,7 @@ export function Table(tableData: TableDataType) {
   }
 
   function handleAddNewRow() {
-    addRow(inputNewRow, columns, ddbbConfig);
+    dataActions.addRow(inputNewRow, columns, ddbbConfig);
     setInputNewRow("");
     newRowRef.current.value = "";
   }
@@ -387,7 +395,7 @@ export function Table(tableData: TableDataType) {
           {table
             .getRowModel()
             .rows.map((row: Row<RowDataType>, rowIndex: number) => (
-              <TableCell
+              <TableRow
                 key={`table-cell-${rowIndex}`}
                 row={row}
                 rowIndex={rowIndex}
@@ -448,7 +456,7 @@ export function Table(tableData: TableDataType) {
         {/* ENDS NEW ROW */}
       </div>
       {/* INIT DEBUG INFO */}
-      {ddbbConfig.enable_show_state && (
+      {globalConfig.enable_show_state && (
         <pre>
           <code>{JSON.stringify(table.getState(), null, 2)}</code>
         </pre>

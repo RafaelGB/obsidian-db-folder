@@ -26,15 +26,15 @@ function mockColumnsState(): ColumnsState {
   return {
     columns: [],
     shadowColumns: [],
-    addToLeft: null,
-    addToRight: null,
-    remove: null,
-    alterSorting: null,
-    addOptionToColumn: null,
-    alterColumnType: null,
-    alterColumnLabel: null,
-    alterColumnSize: null,
     actions: {
+      addToLeft: null,
+      addToRight: null,
+      remove: null,
+      alterSorting: null,
+      addOptionToColumn: null,
+      alterColumnType: null,
+      alterColumnLabel: null,
+      alterColumnSize: null,
       alterIsHidden: null,
     },
     info: {

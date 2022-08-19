@@ -8,7 +8,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class ParseDataOfColumnHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { set, implementation } = tableActionResponse;
-        implementation.parseDataOfColumn = (column: TableColumn, input: string, ddbbConfig: LocalSettings) =>
+        implementation.actions.parseDataOfColumn = (column: TableColumn, input: string, ddbbConfig: LocalSettings) =>
             set((updater) => {
                 const parsedRows = updater.rows.map((row) => ({
                     ...row,

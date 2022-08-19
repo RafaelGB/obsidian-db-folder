@@ -5,7 +5,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class AlterSortingColumnHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { set, implementation } = tableActionResponse;
-        implementation.alterSorting = (column: TableColumn) =>
+        implementation.actions.alterSorting = (column: TableColumn) =>
             set((updater) => {
                 const newColumns = [...updater.columns];
                 const index = newColumns.findIndex((c) => c.id === column.id);

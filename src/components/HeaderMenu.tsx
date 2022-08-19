@@ -12,11 +12,11 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
-  const [columns, alterColumnLabel] = table.options.meta.tableState.columns(
-    (state) => [state.columns, state.alterColumnLabel]
+  const [columns, columnActions] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.actions]
   );
-  const updateDataAfterLabelChange = table.options.meta.tableState.data(
-    (state) => state.updateDataAfterLabelChange
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
@@ -117,14 +117,16 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     table.setColumnOrder(updateOrderWithNewKey);
     // Update state of altered column
     setkeyState(newKey);
-    alterColumnLabel(column.columnDef as TableColumn, labelState).then(() => {
-      updateDataAfterLabelChange(
-        column.columnDef as TableColumn,
-        labelState,
-        columns,
-        ddbbConfig
-      );
-    });
+    columnActions
+      .alterColumnLabel(column.columnDef as TableColumn, labelState)
+      .then(() => {
+        dataActions.updateDataAfterLabelChange(
+          column.columnDef as TableColumn,
+          labelState,
+          columns,
+          ddbbConfig
+        );
+      });
   }
 
   function handleKeyDown(e: any) {

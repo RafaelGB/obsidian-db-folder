@@ -40,39 +40,32 @@ export default class SortHandlerAction extends AbstractHeaderAction {
 
 function sortingUpButton(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
-  const { table, header, column } =
-    headerActionResponse.headerMenuProps.headerProps;
+  const { table, column } = headerActionResponse.headerMenuProps.headerProps;
 
   const tablecolumn = column.columnDef as TableColumn;
-  const generateSorting = table.options.meta.tableState.sorting(
-    (store) => store.generateSorting
+  const [sortingInfo, sortingActions] = table.options.meta.tableState.sorting(
+    (store) => [store.info, store.actions]
   );
-  const alterSorting = table.options.meta.tableState.columns(
-    (store) => store.alterSorting
-  );
-  const tableSortBy = table.options.meta.tableState.sorting(
-    (store) => store.alterSorting
+  const columnActions = table.options.meta.tableState.columns(
+    (store) => store.actions
   );
 
   const sortingUpOnClick = (e: any) => {
-    const sortArray = generateSorting(tablecolumn, false);
+    const sortArray = sortingInfo.generateSorting(tablecolumn, false);
     tablecolumn.isSorted =
       tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = false;
     hooks.setExpanded(false);
     // Update state
-    alterSorting(tablecolumn);
-    tableSortBy(sortArray);
+    columnActions.alterSorting(tablecolumn);
+    sortingActions.alterSorting(sortArray);
     table.setSorting(sortArray);
   };
+  const isAscSorted = column.getIsSorted() === "asc";
   return headerButtonComponent({
     onClick: sortingUpOnClick,
-    icon:
-      header.column.getIsSorted() === "asc" ? <CrossIcon /> : <ArrowUpIcon />,
-    label:
-      header.column.getIsSorted() === "asc"
-        ? "Remove ascending sort"
-        : "Sort ascending",
+    icon: isAscSorted ? <CrossIcon /> : <ArrowUpIcon />,
+    label: isAscSorted ? "Remove ascending sort" : "Sort ascending",
   });
 }
 
@@ -82,25 +75,23 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     headerActionResponse.headerMenuProps.headerProps;
 
   const tablecolumn = column.columnDef as TableColumn;
-  const generateSorting = table.options.meta.tableState.sorting(
-    (store) => store.generateSorting
+  const [sortingInfo, sortingActions] = table.options.meta.tableState.sorting(
+    (store) => [store.info, store.actions]
   );
-  const alterSorting = table.options.meta.tableState.columns(
-    (store) => store.alterSorting
+  const columnActions = table.options.meta.tableState.columns(
+    (store) => store.actions
   );
-  const tableSortBy = table.options.meta.tableState.sorting(
-    (store) => store.alterSorting
-  );
+
   const sortingDownOnClick = (e: any) => {
-    const sortArray = generateSorting(tablecolumn, true);
+    const sortArray = sortingInfo.generateSorting(tablecolumn, true);
     tablecolumn.isSorted =
       tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = true;
 
     hooks.setExpanded(false);
     // Update state
-    alterSorting(tablecolumn);
-    tableSortBy(sortArray);
+    columnActions.alterSorting(tablecolumn);
+    sortingActions.alterSorting(sortArray);
     table.setSorting(sortArray);
   };
   return headerButtonComponent({
