@@ -29,11 +29,6 @@ export default function TableRow(headerProps: TableCellProps) {
               key={`cell-td-${cell.id}-${cellIndex}`}
               className={`${c("td")} data-input`}
             >
-              {rowhovered && cellIndex == 0 && (
-                <div key={`row-context-menu-${cell.id}-${cellIndex}`}>
-                  prueba
-                </div>
-              )}
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </div>
           );

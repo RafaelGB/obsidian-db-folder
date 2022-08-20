@@ -42,6 +42,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
+import rowContextMenuColumn from "./RowContextMenu";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -184,7 +185,7 @@ export function Table(tableData: TableDataType) {
   );
 
   const table: Table<RowDataType> = useReactTable({
-    columns: columns,
+    columns: [rowContextMenuColumn, ...columns],
     data: rows,
     columnResizeMode: ResizeConfiguration.RESIZE_MODE,
     state: {
@@ -430,7 +431,7 @@ export function Table(tableData: TableDataType) {
         </div>
         <div
           key={`div-add-row-cell-padding-left`}
-          className={`${c("td padding-left")}`}
+          className={`${c("td padding-left-05")}`}
         >
           <Select
             styles={CustomTemplateSelectorStyles}

@@ -424,7 +424,7 @@ div.database-plugin__checkbox {
   background-color: var(--background-secondary);
 }
 
-.database-plugin__padding-left {
+.database-plugin__padding-left-05 {
   padding-left: 0.5rem;
 }
 
@@ -545,11 +545,17 @@ span.text-align-right {
 .configuration-section-container-columns-template {
   background-color: var(--background-modifier-box-shadow);
 }
-
+/**
+*  Row styles
+*/
+/* row context menu shows an icon to the left of the first cell translucent*/
+.database-plugin__row-context-menu {
+  float: left;
+  margin-left: 20px;
+}
 /*
 *  React-datepicker styles
 */
-
 .react-datepicker__year-read-view--down-arrow,
 .react-datepicker__month-read-view--down-arrow,
 .react-datepicker__month-year-read-view--down-arrow,

@@ -51,7 +51,8 @@ export const MetadataColumns = Object.freeze({
   CREATED: `__created__`,
   MODIFIED: `__modified__`,
   ADD_COLUMN: `__add_column__`,
-  TASKS: `__tasks__`
+  TASKS: `__tasks__`,
+  ROW_CONTEXT_MENU: "__rowContextMenu__"
 });
 
 export const MetadataLabels = Object.freeze({
