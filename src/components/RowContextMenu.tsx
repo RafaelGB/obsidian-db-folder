@@ -84,16 +84,7 @@ const rowContextMenuColumn: TableColumn = {
           </MenuItem>
         </Menu>
       </>
-    ) : // <div className="px-1">
-    //   <IndeterminateCheckbox
-    //     {...{
-    //       checked: row.getIsSelected(),
-    //       indeterminate: row.getIsSomeSelected(),
-    //       onChange: row.getToggleSelectedHandler(),
-    //     }}
-    //   />
-    // </div>
-    null;
+    ) : null;
   },
 };
 
