@@ -58,9 +58,11 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const { header, table } = headerProps;
   const { tableState } = table.options.meta;
 
-  const [columns, addToLeft, columnInfo, columnActions] = tableState.columns(
-    (state) => [state.columns, state.addToLeft, state.info, state.actions]
-  );
+  const [columns, columnInfo, columnActions] = tableState.columns((state) => [
+    state.columns,
+    state.info,
+    state.actions,
+  ]);
 
   const ddbbConfig = tableState.configState((state) => state.ddbbConfig);
   const filtersConfig = tableState.configState((state) => state.filters);
@@ -115,7 +117,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     const addColumnProps: AddColumnModalProps = {
       columnsState: {
         columns,
-        addToLeft,
         info: columnInfo,
         actions: columnActions,
       },

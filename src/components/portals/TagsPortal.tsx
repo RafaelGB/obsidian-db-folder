@@ -12,12 +12,12 @@ import { TableColumn } from "cdm/FolderModel";
 const TagsPortal = (tagsProps: TagsProps) => {
   const { defaultCell } = tagsProps;
   const { row, column, table } = defaultCell;
-  const [columns, addOptionToColumn] = table.options.meta.tableState.columns(
-    (state) => [state.columns, state.addOptionToColumn]
+  const [columns, columnActions] = table.options.meta.tableState.columns(
+    (state) => [state.columns, state.actions]
   );
-  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
     state.rows,
-    state.updateCell,
+    state.actions,
   ]);
 
   const ddbbConfig = table.options.meta.tableState.configState(
@@ -75,7 +75,13 @@ const TagsPortal = (tagsProps: TagsProps) => {
   ) => {
     const arrayTags = newValue.map((tag: any) => tag.value);
     // Update on disk & memory
-    updateCell(row.index, tableColumn, arrayTags, columns, ddbbConfig);
+    dataActions.updateCell(
+      row.index,
+      tableColumn,
+      arrayTags,
+      columns,
+      ddbbConfig
+    );
     // Add new option to column options
     newValue
       .filter(
@@ -83,7 +89,7 @@ const TagsPortal = (tagsProps: TagsProps) => {
           !tableColumn.options.find((option: any) => option.label === tag.value)
       )
       .forEach((tag: any) => {
-        addOptionToColumn(tableColumn, tag.value, randomColor());
+        columnActions.addOptionToColumn(tableColumn, tag.value, randomColor());
       });
     setTagsState(arrayTags);
   };

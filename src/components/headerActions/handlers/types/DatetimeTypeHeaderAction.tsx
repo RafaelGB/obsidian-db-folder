@@ -28,11 +28,11 @@ export default class DatetimeTypeHeaderAction extends AbstractHeaderAction {
 function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const alterColumnType = table.options.meta.tableState.columns(
-    (state) => state.alterColumnType
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
-  const parseDataOfColumn = table.options.meta.tableState.data(
-    (state) => state.parseDataOfColumn
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
@@ -40,12 +40,15 @@ function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
   const datetimeOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
-    parseDataOfColumn(
+    dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.CALENDAR_TIME,
       ddbbConfig
     );
-    alterColumnType(column.columnDef as TableColumn, InputType.CALENDAR_TIME);
+    columnActions.alterColumnType(
+      column.columnDef as TableColumn,
+      InputType.CALENDAR_TIME
+    );
   };
   return headerTypeComponent({
     onClick: datetimeOnClick,

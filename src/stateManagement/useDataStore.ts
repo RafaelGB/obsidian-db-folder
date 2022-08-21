@@ -23,14 +23,16 @@ const useDataStore = (view: DatabaseView) => {
 function mockDataState(): DataState {
     return {
         rows: [],
-        addRow: null,
-        updateCell: null,
-        updateDataAfterLabelChange: null,
-        removeRow: null,
-        removeDataOfColumn: null,
-        parseDataOfColumn: null,
+        hoveredRow: "0",
         actions: {
+            addRow: null,
+            updateCell: null,
+            updateDataAfterLabelChange: null,
+            removeRow: null,
+            removeDataOfColumn: null,
+            parseDataOfColumn: null,
             dataviewRefresh: null,
+            setHoveredRow: null,
         },
     }
 }

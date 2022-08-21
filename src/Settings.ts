@@ -92,8 +92,10 @@ export class SettingsManager {
     editing_engine_settings_section.run(settingHandlerResponse);
     /** Media section */
     media_settings_section(settingHandlerResponse);
-    /** Developer section */
-    developer_settings_section.run(settingHandlerResponse);
+    if (!settingHandlerResponse.local) {
+      /** Developer section */
+      developer_settings_section.run(settingHandlerResponse);
+    }
   }
 
   reset(response: SettingHandlerResponse) {

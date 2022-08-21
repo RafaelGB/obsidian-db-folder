@@ -21,7 +21,11 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
                 .filter(key => typeof column[key] !== 'object')
                 .forEach(key => {
                     // Lvl3: literal column properties
-                    this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${column[key]}`);
+                    let value = column[key];
+                    if (typeof value === 'string') {
+                        value = `"${value}"`;
+                    }
+                    this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${value}`);
                 });
 
             this.localDisk.push(...unmarshallParticularInputInfo(column));

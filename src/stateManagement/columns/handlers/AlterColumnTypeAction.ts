@@ -9,7 +9,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class AlterColumnTypeHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { view, set, implementation } = tableActionResponse;
-        implementation.alterColumnType = (
+        implementation.actions.alterColumnType = (
             column: TableColumn,
             input: string,
             parsedRows?: RowDataType[]

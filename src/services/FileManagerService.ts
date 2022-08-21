@@ -49,6 +49,14 @@ class VaultManager {
   }
 
   /**
+   * Remove file from vault
+   * @param note
+   */
+  async removeNote(note: TFile): Promise<void> {
+    app.vault.delete(note);
+    new Notice(`File ${note.path} removed from vault`);
+  }
+  /**
   * Edit file content
   * @param note
   */

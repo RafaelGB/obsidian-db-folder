@@ -1,6 +1,6 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { LocalSettings } from 'cdm/SettingsModel';
-import { SourceDataTypes, CellSizeOptions, DEFAULT_SETTINGS } from 'helpers/Constants';
+import { DEFAULT_SETTINGS } from 'helpers/Constants';
 import { Literal } from 'obsidian-dataview';
 import { unEscapeSpecialCharacters } from 'parsers/EscapeHelper';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';

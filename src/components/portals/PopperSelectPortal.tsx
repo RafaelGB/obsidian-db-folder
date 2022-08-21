@@ -12,9 +12,9 @@ import { TableColumn } from "cdm/FolderModel";
 const PopperSelectPortal = (popperProps: PopperProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
-  const [rows, updateCell] = table.options.meta.tableState.data((state) => [
+  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
     state.rows,
-    state.updateCell,
+    state.actions,
   ]);
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
@@ -36,8 +36,8 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   // Selector popper state
   const [domReady, setDomReady] = useState(false);
 
-  const addOptionToColumn = table.options.meta.tableState.columns(
-    (state) => state.addOptionToColumn
+  const columnActions = table.options.meta.tableState.columns(
+    (state) => state.actions
   );
   React.useEffect(() => {
     if (!domReady) {
@@ -46,7 +46,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   });
 
   function handleRemoveOption(e: any) {
-    updateCell(
+    dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
       "",
@@ -62,7 +62,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
     backgroundColor?: string;
   }) {
     // save on disk & move file if its configured on the column
-    updateCell(
+    dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
       option.label,
@@ -98,7 +98,11 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       }
     );
     if (!alreadyExist) {
-      addOptionToColumn(tableColumn, e.target.value, randomColor());
+      columnActions.addOptionToColumn(
+        tableColumn,
+        e.target.value,
+        randomColor()
+      );
     }
   }
 

@@ -6,7 +6,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class AlterColumnLabelHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { view, set, implementation } = tableActionResponse;
-        implementation.alterColumnLabel = async (column: TableColumn, newLabel: string) =>
+        implementation.actions.alterColumnLabel = async (column: TableColumn, newLabel: string) =>
             set((updater) => {
                 const labelIndex = updater.columns.findIndex(
                     (col: TableColumn) => col.id === column.id

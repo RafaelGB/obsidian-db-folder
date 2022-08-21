@@ -1,18 +1,14 @@
-import { TableColumn } from "cdm/FolderModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
-export default class RemoveDataOfColumnHandlerAction extends AbstractTableAction<DataState> {
+export default class SetHoveredRowHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { set, implementation } = tableActionResponse;
-        implementation.actions.removeDataOfColumn = (column: TableColumn) => set((state) => {
-            const newRows = [...state.rows];
-            newRows.forEach((row) => {
-                delete row[column.id];
+        implementation.actions.setHoveredRow = async (rowIndex: string) => {
+            set((updater) => {
+                return { hoveredRow: rowIndex };
             });
-
-            return { rows: newRows };
-        });
+        }
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
     }
