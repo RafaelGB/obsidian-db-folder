@@ -7,11 +7,14 @@ import React from "react";
 
 export default function TableRow(headerProps: TableCellProps) {
   const { row, rowIndex, tableStore } = headerProps;
-  const rowActions = tableStore.data((state) => state.actions);
+  const [hoveredRow, rowActions] = tableStore.data((state) => [
+    state.hoveredRow,
+    state.actions,
+  ]);
   return (
     <div
       key={`cell-tr-${rowIndex}`}
-      className={`${c("tr")}`}
+      className={`${c("tr" + (row.getIsSelected() ? " hovered-row" : ""))}`}
       onMouseEnter={() => {
         rowActions.setHoveredRow(rowIndex);
       }}

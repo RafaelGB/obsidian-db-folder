@@ -89,7 +89,6 @@
   font-size: 1rem;
   border-radius: 4px;
   resize: none;
-  background-color: var(--background-primary);
   box-sizing: border-box;
   flex: 1 1 auto;
   text-align: -webkit-center;
@@ -331,7 +330,6 @@ div.database-plugin__checkbox {
 .database-plugin__td {
   overflow: hidden;
   color: var(--text-normal);
-  background-color: var(--background-primary);
   align-items: stretch;
   justify-content: center;
   padding: 0;
@@ -555,6 +553,11 @@ span.text-align-right {
   float: left;
   margin-left: 20px;
 }
+
+.database-plugin__hovered-row {
+  background-color: #2579ba;
+}
+
 /*
 *  React-datepicker styles
 */
