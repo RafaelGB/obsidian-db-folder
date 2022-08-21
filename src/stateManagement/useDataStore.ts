@@ -23,7 +23,7 @@ const useDataStore = (view: DatabaseView) => {
 function mockDataState(): DataState {
     return {
         rows: [],
-        hoveredRow: 0,
+        hoveredRow: "0",
         actions: {
             addRow: null,
             updateCell: null,

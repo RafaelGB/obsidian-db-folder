@@ -4,7 +4,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class SetHoveredRowHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { set, implementation } = tableActionResponse;
-        implementation.actions.setHoveredRow = async (rowIndex: number) => {
+        implementation.actions.setHoveredRow = async (rowIndex: string) => {
             set((updater) => {
                 return { hoveredRow: rowIndex };
             });

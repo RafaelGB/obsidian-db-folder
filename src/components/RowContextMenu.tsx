@@ -38,18 +38,32 @@ const rowContextMenuColumn: TableColumn = {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+      row.getToggleSelectedHandler()({
+        event: {
+          target: {
+            checked: !row.getIsSelected(),
+          },
+        },
+      });
       setAnchorEl(event.currentTarget);
     };
 
     const handleMenuClose = () => {
       setAnchorEl(null);
+      row.getToggleSelectedHandler()({
+        event: {
+          target: {
+            checked: !row.getIsSelected(),
+          },
+        },
+      });
     };
 
     const handleDeleteRow = () => {
       rowActions.removeRow(row.original);
     };
 
-    return hoveredRow === row.index ? (
+    return hoveredRow === row.id ? (
       <>
         <IconButton
           size="small"

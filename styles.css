@@ -56,7 +56,6 @@
 
 .database-plugin__form-input {
   padding: 0.375rem;
-  background-color: var(--background-primary);
   border: none;
   border-radius: 4px;
   font-size: 0.875rem;
@@ -79,6 +78,14 @@
 
 .is-fullwidth {
   width: 100%;
+}
+
+.database-plugin__tr .data-input {
+  background-color: var(--background-primary);
+}
+
+.database-plugin__tr-hovered .data-input {
+  background-color: var(--background-secondary);
 }
 
 .data-input {
@@ -261,7 +268,6 @@ div.database-plugin__checkbox {
   color: var(--text-muted);
   cursor: pointer;
   text-align: left;
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -271,11 +277,13 @@ div.database-plugin__checkbox {
   padding: 0;
 }
 
-.database-plugin__tr {
+.database-plugin__tr,
+.database-plugin__tr-hovered {
   display: table-row;
 }
 
-.database-plugin__tr:last-child .database-plugin__td {
+.database-plugin__tr:last-child .database-plugin__td,
+.database-plugin__tr-hovered:last-child .database-plugin__td {
   border-bottom: 0;
 }
 
@@ -554,8 +562,8 @@ span.text-align-right {
   margin-left: 20px;
 }
 
-.database-plugin__hovered-row {
-  background-color: #2579ba;
+.database-plugin__tr-hovered {
+  background-color: var(--background-secondary);
 }
 
 /*
