@@ -141,7 +141,9 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     isDragDisabled: true,
     skipPersist: true,
     csvCandidate: false,
-    width: 20,
+    minSize: 18,
+    maxSize: 18,
+    width: 18,
     config: DEFAULT_COLUMN_CONFIG
   }
 });

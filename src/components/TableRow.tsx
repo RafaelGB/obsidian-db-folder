@@ -6,19 +6,14 @@ import { Literal } from "obsidian-dataview";
 import React from "react";
 
 export default function TableRow(headerProps: TableCellProps) {
-  const { row, rowIndex } = headerProps;
-  const [rowhovered, setRowhovered] = React.useState(false);
+  const { row, rowIndex, tableStore } = headerProps;
+  const rowActions = tableStore.data((state) => state.actions);
   return (
     <div
       key={`cell-tr-${rowIndex}`}
       className={`${c("tr")}`}
       onMouseEnter={() => {
-        console.log(`mouse enter on row ${rowIndex}`);
-        setRowhovered(true);
-      }}
-      onMouseLeave={() => {
-        console.log(`mouse leave row ${rowIndex}`);
-        setRowhovered(false);
+        rowActions.setHoveredRow(rowIndex);
       }}
     >
       {row

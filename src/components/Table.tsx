@@ -115,7 +115,6 @@ export function Table(tableData: TableDataType) {
   );
   // Niveling number of columns
   if (columnOrder.length !== columns.length) {
-    console.log("columnOrder.length !== columns.length");
     setColumnOrder(columnsInfo.getValueOfAllColumnsAsociatedWith("id"));
   }
 
@@ -402,6 +401,7 @@ export function Table(tableData: TableDataType) {
                 key={`table-cell-${rowIndex}`}
                 row={row}
                 rowIndex={rowIndex}
+                tableStore={tableStore}
               />
             ))}
 

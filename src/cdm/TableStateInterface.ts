@@ -31,6 +31,7 @@ export interface ConfigState {
 
 export interface DataState {
     rows: RowDataType[];
+    hoveredRow: number | null;
     actions: {
         addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
         updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => void;
@@ -39,6 +40,7 @@ export interface DataState {
         removeRow: (row: RowDataType) => void;
         removeDataOfColumn: (column: TableColumn) => void;
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
+        setHoveredRow: (rowIndex: number) => void;
     }
 }
 
