@@ -17,7 +17,7 @@ const rowContextMenuColumn: TableColumn = {
   input: InputType.TEXT,
   config: DEFAULT_COLUMN_CONFIG,
   position: 0,
-  header: ({ table }) => null,
+  header: () => null,
   cell: ({ row, table }) => {
     const { tableState } = table.options.meta;
     const [hoveredRow, rowActions] = tableState.data((state) => [

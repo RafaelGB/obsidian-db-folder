@@ -188,6 +188,8 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '   media_height: 100',
     '   isInline: false',
     'filters:',
+    ' enabled: false',
+    ' conditions:'
   ].join('\n')
 });
 

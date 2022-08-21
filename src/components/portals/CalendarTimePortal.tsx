@@ -21,7 +21,9 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   );
 
   // Calendar state
-  const calendarTimeState = rows[row.index][tableColumn.key];
+  const [calendarTimeState, setcalendarTimeState] = useState(
+    rows[row.index][tableColumn.key]
+  );
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -31,13 +33,15 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
+    const change = DateTime.fromJSDate(date);
     dataActions.updateCell(
       row.index,
       tableColumn,
-      DateTime.fromJSDate(date).toISO(),
+      change.toISO(),
       columns,
       ddbbConfig
     );
+    setcalendarTimeState(change);
     setShowDatePicker(false);
   }
 
@@ -67,15 +71,13 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
       />
     </div>
   ) : (
-    <span
-      className="calendar-time"
-      onClick={handleSpanOnClick}
-      style={{ width: column.getSize() }}
-    >
-      {DateTime.isDateTime(calendarTimeState)
-        ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
-        : null}
-    </span>
+    <div onClick={handleSpanOnClick}>
+      <span className="calendar-time" style={{ width: column.getSize() }}>
+        {DateTime.isDateTime(calendarTimeState)
+          ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
+          : null}
+      </span>
+    </div>
   );
 };
 
