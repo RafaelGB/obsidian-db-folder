@@ -101,6 +101,7 @@
   text-align: -webkit-center;
   vertical-align: middle;
 }
+
 /** children of data-input fills parent div*/
 .data-input > * {
   border: none;
@@ -558,8 +559,7 @@ span.text-align-right {
 */
 /* row context menu shows an icon to the left of the first cell translucent*/
 .database-plugin__row-context-menu {
-  float: left;
-  margin-left: 20px;
+  padding: 0;
 }
 
 .database-plugin__tr-hovered {

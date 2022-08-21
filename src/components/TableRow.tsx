@@ -6,7 +6,7 @@ import { Literal } from "obsidian-dataview";
 import React from "react";
 
 export default function TableRow(headerProps: TableCellProps) {
-  const { row, rowIndex, tableStore } = headerProps;
+  const { row, tableStore } = headerProps;
   const rowActions = tableStore.data((state) => state.actions);
 
   return (
@@ -23,7 +23,9 @@ export default function TableRow(headerProps: TableCellProps) {
           return (
             <div
               key={`cell-td-${cell.id}-${cellIndex}`}
-              className={`${c("td")} data-input`}
+              className={`${c(
+                "td" + (cellIndex === 0 ? " row-context-menu" : "")
+              )} data-input`}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </div>

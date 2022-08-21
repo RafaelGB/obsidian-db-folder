@@ -8,7 +8,7 @@ import {
   InputType,
   MetadataDatabaseColumns,
 } from "helpers/Constants";
-import React, { HTMLProps } from "react";
+import React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -17,18 +17,7 @@ const rowContextMenuColumn: TableColumn = {
   input: InputType.TEXT,
   config: DEFAULT_COLUMN_CONFIG,
   position: 0,
-  header: ({ table }) => {
-    const { tableState } = table.options.meta;
-    return (
-      <IndeterminateCheckbox
-        {...{
-          checked: table.getIsAllRowsSelected(),
-          indeterminate: table.getIsSomeRowsSelected(),
-          onChange: table.getToggleAllRowsSelectedHandler(),
-        }}
-      />
-    );
-  },
+  header: ({ table }) => null,
   cell: ({ row, table }) => {
     const { tableState } = table.options.meta;
     const [hoveredRow, rowActions] = tableState.data((state) => [
@@ -69,10 +58,9 @@ const rowContextMenuColumn: TableColumn = {
           size="small"
           edge="start"
           color="inherit"
-          aria-label="Open table options"
-          sx={{ mr: 2 }}
-          id="long-button"
-          aria-controls={open ? "long-menu" : undefined}
+          aria-label="Open row context menu"
+          id={`row-context-button-${row.id}`}
+          aria-controls={open ? `row-context-button-${row.id}` : undefined}
           aria-expanded={open ? "true" : undefined}
           aria-haspopup="true"
           onClick={handleClick}
@@ -81,38 +69,12 @@ const rowContextMenuColumn: TableColumn = {
         </IconButton>
         <Menu
           anchorEl={anchorEl}
-          id="account-menu"
+          id={`row-context-menu-${row.id}`}
           open={open}
           onClose={handleMenuClose}
           onClick={handleMenuClose}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              "&:before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          transformOrigin={{ horizontal: "left", vertical: "top" }}
+          anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
         >
           <MenuItem onClick={handleDeleteRow}>
             <ListItemIcon>
@@ -134,28 +96,5 @@ const rowContextMenuColumn: TableColumn = {
     null;
   },
 };
-
-function IndeterminateCheckbox({
-  indeterminate,
-  className = "",
-  ...rest
-}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
-  const ref = React.useRef<HTMLInputElement>(null!);
-
-  React.useEffect(() => {
-    if (typeof indeterminate === "boolean") {
-      ref.current.indeterminate = !rest.checked && indeterminate;
-    }
-  }, [ref, indeterminate]);
-
-  return (
-    <input
-      type="checkbox"
-      ref={ref}
-      className={className + " cursor-pointer"}
-      {...rest}
-    />
-  );
-}
 
 export default rowContextMenuColumn;
