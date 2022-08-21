@@ -67,15 +67,13 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
       />
     </div>
   ) : (
-    <span
-      className="calendar-time"
-      onClick={handleSpanOnClick}
-      style={{ width: column.getSize() }}
-    >
-      {DateTime.isDateTime(calendarTimeState)
-        ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
-        : null}
-    </span>
+    <div onClick={handleSpanOnClick}>
+      <span className="calendar-time" style={{ width: column.getSize() }}>
+        {DateTime.isDateTime(calendarTimeState)
+          ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
+          : null}
+      </span>
+    </div>
   );
 };
 
