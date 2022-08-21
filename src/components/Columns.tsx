@@ -16,6 +16,7 @@ import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DatabaseView } from "DatabaseView";
 import { obtainAllPossibleRows } from "helpers/VaultManagement";
+import rowContextMenuColumn from "./RowContextMenu";
 
 /**
  * Add mandatory and configured metadata columns of the table
@@ -90,7 +91,7 @@ export async function obtainColumnsFromFolder(
     })
   );
   LOGGER.debug(`<= obtainColumnsFromFolder(. return ${columns.length} columns`);
-  return sortColumnsByPosition(columns);
+  return sortColumnsByPosition([rowContextMenuColumn, ...columns]);
 }
 
 export async function obtainColumnsFromFile(

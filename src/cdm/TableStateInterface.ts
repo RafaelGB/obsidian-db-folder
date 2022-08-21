@@ -1,4 +1,4 @@
-import { SortingState } from "@tanstack/react-table";
+import { ColumnOrderState, SortingState } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
@@ -45,10 +45,6 @@ export interface DataState {
 export interface ColumnsState {
     columns: TableColumn[];
     shadowColumns: TableColumn[];
-    info: {
-        getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
-        getVisibilityRecord: () => Record<string, boolean>;
-    };
     actions: {
         addToLeft: (column: TableColumn, customName?: string) => void;
         addToRight: (column: TableColumn, customName?: string) => void;
@@ -59,6 +55,10 @@ export interface ColumnsState {
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
         alterColumnSize: (id: string, width: number) => void;
         alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
+    }
+    info: {
+        getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
+        getVisibilityRecord: () => Record<string, boolean>;
     }
 }
 export interface ColumnSortingState {

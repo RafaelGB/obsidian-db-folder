@@ -1,10 +1,16 @@
 import { TableColumn } from "cdm/FolderModel";
-import { MetadataColumns } from "helpers/Constants";
-
+import {
+  DEFAULT_COLUMN_CONFIG,
+  InputType,
+  MetadataDatabaseColumns,
+} from "helpers/Constants";
 import React, { HTMLProps } from "react";
 
 const rowContextMenuColumn: TableColumn = {
-  id: MetadataColumns.ROW_CONTEXT_MENU,
+  ...MetadataDatabaseColumns.ROW_CONTEXT_MENU,
+  input: InputType.TEXT,
+  config: DEFAULT_COLUMN_CONFIG,
+  position: 0,
   header: ({ table }) => (
     <IndeterminateCheckbox
       {...{

@@ -68,7 +68,6 @@ export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   media_width: 100,
   media_height: 100,
   isInline: false,
-  source_data: 'current_folder',
   task_hide_completed: true,
 });
 
@@ -132,6 +131,19 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
   },
+  ROW_CONTEXT_MENU: {
+    id: MetadataColumns.ROW_CONTEXT_MENU,
+    key: MetadataColumns.ROW_CONTEXT_MENU,
+    input: InputType.CHECKBOX,
+    label: MetadataColumns.ROW_CONTEXT_MENU,
+    accessorKey: MetadataColumns.ROW_CONTEXT_MENU,
+    isMetadata: true,
+    isDragDisabled: true,
+    skipPersist: true,
+    csvCandidate: false,
+    width: 20,
+    config: DEFAULT_COLUMN_CONFIG
+  }
 });
 
 export const TableColumnsTemplate: Pick<DatabaseColumn | TableColumn, "isMetadata" | "skipPersist" | "isDragDisabled" | "options" | "csvCandidate" | "input" | "config"> =

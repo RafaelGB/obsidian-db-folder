@@ -100,8 +100,9 @@ export function Table(tableData: TableDataType) {
   const [persistSizingTimeout, setPersistSizingTimeout] = React.useState(null);
   // Drag and drop
   const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
-    columns.map((c) => c.id)
+    columnsInfo.getValueOfAllColumnsAsociatedWith("id")
   );
+
   const findColumn = React.useCallback(
     (id: string) => {
       const findedColumn = columns.find((c) => c.id === id);
@@ -114,7 +115,8 @@ export function Table(tableData: TableDataType) {
   );
   // Niveling number of columns
   if (columnOrder.length !== columns.length) {
-    setColumnOrder(columns.map((c) => c.id));
+    console.log("columnOrder.length !== columns.length");
+    setColumnOrder(columnsInfo.getValueOfAllColumnsAsociatedWith("id"));
   }
 
   // new Row Template
@@ -185,7 +187,7 @@ export function Table(tableData: TableDataType) {
   );
 
   const table: Table<RowDataType> = useReactTable({
-    columns: [rowContextMenuColumn, ...columns],
+    columns: columns,
     data: rows,
     columnResizeMode: ResizeConfiguration.RESIZE_MODE,
     state: {

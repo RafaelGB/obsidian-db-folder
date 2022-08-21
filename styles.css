@@ -365,8 +365,10 @@ div.database-plugin__checkbox {
   padding: 0.6rem;
 }
 
-.database-plugin__sticky_first_column .database-plugin__td:first-child,
-.database-plugin__sticky_first_column .database-plugin__th:first-child {
+.database-plugin__sticky_first_column .database-plugin__td:nth-child(2),
+.database-plugin__sticky_first_column .database-plugin__th:nth-child(2),
+.database-plugin__table .database-plugin__td:first-child,
+.database-plugin__table .database-plugin__th:first-child {
   position: sticky;
   left: 0;
   z-index: 1;
@@ -683,6 +685,7 @@ span.text-align-right {
   border-radius: 0.3rem;
   display: inline-block;
   position: relative;
+  z-index: 4;
 }
 
 .react-datepicker--time-only .react-datepicker__triangle {
@@ -705,7 +708,7 @@ span.text-align-right {
 }
 
 .react-datepicker-popper {
-  z-index: 1;
+  z-index: 4;
 }
 
 .react-datepicker-popper[data-placement^="bottom"] {
@@ -800,7 +803,7 @@ span.text-align-right {
   top: 2px;
   padding: 0;
   border: none;
-  z-index: 1;
+  z-index: 4;
   height: 32px;
   width: 32px;
   text-indent: -999em;
@@ -1325,7 +1328,7 @@ span.text-align-right {
   width: 50%;
   left: 25%;
   top: 30px;
-  z-index: 1;
+  z-index: 4;
   text-align: center;
   border-radius: 0.3rem;
   border: 1px solid #aeaeae;
@@ -1453,7 +1456,7 @@ span.text-align-right {
   justify-content: center;
   align-items: center;
   display: flex;
-  z-index: 2147483647;
+  z-index: 4;
 }
 
 .react-datepicker__portal .react-datepicker__day-name,

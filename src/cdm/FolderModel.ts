@@ -3,7 +3,7 @@ import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
-import { Column, ColumnSort, Header, Table } from "@tanstack/react-table";
+import { Column, ColumnDef, ColumnSort, Header, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { TableStateInterface } from "./TableStateInterface";
 
@@ -42,7 +42,7 @@ export interface ConfigColumn {
     [key: string]: Literal;
 }
 
-export interface BaseColumn {
+export type BaseColumn = {
     accessorKey: string;
     label: string;
     key: string;
@@ -57,13 +57,7 @@ export interface BaseColumn {
     isDragDisabled?: boolean;
     config: ConfigColumn;
 }
-export interface TableColumn extends BaseColumn {
-    isSortedDesc?: boolean;
-    isSorted?: boolean;
-    id: string;
-    options?: RowSelectOption[];
-    Cell?: any;
-}
+export type TableColumn = ColumnDef<RowDataType, any> & BaseColumn;
 
 export type RowDataType = {
     __note__: NoteInfo,
