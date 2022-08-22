@@ -18,12 +18,17 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             columns: TableColumn[],
             ddbbConfig: LocalSettings,
             isMovingFile?: boolean) => set((state) => {
+                let rowTFile = state.rows[rowIndex].__note__.getFile();
 
+                // Update the row on memory
                 state.rows[rowIndex][column.key] = value;
+
+                // Row Rules
                 if (ddbbConfig.show_metadata_modified) {
                     state.rows[rowIndex][MetadataColumns.MODIFIED] = DateTime.now();
                 }
-                let rowTFile = state.rows[rowIndex].__note__.getFile();
+
+                // Update the row on disk
                 if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
                     const moveInfo = {
                         file: rowTFile,
@@ -49,21 +54,20 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                             path: auxPath,
                         },
                     });
-                    // Update rows without re render
-                    return { rows: state.rows };
+
+                } else {
+                    // Save on disk
+                    updateRowFileProxy(
+                        rowTFile,
+                        column.id,
+                        value,
+                        columns,
+                        ddbbConfig,
+                        UpdateRowOptions.COLUMN_VALUE
+                    );
                 }
-
-                // Save on disk
-                updateRowFileProxy(
-                    rowTFile,
-                    column.id,
-                    value,
-                    columns,
-                    ddbbConfig,
-                    UpdateRowOptions.COLUMN_VALUE
-                );
-
-                return { rows: [...state.rows.slice(0, rowIndex), state.rows[rowIndex], ...state.rows.slice(rowIndex + 1)] };
+                // Update rows without re render
+                return { rows: state.rows };
             });
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);

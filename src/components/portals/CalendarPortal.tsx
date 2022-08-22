@@ -3,10 +3,10 @@ import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import { Portal } from "@mui/material";
 import { c } from "helpers/StylesHelper";
-import { CalendarProps } from "cdm/ComponentsModel";
+import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
-const CalendarPortal = (calendarProps: CalendarProps) => {
+const CalendarPortal = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
   const { row, column, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;

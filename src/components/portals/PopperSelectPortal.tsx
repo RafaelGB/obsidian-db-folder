@@ -5,11 +5,11 @@ import { StyleVariables } from "helpers/Constants";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
-import { PopperProps } from "cdm/ComponentsModel";
+import { CellComponentProps } from "cdm/ComponentsModel";
 import CrossIcon from "components/img/CrossIcon";
 import { TableColumn } from "cdm/FolderModel";
 
-const PopperSelectPortal = (popperProps: PopperProps) => {
+const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
   const [rows, dataActions] = table.options.meta.tableState.data((state) => [
@@ -24,7 +24,9 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
   );
   const tableColumn = column.columnDef as TableColumn;
   /** state of cell value */
-  const selectState = rows[row.index][tableColumn.key];
+  const [selectState, setSelectState] = useState(
+    rows[row.index][tableColumn.key]
+  );
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -70,6 +72,7 @@ const PopperSelectPortal = (popperProps: PopperProps) => {
       ddbbConfig,
       true
     );
+    setSelectState(option.label);
     setShowSelect(false);
   }
 

@@ -188,10 +188,12 @@ class DataviewProxy {
                     .join(', ');
                 break;
             case 'date':
-                // Check if Date of Datetime
+
                 if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
+                    // Parse date
                     auxMarkdown = wrapped.value.toFormat("yyyy-MM-dd");
                 } else {
+                    // Parse datetime
                     auxMarkdown = wrapped.value.toISO()
                     auxMarkdown = this.handleMarkdownBreaker(auxMarkdown, localSettings, isInline);
                 }
