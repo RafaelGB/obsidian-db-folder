@@ -187,6 +187,15 @@ class DataviewProxy {
                     .map(v => this.parseToMarkdown(this.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
                     .join(', ');
                 break;
+            case 'date':
+                // Check if Date of Datetime
+                if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
+                    auxMarkdown = wrapped.value.toFormat("yyyy-MM-dd");
+                } else {
+                    auxMarkdown = wrapped.value.toISO()
+                    auxMarkdown = this.handleMarkdownBreaker(auxMarkdown, localSettings, isInline);
+                }
+                break;
             default:
                 auxMarkdown = this.parseToString(wrapped) as string;
                 // Check possible markdown breakers

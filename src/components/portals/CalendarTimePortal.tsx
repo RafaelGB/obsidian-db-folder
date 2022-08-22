@@ -33,15 +33,15 @@ const CalendarTimePortal = (calendarTimeProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
-    const change = DateTime.fromJSDate(date);
+    const changed = DateTime.fromJSDate(date);
     dataActions.updateCell(
       row.index,
       tableColumn,
-      change.toISO(),
+      changed.toISO(),
       columns,
       ddbbConfig
     );
-    setcalendarTimeState(change);
+    setcalendarTimeState(changed);
     setShowDatePicker(false);
   }
 

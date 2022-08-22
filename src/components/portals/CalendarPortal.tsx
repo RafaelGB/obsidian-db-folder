@@ -23,7 +23,9 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const calendarValue = rows[row.index][tableColumn.key];
+  const [calendarValue, setCalendarValue] = useState(
+    rows[row.index][tableColumn.key]
+  );
 
   function handleSpanOnClick(event: any) {
     event.preventDefault();
@@ -31,13 +33,15 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
+    const changed = DateTime.fromJSDate(date);
     dataActions.updateCell(
       row.index,
       tableColumn,
-      DateTime.fromJSDate(date),
+      changed,
       columns,
       ddbbConfig
     );
+    setCalendarValue(changed);
     setShowDatePicker(false);
   }
 

@@ -18,10 +18,10 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             columns: TableColumn[],
             ddbbConfig: LocalSettings,
             isMovingFile?: boolean) => set((state) => {
-                const row = { ...state.rows[rowIndex] };
-                row[column.key] = value;
+
+                state.rows[rowIndex][column.key] = value;
                 if (ddbbConfig.show_metadata_modified) {
-                    row[MetadataColumns.MODIFIED] = DateTime.now();
+                    state.rows[rowIndex][MetadataColumns.MODIFIED] = DateTime.now();
                 }
                 let rowTFile = state.rows[rowIndex].__note__.getFile();
                 if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
@@ -34,7 +34,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     }
                     moveFile(`${view.file.parent.path}/${value}`, moveInfo);
                     // Update row file
-                    row[
+                    state.rows[rowIndex][
                         MetadataColumns.FILE
                     ] = `[[${view.file.parent.path}/${value}/${rowTFile.name}|${rowTFile.basename}]]`;
                     // Check if action.value is a valid folder name
@@ -43,14 +43,14 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                             ? `${view.file.parent.path}/${value}/${rowTFile.name}`
                             : `${view.file.parent.path}/${rowTFile.name}`;
 
-                    row.__note__ = new NoteInfo({
-                        ...row,
+                    state.rows[rowIndex].__note__ = new NoteInfo({
+                        ...state.rows[rowIndex],
                         file: {
                             path: auxPath,
                         },
                     });
-                    // Update rows
-                    return { rows: [...state.rows.slice(0, rowIndex), row, ...state.rows.slice(rowIndex + 1)] };
+                    // Update rows without re render
+                    return { rows: state.rows };
                 }
 
                 // Save on disk
@@ -63,7 +63,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     UpdateRowOptions.COLUMN_VALUE
                 );
 
-                return { rows: [...state.rows.slice(0, rowIndex), row, ...state.rows.slice(rowIndex + 1)] };
+                return { rows: [...state.rows.slice(0, rowIndex), state.rows[rowIndex], ...state.rows.slice(rowIndex + 1)] };
             });
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
