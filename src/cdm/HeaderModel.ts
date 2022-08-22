@@ -1,4 +1,4 @@
-import { Header, Table } from "@tanstack/react-table";
+import { ColumnOrderState, Header, Table } from "@tanstack/react-table";
 import { DatabaseHeaderProps, RowDataType, TableColumn } from "cdm/FolderModel";
 
 export type HeaderMenuProps = {
@@ -15,9 +15,6 @@ export type HeaderMenuProps = {
 export type TableHeaderProps = {
     table: Table<RowDataType>;
     header: Header<RowDataType, TableColumn>;
-    findColumn: (id: string) => {
-        findedColumn: TableColumn;
-        index: number;
-    };
+    reorderColumn: (draggedColumnId: string, targetColumnId: string, columnOrder: string[]) => ColumnOrderState;
     headerIndex: number;
 };

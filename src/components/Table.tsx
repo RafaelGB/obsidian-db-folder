@@ -103,16 +103,18 @@ export function Table(tableData: TableDataType) {
     columnsInfo.getValueOfAllColumnsAsociatedWith("id")
   );
 
-  const findColumn = React.useCallback(
-    (id: string) => {
-      const findedColumn = columns.find((c) => c.id === id);
-      return {
-        findedColumn,
-        index: columns.indexOf(findedColumn),
-      };
-    },
-    [columns]
-  );
+  const reorderColumn = (
+    draggedColumnId: string,
+    targetColumnId: string,
+    columnOrder: string[]
+  ): ColumnOrderState => {
+    columnOrder.splice(
+      columnOrder.indexOf(targetColumnId),
+      0,
+      columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0] as string
+    );
+    return [...columnOrder];
+  };
   // Niveling number of columns
   if (columnOrder.length !== columns.length) {
     setColumnOrder(columnsInfo.getValueOfAllColumnsAsociatedWith("id"));
@@ -352,7 +354,7 @@ export function Table(tableData: TableDataType) {
                             key={`${header.id}-${headerIndex}`}
                             table={table}
                             header={header}
-                            findColumn={findColumn}
+                            reorderColumn={reorderColumn}
                             headerIndex={headerIndex}
                           />
                         )
