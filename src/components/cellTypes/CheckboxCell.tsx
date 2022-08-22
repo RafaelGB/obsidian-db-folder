@@ -1,15 +1,17 @@
-import React, { useContext, useState } from "react";
-import { TableCellContext } from "components/contexts/CellContext";
-import { CheckboxProps } from "cdm/CheckboxModel";
+import React, { useState } from "react";
 import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
+import { CellComponentProps } from "cdm/ComponentsModel";
 
-export function CheckboxCell(props: CheckboxProps) {
+function CheckboxCell(props: CellComponentProps) {
   const { defaultCell } = props;
   const { row, column, table } = defaultCell;
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
+  const tableColumn = column.columnDef as TableColumn;
+
+  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
+    state.rows,
+    state.actions,
+  ]);
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
   );
@@ -17,8 +19,9 @@ export function CheckboxCell(props: CheckboxProps) {
     (state) => state.ddbbConfig
   );
   /** state of cell value */
-  const { contextValue, setContextValue } = useContext(TableCellContext);
-  const [checked, setChecked] = useState(contextValue.value as boolean);
+  const [checked, setChecked] = useState(
+    Boolean(rows[row.index][tableColumn.key])
+  );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk
@@ -30,11 +33,13 @@ export function CheckboxCell(props: CheckboxProps) {
       ddbbConfig
     );
     setChecked(event.target.checked);
-    setContextValue({ value: event.target.checked ? 1 : 0, update: true });
   };
+
   return (
     <div className={`${c("checkbox")}`}>
       <input type="checkbox" checked={checked} onChange={handleChange} />
     </div>
   );
 }
+
+export default CheckboxCell;

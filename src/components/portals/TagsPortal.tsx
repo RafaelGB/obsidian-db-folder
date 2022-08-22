@@ -1,4 +1,4 @@
-import { RowSelectOption, TagsProps } from "cdm/ComponentsModel";
+import { RowSelectOption, CellComponentProps } from "cdm/ComponentsModel";
 import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
@@ -9,7 +9,7 @@ import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { TableColumn } from "cdm/FolderModel";
 
-const TagsPortal = (tagsProps: TagsProps) => {
+const TagsPortal = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
   const { row, column, table } = defaultCell;
   const [columns, columnActions] = table.options.meta.tableState.columns(

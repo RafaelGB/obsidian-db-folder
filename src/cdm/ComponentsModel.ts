@@ -7,15 +7,7 @@ export type RowSelectOption = {
     label: string,
 }
 
-export type PopperProps = {
-    defaultCell: CellContext<RowDataType, Literal>;
-}
-
-export type TagsProps = {
-    defaultCell: CellContext<RowDataType, Literal>;
-}
-
-export type CalendarProps = {
+export type CellComponentProps = {
     defaultCell: CellContext<RowDataType, Literal>;
 }
 

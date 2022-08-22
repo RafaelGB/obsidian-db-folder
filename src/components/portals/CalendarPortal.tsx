@@ -3,10 +3,10 @@ import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import { Portal } from "@mui/material";
 import { c } from "helpers/StylesHelper";
-import { CalendarProps } from "cdm/ComponentsModel";
+import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
-const CalendarPortal = (calendarProps: CalendarProps) => {
+const CalendarPortal = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
   const { row, column, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
@@ -23,7 +23,9 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
 
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const calendarValue = rows[row.index][tableColumn.key];
+  const [calendarValue, setCalendarValue] = useState(
+    rows[row.index][tableColumn.key]
+  );
 
   function handleSpanOnClick(event: any) {
     event.preventDefault();
@@ -31,13 +33,15 @@ const CalendarPortal = (calendarProps: CalendarProps) => {
   }
 
   function handleCalendarChange(date: Date) {
+    const changed = DateTime.fromJSDate(date);
     dataActions.updateCell(
       row.index,
       tableColumn,
-      DateTime.fromJSDate(date),
+      changed,
       columns,
       ddbbConfig
     );
+    setCalendarValue(changed);
     setShowDatePicker(false);
   }
 
