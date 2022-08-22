@@ -61,6 +61,8 @@ export default function DefaultCell(
       /** Checkbox option */
       case InputType.CHECKBOX:
         return <CheckboxCell defaultCell={defaultCell} />;
+
+      /** New column option */
       case InputType.NEW_COLUMN:
         // Do nothing
         break;
