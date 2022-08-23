@@ -10,10 +10,10 @@ import { resolve_tfile } from "helpers/FileManagement";
  */
 export default class NoteInfo {
     private filepath: string;
-    private page: Record<string, any>;
-    constructor(page: Record<string, any>) {
+    private page: Record<string, Literal>;
+    constructor(page: Record<string, Literal>) {
         this.page = page;
-        this.filepath = page.file.path;
+        this.filepath = (page.file as any).path;
     }
 
     getRowDataType(columns: TableColumn[], config: LocalSettings): RowDataType {
@@ -21,11 +21,12 @@ export default class NoteInfo {
         const aFile: RowDataType = {
             __note__: this
         }
+        const dataviewFile = this.page.file as any;
         /** Metadata fields */
-        aFile[MetadataColumns.FILE] = `${this.page.file.link.markdown()}`;
-        aFile[MetadataColumns.CREATED] = this.page.file.ctime;
-        aFile[MetadataColumns.MODIFIED] = this.page.file.mtime;
-        aFile[MetadataColumns.TASKS] = this.page.file.tasks;
+        aFile[MetadataColumns.FILE] = `${dataviewFile.link.markdown()}`;
+        aFile[MetadataColumns.CREATED] = dataviewFile.ctime;
+        aFile[MetadataColumns.MODIFIED] = dataviewFile.mtime;
+        aFile[MetadataColumns.TASKS] = dataviewFile.tasks;
         /** Parse data with the type of column */
         columns.forEach(column => {
             if (this.page[column.key] !== undefined) {

@@ -10,7 +10,7 @@ const useSortingStore = (view: DatabaseView) => {
         (set) => ({
             sortBy: view.initial.sortBy,
             actions: {
-                alterSorting: (alternativeSorting: SortingState) => set((state) => ({ sortBy: alternativeSorting }))
+                alterSorting: (alternativeSorting: SortingState) => set(() => ({ sortBy: alternativeSorting }))
             },
             info: {
                 generateSorting: (currentCol: TableColumn, isSortedDesc: boolean) => {
