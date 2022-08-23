@@ -30,6 +30,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
 
                 // Update the row on disk
                 if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
+
                     const moveInfo = {
                         file: rowTFile,
                         id: column.id,

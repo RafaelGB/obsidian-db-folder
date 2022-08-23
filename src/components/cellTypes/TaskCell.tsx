@@ -4,10 +4,11 @@ import { SListItem } from "obsidian-dataview/lib/data-model/serialized/markdown"
 import { DataviewService } from "services/DataviewService";
 import React, { useEffect, useRef } from "react";
 import { TableColumn } from "cdm/FolderModel";
+import { BaseComponent, Component, MarkdownRenderChild } from "obsidian";
 
 const TaskCell = (taskProps: CellComponentProps) => {
   const { defaultCell } = taskProps;
-  const { cell, column, table } = defaultCell;
+  const { cell, column, table, row } = defaultCell;
   const { view } = table.options.meta;
   let taskValue = cell.getValue();
   useEffect(() => {
@@ -17,16 +18,17 @@ const TaskCell = (taskProps: CellComponentProps) => {
       if ((column.columnDef as TableColumn).config.task_hide_completed) {
         taskValue = (taskValue as any).where((t: any) => !t.completed);
       }
-
+      const taskComponent = new MarkdownRenderChild(taskRef.current);
       DataviewService.getDataviewAPI().taskList(
         taskValue as Grouping<SListItem>,
         false,
         taskRef.current,
-        view,
-        view.file.path
+        taskComponent,
+        row.original.__note__.getFile().path
       );
+      view.addChild(taskComponent);
     }
-  });
+  }, []);
   const taskRef = useRef<HTMLDivElement>();
 
   return <div ref={taskRef}></div>;

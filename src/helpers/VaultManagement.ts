@@ -377,14 +377,14 @@ export async function moveFile(folderPath: string, info: {
     // Handle error
     throw error;
   }
-  const filePath = `${folderPath} / ${info.file.name}`;
+  const filePath = `${folderPath}/${info.file.name}`;
   await app.fileManager.renameFile(info.file, filePath);
 }
 
 export async function createFolder(folderPath: string): Promise<void> {
   await app.vault.adapter.exists(folderPath).then(async exists => {
     if (!exists) {
-      await app.vault.createFolder(`${folderPath} / `);
+      await app.vault.createFolder(`${folderPath}/`);
     }
   });
 }
