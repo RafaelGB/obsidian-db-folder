@@ -8,7 +8,6 @@ import { generateDataviewTableQuery } from 'helpers/QueryHelper';
 import obtainRowDatabaseFields from 'parsers/FileToRowDatabaseFields';
 import { parseFrontmatterFieldsToString } from 'parsers/RowDatabaseFieldsToFile';
 import { DataviewService } from 'services/DataviewService';
-import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { EditionError } from 'errors/ErrorTypes';

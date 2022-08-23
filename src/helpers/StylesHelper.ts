@@ -33,7 +33,7 @@ export function dbTrim(str: string) {
  * @returns 
  */
 export function getLabelHeader(input: string) {
-    const labelCandidate = Object.entries(MetadataLabels).find(([key, value]) => {
+    const labelCandidate = Object.entries(MetadataLabels).find(([key]) => {
         if (key === input.toUpperCase()) {
             return true;
         }

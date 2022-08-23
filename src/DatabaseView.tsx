@@ -164,7 +164,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.diskConfig.yaml.filters
       );
 
-      this.initial = obtainInitialType(this.columns, this.rows);
+      this.initial = obtainInitialType(this.columns);
       // Define table properties
       this.shadowColumns = this.columns.filter((col) => col.skipPersist);
       const tableProps: TableDataType = {

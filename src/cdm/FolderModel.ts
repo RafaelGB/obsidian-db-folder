@@ -84,7 +84,7 @@ export interface DatabaseHeaderProps {
 }
 
 export type RelationshipProps = {
-    value: any,
+    value: Literal,
     backgroundColor: string
 }
 
