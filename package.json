@@ -53,7 +53,6 @@
 		"@mui/icons-material": "5.10.2",
 		"@popperjs/core": "2.11.6",
 		"monkey-around": "2.3.0",
-		"pkg.json": "2.0.8",
 		"obsidian-dataview": "0.5.42",
 		"react": "18.2.0",
 		"react-dnd": "16.0.1",
@@ -67,7 +66,6 @@
 		"react-color": "2.19.3",
 		"react-window": "1.8.7",
 		"react-datepicker": "4.8.0",
-		"regenerator-runtime": "0.13.9",
 		"luxon": "3.0.1",
 		"zustand": "4.1.1"
 	}

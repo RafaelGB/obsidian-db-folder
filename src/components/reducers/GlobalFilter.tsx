@@ -1,5 +1,4 @@
 import React from "react";
-import "regenerator-runtime/runtime";
 import { GlobalFilterProps } from "cdm/MenuBarModel";
 import {
   DebouncedInputWrapper,
