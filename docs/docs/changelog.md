@@ -1,3 +1,16 @@
+# 2.2.2
+### Shiny new things
+- First steps of a row context menu. You can now remove a row from a table (and also Obsidian). [ISSUE#62](https://github.com/RafaelGB/obsidian-db-folder/issues/62)
+### Improved
+- Performance of DnD columns
+- Performance of tasks column rendering
+- Performance of editing any cell (micromanagement and just save global state without reload)
+### Visual
+- Calendar view z-index bug fixed [ISSUE#273](https://github.com/RafaelGB/obsidian-db-folder/issues/273)
+### No longer broken
+- Fix of select group folder path fixed
+- Date Datetime empty did not open correctly fixed [ISSUE#273](https://github.com/RafaelGB/obsidian-db-folder/issues/273)
+- Label column now admits numbers only [ISSUE#274](https://github.com/RafaelGB/obsidian-db-folder/issues/274)
 # 2.2.1
 ### Visual
 - Opacity of new row form with sticky first column option [ISSUE#251](https://github.com/RafaelGB/obsidian-db-folder/issues/251)
