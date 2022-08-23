@@ -1,7 +1,7 @@
 module.exports = {
     verbose: true,
     preset: 'ts-jest',
-    testEnvironment: 'jsdom',
+    testEnvironment: 'node',
     moduleDirectories: ["node_modules", "src"],
     transform: {
         '^.+\\.ts$': 'ts-jest',
