@@ -59,7 +59,7 @@ export type BaseColumn = {
     isDragDisabled?: boolean;
     config: ConfigColumn;
 }
-export type TableColumn = ColumnDef<RowDataType, any> & BaseColumn;
+export type TableColumn = ColumnDef<RowDataType, Literal> & BaseColumn;
 
 export type RowDataType = {
     __note__: NoteInfo,

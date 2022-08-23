@@ -94,6 +94,7 @@ class VaultManager {
    */
   async obtainContentFromTfile(tfile: TFile): Promise<string> {
     return await app.vault.read(tfile);
+
   }
 
   ontainCurrentFrontmatter(content: string): Record<string, any> {

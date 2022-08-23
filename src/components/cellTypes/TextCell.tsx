@@ -1,6 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { renderMarkdown } from "components/markdown/MarkdownRenderer";
+import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { LOGGER } from "services/Logger";

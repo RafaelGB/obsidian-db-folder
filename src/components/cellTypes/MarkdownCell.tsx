@@ -1,5 +1,5 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
-import { renderMarkdown } from "components/markdown/MarkdownRenderer";
+import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { c } from "helpers/StylesHelper";
 import React, { useEffect, useRef } from "react";
 
