@@ -1,4 +1,3 @@
-import { mocked } from "ts-jest/utils";
 import { render, screen } from "@testing-library/react";
 import { Database } from "components/index/Database";
 import { TableDataType } from "cdm/FolderModel";

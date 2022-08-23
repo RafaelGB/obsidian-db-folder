@@ -8,7 +8,7 @@
 ### Visual
 - Calendar view z-index bug fixed [ISSUE#273](https://github.com/RafaelGB/obsidian-db-folder/issues/273)
 ### No longer broken
-- Fix of select group folder path fixed
+- Select group folder path fixed
 - Date Datetime empty did not open correctly fixed [ISSUE#273](https://github.com/RafaelGB/obsidian-db-folder/issues/273)
 - Label column now admits numbers only [ISSUE#274](https://github.com/RafaelGB/obsidian-db-folder/issues/274)
 # 2.2.1
