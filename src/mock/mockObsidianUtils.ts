@@ -2,7 +2,7 @@ import { generateYamlColumns } from "mock/mockTableUtils";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
 
 /** Mock parseYaml returning YamlHandlerResponse object */
-export const parseYamlMock = (numOfColumns: number, numberOfFilters: number) => {
+export const parseYamlMock = (numOfColumns: number) => {
     return {
         name: "Test",
         description: "Test",

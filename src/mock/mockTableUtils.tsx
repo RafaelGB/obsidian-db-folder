@@ -1,12 +1,11 @@
 // ts
-import faker from "@faker-js/faker";
-import React, { useRef, useLayoutEffect } from "react";
 import { randomColor } from "helpers/Colors";
 import { InputType, DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
 import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromFolder } from "components/Columns";
 
+const { faker } = require("@faker-js/faker");
 /**
  * Generate a random initialState table with the given number of rows.
  * @param count number of rows to generate
