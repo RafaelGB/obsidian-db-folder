@@ -5,7 +5,6 @@ import DatabaseStringToYamlParser from "parsers/DatabaseStringToYamlParser";
 
 jest.mock("obsidian",
     () => {
-
         return {
             parseYaml: jest.fn(() => {
                 return parseYamlMock(1);

@@ -1,5 +1,7 @@
 import { generateYamlColumns } from "mock/mockTableUtils";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
+import { TFile } from "obsidian";
+const { faker } = require("@faker-js/faker");
 
 /** Mock parseYaml returning YamlHandlerResponse object */
 export const parseYamlMock = (numOfColumns: number) => {
@@ -18,3 +20,16 @@ export const parseYamlMock = (numOfColumns: number) => {
     };
 }
 
+
+/** Mock TFile content */
+export const generateTFileMock = (): TFile => {
+    return {
+        basename: faker.name.firstName(),
+        path: faker.name.firstName(),
+        extension: "md",
+        vault: null,
+        name: faker.name.firstName(),
+        parent: null,
+        stat: null
+    };
+}

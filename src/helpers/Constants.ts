@@ -313,3 +313,17 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     current_row_template: '',
   }
 };
+/******************************************************************************
+ *                          SUGGESTER CONSTANTS
+ ******************************************************************************/
+export const SUGGESTER_REGEX = Object.freeze({
+  LINK: /\B\[\[([^\]]*)$/,
+  EMBED: /\B!\[\[([^\]]*)$/,
+
+  LINK_HEADING: /\B\[\[([^#\]]+)#([^\]]*)$/,
+  EMBED_HEADING: /\B!\[\[([^#\]]+)#([^\]]*)$/,
+
+  LINK_BLOCK: /\B\[\[([^#\]]+)#?\^([^\]]*)$/,
+  EMBED_BLOCK: /\B!\[\[([^#\]]+)#?\^([^\]]*)$/
+
+});

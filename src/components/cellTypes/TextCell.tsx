@@ -1,7 +1,13 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
-import React, { useEffect, useRef } from "react";
+import React, {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  MouseEventHandler,
+  useEffect,
+  useRef,
+} from "react";
 import { useState } from "react";
 import { LOGGER } from "services/Logger";
 
@@ -59,12 +65,12 @@ const TextCell = (props: CellComponentProps) => {
     }
   }, [editableMdRef]);
 
-  const handleEditableOnclick = (event: any) => {
+  const handleEditableOnclick: MouseEventHandler<HTMLSpanElement> = () => {
     setDirtyCell(true);
   };
 
   // onChange handler
-  const handleOnChange = (event: any) => {
+  const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setDirtyCell(true);
     // cancelling previous timeouts
     if (editNoteTimeout) {
@@ -81,7 +87,7 @@ const TextCell = (props: CellComponentProps) => {
     );
   };
 
-  function onChange(changedValue: string) {
+  const onChange = (changedValue: string) => {
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
@@ -89,15 +95,15 @@ const TextCell = (props: CellComponentProps) => {
       columns,
       ddbbConfig
     );
-  }
+  };
 
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === "Enter") {
-      event.target.blur();
+      (event.target as any).blur();
     }
   };
 
-  const handleOnBlur = (event: any) => {
+  const handleOnBlur = () => {
     setDirtyCell(false);
   };
 

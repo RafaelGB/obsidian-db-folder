@@ -55,6 +55,7 @@
 		"@tanstack/match-sorter-utils": "8.1.1",
 		"@tanstack/react-table": "8.5.11",
 		"luxon": "3.0.1",
+		"fuse.js": "6.6.2",
 		"monkey-around": "2.3.0",
 		"obsidian-dataview": "0.5.42",
 		"react": "18.2.0",
