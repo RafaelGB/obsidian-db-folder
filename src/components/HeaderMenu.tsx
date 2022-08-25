@@ -240,6 +240,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                         padding: "4px 0px",
                       }}
                     >
+                      {/** Childs of typesButtons */}
                       {typesButtons}
                     </div>
                   )}

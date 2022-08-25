@@ -1,37 +1,19 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
-import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
-import React, {
-  ChangeEventHandler,
-  KeyboardEventHandler,
-  MouseEventHandler,
-  useEffect,
-  useRef,
-} from "react";
+import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import { LOGGER } from "services/Logger";
+import EditorCell from "components/cellTypes/helpers/EditorCell";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, row, column, table } = defaultCell;
+  const { cell, column } = defaultCell;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
-  /** Columns information */
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
-  );
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
-  );
 
   const [cellValue, setCellValue] = useState(cell.getValue());
   const [dirtyCell, setDirtyCell] = useState(false);
-
-  const [editNoteTimeout, setEditNoteTimeout] = useState(null);
 
   /**
    * Render markdown content of Obsidian on load
@@ -69,51 +51,12 @@ const TextCell = (props: CellComponentProps) => {
     setDirtyCell(true);
   };
 
-  // onChange handler
-  const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setDirtyCell(true);
-    // cancelling previous timeouts
-    if (editNoteTimeout) {
-      clearTimeout(editNoteTimeout);
-    }
-    // first update the input text as user type
-    setCellValue(event.target.value);
-    // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
-    setEditNoteTimeout(
-      setTimeout(() => {
-        onChange(event.target.value);
-        // timeout until event is triggered after user has stopped typing
-      }, 1500)
-    );
-  };
-
-  const onChange = (changedValue: string) => {
-    dataActions.updateCell(
-      row.index,
-      column.columnDef as TableColumn,
-      changedValue,
-      columns,
-      ddbbConfig
-    );
-  };
-
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === "Enter") {
-      (event.target as any).blur();
-    }
-  };
-
-  const handleOnBlur = () => {
-    setDirtyCell(false);
-  };
-
   return dirtyCell ? (
-    <input
-      value={(cellValue && cellValue.toString()) || ""}
-      onChange={handleOnChange}
-      onKeyDown={handleKeyDown}
-      onBlur={handleOnBlur}
-      ref={editableMdRef}
+    <EditorCell
+      defaultCell={defaultCell}
+      cellValue={cellValue}
+      setCellValue={setCellValue}
+      setDirtyCell={setDirtyCell}
     />
   ) : (
     <span

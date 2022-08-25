@@ -178,28 +178,18 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
                 style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
                 onClick={() => setShowAdd(true)}
               >
-                <Relationship
-                  value={
-                    <span className="svg-icon-sm svg-text">
-                      <PlusIcon />
-                    </span>
-                  }
-                  backgroundColor={grey(200)}
-                />
+                <span className="svg-icon-sm svg-text">
+                  <PlusIcon />
+                </span>
               </div>
               <div
                 className="cursor-pointer"
                 style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
                 onClick={handleRemoveOption}
               >
-                <Relationship
-                  value={
-                    <span className="svg-icon-sm svg-text">
-                      <CrossIcon />
-                    </span>
-                  }
-                  backgroundColor={grey(200)}
-                />
+                <span className="svg-icon-sm svg-text">
+                  <CrossIcon />
+                </span>
               </div>
             </div>
           </div>

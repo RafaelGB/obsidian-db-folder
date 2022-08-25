@@ -11,6 +11,12 @@ export type CellComponentProps = {
     defaultCell: CellContext<RowDataType, Literal>;
 }
 
+export type EditorCellComponentProps = {
+    cellValue: Literal;
+    setCellValue: (value: Literal) => void;
+    setDirtyCell: (value: boolean) => void;
+} & CellComponentProps;
+
 export type DataviewFiltersProps = {
     table: Table<RowDataType>;
 };
