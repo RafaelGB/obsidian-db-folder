@@ -13,7 +13,8 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, implementation } = tableActionResponse;
         implementation.actions.addRow = (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
-            const filepath = `${view.file.parent.path}/${filename}.md`;
+            const trimedFilename = filename.replace(/\.[^/.]+$/, "").trim();
+            const filepath = `${view.file.parent.path}/${trimedFilename}.md`;
             const rowRecord: RowDatabaseFields = { inline: {}, frontmatter: {} };
             columns
                 .filter((column: TableColumn) => !column.isMetadata)
@@ -27,7 +28,7 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
             // Add note to persist row
             VaultManagerDB.create_markdown_file(
                 view.file.parent,
-                filename,
+                trimedFilename,
                 rowRecord,
                 ddbbConfig
             );
