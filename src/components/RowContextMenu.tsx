@@ -20,12 +20,10 @@ const rowContextMenuColumn: TableColumn = {
   header: () => null,
   cell: ({ row, table }) => {
     const { tableState } = table.options.meta;
-    const [hoveredRow, rowActions] = tableState.data((state) => [
-      state.hoveredRow,
-      state.actions,
-    ]);
+    const rowActions = tableState.data((state) => state.actions);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
       row.getToggleSelectedHandler()({
         event: {
@@ -36,7 +34,6 @@ const rowContextMenuColumn: TableColumn = {
       });
       setAnchorEl(event.currentTarget);
     };
-
     const handleMenuClose = () => {
       setAnchorEl(null);
       row.getToggleSelectedHandler()({
@@ -51,8 +48,7 @@ const rowContextMenuColumn: TableColumn = {
     const handleDeleteRow = () => {
       rowActions.removeRow(row.original);
     };
-
-    return hoveredRow === row.id ? (
+    return (
       <>
         <IconButton
           size="small"
@@ -64,6 +60,7 @@ const rowContextMenuColumn: TableColumn = {
           aria-expanded={open ? "true" : undefined}
           aria-haspopup="true"
           onClick={handleClick}
+          key={`row-context-button-${row.id}`}
         >
           <DragIndicatorIcon />
         </IconButton>
@@ -75,17 +72,25 @@ const rowContextMenuColumn: TableColumn = {
           onClick={handleMenuClose}
           transformOrigin={{ horizontal: "left", vertical: "top" }}
           anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+          key={`row-context-Menu-${row.id}`}
         >
-          <MenuItem onClick={handleDeleteRow}>
-            <ListItemIcon>
-              <DeleteIcon fontSize="small" />
+          <MenuItem
+            onClick={handleDeleteRow}
+            key={`row-context-Menu-MenuItem-Delete-${row.id}`}
+          >
+            <ListItemIcon
+              key={`row-context-Menu-MenuItem-ListItemIcon-${row.id}`}
+            >
+              <DeleteIcon
+                fontSize="small"
+                key={`row-context-Menu-MenuItem-DeleteIcon-${row.id}`}
+              />
             </ListItemIcon>
             Delete
           </MenuItem>
         </Menu>
       </>
-    ) : null;
+    );
   },
 };
-
 export default rowContextMenuColumn;
