@@ -3,19 +3,21 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import TextField from "@mui/material/TextField";
 import { PaginationProps } from "cdm/MenuBarModel";
 import React from "react";
+import { PaginationButtonStyle } from "components/styles/NavBarSearchStyles";
 function PaginationTable(props: PaginationProps) {
   const { table } = props;
   const [page, setPage] = React.useState(null);
   return (
     <>
       <ButtonGroup
-        variant="text"
+        variant="contained"
         size="small"
         key={`ButtonGroup-PaginationTable`}
       >
         <Button
           size="small"
           key={`Button-Pagination-Initial`}
+          sx={PaginationButtonStyle}
           onClick={() => {
             table.setPageIndex(0);
             setPage("");
@@ -27,6 +29,7 @@ function PaginationTable(props: PaginationProps) {
         <Button
           size="small"
           key={`Button-Pagination-Previous`}
+          sx={PaginationButtonStyle}
           onClick={() => {
             table.previousPage();
             setPage(table.getState().pagination.pageIndex);
@@ -60,6 +63,7 @@ function PaginationTable(props: PaginationProps) {
         <Button
           size="small"
           key={`Button-Pagination-Next`}
+          sx={PaginationButtonStyle}
           onClick={() => {
             table.nextPage();
             setPage(table.getState().pagination.pageIndex + 2);
@@ -71,6 +75,7 @@ function PaginationTable(props: PaginationProps) {
         <Button
           size="small"
           key={`Button-Pagination-Last`}
+          sx={PaginationButtonStyle}
           onClick={() => {
             table.setPageIndex(table.getPageCount() - 1);
             setPage(table.getPageCount());
@@ -79,25 +84,7 @@ function PaginationTable(props: PaginationProps) {
         >
           {">>"}
         </Button>
-        {/* <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="border p-1 rounded w-16"
-          />
-        </span>
+        {/*
         <select
           value={table.getState().pagination.pageSize}
           onChange={(e) => {

@@ -219,6 +219,8 @@ export const StyleVariables = Object.freeze({
   TEXT_FAINT: 'var(--text-faint)',
   TEXT_MUTED: 'var(--text-muted)',
   TEXT_NORMAL: 'var(--text-normal)',
+  TEXT_ACCENT_HOVER: 'var(--text-accent-hover)',
+  TEXT_ACCENT: 'var(--text-accent)',
 });
 
 export const SourceDataTypes = Object.freeze({
