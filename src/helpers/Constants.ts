@@ -219,6 +219,8 @@ export const StyleVariables = Object.freeze({
   TEXT_FAINT: 'var(--text-faint)',
   TEXT_MUTED: 'var(--text-muted)',
   TEXT_NORMAL: 'var(--text-normal)',
+  TEXT_ACCENT_HOVER: 'var(--text-accent-hover)',
+  TEXT_ACCENT: 'var(--text-accent)',
 });
 
 export const SourceDataTypes = Object.freeze({
@@ -311,5 +313,20 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     frontmatter_quote_wrap: false,
     row_templates_folder: '/',
     current_row_template: '',
+    pagination_size: 10,
   }
 };
+/******************************************************************************
+ *                          SUGGESTER CONSTANTS
+ ******************************************************************************/
+export const SUGGESTER_REGEX = Object.freeze({
+  LINK: /\B\[\[([^\]]*)$/,
+  EMBED: /\B!\[\[([^\]]*)$/,
+
+  LINK_HEADING: /\B\[\[([^#\]]+)#([^\]]*)$/,
+  EMBED_HEADING: /\B!\[\[([^#\]]+)#([^\]]*)$/,
+
+  LINK_BLOCK: /\B\[\[([^#\]]+)#?\^([^\]]*)$/,
+  EMBED_BLOCK: /\B!\[\[([^#\]]+)#?\^([^\]]*)$/
+
+});

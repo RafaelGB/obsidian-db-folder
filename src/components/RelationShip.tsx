@@ -11,7 +11,7 @@ export default function Relationship(relationShipProps: RelationshipProps) {
         backgroundColor: backgroundColor,
       }}
     >
-      {value}
+      {value && value.toString()}
     </span>
   );
 }

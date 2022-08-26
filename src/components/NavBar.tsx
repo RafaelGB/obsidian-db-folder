@@ -3,6 +3,7 @@ import CsvButton from "components/CsvButton";
 import MenuIcon from "components/img/MenuIcon";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
+import PaginationTable from "components/PaginationTable";
 import { NavBarConfig, StyleVariables } from "helpers/Constants";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -12,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import Typography from "@mui/material/Typography";
-import DataviewFilters from "./reducers/DataviewFilters";
+import DataviewFilters from "components/reducers/DataviewFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -87,6 +88,7 @@ export function NavBar(navBarProps: NavBarProps) {
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
           <DataviewFilters table={table} />
+          <PaginationTable table={table} />
         </Toolbar>
       </AppBar>
     </Box>

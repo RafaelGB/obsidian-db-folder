@@ -21,9 +21,9 @@ const useDataStore = (view: DatabaseView) => {
 
 // TODO - find a better way to mock this
 function mockDataState(): DataState {
+
     return {
         rows: [],
-        hoveredRow: "0",
         actions: {
             addRow: null,
             updateCell: null,
@@ -32,7 +32,6 @@ function mockDataState(): DataState {
             removeDataOfColumn: null,
             parseDataOfColumn: null,
             dataviewRefresh: null,
-            setHoveredRow: null,
         },
     }
 }

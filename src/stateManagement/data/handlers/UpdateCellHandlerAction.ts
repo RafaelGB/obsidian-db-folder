@@ -49,8 +49,13 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                             ? `${view.file.parent.path}/${value}/${rowTFile.name}`
                             : `${view.file.parent.path}/${rowTFile.name}`;
 
+                    const recordRow: Record<string, Literal> = {};
+                    Object.entries(state.rows[rowIndex]).forEach(([key, value]) => {
+                        recordRow[key] = value as Literal;
+                    });
+                    state.rows[rowIndex]
                     state.rows[rowIndex].__note__ = new NoteInfo({
-                        ...state.rows[rowIndex],
+                        ...recordRow,
                         file: {
                             path: auxPath,
                         },

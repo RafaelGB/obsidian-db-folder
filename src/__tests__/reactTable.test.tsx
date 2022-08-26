@@ -7,9 +7,7 @@ import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { App } from "obsidian";
 import StateManager from "StateManager";
 import { jest } from "@jest/globals";
-/**
- * @jest-environment jsdom
- */
+
 describe("React-table", () => {
   test("TODO React testing", async () => {
     expect(true).toBeTruthy();

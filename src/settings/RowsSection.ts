@@ -2,6 +2,7 @@ import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 import { TemplateFolderNewRowsHandler } from "settings/handlers/rows/TemplateFolderNewRowsHandler";
+import { PaginationSizeHandler } from "settings/handlers/rows/PaginationSizeHandler";
 import { AbstractHandler } from "patterns/AbstractHandler";
 
 class RowsSection extends AbstractChain<SettingHandlerResponse> {
@@ -14,7 +15,8 @@ class RowsSection extends AbstractChain<SettingHandlerResponse> {
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
         return [
-            new TemplateFolderNewRowsHandler()
+            new TemplateFolderNewRowsHandler(),
+            new PaginationSizeHandler()
         ]
     }
 }

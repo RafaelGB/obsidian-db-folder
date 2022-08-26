@@ -1,7 +1,7 @@
 import { HeaderMenuProps } from "cdm/HeaderModel";
 
 export type HeaderActionResponse = {
-    buttons: any[]
+    buttons: JSX.Element[]
     headerMenuProps: HeaderMenuProps
     hooks: {
         setExpanded: (expanded: boolean) => void,

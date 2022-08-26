@@ -1,5 +1,5 @@
 import '@tanstack/table-table';
-import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { RowDataType } from "cdm/FolderModel";
 import { TableStateInterface } from "cdm/TableStateInterface";
 import { DatabaseView } from 'DatabaseView';
 

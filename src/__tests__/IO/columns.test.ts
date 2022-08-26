@@ -1,7 +1,7 @@
 import { obtainMetadataColumns, obtainColumnsFromFolder } from "components/Columns";
 import { DEFAULT_SETTINGS, MetadataColumns } from "helpers/Constants";
 import { generateYamlColumns } from "mock/mockTableUtils";
-describe("Columns", () => {
+describe("IO.columns", () => {
     /** Metadata columns */
     test('obtainMetadataColumns()', async () => {
         // Check if mandatory columns exists

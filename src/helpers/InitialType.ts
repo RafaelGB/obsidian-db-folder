@@ -1,7 +1,7 @@
 import { ColumnSort } from "@tanstack/react-table";
 import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
 
-function obtainInitialType(columns: TableColumn[], rows: RowDataType[]): InitialType {
+function obtainInitialType(columns: TableColumn[]): InitialType {
     const initialType: InitialType = {};
     const sortElemList: ColumnSort[] = [];
     columns.forEach((column: TableColumn) => {

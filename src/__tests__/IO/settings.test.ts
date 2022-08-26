@@ -5,10 +5,9 @@ import DatabaseStringToYamlParser from "parsers/DatabaseStringToYamlParser";
 
 jest.mock("obsidian",
     () => {
-
         return {
             parseYaml: jest.fn(() => {
-                return parseYamlMock(1, 1);
+                return parseYamlMock(1);
             }),
         };
     }
@@ -25,7 +24,7 @@ describe("Settings", () => {
     });
     /** Parse string YAML */
     test("Parse Database string to Yaml", () => {
-        const yamlResponse: YamlHandlerResponse = DatabaseStringToYamlParser("test");
+        const yamlResponse: YamlHandlerResponse = DatabaseStringToYamlParser("This values does not matter - mocked response");
         expect(yamlResponse.yaml.name).toBeDefined();
         expect(yamlResponse.yaml.description).toBeDefined();
         expect(yamlResponse.yaml.columns).toBeDefined();

@@ -19,7 +19,7 @@ const useRowTemplateStore = (view: DatabaseView) => {
             }),
             clear: () => set({ template: "" }),
             update: (template: string) => set(
-                (updater) => {
+                () => {
                     return { template: template };
                 }
             ),

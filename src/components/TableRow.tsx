@@ -6,16 +6,12 @@ import { Literal } from "obsidian-dataview";
 import React from "react";
 
 export default function TableRow(headerProps: TableCellProps) {
-  const { row, tableStore } = headerProps;
-  const rowActions = tableStore.data((state) => state.actions);
+  const { row } = headerProps;
 
   return (
     <div
       key={`cell-tr-${row.id}`}
       className={`${c(row.getIsSelected() ? " tr-hovered" : "tr")}`}
-      onMouseEnter={() => {
-        rowActions.setHoveredRow(row.id);
-      }}
     >
       {row
         .getVisibleCells()

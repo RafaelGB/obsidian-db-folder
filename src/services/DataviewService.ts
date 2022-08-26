@@ -22,39 +22,43 @@ class DataviewProxy {
         }
     }
 
-    filter(condition: FilterCondition[], p: any): boolean {
+    filter(condition: FilterCondition[], p: Record<string, Literal>): boolean {
         if (!condition || condition.length === 0) return true;
         for (const c of condition) {
-            switch (getOperatorFilterValue(c.operator)) {
-                case OperatorFilter.EQUAL:
-                    if (p[c.field] !== c.value) return false;
-                    break;
-                case OperatorFilter.NOT_EQUAL:
-                    if (p[c.field] === c.value) return false;
-                    break;
-                case OperatorFilter.GREATER_THAN:
-                    if (p[c.field] <= c.value) return false;
-                    break;
-                case OperatorFilter.LESS_THAN:
-                    if (p[c.field] >= c.value) return false;
-                    break;
-                case OperatorFilter.GREATER_THAN_OR_EQUAL:
-                    if (p[c.field] < c.value) return false;
-                    break;
-                case OperatorFilter.LESS_THAN_OR_EQUAL:
-                    if (p[c.field] > c.value) return false;
-                    break;
-                case OperatorFilter.CONTAINS:
-                    if (p[c.field] !== undefined && !p[c.field].includes(c.value)) return false;
-                    break;
-                case OperatorFilter.STARTS_WITH:
-                    if (p[c.field] !== undefined && !p[c.field].startsWith(c.value)) return false;
-                    break;
-                case OperatorFilter.ENDS_WITH:
-                    if (p[c.field] !== undefined && !p[c.field].endsWith(c.value)) return false;
-                    break;
-                default:
-                    throw new Error(`Unknown operator ${c.operator}`);
+            const value = p[c.field];
+            if (value !== undefined) {
+                const wrapped = this.wrapLiteral(value);
+                switch (getOperatorFilterValue(c.operator)) {
+                    case OperatorFilter.EQUAL:
+                        if (wrapped.value !== c.value) return false;
+                        break;
+                    case OperatorFilter.NOT_EQUAL:
+                        if (wrapped.value === c.value) return false;
+                        break;
+                    case OperatorFilter.GREATER_THAN:
+                        if (wrapped.value <= c.value) return false;
+                        break;
+                    case OperatorFilter.LESS_THAN:
+                        if (wrapped.value >= c.value) return false;
+                        break;
+                    case OperatorFilter.GREATER_THAN_OR_EQUAL:
+                        if (wrapped.value < c.value) return false;
+                        break;
+                    case OperatorFilter.LESS_THAN_OR_EQUAL:
+                        if (wrapped.value > c.value) return false;
+                        break;
+                    case OperatorFilter.CONTAINS:
+                        if (wrapped.type === "string" && !wrapped.value.includes(c.value)) return false;
+                        break;
+                    case OperatorFilter.STARTS_WITH:
+                        if (wrapped.type === "string" && !wrapped.value.startsWith(c.value)) return false;
+                        break;
+                    case OperatorFilter.ENDS_WITH:
+                        if (wrapped.type === "string" && !wrapped.value.endsWith(c.value)) return false;
+                        break;
+                    default:
+                        throw new Error(`Unknown operator ${c.operator}`);
+                }
             }
         }
         return true;

@@ -8,6 +8,7 @@ import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parse
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
 import { SourceDataTypes } from "helpers/Constants";
+import { Literal } from "obsidian-dataview";
 class VaultManager {
   private static instance: VaultManager;
 
@@ -94,14 +95,15 @@ class VaultManager {
    */
   async obtainContentFromTfile(tfile: TFile): Promise<string> {
     return await app.vault.read(tfile);
+
   }
 
-  ontainCurrentFrontmatter(content: string): Record<string, any> {
+  ontainCurrentFrontmatter(content: string): Record<string, Literal> {
     const match = content.match(/^---\s+([\w\W]+?)\s+---/);
     if (match) {
       const frontmatterRaw = match[1];
       const yaml = parseYaml(frontmatterRaw);
-      const frontmatter: Record<string, any> = {};
+      const frontmatter: Record<string, Literal> = {};
       Object.keys(yaml)
 
         .forEach(key => {

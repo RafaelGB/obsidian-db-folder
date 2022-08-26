@@ -4,6 +4,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getExpandedRowModel,
+  getPaginationRowModel,
   ColumnDef,
   ColumnOrderState,
   flexRender,
@@ -42,7 +43,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
-import rowContextMenuColumn from "./RowContextMenu";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -246,6 +246,7 @@ export function Table(tableData: TableDataType) {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     debugTable: globalConfig.enable_debug_mode,
     debugHeaders: globalConfig.enable_debug_mode,
     debugColumns: globalConfig.enable_debug_mode,

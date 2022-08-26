@@ -1,4 +1,5 @@
 import { alpha, styled } from "@mui/material/styles";
+import { StyleVariables } from "helpers/Constants";
 
 export const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -40,3 +41,18 @@ export const DebouncedInputWrapper = styled('div')(({ theme }) => ({
         },
     },
 }));
+
+
+export const PaginationButtonStyle = {
+    mx: {
+        ":disabled": {
+            opacity: 0.5,
+            cursor: "not-allowed",
+            backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+        },
+        ":hover": {
+            backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
+        },
+        backgroundColor: StyleVariables.TEXT_ACCENT,
+    }
+}

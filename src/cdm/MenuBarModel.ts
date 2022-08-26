@@ -17,3 +17,5 @@ export type GlobalFilterProps = {
     hits: number;
     globalFilter: string;
 };
+
+export type PaginationProps = Pick<NavBarProps, "table">;
