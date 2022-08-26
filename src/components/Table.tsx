@@ -43,7 +43,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
-import rowContextMenuColumn from "./RowContextMenu";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,

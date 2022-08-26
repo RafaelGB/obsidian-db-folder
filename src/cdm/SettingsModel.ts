@@ -21,18 +21,19 @@ export interface GlobalSettings {
 }
 
 export interface LocalSettings {
-    group_folder_column: string;
     cell_size: string;
-    sticky_first_column: boolean;
+    current_row_template: string;
+    group_folder_column: string;
+    frontmatter_quote_wrap: boolean;
+    pagination_size: number;
     remove_field_when_delete_column: boolean;
     show_metadata_created: boolean;
     show_metadata_modified: boolean;
     show_metadata_tasks: boolean;
-    source_data: string;
     source_form_result: string;
-    frontmatter_quote_wrap: boolean;
+    source_data: string;
+    sticky_first_column: boolean;
     row_templates_folder: string;
-    current_row_template: string;
 }
 
 export interface FilterSettings {

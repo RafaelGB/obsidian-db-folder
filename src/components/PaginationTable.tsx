@@ -2,11 +2,21 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TextField from "@mui/material/TextField";
 import { PaginationProps } from "cdm/MenuBarModel";
-import React from "react";
+import React, { useEffect } from "react";
 import { PaginationButtonStyle } from "components/styles/NavBarSearchStyles";
 function PaginationTable(props: PaginationProps) {
   const { table } = props;
   const [page, setPage] = React.useState(null);
+
+  // UseSelector to get the current page number
+  const paginationSize = table.options.meta.tableState.configState(
+    (state) => state.ddbbConfig.pagination_size
+  );
+
+  useEffect(() => {
+    table.setPageSize(paginationSize);
+  }, [paginationSize]);
+
   return (
     <>
       <ButtonGroup

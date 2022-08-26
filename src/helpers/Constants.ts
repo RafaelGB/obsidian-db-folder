@@ -313,6 +313,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     frontmatter_quote_wrap: false,
     row_templates_folder: '/',
     current_row_template: '',
+    pagination_size: 10,
   }
 };
 /******************************************************************************
