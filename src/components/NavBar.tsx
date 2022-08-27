@@ -37,6 +37,9 @@ export function NavBar(navBarProps: NavBarProps) {
           color: StyleVariables.TEXT_MUTED,
           backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
           width: "calc(100% - 20px)",
+          boxShadow: "none",
+          position: "fixed",
+          left: 0,
         }}
       >
         <Toolbar>
@@ -91,6 +94,7 @@ export function NavBar(navBarProps: NavBarProps) {
           <PaginationTable table={table} />
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </Box>
   );
 }
