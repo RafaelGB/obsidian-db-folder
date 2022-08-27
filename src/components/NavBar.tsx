@@ -94,7 +94,6 @@ export function NavBar(navBarProps: NavBarProps) {
           <PaginationTable table={table} />
         </Toolbar>
       </AppBar>
-      <Toolbar />
     </Box>
   );
 }
