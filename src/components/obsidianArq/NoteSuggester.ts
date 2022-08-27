@@ -1,5 +1,4 @@
 import { SUGGESTER_REGEX } from "helpers/Constants";
-import { TFile } from "obsidian";
 import Fuse from 'fuse.js';
 
 export function suggesterFilesInFunctionOf(text: string): boolean {
@@ -46,4 +45,3 @@ export function suggesterFilesInFunctionOf(text: string): boolean {
         return true;
     }
 }
-
