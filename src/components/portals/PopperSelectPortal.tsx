@@ -2,7 +2,11 @@ import PlusIcon from "components/img/Plus";
 import Relationship from "components/RelationShip";
 import { grey, randomColor } from "helpers/Colors";
 import { StyleVariables } from "helpers/Constants";
-import React, { useState } from "react";
+import React, {
+  KeyboardEventHandler,
+  MouseEventHandler,
+  useState,
+} from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { CellComponentProps } from "cdm/ComponentsModel";
@@ -47,7 +51,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
     }
   });
 
-  function handleRemoveOption(e: any) {
+  const handleRemoveOption: MouseEventHandler<HTMLDivElement> = () => {
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
@@ -57,7 +61,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
       true
     );
     setShowSelect(false);
-  }
+  };
 
   function handleOptionClick(option: {
     label: string;
@@ -76,22 +80,21 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
     setShowSelect(false);
   }
 
-  function handleOptionBlur(e: any) {
+  const handleOptionBlur = (e: any) => {
     if (e.target.value !== "") {
       addNewOption(e);
     }
     setShowAdd(false);
-  }
-  /**
-   *
-   * @param e Handler for click event on cell
-   */
-  function handleOptionKeyDown(e: any) {
+  };
+
+  const handleOptionKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    e: any
+  ) => {
     if (e.key === "Enter" && e.target.value !== "") {
       addNewOption(e);
       setShowAdd(false);
     }
-  }
+  };
   function addNewOption(e: any) {
     // check if option already exists
     const alreadyExist = tableColumn.options.find(

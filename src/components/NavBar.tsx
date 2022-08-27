@@ -94,6 +94,13 @@ export function NavBar(navBarProps: NavBarProps) {
           <PaginationTable table={table} />
         </Toolbar>
       </AppBar>
+      {/** Hacky to stick the bar without move one row before the header*/}
+      <Toolbar
+        style={{
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      />
     </Box>
   );
 }
