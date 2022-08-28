@@ -1,5 +1,9 @@
 import { EditorCellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
+import VirtualizedSuggestionList, {
+  suggesterFilesInFunctionOf,
+} from "components/obsidianArq/NoteSuggester";
+
 import React, { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";
 import { useState } from "react";
 
@@ -19,6 +23,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
     (state) => state.ddbbConfig
   );
 
+  const [triggerSuggestions, setTriggerSuggestions] = useState(false);
   const [editorValue, setEditorValue] = useState(cellValue);
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
 
@@ -28,6 +33,12 @@ const EditorCell = (props: EditorCellComponentProps) => {
     // cancelling previous timeouts
     if (editNoteTimeout) {
       clearTimeout(editNoteTimeout);
+    }
+
+    if (suggesterFilesInFunctionOf(value)) {
+      setTriggerSuggestions(true);
+    } else if (triggerSuggestions) {
+      setTriggerSuggestions(false);
     }
 
     // first update the input text as user type
@@ -77,6 +88,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
         ref={editableMdRef}
         autoFocus
       />
+      {triggerSuggestions && <VirtualizedSuggestionList />}
     </>
   );
 };

@@ -110,14 +110,14 @@ class Suggest<T> {
 }
 
 export abstract class TextInputSuggest<T> implements ISuggestOwner<T> {
-    protected inputEl: HTMLInputElement | HTMLTextAreaElement;
+    protected inputEl: HTMLInputElement;
 
     private popper: PopperInstance;
     private scope: Scope;
     private suggestEl: HTMLElement;
     private suggest: Suggest<T>;
 
-    constructor(inputEl: HTMLInputElement | HTMLTextAreaElement) {
+    constructor(inputEl: HTMLInputElement) {
         this.inputEl = inputEl;
         this.scope = new Scope();
 

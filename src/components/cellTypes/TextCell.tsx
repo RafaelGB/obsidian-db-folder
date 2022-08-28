@@ -4,10 +4,11 @@ import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import { LOGGER } from "services/Logger";
 import EditorCell from "components/cellTypes/helpers/EditorCell";
+import { MarkdownEditor } from "./Editor/MarkdownEditor";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, column } = defaultCell;
+  const { cell, column, table } = defaultCell;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const editableMdRef = useRef<HTMLInputElement>();
@@ -52,11 +53,23 @@ const TextCell = (props: CellComponentProps) => {
   };
 
   return dirtyCell ? (
-    <EditorCell
-      defaultCell={defaultCell}
-      cellValue={cellValue}
-      setCellValue={setCellValue}
-      setDirtyCell={setDirtyCell}
+    // <EditorCell
+    //   defaultCell={defaultCell}
+    //   cellValue={cellValue}
+    //   setCellValue={setCellValue}
+    //   setDirtyCell={setDirtyCell}
+    // />
+    <MarkdownEditor
+      ref={editableMdRef}
+      className={"item-input"}
+      placeholder="Card title..."
+      onEnter={() => console.log("onEnter")}
+      onEscape={() => console.log("onEscape")}
+      onSubmit={() => console.log("onSubmit")}
+      value={cellValue ? cellValue.toString() : ""}
+      onChange={(e) => setCellValue((e.target as HTMLInputElement).value)}
+      onPaste={() => console.log("onPaste")}
+      view={table.options.meta.view}
     />
   ) : (
     <span
