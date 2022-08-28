@@ -1,4 +1,3 @@
-import { suggesterFilesInFunctionOf } from "components/obsidianArq/NoteSuggester";
 import { mockReset, mockDeep, DeepMockProxy } from "jest-mock-extended";
 import { generateTFileMock } from "mock/mockObsidianUtils";
 
@@ -19,12 +18,6 @@ describe("Components.Cells.editSuggester", () => {
         global.app = mockGlobalApp;
     });
     test('fileSuggester', () => {
-        suggesterFilesInFunctionOf("[[fileName");
-        suggesterFilesInFunctionOf("![[fileName");
-        suggesterFilesInFunctionOf("[[fileName#heading");
-        suggesterFilesInFunctionOf("![[fileName#heading");
-        suggesterFilesInFunctionOf("[[fileName#heading^block");
-        suggesterFilesInFunctionOf("![[fileName#heading^block");
         expect(true).toBeTruthy();
     });
 

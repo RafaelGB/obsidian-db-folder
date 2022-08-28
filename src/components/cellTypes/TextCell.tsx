@@ -3,14 +3,14 @@ import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import { LOGGER } from "services/Logger";
-import EditorCell from "components/cellTypes/helpers/EditorCell";
+import EditorCell from "components/cellTypes/EditorCell";
+import { MarkdownEditor } from "./Editor/MarkdownEditor";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
   const { cell, column } = defaultCell;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
-  const editableMdRef = useRef<HTMLInputElement>();
 
   const [cellValue, setCellValue] = useState(cell.getValue());
   const [dirtyCell, setDirtyCell] = useState(false);
@@ -23,7 +23,6 @@ const TextCell = (props: CellComponentProps) => {
       // End useEffect
       return;
     }
-
     if (containerCellRef.current !== undefined) {
       containerCellRef.current.innerHTML = "";
       renderMarkdown(
@@ -34,18 +33,6 @@ const TextCell = (props: CellComponentProps) => {
       );
     }
   }, [dirtyCell]);
-
-  /**
-   * Focus input when cell is clicked
-   */
-  useEffect(() => {
-    if (editableMdRef.current) {
-      LOGGER.debug(
-        `useEffect hooked with editableMdRef. current value & dirtyCell: ${cellValue} ${dirtyCell}`
-      );
-      editableMdRef.current.focus();
-    }
-  }, [editableMdRef]);
 
   const handleEditableOnclick: MouseEventHandler<HTMLSpanElement> = () => {
     setDirtyCell(true);

@@ -1,13 +1,9 @@
 import { EditorCellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import React, {
-  ChangeEventHandler,
-  KeyboardEventHandler,
-  useEffect,
-  useRef,
-} from "react";
+
+import React, { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";
 import { useState } from "react";
-import { LOGGER } from "services/Logger";
+import { MarkdownEditor } from "./Editor/MarkdownEditor";
 
 const EditorCell = (props: EditorCellComponentProps) => {
   const { defaultCell, cellValue, setCellValue, setDirtyCell } = props;
@@ -25,33 +21,24 @@ const EditorCell = (props: EditorCellComponentProps) => {
     (state) => state.ddbbConfig
   );
 
+  const [triggerSuggestions, setTriggerSuggestions] = useState(false);
   const [editorValue, setEditorValue] = useState(cellValue);
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
 
-  /**
-   * Focus input when cell is clicked
-   */
-  useEffect(() => {
-    if (editableMdRef.current) {
-      LOGGER.debug(
-        `useEffect hooked with editableMdRef. current value & dirtyCell: ${editorValue}`
-      );
-      editableMdRef.current.focus();
-    }
-  }, [editableMdRef]);
-
   // onChange handler
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const { value } = event.target;
     // cancelling previous timeouts
     if (editNoteTimeout) {
       clearTimeout(editNoteTimeout);
     }
+
     // first update the input text as user type
-    setEditorValue(event.target.value);
+    setEditorValue(value);
     // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
     setEditNoteTimeout(
       setTimeout(() => {
-        onChange(event.target.value);
+        onChange(value);
         // timeout until event is triggered after user has stopped typing
       }, 1500)
     );
@@ -67,10 +54,9 @@ const EditorCell = (props: EditorCellComponentProps) => {
     );
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === "Enter") {
-      (event.target as any).blur();
-    }
+  const handleEnter = () => {
+    // Close input on enter
+    editableMdRef.current.blur();
   };
 
   const handleOnBlur = () => {
@@ -79,13 +65,19 @@ const EditorCell = (props: EditorCellComponentProps) => {
   };
 
   return (
-    <input
-      value={(editorValue && editorValue.toString()) || ""}
-      onChange={handleOnChange}
-      onKeyDown={handleKeyDown}
-      onBlur={handleOnBlur}
-      ref={editableMdRef}
-    />
+    <>
+      <MarkdownEditor
+        ref={editableMdRef}
+        value={(editorValue && editorValue.toString()) || ""}
+        onEnter={handleEnter}
+        onEscape={() => console.log("onEscape")}
+        onSubmit={() => console.log("onSubmit")}
+        onBlur={handleOnBlur}
+        onChange={handleOnChange}
+        view={table.options.meta.view}
+        autoFocus
+      />
+    </>
   );
 };
 

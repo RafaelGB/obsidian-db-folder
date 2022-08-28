@@ -37,6 +37,9 @@ export function NavBar(navBarProps: NavBarProps) {
           color: StyleVariables.TEXT_MUTED,
           backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
           width: "calc(100% - 20px)",
+          boxShadow: "none",
+          position: "fixed",
+          left: 0,
         }}
       >
         <Toolbar>
@@ -91,6 +94,13 @@ export function NavBar(navBarProps: NavBarProps) {
           <PaginationTable table={table} />
         </Toolbar>
       </AppBar>
+      {/** Hacky to stick the bar without move one row before the header*/}
+      <Toolbar
+        style={{
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      />
     </Box>
   );
 }

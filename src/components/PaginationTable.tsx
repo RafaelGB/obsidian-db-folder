@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import { PaginationButtonStyle } from "components/styles/NavBarSearchStyles";
 function PaginationTable(props: PaginationProps) {
   const { table } = props;
-  const [page, setPage] = React.useState(null);
+  const [page, setPage] = React.useState(1);
 
   // UseSelector to get the current page number
   const paginationSize = table.options.meta.tableState.configState(
@@ -30,7 +30,7 @@ function PaginationTable(props: PaginationProps) {
           sx={PaginationButtonStyle}
           onClick={() => {
             table.setPageIndex(0);
-            setPage("");
+            setPage(1);
           }}
           disabled={!table.getCanPreviousPage()}
         >
@@ -65,9 +65,12 @@ function PaginationTable(props: PaginationProps) {
           }}
           value={page}
           onChange={(e) => {
-            const page = e.target.value ? Number(e.target.value) - 1 : 0;
-            table.setPageIndex(page);
-            setPage(e.target.value ? Number(e.target.value) : null);
+            // Take min between max number of pages and the value of the input
+
+            const page = e.target.value ? Number(e.target.value) : 0;
+            const pageNumber = Math.min(page, table.getPageCount());
+            table.setPageIndex(pageNumber - 1);
+            setPage(pageNumber);
           }}
         />
         <Button

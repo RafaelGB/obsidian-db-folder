@@ -294,9 +294,11 @@ div.database-plugin__checkbox {
   align-items: center;
   font-size: 0.875rem;
   cursor: pointer;
-  position: sticky;
   bottom: 0;
   z-index: 3;
+  position: fixed;
+  opacity: 0.9;
+  left: 0;
   background-color: var(--background-primary);
 }
 
@@ -564,6 +566,83 @@ span.text-align-right {
 
 .database-plugin__tr-hovered {
   background-color: var(--background-secondary);
+}
+
+/**
+* AUTOCOMPLETE STYLES
+*/
+.database-plugin__autocomplete {
+  font-size: 0.875rem;
+  border: 1px solid var(--background-modifier-border);
+  background-color: var(--background-primary);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 20ch;
+  max-width: 40ch;
+  max-height: 200px;
+  border-radius: 6px;
+  box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.2);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.database-plugin__autocomplete li {
+  margin: 0;
+}
+
+.database-plugin__autocomplete li em {
+  opacity: 0.6;
+}
+
+.database-plugin .textcomplete-footer,
+.database-plugin .textcomplete-header {
+  display: none;
+}
+
+.database-plugin__autocomplete-item-active,
+.database-plugin__autocomplete-item {
+  border-top: 1px solid var(--background-modifier-border);
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+.database-plugin__autocomplete
+  .textcomplete-header
+  + .database-plugin__autocomplete-item,
+.database-plugin__autocomplete
+  .textcomplete-header
+  + .database-plugin__autocomplete-item-active {
+  border-top: none;
+}
+
+.database-plugin__autocomplete-item:hover,
+.database-plugin__autocomplete-item-active {
+  color: var(--text-on-accent);
+  background-color: var(--interactive-accent-hover);
+}
+
+.database-plugin__file-suggestion-wrapper {
+  display: flex;
+  line-height: 1.2;
+}
+
+.database-plugin__file-suggestion-icon {
+  flex-shrink: 0;
+  flex-grow: 0;
+  padding-right: 4px;
+}
+
+.database-plugin__file-suggestion-subtitle {
+  font-size: 0.875em;
+  color: var(--text-muted);
+}
+
+.database-plugin__autocomplete-item:hover
+  .database-plugin__file-suggestion-subtitle,
+.database-plugin__autocomplete-item-active
+  .database-plugin__file-suggestion-subtitle {
+  color: var(--text-on-accent);
 }
 
 /*
