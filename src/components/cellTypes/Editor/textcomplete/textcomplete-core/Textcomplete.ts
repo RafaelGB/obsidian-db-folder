@@ -1,11 +1,11 @@
 import { EventEmitter } from 'eventemitter3';
 import { getParentWindow } from 'helpers/WindowElement';
 
-import { Completer } from './Completer';
-import { Dropdown, DropdownOption } from './Dropdown';
-import { Editor } from './Editor';
-import { SearchResult } from './SearchResult';
-import { StrategyProps } from './Strategy';
+import { Completer } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/Completer';
+import { Dropdown, DropdownOption } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/Dropdown';
+import { Editor } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/Editor';
+import { SearchResult } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/SearchResult';
+import { StrategyProps } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/Strategy';
 
 export interface TextcompleteOption {
   dropdown?: DropdownOption;

@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 
-import { SearchResult } from './SearchResult';
-import { Strategy, StrategyProps } from './Strategy';
+import { SearchResult } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/SearchResult';
+import { Strategy, StrategyProps } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/Strategy';
 
 export class Completer extends EventEmitter {
   private readonly strategies: Strategy<unknown>[];

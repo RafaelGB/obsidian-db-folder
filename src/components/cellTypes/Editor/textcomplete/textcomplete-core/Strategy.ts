@@ -1,4 +1,4 @@
-import { SearchResult } from './SearchResult';
+import { SearchResult } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/SearchResult';
 
 export type SearchCallback<T> = (results: T[]) => void;
 type ReplaceResult = [string, string] | string | null;
@@ -24,7 +24,7 @@ export const DEFAULT_INDEX = 1;
 export class Strategy<T> {
   private cache: Record<string, T[]> = {};
 
-  constructor(private readonly props: StrategyProps<T>) {}
+  constructor(private readonly props: StrategyProps<T>) { }
 
   destroy(): this {
     this.cache = {};

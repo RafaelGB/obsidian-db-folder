@@ -1,4 +1,4 @@
-import { Strategy } from './Strategy';
+import { Strategy } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/Strategy';
 
 const MAIN = /\$&/g;
 const PLACE = /\$(\d)/g;
@@ -8,7 +8,7 @@ export class SearchResult<T = unknown> {
     public readonly data: T,
     private readonly term: string,
     private readonly strategy: Strategy<T>
-  ) {}
+  ) { }
 
   getReplacementData(beforeCursor: string): {
     start: number;

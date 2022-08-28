@@ -7,12 +7,13 @@ export const createCustomEvent = <T>(
   options?: CustomEventInit<T>
 ): CustomEvent<T> => {
   if (isCustomEventSupported) return new CustomEvent(type, options);
-  const event = doc.createEvent('CustomEvent');
-  event.initCustomEvent(
+  const event = new CustomEvent(
     type,
-    /* bubbles */ false,
-    options?.cancelable || false,
-    options?.detail || undefined
+    {
+      bubbles: false,
+      cancelable: options?.cancelable || false,
+      detail: options?.detail || undefined
+    }
   );
   return event;
 };

@@ -1,13 +1,13 @@
-import { getCaretCoordinates } from './textareaCaret';
-import { update } from '../undate/update';
+import { getCaretCoordinates } from 'components/cellTypes/Editor/textcomplete/textcomplete-textarea/textareaCaret';
+import { update } from 'components/cellTypes/Editor/textcomplete/undate/update';
 
 import {
   CursorOffset,
   Editor,
   SearchResult,
   createCustomEvent,
-} from '../textcomplete-core';
-import { calculateElementOffset, getLineHeightPx } from '../textcomplete-utils';
+} from 'components/cellTypes/Editor/textcomplete/textcomplete-core';
+import { calculateElementOffset, getLineHeightPx } from 'components/cellTypes/Editor/textcomplete/textcomplete-utils';
 
 export class TextareaEditor extends Editor {
   constructor(private readonly el: HTMLInputElement) {

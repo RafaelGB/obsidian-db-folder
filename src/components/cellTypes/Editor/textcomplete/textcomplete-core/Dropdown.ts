@@ -1,8 +1,8 @@
 import { EventEmitter } from 'eventemitter3';
 
-import { CursorOffset } from './Editor';
-import { SearchResult } from './SearchResult';
-import { createCustomEvent } from './utils';
+import { CursorOffset } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/Editor';
+import { SearchResult } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/SearchResult';
+import { createCustomEvent } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/utils';
 
 export interface DropdownOption {
   className?: string;
@@ -246,9 +246,8 @@ export class Dropdown extends EventEmitter {
       }
 
       if (placement === 'top' || forceTop) {
-        this.el.style.bottom = `${
-          docEl.clientHeight - cursorOffset.top + cursorOffset.lineHeight
-        }px`;
+        this.el.style.bottom = `${docEl.clientHeight - cursorOffset.top + cursorOffset.lineHeight
+          }px`;
         this.el.style.top = 'auto';
       } else {
         this.el.style.top = `${cursorOffset.top}px`;
@@ -263,8 +262,8 @@ export class Dropdown extends EventEmitter {
     return this.activeIndex < this.items.length - 1
       ? this.activeIndex + 1
       : this.option.rotate
-      ? 0
-      : null;
+        ? 0
+        : null;
   }
 
   private getPrevActiveIndex(): number | null {
@@ -272,8 +271,8 @@ export class Dropdown extends EventEmitter {
     return this.activeIndex !== 0
       ? this.activeIndex - 1
       : this.option.rotate
-      ? this.items.length - 1
-      : null;
+        ? this.items.length - 1
+        : null;
   }
 
   private renderItems(): this {

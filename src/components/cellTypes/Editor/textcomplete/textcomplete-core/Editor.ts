@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 
-import { SearchResult } from './SearchResult';
-import { createCustomEvent } from './utils';
+import { SearchResult } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/SearchResult';
+import { createCustomEvent } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/utils';
 
 export interface CursorOffset {
   lineHeight: number;
@@ -117,17 +117,17 @@ export abstract class Editor extends EventEmitter {
     return e.keyCode === 9 // tab
       ? 'ENTER'
       : e.keyCode === 13 // enter
-      ? 'ENTER'
-      : e.keyCode === 27 // esc
-      ? 'ESC'
-      : e.keyCode === 38 // up
-      ? 'UP'
-      : e.keyCode === 40 // down
-      ? 'DOWN'
-      : e.keyCode === 78 && e.ctrlKey // ctrl-n
-      ? 'DOWN'
-      : e.keyCode === 80 && e.ctrlKey // ctrl-p
-      ? 'UP'
-      : 'OTHER';
+        ? 'ENTER'
+        : e.keyCode === 27 // esc
+          ? 'ESC'
+          : e.keyCode === 38 // up
+            ? 'UP'
+            : e.keyCode === 40 // down
+              ? 'DOWN'
+              : e.keyCode === 78 && e.ctrlKey // ctrl-n
+                ? 'DOWN'
+                : e.keyCode === 80 && e.ctrlKey // ctrl-p
+                  ? 'UP'
+                  : 'OTHER';
   }
 }
