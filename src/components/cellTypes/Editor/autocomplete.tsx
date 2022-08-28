@@ -3,7 +3,7 @@ import Fuse from "fuse.js";
 import { useIMEInputProps } from "helpers/Generators";
 import { c } from "helpers/StylesHelper";
 import { getParentBodyElement } from "helpers/WindowElement";
-import { RefObject, useEffect, useRef } from "react";
+import { KeyboardEventHandler, RefObject, useEffect, useRef } from "react";
 
 // import { KanbanContext, KanbanContextProps } from "../context";
 
@@ -148,20 +148,20 @@ export function useAutocompleteInputProps({
     ref: inputRef,
     onCompositionStart,
     onCompositionEnd,
-    // onKeyDownCapture: (e: KeyboardEvent) => {
-    //   if (getShouldIMEBlockAction() || isAutocompleteVisibleRef.current) {
-    //     return;
-    //   }
+    onKeyDownCapture: (e: any) => {
+      if (getShouldIMEBlockAction() || isAutocompleteVisibleRef.current) {
+        return;
+      }
 
-    //   const handled = onKeyDown(e);
+      const handled = onKeyDown(e);
 
-    //   if (handled) return;
+      if (handled) return;
 
-    //   if (e.key === "Enter") {
-    //     onEnter && onEnter(e);
-    //   } else if (e.key === "Escape") {
-    //     onEscape && onEscape(e);
-    //   }
-    // },
+      if (e.key === "Enter") {
+        onEnter && onEnter(e);
+      } else if (e.key === "Escape") {
+        onEscape && onEscape(e);
+      }
+    },
   };
 }

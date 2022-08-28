@@ -1,15 +1,13 @@
 import { DatabaseView } from "DatabaseView";
 import { c } from "helpers/StylesHelper";
-import { Platform } from "obsidian";
 import React, {
   AllHTMLAttributes,
   DetailedHTMLProps,
   forwardRef,
-  HTMLAttributes,
   Ref,
   useEffect,
 } from "react";
-import { useAutocompleteInputProps } from "./autocomplete";
+import { useAutocompleteInputProps } from "components/cellTypes/Editor/autocomplete";
 import {
   autoPairBracketsCommands,
   autoPairMarkdownCommands,
@@ -17,7 +15,7 @@ import {
   handleTab,
   unpairBrackets,
   unpairMarkdown,
-} from "./commands";
+} from "components/cellTypes/Editor/commands";
 
 interface MarkdownEditorProps
   extends DetailedHTMLProps<AllHTMLAttributes<HTMLInputElement>, any> {
