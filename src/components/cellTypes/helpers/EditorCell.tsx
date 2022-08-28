@@ -1,11 +1,9 @@
 import { EditorCellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import VirtualizedSuggestionList, {
-  suggesterFilesInFunctionOf,
-} from "components/obsidianArq/NoteSuggester";
 
 import React, { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";
 import { useState } from "react";
+import { MarkdownEditor } from "../Editor/MarkdownEditor";
 
 const EditorCell = (props: EditorCellComponentProps) => {
   const { defaultCell, cellValue, setCellValue, setDirtyCell } = props;
@@ -35,12 +33,6 @@ const EditorCell = (props: EditorCellComponentProps) => {
       clearTimeout(editNoteTimeout);
     }
 
-    if (suggesterFilesInFunctionOf(value)) {
-      setTriggerSuggestions(true);
-    } else if (triggerSuggestions) {
-      setTriggerSuggestions(false);
-    }
-
     // first update the input text as user type
     setEditorValue(value);
     // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
@@ -62,15 +54,9 @@ const EditorCell = (props: EditorCellComponentProps) => {
     );
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    switch (event.key) {
-      case "Enter":
-        // Close input on enter
-        editableMdRef.current.blur();
-        break;
-      default:
-      // do nothing
-    }
+  const handleEnter = () => {
+    // Close input on enter
+    editableMdRef.current.blur();
   };
 
   const handleOnBlur = () => {
@@ -80,7 +66,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
 
   return (
     <>
-      <input
+      {/* <input
         value={(editorValue && editorValue.toString()) || ""}
         onChange={handleOnChange}
         onKeyDown={handleKeyDown}
@@ -88,7 +74,17 @@ const EditorCell = (props: EditorCellComponentProps) => {
         ref={editableMdRef}
         autoFocus
       />
-      {triggerSuggestions && <VirtualizedSuggestionList />}
+      {triggerSuggestions && <VirtualizedSuggestionList />} */}
+      <MarkdownEditor
+        ref={editableMdRef}
+        value={(editorValue && editorValue.toString()) || ""}
+        onEnter={handleEnter}
+        onEscape={() => console.log("onEscape")}
+        onSubmit={() => console.log("onSubmit")}
+        onBlur={handleOnBlur}
+        onChange={handleOnChange}
+        view={table.options.meta.view}
+      />
     </>
   );
 };

@@ -8,10 +8,9 @@ import { MarkdownEditor } from "./Editor/MarkdownEditor";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, column, table } = defaultCell;
+  const { cell, column } = defaultCell;
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
-  const editableMdRef = useRef<HTMLInputElement>();
 
   const [cellValue, setCellValue] = useState(cell.getValue());
   const [dirtyCell, setDirtyCell] = useState(false);
@@ -24,7 +23,6 @@ const TextCell = (props: CellComponentProps) => {
       // End useEffect
       return;
     }
-
     if (containerCellRef.current !== undefined) {
       containerCellRef.current.innerHTML = "";
       renderMarkdown(
@@ -36,40 +34,16 @@ const TextCell = (props: CellComponentProps) => {
     }
   }, [dirtyCell]);
 
-  /**
-   * Focus input when cell is clicked
-   */
-  useEffect(() => {
-    if (editableMdRef.current) {
-      LOGGER.debug(
-        `useEffect hooked with editableMdRef. current value & dirtyCell: ${cellValue} ${dirtyCell}`
-      );
-      editableMdRef.current.focus();
-    }
-  }, [editableMdRef]);
-
   const handleEditableOnclick: MouseEventHandler<HTMLSpanElement> = () => {
     setDirtyCell(true);
   };
 
   return dirtyCell ? (
-    // <EditorCell
-    //   defaultCell={defaultCell}
-    //   cellValue={cellValue}
-    //   setCellValue={setCellValue}
-    //   setDirtyCell={setDirtyCell}
-    // />
-    <MarkdownEditor
-      ref={editableMdRef}
-      className={"item-input"}
-      placeholder="Card title..."
-      onEnter={() => console.log("onEnter")}
-      onEscape={() => console.log("onEscape")}
-      onSubmit={() => console.log("onSubmit")}
-      value={cellValue ? cellValue.toString() : ""}
-      onChange={(e) => setCellValue((e.target as HTMLInputElement).value)}
-      onPaste={() => console.log("onPaste")}
-      view={table.options.meta.view}
+    <EditorCell
+      defaultCell={defaultCell}
+      cellValue={cellValue}
+      setCellValue={setCellValue}
+      setDirtyCell={setDirtyCell}
     />
   ) : (
     <span
