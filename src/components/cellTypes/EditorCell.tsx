@@ -3,7 +3,7 @@ import { TableColumn } from "cdm/FolderModel";
 
 import React, { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";
 import { useState } from "react";
-import { MarkdownEditor } from "../Editor/MarkdownEditor";
+import { MarkdownEditor } from "./Editor/MarkdownEditor";
 
 const EditorCell = (props: EditorCellComponentProps) => {
   const { defaultCell, cellValue, setCellValue, setDirtyCell } = props;
