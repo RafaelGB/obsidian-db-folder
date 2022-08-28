@@ -66,15 +66,6 @@ const EditorCell = (props: EditorCellComponentProps) => {
 
   return (
     <>
-      {/* <input
-        value={(editorValue && editorValue.toString()) || ""}
-        onChange={handleOnChange}
-        onKeyDown={handleKeyDown}
-        onBlur={handleOnBlur}
-        ref={editableMdRef}
-        autoFocus
-      />
-      {triggerSuggestions && <VirtualizedSuggestionList />} */}
       <MarkdownEditor
         ref={editableMdRef}
         value={(editorValue && editorValue.toString()) || ""}
@@ -84,6 +75,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
         onBlur={handleOnBlur}
         onChange={handleOnChange}
         view={table.options.meta.view}
+        autoFocus
       />
     </>
   );

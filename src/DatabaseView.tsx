@@ -1,4 +1,5 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
+import { ViewEvents } from "cdm/EmitterModel";
 import {
   InitialType,
   RowDataType,
@@ -12,6 +13,7 @@ import {
 import { createDatabase } from "components/index/Database";
 import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, InputType, StyleClasses } from "helpers/Constants";
+import { createEmitter, Emitter } from "helpers/Emitter";
 import obtainInitialType from "helpers/InitialType";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import { getParentWindow } from "helpers/WindowElement";
@@ -35,6 +37,7 @@ export const databaseIcon = "blocks";
 export class DatabaseView extends TextFileView implements HoverParent {
   plugin: DBFolderPlugin;
   hoverPopover: HoverPopover | null;
+  emitter: Emitter<ViewEvents>;
   tableContainer: HTMLDivElement | null = null;
   rootContainer: Root | null = null;
   diskConfig: DatabaseInfo;
@@ -46,7 +49,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
     this.plugin = plugin;
-
+    this.emitter = createEmitter();
     this.register(
       this.containerEl.onWindowMigrated(() => {
         this.plugin.removeView(this);

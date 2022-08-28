@@ -106,11 +106,11 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
       }
     };
 
-    // view.emitter.on("hotkey", onHotkey);
+    view.emitter.on("hotkey", onHotkey);
 
-    // return () => {
-    //   view.emitter.off("hotkey", onHotkey);
-    // };
+    return () => {
+      view.emitter.off("hotkey", onHotkey);
+    };
   }, [view]);
 
   return (
@@ -120,9 +120,7 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
         className={c("grow-wrap")}
       >
         <input
-          data-ignore-drag={true}
           rows={1}
-          className={c("item-input")}
           {...textareaProps}
           {...autocompleteProps}
           ref={(c: HTMLInputElement) => {
