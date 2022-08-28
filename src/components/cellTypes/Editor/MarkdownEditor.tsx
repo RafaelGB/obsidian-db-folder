@@ -112,26 +112,19 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
   }, [view]);
 
   return (
-    <>
-      <div
-        data-replicated-value={(textareaProps as any).value}
-        className={c("grow-wrap")}
-      >
-        <input
-          rows={1}
-          {...textareaProps}
-          {...autocompleteProps}
-          ref={(c: HTMLInputElement) => {
-            autocompleteProps.ref.current = c;
+    <input
+      rows={1}
+      {...textareaProps}
+      {...autocompleteProps}
+      ref={(c: HTMLInputElement) => {
+        autocompleteProps.ref.current = c;
 
-            if (ref && typeof ref === "function") {
-              ref(c);
-            } else if (ref) {
-              (ref as any).current = c;
-            }
-          }}
-        />
-      </div>
-    </>
+        if (ref && typeof ref === "function") {
+          ref(c);
+        } else if (ref) {
+          (ref as any).current = c;
+        }
+      }}
+    />
   );
 });

@@ -3,9 +3,7 @@ import Fuse from "fuse.js";
 import { useIMEInputProps } from "helpers/Generators";
 import { c } from "helpers/StylesHelper";
 import { getParentBodyElement } from "helpers/WindowElement";
-import { KeyboardEventHandler, RefObject, useEffect, useRef } from "react";
-
-// import { KanbanContext, KanbanContextProps } from "../context";
+import { RefObject, useEffect, useRef } from "react";
 
 import {
   LinkSuggestion,
