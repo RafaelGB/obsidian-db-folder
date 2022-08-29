@@ -1,4 +1,4 @@
-import { insertTextAtCursor } from './insertTextAtCursor';
+import { insertTextAtCursor } from 'components/cellTypes/Editor/insertTextAtCursor';
 import {
   applyWrappingFormatting,
   expandSelectionToLineBoundaries,

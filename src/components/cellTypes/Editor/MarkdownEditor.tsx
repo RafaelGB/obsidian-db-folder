@@ -21,12 +21,11 @@ interface MarkdownEditorProps
   extends DetailedHTMLProps<AllHTMLAttributes<HTMLInputElement>, any> {
   onEnter: (e: KeyboardEvent) => void;
   onEscape: (e: KeyboardEvent) => void;
-  onSubmit: () => void;
   view: DatabaseView;
 }
 
 export const MarkdownEditor = forwardRef(function MarkdownEditor(
-  { onEnter, onEscape, onSubmit, view, ...textareaProps }: MarkdownEditorProps,
+  { onEnter, onEscape, view, ...textareaProps }: MarkdownEditorProps,
   ref: Ref<HTMLInputElement>
 ) {
   const shouldAutoPairMarkdown = (app.vault as any).getConfig(

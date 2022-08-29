@@ -1,9 +1,9 @@
 import { EditorCellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
-import React, { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";
+import React, { ChangeEventHandler, useCallback, useRef } from "react";
 import { useState } from "react";
-import { MarkdownEditor } from "./Editor/MarkdownEditor";
+import { MarkdownEditor } from "components/cellTypes/Editor/MarkdownEditor";
 
 const EditorCell = (props: EditorCellComponentProps) => {
   const { defaultCell, cellValue, setCellValue, setDirtyCell } = props;
@@ -21,13 +21,12 @@ const EditorCell = (props: EditorCellComponentProps) => {
     (state) => state.ddbbConfig
   );
 
-  const [triggerSuggestions, setTriggerSuggestions] = useState(false);
   const [editorValue, setEditorValue] = useState(cellValue);
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
 
   // onChange handler
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const { value } = event.target;
+    const value = event.target.value.trim();
     // cancelling previous timeouts
     if (editNoteTimeout) {
       clearTimeout(editNoteTimeout);
@@ -54,11 +53,21 @@ const EditorCell = (props: EditorCellComponentProps) => {
     );
   };
 
+  /** Call onBlur */
   const handleEnter = () => {
-    // Close input on enter
     editableMdRef.current.blur();
   };
 
+  /**
+   * Close editor without saving changes
+   */
+  const handleOnEscape = useCallback(() => {
+    setDirtyCell(false);
+  }, []);
+
+  /**
+   * Save changes and close editor
+   */
   const handleOnBlur = () => {
     setCellValue(editorValue);
     setDirtyCell(false);
@@ -70,8 +79,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
         ref={editableMdRef}
         value={(editorValue && editorValue.toString()) || ""}
         onEnter={handleEnter}
-        onEscape={() => console.log("onEscape")}
-        onSubmit={() => console.log("onSubmit")}
+        onEscape={handleOnEscape}
         onBlur={handleOnBlur}
         onChange={handleOnChange}
         view={table.options.meta.view}

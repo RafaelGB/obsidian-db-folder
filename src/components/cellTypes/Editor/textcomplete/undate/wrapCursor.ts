@@ -1,4 +1,4 @@
-import { update } from './update';
+import { update } from 'components/cellTypes/Editor/textcomplete/undate/update';
 
 export function wrapCursor(
   el: HTMLInputElement,
