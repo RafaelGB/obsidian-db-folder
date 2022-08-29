@@ -3,7 +3,8 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import TextField from "@mui/material/TextField";
 import { PaginationProps } from "cdm/MenuBarModel";
 import React, { useEffect } from "react";
-import { PaginationButtonStyle } from "components/styles/NavBarSearchStyles";
+import { PaginationButtonStyle } from "components/styles/NavBarStyles";
+import { StyleVariables } from "helpers/Constants";
 function PaginationTable(props: PaginationProps) {
   const { table } = props;
   const [page, setPage] = React.useState(1);
@@ -56,6 +57,7 @@ function PaginationTable(props: PaginationProps) {
           type="number"
           InputLabelProps={{
             shrink: true,
+            style: { color: StyleVariables.TEXT_NORMAL },
           }}
           style={{ width: "100px" }}
           InputProps={{

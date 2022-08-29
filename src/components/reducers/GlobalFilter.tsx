@@ -4,7 +4,7 @@ import {
   DebouncedInputWrapper,
   Search,
   SearchIconWrapper,
-} from "components/styles/NavBarSearchStyles";
+} from "components/styles/NavBarStyles";
 import SearchIcon from "@mui/icons-material/Search";
 import DebouncedInput from "components/behavior/DebouncedInputFn";
 
