@@ -9,11 +9,12 @@ nav:
       - Headers: "features/headers.md"
       - Filters: "features/filters.md"
       - Config: "features/config.md"
+  - Media:
+      - videos: "media/videos.md"
   - FAQ: "faq.md"
   - Contributing:
       - Documentation: "contributing/documentationContribution.md"
       - Developers: "contributing/developersContribution.md"
-
   - Changelog: "changelog.md"
 theme:
   name: material

@@ -1,3 +1,13 @@
+# 2.3.0
+### Shiny new things
+- Pagination arrived! Now you can organize your ddbb in pages, and you can choose the number of items per page in the settings panel. This also affects to the performance, so theoretically you can have a ddbb with more than 10000 items.
+- Autocomplete for links and tags in the editor of text column cells. Its an adaption of [Kanban plugin](https://github.com/mgmeyers/obsidian-kanban) feature, so it will be familiar to you.
+### Visual
+- navbar and add row forms are now static with horizontal scroll. Thanks to [artisticat1](https://github.com/artisticat1)
+### No longer broken
+- Function of obtain all fields now respect uppercase [ISSUE#269](https://github.com/RafaelGB/obsidian-db-folder/issues/269)
+- New rows title are now trimmed to ensure the functionality [ISSUE#279](https://github.com/RafaelGB/obsidian-db-folder/issues/279)
+- Now you can hide/unhide metadata columns too [ISSUE#283](https://github.com/RafaelGB/obsidian-db-folder/issues/283)
 # 2.2.2
 ### Shiny new things
 - First steps of a row context menu. You can now remove a row from a table (and also Obsidian). [ISSUE#62](https://github.com/RafaelGB/obsidian-db-folder/issues/62)
