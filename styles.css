@@ -296,8 +296,8 @@ div.database-plugin__checkbox {
   cursor: pointer;
   bottom: 0;
   z-index: 3;
-  position: fixed;
-  opacity: 0.9;
+  opacity: 0.8;
+  position: sticky;
   left: 0;
   background-color: var(--background-primary);
 }

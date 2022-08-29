@@ -120,7 +120,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       .addItem((item) => {
         item
           .setTitle("Open database settings")
-          .setIcon("gear")
+          .setIcon("dbfolderIcon")
           .onClick(() => {
             new SettingsModal(
               this,

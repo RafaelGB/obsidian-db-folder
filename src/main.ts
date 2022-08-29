@@ -7,6 +7,7 @@ import {
 	ViewState,
 	Platform,
 	MarkdownView,
+	addIcon,
 } from 'obsidian';
 
 import {
@@ -95,6 +96,7 @@ export default class DBFolderPlugin extends Plugin {
 		this.registerEvents();
 		this.registerMonkeyPatches();
 		this.addMarkdownPostProcessor();
+		addIcon("dbfolderIcon", `<circle cx="50" cy="50" r="50" fill="currentColor" />`);
 		// Mount an empty component to start; views will be added as we go
 		this.mount(window);
 
