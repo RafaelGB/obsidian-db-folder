@@ -51,7 +51,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
              *********************************/
             new Setting(template_section)
                 .setName('Use all fields')
-                .setDesc('Add all possible columns of your actual source of the database')
+                .setDesc('WARNING! This will override any previous columns')
                 .addButton((button) => {
                     button.setIcon("create-new")
                         .setTooltip("Load columns from file")

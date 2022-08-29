@@ -17,6 +17,7 @@ import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DatabaseView } from "DatabaseView";
 import { obtainAllPossibleRows } from "helpers/VaultManagement";
 import rowContextMenuColumn from "components/RowContextMenu";
+import { containsUpper } from "helpers/WindowElement";
 
 /**
  * Add mandatory and configured metadata columns of the table
@@ -144,12 +145,30 @@ export async function obtainColumnsFromRows(
   );
   // Obtain unique keys from source
   const keys = rows.reduce((acc, row) => {
-    const keys = Object.keys(row).map((key) => key.toLowerCase());
+    const keys = Object.keys(row).map((key) => key);
     // Remove duplicates
     return [...new Set([...acc, ...keys])];
   }, [] as string[]);
+
+  const uppercaseFields: string[] = [];
+  let lowercaseFields: string[] = [];
+  keys.forEach((key) => {
+    if (containsUpper(key)) {
+      uppercaseFields.push(key);
+    } else {
+      lowercaseFields.push(key);
+    }
+  });
+  const uppercaseFieldsToFilter = uppercaseFields.map((ucf) =>
+    ucf.toLowerCase()
+  );
+  lowercaseFields = lowercaseFields.filter(
+    (field) => !uppercaseFieldsToFilter.contains(field)
+  );
+
+  const uniqueKeys = [...new Set([...uppercaseFields, ...lowercaseFields])];
   // Add keys to columns
-  keys
+  uniqueKeys
     // Check metadata columns to not be added
     .filter((key) => validateColumnKey(key))
     .forEach((key, index) => {
