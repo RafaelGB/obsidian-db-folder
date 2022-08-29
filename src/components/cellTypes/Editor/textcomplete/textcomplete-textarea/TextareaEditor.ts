@@ -32,7 +32,7 @@ export class TextareaEditor extends Editor {
       if (Array.isArray(replace)) {
         update(this.el, replace[0], replace[1]);
         if (this.el) {
-          this.el.dispatchEvent(createCustomEvent(this.el.doc, 'input'));
+          this.el.dispatchEvent(createCustomEvent('input'));
         }
       }
     }
