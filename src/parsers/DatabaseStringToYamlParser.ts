@@ -8,7 +8,7 @@ import { YamlHandler, YamlHandlerResponse } from "cdm/MashallModel";
 import { MarshallDatabaseInfoHandler } from 'parsers/handlers/marshall/MarshallDatabaseInfoHandler';
 import { MarshallColumnsHandler } from "parsers/handlers/marshall/MarshallColumnsHandler";
 import { MarshallConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
-import { MarshallFiltersHandler } from "./handlers/marshall/MarshallFiltersHandler";
+import { MarshallFiltersHandler } from "parsers/handlers/marshall/MarshallFiltersHandler";
 
 /**
  * EXPOSED METHOD

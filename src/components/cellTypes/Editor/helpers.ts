@@ -1,4 +1,4 @@
-import { insertTextAtCursor } from './insertTextAtCursor';
+import { insertTextAtCursor } from 'components/cellTypes/Editor/insertTextAtCursor';
 
 export interface TextRange {
   start: number;
@@ -167,42 +167,42 @@ export function getBreaksNeededForEmptyLineAfter(
   return isInLastLine ? 0 : neededBreaks;
 }
 
-export function getStateFromTextarea(textarea: HTMLInputElement): TextState {
+export function getStateFromInput(input: HTMLInputElement): TextState {
   return {
     selection: {
-      start: textarea.selectionStart,
-      end: textarea.selectionEnd,
+      start: input.selectionStart,
+      end: input.selectionEnd,
     },
-    text: textarea.value,
-    selectedText: textarea.value.slice(
-      textarea.selectionStart,
-      textarea.selectionEnd
+    text: input.value,
+    selectedText: input.value.slice(
+      input.selectionStart,
+      input.selectionEnd
     ),
   };
 }
 
-export function replaceSelection(textarea: HTMLInputElement, text: string) {
-  insertTextAtCursor(textarea, text);
-  return getStateFromTextarea(textarea);
+export function replaceSelection(input: HTMLInputElement, text: string) {
+  insertTextAtCursor(input, text);
+  return getStateFromInput(input);
 }
 
 export function setSelectionRange(
-  textarea: HTMLInputElement,
+  input: HTMLInputElement,
   selection: TextRange
 ): TextState {
-  textarea.focus();
-  textarea.selectionStart = selection.start;
-  textarea.selectionEnd = selection.end;
-  return getStateFromTextarea(textarea);
+  input.focus();
+  input.selectionStart = selection.start;
+  input.selectionEnd = selection.end;
+  return getStateFromInput(input);
 }
 
 export function toggleWrappingFormattingCommand(
-  textarea: HTMLInputElement,
+  input: HTMLInputElement,
   isApplied: RegExp,
   unApply: (s: string) => string,
   formatting: string
 ) {
-  const state = getStateFromTextarea(textarea);
+  const state = getStateFromInput(input);
 
   // Adjust the selection to encompass the whole word if the caret is inside one
   const newSelectionRange = expandSelectionToWordBoundaries({
@@ -210,11 +210,11 @@ export function toggleWrappingFormattingCommand(
     selection: state.selection,
   });
 
-  const selection = setSelectionRange(textarea, newSelectionRange);
+  const selection = setSelectionRange(input, newSelectionRange);
 
   if (isApplied.test(selection.selectedText)) {
-    replaceSelection(textarea, unApply(selection.selectedText));
-    setSelectionRange(textarea, {
+    replaceSelection(input, unApply(selection.selectedText));
+    setSelectionRange(input, {
       start: selection.selection.start,
       end:
         selection.selection.start +
@@ -224,10 +224,10 @@ export function toggleWrappingFormattingCommand(
   } else {
     // Replaces the current selection with the bold mark up
     const formattedState = replaceSelection(
-      textarea,
+      input,
       `${formatting}${selection.selectedText}${formatting}`
     );
-    setSelectionRange(textarea, {
+    setSelectionRange(input, {
       start:
         formattedState.selection.end -
         formatting.length -
@@ -238,13 +238,13 @@ export function toggleWrappingFormattingCommand(
 }
 
 export function applyWrappingFormatting(
-  textarea: HTMLInputElement,
+  input: HTMLInputElement,
   before: string,
   after: string,
   requireSelection?: boolean,
   allowInMiddle?: boolean
 ) {
-  const state = getStateFromTextarea(textarea);
+  const state = getStateFromInput(input);
 
   if (requireSelection && state.selection.end === state.selection.start) {
     return false;
@@ -255,14 +255,14 @@ export function applyWrappingFormatting(
     !allowInMiddle &&
     state.selection.end === state.selection.start &&
     state.selection.start > 0 &&
-    textarea.value[state.selection.start - 1] !== ' '
+    input.value[state.selection.start - 1] !== ' '
   ) {
     return false;
   }
 
   if (state.selection.end === state.selection.start) {
-    const formattedState = replaceSelection(textarea, `${after}`);
-    setSelectionRange(textarea, {
+    const formattedState = replaceSelection(input, `${after}`);
+    setSelectionRange(input, {
       start: formattedState.selection.end - 1 - state.selectedText.length,
       end: formattedState.selection.end - 1,
     });
@@ -271,10 +271,10 @@ export function applyWrappingFormatting(
   }
 
   const formattedState = replaceSelection(
-    textarea,
+    input,
     `${before}${state.selectedText}${after}`
   );
-  setSelectionRange(textarea, {
+  setSelectionRange(input, {
     start: formattedState.selection.end - 1 - state.selectedText.length,
     end: formattedState.selection.end - 1,
   });
@@ -283,26 +283,26 @@ export function applyWrappingFormatting(
 }
 
 export function toggleLineFormatting(
-  textarea: HTMLInputElement,
+  input: HTMLInputElement,
   isApplied: RegExp,
   apply: (s: string) => string,
   remove: (s: string) => string
 ) {
-  const state = getStateFromTextarea(textarea);
+  const state = getStateFromInput(input);
 
   const lineRange = expandSelectionToLineBoundaries({
     text: state.text,
     selection: state.selection,
   });
 
-  const selection = setSelectionRange(textarea, lineRange);
+  const selection = setSelectionRange(input, lineRange);
 
   const newLines = isApplied.test(selection.selectedText)
     ? remove(selection.selectedText)
     : apply(selection.selectedText);
-  const newState = replaceSelection(textarea, newLines);
+  const newState = replaceSelection(input, newLines);
 
-  setSelectionRange(textarea, {
+  setSelectionRange(input, {
     start: selection.selection.start,
     end: newState.selection.end,
   });

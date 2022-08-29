@@ -1,8 +1,8 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
-import { CellSizeDropDownHandler } from './handlers/folder/CellSizeDropDownHandler';
-import { StickyFirstColumnHandler } from './handlers/folder/StickyFirstColumnHandler';
-import { DetailsFormHandler } from './handlers/folder/DetailsFormHandler';
+import { CellSizeDropDownHandler } from 'settings/handlers/folder/CellSizeDropDownHandler';
+import { StickyFirstColumnHandler } from 'settings/handlers/folder/StickyFirstColumnHandler';
+import { DetailsFormHandler } from 'settings/handlers/folder/DetailsFormHandler';
 
 /**
  * developer settings section

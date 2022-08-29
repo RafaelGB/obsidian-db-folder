@@ -1,13 +1,13 @@
-import { insertTextAtCursor } from './insertTextAtCursor';
+import { insertTextAtCursor } from 'components/cellTypes/Editor/insertTextAtCursor';
 import {
   applyWrappingFormatting,
   expandSelectionToLineBoundaries,
-  getStateFromTextarea,
+  getStateFromInput,
   replaceSelection,
   setSelectionRange,
   toggleLineFormatting,
   toggleWrappingFormattingCommand,
-} from './helpers';
+} from 'components/cellTypes/Editor/helpers';
 
 export const commandIds = [
   'editor:toggle-blockquote',
@@ -251,48 +251,48 @@ function removeBullet(str: string) {
 }
 
 export const commands: Record<string, (ta: HTMLInputElement) => void> = {
-  'editor:toggle-bold': (textarea: HTMLInputElement) => {
-    toggleWrappingFormattingCommand(textarea, isBoldedRegEx, unBold, '**');
+  'editor:toggle-bold': (input: HTMLInputElement) => {
+    toggleWrappingFormattingCommand(input, isBoldedRegEx, unBold, '**');
   },
-  'editor:toggle-code': (textarea: HTMLInputElement) => {
-    toggleWrappingFormattingCommand(textarea, isCodeRegEx, unCode, '`');
+  'editor:toggle-code': (input: HTMLInputElement) => {
+    toggleWrappingFormattingCommand(input, isCodeRegEx, unCode, '`');
   },
-  'editor:toggle-italics': (textarea: HTMLInputElement) => {
+  'editor:toggle-italics': (input: HTMLInputElement) => {
     toggleWrappingFormattingCommand(
-      textarea,
+      input,
       isItalicizedRegEx,
       unItalicize,
       '*'
     );
   },
-  'editor:toggle-highlight': (textarea: HTMLInputElement) => {
+  'editor:toggle-highlight': (input: HTMLInputElement) => {
     toggleWrappingFormattingCommand(
-      textarea,
+      input,
       isHighlightedRegEx,
       unHighlight,
       '=='
     );
   },
-  'editor:toggle-strikethrough': (textarea: HTMLInputElement) => {
-    toggleWrappingFormattingCommand(textarea, isStrikedRegEx, unStrike, '~~');
+  'editor:toggle-strikethrough': (input: HTMLInputElement) => {
+    toggleWrappingFormattingCommand(input, isStrikedRegEx, unStrike, '~~');
   },
-  'editor:toggle-blockquote': (textarea: HTMLInputElement) => {
-    toggleLineFormatting(textarea, isQuoted, applyQuote, removeQuote);
+  'editor:toggle-blockquote': (input: HTMLInputElement) => {
+    toggleLineFormatting(input, isQuoted, applyQuote, removeQuote);
   },
-  'editor:toggle-bullet-list': (textarea: HTMLInputElement) => {
-    toggleLineFormatting(textarea, isBulleted, applyBullet, removeBullet);
+  'editor:toggle-bullet-list': (input: HTMLInputElement) => {
+    toggleLineFormatting(input, isBulleted, applyBullet, removeBullet);
   },
-  'editor:toggle-numbered-list': (textarea: HTMLInputElement) => {
+  'editor:toggle-numbered-list': (input: HTMLInputElement) => {
     toggleLineFormatting(
-      textarea,
+      input,
       isOrderedList,
       applyOrderedList,
       removeOrderedList
     );
   },
 
-  'editor:toggle-checklist-status': (textarea: HTMLInputElement) => {
-    const state = getStateFromTextarea(textarea);
+  'editor:toggle-checklist-status': (input: HTMLInputElement) => {
+    const state = getStateFromInput(input);
     const isEmptySelection = state.selection.end === state.selection.start;
 
     const lineRange = expandSelectionToLineBoundaries({
@@ -300,7 +300,7 @@ export const commands: Record<string, (ta: HTMLInputElement) => void> = {
       selection: state.selection,
     });
 
-    const selection = setSelectionRange(textarea, lineRange);
+    const selection = setSelectionRange(input, lineRange);
 
     let newLines = selection.selectedText;
 
@@ -327,17 +327,17 @@ export const commands: Record<string, (ta: HTMLInputElement) => void> = {
       }
     }
 
-    const newState = replaceSelection(textarea, newLines);
+    const newState = replaceSelection(input, newLines);
 
     if (isEmptySelection) {
       const diff = newLines.length - selection.selectedText.length;
 
-      setSelectionRange(textarea, {
+      setSelectionRange(input, {
         start: state.selection.start + diff,
         end: state.selection.end + diff,
       });
     } else {
-      setSelectionRange(textarea, {
+      setSelectionRange(input, {
         start: selection.selection.start,
         end: newState.selection.end,
       });
@@ -349,24 +349,24 @@ export const autoPairBracketsCommands: Record<
   string,
   (ta: HTMLInputElement) => boolean
 > = {
-  '(': (textarea) => applyWrappingFormatting(textarea, '(', ')', false),
-  '[': (textarea) => applyWrappingFormatting(textarea, '[', ']', false, true),
-  '{': (textarea) => applyWrappingFormatting(textarea, '{', '}', false),
-  "'": (textarea) => applyWrappingFormatting(textarea, "'", "'", false),
-  '"': (textarea) => applyWrappingFormatting(textarea, '"', '"', false),
+  '(': (input) => applyWrappingFormatting(input, '(', ')', false),
+  '[': (input) => applyWrappingFormatting(input, '[', ']', false, true),
+  '{': (input) => applyWrappingFormatting(input, '{', '}', false),
+  "'": (input) => applyWrappingFormatting(input, "'", "'", false),
+  '"': (input) => applyWrappingFormatting(input, '"', '"', false),
 };
 
 export const autoPairMarkdownCommands: Record<
   string,
   (ta: HTMLInputElement) => boolean
 > = {
-  '*': (textarea) => applyWrappingFormatting(textarea, '*', '*', false),
-  _: (textarea) => applyWrappingFormatting(textarea, '_', '_', false),
-  '`': (textarea) => applyWrappingFormatting(textarea, '`', '`', false),
-  '=': (textarea) => applyWrappingFormatting(textarea, '=', '=', true),
-  '~': (textarea) => applyWrappingFormatting(textarea, '~', '~', true),
-  $: (textarea) => applyWrappingFormatting(textarea, '$', '$', true),
-  '%': (textarea) => applyWrappingFormatting(textarea, '%', '%', true),
+  '*': (input) => applyWrappingFormatting(input, '*', '*', false),
+  _: (input) => applyWrappingFormatting(input, '_', '_', false),
+  '`': (input) => applyWrappingFormatting(input, '`', '`', false),
+  '=': (input) => applyWrappingFormatting(input, '=', '=', true),
+  '~': (input) => applyWrappingFormatting(input, '~', '~', true),
+  $: (input) => applyWrappingFormatting(input, '$', '$', true),
+  '%': (input) => applyWrappingFormatting(input, '%', '%', true),
 };
 
 const pairMap: Record<string, string> = {
@@ -385,10 +385,10 @@ const pairMap: Record<string, string> = {
 };
 
 export function unpair(
-  textarea: HTMLInputElement,
+  input: HTMLInputElement,
   commandList: Record<string, (ta: HTMLInputElement) => boolean>
 ) {
-  const state = getStateFromTextarea(textarea);
+  const state = getStateFromInput(input);
 
   if (
     state.selection.end !== state.selection.start ||
@@ -401,23 +401,23 @@ export function unpair(
   const next = state.text[state.selection.end];
 
   if (commandList[char] && next === pairMap[char]) {
-    setSelectionRange(textarea, {
+    setSelectionRange(input, {
       start: state.selection.end,
       end: state.selection.end + 1,
     });
 
-    replaceSelection(textarea, '');
+    replaceSelection(input, '');
 
     return true;
   }
 }
 
-export function unpairBrackets(textarea: HTMLInputElement) {
-  return unpair(textarea, autoPairBracketsCommands);
+export function unpairBrackets(input: HTMLInputElement) {
+  return unpair(input, autoPairBracketsCommands);
 }
 
-export function unpairMarkdown(textarea: HTMLInputElement) {
-  return unpair(textarea, autoPairMarkdownCommands);
+export function unpairMarkdown(input: HTMLInputElement) {
+  return unpair(input, autoPairMarkdownCommands);
 }
 
 function applyTab(str: string, useTab: boolean, tabWidth: number) {
@@ -448,26 +448,26 @@ function removeTab(str: string, useTab: boolean, tabWidth: number) {
 }
 
 export function handleTab(
-  textarea: HTMLInputElement,
+  input: HTMLInputElement,
   isShiftPressed: boolean,
   useTab: boolean,
   tabWidth: number
 ) {
-  const initialState = getStateFromTextarea(textarea);
+  const initialState = getStateFromInput(input);
 
   if (isShiftPressed) {
     const lineRange = expandSelectionToLineBoundaries(initialState);
-    const selection = setSelectionRange(textarea, lineRange);
+    const selection = setSelectionRange(input, lineRange);
 
     replaceSelection(
-      textarea,
+      input,
       removeTab(selection.selectedText, useTab, tabWidth)
     );
 
     if (initialState.selection.start === initialState.selection.end) {
       const selectionAdjust = useTab ? 1 : tabWidth;
 
-      setSelectionRange(textarea, {
+      setSelectionRange(input, {
         start: initialState.selection.start - selectionAdjust,
         end: initialState.selection.end - selectionAdjust,
       });
@@ -477,7 +477,7 @@ export function handleTab(
   }
 
   const lineRange = expandSelectionToLineBoundaries(initialState);
-  const selection = setSelectionRange(textarea, lineRange);
+  const selection = setSelectionRange(input, lineRange);
 
   const withTab = applyTab(selection.selectedText, useTab, tabWidth);
   const withInitializedOrdinal = withTab.replace(
@@ -487,43 +487,43 @@ export function handleTab(
     }
   );
 
-  replaceSelection(textarea, withInitializedOrdinal);
+  replaceSelection(input, withInitializedOrdinal);
 
   return true;
 }
 
-export function handleNewLine(textarea: HTMLInputElement) {
-  const initialState = getStateFromTextarea(textarea);
+export function handleNewLine(input: HTMLInputElement) {
+  const initialState = getStateFromInput(input);
 
   if (initialState.selection.start !== initialState.selection.end) {
     return false;
   }
 
   const lineRange = expandSelectionToLineBoundaries(initialState);
-  const before = textarea.value.slice(
+  const before = input.value.slice(
     lineRange.start,
     initialState.selection.end
   );
 
-  const line = textarea.value.slice(lineRange.start, lineRange.end);
+  const line = input.value.slice(lineRange.start, lineRange.end);
 
   // Remove bullet list
   if (/^(\s*[-*+]\s+(?:\[[^\]]\]\s*)?)$/.test(line)) {
-    setSelectionRange(textarea, {
+    setSelectionRange(input, {
       start: lineRange.start - 1,
       end: lineRange.end,
     });
-    replaceSelection(textarea, '\n');
+    replaceSelection(input, '\n');
     return true;
   }
 
   // Remove ordered list
   if (/^(\s*\d[.)]\s+(?:\[[^\]]\]\s*)?)$/.test(line)) {
-    setSelectionRange(textarea, {
+    setSelectionRange(input, {
       start: lineRange.start - 1,
       end: lineRange.end,
     });
-    replaceSelection(textarea, '\n');
+    replaceSelection(input, '\n');
     return true;
   }
 
@@ -531,7 +531,7 @@ export function handleNewLine(textarea: HTMLInputElement) {
   if (isBulleted.test(before)) {
     const pre = before.match(/^(\s*[-*+]\s+(?:\[[^\]]\]\s*)?)/)[1];
     insertTextAtCursor(
-      textarea,
+      input,
       `\n${pre.replace(/^(\s*[-*+]\s+)\[[^\]]\]/, '$1[ ]')}`
     );
     return true;
@@ -547,7 +547,7 @@ export function handleNewLine(textarea: HTMLInputElement) {
         return `${space}${parseInt(number) + 1}`;
       }
     );
-    insertTextAtCursor(textarea, `\n${withIncrementedOrdinal}`);
+    insertTextAtCursor(input, `\n${withIncrementedOrdinal}`);
     return true;
   }
 

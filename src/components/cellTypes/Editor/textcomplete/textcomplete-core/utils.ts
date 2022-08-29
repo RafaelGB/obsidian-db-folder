@@ -2,7 +2,6 @@ const isCustomEventSupported =
   typeof window !== 'undefined' && !!window.CustomEvent;
 
 export const createCustomEvent = <T>(
-  doc: Document,
   type: string,
   options?: CustomEventInit<T>
 ): CustomEvent<T> => {

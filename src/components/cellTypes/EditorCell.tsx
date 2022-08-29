@@ -1,9 +1,9 @@
 import { EditorCellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 
-import React, { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";
+import React, { ChangeEventHandler, useCallback, useRef } from "react";
 import { useState } from "react";
-import { MarkdownEditor } from "./Editor/MarkdownEditor";
+import { MarkdownEditor } from "components/cellTypes/Editor/MarkdownEditor";
 
 const EditorCell = (props: EditorCellComponentProps) => {
   const { defaultCell, cellValue, setCellValue, setDirtyCell } = props;
@@ -21,7 +21,6 @@ const EditorCell = (props: EditorCellComponentProps) => {
     (state) => state.ddbbConfig
   );
 
-  const [triggerSuggestions, setTriggerSuggestions] = useState(false);
   const [editorValue, setEditorValue] = useState(cellValue);
   const [editNoteTimeout, setEditNoteTimeout] = useState(null);
 
@@ -48,17 +47,28 @@ const EditorCell = (props: EditorCellComponentProps) => {
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
-      changedValue,
+      changedValue.trim(),
       columns,
       ddbbConfig
     );
   };
 
+  /** Call onBlur */
   const handleEnter = () => {
-    // Close input on enter
     editableMdRef.current.blur();
   };
 
+  /**
+   * Close editor undoing any changes realised
+   */
+  const handleOnEscape = useCallback(() => {
+    onChange(cellValue ? cellValue.toString() : "");
+    setDirtyCell(false);
+  }, []);
+
+  /**
+   * Save changes and close editor
+   */
   const handleOnBlur = () => {
     setCellValue(editorValue);
     setDirtyCell(false);
@@ -70,8 +80,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
         ref={editableMdRef}
         value={(editorValue && editorValue.toString()) || ""}
         onEnter={handleEnter}
-        onEscape={() => console.log("onEscape")}
-        onSubmit={() => console.log("onSubmit")}
+        onEscape={handleOnEscape}
         onBlur={handleOnBlur}
         onChange={handleOnChange}
         view={table.options.meta.view}

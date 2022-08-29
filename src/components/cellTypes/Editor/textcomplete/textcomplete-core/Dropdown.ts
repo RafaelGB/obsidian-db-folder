@@ -72,7 +72,7 @@ export class Dropdown extends EventEmitter {
     searchResults: SearchResult<unknown>[],
     cursorOffset: CursorOffset
   ): this {
-    const event = createCustomEvent(this.el.doc, 'render', {
+    const event = createCustomEvent('render', {
       cancelable: true,
     });
     this.emit('render', event);
@@ -91,7 +91,7 @@ export class Dropdown extends EventEmitter {
       .show()
       .setOffset(cursorOffset)
       .activate(0);
-    this.emit('rendered', createCustomEvent(this.el.doc, 'rendered'));
+    this.emit('rendered', createCustomEvent('rendered'));
     return this;
   }
 
@@ -109,7 +109,7 @@ export class Dropdown extends EventEmitter {
    */
   select(item: DropdownItem): this {
     const detail = { searchResult: item.searchResult };
-    const event = createCustomEvent(this.el.doc, 'select', {
+    const event = createCustomEvent('select', {
       cancelable: true,
       detail,
     });
@@ -118,7 +118,7 @@ export class Dropdown extends EventEmitter {
     this.hide();
     this.emit(
       'selected',
-      createCustomEvent(this.el.doc, 'selected', { detail })
+      createCustomEvent('selected', { detail })
     );
     return this;
   }
@@ -131,14 +131,14 @@ export class Dropdown extends EventEmitter {
    */
   show(): this {
     if (!this.shown) {
-      const event = createCustomEvent(this.el.doc, 'show', {
+      const event = createCustomEvent('show', {
         cancelable: true,
       });
       this.emit('show', event);
       if (event.defaultPrevented) return this;
       this.el.style.display = 'block';
       this.shown = true;
-      this.emit('shown', createCustomEvent(this.el.doc, 'shown'));
+      this.emit('shown', createCustomEvent('shown'));
     }
     return this;
   }
@@ -151,7 +151,7 @@ export class Dropdown extends EventEmitter {
    */
   hide(): this {
     if (this.shown) {
-      const event = createCustomEvent(this.el.doc, 'hide', {
+      const event = createCustomEvent('hide', {
         cancelable: true,
       });
       this.emit('hide', event);
@@ -159,7 +159,7 @@ export class Dropdown extends EventEmitter {
       this.el.style.display = 'none';
       this.shown = false;
       this.clear();
-      this.emit('hidden', createCustomEvent(this.el.doc, 'hidden'));
+      this.emit('hidden', createCustomEvent('hidden'));
     }
     return this;
   }

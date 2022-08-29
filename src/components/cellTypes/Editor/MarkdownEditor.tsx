@@ -1,5 +1,4 @@
 import { DatabaseView } from "DatabaseView";
-import { c } from "helpers/StylesHelper";
 import React, {
   AllHTMLAttributes,
   DetailedHTMLProps,
@@ -21,12 +20,11 @@ interface MarkdownEditorProps
   extends DetailedHTMLProps<AllHTMLAttributes<HTMLInputElement>, any> {
   onEnter: (e: KeyboardEvent) => void;
   onEscape: (e: KeyboardEvent) => void;
-  onSubmit: () => void;
   view: DatabaseView;
 }
 
 export const MarkdownEditor = forwardRef(function MarkdownEditor(
-  { onEnter, onEscape, onSubmit, view, ...textareaProps }: MarkdownEditorProps,
+  { onEnter, onEscape, view, ...inputProps }: MarkdownEditorProps,
   ref: Ref<HTMLInputElement>
 ) {
   const shouldAutoPairMarkdown = (app.vault as any).getConfig(
@@ -114,7 +112,7 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
   return (
     <input
       rows={1}
-      {...textareaProps}
+      {...inputProps}
       {...autocompleteProps}
       ref={(c: HTMLInputElement) => {
         autocompleteProps.ref.current = c;

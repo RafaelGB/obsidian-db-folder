@@ -2,6 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 
 import { SearchResult } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/SearchResult';
 import { createCustomEvent } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/utils';
+import { LOGGER } from 'services/Logger';
 
 export interface CursorOffset {
   lineHeight: number;
@@ -54,7 +55,7 @@ export abstract class Editor extends EventEmitter {
    * @see {@link Textarea} for live example.
    */
   emitMoveEvent(code: 'UP' | 'DOWN'): CustomEvent {
-    const moveEvent = createCustomEvent(activeDocument, 'move', {
+    const moveEvent = createCustomEvent('move', {
       cancelable: true,
       detail: {
         code: code,
@@ -71,7 +72,7 @@ export abstract class Editor extends EventEmitter {
    * @see {@link Textarea} for live example.
    */
   emitEnterEvent(): CustomEvent {
-    const enterEvent = createCustomEvent(activeDocument, 'enter', {
+    const enterEvent = createCustomEvent('enter', {
       cancelable: true,
     });
     this.emit('enter', enterEvent);
@@ -85,7 +86,7 @@ export abstract class Editor extends EventEmitter {
    * @see {@link Textarea} for live example.
    */
   emitChangeEvent(): CustomEvent {
-    const changeEvent = createCustomEvent(activeDocument, 'change', {
+    const changeEvent = createCustomEvent('change', {
       detail: {
         beforeCursor: this.getBeforeCursor(),
       },
@@ -101,7 +102,7 @@ export abstract class Editor extends EventEmitter {
    * @see {@link Textarea} for live example.
    */
   emitEscEvent(): CustomEvent {
-    const escEvent = createCustomEvent(activeDocument, 'esc', {
+    const escEvent = createCustomEvent('esc', {
       cancelable: true,
     });
     this.emit('esc', escEvent);
@@ -114,20 +115,35 @@ export abstract class Editor extends EventEmitter {
    * @see {@link Textarea} for live example.
    */
   protected getCode(e: KeyboardEvent): KeyCode {
-    return e.keyCode === 9 // tab
-      ? 'ENTER'
-      : e.keyCode === 13 // enter
-        ? 'ENTER'
-        : e.keyCode === 27 // esc
-          ? 'ESC'
-          : e.keyCode === 38 // up
-            ? 'UP'
-            : e.keyCode === 40 // down
-              ? 'DOWN'
-              : e.keyCode === 78 && e.ctrlKey // ctrl-n
-                ? 'DOWN'
-                : e.keyCode === 80 && e.ctrlKey // ctrl-p
-                  ? 'UP'
-                  : 'OTHER';
+    LOGGER.debug(`Editor onKeyDown event: ${e.key}`);
+    let code: KeyCode = 'OTHER';
+    switch (e.key) {
+      case 'Enter':
+      case 'Tab':
+        code = 'ENTER';
+        break;
+      case 'Escape':
+        code = 'ESC';
+        break;
+      case 'ArrowUp':
+        code = 'UP';
+        break;
+      case 'ArrowDown':
+        code = 'DOWN';
+        break;
+      case 'n':
+        if (e.ctrlKey) {
+          code = 'DOWN';
+        }
+        break;
+      case 'p':
+        if (e.ctrlKey) {
+          code = 'UP';
+        }
+        break;
+      default:
+      // do nothing
+    }
+    return code;
   }
 }

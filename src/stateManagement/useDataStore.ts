@@ -1,7 +1,7 @@
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import create from "zustand";
-import data_state_actions from "./data/DataStateActions";
+import data_state_actions from "stateManagement/data/DataStateActions";
 
 const useDataStore = (view: DatabaseView) => {
     return create<DataState>()((set, get) => {

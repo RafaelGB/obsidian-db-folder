@@ -1,7 +1,7 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { TFile } from "obsidian";
-import { DataviewService } from "./DataviewService";
+import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolve_tfile } from "helpers/FileManagement";

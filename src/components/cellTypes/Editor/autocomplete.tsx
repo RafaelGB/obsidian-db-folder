@@ -10,10 +10,13 @@ import {
   getBlockSearchConfig,
   getFileSearchConfig,
   getHeadingSearchConfig,
-} from "./filepicker";
-import { getTagSearchConfig } from "./tagpicker";
-import { StrategyProps, Textcomplete } from "./textcomplete/textcomplete-core";
-import { TextareaEditor } from "./textcomplete/textcomplete-textarea";
+} from "components/cellTypes/Editor/filepicker";
+import { getTagSearchConfig } from "components/cellTypes/Editor/tagpicker";
+import {
+  StrategyProps,
+  Textcomplete,
+} from "components/cellTypes/Editor/textcomplete/textcomplete-core";
+import { InputEditor } from "components/cellTypes/Editor/textcomplete/textcomplete-input";
 
 export interface ConstructAutocompleteParams {
   inputRef: RefObject<HTMLInputElement>;
@@ -71,7 +74,7 @@ export function constructAutocomplete({
     ),
   ];
 
-  const editor = new TextareaEditor(inputRef.current);
+  const editor = new InputEditor(inputRef.current);
   const autocomplete = new Textcomplete(editor, configs, {
     dropdown: {
       parent: getParentBodyElement(inputRef.current),

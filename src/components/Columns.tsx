@@ -16,7 +16,7 @@ import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DatabaseView } from "DatabaseView";
 import { obtainAllPossibleRows } from "helpers/VaultManagement";
-import rowContextMenuColumn from "./RowContextMenu";
+import rowContextMenuColumn from "components/RowContextMenu";
 
 /**
  * Add mandatory and configured metadata columns of the table
