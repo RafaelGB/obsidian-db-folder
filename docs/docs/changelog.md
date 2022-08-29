@@ -1,7 +1,7 @@
 # 2.3.0
 ### Shiny new things
-- Pagination arrived! Now you can organize your ddbb in pages, and you can choose the number of items per page in the settings panel. This also affects to the performance, so theoretically you can have a ddbb with more than 10000 items.
-- Autocomplete for links and tags in the editor of text column cells. Its an adaption of [Kanban plugin](https://github.com/mgmeyers/obsidian-kanban) feature, so it will be familiar to you.
+- Pagination arrived! Now you can organize your ddbb in pages, and you can choose the number of items per page in the settings panel. This also affects to the performance, so theoretically you can have a ddbb with more than 10000 items. [ISSUE#116](https://github.com/RafaelGB/obsidian-db-folder/issues/116)
+- Autocomplete for links and tags in the editor of text column cells. Its an adaption of [Kanban plugin](https://github.com/mgmeyers/obsidian-kanban) feature, so it will be familiar to you. [ISSUE#107](https://github.com/RafaelGB/obsidian-db-folder/issues/107)
 ### Visual
 - navbar and add row forms are now static with horizontal scroll. Thanks to [artisticat1](https://github.com/artisticat1)
 ### No longer broken
