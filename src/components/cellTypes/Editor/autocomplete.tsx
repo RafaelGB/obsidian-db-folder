@@ -13,7 +13,7 @@ import {
 } from "./filepicker";
 import { getTagSearchConfig } from "./tagpicker";
 import { StrategyProps, Textcomplete } from "./textcomplete/textcomplete-core";
-import { TextareaEditor } from "./textcomplete/textcomplete-textarea";
+import { InputEditor } from "./textcomplete/textcomplete-input";
 
 export interface ConstructAutocompleteParams {
   inputRef: RefObject<HTMLInputElement>;
@@ -71,7 +71,7 @@ export function constructAutocomplete({
     ),
   ];
 
-  const editor = new TextareaEditor(inputRef.current);
+  const editor = new InputEditor(inputRef.current);
   const autocomplete = new Textcomplete(editor, configs, {
     dropdown: {
       parent: getParentBodyElement(inputRef.current),

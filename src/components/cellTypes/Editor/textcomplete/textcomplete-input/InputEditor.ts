@@ -1,4 +1,4 @@
-import { getCaretCoordinates } from 'components/cellTypes/Editor/textcomplete/textcomplete-textarea/textareaCaret';
+import { getCaretCoordinates } from 'components/cellTypes/Editor/textcomplete/textcomplete-input/textareaCaret';
 import { update } from 'components/cellTypes/Editor/textcomplete/undate/update';
 
 import {
@@ -9,7 +9,7 @@ import {
 } from 'components/cellTypes/Editor/textcomplete/textcomplete-core';
 import { calculateElementOffset, getLineHeightPx } from 'components/cellTypes/Editor/textcomplete/textcomplete-utils';
 
-export class TextareaEditor extends Editor {
+export class InputEditor extends Editor {
   constructor(private readonly el: HTMLInputElement) {
     super();
     this.startListening();

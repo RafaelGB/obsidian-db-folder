@@ -1,5 +1,4 @@
 import { DatabaseView } from "DatabaseView";
-import { c } from "helpers/StylesHelper";
 import React, {
   AllHTMLAttributes,
   DetailedHTMLProps,
