@@ -6,11 +6,11 @@ export function wrapCursor(
   after?: string
 ) {
   const initEnd = el.selectionEnd;
-  const headToCursor = el.value.substr(0, el.selectionStart) + before;
+  const headToCursor = el.value.substring(0, el.selectionStart) + before;
   const cursorToTail =
     el.value.substring(el.selectionStart, initEnd) +
     (after || '') +
-    el.value.substr(initEnd);
+    el.value.substring(initEnd);
   update(el, headToCursor, cursorToTail);
   el.selectionEnd = initEnd + before.length;
   return el;

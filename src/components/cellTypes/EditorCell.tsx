@@ -26,7 +26,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
 
   // onChange handler
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const value = event.target.value.trim();
+    const { value } = event.target;
     // cancelling previous timeouts
     if (editNoteTimeout) {
       clearTimeout(editNoteTimeout);
@@ -47,7 +47,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
-      changedValue,
+      changedValue.trim(),
       columns,
       ddbbConfig
     );
@@ -59,9 +59,10 @@ const EditorCell = (props: EditorCellComponentProps) => {
   };
 
   /**
-   * Close editor without saving changes
+   * Close editor undoing any changes realised
    */
   const handleOnEscape = useCallback(() => {
+    onChange(cellValue ? cellValue.toString() : "");
     setDirtyCell(false);
   }, []);
 
