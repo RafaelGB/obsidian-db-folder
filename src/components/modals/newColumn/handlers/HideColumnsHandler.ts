@@ -15,7 +15,7 @@ export class HideColumnsHandler extends AbstractHandlerClass<AddColumnModalHandl
      ******************/
     // List of columns to show/hide
     columns
-      .filter(c => !c.isMetadata)
+      .filter(c => !c.skipPersist)
       .forEach((column) => {
         const toggleHandler = (shown: boolean): void => {
           actions.alterIsHidden(column, !shown);
