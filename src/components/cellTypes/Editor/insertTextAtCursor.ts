@@ -36,7 +36,7 @@ export function insertTextAtCursor(input: HTMLInputElement, text: string) {
       if (canManipulateViaTextNodes(input)) {
         let node = input.firstChild;
 
-        // If textarea is empty, just insert the text
+        // If input is empty, just insert the text
         if (!node) {
           input.appendChild(textNode);
         } else {

@@ -24,7 +24,7 @@ interface MarkdownEditorProps
 }
 
 export const MarkdownEditor = forwardRef(function MarkdownEditor(
-  { onEnter, onEscape, view, ...textareaProps }: MarkdownEditorProps,
+  { onEnter, onEscape, view, ...inputProps }: MarkdownEditorProps,
   ref: Ref<HTMLInputElement>
 ) {
   const shouldAutoPairMarkdown = (app.vault as any).getConfig(
@@ -112,7 +112,7 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
   return (
     <input
       rows={1}
-      {...textareaProps}
+      {...inputProps}
       {...autocompleteProps}
       ref={(c: HTMLInputElement) => {
         autocompleteProps.ref.current = c;
