@@ -9,7 +9,6 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
-import CrossIcon from "components/img/CrossIcon";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";

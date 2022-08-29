@@ -18,7 +18,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
 
         promiseOfObtainColumnsFromRows.then((columnsRaw: Record<string, DatabaseColumn>) => {
             // Filter out the columns that are already in the table
-            const currentColumns = (info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id.toLowerCase());
+            const currentColumns = (info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id);
             const filteredColumns: Record<string, string> = {};
             Object.keys(columnsRaw).filter((columnName: string) => {
                 return !currentColumns.includes(columnName.toLowerCase())
