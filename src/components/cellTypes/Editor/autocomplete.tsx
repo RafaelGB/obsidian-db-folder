@@ -10,10 +10,13 @@ import {
   getBlockSearchConfig,
   getFileSearchConfig,
   getHeadingSearchConfig,
-} from "./filepicker";
-import { getTagSearchConfig } from "./tagpicker";
-import { StrategyProps, Textcomplete } from "./textcomplete/textcomplete-core";
-import { InputEditor } from "./textcomplete/textcomplete-input";
+} from "components/cellTypes/Editor/filepicker";
+import { getTagSearchConfig } from "components/cellTypes/Editor/tagpicker";
+import {
+  StrategyProps,
+  Textcomplete,
+} from "components/cellTypes/Editor/textcomplete/textcomplete-core";
+import { InputEditor } from "components/cellTypes/Editor/textcomplete/textcomplete-input";
 
 export interface ConstructAutocompleteParams {
   inputRef: RefObject<HTMLInputElement>;

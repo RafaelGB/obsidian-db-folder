@@ -8,8 +8,8 @@ import AlterColumnTypeHandlerAction from "stateManagement/columns/handlers/Alter
 import AlterColumnLabelHandlerAction from "stateManagement/columns/handlers/AlterColumnLabelAction";
 import AlterColumnSizeHandlerAction from "stateManagement/columns/handlers/AlterColumnSizeAction";
 import InfoColumnFunctions from "stateManagement/columns/handlers/InfoColumnFunctions";
+import AlterIsHiddenColumnHandlerAction from "stateManagement/columns/handlers/AlterIsHiddenColumnAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
-import AlterIsHiddenColumnHandlerAction from "./handlers/AlterIsHiddenColumnAction";
 class ColumnsStateActions extends AbstractChain<TableActionResponse<ColumnsState>> {
     protected getHandlers(): AbstractHandler<TableActionResponse<ColumnsState>>[] {
         return [

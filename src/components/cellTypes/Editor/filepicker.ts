@@ -4,7 +4,7 @@ import { c } from 'helpers/StylesHelper';
 import { App, TFile, setIcon } from 'obsidian';
 import StateManager from 'StateManager';
 
-import { StrategyProps } from './textcomplete/textcomplete-core';
+import { StrategyProps } from 'components/cellTypes/Editor/textcomplete/textcomplete-core';
 
 const linkRegex = /\B\[\[([^\]]*)$/;
 const embedRegex = /\B!\[\[([^\]]*)$/;

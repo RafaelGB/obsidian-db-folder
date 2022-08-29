@@ -1,11 +1,11 @@
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
+import { TableStateInterface } from "cdm/TableStateInterface";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
 import { Column, ColumnDef, ColumnSort, Header, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { TableStateInterface } from "./TableStateInterface";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {

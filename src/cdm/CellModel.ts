@@ -1,5 +1,5 @@
 import { Row } from "@tanstack/react-table"
-import { RowDataType } from "./FolderModel"
+import { RowDataType } from "cdm/FolderModel"
 import { TableStateInterface } from "cdm/TableStateInterface"
 
 export type TableCellProps = {

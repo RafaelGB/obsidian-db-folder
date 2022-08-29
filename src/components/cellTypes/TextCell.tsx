@@ -2,9 +2,7 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
-import { LOGGER } from "services/Logger";
 import EditorCell from "components/cellTypes/EditorCell";
-import { MarkdownEditor } from "./Editor/MarkdownEditor";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
