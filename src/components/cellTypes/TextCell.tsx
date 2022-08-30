@@ -6,11 +6,12 @@ import EditorCell from "components/cellTypes/EditorCell";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, column } = defaultCell;
+  const { column, table, row } = defaultCell;
+  const { tableState } = table.options.meta;
+  const textRow = tableState.data((state) => state.rows[row.index]);
+
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
-
-  const [cellValue, setCellValue] = useState(cell.getValue());
   const [dirtyCell, setDirtyCell] = useState(false);
 
   /**
@@ -23,9 +24,10 @@ const TextCell = (props: CellComponentProps) => {
     }
     if (containerCellRef.current !== undefined) {
       containerCellRef.current.innerHTML = "";
+      console.log("rendering markdown");
       renderMarkdown(
         defaultCell,
-        cellValue?.toString(),
+        textRow[column.id]?.toString(),
         containerCellRef.current,
         5
       );
@@ -37,12 +39,7 @@ const TextCell = (props: CellComponentProps) => {
   };
 
   return dirtyCell ? (
-    <EditorCell
-      defaultCell={defaultCell}
-      cellValue={cellValue}
-      setCellValue={setCellValue}
-      setDirtyCell={setDirtyCell}
-    />
+    <EditorCell defaultCell={defaultCell} setDirtyCell={setDirtyCell} />
   ) : (
     <span
       ref={containerCellRef}

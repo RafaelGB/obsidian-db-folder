@@ -6,8 +6,8 @@ import { useState } from "react";
 import { MarkdownEditor } from "components/cellTypes/Editor/MarkdownEditor";
 
 const EditorCell = (props: EditorCellComponentProps) => {
-  const { defaultCell, cellValue, setCellValue, setDirtyCell } = props;
-  const { row, column, table } = defaultCell;
+  const { defaultCell, setDirtyCell } = props;
+  const { cell, row, column, table } = defaultCell;
   /** Ref to cell container */
   const editableMdRef = useRef<HTMLInputElement>();
   /** Columns information */
@@ -21,29 +21,17 @@ const EditorCell = (props: EditorCellComponentProps) => {
     (state) => state.info
   );
 
-  const [editorValue, setEditorValue] = useState(cellValue);
-  const [editNoteTimeout, setEditNoteTimeout] = useState(null);
+  const [editorValue, setEditorValue] = useState(cell.getValue());
 
   // onChange handler
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const { value } = event.target;
-    // cancelling previous timeouts
-    if (editNoteTimeout) {
-      clearTimeout(editNoteTimeout);
-    }
 
     // first update the input text as user type
     setEditorValue(value);
-    // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
-    setEditNoteTimeout(
-      setTimeout(() => {
-        onChange(value);
-        // timeout until event is triggered after user has stopped typing
-      }, 1500)
-    );
   };
 
-  const onChange = (changedValue: string) => {
+  const persistChange = (changedValue: string) => {
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
@@ -62,23 +50,23 @@ const EditorCell = (props: EditorCellComponentProps) => {
    * Close editor undoing any changes realised
    */
   const handleOnEscape = useCallback(() => {
-    onChange(cellValue ? cellValue.toString() : "");
     setDirtyCell(false);
+    persistChange(cell.getValue()?.toString());
   }, []);
 
   /**
    * Save changes and close editor
    */
   const handleOnBlur = () => {
-    setCellValue(editorValue);
     setDirtyCell(false);
+    persistChange(editorValue?.toString());
   };
 
   return (
     <>
       <MarkdownEditor
         ref={editableMdRef}
-        value={(editorValue && editorValue.toString()) || ""}
+        value={editorValue?.toString()}
         onEnter={handleEnter}
         onEscape={handleOnEscape}
         onBlur={handleOnBlur}

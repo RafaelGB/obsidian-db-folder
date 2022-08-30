@@ -12,14 +12,14 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
-  const [columns, columnActions] = table.options.meta.tableState.columns(
-    (state) => [state.columns, state.actions]
+  const [columnsInfo, columnActions] = table.options.meta.tableState.columns(
+    (state) => [state.info, state.actions]
   );
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
   );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
+  const configInfo = table.options.meta.tableState.configState(
+    (state) => state.info
   );
 
   /** Header props */
@@ -123,8 +123,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
         dataActions.updateDataAfterLabelChange(
           column.columnDef as TableColumn,
           labelState,
-          columns,
-          ddbbConfig
+          columnsInfo.getAllColumns(),
+          configInfo.getLocalSettings()
         );
       });
   }
