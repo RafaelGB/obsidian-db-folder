@@ -73,9 +73,8 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                         UpdateRowOptions.COLUMN_VALUE
                     );
                 }
-                state.rows[rowIndex] = modifiedRow;
                 // Update rows without re render
-                return { rows: state.rows };
+                return { rows: [...state.rows.slice(0, rowIndex), modifiedRow, ...state.rows.slice(rowIndex + 1)] };
             });
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);

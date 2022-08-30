@@ -26,9 +26,8 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   );
 
   // Calendar state
-  const [calendarTimeState, setcalendarTimeState] = useState(
-    calendatTimeRow[tableColumn.key]
-  );
+  const calendarTimeState = calendatTimeRow[tableColumn.key];
+
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -42,11 +41,10 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
     dataActions.updateCell(
       row.index,
       tableColumn,
-      changed.toISO(),
+      changed,
       columns,
       ddbbConfig
     );
-    setcalendarTimeState(changed);
     setShowDatePicker(false);
   }
 
