@@ -25,6 +25,7 @@ const useConfigStore = (view: DatabaseView) => {
             },
             info: {
                 getLocalSettings: () => get().ddbbConfig,
+                getFilters: () => get().filters,
             },
         })
     );

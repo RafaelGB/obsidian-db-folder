@@ -193,7 +193,6 @@ class DataviewProxy {
                 break;
 
             case 'date':
-
                 if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
                     // Parse date
                     auxMarkdown = wrapped.value.toFormat("yyyy-MM-dd");

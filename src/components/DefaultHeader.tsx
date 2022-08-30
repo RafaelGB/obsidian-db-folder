@@ -58,16 +58,14 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const { header, table } = headerProps;
   const { tableState } = table.options.meta;
 
-  const [columns, columnInfo, columnActions] = tableState.columns((state) => [
-    state.columns,
+  const [columnInfo, columnActions] = tableState.columns((state) => [
     state.info,
     state.actions,
   ]);
 
-  const ddbbConfig = tableState.configState((state) => state.ddbbConfig);
-  const filtersConfig = tableState.configState((state) => state.filters);
-  /** Column values */
+  const configInfo = tableState.configState((state) => state.info);
 
+  /** Column values */
   const { id, input, options, label, config } = header.column
     .columnDef as TableColumn;
   /** reducer asociated to database */
@@ -113,15 +111,14 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
   }
 
-  function handlerAddColumnToLeft(e: any) {
+  function handlerAddColumnToLeft() {
     const addColumnProps: AddColumnModalProps = {
       columnsState: {
-        columns,
         info: columnInfo,
         actions: columnActions,
       },
-      ddbbConfig: ddbbConfig,
-      filters: filtersConfig,
+      ddbbConfig: configInfo.getLocalSettings(),
+      filters: configInfo.getFilters(),
     };
     new AddColumnModal(table.options.meta.view, addColumnProps).open();
   }

@@ -10,9 +10,10 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
     handle(response: AddColumnModalHandlerResponse): AddColumnModalHandlerResponse {
         const { containerEl, addColumnModalManager } = response;
         const { filters, ddbbConfig } = addColumnModalManager.props;
-        const { columns, actions, info } = addColumnModalManager.props.columnsState;
+        const { actions, info } = addColumnModalManager.props.columnsState;
+        const columns = info.getAllColumns();
         let selectedColumn: string = "-";
-        const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
+        const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve) => {
             resolve(obtainColumnsFromRows(addColumnModalManager.addColumnModal.view, ddbbConfig, filters, columns));
         });
 

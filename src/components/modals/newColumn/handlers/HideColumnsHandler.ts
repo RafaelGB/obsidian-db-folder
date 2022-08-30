@@ -8,13 +8,13 @@ export class HideColumnsHandler extends AbstractHandlerClass<AddColumnModalHandl
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { columns, actions } = addColumnModalManager.props.columnsState;
+    const { info, actions } = addColumnModalManager.props.columnsState;
 
     /******************
      * SHOW COLUMN MENU
      ******************/
     // List of columns to show/hide
-    columns
+    info.getAllColumns()
       .filter(c => !c.skipPersist)
       .forEach((column) => {
         const toggleHandler = (shown: boolean): void => {

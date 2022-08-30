@@ -1,10 +1,16 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import React, { useState } from "react";
+import { Literal } from "obsidian-dataview";
+import React, {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  useEffect,
+  useState,
+} from "react";
 
 const NumberCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, row, column, table } = defaultCell;
+  const { row, column, table } = defaultCell;
 
   /** Columns information */
   const columnsInfo = table.options.meta.tableState.columns(
@@ -13,38 +19,30 @@ const NumberCell = (props: CellComponentProps) => {
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
   );
+
+  const numberRow = table.options.meta.tableState.data(
+    (state) => state.rows[row.index]
+  );
+
   const configInfo = table.options.meta.tableState.configState(
     (state) => state.info
   );
 
-  const [cellValue, setCellValue] = useState(cell.getValue());
+  const [cellValue, setCellValue] = useState(numberRow[column.id] as number);
   const [dirtyCell, setDirtyCell] = useState(false);
 
-  const [editNoteTimeout, setEditNoteTimeout] = useState(null);
-
-  const handleEditableOnclick = (event: any) => {
+  const handleEditableOnclick = () => {
     setDirtyCell(true);
   };
 
   // onChange handler
-  const handleOnChange = (event: any) => {
-    setDirtyCell(true);
-    // cancelling previous timeouts
-    if (editNoteTimeout) {
-      clearTimeout(editNoteTimeout);
-    }
-    // first update the input text as user type
-    setCellValue(event.target.value);
-    // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
-    setEditNoteTimeout(
-      setTimeout(() => {
-        onChange(event.target.value);
-        // timeout until event is triggered after user has stopped typing
-      }, 1500)
-    );
+  const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    // parse value to number
+    const value = parseFloat(event.target.value);
+    setCellValue(value);
   };
 
-  function onChange(changedValue: string) {
+  function persistChange(changedValue: number) {
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
@@ -54,13 +52,16 @@ const NumberCell = (props: CellComponentProps) => {
     );
   }
 
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    event: any
+  ) => {
     if (event.key === "Enter") {
       event.target.blur();
     }
   };
 
-  const handleOnBlur = (event: any) => {
+  const handleOnBlur = () => {
+    persistChange(cellValue);
     setDirtyCell(false);
   };
 

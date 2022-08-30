@@ -9,7 +9,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { columns, actions } = addColumnModalManager.props.columnsState;
+    const { info, actions } = addColumnModalManager.props.columnsState;
     let newColumnName = "";
     /**************
      * EMPTY COLUMN
@@ -31,7 +31,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
           .onClick(async (): Promise<void> => {
             const isEmpty = newColumnName.length === 0;
             actions.addToLeft(
-              columns.find((o) => o.id === MetadataColumns.ADD_COLUMN),
+              info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
               isEmpty ? undefined : newColumnName
             );
             new Notice(isEmpty ? "New column added" : `"${newColumnName}" added to the table`, 1500);
