@@ -40,6 +40,7 @@ function mockColumnsState(): ColumnsState {
     info: {
       getValueOfAllColumnsAsociatedWith: null,
       getVisibilityRecord: null,
+      getAllColumns: null,
     },
   };
 }

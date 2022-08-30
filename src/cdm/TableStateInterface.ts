@@ -27,6 +27,9 @@ export interface ConfigState {
         alterFilters: (filters: Partial<FilterSettings>) => void;
         alterConfig: (config: Partial<LocalSettings>) => void;
     }
+    info: {
+        getLocalSettings: () => LocalSettings;
+    }
 }
 
 export interface DataState {
@@ -57,6 +60,7 @@ export interface ColumnsState {
         alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
     }
     info: {
+        getAllColumns: () => TableColumn[];
         getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
         getVisibilityRecord: () => Record<string, boolean>;
     }

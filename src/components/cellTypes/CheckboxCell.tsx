@@ -8,19 +8,25 @@ function CheckboxCell(props: CellComponentProps) {
   const { row, column, table } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
 
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
+
+  const checkboxCell = table.options.meta.tableState.data(
+    (state) => state.rows[row.index]
   );
+
+  const columnsInfo = table.options.meta.tableState.columns(
+    (state) => state.info
+  );
+
+  const configInfo = table.options.meta.tableState.configState(
+    (state) => state.info
+  );
+
   /** state of cell value */
   const [checked, setChecked] = useState(
-    Boolean(rows[row.index][tableColumn.key])
+    Boolean(checkboxCell[tableColumn.key])
   );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
@@ -29,8 +35,8 @@ function CheckboxCell(props: CellComponentProps) {
       row.index,
       column.columnDef as TableColumn,
       newValue,
-      columns,
-      ddbbConfig
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings()
     );
     setChecked(event.target.checked);
   };

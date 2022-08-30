@@ -17,6 +17,10 @@ export default class InfoColumnFunctions extends AbstractTableAction<ColumnsStat
             return visibilityRecord;
         };
 
+        implementation.info.getAllColumns = () => {
+            return get().columns;
+        }
+
         response.implementation = implementation;
         return this.goNext(response);
     }
