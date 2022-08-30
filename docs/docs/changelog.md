@@ -1,3 +1,8 @@
+# 2.3.1
+### No longer broken
+- new row hide last row [ISSUE#295](https://github.com/RafaelGB/obsidian-db-folder/issues/295)
+- new row hide dbsettings using sliding panes [ISSUE#296](https://github.com/RafaelGB/obsidian-db-folder/issues/296)
+- Pagination legend supports dark mode[ISSUE#291](https://github.com/RafaelGB/obsidian-db-folder/issues/291)
 # 2.3.0
 ### Shiny new things
 - Pagination arrived! Now you can organize your ddbb in pages, and you can choose the number of items per page in the settings panel. This also affects to the performance, so theoretically you can have a ddbb with more than 10000 items. [ISSUE#116](https://github.com/RafaelGB/obsidian-db-folder/issues/116)
