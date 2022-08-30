@@ -59,6 +59,7 @@ const rowContextMenuColumn: TableColumn = {
           aria-controls={open ? `row-context-button-${row.id}` : undefined}
           aria-expanded={open ? "true" : undefined}
           aria-haspopup="true"
+          sx={{ border: 0, borderRadius: 0 }}
           onClick={handleClick}
           key={`row-context-button-${row.id}`}
         >
