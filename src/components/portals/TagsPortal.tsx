@@ -15,10 +15,13 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
   const [columns, columnActions] = table.options.meta.tableState.columns(
     (state) => [state.columns, state.actions]
   );
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
+  );
+
+  const tagsRow = table.options.meta.tableState.data(
+    (state) => state.rows[row.index]
+  );
 
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
@@ -29,8 +32,8 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
   const [tagsState, setTagsState] = useState(
-    Array.isArray(rows[row.index][tableColumn.key])
-      ? (rows[row.index][tableColumn.key] as Literal[])
+    Array.isArray(tagsRow[tableColumn.key])
+      ? (tagsRow[tableColumn.key] as Literal[])
       : []
   );
 

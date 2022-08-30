@@ -9,20 +9,25 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
   const { row, table, column } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
+  );
+
+  const calendatTimeRow = table.options.meta.tableState.data(
+    (state) => state.rows[row.index]
+  );
+
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
   );
+
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
 
   // Calendar state
   const [calendarTimeState, setcalendarTimeState] = useState(
-    rows[row.index][tableColumn.key]
+    calendatTimeRow[tableColumn.key]
   );
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);

@@ -18,14 +18,15 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             columns: TableColumn[],
             ddbbConfig: LocalSettings,
             isMovingFile?: boolean) => set((state) => {
-                let rowTFile = state.rows[rowIndex].__note__.getFile();
+                const modifiedRow = state.rows[rowIndex];
+                let rowTFile = modifiedRow.__note__.getFile();
 
                 // Update the row on memory
-                state.rows[rowIndex][column.key] = value;
+                modifiedRow[column.key] = value;
 
                 // Row Rules
                 if (ddbbConfig.show_metadata_modified) {
-                    state.rows[rowIndex][MetadataColumns.MODIFIED] = DateTime.now();
+                    modifiedRow[MetadataColumns.MODIFIED] = DateTime.now();
                 }
 
                 // Update the row on disk
@@ -40,7 +41,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     }
                     moveFile(`${view.file.parent.path}/${value}`, moveInfo);
                     // Update row file
-                    state.rows[rowIndex][
+                    modifiedRow[
                         MetadataColumns.FILE
                     ] = `[[${view.file.parent.path}/${value}/${rowTFile.name}|${rowTFile.basename}]]`;
                     // Check if action.value is a valid folder name
@@ -50,11 +51,11 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                             : `${view.file.parent.path}/${rowTFile.name}`;
 
                     const recordRow: Record<string, Literal> = {};
-                    Object.entries(state.rows[rowIndex]).forEach(([key, value]) => {
+                    Object.entries(modifiedRow).forEach(([key, value]) => {
                         recordRow[key] = value as Literal;
                     });
-                    state.rows[rowIndex]
-                    state.rows[rowIndex].__note__ = new NoteInfo({
+
+                    modifiedRow.__note__ = new NoteInfo({
                         ...recordRow,
                         file: {
                             path: auxPath,
@@ -72,6 +73,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                         UpdateRowOptions.COLUMN_VALUE
                     );
                 }
+                state.rows[rowIndex] = modifiedRow;
                 // Update rows without re render
                 return { rows: state.rows };
             });

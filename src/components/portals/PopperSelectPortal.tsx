@@ -16,20 +16,27 @@ import { TableColumn } from "cdm/FolderModel";
 const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
+
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
+  );
+
+  const selectPortalRow = table.options.meta.tableState.data(
+    (state) => state.rows[row.index]
+  );
+
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
   );
+
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
+
   const tableColumn = column.columnDef as TableColumn;
   /** state of cell value */
   const [selectState, setSelectState] = useState(
-    rows[row.index][tableColumn.key]
+    selectPortalRow[tableColumn.key]
   );
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
@@ -45,6 +52,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const columnActions = table.options.meta.tableState.columns(
     (state) => state.actions
   );
+
   React.useEffect(() => {
     if (!domReady) {
       setDomReady(true);
