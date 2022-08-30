@@ -11,14 +11,14 @@ const EditorCell = (props: EditorCellComponentProps) => {
   /** Ref to cell container */
   const editableMdRef = useRef<HTMLInputElement>();
   /** Columns information */
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
+  const columnsInfo = table.options.meta.tableState.columns(
+    (state) => state.info
   );
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
   );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
+  const configInfo = table.options.meta.tableState.configState(
+    (state) => state.info
   );
 
   const [editorValue, setEditorValue] = useState(cellValue);
@@ -48,8 +48,8 @@ const EditorCell = (props: EditorCellComponentProps) => {
       row.index,
       column.columnDef as TableColumn,
       changedValue.trim(),
-      columns,
-      ddbbConfig
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings()
     );
   };
 

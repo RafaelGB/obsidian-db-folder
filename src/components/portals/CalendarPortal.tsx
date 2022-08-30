@@ -9,22 +9,19 @@ import { TableColumn } from "cdm/FolderModel";
 const CalendarPortal = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
   const { row, column, table } = defaultCell;
+  const { tableState } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
-  );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
-  );
+  const dataActions = tableState.data((state) => state.actions);
+
+  const calendarPortalRow = tableState.data((state) => state.rows[row.index]);
+
+  const columns = tableState.columns((state) => state.columns);
+  const ddbbConfig = tableState.configState((state) => state.ddbbConfig);
 
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [calendarValue, setCalendarValue] = useState(
-    rows[row.index][tableColumn.key]
+    calendarPortalRow[tableColumn.key]
   );
 
   function handleSpanOnClick(event: any) {

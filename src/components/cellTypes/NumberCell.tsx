@@ -7,14 +7,14 @@ const NumberCell = (props: CellComponentProps) => {
   const { cell, row, column, table } = defaultCell;
 
   /** Columns information */
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
+  const columnsInfo = table.options.meta.tableState.columns(
+    (state) => state.info
   );
   const dataActions = table.options.meta.tableState.data(
     (state) => state.actions
   );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
+  const configInfo = table.options.meta.tableState.configState(
+    (state) => state.info
   );
 
   const [cellValue, setCellValue] = useState(cell.getValue());
@@ -49,8 +49,8 @@ const NumberCell = (props: CellComponentProps) => {
       row.index,
       column.columnDef as TableColumn,
       changedValue,
-      columns,
-      ddbbConfig
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings()
     );
   }
 

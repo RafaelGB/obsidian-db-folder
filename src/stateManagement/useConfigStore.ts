@@ -7,7 +7,7 @@ const useConfigStore = (view: DatabaseView) => {
     const { global_settings } = view.plugin.settings;
     const { config, filters } = view.diskConfig.yaml;
     return create<ConfigState>()(
-        (set) => ({
+        (set, get) => ({
             ddbbConfig: config,
             filters: filters,
             global: global_settings,
@@ -22,7 +22,10 @@ const useConfigStore = (view: DatabaseView) => {
                         view.diskConfig.updateConfig(alteredConfig);
                         return ({ ddbbConfig: { ...state.ddbbConfig, ...alteredConfig } });
                     }),
-            }
+            },
+            info: {
+                getLocalSettings: () => get().ddbbConfig,
+            },
         })
     );
 }
