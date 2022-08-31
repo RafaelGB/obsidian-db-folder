@@ -12,7 +12,7 @@ export type CellComponentProps = {
 }
 
 export type EditorCellComponentProps = {
-    setDirtyCell: (value: boolean) => void;
+    persistChange: (changedValue: string) => void;
 } & CellComponentProps;
 
 export type DataviewFiltersProps = {
