@@ -12,30 +12,24 @@ import { TableColumn } from "cdm/FolderModel";
 const TagsPortal = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
   const { row, column, table } = defaultCell;
-  const [columns, columnActions] = table.options.meta.tableState.columns(
-    (state) => [state.columns, state.actions]
-  );
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
+  const { tableState } = table.options.meta;
+  const [columnsInfo, columnActions] = tableState.columns((state) => [
+    state.info,
+    state.actions,
+  ]);
+  const dataActions = tableState.data((state) => state.actions);
 
-  const tagsRow = table.options.meta.tableState.data(
-    (state) => state.rows[row.index]
-  );
+  const tagsRow = tableState.data((state) => state.rows[row.index]);
 
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
-  );
+  const configInfo = tableState.configState((state) => state.info);
 
   const tableColumn = column.columnDef as TableColumn;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
   // tags values state
-  const [tagsState, setTagsState] = useState(
-    Array.isArray(tagsRow[tableColumn.key])
-      ? (tagsRow[tableColumn.key] as Literal[])
-      : []
-  );
+  const tagsState = Array.isArray(tagsRow[tableColumn.key])
+    ? (tagsRow[tableColumn.key] as Literal[])
+    : [];
 
   function getColor(tag: string) {
     const match = tableColumn.options.find(
@@ -50,9 +44,9 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
         label: tag,
         backgroundColor: color,
       };
-      const currentColumn = columns.find(
-        (col: TableColumn) => col.key === tableColumn.key
-      );
+      const currentColumn = columnsInfo
+        .getAllColumns()
+        .find((col: TableColumn) => col.key === tableColumn.key);
       currentColumn.options.push(newOption);
       table.options.meta.view.diskConfig.updateColumnProperties(column.id, {
         options: currentColumn.options,
@@ -82,19 +76,18 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
       row.index,
       tableColumn,
       arrayTags,
-      columns,
-      ddbbConfig
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings()
     );
     // Add new option to column options
     newValue
       .filter(
-        (tag: any) =>
-          !tableColumn.options.find((option: any) => option.label === tag.value)
+        (tag) =>
+          !tableColumn.options.find((option) => option.label === tag.value)
       )
-      .forEach((tag: any) => {
+      .forEach((tag) => {
         columnActions.addOptionToColumn(tableColumn, tag.value, randomColor());
       });
-    setTagsState(arrayTags);
   };
 
   function TagsForm() {

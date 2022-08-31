@@ -24,10 +24,6 @@ function CheckboxCell(props: CellComponentProps) {
     (state) => state.info
   );
 
-  /** state of cell value */
-  const [checked, setChecked] = useState(
-    Boolean(checkboxCell[tableColumn.key])
-  );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked ? 1 : 0;
     // save on disk
@@ -38,12 +34,15 @@ function CheckboxCell(props: CellComponentProps) {
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
-    setChecked(event.target.checked);
   };
 
   return (
     <div className={`${c("checkbox")}`}>
-      <input type="checkbox" checked={checked} onChange={handleChange} />
+      <input
+        type="checkbox"
+        checked={Boolean(checkboxCell[tableColumn.key])}
+        onChange={handleChange}
+      />
     </div>
   );
 }

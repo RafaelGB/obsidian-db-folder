@@ -34,10 +34,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
   );
 
   const tableColumn = column.columnDef as TableColumn;
-  /** state of cell value */
-  const [selectState, setSelectState] = useState(
-    selectPortalRow[tableColumn.key]
-  );
+
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -84,7 +81,6 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
       ddbbConfig,
       true
     );
-    setSelectState(option.label);
     setShowSelect(false);
   }
 
@@ -122,7 +118,8 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
 
   function getColor() {
     const match = tableColumn.options.find(
-      (option: { label: string }) => option.label === selectState
+      (option: { label: string }) =>
+        option.label === selectPortalRow[tableColumn.key]
     );
     return (match && match.backgroundColor) || grey(200);
   }
@@ -218,9 +215,9 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
         onClick={() => setShowSelect(true)}
         style={{ width: column.getSize() }}
       >
-        {selectState && (
+        {selectPortalRow[tableColumn.key] && (
           <Relationship
-            value={selectState.toString()}
+            value={selectPortalRow[tableColumn.key].toString()}
             backgroundColor={getColor()}
           />
         )}
