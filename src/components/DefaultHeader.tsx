@@ -146,6 +146,11 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
             ""
           )}
         </span>
+        {header.column.getSortIndex() !== -1 && (
+          <span className="svg-icon svg-gray icon-margin">
+            {header.column.getSortIndex() + 1}
+          </span>
+        )}
       </div>
       {domReady
         ? ReactDOM.createPortal(
