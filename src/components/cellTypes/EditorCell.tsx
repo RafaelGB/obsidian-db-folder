@@ -5,13 +5,13 @@ import { useState } from "react";
 import { MarkdownEditor } from "components/cellTypes/Editor/MarkdownEditor";
 
 const EditorCell = (props: EditorCellComponentProps) => {
-  const { defaultCell, persistChange } = props;
-  const { cell, table } = defaultCell;
+  const { defaultCell, persistChange, textCell } = props;
+  const { table } = defaultCell;
   /** Ref to cell container */
   const editableMdRef = useRef<HTMLInputElement>();
   /** Columns information */
 
-  const [editorValue, setEditorValue] = useState(cell.getValue());
+  const [editorValue, setEditorValue] = useState(textCell);
 
   // onChange handler
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -28,7 +28,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
    * Close editor undoing any changes realised
    */
   const handleOnEscape = useCallback(() => {
-    persistChange(cell.getValue()?.toString());
+    persistChange(textCell);
   }, []);
 
   /**

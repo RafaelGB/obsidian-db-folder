@@ -24,6 +24,7 @@ const TextCell = (props: CellComponentProps) => {
     (state) => state.actions
   );
 
+  const textCell = textRow[column.id]?.toString();
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const [dirtyCell, setDirtyCell] = useState(false);
@@ -39,12 +40,7 @@ const TextCell = (props: CellComponentProps) => {
     if (containerCellRef.current !== undefined) {
       containerCellRef.current.innerHTML = "";
 
-      renderMarkdown(
-        defaultCell,
-        textRow[column.id]?.toString(),
-        containerCellRef.current,
-        5
-      );
+      renderMarkdown(defaultCell, textCell, containerCellRef.current, 5);
     }
   }, [dirtyCell, cell.getValue()]);
 
@@ -64,7 +60,11 @@ const TextCell = (props: CellComponentProps) => {
   };
 
   return dirtyCell ? (
-    <EditorCell defaultCell={defaultCell} persistChange={persistChange} />
+    <EditorCell
+      defaultCell={defaultCell}
+      persistChange={persistChange}
+      textCell={textCell}
+    />
   ) : (
     <span
       ref={containerCellRef}
