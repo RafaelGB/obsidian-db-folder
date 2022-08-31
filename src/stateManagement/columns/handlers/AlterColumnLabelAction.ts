@@ -19,7 +19,6 @@ export default class AlterColumnLabelHandlerAction extends AbstractTableAction<C
                 alteredColumns[labelIndex].accessorKey = newKey;
                 // Update configuration & row files on disk
                 view.diskConfig.updateColumnKey(column.id, newKey, newLabel);
-                console.log(alteredColumns);
                 return { columns: alteredColumns };
             });
         tableActionResponse.implementation = implementation;

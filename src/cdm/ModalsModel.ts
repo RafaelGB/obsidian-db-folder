@@ -1,8 +1,10 @@
 import { TableColumn } from "cdm/FolderModel";
-import { ColumnsState } from "cdm/TableStateInterface";
+import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
 import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
 import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
+import { HeaderMenuProps } from "cdm/HeaderModel";
+import { DatabaseView } from "DatabaseView";
 
 /**
  * Base class for all modal responses.
@@ -20,6 +22,13 @@ export type ColumnSettingsHandlerResponse = {
     columnSettingsManager: ColumnSettingsManager
 } & BaseModalHandlerResponse
 
+export type ColumnSettingsModalProps = {
+    dataState: Pick<DataState, "actions">,
+    columnState: Pick<ColumnsState, "info">,
+    configState: Pick<ConfigState, "info">,
+    view: DatabaseView,
+    headerMenuProps: HeaderMenuProps
+}
 
 export type AddColumnModalProps = {
     columnsState: Partial<ColumnsState>;
