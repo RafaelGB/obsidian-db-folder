@@ -24,13 +24,11 @@ export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTab
             });
 
             // Save on memory
-            console.log(state.rows);
             const alterRows = state.rows.map((row) => {
                 row[newKey] = row[column.id];
                 delete row[column.id];
                 return row;
             });
-            console.log(alterRows);
             return { rows: alterRows };
         }
         );

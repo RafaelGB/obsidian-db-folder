@@ -30,6 +30,7 @@ function mockDataState(): DataState {
             updateDataAfterLabelChange: null,
             removeRow: null,
             removeDataOfColumn: null,
+            removeOptionForAllRows: null,
             parseDataOfColumn: null,
             dataviewRefresh: null,
         },

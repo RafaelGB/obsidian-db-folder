@@ -42,6 +42,8 @@ export interface DataState {
         updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         removeRow: (row: RowDataType) => void;
         removeDataOfColumn: (column: TableColumn) => void;
+        removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
+            ddbbConfig: LocalSettings) => Promise<void>;
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
     }
 }

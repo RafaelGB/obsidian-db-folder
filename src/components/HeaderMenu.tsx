@@ -269,10 +269,13 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   <div
                     className="menu-item sort-button"
                     onClick={() => {
-                      new ColumnSettingsModal(
-                        table.options.meta.view,
-                        headerMenuProps
-                      ).open();
+                      new ColumnSettingsModal({
+                        dataState: { actions: dataActions },
+                        columnState: { info: columnsInfo },
+                        configState: { info: configInfo },
+                        view: table.options.meta.view,
+                        headerMenuProps: headerMenuProps,
+                      }).open();
                       setExpanded(false);
                     }}
                   >

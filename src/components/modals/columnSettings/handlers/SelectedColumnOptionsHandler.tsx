@@ -6,6 +6,7 @@ import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { LOGGER } from "services/Logger";
 
 export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
   settingTitle: string = "Column Options";
@@ -14,7 +15,8 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
   ): ColumnSettingsHandlerResponse {
     const { column, containerEl, columnSettingsManager } =
       columnHandlerResponse;
-    const { view } = columnSettingsManager.modal;
+    const { view, dataState, configState, columnsState } =
+      columnSettingsManager.modal;
     let newLabel = "";
     const options = column.options;
     const onClickAddPromise = async (): Promise<void> => {
@@ -72,11 +74,33 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         cb.setIcon("cross")
           .setTooltip("Delete")
           .onClick(async (): Promise<void> => {
+            const removedOption = options[index];
             options.splice(index, 1);
             // Persist changes
             await view.diskConfig.updateColumnProperties(column.key, {
               options: options,
             });
+
+            dataState.actions
+              .removeOptionForAllRows(
+                column,
+                removedOption.label,
+                columnsState.info.getAllColumns(),
+                configState.info.getLocalSettings()
+              )
+              .then(() => {
+                new Notice(
+                  `Option ${removedOption.label} was removed from all rows`,
+                  1500
+                );
+              })
+              .catch((err) => {
+                const errMsg = `Error removing ${removedOption.label}`;
+                LOGGER.error(errMsg, err);
+                new Notice(errMsg, 3000);
+              });
+            columnHandlerResponse.columnSettingsManager.modal.enableReset =
+              true;
             // Force refresh of settings
             columnSettingsManager.reset(columnHandlerResponse);
           });

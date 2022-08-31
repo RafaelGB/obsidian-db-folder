@@ -3,21 +3,28 @@ import { DatabaseView } from "DatabaseView";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
-import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
+import { ColumnSettingsHandlerResponse, ColumnSettingsModalProps } from "cdm/ModalsModel";
 import { particular_settings_section, behavior_settings_section } from "components/modals/columnSettings/ColumnSections";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
 
 export class ColumnSettingsModal extends Modal {
     view: DatabaseView;
     headerMenuProps: HeaderMenuProps;
     columnSettingsManager: ColumnSettingsManager;
+    dataState: Partial<DataState>;
+    configState: Partial<ConfigState>;
+    columnsState: Partial<ColumnsState>;
     enableReset: boolean = false;
     constructor(
-        view: DatabaseView,
-        headerMenuProps: HeaderMenuProps
+        props: ColumnSettingsModalProps
     ) {
+        const { view, headerMenuProps, dataState, configState, columnState } = props;
         super(view.app);
         this.view = view;
+        this.dataState = dataState;
+        this.configState = configState;
+        this.columnsState = columnState;
         this.headerMenuProps = headerMenuProps;
         this.columnSettingsManager = new ColumnSettingsManager(this);
     }
