@@ -17,12 +17,12 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
     (state) => state.rows[row.index]
   );
 
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
+  const columnsInfo = table.options.meta.tableState.columns(
+    (state) => state.info
   );
 
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
+  const configInfo = table.options.meta.tableState.configState(
+    (state) => state.info
   );
 
   // Calendar state
@@ -42,8 +42,8 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
       row.index,
       tableColumn,
       changed,
-      columns,
-      ddbbConfig
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings()
     );
     setShowDatePicker(false);
   }
