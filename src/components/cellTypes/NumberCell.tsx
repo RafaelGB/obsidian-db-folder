@@ -1,50 +1,39 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import React, { useState } from "react";
+import { Literal } from "obsidian-dataview";
+import React, {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  useEffect,
+  useState,
+} from "react";
 
 const NumberCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, row, column, table } = defaultCell;
+  const { row, column, table } = defaultCell;
+  const { tableState } = table.options.meta;
+  /** Cell information */
+  const columnsInfo = tableState.columns((state) => state.info);
+  const dataActions = tableState.data((state) => state.actions);
+  const numberRow = tableState.data((state) => state.rows[row.index]);
+  const configInfo = tableState.configState((state) => state.info);
 
-  /** Columns information */
-  const columnsInfo = table.options.meta.tableState.columns(
-    (state) => state.info
-  );
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
-  const configInfo = table.options.meta.tableState.configState(
-    (state) => state.info
-  );
-
-  const [cellValue, setCellValue] = useState(cell.getValue());
+  const [editableValue, setEditableValue] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
-  const [editNoteTimeout, setEditNoteTimeout] = useState(null);
-
-  const handleEditableOnclick = (event: any) => {
+  const handleEditableOnclick = () => {
     setDirtyCell(true);
+    setEditableValue(numberRow[column.id] as number);
   };
 
   // onChange handler
-  const handleOnChange = (event: any) => {
-    setDirtyCell(true);
-    // cancelling previous timeouts
-    if (editNoteTimeout) {
-      clearTimeout(editNoteTimeout);
-    }
-    // first update the input text as user type
-    setCellValue(event.target.value);
-    // initialize a setimeout by wrapping in our editNoteTimeout so that we can clear it out using clearTimeout
-    setEditNoteTimeout(
-      setTimeout(() => {
-        onChange(event.target.value);
-        // timeout until event is triggered after user has stopped typing
-      }, 1500)
-    );
+  const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    // parse value to number
+    const value = parseFloat(event.target.value);
+    setEditableValue(value);
   };
 
-  function onChange(changedValue: string) {
+  function persistChange(changedValue: number) {
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
@@ -54,19 +43,22 @@ const NumberCell = (props: CellComponentProps) => {
     );
   }
 
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    event: any
+  ) => {
     if (event.key === "Enter") {
       event.target.blur();
     }
   };
 
-  const handleOnBlur = (event: any) => {
+  const handleOnBlur = () => {
+    persistChange(editableValue);
     setDirtyCell(false);
   };
 
   return dirtyCell ? (
     <input
-      value={(cellValue && cellValue.toString()) || ""}
+      value={(editableValue && editableValue.toString()) || ""}
       onChange={handleOnChange}
       onKeyDown={handleKeyDown}
       onBlur={handleOnBlur}
@@ -78,7 +70,7 @@ const NumberCell = (props: CellComponentProps) => {
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
     >
-      {(cellValue && cellValue.toString()) || ""}
+      {(numberRow[column.id] && numberRow[column.id].toString()) || ""}
     </span>
   );
 };

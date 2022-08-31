@@ -15,8 +15,8 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
 
   const calendarPortalRow = tableState.data((state) => state.rows[row.index]);
 
-  const columns = tableState.columns((state) => state.columns);
-  const ddbbConfig = tableState.configState((state) => state.ddbbConfig);
+  const columnsInfo = tableState.columns((state) => state.info);
+  const configInfo = tableState.configState((state) => state.info);
 
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -35,8 +35,8 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
       row.index,
       tableColumn,
       changed,
-      columns,
-      ddbbConfig
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings()
     );
     setCalendarValue(changed);
     setShowDatePicker(false);

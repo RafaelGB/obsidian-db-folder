@@ -9,21 +9,25 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
   const { row, table, column } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
   );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
+
+  const calendatTimeRow = table.options.meta.tableState.data(
+    (state) => state.rows[row.index]
+  );
+
+  const columnsInfo = table.options.meta.tableState.columns(
+    (state) => state.info
+  );
+
+  const configInfo = table.options.meta.tableState.configState(
+    (state) => state.info
   );
 
   // Calendar state
-  const [calendarTimeState, setcalendarTimeState] = useState(
-    rows[row.index][tableColumn.key]
-  );
+  const calendarTimeState = calendatTimeRow[tableColumn.key];
+
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -37,11 +41,10 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
     dataActions.updateCell(
       row.index,
       tableColumn,
-      changed.toISO(),
-      columns,
-      ddbbConfig
+      changed,
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings()
     );
-    setcalendarTimeState(changed);
     setShowDatePicker(false);
   }
 

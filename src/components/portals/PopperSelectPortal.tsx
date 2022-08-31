@@ -16,21 +16,25 @@ import { TableColumn } from "cdm/FolderModel";
 const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
+
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
+  );
+
+  const selectPortalRow = table.options.meta.tableState.data(
+    (state) => state.rows[row.index]
+  );
+
   const columns = table.options.meta.tableState.columns(
     (state) => state.columns
   );
+
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
+
   const tableColumn = column.columnDef as TableColumn;
-  /** state of cell value */
-  const [selectState, setSelectState] = useState(
-    rows[row.index][tableColumn.key]
-  );
+
   // Selector reference state
   const [selectRef, setSelectRef] = useState(null);
   const [showSelect, setShowSelect] = useState(false);
@@ -45,6 +49,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const columnActions = table.options.meta.tableState.columns(
     (state) => state.actions
   );
+
   React.useEffect(() => {
     if (!domReady) {
       setDomReady(true);
@@ -76,7 +81,6 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
       ddbbConfig,
       true
     );
-    setSelectState(option.label);
     setShowSelect(false);
   }
 
@@ -114,7 +118,8 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
 
   function getColor() {
     const match = tableColumn.options.find(
-      (option: { label: string }) => option.label === selectState
+      (option: { label: string }) =>
+        option.label === selectPortalRow[tableColumn.key]
     );
     return (match && match.backgroundColor) || grey(200);
   }
@@ -210,9 +215,9 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
         onClick={() => setShowSelect(true)}
         style={{ width: column.getSize() }}
       >
-        {selectState && (
+        {selectPortalRow[tableColumn.key] && (
           <Relationship
-            value={selectState.toString()}
+            value={selectPortalRow[tableColumn.key].toString()}
             backgroundColor={getColor()}
           />
         )}

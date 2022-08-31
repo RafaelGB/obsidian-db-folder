@@ -29,6 +29,7 @@ export interface ConfigState {
     }
     info: {
         getLocalSettings: () => LocalSettings;
+        getFilters: () => FilterSettings;
     }
 }
 

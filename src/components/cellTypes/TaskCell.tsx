@@ -4,7 +4,7 @@ import { SListItem } from "obsidian-dataview/lib/data-model/serialized/markdown"
 import { DataviewService } from "services/DataviewService";
 import React, { useEffect, useRef } from "react";
 import { TableColumn } from "cdm/FolderModel";
-import { BaseComponent, Component, MarkdownRenderChild } from "obsidian";
+import { MarkdownRenderChild } from "obsidian";
 
 const TaskCell = (taskProps: CellComponentProps) => {
   const { defaultCell } = taskProps;

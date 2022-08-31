@@ -210,7 +210,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       await inlineColumnEdit();
       return;
     }
-    rowFields.frontmatter[columnId] = newValue;
+    rowFields.frontmatter[columnId] = DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig);
     await persistFrontmatter();
     await inlineRemoveColumn();
   }

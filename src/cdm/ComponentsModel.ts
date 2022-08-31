@@ -12,9 +12,7 @@ export type CellComponentProps = {
 }
 
 export type EditorCellComponentProps = {
-    cellValue: Literal;
-    setCellValue: (value: Literal) => void;
-    setDirtyCell: (value: boolean) => void;
+    persistChange: (changedValue: string) => void;
 } & CellComponentProps;
 
 export type DataviewFiltersProps = {
