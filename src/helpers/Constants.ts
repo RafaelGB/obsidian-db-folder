@@ -271,7 +271,7 @@ export function getOperatorFilterValue(keyToFind: string): string {
 }
 
 export const MarkdownBreakerRules = Object.freeze({
-  INIT_CHARS: ['`', '"', '[', '{', '*'],
+  INIT_CHARS: ['`', '"', '[', '{', '*', '!'],
   BETWEEN_CHARS: [':'],
   UNIQUE_CHARS: ['?'],
 })

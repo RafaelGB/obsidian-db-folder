@@ -13,6 +13,7 @@ export type CellComponentProps = {
 
 export type EditorCellComponentProps = {
     persistChange: (changedValue: string) => void;
+    textCell: string;
 } & CellComponentProps;
 
 export type DataviewFiltersProps = {
