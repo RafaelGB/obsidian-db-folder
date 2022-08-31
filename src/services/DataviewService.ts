@@ -223,9 +223,16 @@ class DataviewProxy {
     }
 
     private handleMarkdownBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {
-        if (isInline || (value.startsWith('"') && value.endsWith('"'))) {
+        // Do nothing if is inline
+        if (isInline) {
             return value;
         }
+
+        // Remove a possible already existing quote wrapper
+        if (value.startsWith('"') && value.endsWith('"')) {
+            value = value.substring(1, value.length - 1);
+        }
+
         // Check possible markdown breakers of the yaml
         if (MarkdownBreakerRules.INIT_CHARS.some(c => value.startsWith(c)) ||
             MarkdownBreakerRules.BETWEEN_CHARS.some(rule => value.includes(rule)) ||
