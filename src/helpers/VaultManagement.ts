@@ -4,7 +4,7 @@ import { VaultManagerDB } from 'services/FileManagerService';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
 import { DatabaseCore, InputType, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
-import { generateDataviewTableQuery } from 'helpers/QueryHelper';
+import { generateDataviewTableQuery, inlineRegexInFunctionOf } from 'helpers/QueryHelper';
 import obtainRowDatabaseFields from 'parsers/FileToRowDatabaseFields';
 import { parseFrontmatterFieldsToString } from 'parsers/RowDatabaseFieldsToFile';
 import { DataviewService } from 'services/DataviewService';
@@ -261,7 +261,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
    *                              INLINE GROUP FUNCTIONS
    *******************************************************************************************/
   async function inlineColumnEdit(): Promise<void> {
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
+    const inlineFieldRegex = inlineRegexInFunctionOf(columnId);
     if (!inlineFieldRegex.test(content)) {
       await inlineAddColumn();
       return;
@@ -274,7 +274,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `$1 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}`
+      newValue: `$3$6$7$8 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}$10$11`
     };
     await VaultManagerDB.editNoteContent(noteObject);
     await persistFrontmatter();
@@ -288,12 +288,12 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
     * group 1 is inline field checking that starts in new line
     * group 2 is the current value of inline field
     */
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2})+(.*$)`, 'gm');
+    const inlineFieldRegex = inlineRegexInFunctionOf(columnId);
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: inlineFieldRegex,
-      newValue: `${newValue}::$2`
+      newValue: `$6$7${newValue}:: $4$9$10$11`
     };
     await VaultManagerDB.editNoteContent(noteObject);
     await persistFrontmatter();
@@ -316,11 +316,12 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
     * group 1 is inline field checking that starts in new line
     * group 2 is the current value of inline field
     */
-    const inlineFieldRegex = new RegExp(`(^${columnId}[:]{2}\\s)+([\\w\\W]+?$)`, 'gm');
+    const inlineFieldRegex = inlineRegexInFunctionOf(columnId);
     const noteObject = {
-      action: 'remove',
+      action: 'replace',
       file: file,
-      regexp: inlineFieldRegex
+      regexp: inlineFieldRegex,
+      newValue: `$6$11`
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
