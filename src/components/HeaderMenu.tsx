@@ -115,8 +115,21 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
       o === column.id ? newKey : o
     );
     table.setColumnOrder(updateOrderWithNewKey);
-    // Update state of altered column
+
     setkeyState(newKey);
+
+    // Update sorted columns
+    if (column.getIsSorted()) {
+      const alterSort = table.options.state.sorting.map((o) => {
+        if (o.id === column.id) {
+          o.id = newKey;
+        }
+        return o;
+      });
+      table.setSorting(alterSort);
+    }
+
+    // Update state of altered column
     columnActions
       .alterColumnLabel(column.columnDef as TableColumn, labelState)
       .then(() => {
