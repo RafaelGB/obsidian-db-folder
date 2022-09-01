@@ -3,4 +3,5 @@
 git checkout $1
 git add .
 git commit -m "Update documentation"
+git pull
 git push origin $1
