@@ -1,3 +1,15 @@
+# 2.3.2
+*Published on 2022/09/01*
+### Shiny new things
+- Inline fields with bold ,italics or underline key is edditable now. Also you can edit those inline fields wrapped with pharentesis in the middle of a line, respecting dataview readability [ISSUE#134](https://github.com/RafaelGB/obsidian-db-folder/issues/134)
+- Remove options from columns settings of tag or select type now remove that option from all the rows too [ISSUE#121](https://github.com/RafaelGB/obsidian-db-folder/issues/121)
+### Improved
+- frontmatter embed links support [ISSUE#123](https://github.com/RafaelGB/obsidian-db-folder/issues/123)
+### Visual
+- Multi-column sort order information [ISSUE#127](https://github.com/RafaelGB/obsidian-db-folder/issues/127]
+### No longer broken
+- Enable frontmatter quotes wrapping does not break config that already has quotes [ISSUE#286](https://github.com/RafaelGB/obsidian-db-folder/issues/286)
+- Problem refreshing column info after modifying the label solved [ISSUE#300](https://github.com/RafaelGB/obsidian-db-folder/issues/300)
 # 2.3.1
 ### No longer broken
 - new row hide last row [ISSUE#295](https://github.com/RafaelGB/obsidian-db-folder/issues/295)
