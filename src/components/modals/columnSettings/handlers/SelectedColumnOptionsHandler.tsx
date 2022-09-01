@@ -64,7 +64,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
 
     options.forEach((option, index) => {
       const colorPickerProps: ColorPickerProps = {
-        view: view,
+        modal: columnSettingsManager.modal,
         options: options,
         option: option,
         columnKey: column.key,

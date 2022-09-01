@@ -1,8 +1,8 @@
-import { DatabaseView } from "DatabaseView";
 import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
 
 export type ColorPickerProps = {
-    view: DatabaseView;
+    modal: ColumnSettingsModal;
     options: RowSelectOption[];
     option: RowSelectOption;
     columnKey: string;
