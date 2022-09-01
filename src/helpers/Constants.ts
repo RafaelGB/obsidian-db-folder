@@ -247,15 +247,17 @@ export const ResizeConfiguration = Object.freeze({
 });
 
 export const OperatorFilter = Object.freeze({
-  EQUAL: '=',
-  NOT_EQUAL: '!=',
-  GREATER_THAN: '>',
-  LESS_THAN: '<',
-  GREATER_THAN_OR_EQUAL: '>=',
-  LESS_THAN_OR_EQUAL: '<=',
-  CONTAINS: 'contains',
-  STARTS_WITH: 'starts_with',
-  ENDS_WITH: 'ends_with',
+  EQUAL: ['EQUAL', '='],
+  NOT_EQUAL: ['NOT_EQUAL', '!='],
+  GREATER_THAN: ['GREATER_THAN', '>'],
+  LESS_THAN: ['LESS_THAN', '<'],
+  GREATER_THAN_OR_EQUAL: ['GREATER_THAN_OR_EQUAL', '>='],
+  LESS_THAN_OR_EQUAL: ['LESS_THAN_OR_EQUAL', '<='],
+  CONTAINS: ['CONTAINS', 'contains'],
+  STARTS_WITH: ['STARTS_WITH', 'starts with'],
+  ENDS_WITH: ['ENDS_WITH', 'ends with'],
+  IS_EMPTY: ['IS_EMPTY', 'is empty'],
+  IS_NOT_EMPTY: ['IS_NOT_EMPTY', 'is not empty'],
 });
 
 export function getOperatorFilterValue(keyToFind: string): string {
@@ -264,7 +266,7 @@ export function getOperatorFilterValue(keyToFind: string): string {
   );
   // Check if the key was found
   if (entry) {
-    return entry[1];
+    return entry[1][1];
   } else {
     return '';
   }

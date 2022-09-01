@@ -8,8 +8,8 @@ import React from "react";
 export default function DataviewFilters(props: DataviewFiltersProps) {
   const { table } = props;
   const { tableState } = table.options.meta;
-  const [ddbbConfig, filters, filterActions] = tableState.configState(
-    (state) => [state.ddbbConfig, state.filters, state.actions]
+  const [configInfo, filters, filterActions] = tableState.configState(
+    (state) => [state.info, state.filters, state.actions]
   );
   const columns = tableState.columns((state) => state.columns);
   const dataActions = tableState.data((state) => state.actions);
@@ -18,7 +18,11 @@ export default function DataviewFilters(props: DataviewFiltersProps) {
     const alteredFilterState = { ...filters };
     alteredFilterState.enabled = !alteredFilterState.enabled;
     filterActions.alterFilters(alteredFilterState);
-    dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
+    dataActions.dataviewRefresh(
+      columns,
+      configInfo.getLocalSettings(),
+      alteredFilterState
+    );
   };
 
   return (

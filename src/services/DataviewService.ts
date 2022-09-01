@@ -22,43 +22,51 @@ class DataviewProxy {
         }
     }
 
-    filter(condition: FilterCondition[], p: Record<string, Literal>): boolean {
+    filter(condition: FilterCondition[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
         if (!condition || condition.length === 0) return true;
         for (const c of condition) {
-            const value = p[c.field];
-            if (value !== undefined) {
-                const wrapped = this.wrapLiteral(value);
-                switch (getOperatorFilterValue(c.operator)) {
-                    case OperatorFilter.EQUAL:
-                        if (wrapped.value !== c.value) return false;
-                        break;
-                    case OperatorFilter.NOT_EQUAL:
-                        if (wrapped.value === c.value) return false;
-                        break;
-                    case OperatorFilter.GREATER_THAN:
-                        if (wrapped.value <= c.value) return false;
-                        break;
-                    case OperatorFilter.LESS_THAN:
-                        if (wrapped.value >= c.value) return false;
-                        break;
-                    case OperatorFilter.GREATER_THAN_OR_EQUAL:
-                        if (wrapped.value < c.value) return false;
-                        break;
-                    case OperatorFilter.LESS_THAN_OR_EQUAL:
-                        if (wrapped.value > c.value) return false;
-                        break;
-                    case OperatorFilter.CONTAINS:
-                        if (wrapped.type === "string" && !wrapped.value.includes(c.value)) return false;
-                        break;
-                    case OperatorFilter.STARTS_WITH:
-                        if (wrapped.type === "string" && !wrapped.value.startsWith(c.value)) return false;
-                        break;
-                    case OperatorFilter.ENDS_WITH:
-                        if (wrapped.type === "string" && !wrapped.value.endsWith(c.value)) return false;
-                        break;
-                    default:
-                        throw new Error(`Unknown operator ${c.operator}`);
-                }
+            const filterableValue = this.parseLiteral(p[c.field], InputType.MARKDOWN, ddbbConfig);
+            switch (getOperatorFilterValue(c.operator)) {
+                case OperatorFilter.IS_EMPTY[1]:
+                    if (filterableValue !== '') {
+                        return false;
+                    }
+                    break;
+                case OperatorFilter.IS_NOT_EMPTY[1]:
+                    if (filterableValue === '') {
+                        return false;
+                    }
+                    break;
+                case OperatorFilter.EQUAL[1]:
+                    if (filterableValue !== c.value) return false;
+                    break;
+                case OperatorFilter.NOT_EQUAL[1]:
+                    if (filterableValue === c.value) return false;
+                    break;
+                case OperatorFilter.GREATER_THAN[1]:
+                    if (filterableValue <= c.value) return false;
+                    break;
+                case OperatorFilter.LESS_THAN[1]:
+                    if (filterableValue >= c.value) return false;
+                    break;
+                case OperatorFilter.GREATER_THAN_OR_EQUAL[1]:
+                    if (filterableValue < c.value) return false;
+                    break;
+                case OperatorFilter.LESS_THAN_OR_EQUAL[1]:
+                    if (filterableValue > c.value) return false;
+                    break;
+                case OperatorFilter.CONTAINS[1]:
+                    if (!filterableValue.toString().includes(c.value)) return false;
+                    break;
+                case OperatorFilter.STARTS_WITH[1]:
+                    if (!filterableValue.toString().startsWith(c.value)) return false;
+                    break;
+                case OperatorFilter.ENDS_WITH[1]:
+                    if (!filterableValue.toString().endsWith(c.value)) return false;
+                    break;
+                default:
+                    throw new Error(`Unknown operator ${c.operator}`);
+
             }
         }
         return true;

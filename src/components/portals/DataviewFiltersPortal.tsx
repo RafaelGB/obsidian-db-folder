@@ -123,9 +123,9 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
             return (
               <MenuItem
                 value={key}
-                key={`MenuItem-OperatorSelector-${key}-${selectorProps.index}`}
+                key={`MenuItem-OperatorSelector-${value[0]}-${selectorProps.index}`}
               >
-                {value}
+                {value[1]}
               </MenuItem>
             );
           })}
@@ -161,7 +161,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     const alteredFilterState = { ...filters };
     alteredFilterState.conditions.push({
       field: possibleColumns[0],
-      operator: "EQUAL",
+      operator: OperatorFilter.CONTAINS[0],
       value: "",
     });
     configActions.alterFilters(alteredFilterState);
@@ -183,7 +183,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
               ...styles.popper,
               zIndex: 4,
               minWidth: 200,
-              maxWidth: 450,
+              maxWidth: 500,
               padding: "0.75rem",
               background: StyleVariables.BACKGROUND_SECONDARY,
             }}
@@ -194,21 +194,24 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                 return (
                   <Grid
                     container
-                    rowSpacing={0.5}
+                    rowSpacing={0.25}
                     columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
                     key={`Grid-container-${index}`}
                   >
-                    <Grid item xs={3.5} key={`Grid-field-${index}`}>
+                    <Grid item xs="auto" key={`Grid-field-${index}`}>
                       {existedColumnSelector({
                         currentCol: field,
                         index: index,
                       })}
                     </Grid>
-                    <Grid item xs={2} key={`Grid-operator-${index}`}>
+                    <Grid item xs="auto" key={`Grid-operator-${index}`}>
                       {operatorSelector({ currentOp: operator, index: index })}
                     </Grid>
                     {/* if value exists, show it */}
-                    {value !== undefined && (
+                    {![
+                      OperatorFilter.IS_EMPTY[0],
+                      OperatorFilter.IS_NOT_EMPTY[0],
+                    ].contains(operator) && (
                       <Grid item xs={3.5} key={`Grid-value-${index}`}>
                         <ValueFilterComponent
                           value={value}
@@ -217,16 +220,14 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                       </Grid>
                     )}
                     {/* Remove button */}
-                    <Grid item xs={1.5} key={`Grid-remove-${index}`}>
+                    <Grid item xs={0.75} key={`Grid-remove-${index}`}>
                       <Button
                         variant="contained"
                         color="secondary"
                         size="small"
                         onClick={deleteConditionHadler(index)}
                         endIcon={<DeleteIcon />}
-                      >
-                        Delete
-                      </Button>
+                      />
                     </Grid>
                   </Grid>
                 );
