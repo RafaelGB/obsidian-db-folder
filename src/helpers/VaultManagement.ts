@@ -83,7 +83,7 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p));
+    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p, ddbbConfig));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page);
@@ -101,7 +101,7 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p));
+    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p, ddbbConfig));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page);
