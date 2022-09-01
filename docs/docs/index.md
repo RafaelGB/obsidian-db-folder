@@ -7,5 +7,4 @@ You **need** to have Dataview installed to use this plugin.
 
 ## How can I add a database?
 You can add a database by right clicking on the folder where you want to store your table.
-prueba
 ![AddDatabase.gif](assets/AddDatabase.gif)
