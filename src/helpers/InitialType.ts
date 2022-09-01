@@ -1,5 +1,5 @@
 import { ColumnSort } from "@tanstack/react-table";
-import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
+import { InitialType, TableColumn } from "cdm/FolderModel";
 
 function obtainInitialType(columns: TableColumn[]): InitialType {
     const initialType: InitialType = {};
