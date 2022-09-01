@@ -43,23 +43,33 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
 
   const tablecolumn = column.columnDef as TableColumn;
-  const [sortingInfo, sortingActions] = table.options.meta.tableState.sorting(
-    (store) => [store.info, store.actions]
-  );
   const columnActions = table.options.meta.tableState.columns(
     (store) => store.actions
   );
 
-  const sortingUpOnClick = (e: any) => {
-    const sortArray = sortingInfo.generateSorting(tablecolumn, false);
+  const sortingUpOnClick = () => {
     tablecolumn.isSorted =
       tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = false;
     hooks.setExpanded(false);
     // Update state
     columnActions.alterSorting(tablecolumn);
-    sortingActions.alterSorting(sortArray);
-    table.setSorting(sortArray);
+
+    let currentSorting = [...table.options.state.sorting];
+    if (tablecolumn.isSorted) {
+      currentSorting.remove(
+        currentSorting.find((s) => s.id === tablecolumn.id)
+      );
+      currentSorting.push({
+        id: tablecolumn.id,
+        desc: tablecolumn.isSortedDesc,
+      });
+    } else {
+      currentSorting.remove(
+        currentSorting.find((s) => s.id === tablecolumn.id)
+      );
+    }
+    table.setSorting(currentSorting);
   };
   const isAscSorted = column.getIsSorted() === "asc";
   return headerButtonComponent({
@@ -75,15 +85,12 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     headerActionResponse.headerMenuProps.headerProps;
 
   const tablecolumn = column.columnDef as TableColumn;
-  const [sortingInfo, sortingActions] = table.options.meta.tableState.sorting(
-    (store) => [store.info, store.actions]
-  );
+
   const columnActions = table.options.meta.tableState.columns(
     (store) => store.actions
   );
 
-  const sortingDownOnClick = (e: any) => {
-    const sortArray = sortingInfo.generateSorting(tablecolumn, true);
+  const sortingDownOnClick = () => {
     tablecolumn.isSorted =
       tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = true;
@@ -91,9 +98,23 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     hooks.setExpanded(false);
     // Update state
     columnActions.alterSorting(tablecolumn);
-    sortingActions.alterSorting(sortArray);
-    table.setSorting(sortArray);
+    let currentSorting = [...table.options.state.sorting];
+    if (tablecolumn.isSorted) {
+      currentSorting.remove(
+        currentSorting.find((s) => s.id === tablecolumn.id)
+      );
+      currentSorting.push({
+        id: tablecolumn.id,
+        desc: tablecolumn.isSortedDesc,
+      });
+    } else {
+      currentSorting.remove(
+        currentSorting.find((s) => s.id === tablecolumn.id)
+      );
+    }
+    table.setSorting(currentSorting);
   };
+
   return headerButtonComponent({
     onClick: sortingDownOnClick,
     icon:

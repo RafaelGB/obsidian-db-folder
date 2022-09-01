@@ -4,13 +4,20 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterSortingColumnHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
-        const { set, implementation } = tableActionResponse;
+        const { view, set, implementation } = tableActionResponse;
         implementation.actions.alterSorting = (column: TableColumn) =>
             set((updater) => {
                 const newColumns = [...updater.columns];
                 const index = newColumns.findIndex((c) => c.id === column.id);
                 newColumns[index].isSorted = column.isSorted;
                 newColumns[index].isSortedDesc = column.isSortedDesc;
+                view.diskConfig.updateColumnProperties(
+                    column.id,
+                    {
+                        isSorted: column.isSorted,
+                        isSortedDesc: column.isSortedDesc,
+                    }
+                );
                 return { columns: newColumns };
             });
 
