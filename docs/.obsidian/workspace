@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "docs/Imed/6_Viewing data.md",
+            "file": "docs/Imed/5_Notes.md",
             "mode": "source",
             "source": false
           }
@@ -77,7 +77,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/Imed/6_Viewing data.md",
+                "file": "docs/Imed/5_Notes.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -94,7 +94,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/Imed/6_Viewing data.md",
+                "file": "docs/Imed/5_Notes.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -117,7 +117,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/Imed/6_Viewing data.md"
+                "file": "docs/Imed/5_Notes.md"
               }
             }
           }
@@ -128,14 +128,14 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "3a02bf8e6b8a26a9",
+  "active": "1388ebae61465da7",
   "lastOpenFiles": [
-    "docs/Imed/5_Notes.md",
     "docs/Imed/4_Properties.md",
+    "docs/Imed/6_Viewing data.md",
+    "docs/Imed/5_Notes.md",
     "docs/Imed/3_Columns.md",
     "docs/Imed/2_Sources.md",
     "docs/Imed/1_index.md",
-    "docs/Imed/6_Viewing data.md",
     "docs/Imed/sommaire.md",
     "docs/faq.md",
     "docs/Imed/6_Yaml & inline fields.md"
