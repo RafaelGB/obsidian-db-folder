@@ -211,7 +211,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       this.tableContainer = this.contentEl.createDiv(
         StyleClasses.TABLE_CONTAINER
       );
-      this.tableContainer.setAttribute("id", "root");
+      this.tableContainer.setAttribute("id", file.path);
       this.rootContainer = createRoot(this.tableContainer);
       return await super.onLoadFile(file);
     } catch (e) {
