@@ -108,7 +108,6 @@ export function Table(tableData: TableDataType) {
     targetColumnId: string,
     columnOrder: string[]
   ): ColumnOrderState => {
-    console.log("reorderColumn", draggedColumnId, targetColumnId, columnOrder);
     columnOrder.splice(
       columnOrder.indexOf(targetColumnId),
       0,
