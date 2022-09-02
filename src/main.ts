@@ -115,15 +115,20 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	async onunload() {
+		LOGGER.info('Unloading DBFolder plugin');
+
 		this.windowRegistry.forEach((reg, win) => {
 			reg.viewStateReceivers.forEach((fn) => fn([]));
 			this.unmount(win);
 		});
-		LOGGER.info('Unloading DBFolder plugin');
-		// Unmount views first
-		this.stateManagers.clear();
+
 		this.unmount(window);
+
+		this.stateManagers.clear();
 		this.windowRegistry.clear();
+		this.databaseFileModes = {};
+
+		(app.workspace as any).unregisterHoverLinkSource(DatabaseCore.FRONTMATTER_KEY);
 	}
 
 	/** Update plugin settings. */
