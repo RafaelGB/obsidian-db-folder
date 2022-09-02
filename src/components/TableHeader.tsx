@@ -6,12 +6,6 @@ import { useDrag, useDrop } from "react-dnd";
 import { RowDataType } from "cdm/FolderModel";
 import { DnDConfiguration } from "helpers/Constants";
 
-interface DragItem {
-  index: number;
-  id: string;
-  type: string;
-}
-
 export default function TableHeader(headerProps: TableHeaderProps) {
   const { table, header, reorderColumn, headerIndex } = headerProps;
   const { view } = table.options.meta;
