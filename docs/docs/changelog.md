@@ -1,3 +1,11 @@
+# 2.3.3
+*Published on 2022/09/02*
+### Shiny new things
+- New filter options: 'is not empty' and 'is empty' with visual improvements of auto resize [ISSUE#151](https://github.com/RafaelGB/obsidian-db-folder/issues/151)
+### No longer broken
+- Iterate between databases do not provoke blank screen anymore [ISSUE#309](https://github.com/RafaelGB/obsidian-db-folder/issues/309)
+- Refresh of table after change option color and rename column if is sorted [ISSUE#305](https://github.com/RafaelGB/obsidian-db-folder/issues/305)
+- Multi-sort respect priority now [ISSUE#299](https://github.com/RafaelGB/obsidian-db-folder/issues/299)
 # 2.3.2
 *Published on 2022/09/01*
 ### Shiny new things
