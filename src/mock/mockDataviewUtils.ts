@@ -7,6 +7,6 @@ export const generateStateManager = (): StateManager => {
         app.workspace.getMostRecentLeaf(),
         null
     );
-    const stateManager = new StateManager(initialView, null, null, null);
+    const stateManager = new StateManager(initialView, null, null);
     return stateManager;
 };
