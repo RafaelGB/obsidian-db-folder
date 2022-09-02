@@ -56,7 +56,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const created: boolean = false;
   /** Properties of header */
   const { header, table } = headerProps;
-  const { tableState } = table.options.meta;
+  const { tableState, view } = table.options.meta;
 
   const [columnInfo, columnActions] = tableState.columns((state) => [
     state.info,
@@ -164,7 +164,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
               labelState={labelState}
               setLabelState={setLabelState}
             />,
-            activeDocument.getElementById("popper-container")
+            activeDocument.getElementById(`${view.file.path}-popper`)
           )
         : null}
     </>
