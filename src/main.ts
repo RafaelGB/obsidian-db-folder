@@ -103,6 +103,17 @@ export default class DBFolderPlugin extends Plugin {
 		});
 	}
 
+	unload(): void {
+		Promise.all(
+			app.workspace.getLeavesOfType(DatabaseCore.FRONTMATTER_KEY).map((leaf) => {
+				this.databaseFileModes[(leaf as any).id] = 'markdown';
+				return this.setMarkdownView(leaf);
+			})
+		).then(() => {
+			super.unload();
+		});
+	}
+
 	async onunload() {
 		this.windowRegistry.forEach((reg, win) => {
 			reg.viewStateReceivers.forEach((fn) => fn([]));
