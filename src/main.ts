@@ -103,16 +103,32 @@ export default class DBFolderPlugin extends Plugin {
 		});
 	}
 
+	unload(): void {
+		Promise.all(
+			app.workspace.getLeavesOfType(DatabaseCore.FRONTMATTER_KEY).map((leaf) => {
+				this.databaseFileModes[(leaf as any).id] = 'markdown';
+				return this.setMarkdownView(leaf);
+			})
+		).then(() => {
+			super.unload();
+		});
+	}
+
 	async onunload() {
+		LOGGER.info('Unloading DBFolder plugin');
+
 		this.windowRegistry.forEach((reg, win) => {
 			reg.viewStateReceivers.forEach((fn) => fn([]));
 			this.unmount(win);
 		});
-		LOGGER.info('Unloading DBFolder plugin');
-		// Unmount views first
-		this.stateManagers.clear();
+
 		this.unmount(window);
+
+		this.stateManagers.clear();
 		this.windowRegistry.clear();
+		this.databaseFileModes = {};
+
+		(app.workspace as any).unregisterHoverLinkSource(DatabaseCore.FRONTMATTER_KEY);
 	}
 
 	/** Update plugin settings. */
@@ -153,7 +169,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
 
-	addView(view: DatabaseView, data: string, shouldParseData: boolean) {
+	addView(view: DatabaseView, data: string) {
 		const win = view.getWindow();
 		const reg = this.windowRegistry.get(win);
 
@@ -166,15 +182,13 @@ export default class DBFolderPlugin extends Plugin {
 		}
 
 		const file = view.file;
-
 		if (this.stateManagers.has(file)) {
-			this.stateManagers.get(file).registerView(view, data, shouldParseData);
+			this.stateManagers.get(file).registerView(view);
 		} else {
 			this.stateManagers.set(
 				file,
 				new StateManager(
 					view,
-					data,
 					() => this.stateManagers.delete(file),
 					() => this.settings
 				)
