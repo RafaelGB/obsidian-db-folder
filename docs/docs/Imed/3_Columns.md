@@ -9,9 +9,9 @@ Be aware that this will overide any previously created columns, you'll have to c
 ### Add from template
 The plugin can look at only one file (as a template), and grab only this file's metadata as columns. The list of files to choose from is provided from the used source, and can be found in the database setting under `select file as column template`.
 ## Hiding
-You can hide the columns while keeping the underlying metadata.
+You can hide the columns while keeping the underlying metadata by using the column menu or by pressing the `+` button, where you'll see a list of all the columns (hidden or not).
 ## Removing
-You can remove the column and remove its underlying metadata. Make sure to enable `configuration about columns > remove fields` in the plugin setting or in the database settings.
+You can remove the column and remove its underlying metadata by using the column menu. Make sure to enable `configuration about columns > remove fields` in the plugin setting or in the database settings.
 ## Resizing
 You can resize columns by draging the handle at the right of the column header.
 ## Reordering
