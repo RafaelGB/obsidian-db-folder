@@ -16,22 +16,14 @@ import { TableColumn } from "cdm/FolderModel";
 const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
+  const { tableState, view } = table.options.meta;
+  const dataActions = tableState.data((state) => state.actions);
 
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
+  const selectPortalRow = tableState.data((state) => state.rows[row.index]);
 
-  const selectPortalRow = table.options.meta.tableState.data(
-    (state) => state.rows[row.index]
-  );
+  const columns = tableState.columns((state) => state.columns);
 
-  const columns = table.options.meta.tableState.columns(
-    (state) => state.columns
-  );
-
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
-  );
+  const ddbbConfig = tableState.configState((state) => state.ddbbConfig);
 
   const tableColumn = column.columnDef as TableColumn;
 
@@ -225,7 +217,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
       {domReady
         ? ReactDOM.createPortal(
             PortalSelect(),
-            activeDocument.getElementById("popper-container")
+            activeDocument.getElementById(`${view.file.path}-popper`)
           )
         : null}
     </>

@@ -8,22 +8,15 @@ import { TableColumn } from "cdm/FolderModel";
 const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
   const { row, table, column } = defaultCell;
+  const { tableState, view } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
+  const dataActions = tableState.data((state) => state.actions);
 
-  const calendatTimeRow = table.options.meta.tableState.data(
-    (state) => state.rows[row.index]
-  );
+  const calendatTimeRow = tableState.data((state) => state.rows[row.index]);
 
-  const columnsInfo = table.options.meta.tableState.columns(
-    (state) => state.info
-  );
+  const columnsInfo = tableState.columns((state) => state.info);
 
-  const configInfo = table.options.meta.tableState.configState(
-    (state) => state.info
-  );
+  const configInfo = tableState.configState((state) => state.info);
 
   // Calendar state
   const calendarTimeState = calendatTimeRow[tableColumn.key];
@@ -49,7 +42,7 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   }
 
   const CalendarContainer = (containerProps: any) => {
-    const el = activeDocument.getElementById("popper-container");
+    const el = activeDocument.getElementById(`${view.file.path}-popper`);
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
 

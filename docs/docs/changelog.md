@@ -6,7 +6,7 @@
 ### Improved
 - frontmatter embed links support [ISSUE#123](https://github.com/RafaelGB/obsidian-db-folder/issues/123)
 ### Visual
-- Multi-column sort order information [ISSUE#127](https://github.com/RafaelGB/obsidian-db-folder/issues/127]
+- Multi-column sort order information [ISSUE#127](https://github.com/RafaelGB/obsidian-db-folder/issues/127)
 ### No longer broken
 - Enable frontmatter quotes wrapping does not break config that already has quotes [ISSUE#286](https://github.com/RafaelGB/obsidian-db-folder/issues/286)
 - Problem refreshing column info after modifying the label solved [ISSUE#300](https://github.com/RafaelGB/obsidian-db-folder/issues/300)

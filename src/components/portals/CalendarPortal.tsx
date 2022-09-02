@@ -9,7 +9,7 @@ import { TableColumn } from "cdm/FolderModel";
 const CalendarPortal = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
   const { row, column, table } = defaultCell;
-  const { tableState } = table.options.meta;
+  const { tableState, view } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
   const dataActions = tableState.data((state) => state.actions);
 
@@ -43,7 +43,7 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
   }
 
   const CalendarContainer = (containerProps: any) => {
-    const el = activeDocument.getElementById("popper-container");
+    const el = activeDocument.getElementById(`${view.file.path}-popper`);
     return <Portal container={el}>{containerProps.children}</Portal>;
   };
   return showDatePicker ? (
