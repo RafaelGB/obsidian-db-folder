@@ -1,0 +1,143 @@
+{
+  "main": {
+    "id": "60d0d101d34a2ff9",
+    "type": "split",
+    "children": [
+      {
+        "id": "1388ebae61465da7",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "docs/Imed/3_Columns.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f595d9310d39a1ed",
+    "type": "split",
+    "children": [
+      {
+        "id": "00bd36e9d9822747",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3a02bf8e6b8a26a9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "9f96aadaff7d1d3d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "header",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "7202a51f3eee53b0",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "f90ec7f8de4e0a24",
+    "type": "split",
+    "children": [
+      {
+        "id": "201b017301510b3b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6f3bd3da61e0ab5a",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "docs/Imed/3_Columns.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "472341dc0d63ec39",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "docs/Imed/3_Columns.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "509e30d4813ee14c",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "75e551ecfe61359a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "docs/Imed/3_Columns.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "1388ebae61465da7",
+  "lastOpenFiles": [
+    "docs/Imed/5_Notes.md",
+    "docs/Imed/4_Properties.md",
+    "docs/Imed/6_Viewing data.md",
+    "docs/Imed/3_Columns.md",
+    "docs/Imed/2_Sources.md",
+    "docs/Imed/1_index.md",
+    "docs/Imed/sommaire.md",
+    "docs/faq.md",
+    "docs/Imed/6_Yaml & inline fields.md"
+  ]
+}

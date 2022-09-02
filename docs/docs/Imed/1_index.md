@@ -7,4 +7,6 @@ You **need** to have Dataview installed to use this plugin.
 
 ## How can I add a database?
 You can add a database by right clicking on the folder where you want to store your table.
-![AddDatabase.gif](assets/AddDatabase.gif)
+
+##  How do I access settings?
+There is two types of settings (plugin setting and database setting). You can access the database settings from the obsidian menu. The database settings takes priority over the plugin setting.

@@ -2,16 +2,17 @@ site_name: Database Folder
 repo_url: https://github.com/RafaelGB/obsidian-db-folder
 edit_uri: edit/master/docs/docs/
 nav:
-  - Get started: "index.md"
-  - About: "about.md"
+  - Get started: "Imed/1_index.md"
   - Features:
-      - Rows: "features/rows.md"
-      - Headers: "features/headers.md"
-      - Filters: "features/filters.md"
-      - Config: "features/config.md"
+    - Sources: "Imed/2_Sources.md"
+    - Columns: "Imed/3_Columns.md"
+    - Properties: "Imed/4_Properties.md"
+    - Notes: "Imed/5_Notes.md"
+    - Viewing data: "Imed/6_Viewing data.md"
+  - About: "about.md"
+  - FAQ: "faq.md"
   - Media:
       - videos: "media/videos.md"
-  - FAQ: "faq.md"
   - Contributing:
       - Documentation: "contributing/documentationContribution.md"
       - Developers: "contributing/developersContribution.md"
