@@ -53,7 +53,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     this.register(
       this.containerEl.onWindowMigrated(() => {
         this.plugin.removeView(this);
-        this.plugin.addView(this, this.data, this.isPrimary);
+        this.plugin.addView(this, this.data);
       })
     );
   }
@@ -66,7 +66,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     return this.data;
   }
 
-  setViewData(data: string, clear: boolean): void {
+  setViewData(data: string): void {
     if (!isDatabaseNote(data)) {
       this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
         InputType.MARKDOWN;
@@ -76,7 +76,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       return;
     }
 
-    this.plugin.addView(this, data, !clear && this.isPrimary);
+    this.plugin.addView(this, data);
   }
 
   getViewType(): string {

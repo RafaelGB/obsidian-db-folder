@@ -8,7 +8,6 @@ export default class StateManager {
   public file: TFile;
   constructor(
     initialView: DatabaseView,
-    initialData: string,
     onEmpty: () => void,
     getGlobalSettings: () => DatabaseSettings
   ) {
@@ -16,14 +15,14 @@ export default class StateManager {
     this.onEmpty = onEmpty;
     this.getGlobalSettings = getGlobalSettings;
 
-    this.registerView(initialView, initialData, true);
+    this.registerView(initialView);
   }
 
-  registerView(view: DatabaseView, data: string, shouldParseData: boolean) {
-    if (!this.viewSet.has(view)) {
-      this.viewSet.add(view);
-      view.initDatabase();
-    }
+  registerView(view: DatabaseView) {
+    this.viewSet.clear();
+    this.viewSet.add(view);
+    view.initDatabase();
+
   }
 
   unregisterView(view: DatabaseView) {

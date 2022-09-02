@@ -169,7 +169,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
 
-	addView(view: DatabaseView, data: string, shouldParseData: boolean) {
+	addView(view: DatabaseView, data: string) {
 		const win = view.getWindow();
 		const reg = this.windowRegistry.get(win);
 
@@ -182,15 +182,13 @@ export default class DBFolderPlugin extends Plugin {
 		}
 
 		const file = view.file;
-
 		if (this.stateManagers.has(file)) {
-			this.stateManagers.get(file).registerView(view, data, shouldParseData);
+			this.stateManagers.get(file).registerView(view);
 		} else {
 			this.stateManagers.set(
 				file,
 				new StateManager(
 					view,
-					data,
 					() => this.stateManagers.delete(file),
 					() => this.settings
 				)
