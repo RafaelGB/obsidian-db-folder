@@ -2,7 +2,9 @@ import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { MetadataColumns } from "helpers/Constants";
+import { DatabaseView } from "DatabaseView";
+import { MetadataColumns, SourceDataTypes } from "helpers/Constants";
+import { resolve_tfolder } from "helpers/FileManagement";
 import { DateTime } from "luxon";
 import { Literal } from "obsidian-dataview";
 import { VaultManagerDB } from "services/FileManagerService";
@@ -13,13 +15,14 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, implementation } = tableActionResponse;
         implementation.actions.addRow = (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
+            const destination_folder = this.destination_folder(view, ddbbConfig);
             let trimedFilename = filename.replace(/\.[^/.]+$/, "").trim();
-            let filepath = `${view.file.parent.path}/${trimedFilename}.md`;
+            let filepath = `${destination_folder}/${trimedFilename}.md`;
             // Validate possible duplicates
             let sufixOfDuplicate = 0;
             while (state.rows.find((row) => row.__note__.filepath === filepath)) {
                 sufixOfDuplicate++;
-                filepath = `${view.file.parent.path}/${trimedFilename}-${sufixOfDuplicate}.md`;
+                filepath = `${destination_folder}/${trimedFilename}-${sufixOfDuplicate}.md`;
             }
             if (sufixOfDuplicate > 0) {
                 trimedFilename = `${trimedFilename}-${sufixOfDuplicate}`;
@@ -37,7 +40,7 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                 });
             // Add note to persist row
             VaultManagerDB.create_markdown_file(
-                view.file.parent,
+                resolve_tfolder(destination_folder),
                 trimedFilename,
                 rowRecord,
                 ddbbConfig
@@ -61,5 +64,18 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
         });
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
+    }
+    destination_folder(view: DatabaseView, ddbbConfig: LocalSettings): string {
+        let destination_folder = view.file.parent.path;
+        switch (ddbbConfig.source_data) {
+            case SourceDataTypes.TAG:
+            case SourceDataTypes.OUTGOING_LINK:
+            case SourceDataTypes.INCOMING_LINK:
+                destination_folder = ddbbConfig.source_destination_path;
+                break;
+            default:
+            //Current folder
+        }
+        return destination_folder;
     }
 }

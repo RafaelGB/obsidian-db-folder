@@ -53,3 +53,9 @@ export class FileSuggest extends TextInputSuggest<TFile> {
         this.close();
     }
 }
+
+export function filePathsRecordSuggester(): Record<string, string> {
+    const filePaths: Record<string, string> = {}
+    app.vault.getMarkdownFiles().forEach(file => { filePaths[file.path] = file.basename });
+    return filePaths;
+}
