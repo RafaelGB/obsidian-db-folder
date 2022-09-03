@@ -9,7 +9,7 @@ import { resolve_tfile } from "helpers/FileManagement";
  * Keep info about a note and offer methods to manipulate it
  */
 export default class NoteInfo {
-    private filepath: string;
+    public filepath: string;
     private page: Record<string, Literal>;
     constructor(page: Record<string, Literal>) {
         this.page = page;
