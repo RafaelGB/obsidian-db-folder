@@ -1,5 +1,6 @@
 import { RowDataType } from "cdm/FolderModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
+import { Notice } from "obsidian";
 import { VaultManagerDB } from "services/FileManagerService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
@@ -9,9 +10,13 @@ export default class RemoveRowHandlerAction extends AbstractTableAction<DataStat
         implementation.actions.removeRow = (rowToRemove: RowDataType) =>
             set((state) => {
                 const filteredRows = state.rows.filter(
-                    (r) => r.__note__.getFile().path !== rowToRemove.__note__.getFile().path
+                    (r) => r.__note__.filepath !== rowToRemove.__note__.filepath
                 );
-                VaultManagerDB.removeNote(rowToRemove.__note__.getFile());
+                if (filteredRows.length !== state.rows.length) {
+                    VaultManagerDB.removeNote(rowToRemove.__note__.getFile());
+                } else {
+                    new Notice(`Error: Could not remove note from database. path does not exist: ${rowToRemove.__note__.filepath}`);
+                }
                 return {
                     rows: filteredRows
                 }

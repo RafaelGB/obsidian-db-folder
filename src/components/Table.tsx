@@ -60,23 +60,26 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
 export function Table(tableData: TableDataType) {
   /** Main information about the table */
   const { view, tableStore } = tableData;
-  const [columns, columnActions, columnsInfo] = tableStore.columns((state) => [
-    state.columns,
-    state.actions,
-    state.info,
-  ]);
-  const [rows, dataActions] = tableStore.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
+  const columns = tableStore.columns((state) => state.columns);
+  const columnActions = tableStore.columns((state) => state.actions);
+  const columnsInfo = tableStore.columns((state) => state.info);
+  const rows = tableStore.data((state) => state.rows);
+  const dataActions = tableStore.data((state) => state.actions);
+
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
   );
 
-  const [ddbbConfig, globalConfig, configActions] = tableStore.configState(
-    (store) => [store.ddbbConfig, store.global, store.actions]
+  const cell_size_config = tableStore.configState(
+    (store) => store.ddbbConfig.cell_size
+  );
+  const sticky_first_column_config = tableStore.configState(
+    (store) => store.ddbbConfig.sticky_first_column
   );
 
+  const globalConfig = tableStore.configState((store) => store.global);
+  const configActions = tableStore.configState((store) => store.actions);
+  const configInfo = tableStore.configState((store) => store.info);
   /** Plugin services */
   const stateManager: StateManager = tableData.stateManager;
   const filePath = stateManager.file.path;
@@ -236,7 +239,7 @@ export function Table(tableData: TableDataType) {
     onColumnOrderChange: setColumnOrder,
     // Hack to force react-table to use all columns when filtering
     getColumnCanGlobalFilter: (column) => true,
-    globalFilterFn: globalDatabaseFilterFn(ddbbConfig),
+    globalFilterFn: globalDatabaseFilterFn(configInfo.getLocalSettings()),
     meta: {
       tableState: tableStore,
       view: view,
@@ -262,7 +265,7 @@ export function Table(tableData: TableDataType) {
   }
 
   function handleAddNewRow() {
-    dataActions.addRow(inputNewRow, columns, ddbbConfig);
+    dataActions.addRow(inputNewRow, columns, configInfo.getLocalSettings());
     setInputNewRow("");
     newRowRef.current.value = "";
   }
@@ -303,8 +306,8 @@ export function Table(tableData: TableDataType) {
         key={`div-table`}
         className={`${c(
           "table noselect cell_size_" +
-            ddbbConfig.cell_size +
-            (ddbbConfig.sticky_first_column ? " sticky_first_column" : "")
+            cell_size_config +
+            (sticky_first_column_config ? " sticky_first_column" : "")
         )}`}
         onMouseOver={onMouseOver}
         onClick={onClick}
