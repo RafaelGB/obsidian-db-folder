@@ -40,7 +40,7 @@ export interface DataState {
         updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => void;
         parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
         updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-        removeRow: (row: RowDataType) => void;
+        removeRow: (row: RowDataType) => Promise<void>;
         removeDataOfColumn: (column: TableColumn) => void;
         removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => Promise<void>;

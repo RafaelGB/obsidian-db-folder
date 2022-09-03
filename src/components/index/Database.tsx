@@ -11,7 +11,10 @@ export function Database(tableProps: TableDataType) {
   return (
     <React.StrictMode>
       <Table {...tableProps} tableStore={tableStore} />
-      <div id="popper-container" key={"popper-container-key"}></div>
+      <div
+        id={`${tableProps.view.file.path}-popper`}
+        key={`${tableProps.view.file.path}-popper-key`}
+      ></div>
     </React.StrictMode>
   );
 }
