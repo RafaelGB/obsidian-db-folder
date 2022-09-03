@@ -46,6 +46,7 @@ const rowContextMenuColumn: TableColumn = {
     };
 
     const handleDeleteRow = () => {
+      console.log(table.getRowModel().rows);
       rowActions.removeRow(row.original);
     };
     return (

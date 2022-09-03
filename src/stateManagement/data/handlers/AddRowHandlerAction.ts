@@ -13,8 +13,18 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, implementation } = tableActionResponse;
         implementation.actions.addRow = (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
-            const trimedFilename = filename.replace(/\.[^/.]+$/, "").trim();
-            const filepath = `${view.file.parent.path}/${trimedFilename}.md`;
+            let trimedFilename = filename.replace(/\.[^/.]+$/, "").trim();
+            let filepath = `${view.file.parent.path}/${trimedFilename}.md`;
+            // Validate possible duplicates
+            let sufixOfDuplicate = 0;
+            while (state.rows.find((row) => row.__note__.filepath === filepath)) {
+                sufixOfDuplicate++;
+                filepath = `${view.file.parent.path}/${trimedFilename}-${sufixOfDuplicate}.md`;
+            }
+            if (sufixOfDuplicate > 0) {
+                trimedFilename = `${trimedFilename}-${sufixOfDuplicate}`;
+                filename = `${trimedFilename} copy(${sufixOfDuplicate})`;
+            }
             const rowRecord: RowDatabaseFields = { inline: {}, frontmatter: {} };
             columns
                 .filter((column: TableColumn) => !column.isMetadata)

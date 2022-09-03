@@ -189,7 +189,6 @@ export function Table(tableData: TableDataType) {
     },
     [stateManager, filePath]
   );
-
   const table: Table<RowDataType> = useReactTable({
     columns: columns,
     data: rows,
