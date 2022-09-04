@@ -2,11 +2,11 @@
 
 You can create blank notes by typing the name in the bottom bar while leaving the template field empty.
 
-## Creating notes with template
+## Creating notes with a template
 
 You have to choose a template in the bottom bar before creating the note. You can filter the files suggested in the bottom bar by adding a folder in the settings under `rows template file folder location`.
 
-> It works with the core template plugin. But with templater plugin, you have to activate the option `Trigger templater on new file creation` in templater settings.
+> It works with the core template plugin. But with the templater plugin, you have to activate the option `Trigger templater on new file creation` in templater settings.
 
 ## Deleting notes
 

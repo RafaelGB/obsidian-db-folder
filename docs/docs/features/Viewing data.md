@@ -4,11 +4,11 @@ You can change the database name and description in the database settings.
 
 ## Sticky first column
 
-You can make the first column sticky in the database settings to make it always visible even when scroll horizontally.
+You can make the first column sticky in the database settings to make it always visible even when scrolling horizontally.
 
 ## Pagination
 
-To help with displaying a lot of data, by default the database displaying only 10 rows and allows changing the pages using the top bar. You can change the number of rows displayed per page in the database settings.
+To help with displaying a lot of data, by default the database displays only 10 rows and allows changing the pages using the top bar. You can change the number of rows displayed per page in the database settings.
 
 ## Row height
 
