@@ -420,10 +420,15 @@ export default class DBFolderPlugin extends Plugin {
 	}
 	registerCommands() {
 		// TODO - add command to create a new database
+		this.addCommand({
+			id: 'create-new-database-folder',
+			name: 'Create a new database table',
+			callback: () => console.log('create new database folder'),
+		});
 	}
 	/**
-	   * Displays a transcluded .excalidraw image in markdown preview mode
-	   */
+	 * Displays a transcluded .excalidraw image in markdown preview mode
+	 */
 	private addMarkdownPostProcessor() {
 		const previewMode = PreviewDatabaseModeService.getInstance(this);
 		this.registerMarkdownPostProcessor(previewMode.markdownPostProcessor);
