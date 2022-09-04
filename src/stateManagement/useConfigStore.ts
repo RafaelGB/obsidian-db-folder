@@ -12,11 +12,12 @@ const useConfigStore = (view: DatabaseView) => {
             filters: filters,
             global: global_settings,
             actions: {
-                alterFilters: (partialFilters: Partial<FilterSettings>) =>
+                alterFilters: async (partialFilters: Partial<FilterSettings>) => {
+                    await view.diskConfig.updateFilters(partialFilters);
                     set((state) => {
-                        view.diskConfig.updateFilters(partialFilters);
                         return ({ filters: { ...state.filters, ...partialFilters } });
-                    }),
+                    })
+                },
                 alterConfig: (alteredConfig: Partial<LocalSettings>) =>
                     set((state) => {
                         view.diskConfig.updateConfig(alteredConfig);

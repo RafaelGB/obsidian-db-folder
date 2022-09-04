@@ -192,6 +192,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   destroy() {
     LOGGER.info(`=>destroy ${this.file.path}`);
     // Remove draggables from render, as the DOM has already detached
+    this.getStateManager().unregisterView(this);
     this.plugin.removeView(this);
     this.tableContainer.remove();
     LOGGER.info(`<=destroy ${this.file.path}`);
