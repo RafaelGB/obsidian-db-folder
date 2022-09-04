@@ -1,16 +1,18 @@
-### Blank column
+## Creating
+
+### Blank Column
 
 You can add a new column with the `+` button of the database, or by using the `insert right/left` in the column menu.
 
-### Add from existing metadata
+### Add From Existing Metadata
 
 The plugin searches all the file included in the source selected for metadata that is not included in the database. Choose from the list provided when clicking in the `+` button.
 
-### Add from all available metadata at once
+### Add From All Available Metadata at Once
 
 The plugin can grab all the metadata from all the files included in the selected source and add them all at once. Be aware that this will override any previously created columns, you'll have to configure the columns again.
 
-### Add from template
+### Add From Template
 
 The plugin can look at only one file (as a template), and grab only this file's metadata as columns. The list of files to choose from is provided from the used source, and can be found in the database setting under `select file as column template`.
 
