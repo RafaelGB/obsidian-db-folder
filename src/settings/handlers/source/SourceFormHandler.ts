@@ -6,7 +6,8 @@ import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown } from "settings/SettingsComponents";
-import { FileSuggest } from "settings/suggesters/FileSuggester";
+import { filePathsRecordSuggester, FileSuggest } from "settings/suggesters/FileSuggester";
+import { FolderSuggest } from "settings/suggesters/FolderSuggester";
 
 export class SourceFormHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Form in function of source data';
@@ -18,24 +19,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                 break;
             case SourceDataTypes.OUTGOING_LINK:
             case SourceDataTypes.INCOMING_LINK:
-                const filePaths: Record<string, string> = {}
-                app.vault.getMarkdownFiles().forEach(file => { filePaths[file.path] = file.basename });
-                const source_form_promise = async (value: string): Promise<void> => {
-                    // update settings
-                    view.diskConfig.updateConfig({ source_form_result: value });
-                };
-                new Setting(containerEl)
-                    .setName('Select a file')
-                    .setDesc('Select file from vault to be used as source of data.')
-                    .addSearch((cb) => {
-                        new FileSuggest(
-                            cb.inputEl,
-                            view.file.parent.path
-                        );
-                        cb.setPlaceholder("Example: folder1/template_file")
-                            .setValue(view.diskConfig.yaml.config.source_form_result)
-                            .onChange(source_form_promise);
-                    });
+                outgoingAndIncomingHandler(view, containerEl);
                 break;
             case SourceDataTypes.QUERY:
                 queryHandler(view, containerEl, columns);
@@ -70,7 +54,28 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
             tagRecords,
             source_form_promise
         );
+        destinationFolderHandler(view, containerEl);
     }
+}
+
+function outgoingAndIncomingHandler(view: DatabaseView, containerEl: HTMLElement) {
+    const source_form_promise = async (value: string): Promise<void> => {
+        // update settings
+        view.diskConfig.updateConfig({ source_form_result: value });
+    };
+    new Setting(containerEl)
+        .setName('Select a file')
+        .setDesc('Select file from vault to be used as source of data.')
+        .addSearch((cb) => {
+            new FileSuggest(
+                cb.inputEl,
+                view.file.parent.path
+            );
+            cb.setPlaceholder("Example: folder1/template_file")
+                .setValue(view.diskConfig.yaml.config.source_form_result)
+                .onChange(source_form_promise);
+        });
+    destinationFolderHandler(view, containerEl);
 }
 
 function queryHandler(view: DatabaseView, containerEl: HTMLElement, columns: TableColumn[]) {
@@ -103,5 +108,24 @@ function queryHandler(view: DatabaseView, containerEl: HTMLElement, columns: Tab
                             });
                     }
                 });
+        });
+    destinationFolderHandler(view, containerEl);
+}
+
+function destinationFolderHandler(view: DatabaseView, containerEl: HTMLElement) {
+    const source_form_promise = async (value: string): Promise<void> => {
+        // update settings
+        view.diskConfig.updateConfig({ source_destination_path: value });
+    };
+    new Setting(containerEl)
+        .setName('Select destination folder')
+        .setDesc('Select the destination of new entries for this source')
+        .addSearch((cb) => {
+            new FolderSuggest(
+                cb.inputEl
+            );
+            cb.setPlaceholder("Example: path/to/folder")
+                .setValue(view.diskConfig.yaml.config.source_destination_path)
+                .onChange(source_form_promise);
         });
 }

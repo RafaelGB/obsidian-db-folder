@@ -93,6 +93,7 @@ export default class DBFolderPlugin extends Plugin {
 
 		this.registerView(DatabaseCore.FRONTMATTER_KEY, (leaf) => new DatabaseView(leaf, this));
 		this.registerEvents();
+		this.registerCommands();
 		this.registerMonkeyPatches();
 		this.addMarkdownPostProcessor();
 		// Mount an empty component to start; views will be added as we go
@@ -417,7 +418,9 @@ export default class DBFolderPlugin extends Plugin {
 			})
 		);
 	}
-
+	registerCommands() {
+		// TODO - add command to create a new database
+	}
 	/**
 	   * Displays a transcluded .excalidraw image in markdown preview mode
 	   */
