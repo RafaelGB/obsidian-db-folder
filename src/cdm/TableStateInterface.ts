@@ -24,7 +24,7 @@ export interface ConfigState {
     filters: FilterSettings;
     global: GlobalSettings;
     actions: {
-        alterFilters: (filters: Partial<FilterSettings>) => void;
+        alterFilters: (filters: Partial<FilterSettings>) => Promise<void>;
         alterConfig: (config: Partial<LocalSettings>) => void;
     }
     info: {

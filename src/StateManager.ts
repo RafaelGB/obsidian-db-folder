@@ -19,10 +19,10 @@ export default class StateManager {
   }
 
   registerView(view: DatabaseView) {
-    this.viewSet.clear();
-    this.viewSet.add(view);
-    view.initDatabase();
-
+    if (!this.viewSet.has(view)) {
+      this.viewSet.add(view);
+      view.initDatabase();
+    }
   }
 
   unregisterView(view: DatabaseView) {

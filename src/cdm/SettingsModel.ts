@@ -31,6 +31,7 @@ export interface LocalSettings {
     show_metadata_modified: boolean;
     show_metadata_tasks: boolean;
     source_form_result: string;
+    source_destination_path: string;
     source_data: string;
     sticky_first_column: boolean;
     row_templates_folder: string;

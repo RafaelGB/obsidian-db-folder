@@ -1,3 +1,10 @@
+# 2.3.4
+*Published on 2022/09/04*
+### Improved
+- If you choose a source different of current folder, now you can select the destination of your new notes [ISSUE#318](https://github.com/RafaelGB/obsidian-db-folder/issues/318)
+### No longer broken
+- Hotfix of add a filter [ISSUE#322](https://github.com/RafaelGB/obsidian-db-folder/issues/322)
+- Hotfix od delete a row in some cases [ISSUE#319](https://github.com/RafaelGB/obsidian-db-folder/issues/319)
 # 2.3.3
 *Published on 2022/09/02*
 ### Shiny new things

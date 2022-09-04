@@ -22,10 +22,11 @@ import MenuUpIcon from "components/img/MenuUpIcon";
 const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const { table } = props;
   const { tableState, view } = table.options.meta;
-  const [ddbbConfig, filters, configActions] = tableState.configState(
-    (state) => [state.ddbbConfig, state.filters, state.actions]
-  );
-
+  const [ddbbConfig, configActions] = tableState.configState((state) => [
+    state.ddbbConfig,
+    state.actions,
+  ]);
+  const filters = tableState.configState((state) => state.filters);
   const columns = tableState.columns((state) => state.columns);
   const dataActions = tableState.data((state) => state.actions);
   const [filtersRef, setFiltersRef] = useState(null);
