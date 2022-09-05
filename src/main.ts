@@ -7,11 +7,11 @@ import {
 	ViewState,
 	Platform,
 	MarkdownView,
+	addIcon,
 } from 'obsidian';
 
 import {
 	DatabaseView,
-	databaseIcon,
 } from 'DatabaseView';
 
 import {
@@ -28,7 +28,7 @@ import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
-import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
+import { DatabaseCore, DB_ICONS, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 import { unmountComponentAtNode } from 'react-dom';
 import { isDatabaseNote } from 'helpers/VaultManagement';
@@ -66,7 +66,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	async onload(): Promise<void> {
 		await this.load_settings();
-
+		addIcon(DB_ICONS.NAME, DB_ICONS.ICON);
 		this.registerEvent(
 			app.workspace.on('window-open', (_: any, win: Window) => {
 				this.mount(win);
@@ -331,7 +331,7 @@ export default class DBFolderPlugin extends Plugin {
 					menu.addItem((item) => {
 						item
 							.setTitle('New database folder')
-							.setIcon(databaseIcon)
+							.setIcon(DB_ICONS.NAME)
 							.onClick(() => generateNewDatabase(
 								generateDbConfiguration(this.settings.local_settings),
 								file
@@ -361,7 +361,7 @@ export default class DBFolderPlugin extends Plugin {
 						menu.addItem((item) => {
 							item
 								.setTitle('Open as database folder')
-								.setIcon(databaseIcon)
+								.setIcon(DB_ICONS.NAME)
 								.setSection('pane')
 								.onClick(() => {
 									this.databaseFileModes[(leaf as any).id || file.path] =
@@ -382,7 +382,7 @@ export default class DBFolderPlugin extends Plugin {
 					menu.addItem((item) => {
 						item
 							.setTitle('Open as database folder')
-							.setIcon(databaseIcon)
+							.setIcon(DB_ICONS.NAME)
 							.setSection('pane')
 							.onClick(() => {
 								this.databaseFileModes[(leaf as any).id || file.path] =
@@ -400,6 +400,10 @@ export default class DBFolderPlugin extends Plugin {
 			id: 'create-new-database-folder',
 			name: 'Create a new database table',
 			callback: () => new DatabaseHelperCreationModal(this.settings.local_settings).open(),
+		});
+
+		this.addRibbonIcon(DB_ICONS.NAME, "Create a new database table", async (e) => {
+			new DatabaseHelperCreationModal(this.settings.local_settings).open()
 		});
 	}
 	/**
