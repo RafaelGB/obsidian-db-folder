@@ -17,6 +17,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import Typography from "@mui/material/Typography";
 import DataviewFilters from "components/reducers/DataviewFilters";
+import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { SettingsModal } from "Settings";
 
 export function NavBar(navBarProps: NavBarProps) {
@@ -98,11 +99,11 @@ export function NavBar(navBarProps: NavBarProps) {
             }}
           >
             <MenuItem onClick={handleSettingsClick} disableRipple>
-              <SettingsIcon />
+              <SettingsIcon {...MenuButtonStyle} />
               Settings
             </MenuItem>
             <MenuItem onClick={handleOpenAsMarkdownClick} disableRipple>
-              <InsertDriveFileIcon />
+              <InsertDriveFileIcon {...MenuButtonStyle} />
               Open as Markdown
             </MenuItem>
             <MenuItem disableRipple>

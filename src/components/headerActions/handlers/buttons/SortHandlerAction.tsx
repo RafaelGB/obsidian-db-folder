@@ -52,9 +52,7 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
       tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = false;
     hooks.setExpanded(false);
-    // Update state
-    columnActions.alterSorting(tablecolumn);
-
+    // Save on memory
     let currentSorting = [...table.options.state.sorting];
     if (tablecolumn.isSorted) {
       currentSorting.remove(
@@ -64,12 +62,16 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
         id: tablecolumn.id,
         desc: tablecolumn.isSortedDesc,
       });
+      tablecolumn.sortIndex = currentSorting.length;
     } else {
       currentSorting.remove(
         currentSorting.find((s) => s.id === tablecolumn.id)
       );
+      tablecolumn.sortIndex = -1;
     }
     table.setSorting(currentSorting);
+    // Save on disk
+    columnActions.alterSorting(tablecolumn);
   };
   const isAscSorted = column.getIsSorted() === "asc";
   return headerButtonComponent({
@@ -96,8 +98,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     tablecolumn.isSortedDesc = true;
 
     hooks.setExpanded(false);
-    // Update state
-    columnActions.alterSorting(tablecolumn);
+    // Update on memory
     let currentSorting = [...table.options.state.sorting];
     if (tablecolumn.isSorted) {
       currentSorting.remove(
@@ -107,12 +108,16 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
         id: tablecolumn.id,
         desc: tablecolumn.isSortedDesc,
       });
+      tablecolumn.sortIndex = currentSorting.length;
     } else {
       currentSorting.remove(
         currentSorting.find((s) => s.id === tablecolumn.id)
       );
+      tablecolumn.sortIndex = -1;
     }
     table.setSorting(currentSorting);
+    // Update on disk
+    columnActions.alterSorting(tablecolumn);
   };
 
   return headerButtonComponent({

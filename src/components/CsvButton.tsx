@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import { CsvButtonProps } from "cdm/MenuBarModel";
 import {
   normalizeColumnsToCsvHeader,
@@ -6,7 +5,8 @@ import {
 } from "parsers/NormalizeRowsToCSV";
 import React from "react";
 import { CSVLink } from "react-csv";
-import DownloadIcon from "components/img/DownloadIcon";
+import DownloadIcon from "@mui/icons-material/Download";
+import { MenuButtonStyle } from "components/styles/NavBarStyles";
 
 const CsvButton = (CsvButtonProps: CsvButtonProps) => {
   const { columns, rows, name } = CsvButtonProps;
@@ -35,7 +35,7 @@ const CsvButton = (CsvButtonProps: CsvButtonProps) => {
         ref={csvLink}
         target="_blank"
       >
-        <DownloadIcon />
+        <DownloadIcon {...MenuButtonStyle} />
         Download CSV
       </CSVLink>
     </>
