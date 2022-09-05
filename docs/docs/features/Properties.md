@@ -14,7 +14,7 @@
 
 > You can change the column property types, and if the format is right, it will be recognized by the plugin. Sometimes, though, after converting, you won't see the changes until you refresh the database.
 
-## YAML & dataview inline fields
+## YAML & Dataview Inline Fields
 
 The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you'll have to change it in the column's settings. Keep in mind that this change will not convert the underlying YAML to an inline format.
 
