@@ -8,10 +8,20 @@ function obtainInitialType(columns: TableColumn[]): InitialType {
         if (column.isSorted) {
             sortElemList.push({
                 id: column.key,
-                desc: column.isSortedDesc
+                desc: column.isSortedDesc,
             });
         }
     });
+    // Sort by index
+    sortElemList.sort((a: ColumnSort, b: ColumnSort) => {
+        const aIndex = columns.find((column: TableColumn) => column.key === a.id)?.sortIndex;
+        const bIndex = columns.find((column: TableColumn) => column.key === b.id)?.sortIndex;
+        if (aIndex === -1 || bIndex === -1) {
+            return 0;
+        }
+        return aIndex - bIndex;
+    });
+
     initialType.sortBy = sortElemList;
     return initialType;
 }

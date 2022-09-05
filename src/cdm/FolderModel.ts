@@ -54,6 +54,7 @@ export type BaseColumn = {
     isMetadata?: boolean;
     isSorted?: boolean;
     isSortedDesc?: boolean;
+    sortIndex?: number;
     isHidden?: boolean;
     skipPersist?: boolean;
     isDragDisabled?: boolean;
