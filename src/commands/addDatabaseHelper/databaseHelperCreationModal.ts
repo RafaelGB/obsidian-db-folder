@@ -132,6 +132,9 @@ export class DatabaseHelperCreationModalManager {
     async createButtonHandler() {
         try {
             const targetFolder = resolve_tfolder(this.destinationFolder);
+            this.databaseHelperCreationModal.local_settings.source_form_result = this.parseValueToThuthyYaml(
+                this.databaseHelperCreationModal.local_settings.source_form_result
+            );
             await generateNewDatabase(
                 generateDbConfiguration(this.databaseHelperCreationModal.local_settings),
                 targetFolder,
@@ -174,7 +177,7 @@ export class DatabaseHelperCreationModalManager {
     queryHandler(containerEl: HTMLElement) {
         const query_promise = async (value: string): Promise<void> => {
             // update settings
-            this.databaseHelperCreationModal.local_settings.source_form_result = this.parseValueToThuthyYaml(value);
+            this.databaseHelperCreationModal.local_settings.source_form_result = value;
         };
         new Setting(containerEl)
             .setName('Dataview query')
@@ -191,7 +194,7 @@ export class DatabaseHelperCreationModalManager {
                             [],
                             this.databaseHelperCreationModal.local_settings.source_form_result);
                         if (query) {
-                            DataviewService.getDataviewAPI().tryQuery(query)
+                            DataviewService.getDataviewAPI().tryQuery(query.replace('TABLE ,', 'TABLE '))
                                 .then(() => {
                                     new Notice(`Dataview query "${query}" is valid!`, 2000);
                                 })
