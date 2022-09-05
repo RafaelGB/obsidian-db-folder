@@ -1,3 +1,9 @@
+# 2.3.5
+*Published on 2022/09/05*
+### Shiny new things
+- New command & ribbon icon to generate a new database with a helpful wizard to guide you through the process [ISSUE#126](https://github.com/RafaelGB/obsidian-db-folder/issues/126)
+### No longer broken
+- Problem with saving query on yaml solved [ISSUE#325](https://github.com/RafaelGB/obsidian-db-folder/issues/325)
 # 2.3.4
 *Published on 2022/09/04*
 ### Improved

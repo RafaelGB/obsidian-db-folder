@@ -246,6 +246,7 @@ class DataviewProxy {
             MarkdownBreakerRules.BETWEEN_CHARS.some(rule => value.includes(rule)) ||
             MarkdownBreakerRules.UNIQUE_CHARS.some(c => value === c) ||
             localSettings.frontmatter_quote_wrap) {
+            value = value.replaceAll(`\\`, ``);
             value = value.replaceAll(`"`, `\\"`);
             return `"${value}"`;
         }
