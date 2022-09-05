@@ -19,8 +19,6 @@ export function useIMEInputProps() {
     const isComposingRef = useRef<boolean>(false);
 
     return {
-        // Note: these are lowercased because we use preact
-        // See: https://github.com/preactjs/preact/issues/3003
         onCompositionStart: () => {
             isComposingRef.current = true;
         },
