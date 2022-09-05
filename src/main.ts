@@ -33,6 +33,8 @@ import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorServic
 import { unmountComponentAtNode } from 'react-dom';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import { getParentWindow } from 'helpers/WindowElement';
+import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
+import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
@@ -304,35 +306,6 @@ export default class DBFolderPlugin extends Plugin {
 			viewStateReceivers: [],
 			appRoot: el,
 		});
-
-		//Preact.render(createApp(win, this), el);
-	}
-
-	async newDatabase(folder?: TFolder) {
-		const targetFolder = folder
-			? folder
-			: this.app.fileManager.getNewFileParent(
-				this.app.workspace.getActiveFile()?.path || ''
-			);
-
-		try {
-			const database: TFile = await (
-				this.app.fileManager as any
-			).createNewMarkdownFile(targetFolder, 'Untitled database');
-
-			await app.vault.modify(
-				database,
-				DatabaseFrontmatterOptions.BASIC
-					.concat('\n')
-					.concat(this.defaultConfiguration())
-			);
-			await app.workspace.getMostRecentLeaf().setViewState({
-				type: DatabaseCore.FRONTMATTER_KEY,
-				state: { file: database.path },
-			});
-		} catch (e) {
-			LOGGER.error('Error creating database folder:', e);
-		}
 	}
 
 	/**
@@ -359,7 +332,10 @@ export default class DBFolderPlugin extends Plugin {
 						item
 							.setTitle('New database folder')
 							.setIcon(databaseIcon)
-							.onClick(() => this.newDatabase(file));
+							.onClick(() => generateNewDatabase(
+								generateDbConfiguration(this.settings.local_settings),
+								file
+							));
 					});
 					return;
 				}
@@ -423,7 +399,7 @@ export default class DBFolderPlugin extends Plugin {
 		this.addCommand({
 			id: 'create-new-database-folder',
 			name: 'Create a new database table',
-			callback: () => console.log('create new database folder'),
+			callback: () => new DatabaseHelperCreationModal(this.settings.local_settings).open(),
 		});
 	}
 	/**
