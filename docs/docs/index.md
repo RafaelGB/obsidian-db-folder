@@ -16,4 +16,4 @@ There are 3 ways of creating a database:
 
 ## How Do I Access Settings?
 
-There are two types of settings (plugin setting and database setting). You can access the database settings from the obsidian menu or from the header menu. The database settings take priority over the plugin setting.
+There are two types of settings (plugin setting and database setting). You can access the database settings from the obsidian menu or from the header menu. The database settings take priority over the plugin settings.
