@@ -30,7 +30,7 @@ You can sort one column or multiple columns from the column's menu in descending
 
 ## Database Markdown
 
-You can view the database markdown note by using the command `open as markdown` in obsidian menu or in the header menu.
+You can view the database markdown note by using the command `open as markdown` in obsidian menu or in the database menu.
 
 ## Embedding Database
 
