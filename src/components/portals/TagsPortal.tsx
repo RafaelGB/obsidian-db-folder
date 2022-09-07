@@ -104,7 +104,8 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
           options={multiOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
-          menuPortalTarget={document.body}
+          menuPortalTarget={activeDocument.body}
+          menuPlacement="auto"
           menuShouldBlockScroll={true}
           className="react-select-container"
           classNamePrefix="react-select"
