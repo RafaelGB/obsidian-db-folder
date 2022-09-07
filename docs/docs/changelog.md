@@ -1,3 +1,10 @@
+# 2.3.6
+*Published on 2022/09/07*
+### Improved
+- render of checkbox fixed [ISSUE#334](https://github.com/RafaelGB/obsidian-db-folder/issues/334)
+- order of multisort is persisted [ISSUE#324](https://github.com/RafaelGB/obsidian-db-folder/issues/324)
+### No longer broken
+- The tab title bar with Obsidian 0.16 is optional, so the settings of the ddbb where moved to the bar of the plugin itself [ISSUE#330](https://github.com/RafaelGB/obsidian-db-folder/issues/330)
 # 2.3.5
 *Published on 2022/09/05*
 ### Shiny new things
