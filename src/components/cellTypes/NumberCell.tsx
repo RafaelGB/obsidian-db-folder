@@ -1,10 +1,8 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { Literal } from "obsidian-dataview";
 import React, {
   ChangeEventHandler,
   KeyboardEventHandler,
-  useEffect,
   useState,
 } from "react";
 

@@ -10,73 +10,79 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
-        const { view, set, implementation } = tableActionResponse;
-        implementation.actions.updateCell = (
+        const { view, set, get, implementation } = tableActionResponse;
+        implementation.actions.updateCell = async (
             rowIndex: number,
             column: TableColumn,
             value: Literal,
             columns: TableColumn[],
             ddbbConfig: LocalSettings,
-            isMovingFile?: boolean) => set((state) => {
-                const modifiedRow = state.rows[rowIndex];
-                let rowTFile = modifiedRow.__note__.getFile();
+            isMovingFile?: boolean) => {
+            const modifiedRow = get().rows[rowIndex];
+            let rowTFile = modifiedRow.__note__.getFile();
 
-                // Update the row on memory
-                modifiedRow[column.key] = value;
+            // Update the row on memory
+            modifiedRow[column.key] = value;
 
-                // Row Rules
-                if (ddbbConfig.show_metadata_modified) {
-                    modifiedRow[MetadataColumns.MODIFIED] = DateTime.now();
+            // Row Rules
+            if (ddbbConfig.show_metadata_modified) {
+                modifiedRow[MetadataColumns.MODIFIED] = DateTime.now();
+            }
+            // Update the row on disk
+            if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
+
+                const moveInfo = {
+                    file: rowTFile,
+                    id: column.id,
+                    value: value,
+                    columns: columns,
+                    ddbbConfig: ddbbConfig,
                 }
+                await moveFile(`${view.file.parent.path}/${value}`, moveInfo);
+                // Update row file
+                modifiedRow[
+                    MetadataColumns.FILE
+                ] = `[[${view.file.parent.path}/${value}/${rowTFile.name}|${rowTFile.basename}]]`;
+                // Check if action.value is a valid folder name
+                const auxPath =
+                    value !== ""
+                        ? `${view.file.parent.path}/${value}/${rowTFile.name}`
+                        : `${view.file.parent.path}/${rowTFile.name}`;
 
-                // Update the row on disk
-                if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
+                const recordRow: Record<string, Literal> = {};
+                Object.entries(modifiedRow).forEach(([key, value]) => {
+                    recordRow[key] = value as Literal;
+                });
 
-                    const moveInfo = {
-                        file: rowTFile,
-                        id: column.id,
-                        value: value,
-                        columns: columns,
-                        ddbbConfig: ddbbConfig,
-                    }
-                    moveFile(`${view.file.parent.path}/${value}`, moveInfo);
-                    // Update row file
-                    modifiedRow[
-                        MetadataColumns.FILE
-                    ] = `[[${view.file.parent.path}/${value}/${rowTFile.name}|${rowTFile.basename}]]`;
-                    // Check if action.value is a valid folder name
-                    const auxPath =
-                        value !== ""
-                            ? `${view.file.parent.path}/${value}/${rowTFile.name}`
-                            : `${view.file.parent.path}/${rowTFile.name}`;
+                modifiedRow.__note__ = new NoteInfo({
+                    ...recordRow,
+                    file: {
+                        path: auxPath,
+                    },
+                });
 
-                    const recordRow: Record<string, Literal> = {};
-                    Object.entries(modifiedRow).forEach(([key, value]) => {
-                        recordRow[key] = value as Literal;
-                    });
-
-                    modifiedRow.__note__ = new NoteInfo({
-                        ...recordRow,
-                        file: {
-                            path: auxPath,
-                        },
-                    });
-
-                } else {
-                    // Save on disk
-                    updateRowFileProxy(
-                        rowTFile,
-                        column.id,
-                        value,
-                        columns,
-                        ddbbConfig,
-                        UpdateRowOptions.COLUMN_VALUE
-                    );
-                }
-                // Update rows without re render
-                state.rows[rowIndex] = modifiedRow;
-                return { rows: state.rows };
-            });
+            } else {
+                // Save on disk
+                await updateRowFileProxy(
+                    rowTFile,
+                    column.id,
+                    value,
+                    columns,
+                    ddbbConfig,
+                    UpdateRowOptions.COLUMN_VALUE
+                );
+            }
+            set((state) => {
+                // Save on memory
+                return {
+                    rows: [
+                        ...state.rows.slice(0, rowIndex),
+                        modifiedRow,
+                        ...state.rows.slice(rowIndex + 1),
+                    ]
+                };
+            })
+        };
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
     }
