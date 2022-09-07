@@ -2,7 +2,7 @@
 
 -   **Text**: this property support markdown, links, and tags ;
 -   **Number**: this property only accepts numbers ;
--   **Checkbox**: this property is represented by `1/0` in the underlying markdown ;
+-   **Checkbox**: this property is represented by `true/false` in the underlying markdown ;
 -   **Date**: this property accepts dates with the format `YYYY-MM-DD` ;
 -   **Time**: this property accepts time with the format `YYYY-MM-DD hh:mm AM/PM` ;
 -   **Select**: this property accepts from a list of options you define. Colors are attributed automatically, though you can change them in the column setting. Furthermore, when removing the select option in the setting, it is also removed from the note's metadata ;
@@ -12,7 +12,7 @@
 -   **Modified time**: this column can be added only once from the database settings and will display the last modified time of the row ;
 -   **Tasks**: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings.
 
-> You can change the column property types, and if the format is right, it will be recognized by the plugin. Sometimes, though, after converting, you won't see the changes until you refresh the database.
+> You can change from one property type to another, and if the format is right, it will be recognized by the plugin. Sometimes, though, after converting, you won't see the changes until you refresh the database.
 
 ## YAML & Dataview Inline Fields
 
