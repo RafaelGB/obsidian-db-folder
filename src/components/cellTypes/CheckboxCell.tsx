@@ -1,5 +1,4 @@
 import React from "react";
-import shallow from "zustand/shallow";
 import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 import { CellComponentProps } from "cdm/ComponentsModel";
@@ -11,10 +10,7 @@ function CheckboxCell(props: CellComponentProps) {
 
   const dataActions = tableState.data((state) => state.actions);
 
-  const checkboxRow = tableState.data(
-    (state) => state.rows[row.index],
-    shallow
-  );
+  const checkboxRow = tableState.data((state) => state.rows[row.index]);
 
   const columnsInfo = tableState.columns((state) => state.info);
 
