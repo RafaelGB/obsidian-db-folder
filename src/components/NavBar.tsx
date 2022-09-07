@@ -4,16 +4,21 @@ import MenuIcon from "components/img/MenuIcon";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import PaginationTable from "components/PaginationTable";
-import { NavBarConfig, StyleVariables } from "helpers/Constants";
+import { InputType, NavBarConfig, StyleVariables } from "helpers/Constants";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import SettingsIcon from "@mui/icons-material/Settings";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import Typography from "@mui/material/Typography";
 import DataviewFilters from "components/reducers/DataviewFilters";
+import { MenuButtonStyle } from "components/styles/NavBarStyles";
+import { SettingsModal } from "Settings";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -27,6 +32,28 @@ export function NavBar(navBarProps: NavBarProps) {
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleSettingsClick = () => {
+    setAnchorEl(null);
+    new SettingsModal(
+      view,
+      {
+        onSettingsChange: (settings) => {
+          /**
+           * Settings are saved into the database file, so we don't need to do anything here.
+           */
+        },
+      },
+      view.plugin.settings
+    ).open();
+  };
+
+  const handleOpenAsMarkdownClick = () => {
+    setAnchorEl(null);
+    view.plugin.databaseFileModes[(view.leaf as any).id || view.file.path] =
+      InputType.MARKDOWN;
+    view.plugin.setMarkdownView(view.leaf);
   };
 
   return (
@@ -71,7 +98,15 @@ export function NavBar(navBarProps: NavBarProps) {
               "aria-labelledby": "long-button",
             }}
           >
-            <MenuItem>
+            <MenuItem onClick={handleSettingsClick} disableRipple>
+              <SettingsIcon {...MenuButtonStyle} />
+              Settings
+            </MenuItem>
+            <MenuItem onClick={handleOpenAsMarkdownClick} disableRipple>
+              <InsertDriveFileIcon {...MenuButtonStyle} />
+              Open as Markdown
+            </MenuItem>
+            <MenuItem disableRipple>
               {/* CSV buttton download */}
               <CsvButton
                 columns={columns}

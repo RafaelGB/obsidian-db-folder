@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 import { CellComponentProps } from "cdm/ComponentsModel";
@@ -6,26 +6,18 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 function CheckboxCell(props: CellComponentProps) {
   const { defaultCell } = props;
   const { row, column, table } = defaultCell;
-  const tableColumn = column.columnDef as TableColumn;
+  const { tableState } = table.options.meta;
 
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
+  const dataActions = tableState.data((state) => state.actions);
 
-  const checkboxCell = table.options.meta.tableState.data(
-    (state) => state.rows[row.index]
-  );
+  const checkboxRow = tableState.data((state) => state.rows[row.index]);
 
-  const columnsInfo = table.options.meta.tableState.columns(
-    (state) => state.info
-  );
+  const columnsInfo = tableState.columns((state) => state.info);
 
-  const configInfo = table.options.meta.tableState.configState(
-    (state) => state.info
-  );
+  const configInfo = tableState.configState((state) => state.info);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.checked ? 1 : 0;
+    const newValue = event.target.checked;
     // save on disk
     dataActions.updateCell(
       row.index,
@@ -35,12 +27,12 @@ function CheckboxCell(props: CellComponentProps) {
       configInfo.getLocalSettings()
     );
   };
-
   return (
-    <div className={`${c("checkbox")}`}>
+    <div key={`checkbox-div-${row.index}`} className={`${c("checkbox")}`}>
       <input
         type="checkbox"
-        checked={Boolean(checkboxCell[tableColumn.key])}
+        checked={checkboxRow[column.id] as boolean}
+        key={`checkbox-input-${row.index}`}
         onChange={handleChange}
       />
     </div>

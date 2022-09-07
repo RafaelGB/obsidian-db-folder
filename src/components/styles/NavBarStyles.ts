@@ -56,3 +56,10 @@ export const PaginationButtonStyle = {
         backgroundColor: StyleVariables.TEXT_ACCENT,
     }
 }
+
+export const MenuButtonStyle = {
+    sx: {
+        color: StyleVariables.TEXT_ACCENT_HOVER,
+    }
+}
+

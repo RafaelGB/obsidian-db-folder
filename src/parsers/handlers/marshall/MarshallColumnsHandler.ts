@@ -47,12 +47,17 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     this.addError(`There was not label in column ${key}`);
                     column.label = key;
                 }
+
                 if (column.skipPersist === undefined) {
                     column.skipPersist = false;
                 }
 
                 if (column.isHidden === undefined) {
                     column.isHidden = false;
+                }
+
+                if (column.sortIndex === undefined || typeof column.sortIndex !== 'number') {
+                    column.sortIndex = -1;
                 }
 
                 /** CONFIG COLUMN INFO */

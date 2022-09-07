@@ -395,7 +395,6 @@ export default class DBFolderPlugin extends Plugin {
 		);
 	}
 	registerCommands() {
-		// TODO - add command to create a new database
 		this.addCommand({
 			id: 'create-new-database-folder',
 			name: 'Create a new database table',
