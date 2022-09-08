@@ -7,7 +7,7 @@ import {
   MetadataDatabaseColumns,
 } from "helpers/Constants";
 import React from "react";
-import { showFileMenu } from "./obsidianArq/commands";
+import { showFileMenu } from "components/obsidianArq/commands";
 
 const rowContextMenuColumn: TableColumn = {
   ...MetadataDatabaseColumns.ROW_CONTEXT_MENU,
