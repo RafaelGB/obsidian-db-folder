@@ -15,7 +15,10 @@ const TaskCell = (taskProps: CellComponentProps) => {
     // Check if there are tasks in the cell
     if (taskValue !== "") {
       taskRef.current.innerHTML = "";
-      if ((column.columnDef as TableColumn).config.task_hide_completed) {
+      if (
+        (column.columnDef as TableColumn).config.task_hide_completed &&
+        typeof (taskValue as any).where === "function"
+      ) {
         taskValue = (taskValue as any).where((t: any) => !t.completed);
       }
       const taskComponent = new MarkdownRenderChild(taskRef.current);
