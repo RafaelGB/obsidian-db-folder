@@ -22,11 +22,16 @@ const rowContextMenuColumn: TableColumn = {
       rowActions.removeRow(row.original);
     };
 
+    const handleRenameRow = () => {
+      rowActions.renameFile(row.index);
+    };
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
       showFileMenu(
         row.original.__note__.getFile(),
         event.nativeEvent,
-        handleDeleteRow
+        handleDeleteRow,
+        handleRenameRow
       );
     };
 
