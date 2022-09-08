@@ -62,8 +62,6 @@
 		"react-color": "2.19.3",
 		"react-csv": "2.2.2",
 		"react-datepicker": "4.8.0",
-		"react-dnd": "16.0.1",
-		"react-dnd-html5-backend": "16.0.1",
 		"react-dom": "18.2.0",
 		"react-popper": "2.3.0",
 		"react-select": "5.4.0",
