@@ -8,9 +8,9 @@ You have to choose a template in the bottom bar before creating the note. You ca
 
 > It works with the core template plugin. But with the templater plugin, you have to activate the option `Trigger templater on new file creation` in templater settings.
 
-## Deleting Notes
+## Deleting & Renaming Notes
 
-You can use the dots to the right of every row to delete the row and the note associated with it.
+You can use the dots to the right of every row, to bring up a menu where you can delete and rename the note associated with the row.
 
 ## Moving Notes Based on Metadata
 
