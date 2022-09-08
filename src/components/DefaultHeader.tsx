@@ -95,6 +95,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       propertyIcon = <CalendarIcon />;
       break;
     case InputType.CALENDAR_TIME:
+    case InputType.METATADA_TIME:
       propertyIcon = <CalendarTimeIcon />;
       break;
     case InputType.MARKDOWN:

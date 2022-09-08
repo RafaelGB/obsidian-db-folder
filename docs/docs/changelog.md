@@ -1,3 +1,8 @@
+# 2.3.7
+### Visual
+- Tasks aligned to the left properly
+### No longer broken
+- new yaml breaker conditions added (>)
 # 2.3.6
 *Published on 2022/09/07*
 ### Improved

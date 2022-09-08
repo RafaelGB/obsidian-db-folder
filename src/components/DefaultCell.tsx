@@ -13,6 +13,7 @@ import NumberCell from "components/cellTypes/NumberCell";
 import TextCell from "components/cellTypes/TextCell";
 import { CellContext } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview";
+import MetadataTimeCell from "./cellTypes/MetadataTimeCell";
 
 export default function DefaultCell(
   defaultCell: CellContext<RowDataType, Literal>
@@ -45,6 +46,10 @@ export default function DefaultCell(
       /** Calendar with time option */
       case InputType.CALENDAR_TIME:
         return <CalendarTimePortal defaultCell={defaultCell} />;
+
+      /** Metadata options related with date/datetime */
+      case InputType.METATADA_TIME:
+        return <MetadataTimeCell defaultCell={defaultCell} />;
 
       /** Selector option */
       case InputType.SELECT:
