@@ -38,8 +38,6 @@ import { HeaderNavBar } from "components/NavBar";
 import TableHeader from "components/TableHeader";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import Select, { OnChangeValue } from "react-select";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
@@ -333,7 +331,7 @@ export function Table(tableData: TableDataType) {
                   className={`${c("tr header-group")}`}
                 >
                   {/* TODO manage context with documentFragment in any way to fix DnD conflict with Obsidian */}
-                  <DndProvider
+                  {/* <DndProvider
                     key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
                     debugMode={globalConfig.enable_debug_mode}
                     backend={HTML5Backend}
@@ -343,28 +341,28 @@ export function Table(tableData: TableDataType) {
                         ? activeWindow
                         : activeDocument.createElement("div"))
                     }
-                  >
-                    {headerGroup.headers
-                      .filter(
-                        (o: Header<RowDataType, TableColumn>) =>
-                          (o.column.columnDef as TableColumn).key !==
-                          MetadataColumns.ADD_COLUMN
+                  > */}
+                  {headerGroup.headers
+                    .filter(
+                      (o: Header<RowDataType, TableColumn>) =>
+                        (o.column.columnDef as TableColumn).key !==
+                        MetadataColumns.ADD_COLUMN
+                    )
+                    .map(
+                      (
+                        header: Header<RowDataType, TableColumn>,
+                        headerIndex: number
+                      ) => (
+                        <TableHeader
+                          key={`${header.id}-${headerIndex}`}
+                          table={table}
+                          header={header}
+                          reorderColumn={reorderColumn}
+                          headerIndex={headerIndex}
+                        />
                       )
-                      .map(
-                        (
-                          header: Header<RowDataType, TableColumn>,
-                          headerIndex: number
-                        ) => (
-                          <TableHeader
-                            key={`${header.id}-${headerIndex}`}
-                            table={table}
-                            header={header}
-                            reorderColumn={reorderColumn}
-                            headerIndex={headerIndex}
-                          />
-                        )
-                      )}
-                  </DndProvider>
+                    )}
+                  {/* </DndProvider> */}
                   {headerGroup.headers
                     .filter(
                       (o: Header<RowDataType, TableColumn>) =>

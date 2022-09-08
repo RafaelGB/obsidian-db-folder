@@ -1,16 +1,14 @@
 import React from "react";
-import { Column, flexRender } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import { c } from "helpers/StylesHelper";
 import { TableHeaderProps } from "cdm/HeaderModel";
-import { useDrag, useDrop } from "react-dnd";
-import { RowDataType } from "cdm/FolderModel";
-import { DnDConfiguration } from "helpers/Constants";
 
 export default function TableHeader(headerProps: TableHeaderProps) {
   const { table, header, reorderColumn, headerIndex } = headerProps;
   const { view } = table.options.meta;
   const { columnOrder } = table.options.state;
-
+  const [isDragging, setIsDragging] = React.useState(false);
+  const dndRef = React.useRef(null);
   function moveColumn(
     draggedColumnId: string,
     targetColumnId: string,
@@ -27,37 +25,49 @@ export default function TableHeader(headerProps: TableHeaderProps) {
     return newColumnOrder;
   }
 
-  const [, dropRef] = useDrop({
-    accept: DnDConfiguration.DRAG_TYPE,
-    drop: (draggedColumn: Column<RowDataType>) => {
-      const newColumnOrder = moveColumn(
-        draggedColumn.id,
-        header.column.id,
-        columnOrder
-      );
-      table.setColumnOrder(newColumnOrder);
-    },
-  });
-
-  const [{ isDragging }, dragRef] = useDrag({
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    item: () => header.column,
-    type: DnDConfiguration.DRAG_TYPE,
-  });
-
   return (
     <div
       key={`${header.id}-${headerIndex}`}
       className={`${c("th noselect")} header`}
+      ref={dndRef}
       style={{
         width: header.getSize(),
         opacity: isDragging ? 0.5 : 1,
       }}
-      ref={dropRef}
+      onDrop={(e) => {
+        e.preventDefault();
+        const newColumnOrder = moveColumn(
+          e.dataTransfer.getData("dbfolderDragId"),
+          header.column.id,
+          columnOrder
+        );
+        table.setColumnOrder(newColumnOrder);
+        return false;
+      }}
+      draggable
+      onDragStart={(e) => {
+        setIsDragging(true);
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("dbfolderDragId", header.column.id);
+      }}
+      onDragEnter={(e) => {
+        dndRef.current.classList.add("over");
+      }}
+      onDragLeave={(e) => {
+        dndRef.current.classList.remove("over");
+      }}
+      onDragEnd={(e) => {
+        setIsDragging(false);
+      }}
+      onDragOver={(e) => {
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
+        e.dataTransfer.dropEffect = "move";
+        return false;
+      }}
     >
-      <div ref={dragRef} key={`${header.id}-${headerIndex}-dnd`}>
+      <div key={`${header.id}-${headerIndex}-dnd`}>
         {header.isPlaceholder
           ? null
           : flexRender(header.column.columnDef.header, header.getContext())}
