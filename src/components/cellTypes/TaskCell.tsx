@@ -5,6 +5,7 @@ import { DataviewService } from "services/DataviewService";
 import React, { useEffect, useRef } from "react";
 import { TableColumn } from "cdm/FolderModel";
 import { MarkdownRenderChild } from "obsidian";
+import { c } from "helpers/StylesHelper";
 
 const TaskCell = (taskProps: CellComponentProps) => {
   const { defaultCell } = taskProps;
@@ -34,7 +35,7 @@ const TaskCell = (taskProps: CellComponentProps) => {
   }, []);
   const taskRef = useRef<HTMLDivElement>();
 
-  return <div ref={taskRef}></div>;
+  return <div ref={taskRef} className={c("text-align-left")}></div>;
 };
 
 export default TaskCell;
