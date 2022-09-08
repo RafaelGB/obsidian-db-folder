@@ -294,7 +294,6 @@ export const YAML_INDENT = Object.freeze("  ");
 export const DEFAULT_SETTINGS: DatabaseSettings = {
   global_settings: {
     enable_debug_mode: false,
-    enable_dnd: false,
     enable_show_state: false,
     logger_level_info: 'error',
     media_settings: {

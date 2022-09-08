@@ -3,7 +3,6 @@ import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler
 import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
 import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateToggleHandler';
 import { LoggerLevelInfoDropDownHandler } from 'settings/handlers/developer/LoggerLevelInfoDropDownHandler';
-import { DnDToggleHandler } from 'settings/handlers/developer/DnDToggleHandler';
 import { AbstractChain } from 'patterns/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/AbstractHandler';
 
@@ -20,7 +19,6 @@ class DeveloperSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
         return [
-            new DnDToggleHandler(),
             new LoggerToggleHandler(),
             new LoggerLevelInfoDropDownHandler(),
             new TableStateToggleHandler()

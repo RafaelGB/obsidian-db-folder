@@ -16,7 +16,6 @@ export interface GlobalSettings {
     enable_debug_mode: boolean;
     logger_level_info: string;
     media_settings: MediaSettings;
-    enable_dnd: boolean;
     enable_show_state: boolean;
 }
 
