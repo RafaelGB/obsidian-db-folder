@@ -1,3 +1,18 @@
+# 2.4.0
+*Published on 2022/09/08*
+### Shiny new things
+- Totally renewed row context menu! Now wraps the obsidian context menu, so you can use all the plugins that add items to it(rename and delete file included as custom options too) [ISSUE#152](https://github.com/RafaelGB/obsidian-db-folder/issues/152)
+- Created and modified columns now is rendered as daily link note using the complete date as alias [ISSUE#144](https://github.com/RafaelGB/obsidian-db-folder/issues/144)
+### Improved
+- Global search now ignore cases [ISSUE#340](https://github.com/RafaelGB/obsidian-db-folder/issues/340)
+- File column is ordered alphabetically using filename instead of path with sort options [ISSUE#335](https://github.com/RafaelGB/obsidian-db-folder/issues/335)
+- Checkbox edition save boolean values instead of 1 or 0 [ISSUE#158](https://github.com/RafaelGB/obsidian-db-folder/issues/158)
+### Visual
+- Tasks aligned to the left properly
+- Open tags cell on the bottom of the table is displayed properly [ISSUE#139](https://github.com/RafaelGB/obsidian-db-folder/issues/139)
+### No longer broken
+- new yaml breaker conditions added (>)
+- Edit a cell in a page out of the first one does not reset the pagination anymore [ISSUE#338](https://github.com/RafaelGB/obsidian-db-folder/issues/338)
 # 2.3.6
 *Published on 2022/09/07*
 ### Improved

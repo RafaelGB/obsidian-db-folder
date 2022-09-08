@@ -18,11 +18,12 @@ function CheckboxCell(props: CellComponentProps) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked;
+    console.log("newValue", newValue);
     // save on disk
     dataActions.updateCell(
       row.index,
       column.columnDef as TableColumn,
-      newValue,
+      newValue ? "true" : "false",
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
@@ -31,7 +32,7 @@ function CheckboxCell(props: CellComponentProps) {
     <div key={`checkbox-div-${row.index}`} className={`${c("checkbox")}`}>
       <input
         type="checkbox"
-        checked={checkboxRow[column.id] as boolean}
+        checked={checkboxRow[column.id] === "true"}
         key={`checkbox-input-${row.index}`}
         onChange={handleChange}
       />

@@ -45,6 +45,7 @@ export interface DataState {
         removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => Promise<void>;
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
+        renameFile: (rowIndex: number) => Promise<void>;
     }
 }
 

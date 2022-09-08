@@ -15,5 +15,5 @@ export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<Row
         return false;
     }
     const sanitized = DataviewService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true);
-    return sanitized.toString().includes(filterValue)
+    return sanitized.toString().toLowerCase().includes(filterValue.toLowerCase())
 }

@@ -16,7 +16,7 @@ function obtainInitialType(columns: TableColumn[]): InitialType {
     sortElemList.sort((a: ColumnSort, b: ColumnSort) => {
         const aIndex = columns.find((column: TableColumn) => column.key === a.id)?.sortIndex;
         const bIndex = columns.find((column: TableColumn) => column.key === b.id)?.sortIndex;
-        if (aIndex === -1 || bIndex === -1) {
+        if (aIndex === -1 || bIndex === -1 || aIndex === undefined || bIndex === undefined) {
             return 0;
         }
         return aIndex - bIndex;

@@ -58,7 +58,7 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                     ...rowRecord.inline,
                     file: { path: filepath },
                 }),
-                [MetadataColumns.FILE]: `[[${filepath}|${filename}]]`,
+                [MetadataColumns.FILE]: `${filename}|${filepath}`,
             };
             return { rows: [...state.rows, row] }
         });

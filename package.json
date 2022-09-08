@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-dbfolder",
-	"version": "2.3.6",
+	"version": "2.4.0",
 	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
@@ -50,7 +50,7 @@
 	"dependencies": {
 		"@emotion/styled": "11.10.4",
 		"@mui/icons-material": "5.10.3",
-		"@mui/material": "5.10.3",
+		"@mui/material": "5.10.4",
 		"@popperjs/core": "2.11.6",
 		"@tanstack/match-sorter-utils": "8.1.1",
 		"@tanstack/react-table": "8.5.13",

@@ -1,4 +1,3 @@
-import { StyleVariables } from "helpers/Constants";
 import {
     StylesConfig,
     GroupBase,
@@ -8,9 +7,6 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     container: () => ({
         position: "static",
         boxSizing: "border-box",
-    }),
-    menu: () => ({
-        position: "fixed"
     }),
     menuPortal: base => ({ ...base, zIndex: 9999 }),
     control: (styles) => ({ ...styles, backgroundColor: "var(--background-primary)" }),

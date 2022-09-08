@@ -50,6 +50,7 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
   header: DefaultHeader,
   enableResizing: true,
+  sortingFn: "alphanumeric",
 };
 
 /**
@@ -252,6 +253,7 @@ export function Table(tableData: TableDataType) {
     debugTable: globalConfig.enable_debug_mode,
     debugHeaders: globalConfig.enable_debug_mode,
     debugColumns: globalConfig.enable_debug_mode,
+    autoResetPageIndex: false,
   });
 
   // Manage input of new row

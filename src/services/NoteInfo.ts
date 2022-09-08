@@ -5,6 +5,7 @@ import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolve_tfile } from "helpers/FileManagement";
+import { SMarkdownPage } from "obsidian-dataview/lib/data-model/serialized/markdown";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
@@ -21,16 +22,17 @@ export default class NoteInfo {
         const aFile: RowDataType = {
             __note__: this
         }
-        const dataviewFile = this.page.file as any;
+        const dataviewFile = this.page as SMarkdownPage;
+
         /** Metadata fields */
-        aFile[MetadataColumns.FILE] = `${dataviewFile.link.markdown()}`;
-        aFile[MetadataColumns.CREATED] = dataviewFile.ctime;
-        aFile[MetadataColumns.MODIFIED] = dataviewFile.mtime;
-        aFile[MetadataColumns.TASKS] = dataviewFile.tasks;
+        aFile[MetadataColumns.FILE] = `${dataviewFile.file.link.fileName()}|${dataviewFile.file.link.path}`;
+        aFile[MetadataColumns.CREATED] = dataviewFile.file.ctime;
+        aFile[MetadataColumns.MODIFIED] = dataviewFile.file.mtime;
+        aFile[MetadataColumns.TASKS] = dataviewFile.file.tasks;
         /** Parse data with the type of column */
         columns.forEach(column => {
-            if (this.page[column.key] !== undefined) {
-                aFile[column.key] = DataviewService.parseLiteral((this.page[column.key]) as Literal, column.input, config, column.config.isInline);
+            if (dataviewFile[column.key] !== undefined) {
+                aFile[column.key] = DataviewService.parseLiteral((dataviewFile[column.key]) as Literal, column.input, config, column.config.isInline);
             }
         });
         return aFile;

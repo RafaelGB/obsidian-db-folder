@@ -5,6 +5,7 @@ import { DataviewService } from "services/DataviewService";
 import React, { useEffect, useRef } from "react";
 import { TableColumn } from "cdm/FolderModel";
 import { MarkdownRenderChild } from "obsidian";
+import { c } from "helpers/StylesHelper";
 
 const TaskCell = (taskProps: CellComponentProps) => {
   const { defaultCell } = taskProps;
@@ -15,7 +16,10 @@ const TaskCell = (taskProps: CellComponentProps) => {
     // Check if there are tasks in the cell
     if (taskValue !== "") {
       taskRef.current.innerHTML = "";
-      if ((column.columnDef as TableColumn).config.task_hide_completed) {
+      if (
+        (column.columnDef as TableColumn).config.task_hide_completed &&
+        typeof (taskValue as any).where === "function"
+      ) {
         taskValue = (taskValue as any).where((t: any) => !t.completed);
       }
       const taskComponent = new MarkdownRenderChild(taskRef.current);
@@ -31,7 +35,7 @@ const TaskCell = (taskProps: CellComponentProps) => {
   }, []);
   const taskRef = useRef<HTMLDivElement>();
 
-  return <div ref={taskRef}></div>;
+  return <div ref={taskRef} className={c("text-align-left")}></div>;
 };
 
 export default TaskCell;
