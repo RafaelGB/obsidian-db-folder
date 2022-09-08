@@ -42,7 +42,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                 // Update row file
                 modifiedRow[
                     MetadataColumns.FILE
-                ] = `[[${view.file.parent.path}/${value}/${rowTFile.name}|${rowTFile.basename}]]`;
+                ] = `${rowTFile.basename}|${view.file.parent.path}/${value}/${rowTFile.name}`;
                 // Check if action.value is a valid folder name
                 const auxPath =
                     value !== ""
@@ -54,13 +54,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     recordRow[key] = value as Literal;
                 });
 
-                modifiedRow.__note__ = new NoteInfo({
-                    ...recordRow,
-                    file: {
-                        path: auxPath,
-                    },
-                });
-
+                modifiedRow.__note__.filepath = auxPath;
             } else {
                 // Save on disk
                 await updateRowFileProxy(
