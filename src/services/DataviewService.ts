@@ -177,12 +177,12 @@ class DataviewProxy {
         }
     }
 
-    private parseToBoolean(wrapped: WrappedLiteral): boolean {
+    private parseToBoolean(wrapped: WrappedLiteral): string {
         if (wrapped.type === 'boolean') {
-            return wrapped.value;
+            return wrapped.value ? 'true' : 'false';
         } else {
             const adjustedValue = this.getDataviewAPI().value.toString(wrapped.value);
-            return adjustedValue === 'true' || adjustedValue === '1';
+            return adjustedValue === 'true' ? "true" : "false";
         }
     }
 
