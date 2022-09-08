@@ -18,23 +18,11 @@ const rowContextMenuColumn: TableColumn = {
   cell: ({ row, table }) => {
     const { tableState } = table.options.meta;
     const rowActions = tableState.data((state) => state.actions);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-
     const handleDeleteRow = () => {
       rowActions.removeRow(row.original);
     };
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-      row.getToggleSelectedHandler()({
-        event: {
-          target: {
-            checked: !row.getIsSelected(),
-          },
-        },
-      });
-      setAnchorEl(event.currentTarget);
-
       showFileMenu(
         row.original.__note__.getFile(),
         event.nativeEvent,
