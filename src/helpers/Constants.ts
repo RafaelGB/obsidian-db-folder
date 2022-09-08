@@ -17,6 +17,7 @@ export const InputType = Object.freeze({
   MARKDOWN: 'markdown',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
+  METATADA_TIME: 'metadata_time',
   TASK: 'task',
   CHECKBOX: 'checkbox',
   NEW_COLUMN: 'new_column'
@@ -100,7 +101,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   CREATED: {
     key: MetadataColumns.CREATED,
-    input: InputType.CALENDAR_TIME,
+    input: InputType.METATADA_TIME,
     label: MetadataLabels.CREATED,
     accessorKey: MetadataColumns.CREATED,
     isMetadata: true,
@@ -111,7 +112,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
-    input: InputType.CALENDAR_TIME,
+    input: InputType.METATADA_TIME,
     label: MetadataLabels.MODIFIED,
     accessorKey: MetadataColumns.MODIFIED,
     isMetadata: true,
