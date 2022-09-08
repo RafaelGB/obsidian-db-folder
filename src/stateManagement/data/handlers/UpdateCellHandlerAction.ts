@@ -5,7 +5,6 @@ import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
 import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
-import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
