@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 import DataviewFilters from "components/reducers/DataviewFilters";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { SettingsModal } from "Settings";
+import CsvReader from "./navbar/CsvReader";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -114,6 +115,7 @@ export function NavBar(navBarProps: NavBarProps) {
                 name={view.diskConfig.yaml.name}
               />
             </MenuItem>
+            <CsvReader />
           </Menu>
           <Typography
             variant="h6"
