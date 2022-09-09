@@ -330,18 +330,6 @@ export function Table(tableData: TableDataType) {
                   key={`${headerGroup.id}-${headerGroupIndex}`}
                   className={`${c("tr header-group")}`}
                 >
-                  {/* TODO manage context with documentFragment in any way to fix DnD conflict with Obsidian */}
-                  {/* <DndProvider
-                    key={`${headerGroup.id}-${headerGroupIndex}-dnd-provider`}
-                    debugMode={globalConfig.enable_debug_mode}
-                    backend={HTML5Backend}
-                    context={
-                      (globalConfig.enable_debug_mode,
-                      globalConfig.enable_dnd
-                        ? activeWindow
-                        : activeDocument.createElement("div"))
-                    }
-                  > */}
                   {headerGroup.headers
                     .filter(
                       (o: Header<RowDataType, TableColumn>) =>
@@ -362,7 +350,6 @@ export function Table(tableData: TableDataType) {
                         />
                       )
                     )}
-                  {/* </DndProvider> */}
                   {headerGroup.headers
                     .filter(
                       (o: Header<RowDataType, TableColumn>) =>
