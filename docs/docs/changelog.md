@@ -1,3 +1,9 @@
+# 2.4.1
+*Published on 2022/09/09*
+### Visual
+- Search now indicate the number of avaliable rows always, not just like placeholder [ISSUE#130](https://github.com/RafaelGB/obsidian-db-folder/issues/130)
+### No longer broken
+- FINALLY, DnD columns is enabled by default and the developer config about it was removed. It does not break Obsidian DnD anymore [ISSUE#239](https://github.com/RafaelGB/obsidian-db-folder/issues/239)
 # 2.4.0
 *Published on 2022/09/08*
 ### Shiny new things
