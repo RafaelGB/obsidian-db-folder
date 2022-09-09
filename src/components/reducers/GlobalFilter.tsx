@@ -20,13 +20,22 @@ export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
   return (
     <Search>
       <SearchIconWrapper>
-        <SearchIcon />
+        <div
+          style={{
+            listStyleType: "none",
+          }}
+        >
+          <li>
+            <SearchIcon />
+          </li>
+          <li>{hits}</li>
+        </div>
       </SearchIconWrapper>
       <DebouncedInputWrapper>
         <DebouncedInput
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
-          placeholder={`Search... (${hits})`}
+          placeholder={`Search...`}
         />
       </DebouncedInputWrapper>
     </Search>
