@@ -30,7 +30,7 @@ You can resize columns by dragging the handle at the right of the column header.
 
 ## Reordering
 
-For now, by default, reordering columns is disabled because of a related bug. You can, however, enable it in the plugin settings under `Developer section > Enable drag and drop columns`.
+To reorder a column, you have to drag and drop it to the specific location you want it to be moved.
 
 ## Renaming
 
