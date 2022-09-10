@@ -17,6 +17,7 @@ export interface GlobalSettings {
     logger_level_info: string;
     media_settings: MediaSettings;
     enable_show_state: boolean;
+    csv_file_header_key: string;
 }
 
 export interface LocalSettings {

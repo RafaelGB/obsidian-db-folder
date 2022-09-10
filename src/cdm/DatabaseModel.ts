@@ -3,6 +3,7 @@ import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { TableOptions } from "@tanstack/react-table";
 import { BaseColumn, RowDataType } from "cdm/FolderModel";
+import { DateTime, SMarkdownPage, STask } from "obsidian-dataview";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {
@@ -45,3 +46,16 @@ export type MetadataColumnsModel = {
 export type TableOptionsResponse = {
     options: TableOptions<RowDataType>;
 }
+
+export type NoteInfoPage = Omit<SMarkdownPage, "file"> & {
+    file:
+    {
+        link: {
+            fileName: () => string, path: string
+        },
+        path: string,
+        ctime: DateTime,
+        mtime: DateTime,
+        tasks?: STask[]
+    }
+};

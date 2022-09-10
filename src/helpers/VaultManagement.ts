@@ -12,6 +12,7 @@ import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { EditionError } from 'errors/ErrorTypes';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
+import { NoteInfoPage } from 'cdm/DatabaseModel';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -86,7 +87,7 @@ export async function adapterTFilesToRows(folderPath: string, columns: TableColu
     folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p, ddbbConfig));
   }
   folderFiles.map((page) => {
-    const noteInfo = new NoteInfo(page);
+    const noteInfo = new NoteInfo(page as NoteInfoPage);
     rows.push(noteInfo.getRowDataType(columns, ddbbConfig));
   });
 
@@ -104,7 +105,7 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
     folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p, ddbbConfig));
   }
   folderFiles.map((page) => {
-    const noteInfo = new NoteInfo(page);
+    const noteInfo = new NoteInfo(page as NoteInfoPage);
     rows.push(noteInfo.getAllRowDataType(ddbbConfig));
   });
 

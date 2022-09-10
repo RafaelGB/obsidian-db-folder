@@ -296,6 +296,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
     enable_show_state: false,
     logger_level_info: 'error',
+    csv_file_header_key: 'File',
     media_settings: {
       enable_media_view: DEFAULT_COLUMN_CONFIG.enable_media_view,
       width: DEFAULT_COLUMN_CONFIG.media_height,

@@ -9,7 +9,9 @@ import ParseDataOfColumnHandlerAction from "stateManagement/data/handlers/ParseD
 import DataviewRefreshHandlerAction from "stateManagement/data/handlers/DataviewRefreshHandlerAction";
 import RemoveOptionForAllRowsAction from "stateManagement/data/handlers/RemoveOptionForAllRowsAction";
 import RenameFileHandlerAction from "stateManagement/data/handlers/RenameFileHandlerAction";
+import SaveDataFromFileHandlerAction from "stateManagement/data/handlers/SaveDataFromFileHandlerAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
+
 
 class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
     protected getHandlers(): AbstractHandler<TableActionResponse<DataState>>[] {
@@ -22,7 +24,8 @@ class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
             new RemoveDataOfColumnHandlerAction(),
             new DataviewRefreshHandlerAction(),
             new RemoveOptionForAllRowsAction(),
-            new RenameFileHandlerAction()
+            new RenameFileHandlerAction(),
+            new SaveDataFromFileHandlerAction()
         ];
     }
 }
