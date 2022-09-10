@@ -91,9 +91,9 @@ export class SettingsManager {
     rows_settings_section.run(settingHandlerResponse);
     /** Editing engine section */
     editing_engine_settings_section.run(settingHandlerResponse);
-    /** Media section */
-    media_settings_section(settingHandlerResponse);
     if (!settingHandlerResponse.local) {
+      /** Media section */
+      media_settings_section(settingHandlerResponse);
       /** CSV section */
       csv_settings_section.run(settingHandlerResponse);
       /** Developer section */

@@ -66,6 +66,7 @@ export const MetadataLabels = Object.freeze({
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   enable_media_view: true,
+  link_alias_enabled: true,
   media_width: 100,
   media_height: 100,
   isInline: false,
@@ -298,6 +299,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     logger_level_info: 'error',
     csv_file_header_key: 'File',
     media_settings: {
+      link_alias_enabled: DEFAULT_COLUMN_CONFIG.link_alias_enabled,
       enable_media_view: DEFAULT_COLUMN_CONFIG.enable_media_view,
       width: DEFAULT_COLUMN_CONFIG.media_height,
       height: DEFAULT_COLUMN_CONFIG.media_height

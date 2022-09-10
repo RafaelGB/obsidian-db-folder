@@ -1,5 +1,6 @@
 export interface MediaSettings {
     enable_media_view: boolean;
+    link_alias_enabled: boolean;
     width: number;
     height: number;
 }
