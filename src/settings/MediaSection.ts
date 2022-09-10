@@ -2,6 +2,7 @@ import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { MediaToggleHandler } from 'settings/handlers/media/MediaToggleHandler';
 import { MediaDimensionsHandler } from 'settings/handlers/media/MediaDimensionsHandler';
+import { LinkAliasToggleHandler } from 'settings/handlers/media/LinkAliasToggleHandler';
 
 /**
  * developer settings section
@@ -28,6 +29,7 @@ export function media_settings_section(settingHandlerResponse: SettingHandlerRes
 function getHandlers(): SettingHandler[] {
     return [
         new MediaToggleHandler(),
+        new LinkAliasToggleHandler(),
         new MediaDimensionsHandler(),
     ];
 }

@@ -12,12 +12,14 @@ export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandl
             // Check context to define correct promise
             // Persist value
             await view.diskConfig.updateColumnConfig(column.key, {
-                enable_media_view: value
+                enable_media_view: value,
+                link_alias_enabled: value ? column.config.link_alias_enabled : false
             });
             // Force refresh of settings
             columnSettingsManager.reset(columnHandlerResponse);
             columnSettingsManager.modal.enableReset = true;
         }
+
         add_toggle(
             containerEl,
             this.settingTitle,
@@ -25,6 +27,7 @@ export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandl
             column.config.enable_media_view,
             media_togle_promise
         );
+
         return this.goNext(columnHandlerResponse);
     }
 }
