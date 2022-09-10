@@ -2,7 +2,7 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
-import { SourceDataTypes } from "helpers/Constants";
+import { DEFAULT_SETTINGS, SourceDataTypes } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
@@ -47,7 +47,9 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
         const headers = this.normalizeArray(lines[0].split(","));
         const destination_folder = config.source_data === SourceDataTypes.CURRENT_FOLDER ? view.file.parent.path : config.source_destination_path;
         // Obtain File from headers array
-        const fileIndex = headers.indexOf(view.plugin.settings.global_settings.csv_file_header_key);
+        const fileIndex = headers.indexOf(
+            view.plugin.settings.global_settings.csv_file_header_key ?? DEFAULT_SETTINGS.global_settings.csv_file_header_key
+        );
         if (fileIndex === -1) {
             throw new Error(`${view.plugin.settings.global_settings.csv_file_header_key} column not found in CSV file`);
         }
