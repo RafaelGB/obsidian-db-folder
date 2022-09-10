@@ -34,40 +34,42 @@ export default function TableHeader(headerProps: TableHeaderProps) {
         width: header.getSize(),
         opacity: isDragging ? 0.5 : 1,
       }}
-      onDrop={(e) => {
-        e.preventDefault();
-        const newColumnOrder = moveColumn(
-          e.dataTransfer.getData("dbfolderDragId"),
-          header.column.id,
-          columnOrder
-        );
-        table.setColumnOrder(newColumnOrder);
-        return false;
-      }}
-      draggable
-      onDragStart={(e) => {
-        setIsDragging(true);
-        e.dataTransfer.effectAllowed = "move";
-        e.dataTransfer.setData("dbfolderDragId", header.column.id);
-      }}
-      onDragEnter={(e) => {
-        dndRef.current.classList.add("over");
-      }}
-      onDragLeave={(e) => {
-        dndRef.current.classList.remove("over");
-      }}
-      onDragEnd={(e) => {
-        setIsDragging(false);
-      }}
-      onDragOver={(e) => {
-        if (e.preventDefault) {
-          e.preventDefault();
-        }
-        e.dataTransfer.dropEffect = "move";
-        return false;
-      }}
     >
-      <div key={`${header.id}-${headerIndex}-dnd`}>
+      <div
+        key={`${header.id}-${headerIndex}-dnd`}
+        onDrop={(e) => {
+          e.preventDefault();
+          const newColumnOrder = moveColumn(
+            e.dataTransfer.getData("dbfolderDragId"),
+            header.column.id,
+            columnOrder
+          );
+          table.setColumnOrder(newColumnOrder);
+          return false;
+        }}
+        draggable
+        onDragStart={(e) => {
+          setIsDragging(true);
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setData("dbfolderDragId", header.column.id);
+        }}
+        onDragEnter={(e) => {
+          dndRef.current.classList.add(c("over"));
+        }}
+        onDragLeave={(e) => {
+          dndRef.current.classList.remove(c("over"));
+        }}
+        onDragEnd={(e) => {
+          setIsDragging(false);
+        }}
+        onDragOver={(e) => {
+          if (e.preventDefault) {
+            e.preventDefault();
+          }
+          e.dataTransfer.dropEffect = "move";
+          return false;
+        }}
+      >
         {header.isPlaceholder
           ? null
           : flexRender(header.column.columnDef.header, header.getContext())}
