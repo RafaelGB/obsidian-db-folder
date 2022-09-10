@@ -5,16 +5,19 @@ import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolve_tfile } from "helpers/FileManagement";
-import { SMarkdownPage } from "obsidian-dataview/lib/data-model/serialized/markdown";
+import { SMarkdownPage, STask } from "obsidian-dataview/lib/data-model/serialized/markdown";
+import { DateTime } from "luxon";
+import { NoteInfoPage } from "cdm/DatabaseModel";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
+
 export default class NoteInfo {
     public filepath: string;
-    private page: Record<string, Literal>;
-    constructor(page: Record<string, Literal>) {
+    private page: NoteInfoPage;
+    constructor(page: NoteInfoPage) {
         this.page = page;
-        this.filepath = (page.file as any).path;
+        this.filepath = page.file.path;
     }
 
     getRowDataType(columns: TableColumn[], config: LocalSettings): RowDataType {
@@ -22,7 +25,7 @@ export default class NoteInfo {
         const aFile: RowDataType = {
             __note__: this
         }
-        const dataviewFile = this.page as SMarkdownPage;
+        const dataviewFile = this.page;
 
         /** Metadata fields */
         aFile[MetadataColumns.FILE] = `${dataviewFile.file.link.fileName()}|${dataviewFile.file.link.path}`;

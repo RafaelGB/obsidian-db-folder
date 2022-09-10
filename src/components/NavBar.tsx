@@ -1,9 +1,9 @@
 import * as React from "react";
-import CsvButton from "components/CsvButton";
+import CsvWriter from "components/navbar/CsvWriter";
 import MenuIcon from "components/img/MenuIcon";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import PaginationTable from "components/PaginationTable";
+import PaginationTable from "components/navbar/PaginationTable";
 import { InputType, NavBarConfig, StyleVariables } from "helpers/Constants";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -109,7 +109,7 @@ export function NavBar(navBarProps: NavBarProps) {
             </MenuItem>
             <MenuItem disableRipple>
               {/* CSV buttton download */}
-              <CsvButton
+              <CsvWriter
                 columns={columns}
                 rows={table.getRowModel().rows}
                 name={view.diskConfig.yaml.name}

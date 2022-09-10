@@ -1,16 +1,18 @@
 import MenuItem from "@mui/material/MenuItem";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import React, { MouseEventHandler, useRef } from "react";
-import { useState } from "react";
+import React, { ChangeEventHandler, MouseEventHandler, useRef } from "react";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 
 export default function CsvReader() {
-  const [csvFile, setCsvFile] = useState(null);
-
   const inputRef = useRef(null);
 
   const handleFileUpload: MouseEventHandler<HTMLLIElement> = (e) => {
     inputRef.current.click();
+  };
+
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const csvFile = e.target.files[0];
+    console.log(csvFile);
   };
 
   return (
@@ -23,9 +25,7 @@ export default function CsvReader() {
         type="file"
         accept=".csv"
         style={{ display: "none" }}
-        onChange={(e) => {
-          setCsvFile(e.target.files[0]);
-        }}
+        onChange={handleFileChange}
       />
     </MenuItem>
   );
