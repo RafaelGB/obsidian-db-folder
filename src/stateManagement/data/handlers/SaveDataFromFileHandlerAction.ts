@@ -47,9 +47,9 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
         const headers = this.normalizeArray(lines[0].split(","));
         const destination_folder = config.source_data === SourceDataTypes.CURRENT_FOLDER ? view.file.parent.path : config.source_destination_path;
         // Obtain File from headers array
-        const fileIndex = headers.indexOf('File');
+        const fileIndex = headers.indexOf(view.plugin.settings.global_settings.csv_file_header_key);
         if (fileIndex === -1) {
-            throw new Error("File column not found in CSV file");
+            throw new Error(`${view.plugin.settings.global_settings.csv_file_header_key} column not found in CSV file`);
         }
 
         for (let i = 1; i < lines.length; i++) {
