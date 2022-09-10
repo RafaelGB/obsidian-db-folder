@@ -3,6 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript2 from "rollup-plugin-typescript2";
 import { terser } from 'rollup-plugin-terser';
+import replace from '@rollup/plugin-replace';
 
 const isProd = (process.env.BUILD === 'production');
 console.log(`Building ${isProd ? 'production' : 'development'}`);
@@ -22,6 +23,9 @@ const getRollupPlugins = (tsconfig, ...plugins) =>
         nodeResolve({ browser: true }),
         json(),
         commonjs(),
+        replace({
+            'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development')
+        })
     ].concat(plugins);
 
 const PROD_PLUGIN_CONFIG = {

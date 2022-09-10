@@ -6,5 +6,5 @@
 	"description": "Folder with the capability to store and retrieve data from a folder like database",
 	"author": "RafaelGB",
 	"authorUrl": "https://github.com/RafaelGB/obsidian-bd-folder",
-	"isDesktopOnly": true
+	"isDesktopOnly": false
 }
