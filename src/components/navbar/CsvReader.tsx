@@ -2,8 +2,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import React, { ChangeEventHandler, MouseEventHandler, useRef } from "react";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
+import { NavBarProps } from "cdm/MenuBarModel";
 
-export default function CsvReader() {
+export default function CsvReader(navBarProps: NavBarProps) {
+  const { table } = navBarProps;
+  const { tableState } = table.options.meta;
+  const columnsInfo = tableState.columns((state) => state.info);
+  const configInfo = tableState.configState((state) => state.info);
+  const dataActions = tableState.data((state) => state.actions);
   const inputRef = useRef(null);
 
   const handleFileUpload: MouseEventHandler<HTMLLIElement> = (e) => {
@@ -12,7 +18,13 @@ export default function CsvReader() {
 
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const csvFile = e.target.files[0];
-    console.log(csvFile);
+    if (csvFile) {
+      dataActions.saveDataFromFile(
+        csvFile,
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings()
+      );
+    }
   };
 
   return (

@@ -24,7 +24,7 @@ import CsvReader from "./navbar/CsvReader";
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
   const { view, tableState } = table.options.meta;
-  const columns = tableState.columns((state) => state.columns);
+  const columnsInfo = tableState.columns((state) => state.info);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleMenuClose = () => {
@@ -110,12 +110,12 @@ export function NavBar(navBarProps: NavBarProps) {
             <MenuItem disableRipple>
               {/* CSV buttton download */}
               <CsvWriter
-                columns={columns}
+                columns={columnsInfo.getAllColumns()}
                 rows={table.getRowModel().rows}
                 name={view.diskConfig.yaml.name}
               />
             </MenuItem>
-            <CsvReader />
+            <CsvReader {...navBarProps} />
           </Menu>
           <Typography
             variant="h6"

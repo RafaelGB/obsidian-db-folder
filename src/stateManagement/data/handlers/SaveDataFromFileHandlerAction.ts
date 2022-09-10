@@ -24,6 +24,7 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
                 reader.onload = async (event) => {
                     const csv = event.target.result;
                     const rows = await this.parseCSV(csv, columns, config, view);
+                    new Notice(`Saved ${rows.length} rows from ${file.name}`);
                     set((state) => {
                         return {
                             rows: [...state.rows, ...rows]
@@ -43,25 +44,26 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
     async parseCSV(csv: string | ArrayBuffer, columns: TableColumn[], config: LocalSettings, view: DatabaseView): Promise<RowDataType[]> {
         const rows: RowDataType[] = [];
         const lines = csv.toString().split("\n");
-        const headers = lines[0].split(",");
+        const headers = this.normalizeArray(lines[0].split(","));
         const destination_folder = config.source_data === SourceDataTypes.CURRENT_FOLDER ? view.file.parent.path : config.source_destination_path;
         // Obtain File from headers array
-        const fileIndex = headers.indexOf("File");
+        const fileIndex = headers.indexOf('File');
         if (fileIndex === -1) {
             throw new Error("File column not found in CSV file");
         }
 
         for (let i = 1; i < lines.length; i++) {
 
-            const currentline = lines[i].split(",");
+            const currentline = this.normalizeArray(lines[i].split(","));
             const potentialPath = currentline[fileIndex];
             currentline.splice(fileIndex, 1);
             // Obtain just the filename from the path
-            const filename = potentialPath.split("/").pop().replace(/(\.\w+)+$/, "").trim();
-
+            let filename = potentialPath?.split("/").pop().split('.').slice(0, -1).join('.').trim();
             if (filename) {
+
                 const filepath = config.source_data === SourceDataTypes.CURRENT_FOLDER ? `${view.file.parent.path}/${filename}.md` : `${config.source_destination_path}/${filename}.md`;
                 const lineRecord: Record<string, Literal> = {};
+
                 currentline.forEach((value, index) => {
                     lineRecord[headers[index]] = value;
                 });
@@ -95,5 +97,8 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
         }
 
         return rows;
+    }
+    normalizeArray(array: string[]): string[] {
+        return array.map((value) => value?.replaceAll("\"", "").trim());
     }
 }
