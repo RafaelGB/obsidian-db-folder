@@ -57,8 +57,8 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
         const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         switch (this.input) {
             case InputType.TEXT:
-                particularHandlers.push(new MediaToggleHandler());
                 particularHandlers.push(new LinkAliasToggleHandler());
+                particularHandlers.push(new MediaToggleHandler());
                 particularHandlers.push(new MediaDimensionsHandler());
                 break;
             case InputType.SELECT:
