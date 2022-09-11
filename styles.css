@@ -188,6 +188,12 @@ div.database-plugin__checkbox {
   display: inline;
 }
 
+.database-plugin__md_cell ul {
+  margin-block-start: unset !important;
+  margin-block-end: unset !important;
+  display: inline-table;
+}
+
 .database-plugin__markdown-preview-view {
   padding: 0;
   height: fit-content;

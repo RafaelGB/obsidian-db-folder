@@ -4,7 +4,7 @@ import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { DEFAULT_SETTINGS, SourceDataTypes } from "helpers/Constants";
 import { Notice } from "obsidian";
-import { Literal } from "obsidian-dataview";
+import { Link, Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
@@ -86,11 +86,10 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
                         path: filepath,
                         ctime: DateTime.now(),
                         mtime: DateTime.now(),
-                        link: {
-                            path: filepath,
-                            fileName: () => filename,
-                        },
+                        link: Link.file(filepath),
                         tasks: [],
+                        inlinks: [],
+                        outlinks: [],
                     },
                 });
 

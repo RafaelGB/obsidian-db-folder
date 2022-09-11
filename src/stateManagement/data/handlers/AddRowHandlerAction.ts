@@ -6,6 +6,7 @@ import { DatabaseView } from "DatabaseView";
 import { SourceDataTypes } from "helpers/Constants";
 import { resolve_tfolder } from "helpers/FileManagement";
 import { DateTime } from "luxon";
+import { Link } from "obsidian-dataview";
 import { VaultManagerDB } from "services/FileManagerService";
 import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
@@ -44,7 +45,6 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                 rowRecord,
                 ddbbConfig
             );
-
             const newNote = new NoteInfo({
                 ...rowRecord.frontmatter,
                 ...rowRecord.inline,
@@ -52,11 +52,10 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                     path: filepath,
                     ctime: DateTime.now(),
                     mtime: DateTime.now(),
-                    link: {
-                        path: filepath,
-                        fileName: () => filename,
-                    },
+                    link: Link.file(filepath),
                     tasks: [],
+                    inlinks: [],
+                    outlinks: [],
                 },
             });
 
