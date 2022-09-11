@@ -236,7 +236,7 @@ export function Table(tableData: TableDataType) {
     },
     onColumnOrderChange: setColumnOrder,
     // Hack to force react-table to use all columns when filtering
-    getColumnCanGlobalFilter: (column) => true,
+    getColumnCanGlobalFilter: () => true,
     globalFilterFn: globalDatabaseFilterFn(configInfo.getLocalSettings()),
     meta: {
       tableState: tableStore,

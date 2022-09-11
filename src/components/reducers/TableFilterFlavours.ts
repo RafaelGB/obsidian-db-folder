@@ -14,6 +14,16 @@ export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<Row
     if (value === undefined) {
         return false;
     }
-    const sanitized = DataviewService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true);
-    return sanitized.toString().toLowerCase().includes(filterValue.toLowerCase())
+    const sanitized = DataviewService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true).toString().toLowerCase();
+    filterValue = filterValue.toLowerCase();
+    return sanitized.includes(filterValue) || searchRegex(sanitized, filterValue);
+}
+
+function searchRegex(sanitized: string, filterValue: string): boolean {
+    try {
+        const regex = new RegExp(filterValue);
+        return regex.test(sanitized);
+    } catch (e) {
+        return false;
+    }
 }
