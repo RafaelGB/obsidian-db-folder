@@ -30,11 +30,12 @@ body:
     id: Platform
     attributes:
       label: What platform were you using?
-      required: true
       options:
         - Desktop
         - Mobile
         - Cross
+      validations:
+        required: true
   - type: input
     id: Version
     attributes:
