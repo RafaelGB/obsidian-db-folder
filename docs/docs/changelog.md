@@ -1,3 +1,17 @@
+# 2.5.0
+*Published on 2022/09/11*
+### Shiny new things
+- Added support for mobile devices (iOS and Android) and tablets (iPad and Android tablets) [ISSUE#27](https://github.com/RafaelGB/obsidian-db-folder/issues/27)
+- CSV import option included on menu [ISSUE#129](https://github.com/RafaelGB/obsidian-db-folder/issues/129)
+- Global search not admit regex [ISSUE#169](https://github.com/RafaelGB/obsidian-db-folder/issues/169)
+- New metadata options from dataview: Inlinks and Outlinks [ISSUE#170](https://github.com/RafaelGB/obsidian-db-folder/issues/170)
+### Improved
+- Button to clear date and datetime fields [ISSUE#160](https://github.com/RafaelGB/obsidian-db-folder/issues/160)
+- New option to add an alias for all url links per column [ISSUE#157](https://github.com/RafaelGB/obsidian-db-folder/issues/157)
+### No longer broken
+- Yaml config centinel was changed to convive with Templater plugin [ISSUE#179](https://github.com/RafaelGB/obsidian-db-folder/issues/179)
+- onBlur did not work well on empty text cells [ISSUE#352](https://github.com/RafaelGB/obsidian-db-folder/issues/352)
+- DnD conflicts with resize fixed [ISSUE#349](https://github.com/RafaelGB/obsidian-db-folder/issues/349)
 # 2.4.1
 *Published on 2022/09/09*
 ### Visual

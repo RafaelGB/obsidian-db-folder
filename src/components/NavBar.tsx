@@ -117,14 +117,6 @@ export function NavBar(navBarProps: NavBarProps) {
             </MenuItem>
             <CsvReader {...navBarProps} />
           </Menu>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            {view.diskConfig.yaml.name}
-          </Typography>
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
           <DataviewFilters table={table} />
