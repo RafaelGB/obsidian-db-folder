@@ -34,14 +34,16 @@ body:
         - Desktop
         - Mobile
         - Cross
-      validations:
-        required: true
+    validations:
+      required: true
   - type: input
     id: Version
     attributes:
       label: Version of the plugin
       description: "Tell us the version you were using"
       placeholder: "vx.y.z"
+    validations:
+      required: true
   - type: textarea
     id: logs
     attributes:
