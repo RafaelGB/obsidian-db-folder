@@ -48,14 +48,5 @@ export type TableOptionsResponse = {
 }
 
 export type NoteInfoPage = Omit<SMarkdownPage, "file"> & {
-    file:
-    {
-        link: {
-            fileName: () => string, path: string
-        },
-        path: string,
-        ctime: DateTime,
-        mtime: DateTime,
-        tasks?: STask[]
-    }
+    file: Pick<SMarkdownPage["file"], "link" | "path" | "ctime" | "mtime" | "tasks" | "outlinks" | "inlinks">
 };

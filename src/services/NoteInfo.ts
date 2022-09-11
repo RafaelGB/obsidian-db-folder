@@ -5,8 +5,6 @@ import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolve_tfile } from "helpers/FileManagement";
-import { SMarkdownPage, STask } from "obsidian-dataview/lib/data-model/serialized/markdown";
-import { DateTime } from "luxon";
 import { NoteInfoPage } from "cdm/DatabaseModel";
 /**
  * Keep info about a note and offer methods to manipulate it
@@ -26,12 +24,14 @@ export default class NoteInfo {
             __note__: this
         }
         const dataviewFile = this.page;
-
+        dataviewFile
         /** Metadata fields */
         aFile[MetadataColumns.FILE] = `${dataviewFile.file.link.fileName()}|${dataviewFile.file.link.path}`;
         aFile[MetadataColumns.CREATED] = dataviewFile.file.ctime;
         aFile[MetadataColumns.MODIFIED] = dataviewFile.file.mtime;
         aFile[MetadataColumns.TASKS] = dataviewFile.file.tasks;
+        aFile[MetadataColumns.OUTLINKS] = dataviewFile.file.outlinks;
+        aFile[MetadataColumns.INLINKS] = dataviewFile.file.inlinks;
         /** Parse data with the type of column */
         columns.forEach(column => {
             if (dataviewFile[column.key] !== undefined) {

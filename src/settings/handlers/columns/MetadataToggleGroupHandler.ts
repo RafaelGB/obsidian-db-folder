@@ -81,12 +81,67 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
                 });
             }
         }
+
         new Setting(metadata_section)
             .setName("Tasks")
             .setDesc("Enable/disable File Tasks Column")
             .addToggle(toggle =>
                 toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_tasks : settingsManager.plugin.settings.local_settings.show_metadata_tasks)
                     .onChange(metadata_tasks_toggle_promise)
+            );
+
+        /*************************
+        * INLINKS COLUMN
+        *************************/
+        const metadata_inlinks_toggle_promise = async (value: boolean): Promise<void> => {
+            // Check context to define correct promise
+            if (local) {
+                // Persist value
+                view.diskConfig.updateConfig({ show_metadata_inlinks: value });
+            } else {
+                // switch show task on/off
+                const update_local_settings = settingsManager.plugin.settings.local_settings;
+                update_local_settings.show_metadata_inlinks = value;
+                // update settings
+                await settingsManager.plugin.updateSettings({
+                    local_settings: update_local_settings
+                });
+            }
+        }
+
+        new Setting(metadata_section)
+            .setName("Inlinks")
+            .setDesc("Enable/disable File Inlinks Column")
+            .addToggle(toggle =>
+                toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_inlinks : settingsManager.plugin.settings.local_settings.show_metadata_inlinks)
+                    .onChange(metadata_inlinks_toggle_promise)
+            );
+
+        /*************************
+        * OUTLINKS COLUMN
+        *************************/
+        const metadata_outlinks_toggle_promise = async (value: boolean): Promise<void> => {
+            // Check context to define correct promise
+            if (local) {
+                // Persist value
+                view.diskConfig.updateConfig({ show_metadata_outlinks: value });
+            } else {
+                // switch show task on/off
+                const update_local_settings = settingsManager.plugin.settings.local_settings;
+                update_local_settings.show_metadata_outlinks = value;
+                // update settings
+                await settingsManager.plugin.updateSettings({
+                    local_settings: update_local_settings
+                });
+            }
+        }
+
+        new Setting(metadata_section)
+            .setName("Outlinks")
+            .setDesc("Enable/disable File Outlinks Column")
+            .addToggle(toggle =>
+                toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_outlinks : settingsManager.plugin.settings.local_settings.show_metadata_outlinks)
+                    .onChange(metadata_outlinks_toggle_promise)
             );
 
         return this.goNext(settingHandlerResponse);
