@@ -4,7 +4,7 @@ database-plugin: basic
 
 ---
 
-<%%
+%% dbfolder:yaml
 name: new database
 description: new description
 columns:
@@ -137,4 +137,4 @@ config:
   source_form_result: 
   show_metadata_tasks: true
 filters:
-%%>
+%%

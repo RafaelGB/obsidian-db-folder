@@ -20,7 +20,7 @@ export async function generateNewDatabase(ddbbConfig: string, folder?: TFolder, 
                 .concat('\n')
                 .concat(ddbbConfig)
                 .concat('\n')
-                .concat('%%>')
+                .concat('%%')
         );
         await app.workspace.getMostRecentLeaf().setViewState({
             type: DatabaseCore.FRONTMATTER_KEY,

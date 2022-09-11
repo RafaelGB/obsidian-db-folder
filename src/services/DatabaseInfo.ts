@@ -10,6 +10,7 @@ import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
 import { FilterCondition, FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
+import { DATABASE_CONFIG } from 'helpers/Constants';
 
 export default class DatabaseInfo {
     private file: TFile;
@@ -25,10 +26,13 @@ export default class DatabaseInfo {
      */
     async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
         LOGGER.info(`=>initDatabaseconfigYaml`, `file:${this.file.path}`);
-        const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
+        let databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
         if (!databaseRaw || !isDatabaseNote(databaseRaw)) throw new Error('No frontmatter found');
+        // Temporal migration centinels code
+        databaseRaw = databaseRaw.replaceAll(DATABASE_CONFIG.START_CENTINEL_LEGACY, DATABASE_CONFIG.START_CENTINEL);
+        databaseRaw = databaseRaw.replaceAll(DATABASE_CONFIG.END_CENTINEL_LEGACY, DATABASE_CONFIG.END_CENTINEL);
 
-        const match = databaseRaw.match(/<%%\s+([\w\W]+?)\s+%%>/);
+        const match = databaseRaw.match(DATABASE_CONFIG.YAML);
 
         if (!match) {
             return null;
@@ -52,14 +56,13 @@ export default class DatabaseInfo {
      */
     async saveOnDisk(): Promise<void> {
         LOGGER.debug(`=>setDatabaseconfigYaml`, `file:${this.file.path}`);
-        const configRegex = new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`, "g");
         const databaseFilePath = this.file.path;
         const databaseConfigUpdated = DatabaseYamlToStringParser(this.yaml).join("\n");
         const noteObject: NoteContentAction = {
             action: 'replace',
             file: this.file,
-            regexp: configRegex,
-            newValue: `<%%\n${databaseConfigUpdated}\n%%>`
+            regexp: DATABASE_CONFIG.REPLACE_YAML_REGEX,
+            newValue: `${DATABASE_CONFIG.START_CENTINEL}\n${databaseConfigUpdated}\n${DATABASE_CONFIG.END_CENTINEL}`
         };
         // Update configuration file
         await VaultManagerDB.editNoteContent(noteObject);

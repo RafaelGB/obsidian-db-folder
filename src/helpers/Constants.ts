@@ -203,7 +203,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '',
     '---',
     '',
-    '<%%',
+    '%% dbfolder:yaml',
     'name: new database',
     'description: new description',
     'columns:',
@@ -354,7 +354,18 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
   }
 };
 /******************************************************************************
- *                          SUGGESTER CONSTANTS
+ *                            DATABASE_CONFIG REGEX
+ ******************************************************************************/
+export const DATABASE_CONFIG = Object.freeze({
+  YAML: /%%\sdbfolder:yaml\s+([\w\W]+?)\s+%%/,
+  REPLACE_YAML_REGEX: new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`, "g"),
+  START_CENTINEL: '%% dbfolder:yaml',
+  END_CENTINEL: '%%',
+  START_CENTINEL_LEGACY: '<%%',
+  END_CENTINEL_LEGACY: '%%>',
+});
+/******************************************************************************
+ *                            SUGGESTER REGEX
  ******************************************************************************/
 export const SUGGESTER_REGEX = Object.freeze({
   LINK: /\B\[\[([^\]]*)$/,
@@ -368,7 +379,7 @@ export const SUGGESTER_REGEX = Object.freeze({
 });
 
 /******************************************************************************
- *                          ICONS CONSTANTS
+ *                                ICONS
  ******************************************************************************/
 export const DB_ICONS = Object.freeze({
   NAME: 'database-folder-icon',
