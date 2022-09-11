@@ -31,6 +31,8 @@ export interface LocalSettings {
     show_metadata_created: boolean;
     show_metadata_modified: boolean;
     show_metadata_tasks: boolean;
+    show_metadata_inlinks: boolean;
+    show_metadata_outlinks: boolean;
     source_form_result: string;
     source_destination_path: string;
     source_data: string;

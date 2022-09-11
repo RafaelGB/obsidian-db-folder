@@ -104,6 +104,10 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     case InputType.TAGS:
       propertyIcon = <TagsIcon />;
       break;
+    case InputType.INLINKS:
+    case InputType.OUTLINKS:
+      propertyIcon = <TaskIcon />;
+      break;
     case InputType.TASK:
     case InputType.CHECKBOX:
       propertyIcon = <TaskIcon />;

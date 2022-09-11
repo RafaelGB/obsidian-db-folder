@@ -19,6 +19,8 @@ export const InputType = Object.freeze({
   CALENDAR_TIME: 'calendar_time',
   METATADA_TIME: 'metadata_time',
   TASK: 'task',
+  INLINKS: 'inlinks',
+  OUTLINKS: 'outlinks',
   CHECKBOX: 'checkbox',
   NEW_COLUMN: 'new_column'
 });
@@ -53,6 +55,8 @@ export const MetadataColumns = Object.freeze({
   MODIFIED: `__modified__`,
   ADD_COLUMN: `__add_column__`,
   TASKS: `__tasks__`,
+  OUTLINKS: `__outlinks__`,
+  INLINKS: `__inlinks__`,
   ROW_CONTEXT_MENU: "__rowContextMenu__"
 });
 
@@ -62,6 +66,8 @@ export const MetadataLabels = Object.freeze({
   CREATED: 'Created',
   MODIFIED: 'Modified',
   TASK: 'Task',
+  OUTLINKS: 'Outlinks',
+  INLINKS: 'Inlinks',
 });
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
@@ -132,6 +138,29 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     skipPersist: false,
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
+  },
+  INLINKS: {
+    key: MetadataColumns.INLINKS,
+    input: InputType.INLINKS,
+    label: MetadataLabels.INLINKS,
+    accessorKey: MetadataColumns.INLINKS,
+    isMetadata: true,
+    isDragDisabled: false,
+    skipPersist: false,
+    csvCandidate: false,
+    config: DEFAULT_COLUMN_CONFIG
+  },
+  OUTLINKS: {
+    key: MetadataColumns.OUTLINKS,
+    input: InputType.OUTLINKS,
+    label: MetadataLabels.OUTLINKS,
+    accessorKey: MetadataColumns.OUTLINKS,
+    isMetadata: true,
+    isDragDisabled: false,
+    skipPersist: false,
+    csvCandidate: false,
+    config: DEFAULT_COLUMN_CONFIG
+
   },
   ROW_CONTEXT_MENU: {
     id: MetadataColumns.ROW_CONTEXT_MENU,
@@ -313,6 +342,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     show_metadata_created: false,
     show_metadata_modified: false,
     show_metadata_tasks: false,
+    show_metadata_inlinks: false,
+    show_metadata_outlinks: false,
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
     source_destination_path: '/',

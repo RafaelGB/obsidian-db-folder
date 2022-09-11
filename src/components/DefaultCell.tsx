@@ -11,9 +11,10 @@ import MarkdownCell from "components/cellTypes/MarkdownCell";
 import TagsPortal from "components/portals/TagsPortal";
 import NumberCell from "components/cellTypes/NumberCell";
 import TextCell from "components/cellTypes/TextCell";
+import MetadataTimeCell from "components/cellTypes/MetadataTimeCell";
+import InOutLinksCell from "components/cellTypes/InOutLinksCell";
 import { CellContext } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview";
-import MetadataTimeCell from "./cellTypes/MetadataTimeCell";
 
 export default function DefaultCell(
   defaultCell: CellContext<RowDataType, Literal>
@@ -62,6 +63,11 @@ export default function DefaultCell(
       /** Tasks option */
       case InputType.TASK:
         return <TaskCell defaultCell={defaultCell} />;
+
+      /** InOut links option */
+      case InputType.INLINKS:
+      case InputType.OUTLINKS:
+        return <InOutLinksCell defaultCell={defaultCell} />;
 
       /** Checkbox option */
       case InputType.CHECKBOX:
