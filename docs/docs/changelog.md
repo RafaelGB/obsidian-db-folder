@@ -12,6 +12,7 @@
 - Yaml config centinel was changed to convive with Templater plugin [ISSUE#179](https://github.com/RafaelGB/obsidian-db-folder/issues/179)
 - onBlur did not work well on empty text cells [ISSUE#352](https://github.com/RafaelGB/obsidian-db-folder/issues/352)
 - DnD conflicts with resize fixed [ISSUE#349](https://github.com/RafaelGB/obsidian-db-folder/issues/349)
+- Dark mode for principal and filters menu [ISSUE#350](https://github.com/RafaelGB/obsidian-db-folder/issues/350)
 # 2.4.1
 *Published on 2022/09/09*
 ### Visual
