@@ -97,6 +97,10 @@ export function NavBar(navBarProps: NavBarProps) {
             }}
             MenuListProps={{
               "aria-labelledby": "long-button",
+              style: {
+                backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+                color: StyleVariables.TEXT_NORMAL,
+              },
             }}
           >
             <MenuItem onClick={handleSettingsClick} disableRipple>
