@@ -30,7 +30,7 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   }
 
   function handleCalendarChange(date: Date) {
-    const changed = DateTime.fromJSDate(date);
+    const changed = date !== null ? DateTime.fromJSDate(date) : null;
     dataActions.updateCell(
       row.index,
       tableColumn,
@@ -63,6 +63,8 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
         timeCaption="time"
         showTimeSelect
         autoFocus
+        isClearable
+        clearButtonTitle="Clear"
         placeholderText="Pick a moment..."
       />
     </div>

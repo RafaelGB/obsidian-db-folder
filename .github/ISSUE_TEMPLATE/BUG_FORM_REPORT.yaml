@@ -48,5 +48,5 @@ body:
     id: logs
     attributes:
       label: Relevant log output
-      description: Please copy and paste any relevant log output of Obsidian. (MacOS - cmd+shift+I. Linux/Windows - ctrl+shift+I)
+      description: Please copy and paste any relevant log output of Obsidian. (MacOS - cmd+opt+I. Linux/Windows - ctrl+shift+I)
       render: shell
