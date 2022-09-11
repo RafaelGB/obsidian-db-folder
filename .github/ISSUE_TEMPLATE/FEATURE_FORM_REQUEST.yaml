@@ -1,0 +1,36 @@
+name: 🗣 Request a new feature
+description: Suggest an idea for this project
+title: "[FR]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        thanks for your ideas, they are very welcome!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: request
+    attributes:
+      label: Present your request
+      description: What do you want to see in the plugin?
+      placeholder: Tell us your idea!
+      value: "I want to see ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: Platform
+    attributes:
+      label: For which platform do you request this request??
+      options:
+        - Desktop
+        - Mobile
+        - Cross
+    validations:
+      required: true
