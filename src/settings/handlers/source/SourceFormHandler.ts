@@ -6,7 +6,7 @@ import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown } from "settings/SettingsComponents";
-import { filePathsRecordSuggester, FileSuggest } from "settings/suggesters/FileSuggester";
+import { FileSuggest } from "settings/suggesters/FileSuggester";
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";
 
 export class SourceFormHandler extends AbstractSettingsHandler {

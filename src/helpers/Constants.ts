@@ -353,6 +353,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     row_templates_folder: '/',
     current_row_template: '',
     pagination_size: 10,
+    formula_folder_path: '/',
   }
 };
 /******************************************************************************
