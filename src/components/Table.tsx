@@ -48,7 +48,7 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
   header: DefaultHeader,
   enableResizing: true,
-  sortingFn: "alphanumeric",
+  sortingFn: "auto",
 };
 
 /**
