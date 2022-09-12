@@ -1,18 +1,20 @@
 ## Types
 
--   **Text**: this property support markdown, links, and tags ;
--   **Number**: this property only accepts numbers ;
--   **Checkbox**: this property is represented by `true/false` in the underlying markdown ;
--   **Date**: this property accepts dates with the format `YYYY-MM-DD` ;
--   **Time**: this property accepts time with the format `YYYY-MM-DD hh:mm AM/PM` ;
--   **Select**: this property accepts from a list of options you define. Colors are attributed automatically, though you can change them in the column setting. Furthermore, when removing the select option in the setting, it is also removed from the note's metadata ;
--   **Tags**: similar to the previous property, but instead of only selecting one option, you can select multiples options per cell ;
--   **Image**: you can embed images in the `text` property in this format `![[image]]`. Make sure to enable `media links` in the column setting and adjust the dimensions too ;
--   **Created time**: this column can be added only once from the database settings and will display the created time of the row ;
--   **Modified time**: this column can be added only once from the database settings and will display the last modified time of the row ;
--   **Tasks**: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings.
+- **Text**: this property support markdown, links, and tags. If you're using links you can enable alias in the column settings ;
+- **Number**: this property only accepts numbers ;
+- **Checkbox**: this property is represented by `true/false` in the underlying markdown ;
+- **Date**: this property accepts dates with the format `YYYY-MM-DD` ;
+- **Time**: this property accepts time with the format `YYYY-MM-DD hh:mm AM/PM` ;
+- **Select**: this property accepts from a list of options you define. Colors are attributed automatically, though you can change them in the column setting. Furthermore, when removing the select option in the setting, it is also removed from the note's metadata ;
+- **Tags**: similar to the previous property, but instead of only selecting one option, you can select multiples options per cell ;
+- **Image**: you can embed images in the `text` property in this format `![[image]]`. Make sure to enable `media links` in the column setting and adjust the dimensions too ;
+- **Created time**: this column can be added only once from the database settings and will display the created time of the row ;
+- **Modified time**: this column can be added only once from the database settings and will display the last modified time of the row ;
+- **Tasks**: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings ;
+- **Inlinks**: this column can be added only once from the database settings and will display the files that have links to the select file ;
+- **Outlinks**: this column can be added only once from the database settings and will display the files that have links from the select file.
 
-> You can change from one property type to another, and if the format is right, it will be recognized by the plugin. Sometimes, though, after converting, you won't see the changes until you refresh the database.
+> You can change from one property type to another, and if the format is right, it will be recognized by the plugin.
 
 ## YAML & Dataview Inline Fields
 
