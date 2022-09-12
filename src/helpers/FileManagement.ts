@@ -55,7 +55,6 @@ export function get_tfiles_from_folder(
     return files;
 }
 
-
 export function destination_folder(view: DatabaseView, ddbbConfig: LocalSettings): string {
     let destination_folder = view.file.parent.path;
     switch (ddbbConfig.source_data) {
