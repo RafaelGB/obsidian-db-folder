@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from "react";
 
 const MarkdownCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
-  const { table, row, column } = defaultCell;
+  const { cell, table, row, column } = defaultCell;
   const { tableState } = table.options.meta;
   const markdownRow = tableState.data((state) => state.rows[row.index]);
   const mdRef = useRef<HTMLDivElement>();
@@ -21,7 +21,13 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
       );
     }
   });
-  return <span ref={mdRef} className={`${c("md_cell")}`}></span>;
+  return (
+    <span
+      ref={mdRef}
+      className={`${c("md_cell")}`}
+      key={`markdown_${cell.id}`}
+    />
+  );
 };
 
 export default MarkdownCell;
