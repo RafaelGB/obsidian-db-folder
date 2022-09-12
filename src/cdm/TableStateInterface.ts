@@ -84,7 +84,12 @@ export interface RowTemplateState {
     update: (template: string) => void;
 }
 
+export interface AutomationState {
+    formula: { [key: string]: (row: RowDataType) => Literal };
+}
+
 export interface TableStateInterface {
+    automations: UseBoundStore<StoreApi<AutomationState>>;
     configState: UseBoundStore<StoreApi<ConfigState>>;
     rowTemplate: UseBoundStore<StoreApi<RowTemplateState>>;
     data: UseBoundStore<StoreApi<DataState>>;
