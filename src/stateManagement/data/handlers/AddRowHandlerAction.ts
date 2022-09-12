@@ -91,6 +91,7 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
             case SourceDataTypes.TAG:
             case SourceDataTypes.OUTGOING_LINK:
             case SourceDataTypes.INCOMING_LINK:
+            case SourceDataTypes.QUERY:
                 destination_folder = ddbbConfig.source_destination_path;
                 break;
             default:
