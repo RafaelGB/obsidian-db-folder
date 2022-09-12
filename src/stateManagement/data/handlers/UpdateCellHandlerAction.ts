@@ -38,17 +38,17 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     columns: columns,
                     ddbbConfig: ddbbConfig,
                 }
-
-                await moveFile(`${destination_folder(view, ddbbConfig)}/${value}`, moveInfo);
+                const foldePath = destination_folder(view, ddbbConfig);
+                await moveFile(`${foldePath}/${value}`, moveInfo);
                 // Update row file
                 modifiedRow[
                     MetadataColumns.FILE
-                ] = `${rowTFile.basename}|${view.file.parent.path}/${value}/${rowTFile.name}`;
+                ] = `${rowTFile.basename}|${foldePath}/${value}/${rowTFile.name}`;
                 // Check if action.value is a valid folder name
                 const auxPath =
                     value !== ""
-                        ? `${view.file.parent.path}/${value}/${rowTFile.name}`
-                        : `${view.file.parent.path}/${rowTFile.name}`;
+                        ? `${foldePath}/${value}/${rowTFile.name}`
+                        : `${foldePath}/${rowTFile.name}`;
 
                 const recordRow: Record<string, Literal> = {};
                 Object.entries(modifiedRow).forEach(([key, value]) => {
