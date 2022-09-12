@@ -1,11 +1,8 @@
-import { App } from "obsidian";
-
-import TemplaterPlugin from "main";
 import { IGenerateObject } from "../IGenerateObject";
 import { UserScriptFunctions } from "./ScriptFunctions";
 import { LocalSettings } from "cdm/SettingsModel";
 
-export class UserFunctions implements IGenerateObject {
+export class FormulaFunctions implements IGenerateObject {
     // private user_system_functions: UserSystemFunctions;
     private user_script_functions: UserScriptFunctions;
 

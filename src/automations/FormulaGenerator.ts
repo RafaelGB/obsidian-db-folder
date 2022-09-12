@@ -1,7 +1,4 @@
-import { App } from "obsidian";
-
-import { UserFunctions } from "./user_functions/UserFunctions";
-import TemplaterPlugin from "main";
+import { FormulaFunctions } from "./user_functions/FormulaFunctions";
 import { IGenerateObject } from "./IGenerateObject";
 import * as obsidian_module from "obsidian";
 import { LocalSettings } from "cdm/SettingsModel";
@@ -11,11 +8,11 @@ export enum FunctionsMode {
     USER_INTERNAL,
 }
 
-export class FunctionsGenerator implements IGenerateObject {
-    public formula_functions: UserFunctions;
+export class FormulaGenerator implements IGenerateObject {
+    public formula_functions: FormulaFunctions;
 
-    constructor(private app: App, private plugin: TemplaterPlugin) {
-        this.formula_functions = new UserFunctions(this.app, this.plugin);
+    constructor(private config: LocalSettings) {
+        this.formula_functions = new FormulaFunctions(config);
     }
 
     async init(): Promise<void> {
