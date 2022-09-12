@@ -20,6 +20,8 @@ import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { AddColumnModalProps } from "cdm/ModalsModel";
+import OutlinkIcon from "./img/OutlinkIcon";
+import IncomingLinkIcon from "./img/IncomingLinkIcon";
 
 /**
  * Generate column Options with Select type
@@ -105,8 +107,10 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       propertyIcon = <TagsIcon />;
       break;
     case InputType.INLINKS:
+      propertyIcon = <IncomingLinkIcon />;
+      break;
     case InputType.OUTLINKS:
-      propertyIcon = <TaskIcon />;
+      propertyIcon = <OutlinkIcon />;
       break;
     case InputType.TASK:
     case InputType.CHECKBOX:

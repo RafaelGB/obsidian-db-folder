@@ -6,6 +6,7 @@ import { moveFile, updateRowFileProxy } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
+import { destination_folder } from "helpers/FileManagement";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -37,7 +38,8 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     columns: columns,
                     ddbbConfig: ddbbConfig,
                 }
-                await moveFile(`${view.file.parent.path}/${value}`, moveInfo);
+
+                await moveFile(`${destination_folder(view, ddbbConfig)}/${value}`, moveInfo);
                 // Update row file
                 modifiedRow[
                     MetadataColumns.FILE
