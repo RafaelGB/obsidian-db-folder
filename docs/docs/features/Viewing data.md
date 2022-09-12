@@ -42,4 +42,4 @@ You can export the database into **CSV** format using the database menu.
 
 ## Importing Data
 
-You can upload a **CSV** table and turn it to a database using the database menu.
+You can upload a **CSV** file and turn it to a database using the database menu.
