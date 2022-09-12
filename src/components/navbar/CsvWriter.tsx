@@ -8,7 +8,7 @@ import { CSVLink } from "react-csv";
 import DownloadIcon from "@mui/icons-material/Download";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 
-const CsvButton = (CsvButtonProps: CsvButtonProps) => {
+const CsvWriter = (CsvButtonProps: CsvButtonProps) => {
   const { columns, rows, name } = CsvButtonProps;
   // Manage CSV
   const [dataForDownload, setDataForDownload] = React.useState([]);
@@ -42,4 +42,4 @@ const CsvButton = (CsvButtonProps: CsvButtonProps) => {
   );
 };
 
-export default CsvButton;
+export default CsvWriter;

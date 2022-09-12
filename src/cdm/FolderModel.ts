@@ -35,6 +35,7 @@ export type Models = {
 
 export interface ConfigColumn {
     enable_media_view: boolean;
+    link_alias_enabled: boolean;
     media_width: number;
     media_height: number;
     isInline: boolean;

@@ -1,9 +1,9 @@
 import * as React from "react";
-import CsvButton from "components/CsvButton";
+import CsvWriter from "components/navbar/CsvWriter";
 import MenuIcon from "components/img/MenuIcon";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import PaginationTable from "components/PaginationTable";
+import PaginationTable from "components/navbar/PaginationTable";
 import { InputType, NavBarConfig, StyleVariables } from "helpers/Constants";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -19,11 +19,12 @@ import Typography from "@mui/material/Typography";
 import DataviewFilters from "components/reducers/DataviewFilters";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { SettingsModal } from "Settings";
+import CsvReader from "./navbar/CsvReader";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
   const { view, tableState } = table.options.meta;
-  const columns = tableState.columns((state) => state.columns);
+  const columnsInfo = tableState.columns((state) => state.info);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleMenuClose = () => {
@@ -96,6 +97,10 @@ export function NavBar(navBarProps: NavBarProps) {
             }}
             MenuListProps={{
               "aria-labelledby": "long-button",
+              style: {
+                backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+                color: StyleVariables.TEXT_NORMAL,
+              },
             }}
           >
             <MenuItem onClick={handleSettingsClick} disableRipple>
@@ -108,21 +113,14 @@ export function NavBar(navBarProps: NavBarProps) {
             </MenuItem>
             <MenuItem disableRipple>
               {/* CSV buttton download */}
-              <CsvButton
-                columns={columns}
+              <CsvWriter
+                columns={columnsInfo.getAllColumns()}
                 rows={table.getRowModel().rows}
                 name={view.diskConfig.yaml.name}
               />
             </MenuItem>
+            <CsvReader {...navBarProps} />
           </Menu>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            {view.diskConfig.yaml.name}
-          </Typography>
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
           <DataviewFilters table={table} />

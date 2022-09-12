@@ -1,7 +1,7 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 export class MediaToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable media links';
+    settingTitle: string = 'Default media link state (on/off)';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl } = settingHandlerResponse;
         // pass if modal opened from local settings

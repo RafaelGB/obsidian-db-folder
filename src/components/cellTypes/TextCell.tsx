@@ -49,13 +49,15 @@ const TextCell = (props: CellComponentProps) => {
   };
 
   const persistChange = (changedValue: string) => {
-    dataActions.updateCell(
-      row.index,
-      column.columnDef as TableColumn,
-      changedValue.trim(),
-      columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings()
-    );
+    if (changedValue !== undefined && changedValue !== textCell) {
+      dataActions.updateCell(
+        row.index,
+        column.columnDef as TableColumn,
+        changedValue.trim(),
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings()
+      );
+    }
     setDirtyCell(false);
   };
 

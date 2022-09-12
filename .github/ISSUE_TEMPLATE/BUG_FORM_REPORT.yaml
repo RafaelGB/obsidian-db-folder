@@ -1,0 +1,52 @@
+name: 🐛 Bug Report
+description: Tell us the bug that you found
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees:
+  - RafaelGB
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: dropdown
+    id: Platform
+    attributes:
+      label: What platform were you using?
+      options:
+        - Desktop
+        - Mobile
+        - Cross
+    validations:
+      required: true
+  - type: input
+    id: Version
+    attributes:
+      label: Version of the plugin
+      description: "Tell us the version you were using"
+      placeholder: "vx.y.z"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output of Obsidian. (MacOS - cmd+opt+I. Linux/Windows - ctrl+shift+I)
+      render: shell

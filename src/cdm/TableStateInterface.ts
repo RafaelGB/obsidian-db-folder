@@ -36,7 +36,7 @@ export interface ConfigState {
 export interface DataState {
     rows: RowDataType[];
     actions: {
-        addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => void;
+        addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => Promise<void>;
         parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
         updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
@@ -46,6 +46,7 @@ export interface DataState {
             ddbbConfig: LocalSettings) => Promise<void>;
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
         renameFile: (rowIndex: number) => Promise<void>;
+        saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
     }
 }
 

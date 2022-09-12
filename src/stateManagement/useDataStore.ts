@@ -33,7 +33,8 @@ function mockDataState(): DataState {
             removeOptionForAllRows: null,
             parseDataOfColumn: null,
             dataviewRefresh: null,
-            renameFile: null
+            renameFile: null,
+            saveDataFromFile: null
         },
     }
 }

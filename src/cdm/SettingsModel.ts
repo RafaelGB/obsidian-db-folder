@@ -1,5 +1,6 @@
 export interface MediaSettings {
     enable_media_view: boolean;
+    link_alias_enabled: boolean;
     width: number;
     height: number;
 }
@@ -17,6 +18,7 @@ export interface GlobalSettings {
     logger_level_info: string;
     media_settings: MediaSettings;
     enable_show_state: boolean;
+    csv_file_header_key: string;
 }
 
 export interface LocalSettings {
@@ -29,6 +31,8 @@ export interface LocalSettings {
     show_metadata_created: boolean;
     show_metadata_modified: boolean;
     show_metadata_tasks: boolean;
+    show_metadata_inlinks: boolean;
+    show_metadata_outlinks: boolean;
     source_form_result: string;
     source_destination_path: string;
     source_data: string;

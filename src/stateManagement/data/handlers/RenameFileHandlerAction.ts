@@ -31,7 +31,7 @@ export default class RenameFileHandlerAction extends AbstractTableAction<DataSta
                 await prompt_filename.openAndGetValue(renameFilePromise, () => { new Notice("Rename cancelled") });
 
             } catch (error) {
-                //new Notice(`Error: Could not remove note from database. path does not exist: ${rowToRemove.__note__.filepath}`);
+                new Notice(`Error: Could not remove note from database. ${error}`, 3000);
             }
 
         };

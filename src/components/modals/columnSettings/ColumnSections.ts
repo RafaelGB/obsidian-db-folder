@@ -1,10 +1,11 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { add_setting_header } from "settings/SettingsComponents";
-import { MediaDimensionsHandler } from "components/modals/columnSettings/handlers/MediaDimensionsHandler";
-import { MediaToggleHandler } from "components/modals/columnSettings/handlers/MediaToggleHandler";
+import { MediaDimensionsHandler } from "components/modals/columnSettings/handlers/media/MediaDimensionsHandler";
+import { MediaToggleHandler } from "components/modals/columnSettings/handlers/media/MediaToggleHandler";
 import { InlineToggleHandler } from "components/modals/columnSettings/handlers/InlineToggleHandler";
 import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/handlers/SelectedColumnOptionsHandler";
 import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
+import { LinkAliasToggleHandler } from "components/modals/columnSettings/handlers/media/LinkAliasToggleHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -56,6 +57,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
         const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         switch (this.input) {
             case InputType.TEXT:
+                particularHandlers.push(new LinkAliasToggleHandler());
                 particularHandlers.push(new MediaToggleHandler());
                 particularHandlers.push(new MediaDimensionsHandler());
                 break;

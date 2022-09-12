@@ -18,7 +18,6 @@ function CheckboxCell(props: CellComponentProps) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked;
-    console.log("newValue", newValue);
     // save on disk
     dataActions.updateCell(
       row.index,

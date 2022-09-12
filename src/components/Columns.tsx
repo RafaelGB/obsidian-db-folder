@@ -64,10 +64,31 @@ export async function obtainMetadataColumns(
     delete yamlColumns[MetadataColumns.TASKS];
   }
 
+  if (localSetting.show_metadata_inlinks) {
+    // If INLINKS is not already in the table, add it
+    yamlColumns[MetadataColumns.INLINKS] = {
+      ...MetadataDatabaseColumns.INLINKS,
+      ...(yamlColumns[MetadataColumns.INLINKS] ?? {}),
+    };
+  } else {
+    delete yamlColumns[MetadataColumns.INLINKS];
+  }
+
+  if (localSetting.show_metadata_outlinks) {
+    // If OUTLINKS is not already in the table, add it
+    yamlColumns[MetadataColumns.OUTLINKS] = {
+      ...MetadataDatabaseColumns.OUTLINKS,
+      ...(yamlColumns[MetadataColumns.OUTLINKS] ?? {}),
+    };
+  } else {
+    delete yamlColumns[MetadataColumns.OUTLINKS];
+  }
+
   yamlColumns[MetadataColumns.ADD_COLUMN] = {
     ...MetadataDatabaseColumns.ADD_COLUMN,
     position: DatabaseLimits.MAX_COLUMNS + 1,
   };
+
   return yamlColumns;
 }
 

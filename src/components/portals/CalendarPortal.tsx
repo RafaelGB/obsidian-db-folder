@@ -30,7 +30,7 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
   }
 
   function handleCalendarChange(date: Date) {
-    const changed = DateTime.fromJSDate(date);
+    const changed = date !== null ? DateTime.fromJSDate(date) : null;
     dataActions.updateCell(
       row.index,
       tableColumn,
@@ -58,6 +58,8 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
       popperContainer={CalendarContainer}
       onBlur={() => setShowDatePicker(false)}
       autoFocus
+      isClearable
+      clearButtonTitle="Clear"
       placeholderText="Pick a date..."
     />
   ) : (

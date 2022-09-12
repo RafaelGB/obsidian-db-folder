@@ -28,7 +28,7 @@ import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
-import { DatabaseCore, DB_ICONS, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
+import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 import { unmountComponentAtNode } from 'react-dom';
 import { isDatabaseNote } from 'helpers/VaultManagement';
@@ -319,7 +319,7 @@ export default class DBFolderPlugin extends Plugin {
 			const defaultValue = local_settings[key as keyof LocalSettings] !== undefined ? local_settings[key as keyof LocalSettings] : value;
 			defaultConfig.push(`${YAML_INDENT}${key}: ${defaultValue}`);
 		});
-		defaultConfig.push("%%>");
+		defaultConfig.push(DATABASE_CONFIG.END_CENTINEL);
 		return defaultConfig.join('\n');
 	}
 
@@ -476,30 +476,4 @@ export default class DBFolderPlugin extends Plugin {
 			})
 		);
 	}
-
-	// private debuggingMobile(plugin:Plugin){
-	// 	// Call this method inside your plugin's `onLoad` function
-	// 	function monkeyPatchConsole(plugin: Plugin) {
-
-	// 		if (!plugin.app.isMobile) {
-	// 			return;
-	// 		}
-
-	// 		const logFile = `${plugin.manifest.dir}/logs.txt`;
-	// 		const logs: string[] = [];
-	// 		const logMessages = (prefix: string) => (...messages: unknown[]) => {
-	// 			logs.push(`\n[${prefix}]`);
-	// 			for (const message of messages) {
-	// 				logs.push(String(message));
-	// 			}
-	// 			plugin.app.vault.adapter.write(logFile, logs.join(" "));
-	// 		};
-
-	// 		console.debug = logMessages("debug");
-	// 		console.error = logMessages("error");
-	// 		console.info = logMessages("info");
-	// 		console.log = logMessages("log");
-	// 		console.warn = logMessages("warn");
-	// 	}
-	// }
 }

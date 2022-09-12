@@ -13,7 +13,7 @@ export default function DataviewFilters(props: DataviewFiltersProps) {
   );
   const columns = tableState.columns((state) => state.columns);
   const dataActions = tableState.data((state) => state.actions);
-  const enableFilterHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const enableFilterHandler = () => {
     // Invert the filter state
     const alteredFilterState = { ...filters };
     alteredFilterState.enabled = !alteredFilterState.enabled;

@@ -19,6 +19,8 @@ export const InputType = Object.freeze({
   CALENDAR_TIME: 'calendar_time',
   METATADA_TIME: 'metadata_time',
   TASK: 'task',
+  INLINKS: 'inlinks',
+  OUTLINKS: 'outlinks',
   CHECKBOX: 'checkbox',
   NEW_COLUMN: 'new_column'
 });
@@ -53,6 +55,8 @@ export const MetadataColumns = Object.freeze({
   MODIFIED: `__modified__`,
   ADD_COLUMN: `__add_column__`,
   TASKS: `__tasks__`,
+  OUTLINKS: `__outlinks__`,
+  INLINKS: `__inlinks__`,
   ROW_CONTEXT_MENU: "__rowContextMenu__"
 });
 
@@ -62,10 +66,13 @@ export const MetadataLabels = Object.freeze({
   CREATED: 'Created',
   MODIFIED: 'Modified',
   TASK: 'Task',
+  OUTLINKS: 'Outlinks',
+  INLINKS: 'Inlinks',
 });
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   enable_media_view: true,
+  link_alias_enabled: true,
   media_width: 100,
   media_height: 100,
   isInline: false,
@@ -132,6 +139,29 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
   },
+  INLINKS: {
+    key: MetadataColumns.INLINKS,
+    input: InputType.INLINKS,
+    label: MetadataLabels.INLINKS,
+    accessorKey: MetadataColumns.INLINKS,
+    isMetadata: true,
+    isDragDisabled: false,
+    skipPersist: false,
+    csvCandidate: false,
+    config: DEFAULT_COLUMN_CONFIG
+  },
+  OUTLINKS: {
+    key: MetadataColumns.OUTLINKS,
+    input: InputType.OUTLINKS,
+    label: MetadataLabels.OUTLINKS,
+    accessorKey: MetadataColumns.OUTLINKS,
+    isMetadata: true,
+    isDragDisabled: false,
+    skipPersist: false,
+    csvCandidate: false,
+    config: DEFAULT_COLUMN_CONFIG
+
+  },
   ROW_CONTEXT_MENU: {
     id: MetadataColumns.ROW_CONTEXT_MENU,
     key: MetadataColumns.ROW_CONTEXT_MENU,
@@ -173,7 +203,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     '',
     '---',
     '',
-    '<%%',
+    '%% dbfolder:yaml',
     'name: new database',
     'description: new description',
     'columns:',
@@ -296,7 +326,9 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
     enable_show_state: false,
     logger_level_info: 'error',
+    csv_file_header_key: 'File',
     media_settings: {
+      link_alias_enabled: DEFAULT_COLUMN_CONFIG.link_alias_enabled,
       enable_media_view: DEFAULT_COLUMN_CONFIG.enable_media_view,
       width: DEFAULT_COLUMN_CONFIG.media_height,
       height: DEFAULT_COLUMN_CONFIG.media_height
@@ -310,6 +342,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     show_metadata_created: false,
     show_metadata_modified: false,
     show_metadata_tasks: false,
+    show_metadata_inlinks: false,
+    show_metadata_outlinks: false,
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
     source_destination_path: '/',
@@ -320,7 +354,18 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
   }
 };
 /******************************************************************************
- *                          SUGGESTER CONSTANTS
+ *                            DATABASE_CONFIG REGEX
+ ******************************************************************************/
+export const DATABASE_CONFIG = Object.freeze({
+  YAML: /%%\sdbfolder:yaml\s+([\w\W]+?)\s+%%/,
+  REPLACE_YAML_REGEX: new RegExp(`%%\\sdbfolder:yaml\\s+([\\w\\W]+?)\\s+%%`, "g"),
+  START_CENTINEL: '%% dbfolder:yaml',
+  END_CENTINEL: '%%',
+  START_CENTINEL_LEGACY: '<%%',
+  END_CENTINEL_LEGACY: '%%>',
+});
+/******************************************************************************
+ *                            SUGGESTER REGEX
  ******************************************************************************/
 export const SUGGESTER_REGEX = Object.freeze({
   LINK: /\B\[\[([^\]]*)$/,
@@ -334,7 +379,7 @@ export const SUGGESTER_REGEX = Object.freeze({
 });
 
 /******************************************************************************
- *                          ICONS CONSTANTS
+ *                                ICONS
  ******************************************************************************/
 export const DB_ICONS = Object.freeze({
   NAME: 'database-folder-icon',

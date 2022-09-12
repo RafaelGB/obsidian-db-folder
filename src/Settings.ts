@@ -13,6 +13,7 @@ import { source_settings_section } from "settings/SourceSection";
 import { DatabaseSettings } from "cdm/SettingsModel";
 import editing_engine_settings_section from "settings/EditingEngineSection";
 import rows_settings_section from "settings/RowsSection";
+import csv_settings_section from "settings/CSVSection";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -90,9 +91,11 @@ export class SettingsManager {
     rows_settings_section.run(settingHandlerResponse);
     /** Editing engine section */
     editing_engine_settings_section.run(settingHandlerResponse);
-    /** Media section */
-    media_settings_section(settingHandlerResponse);
     if (!settingHandlerResponse.local) {
+      /** Media section */
+      media_settings_section(settingHandlerResponse);
+      /** CSV section */
+      csv_settings_section.run(settingHandlerResponse);
       /** Developer section */
       developer_settings_section.run(settingHandlerResponse);
     }

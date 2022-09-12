@@ -19,8 +19,13 @@ export async function renderMarkdown(
     const view: DatabaseView = table.options.meta.view;
     const column = defaultCell.column.columnDef as TableColumn;
     const { media_height, media_width, enable_media_view } = column.config;
-    if (enable_media_view && isValidHttpUrl(markdownString)) {
-      markdownString = `![embedded link|${media_height}x${media_width}](${markdownString})`;
+    if (isValidHttpUrl(markdownString)) {
+      const media_inclusion = enable_media_view ? `|${media_height}x${media_width}` : "";
+      const linkname = column.config.link_alias_enabled ? `${column.label}` : `${markdownString}`;
+      markdownString = `[${linkname}${media_inclusion}](${markdownString})`;
+      if (enable_media_view) {
+        markdownString = `!${markdownString}`;
+      }
     }
     domElement.empty();
     const dom = domElement.createDiv();

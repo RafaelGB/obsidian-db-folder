@@ -93,6 +93,18 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
           size="small"
           key={`Select-existedColumnSelector-${selectorProps.index}`}
           onChange={onchangeExistedColumnHandler(selectorProps.index)}
+          style={{
+            backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+            color: StyleVariables.TEXT_NORMAL,
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+                color: StyleVariables.TEXT_NORMAL,
+              },
+            },
+          }}
         >
           {possibleColumns.map((key) => {
             return (
@@ -119,6 +131,18 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
           value={selectorProps.currentOp}
           size="small"
           onChange={onChangeOperatorHandler(selectorProps.index)}
+          style={{
+            backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+            color: StyleVariables.TEXT_NORMAL,
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+                color: StyleVariables.TEXT_NORMAL,
+              },
+            },
+          }}
         >
           {Object.entries(OperatorFilter).map(([key, value]) => {
             return (
