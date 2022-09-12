@@ -572,7 +572,7 @@
 
 <h2 id="types">Types</h2>
 <ul>
-<li><strong>Text</strong>: this property support markdown, links, and tags ;</li>
+<li><strong>Text</strong>: this property support markdown, links, and tags. If you're using links you can enable alias in the column settings ;</li>
 <li><strong>Number</strong>: this property only accepts numbers ;</li>
 <li><strong>Checkbox</strong>: this property is represented by <code>true/false</code> in the underlying markdown ;</li>
 <li><strong>Date</strong>: this property accepts dates with the format <code>YYYY-MM-DD</code> ;</li>
@@ -582,10 +582,12 @@
 <li><strong>Image</strong>: you can embed images in the <code>text</code> property in this format <code>![[image]]</code>. Make sure to enable <code>media links</code> in the column setting and adjust the dimensions too ;</li>
 <li><strong>Created time</strong>: this column can be added only once from the database settings and will display the created time of the row ;</li>
 <li><strong>Modified time</strong>: this column can be added only once from the database settings and will display the last modified time of the row ;</li>
-<li><strong>Tasks</strong>: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings.</li>
+<li><strong>Tasks</strong>: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings ;</li>
+<li><strong>Inlinks</strong>: this column can be added only once from the database settings and will display the files that have links to the select file ;</li>
+<li><strong>Outlinks</strong>: this column can be added only once from the database settings and will display the files that have links from the select file.</li>
 </ul>
 <blockquote>
-<p>You can change from one property type to another, and if the format is right, it will be recognized by the plugin. Sometimes, though, after converting, you won't see the changes until you refresh the database.</p>
+<p>You can change from one property type to another, and if the format is right, it will be recognized by the plugin.</p>
 </blockquote>
 <h2 id="yaml-dataview-inline-fields">YAML &amp; Dataview Inline Fields</h2>
 <p>The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you'll have to change it in the column's settings. Keep in mind that this change will not convert the underlying YAML to an inline format.</p>
