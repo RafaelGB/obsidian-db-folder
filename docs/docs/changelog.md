@@ -1,9 +1,11 @@
+# 2.5.1
+- hotfix of persist saving introduced in 2.5.0 with the change of config centinel
 # 2.5.0
 *Published on 2022/09/11*
 ### Shiny new things
 - Added support for mobile devices (iOS and Android) and tablets (iPad and Android tablets) [ISSUE#27](https://github.com/RafaelGB/obsidian-db-folder/issues/27)
 - CSV import option included on menu [ISSUE#129](https://github.com/RafaelGB/obsidian-db-folder/issues/129)
-- Global search not admit regex [ISSUE#169](https://github.com/RafaelGB/obsidian-db-folder/issues/169)
+- Global search now admit regex [ISSUE#169](https://github.com/RafaelGB/obsidian-db-folder/issues/169)
 - New metadata options from dataview: Inlinks and Outlinks [ISSUE#170](https://github.com/RafaelGB/obsidian-db-folder/issues/170)
 ### Improved
 - Button to clear date and datetime fields [ISSUE#160](https://github.com/RafaelGB/obsidian-db-folder/issues/160)

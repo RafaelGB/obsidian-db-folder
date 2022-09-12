@@ -28,7 +28,7 @@ import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
-import { DatabaseCore, DB_ICONS, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
+import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 import { unmountComponentAtNode } from 'react-dom';
 import { isDatabaseNote } from 'helpers/VaultManagement';
@@ -319,7 +319,7 @@ export default class DBFolderPlugin extends Plugin {
 			const defaultValue = local_settings[key as keyof LocalSettings] !== undefined ? local_settings[key as keyof LocalSettings] : value;
 			defaultConfig.push(`${YAML_INDENT}${key}: ${defaultValue}`);
 		});
-		defaultConfig.push("%%>");
+		defaultConfig.push(DATABASE_CONFIG.END_CENTINEL);
 		return defaultConfig.join('\n');
 	}
 

@@ -358,7 +358,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
  ******************************************************************************/
 export const DATABASE_CONFIG = Object.freeze({
   YAML: /%%\sdbfolder:yaml\s+([\w\W]+?)\s+%%/,
-  REPLACE_YAML_REGEX: new RegExp(`<%%\\s+([\\w\\W]+?)\\s+%%>`, "g"),
+  REPLACE_YAML_REGEX: new RegExp(`%%\\sdbfolder:yaml\\s+([\\w\\W]+?)\\s+%%`, "g"),
   START_CENTINEL: '%% dbfolder:yaml',
   END_CENTINEL: '%%',
   START_CENTINEL_LEGACY: '<%%',
