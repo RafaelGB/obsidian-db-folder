@@ -1,4 +1,9 @@
+# 2.5.2
+### No longer broken
+- hotfix about new rows and import csv rows. Link.file object of dataview just works if the Link is loaded first
+- improving coexistence with old yamls
 # 2.5.1
+### No longer broken
 - hotfix of persist saving introduced in 2.5.0 with the change of config centinel
 # 2.5.0
 *Published on 2022/09/11*
