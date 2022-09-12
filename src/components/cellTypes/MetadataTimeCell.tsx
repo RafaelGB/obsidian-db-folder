@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from "react";
 
 const MetadataTimeCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
-  const { cell, column } = defaultCell;
+  const { cell } = defaultCell;
   const mdRef = useRef<HTMLDivElement>();
   useEffect(() => {
     if (mdRef.current !== null) {
