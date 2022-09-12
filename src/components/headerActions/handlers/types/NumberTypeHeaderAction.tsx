@@ -32,7 +32,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const numberOnClick = (e: any) => {
+  const numberOnClick = () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(

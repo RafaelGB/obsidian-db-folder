@@ -12,6 +12,9 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
+import OutlinkIcon from "components/img/OutlinkIcon";
+import IncomingLinkIcon from "components/img/IncomingLinkIcon";
+import CodeIcon from "components/img/CodeIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
@@ -20,8 +23,6 @@ import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { AddColumnModalProps } from "cdm/ModalsModel";
-import OutlinkIcon from "./img/OutlinkIcon";
-import IncomingLinkIcon from "./img/IncomingLinkIcon";
 
 /**
  * Generate column Options with Select type
@@ -115,6 +116,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     case InputType.TASK:
     case InputType.CHECKBOX:
       propertyIcon = <TaskIcon />;
+      break;
+    case InputType.FORMULA:
+      propertyIcon = <CodeIcon />;
       break;
     default:
       break;

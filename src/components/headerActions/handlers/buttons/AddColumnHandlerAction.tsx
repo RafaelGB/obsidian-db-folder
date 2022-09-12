@@ -35,7 +35,7 @@ function addColumnToRightButton(headerActionResponse: HeaderActionResponse) {
     (state) => state.actions
   );
 
-  const addColumnToRightOnClick = (e: any) => {
+  const addColumnToRightOnClick = () => {
     columnActions.addToRight(column);
     hooks.setExpanded(false);
   };

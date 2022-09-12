@@ -7,7 +7,9 @@ import TagsTypeHeaderAction from "components/headerActions/handlers/types/TagsTy
 import NumberTypeHeaderAction from "components/headerActions/handlers/types/NumberTypeHeaderAction";
 import DateTypeHeaderAction from "components/headerActions/handlers/types/DateTypeHeaderAction";
 import DatetimeTypeHeaderAction from "components/headerActions/handlers/types/DatetimeTypeHeaderAction";
+import FormulaTypeHeaderAction from "components/headerActions/handlers/types/FormulaTypeHeaderAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
+
 class HeaderActionTypesSection extends AbstractChain<HeaderActionResponse> {
     protected getHandlers(): AbstractHandler<HeaderActionResponse>[] {
         return [
@@ -18,6 +20,7 @@ class HeaderActionTypesSection extends AbstractChain<HeaderActionResponse> {
             new CheckboxTypeHandlerAction(),
             new DateTypeHeaderAction(),
             new DatetimeTypeHeaderAction(),
+            new FormulaTypeHeaderAction()
         ];
     }
 }
