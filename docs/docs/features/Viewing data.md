@@ -16,7 +16,7 @@ In the database settings under `cell size`, you can change the row height betwe
 
 ## Filtering
 
-You can either search for any metadata displayed in the database, or you can create a filter using the top bar. You can use multiple filters at the same time. The button on the left activates and deactivates the filter.
+You can create one or multiple filters using the top bar. The button on the left activates and deactivates the filter. You can also search (normally or with regex) for any metadata displayed in the database.
 
 > The database filter holds priority over the dataview query source filter.
 
@@ -39,3 +39,7 @@ You can embed a database by using this format `![[database file name.md]]`, it'
 ## Exporting Data
 
 You can export the database into **CSV** format using the database menu.
+
+## Importing Data
+
+You can upload a **CSV** table and turn it to a database using the database menu.
