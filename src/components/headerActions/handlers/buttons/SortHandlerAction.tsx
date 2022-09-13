@@ -18,7 +18,6 @@ export default class SortHandlerAction extends AbstractHeaderAction {
       case InputType.TASK:
       case InputType.INLINKS:
       case InputType.OUTLINKS:
-      case InputType.FORMULA:
         // DO NOTHING
         break;
       default:

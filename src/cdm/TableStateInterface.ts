@@ -86,6 +86,9 @@ export interface RowTemplateState {
 
 export interface AutomationState {
     formula: { [key: string]: (row: RowDataType) => Literal };
+    info: {
+        getFormula: (name: string) => (row: RowDataType) => Literal;
+    }
 }
 
 export interface TableStateInterface {

@@ -1,6 +1,7 @@
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import create from "zustand";
+import automation_state_actions from "stateManagement/automations/AutomationStateActions";
 
 const useAutomationStore = (view: DatabaseView) => {
     return create<AutomationState>()((set, get) => {
@@ -12,9 +13,9 @@ const useAutomationStore = (view: DatabaseView) => {
                 ...mockAutomationState(),
             },
         };
-        // const dataActions = data_state_actions.run(tableActionResponse);
+        const automationActions = automation_state_actions.run(tableActionResponse);
         // return dataActions.implementation;
-        return tableActionResponse.implementation;
+        return automationActions.implementation;
     });
 }
 
@@ -22,7 +23,10 @@ const useAutomationStore = (view: DatabaseView) => {
 function mockAutomationState(): AutomationState {
 
     return {
-        formula: null
+        formula: null,
+        info: {
+            getFormula: null
+        }
     }
 }
 export default useAutomationStore;
