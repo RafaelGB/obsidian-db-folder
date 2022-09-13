@@ -1,4 +1,4 @@
-import { FormulaFunctions } from "automations/user_functions/FormulaFunctions";
+import { FormulaFunctions } from "automations/formula_functions/FormulaFunctions";
 import { IGenerateObject } from "automations/IGenerateObject";
 import * as obsidian_module from "obsidian";
 import { LocalSettings } from "cdm/SettingsModel";
