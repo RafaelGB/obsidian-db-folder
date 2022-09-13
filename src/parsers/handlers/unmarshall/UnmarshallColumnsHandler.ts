@@ -22,7 +22,7 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
                 .filter(key => typeof column[key] !== 'object')
                 .forEach(key => {
                     // Lvl3: literal column properties
-                    const value = parseValuetoSanitizeYamlValue(column[key].toString(), config);
+                    const value = parseValuetoSanitizeYamlValue(column[key]?.toString(), config);
                     this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${value}`);
                 });
 
@@ -31,7 +31,7 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
 
             // Lvl4: column config
             Object.keys(column.config).forEach(key => {
-                const connfValue = parseValuetoSanitizeYamlValue(column.config[key].toString(), config);
+                const connfValue = parseValuetoSanitizeYamlValue(column.config[key]?.toString(), config);
                 this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${connfValue}`);
             });
         };
