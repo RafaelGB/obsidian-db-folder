@@ -38,6 +38,7 @@ export interface LocalSettings {
     source_data: string;
     sticky_first_column: boolean;
     row_templates_folder: string;
+    formula_folder_path: string;
 }
 
 export interface FilterSettings {

@@ -1,54 +1,55 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
-import MultiIcon from "components/img/Multi";
 import React from "react";
-import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
+import { InputLabel, InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
+import CodeIcon from "components/img/CodeIcon";
 
-export default class SelectTypeHeaderAction extends AbstractHeaderAction {
+export default class FormulaTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
   handle(headerActionResponse: HeaderActionResponse): HeaderActionResponse {
     this.globalHeaderActionResponse = headerActionResponse;
-    this.addSelectType();
+    this.addNumberType();
     return this.goNext(this.globalHeaderActionResponse);
   }
-  private addSelectType() {
+  private addNumberType() {
     this.globalHeaderActionResponse.buttons.push(
-      selectTypeComponent(this.globalHeaderActionResponse)
+      numberTypeComponent(this.globalHeaderActionResponse)
     );
   }
 }
-function selectTypeComponent(headerActionResponse: HeaderActionResponse) {
+function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
   const columnActions = table.options.meta.tableState.columns(
     (state) => state.actions
   );
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
+  );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
-  const selectOnClick = () => {
+
+  const formulaOnClick = () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
-      InputType.SELECT,
+      InputType.FORMULA,
       ddbbConfig
     );
+
     columnActions.alterColumnType(
       column.columnDef as TableColumn,
-      InputType.SELECT,
-      rows
+      InputType.FORMULA
     );
   };
+
   return headerTypeComponent({
-    onClick: selectOnClick,
-    icon: <MultiIcon />,
-    label: InputLabel.SELECT,
+    onClick: formulaOnClick,
+    icon: <CodeIcon />,
+    label: InputLabel.FORMULA,
   });
 }

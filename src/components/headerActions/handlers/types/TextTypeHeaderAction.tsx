@@ -32,7 +32,7 @@ function textTypeComponent(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
-  const tagsOnClick = (e: any) => {
+  const tagsOnClick = () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(

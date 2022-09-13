@@ -112,6 +112,7 @@ class DataviewProxy {
                 parsedLiteral = this.parseToBoolean(wrapped);
                 break;
             case InputType.TASK:
+            case InputType.FORMULA:
                 // Do nothing
                 break;
             default:

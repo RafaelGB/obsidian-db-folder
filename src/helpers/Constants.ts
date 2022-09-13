@@ -22,7 +22,8 @@ export const InputType = Object.freeze({
   INLINKS: 'inlinks',
   OUTLINKS: 'outlinks',
   CHECKBOX: 'checkbox',
-  NEW_COLUMN: 'new_column'
+  NEW_COLUMN: 'new_column',
+  FORMULA: 'formula',
 });
 
 export const InputLabel = Object.freeze({
@@ -34,7 +35,8 @@ export const InputLabel = Object.freeze({
   CALENDAR: 'Date',
   CALENDAR_TIME: 'Datetime',
   TASK: 'Task',
-  CHECKBOX: 'Checkbox'
+  CHECKBOX: 'Checkbox',
+  FORMULA: 'Formula',
 });
 
 export const DatabaseLimits = Object.freeze({
@@ -351,6 +353,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     row_templates_folder: '/',
     current_row_template: '',
     pagination_size: 10,
+    formula_folder_path: '/',
   }
 };
 /******************************************************************************
