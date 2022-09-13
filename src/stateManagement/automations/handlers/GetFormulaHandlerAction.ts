@@ -3,7 +3,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class GetFormulaHandlerAction extends AbstractTableAction<AutomationState> {
     handle(tableActionResponse: TableActionResponse<AutomationState>): TableActionResponse<AutomationState> {
-        const { get, view, implementation } = tableActionResponse;
+        const { get, implementation } = tableActionResponse;
         implementation.info.getFormula = (formulaName: string) => {
             return get().formula[formulaName];
         };

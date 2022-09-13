@@ -29,6 +29,7 @@ function mockAutomationState(): AutomationState {
         formula: {},
         info: {
             getFormula: null,
+            runFormula: null,
         },
         actions: {
             loadFormulas: null,

@@ -14,6 +14,7 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
             await view.diskConfig.updateColumnConfig(column.key, {
                 formula_query: value
             });
+            columnSettingsManager.modal.enableReset = true;
         }
 
         new Setting(containerEl)

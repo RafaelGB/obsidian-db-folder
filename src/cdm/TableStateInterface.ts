@@ -85,9 +85,10 @@ export interface RowTemplateState {
 }
 
 export interface AutomationState {
-    formula: { [key: string]: (row: RowDataType) => Literal };
+    formula: { [key: string]: unknown };
     info: {
-        getFormula: (name: string) => (row: RowDataType) => Literal;
+        getFormula: (name: string) => unknown;
+        runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
     },
     actions: {
         loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;
