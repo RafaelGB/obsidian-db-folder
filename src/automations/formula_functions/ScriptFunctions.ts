@@ -1,4 +1,4 @@
-import { App, Notice, TFile } from "obsidian";
+import { Notice, TFile } from "obsidian";
 import { IGenerateObject } from "automations/IGenerateObject";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
 import { LocalSettings } from "cdm/SettingsModel";

@@ -3,10 +3,10 @@ import { UserScriptFunctions } from "automations/formula_functions/ScriptFunctio
 import { LocalSettings } from "cdm/SettingsModel";
 
 export class FormulaFunctions implements IGenerateObject {
-    private user_script_functions: UserScriptFunctions;
+    private js_script_functions: UserScriptFunctions;
 
     constructor(private config: LocalSettings) {
-        this.user_script_functions = new UserScriptFunctions(config);
+        this.js_script_functions = new UserScriptFunctions(config);
     }
 
     async generate_object(
@@ -16,7 +16,7 @@ export class FormulaFunctions implements IGenerateObject {
 
         if (config.formula_folder_path) {
             user_script_functions =
-                await this.user_script_functions.generate_object();
+                await this.js_script_functions.generate_object();
         }
 
         return {

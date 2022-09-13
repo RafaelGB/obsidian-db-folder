@@ -28,7 +28,6 @@ import {
   TFile,
   Menu,
 } from "obsidian";
-import { Literal } from "obsidian-dataview";
 import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
@@ -46,7 +45,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   columns: Array<TableColumn>;
   shadowColumns: Array<TableColumn>;
   initial: InitialType;
-  formulas: Record<string, (row: RowDataType) => Literal>;
+  formulas: Record<string, unknown>;
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);

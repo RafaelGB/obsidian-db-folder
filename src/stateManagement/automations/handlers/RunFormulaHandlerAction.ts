@@ -8,17 +8,27 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
     handle(tableActionResponse: TableActionResponse<AutomationState>): TableActionResponse<AutomationState> {
         const { implementation, get } = tableActionResponse;
         implementation.info.runFormula = (input: string, row: RowDataType, ddbbConfig: LocalSettings) => {
-            return this.evalInput(input, row, ddbbConfig, get().formula);
+            return this.proxyFunction(input, row, ddbbConfig, get().formula);
         };
 
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
     }
-    evalInput(input: string, row: RowDataType, ddbbConfig: LocalSettings, formulas: {
+    evalInput(input: string, row: RowDataType, config: LocalSettings, db: {
         [key: string]: unknown;
     }): Literal {
         const dynamicJS = 'return `' + input + '`';
-        const func = new Function('row', 'ddbbConfig', 'formulas', dynamicJS);
-        return func(row, ddbbConfig, formulas);
+        const func = new Function('row', 'ddbbConfig', 'db', dynamicJS);
+        return func(row, config, db);
     }
+    proxyFunction(input: string, row: RowDataType, config: LocalSettings, db: {
+        [key: string]: unknown;
+    }): Literal {
+        try {
+            return this.evalInput(input, row, config, db);
+        } catch (e) {
+            return `Error: ${e}`;
+        }
+    }
+
 }
