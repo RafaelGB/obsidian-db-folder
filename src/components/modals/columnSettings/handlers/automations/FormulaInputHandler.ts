@@ -9,7 +9,6 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
         const { config } = column
 
         const formula_promise = async (value: string) => {
-            config.formula_query = value;
             // Persist value
             await view.diskConfig.updateColumnConfig(column.key, {
                 formula_query: value
