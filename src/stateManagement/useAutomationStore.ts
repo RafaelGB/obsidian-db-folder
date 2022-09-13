@@ -11,8 +11,11 @@ const useAutomationStore = (view: DatabaseView) => {
             get: get,
             implementation: {
                 ...mockAutomationState(),
+                formula: view.formulas,
             },
         };
+
+        delete view.formulas;
         const automationActions = automation_state_actions.run(tableActionResponse);
         // return dataActions.implementation;
         return automationActions.implementation;
@@ -23,9 +26,12 @@ const useAutomationStore = (view: DatabaseView) => {
 function mockAutomationState(): AutomationState {
 
     return {
-        formula: null,
+        formula: {},
         info: {
-            getFormula: null
+            getFormula: null,
+        },
+        actions: {
+            loadFormulas: null,
         }
     }
 }

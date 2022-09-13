@@ -1,3 +1,4 @@
+import { obtainFormulasFromFolder } from "automations/AutomationsHelper";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { ViewEvents } from "cdm/EmitterModel";
 import {
@@ -27,6 +28,7 @@ import {
   TFile,
   Menu,
 } from "obsidian";
+import { Literal } from "obsidian-dataview";
 import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
@@ -44,6 +46,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   columns: Array<TableColumn>;
   shadowColumns: Array<TableColumn>;
   initial: InitialType;
+  formulas: Record<string, (row: RowDataType) => Literal>;
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
     super(leaf);
@@ -151,7 +154,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       let yamlColumns: Record<string, DatabaseColumn> =
         this.diskConfig.yaml.columns;
-      this.diskConfig.yaml.config;
       // Complete the columns with the metadata columns
       yamlColumns = await obtainMetadataColumns(
         yamlColumns,
@@ -167,6 +169,10 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
 
       this.initial = obtainInitialType(this.columns);
+
+      this.formulas = await obtainFormulasFromFolder(
+        this.diskConfig.yaml.config
+      );
       // Define table properties
       this.shadowColumns = this.columns.filter((col) => col.skipPersist);
       const tableProps: TableDataType = {

@@ -1,7 +1,4 @@
-import { TableColumn } from "cdm/FolderModel";
-import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
-import { AutomationState, DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { adapterTFilesToRows } from "helpers/VaultManagement";
+import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class GetFormulaHandlerAction extends AbstractTableAction<AutomationState> {

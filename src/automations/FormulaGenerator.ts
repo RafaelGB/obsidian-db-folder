@@ -2,6 +2,8 @@ import { FormulaFunctions } from "./user_functions/FormulaFunctions";
 import { IGenerateObject } from "./IGenerateObject";
 import * as obsidian_module from "obsidian";
 import { LocalSettings } from "cdm/SettingsModel";
+import { RowDataType } from "cdm/FolderModel";
+import { Literal } from "obsidian-dataview";
 
 export enum FunctionsMode {
     INTERNAL,
@@ -27,8 +29,8 @@ export class FormulaGenerator implements IGenerateObject {
     async generate_object(
         config: LocalSettings,
         functions_mode: FunctionsMode = FunctionsMode.USER_INTERNAL
-    ): Promise<Record<string, unknown>> {
-        const final_object = {};
+    ): Promise<Record<string, (row: RowDataType) => Literal>> {
+        const final_object: Record<string, any> = {};
         const additional_functions_object = this.additional_functions();
         const internal_functions_object =
             await this.formula_functions.generate_object(config);

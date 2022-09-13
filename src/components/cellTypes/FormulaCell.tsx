@@ -8,10 +8,9 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const { tableState } = table.options.meta;
   const formulaRow = tableState.data((state) => state.rows[row.index]);
   const formulaInfo = tableState.automations((state) => state.info);
-  const result = formulaInfo.getFormula("sum")(formulaRow);
   return (
     <div className={`${c("md_cell")}`} key={`formula_${cell.id}`}>
-      {result.toString()}
+      {formulaInfo.getFormula("sum")(formulaRow).toString()}
     </div>
   );
 };
