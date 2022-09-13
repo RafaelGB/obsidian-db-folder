@@ -26,7 +26,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         .toString();
       renderMarkdown(defaultCell, formulaResponse, formulaRef.current, 5);
     }
-  }, [formulaRow]);
+  }, [row]);
   return (
     <span
       ref={formulaRef}

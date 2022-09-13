@@ -41,3 +41,7 @@ function parseLiteralToString(literal: Literal, level: number, localSettings: Lo
     }
     return literalBlock;
 }
+
+export function parseValuetoSanitizeYamlValue(value: string, localSettings: LocalSettings): string {
+    return DataviewService.parseLiteral(value, InputType.MARKDOWN, localSettings).toString();
+}
