@@ -1,5 +1,5 @@
-import { FormulaFunctions } from "./user_functions/FormulaFunctions";
-import { IGenerateObject } from "./IGenerateObject";
+import { FormulaFunctions } from "automations/user_functions/FormulaFunctions";
+import { IGenerateObject } from "automations/IGenerateObject";
 import * as obsidian_module from "obsidian";
 import { LocalSettings } from "cdm/SettingsModel";
 import { RowDataType } from "cdm/FolderModel";

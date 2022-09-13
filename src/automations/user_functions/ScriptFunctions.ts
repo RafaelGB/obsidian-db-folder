@@ -1,7 +1,5 @@
 import { App, Notice, TFile } from "obsidian";
-
-import TemplaterPlugin from "main";
-import { IGenerateObject } from "../IGenerateObject";
+import { IGenerateObject } from "automations/IGenerateObject";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
 import { LocalSettings } from "cdm/SettingsModel";
 import { LOGGER } from "services/Logger";

@@ -1,5 +1,5 @@
-import { IGenerateObject } from "../IGenerateObject";
-import { UserScriptFunctions } from "./ScriptFunctions";
+import { IGenerateObject } from "automations/IGenerateObject";
+import { UserScriptFunctions } from "automations/user_functions/ScriptFunctions";
 import { LocalSettings } from "cdm/SettingsModel";
 
 export class FormulaFunctions implements IGenerateObject {
