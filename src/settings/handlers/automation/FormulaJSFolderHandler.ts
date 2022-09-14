@@ -21,7 +21,6 @@ export class FormulaJSFolderHandler extends AbstractSettingsHandler {
             }
 
         };
-        console.log('FormulaJSFolderHandler bejore');
         // render dropdown inside container
         new Setting(containerEl)
             .setName('Select the formula JS folder')
@@ -34,8 +33,6 @@ export class FormulaJSFolderHandler extends AbstractSettingsHandler {
                     .setValue(local ? view.diskConfig.yaml.config.formula_folder_path : settingsManager.plugin.settings.local_settings.formula_folder_path)
                     .onChange(formula_folder_promise);
             });
-
-        console.log('FormulaJSFolderHandler after');
         return this.goNext(settingHandlerResponse);
     }
 }
