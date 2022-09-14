@@ -5,12 +5,10 @@ import { FolderSuggest } from "settings/suggesters/FolderSuggester";
 export class FormulaJSFolderHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Select the source of database data';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, view } = settingHandlerResponse;
+        const { containerEl, view } = settingHandlerResponse;
         const formula_folder_promise = async (value: string): Promise<void> => {
             // update settings
             view.diskConfig.updateConfig({ formula_folder_path: value });
-            // Force refresh of settings
-            settingsManager.reset(settingHandlerResponse);
         };
         // render dropdown inside container
         new Setting(containerEl)
