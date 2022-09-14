@@ -6,10 +6,10 @@ import { FormulaJSFolderHandler } from 'settings/handlers/automation/FormulaJSFo
 
 class AutomationSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const columns_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-automations");
+        const automation_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-automations");
         // title of the section
-        add_setting_header(columns_section, "Automations related the table", 'h3');
-        settingHandlerResponse.containerEl = columns_section;
+        add_setting_header(automation_section, "Automations related the table", 'h3');
+        settingHandlerResponse.containerEl = automation_section;
         return settingHandlerResponse;
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
