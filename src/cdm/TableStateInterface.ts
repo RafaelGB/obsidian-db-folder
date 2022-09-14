@@ -84,7 +84,19 @@ export interface RowTemplateState {
     update: (template: string) => void;
 }
 
+export interface AutomationState {
+    formula: { [key: string]: unknown };
+    info: {
+        getFormula: (name: string) => unknown;
+        runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
+    },
+    actions: {
+        loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;
+    }
+}
+
 export interface TableStateInterface {
+    automations: UseBoundStore<StoreApi<AutomationState>>;
     configState: UseBoundStore<StoreApi<ConfigState>>;
     rowTemplate: UseBoundStore<StoreApi<RowTemplateState>>;
     data: UseBoundStore<StoreApi<DataState>>;

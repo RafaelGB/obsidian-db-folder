@@ -1,5 +1,4 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
-import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { c } from "helpers/StylesHelper";
 import { DateTime } from "luxon";
@@ -7,7 +6,7 @@ import React, { useEffect, useRef } from "react";
 
 const MetadataTimeCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
-  const { cell, column } = defaultCell;
+  const { cell } = defaultCell;
   const mdRef = useRef<HTMLDivElement>();
   useEffect(() => {
     if (mdRef.current !== null) {
@@ -25,7 +24,13 @@ const MetadataTimeCell = (mdProps: CellComponentProps) => {
       renderMarkdown(defaultCell, metadataValue, mdRef.current, 5);
     }
   });
-  return <span ref={mdRef} className={`${c("md_cell")}`}></span>;
+  return (
+    <span
+      ref={mdRef}
+      className={`${c("md_cell")}`}
+      key={`metadata_time_${cell.id}`}
+    />
+  );
 };
 
 export default MetadataTimeCell;

@@ -13,6 +13,7 @@ import NumberCell from "components/cellTypes/NumberCell";
 import TextCell from "components/cellTypes/TextCell";
 import MetadataTimeCell from "components/cellTypes/MetadataTimeCell";
 import InOutLinksCell from "components/cellTypes/InOutLinksCell";
+import FormulaCell from "components/cellTypes/FormulaCell";
 import { CellContext } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview";
 
@@ -72,6 +73,10 @@ export default function DefaultCell(
       /** Checkbox option */
       case InputType.CHECKBOX:
         return <CheckboxCell defaultCell={defaultCell} />;
+
+      /** Formula option */
+      case InputType.FORMULA:
+        return <FormulaCell defaultCell={defaultCell} />;
 
       /** New column option */
       case InputType.NEW_COLUMN:

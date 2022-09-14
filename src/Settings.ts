@@ -14,6 +14,7 @@ import { DatabaseSettings } from "cdm/SettingsModel";
 import editing_engine_settings_section from "settings/EditingEngineSection";
 import rows_settings_section from "settings/RowsSection";
 import csv_settings_section from "settings/CSVSection";
+import automation_settings_section from "settings/AutomationSection";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -91,6 +92,8 @@ export class SettingsManager {
     rows_settings_section.run(settingHandlerResponse);
     /** Editing engine section */
     editing_engine_settings_section.run(settingHandlerResponse);
+    /** Automation section */
+    automation_settings_section.run(settingHandlerResponse);
     if (!settingHandlerResponse.local) {
       /** Media section */
       media_settings_section(settingHandlerResponse);

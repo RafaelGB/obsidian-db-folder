@@ -37,7 +37,8 @@ function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
-  const datetimeOnClick = (e: any) => {
+
+  const datetimeOnClick = () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
@@ -50,6 +51,7 @@ function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.CALENDAR_TIME
     );
   };
+
   return headerTypeComponent({
     onClick: datetimeOnClick,
     icon: <CalendarTimeIcon />,

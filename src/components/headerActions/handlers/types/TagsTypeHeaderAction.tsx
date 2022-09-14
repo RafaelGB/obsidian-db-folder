@@ -34,7 +34,7 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const tagsOnClick = (e: any) => {
+  const tagsOnClick = () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(

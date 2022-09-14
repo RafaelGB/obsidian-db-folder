@@ -1,5 +1,8 @@
+import { LocalSettings } from "cdm/SettingsModel";
+import { DatabaseView } from "DatabaseView";
 import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
+import { SourceDataTypes } from "helpers/Constants";
 
 export function resolve_tfile(file_str: string): TFile {
     file_str = normalizePath(file_str);
@@ -50,4 +53,19 @@ export function get_tfiles_from_folder(
     });
 
     return files;
+}
+
+export function destination_folder(view: DatabaseView, ddbbConfig: LocalSettings): string {
+    let destination_folder = view.file.parent.path;
+    switch (ddbbConfig.source_data) {
+        case SourceDataTypes.TAG:
+        case SourceDataTypes.OUTGOING_LINK:
+        case SourceDataTypes.INCOMING_LINK:
+        case SourceDataTypes.QUERY:
+            destination_folder = ddbbConfig.source_destination_path;
+            break;
+        default:
+        //Current folder
+    }
+    return destination_folder;
 }

@@ -54,6 +54,7 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                      * - CALENDAR
                      * - CALENDAR_TIME
                      * - CHECKBOX
+                     * - FORMULA
                      */
                 }
                 return { columns: alteredColumns };

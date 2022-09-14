@@ -16,6 +16,8 @@ export default class SortHandlerAction extends AbstractHeaderAction {
       .column.columnDef as TableColumn;
     switch (column.input) {
       case InputType.TASK:
+      case InputType.INLINKS:
+      case InputType.OUTLINKS:
         // DO NOTHING
         break;
       default:

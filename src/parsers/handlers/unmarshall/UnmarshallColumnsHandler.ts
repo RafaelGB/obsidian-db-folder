@@ -2,12 +2,13 @@ import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DiskHandlerResponse } from "cdm/MashallModel";
 import { InputType, YAML_INDENT } from "helpers/Constants";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
+import { parseValuetoSanitizeYamlValue } from "parsers/RowDatabaseFieldsToFile";
 
 export class UnmarshallColumnsHandler extends AbstractDiskHandler {
     handlerName: string = 'columns';
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
-        const { columns } = handlerResponse.yaml;
+        const { columns, config } = handlerResponse.yaml;
         // Lvl1: columns field group
         this.localDisk.push(`${this.handlerName}:`);
         for (const columnKey in columns) {
@@ -21,10 +22,7 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
                 .filter(key => typeof column[key] !== 'object')
                 .forEach(key => {
                     // Lvl3: literal column properties
-                    let value = column[key];
-                    if (typeof value === 'string') {
-                        value = `"${value}"`;
-                    }
+                    const value = parseValuetoSanitizeYamlValue(column[key]?.toString(), config);
                     this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${value}`);
                 });
 
@@ -33,7 +31,8 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
 
             // Lvl4: column config
             Object.keys(column.config).forEach(key => {
-                this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${column.config[key]}`);
+                const connfValue = parseValuetoSanitizeYamlValue(column.config[key]?.toString(), config);
+                this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${connfValue}`);
             });
         };
         return this.goNext(handlerResponse);
