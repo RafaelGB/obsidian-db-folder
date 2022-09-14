@@ -50,18 +50,12 @@ export class UserScriptFunctions implements IGenerateObject {
         if (!formula_function) {
             const msg = `Failed to load user script ${file.path}. No exports detected.`;
             LOGGER.error(msg);
-            new Notice(
-                msg
-                , 3000);
-            throw new Error(msg);
+            return;
         }
         if (!(formula_function instanceof Function)) {
             const msg = `Failed to load user script ${file.path}. Default export is not a function.`
             LOGGER.error(msg);
-            new Notice(
-                msg
-                , 3000);
-            throw new Error(msg);
+            return;
         }
         user_script_functions.set(`${file.basename}`, formula_function);
     }
