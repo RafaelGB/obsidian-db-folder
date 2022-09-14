@@ -1,12 +1,12 @@
 import { IGenerateObject } from "automations/IGenerateObject";
-import { UserScriptFunctions } from "automations/formula_functions/ScriptFunctions";
+import { ScriptFunctions } from "automations/formula_functions/ScriptFunctions";
 import { LocalSettings } from "cdm/SettingsModel";
 
 export class FormulaFunctions implements IGenerateObject {
-    private js_script_functions: UserScriptFunctions;
+    private js_script_functions: ScriptFunctions;
 
     constructor(private config: LocalSettings) {
-        this.js_script_functions = new UserScriptFunctions(config);
+        this.js_script_functions = new ScriptFunctions(config);
     }
 
     async generate_object(

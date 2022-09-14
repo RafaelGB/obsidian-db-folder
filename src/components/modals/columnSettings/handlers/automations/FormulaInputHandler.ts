@@ -24,7 +24,17 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
                 textArea.setPlaceholder('Write here your formula');
                 textArea.onChange(formula_promise);
             });
+        const mainDesc = containerEl.createEl('p');
 
+        mainDesc.appendText('Check our ');
+        mainDesc.appendChild(
+            createEl('a', {
+                text: "documentation",
+                href: "https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/",
+            })
+        );
+
+        mainDesc.appendText(' for more information about how to use formulas');
         return this.goNext(columnHandlerResponse);
     }
 }
