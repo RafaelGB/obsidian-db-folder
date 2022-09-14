@@ -1,3 +1,10 @@
+## 2.6.0
+### Shiny new things
+- New column type: `Formulas`! You can configure you own formula inside  the column settings. Check our documentation for more details [here](https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/) [ISSUE#49](https://github.com/RafaelGB/obsidian-db-folder/issues/49)
+### No longer broken
+- Group folders with dv query source now respect ther target folder for new entries [ISSUE#372](https://github.com/RafaelGB/obsidian-db-folder/issues/372https://github.com/RafaelGB/obsidian-db-folder/issues/372)
+- Improved sorting to respect all the types of the table [ISSUE#371](https://github.com/RafaelGB/obsidian-db-folder/issues/371)
+- Columns with special characters are allowed now with dv query source [ISSUE#375](https://github.com/RafaelGB/obsidian-db-folder/issues/375)
 ## 2.5.3
 ### No longer broken
 - Sorting for created and modified dates working with new table version [ISSUE#368](https://github.com/RafaelGB/obsidian-db-folder/issues/368)
