@@ -19,7 +19,11 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
     }): Literal {
         const dynamicJS = 'return `' + input + '`';
         const func = new Function('row', 'ddbbConfig', 'db', dynamicJS);
-        return func(row, config, db);
+        const result = func(row, config, db);
+        if (result === "undefined" || result === "null") {
+            return '';
+        }
+        return result;
     }
     proxyFunction(input: string, row: RowDataType, config: LocalSettings, db: {
         [key: string]: unknown;
