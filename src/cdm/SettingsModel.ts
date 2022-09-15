@@ -41,6 +41,8 @@ export interface LocalSettings {
     formula_folder_path: string;
     inline_default: boolean;
     inline_new_position: string;
+    date_format: string;
+    datetime_format: string;
 }
 
 export interface FilterSettings {

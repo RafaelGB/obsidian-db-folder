@@ -69,7 +69,9 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
       style={{ width: column.getSize() }}
     >
       {DateTime.isDateTime(calendarValue)
-        ? (calendarValue as unknown as DateTime).toFormat("yyyy-MM-dd")
+        ? (calendarValue as unknown as DateTime).toFormat(
+            configInfo.getLocalSettings().date_format
+          )
         : null}
     </span>
   );

@@ -3,6 +3,7 @@ import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler
 import { add_setting_header } from "settings/SettingsComponents";
 import { FrontmatterQuotesToggleHandler } from "settings/handlers/editingEngine/FrontmatterQuotesToggleHandler";
 import { AbstractHandler } from "patterns/AbstractHandler";
+import { DateFormatHandler } from "settings/handlers/editingEngine/DateFormatHandler";
 
 class EditingEngineSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
@@ -14,7 +15,8 @@ class EditingEngineSetttingsSection extends AbstractChain<SettingHandlerResponse
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
         return [
-            new FrontmatterQuotesToggleHandler()
+            new FrontmatterQuotesToggleHandler(),
+            new DateFormatHandler()
         ]
     }
 }

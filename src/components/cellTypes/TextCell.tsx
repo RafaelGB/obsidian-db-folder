@@ -4,7 +4,7 @@ import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
 import { TableColumn } from "cdm/FolderModel";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
@@ -73,7 +73,7 @@ const TextCell = (props: CellComponentProps) => {
       ref={containerCellRef}
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
-      className={c(tableColumn.config.content_alignment)}
+      className={c(getAlignmentClassname(tableColumn.config.content_alignment))}
     />
   );
 };

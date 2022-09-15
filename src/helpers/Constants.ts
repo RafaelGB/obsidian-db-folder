@@ -86,8 +86,7 @@ export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   media_width: 100,
   media_height: 100,
   isInline: false,
-  task_hide_completed: true,
-  content_alignment: COLUMN_ALIGNMENT_OPTIONS.LEFT,
+  task_hide_completed: true
 });
 
 export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
@@ -370,6 +369,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     formula_folder_path: '/',
     inline_default: false,
     inline_new_position: INLINE_POSITION.TOP,
+    date_format: 'yyyy-MM-dd',
+    datetime_format: 'yyyy-MM-dd HH:mm:ss',
   }
 };
 /******************************************************************************

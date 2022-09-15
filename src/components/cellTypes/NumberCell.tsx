@@ -1,6 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, {
   ChangeEventHandler,
   KeyboardEventHandler,
@@ -61,11 +61,11 @@ const NumberCell = (props: CellComponentProps) => {
       onChange={handleOnChange}
       onKeyDown={handleKeyDown}
       onBlur={handleOnBlur}
-      className={c(tableColumn.config.content_alignment)}
+      className={c(getAlignmentClassname(tableColumn.config.content_alignment))}
     />
   ) : (
     <span
-      className={c(tableColumn.config.content_alignment)}
+      className={c(getAlignmentClassname(tableColumn.config.content_alignment))}
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
     >
