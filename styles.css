@@ -489,16 +489,22 @@ div.database-plugin__checkbox {
   gap: 0.3rem;
 }
 
-span.text-align-right {
+.database-plugin__text-align-right {
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.database-plugin__text-align-center {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .database-plugin__text-align-left {
   display: flex;
-  text-align: left;
   justify-content: flex-start;
+  text-align: left;
 }
 
 .cell-padding {

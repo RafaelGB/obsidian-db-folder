@@ -4,7 +4,7 @@ import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
 import { ColumnSettingsHandlerResponse, ColumnSettingsModalProps } from "cdm/ModalsModel";
-import { particular_settings_section, behavior_settings_section } from "components/modals/columnSettings/ColumnSections";
+import { particular_settings_section, behavior_settings_section, style_settings_section } from "components/modals/columnSettings/ColumnSections";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
 
@@ -70,6 +70,8 @@ export class ColumnSettingsManager {
     constructBody(response: ColumnSettingsHandlerResponse) {
         /** behavior section */
         behavior_settings_section.run(response);
+        /** styles section */
+        style_settings_section.run(response);
         /** Particular settings section */
         particular_settings_section.run(response);
     }

@@ -7,9 +7,38 @@ import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/h
 import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
 import { LinkAliasToggleHandler } from "components/modals/columnSettings/handlers/media/LinkAliasToggleHandler";
 import { FormulaInputHandler } from "components/modals/columnSettings/handlers/automations/FormulaInputHandler";
+import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/AlignmentSelectorHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
+
+class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
+    private input: string = InputType.TEXT;
+    protected runBefore(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
+        this.input = columnHandlerResponse.column.input;
+        return columnHandlerResponse;
+    }
+    protected customHandle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
+        const style_section = columnHandlerResponse.containerEl.createDiv("column-section-container-style");
+        add_setting_header(style_section, "Style", "h3");
+        columnHandlerResponse.containerEl = style_section;
+        return columnHandlerResponse;
+    }
+    protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
+        const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
+        switch (this.input) {
+            case InputType.TEXT:
+            case InputType.NUMBER:
+            case InputType.FORMULA:
+                particularHandlers.push(new AlignmentSelectorHandler());
+                break;
+            default:
+            // do nothing
+        }
+        return particularHandlers;
+    }
+}
+export const style_settings_section = new StyleSetttingsSection();
 
 class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
     private input: string = InputType.TEXT;
@@ -68,6 +97,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.TASK:
                 particularHandlers.push(new HideCompletedTaskToggleHandler());
+                break;
             case InputType.FORMULA:
                 particularHandlers.push(new FormulaInputHandler());
                 break;

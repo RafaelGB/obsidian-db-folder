@@ -71,6 +71,14 @@ export const MetadataLabels = Object.freeze({
   OUTLINKS: 'Outlinks',
   INLINKS: 'Inlinks',
 });
+/******************************************************************************
+ *                          COLUMN CONFIGURATIONS                             *
+ ******************************************************************************/
+export const COLUMN_ALIGNMENT_OPTIONS = Object.freeze({
+  LEFT: 'text-align-left',
+  CENTER: 'text-align-center',
+  RIGHT: 'text-align-right',
+});
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   enable_media_view: true,
@@ -79,6 +87,7 @@ export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   media_height: 100,
   isInline: false,
   task_hide_completed: true,
+  content_alignment: COLUMN_ALIGNMENT_OPTIONS.LEFT,
 });
 
 export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
