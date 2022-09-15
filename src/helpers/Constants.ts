@@ -369,8 +369,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     formula_folder_path: '/',
     inline_default: false,
     inline_new_position: INLINE_POSITION.TOP,
-    date_format: 'YYYY-MM-DD',
-    datetime_format: 'YYYY-MM-DD HH:mm:ss',
+    date_format: 'yyyy-MM-dd',
+    datetime_format: 'yyyy-MM-dd HH:mm:ss',
   }
 };
 /******************************************************************************
