@@ -40,3 +40,7 @@ export function getLabelHeader(input: string) {
     });
     return labelCandidate === undefined ? input : labelCandidate[1];
 }
+
+export function getAlignmentClassname(alignment: string) {
+    return alignment === undefined ? COLUMN_ALIGNMENT_OPTIONS.LEFT : alignment;
+}
