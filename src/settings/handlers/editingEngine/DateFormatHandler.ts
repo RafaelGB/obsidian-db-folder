@@ -1,3 +1,4 @@
+import { DatabaseView } from "DatabaseView";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_text } from "settings/SettingsComponents";
@@ -28,7 +29,7 @@ export class DateFormatHandler extends AbstractSettingsHandler {
             "yyyy-mm-dd",
             current_date_format(
                 local,
-                view.diskConfig.yaml.config.date_format,
+                view,
                 settingsManager.plugin.settings.local_settings.date_format
             ),
             date_promise
@@ -55,7 +56,7 @@ export class DateFormatHandler extends AbstractSettingsHandler {
             "yyyy-mm-dd hh:mm:ss",
             current_datetime_format(
                 local,
-                view.diskConfig.yaml.config.datetime_format,
+                view,
                 settingsManager.plugin.settings.local_settings.datetime_format
             ),
             datetime_promise
@@ -64,14 +65,14 @@ export class DateFormatHandler extends AbstractSettingsHandler {
     }
 }
 
-function current_date_format(local: boolean, tableValue: string, default_value: string) {
+function current_date_format(local: boolean, view: DatabaseView, default_value: string) {
     return local ?
-        (tableValue ?? DEFAULT_SETTINGS.local_settings.date_format) :
+        (view.diskConfig.yaml.config.date_format ?? DEFAULT_SETTINGS.local_settings.date_format) :
         (default_value ?? DEFAULT_SETTINGS.local_settings.date_format);
 }
 
-function current_datetime_format(local: boolean, tableValue: string, default_value: string) {
+function current_datetime_format(local: boolean, view: DatabaseView, default_value: string) {
     return local ?
-        (tableValue ?? DEFAULT_SETTINGS.local_settings.datetime_format) :
+        (view.diskConfig.yaml.config.datetime_format ?? DEFAULT_SETTINGS.local_settings.datetime_format) :
         (default_value ?? DEFAULT_SETTINGS.local_settings.datetime_format);
 }
