@@ -4,12 +4,13 @@ import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
 import { TableColumn } from "cdm/FolderModel";
+import { c } from "helpers/StylesHelper";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
   const { cell, column, table, row } = defaultCell;
   const { tableState } = table.options.meta;
-
+  const tableColumn = column.columnDef as TableColumn;
   const textRow = tableState.data((state) => state.rows[row.index]);
 
   const configInfo = table.options.meta.tableState.configState(
@@ -52,7 +53,7 @@ const TextCell = (props: CellComponentProps) => {
     if (changedValue !== undefined && changedValue !== textCell) {
       dataActions.updateCell(
         row.index,
-        column.columnDef as TableColumn,
+        tableColumn,
         changedValue.trim(),
         columnsInfo.getAllColumns(),
         configInfo.getLocalSettings()
@@ -72,6 +73,7 @@ const TextCell = (props: CellComponentProps) => {
       ref={containerCellRef}
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
+      className={c(tableColumn.config.content_alignment)}
     />
   );
 };

@@ -75,9 +75,9 @@ export const MetadataLabels = Object.freeze({
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
 export const COLUMN_ALIGNMENT_OPTIONS = Object.freeze({
-  LEFT: 'left',
-  CENTER: 'center',
-  RIGHT: 'right',
+  LEFT: 'text-align-left',
+  CENTER: 'text-align-center',
+  RIGHT: 'text-align-right',
 });
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({

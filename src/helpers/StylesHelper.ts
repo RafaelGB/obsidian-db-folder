@@ -1,4 +1,4 @@
-import { DatabaseCore, MetadataLabels } from "helpers/Constants";
+import { COLUMN_ALIGNMENT_OPTIONS, DatabaseCore, MetadataLabels } from "helpers/Constants";
 
 /**
  * Wrap the classname of css elements
