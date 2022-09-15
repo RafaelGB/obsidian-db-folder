@@ -21,6 +21,7 @@ export class AlignmentSelectorHandler extends AbstractHandlerClass<ColumnSetting
       <TextAlignmentSelector
         modal={columnSettingsManager.modal}
         columnKey={column.key}
+        currentAlignment={column.config.content_alignment}
       />
     );
     return this.goNext(columnHandlerResponse);

@@ -12,5 +12,5 @@ export type ColorPickerProps = {
 } & BaseStyleProps;
 
 export type TextAlignmentProps = {
-
+    currentAlignment: string;
 } & BaseStyleProps;

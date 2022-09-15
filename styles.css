@@ -491,8 +491,8 @@ div.database-plugin__checkbox {
 
 .database-plugin__text-align-right {
   display: flex;
-  align-items: right;
   justify-content: flex-end;
+  text-align: right;
 }
 
 .database-plugin__text-align-center {
@@ -503,8 +503,8 @@ div.database-plugin__checkbox {
 
 .database-plugin__text-align-left {
   display: flex;
-  text-align: left;
   justify-content: flex-start;
+  text-align: left;
 }
 
 .cell-padding {

@@ -6,12 +6,12 @@ import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { TextAlignmentProps } from "cdm/StyleModel";
-import { COLUMN_ALIGNMENT_OPTIONS } from "helpers/Constants";
+import { COLUMN_ALIGNMENT_OPTIONS, StyleVariables } from "helpers/Constants";
 
 export default function TextAlignmentSelector(props: TextAlignmentProps) {
-  const { modal, columnKey } = props;
+  const { modal, columnKey, currentAlignment } = props;
   const { view } = modal;
-  const [alignment, setAlignment] = React.useState("left");
+  const [alignment, setAlignment] = React.useState(currentAlignment);
 
   const handleAlignment = async (
     event: React.MouseEvent<HTMLElement>,
@@ -38,18 +38,36 @@ export default function TextAlignmentSelector(props: TextAlignmentProps) {
         <ToggleButton
           value={COLUMN_ALIGNMENT_OPTIONS.LEFT}
           aria-label="left aligned"
+          sx={{
+            color: StyleVariables.TEXT_NORMAL,
+            "&.Mui-selected, &.Mui-selected:hover": {
+              color: StyleVariables.TEXT_ACCENT,
+            },
+          }}
         >
           <FormatAlignLeftIcon />
         </ToggleButton>
         <ToggleButton
           value={COLUMN_ALIGNMENT_OPTIONS.CENTER}
           aria-label="centered"
+          sx={{
+            color: StyleVariables.TEXT_NORMAL,
+            "&.Mui-selected, &.Mui-selected:hover": {
+              color: StyleVariables.TEXT_ACCENT,
+            },
+          }}
         >
           <FormatAlignCenterIcon />
         </ToggleButton>
         <ToggleButton
           value={COLUMN_ALIGNMENT_OPTIONS.RIGHT}
           aria-label="right aligned"
+          sx={{
+            color: StyleVariables.TEXT_NORMAL,
+            "&.Mui-selected, &.Mui-selected:hover": {
+              color: StyleVariables.TEXT_ACCENT,
+            },
+          }}
         >
           <FormatAlignRightIcon />
         </ToggleButton>
