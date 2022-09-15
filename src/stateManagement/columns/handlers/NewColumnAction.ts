@@ -55,7 +55,10 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
             key: columnInfo.name,
             label: columnInfo.label,
             position: columnInfo.position,
-            config: DEFAULT_COLUMN_CONFIG,
+            config: {
+                ...DEFAULT_COLUMN_CONFIG,
+                isInline: view.diskConfig.yaml.config.inline_default
+            },
         };
         view.diskConfig.addColumn(columnInfo.name, newColumn);
 
