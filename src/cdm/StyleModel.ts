@@ -1,9 +1,16 @@
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
 
-export type ColorPickerProps = {
+type BaseStyleProps = {
     modal: ColumnSettingsModal;
-    options: RowSelectOption[];
-    option: RowSelectOption;
     columnKey: string;
 };
+
+export type ColorPickerProps = {
+    options: RowSelectOption[];
+    option: RowSelectOption;
+} & BaseStyleProps;
+
+export type TextAlignmentProps = {
+
+} & BaseStyleProps;

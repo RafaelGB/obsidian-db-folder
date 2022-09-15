@@ -7,6 +7,7 @@ import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/h
 import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
 import { LinkAliasToggleHandler } from "components/modals/columnSettings/handlers/media/LinkAliasToggleHandler";
 import { FormulaInputHandler } from "components/modals/columnSettings/handlers/automations/FormulaInputHandler";
+import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/AlignmentSelectorHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -25,6 +26,7 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
     }
     protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
         const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
+        particularHandlers.push(new AlignmentSelectorHandler());
         switch (this.input) {
             case InputType.TASK:
                 // do nothing
@@ -68,6 +70,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.TASK:
                 particularHandlers.push(new HideCompletedTaskToggleHandler());
+                break;
             case InputType.FORMULA:
                 particularHandlers.push(new FormulaInputHandler());
                 break;

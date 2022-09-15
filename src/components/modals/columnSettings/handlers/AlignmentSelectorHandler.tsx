@@ -1,0 +1,28 @@
+import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
+import TextAlignmentSelector from "components/styles/TextAlignmentSelector";
+import { Setting } from "obsidian";
+import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import React from "react";
+import { createRoot } from "react-dom/client";
+
+export class AlignmentSelectorHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
+  settingTitle: string = "Content alignment selector";
+  handle(
+    columnHandlerResponse: ColumnSettingsHandlerResponse
+  ): ColumnSettingsHandlerResponse {
+    const { column, containerEl, columnSettingsManager } =
+      columnHandlerResponse;
+
+    const alignmentSetting = new Setting(containerEl)
+      .setName(this.settingTitle)
+      .setDesc("Change content alignment of the column");
+
+    createRoot(alignmentSetting.controlEl.createDiv()).render(
+      <TextAlignmentSelector
+        modal={columnSettingsManager.modal}
+        columnKey={column.key}
+      />
+    );
+    return this.goNext(columnHandlerResponse);
+  }
+}
