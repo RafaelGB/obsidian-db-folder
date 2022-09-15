@@ -1,3 +1,5 @@
+## 2.6.1
+- hotfix of global settings and a partial regresion of [ISSUE#375](https://github.com/RafaelGB/obsidian-db-folder/issues/375) cause some columns could not be shown
 ## 2.6.0
 ### Shiny new things
 - New column type: `Formulas`! You can configure you own formula inside  the column settings. Check our documentation for more details [here](https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/) [ISSUE#49](https://github.com/RafaelGB/obsidian-db-folder/issues/49)

@@ -39,6 +39,8 @@ export interface LocalSettings {
     sticky_first_column: boolean;
     row_templates_folder: string;
     formula_folder_path: string;
+    inline_default: boolean;
+    inline_new_position: string;
 }
 
 export interface FilterSettings {

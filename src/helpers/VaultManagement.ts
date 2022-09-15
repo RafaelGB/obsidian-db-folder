@@ -13,6 +13,7 @@ import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { EditionError } from 'errors/ErrorTypes';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
+import { inline_regex_target_in_function_of } from './FileManagement';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -301,12 +302,16 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function inlineAddColumn(): Promise<void> {
-    const inlineAddRegex = new RegExp(`(^---[\\s\\S]+?---\\n)+(.*)`, 'g');
+    const inlineAddRegex = new RegExp(`(^---[\\s\\S]+?---\\n)+([\\s\\S]+?$)`, 'g');
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: inlineAddRegex,
-      newValue: `$1${columnId}:: ${newValue}\n$2`
+      newValue: inline_regex_target_in_function_of(
+        ddbbConfig.inline_new_position,
+        columnId,
+        DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString()
+      )
     };
     await persistFrontmatter();
     await VaultManagerDB.editNoteContent(noteObject);

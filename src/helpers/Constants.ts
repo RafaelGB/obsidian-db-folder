@@ -323,6 +323,11 @@ export const YAML_INDENT = Object.freeze("  ");
 /******************************************************************************
  *                          SETTINGS CONSTANTS
  ******************************************************************************/
+export const INLINE_POSITION = Object.freeze({
+  TOP: 'top',
+  BOTTOM: 'bottom',
+});
+
 export const DEFAULT_SETTINGS: DatabaseSettings = {
   global_settings: {
     enable_debug_mode: false,
@@ -354,6 +359,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     current_row_template: '',
     pagination_size: 10,
     formula_folder_path: '/',
+    inline_default: false,
+    inline_new_position: INLINE_POSITION.TOP,
   }
 };
 /******************************************************************************
