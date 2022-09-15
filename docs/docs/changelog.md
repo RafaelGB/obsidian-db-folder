@@ -1,3 +1,9 @@
+## 2.6.2
+- aligment options for every column (text,number and formula) [ISSUE#292](https://github.com/RafaelGB/obsidian-db-folder/issues/292)
+- Option for make inline fields as default [ISSUE#304](https://github.com/RafaelGB/obsidian-db-folder/issues/304)
+- Option to choose where to save new inline fields (top or bottom)[ISSUE#304](https://github.com/RafaelGB/obsidian-db-folder/issues/304)
+- Option to persist formulas (make them sortable and searchable) [ISSUE#387](https://github.com/RafaelGB/obsidian-db-folder/issues/387)
+- Configurable Date format [ISSUE#297](https://github.com/RafaelGB/obsidian-db-folder/issues/297)
 ## 2.6.1
 - hotfix of global settings and a partial regresion of [ISSUE#375](https://github.com/RafaelGB/obsidian-db-folder/issues/375) cause some columns could not be shown
 ## 2.6.0
