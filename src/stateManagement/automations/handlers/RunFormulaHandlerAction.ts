@@ -2,6 +2,7 @@ import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
 import { Literal } from "obsidian-dataview";
+import { LOGGER } from "services/Logger";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class RunFormulaHandlerAction extends AbstractTableAction<AutomationState> {
@@ -31,7 +32,8 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
         try {
             return this.evalInput(input, row, config, db);
         } catch (e) {
-            return `Error: ${e}`;
+            LOGGER.error(`Error evaluating formula from row ${row.__note__.filepath}: `, e);
+            return "";
         }
     }
 

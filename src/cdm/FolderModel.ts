@@ -41,6 +41,7 @@ export interface ConfigColumn {
     isInline: boolean;
     task_hide_completed?: boolean;
     formula_query?: string;
+    persist_formula?: boolean;
     [key: string]: Literal;
 }
 
