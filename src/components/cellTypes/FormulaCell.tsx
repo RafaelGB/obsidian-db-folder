@@ -1,7 +1,7 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, { useEffect, useRef } from "react";
 
 const FormulaCell = (mdProps: CellComponentProps) => {
@@ -46,7 +46,9 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   return (
     <span
       ref={formulaRef}
-      className={`${c("md_cell " + tableColumn.config.content_alignment)}`}
+      className={`${c(
+        "md_cell " + getAlignmentClassname(tableColumn.config.content_alignment)
+      )}`}
       key={`formula_${cell.id}`}
     />
   );

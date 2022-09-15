@@ -68,9 +68,6 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     if (column.config.isInline === undefined) {
                         column.config.isInline = DEFAULT_COLUMN_CONFIG.isInline;
                     }
-                    if (column.config.content_alignment === undefined) {
-                        column.config.content_alignment = DEFAULT_COLUMN_CONFIG.content_alignment;
-                    }
                     column = marshallParticularConfigInfo(column);
                 }
                 // Update mashaller response
