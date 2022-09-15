@@ -1,4 +1,5 @@
 ## 2.6.2
+### Shiny new things
 - aligment options for every column (text,number and formula) [ISSUE#292](https://github.com/RafaelGB/obsidian-db-folder/issues/292)
 - Option for make inline fields as default [ISSUE#304](https://github.com/RafaelGB/obsidian-db-folder/issues/304)
 - Option to choose where to save new inline fields (top or bottom)[ISSUE#304](https://github.com/RafaelGB/obsidian-db-folder/issues/304)

@@ -149,7 +149,6 @@ class DataviewProxy {
     }
 
     private parseToCalendar(wrapped: WrappedLiteral, format?: string): DateTime {
-        console.log(wrapped);
         if (wrapped.type === 'string') {
             let calendarCandidate;
             if (format) {

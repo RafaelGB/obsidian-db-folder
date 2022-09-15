@@ -1,3 +1,5 @@
+import { LOGGER } from "services/Logger";
+
 interface EventsMap {
     [event: string]: any;
 }
@@ -45,7 +47,7 @@ export function createEmitter<
             const scopedHandlers = this.events[scopedKey];
 
             if (!globalHandlers && !scopedHandlers) {
-                console.warn('Event emitted with no handler', event, id);
+                LOGGER.warn('Event emitted with no handler', event, id);
                 return;
             }
 
