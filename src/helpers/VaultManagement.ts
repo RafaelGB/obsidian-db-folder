@@ -232,7 +232,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
     // If the frontmatter is empty, do not persist it
-    if (Object.keys(rowFields.frontmatter).length > 0) {
+    if (Object.keys(rowFields.frontmatter).length > 0 || deletedColumn !== undefined) {
       const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
       const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
       const noteObject = {
@@ -265,7 +265,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       newValue: `$3$6$7$8 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}$10$11`
     };
     await VaultManagerDB.editNoteContent(noteObject);
-    await persistFrontmatter();
+    await persistFrontmatter(columnId);
   }
 
   async function inlineColumnKey(): Promise<void> {
@@ -288,7 +288,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function inlineAddColumn(): Promise<void> {
-    const inlineAddRegex = new RegExp(`(^---[\\s\\S]+?---\\n)+([\\s\\S]+?$)`, 'g');
+    const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
     const noteObject = {
       action: 'replace',
       file: file,
@@ -296,10 +296,11 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       newValue: inline_regex_target_in_function_of(
         ddbbConfig.inline_new_position,
         columnId,
-        DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString()
+        DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString(),
+        contentHasFrontmatter
       )
     };
-    await persistFrontmatter();
+    await persistFrontmatter(columnId);
     await VaultManagerDB.editNoteContent(noteObject);
   }
 
