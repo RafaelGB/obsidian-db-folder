@@ -231,18 +231,16 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-    // If the frontmatter is empty, do not persist it
-    if (Object.keys(rowFields.frontmatter).length > 0 || deletedColumn !== undefined) {
-      const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
-      const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
-      const noteObject = {
-        action: 'replace',
-        file: file,
-        regexp: frontmatterGroupRegex,
-        newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
-      };
-      await VaultManagerDB.editNoteContent(noteObject);
-    }
+    console.log('persistFrontmatter');
+    const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---\n/g : /(^[\s\S]*$)/g;
+    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
+    const noteObject = {
+      action: 'replace',
+      file: file,
+      regexp: frontmatterGroupRegex,
+      newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
+    };
+    await VaultManagerDB.editNoteContent(noteObject);
   }
 
   /*******************************************************************************************
@@ -288,7 +286,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function inlineAddColumn(): Promise<void> {
-    const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
+    const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---\n)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
     const noteObject = {
       action: 'replace',
       file: file,
