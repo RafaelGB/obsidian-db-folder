@@ -27,4 +27,4 @@ If there is no metadata in your notes, it will be created when you fill the corr
 
 ## Alignment
 
-You can change the text orientation inside the column setting between `right-oriented`, `centered`, and `left-oriented` for the **text**, **number**, and **formula** properties.
+You can change the text alignment inside the column setting between `right-aligned`, `centered`, and `left-aligned` for the **text**, **number**, and **formula** properties.
