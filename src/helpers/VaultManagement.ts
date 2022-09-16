@@ -180,29 +180,12 @@ export async function updateRowFileProxy(file: TFile, columnId: string, newValue
 export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   const content = await VaultManagerDB.obtainContentFromTfile(file);
+  const contentHasFrontmatter = hasFrontmatter(content);
   const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
   const rowFields = obtainRowDatabaseFields(file, columns, frontmatterKeys);
   const column = columns.find(
     c => c.key === (UpdateRowOptions.COLUMN_KEY === option ? newValue : columnId)
   );
-
-  // Adds an empty frontmatter at the beginning of the file
-  async function addFrontmatter(): Promise<void> {
-    /* Regex explanation
-    * group 1 all content
-    */
-    const frontmatterRegex = /(^[\s\S]*$)/g;
-
-
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterRegex,
-      newValue: `---\n---\n$1`
-    };
-    // update content on disk and in memory
-    await VaultManagerDB.editNoteContent(noteObject);
-  }
   /*******************************************************************************************
    *                              FRONTMATTER GROUP FUNCTIONS
    *******************************************************************************************/
@@ -248,15 +231,18 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-    const frontmatterGroupRegex = /^---[\s\S]+?---/g;
-    const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterGroupRegex,
-      newValue: `${frontmatterFieldsText}`
-    };
-    await VaultManagerDB.editNoteContent(noteObject);
+    // If the frontmatter is empty, do not persist it
+    if (Object.keys(rowFields.frontmatter).length > 0) {
+      const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
+      const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
+      const noteObject = {
+        action: 'replace',
+        file: file,
+        regexp: frontmatterGroupRegex,
+        newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
+      };
+      await VaultManagerDB.editNoteContent(noteObject);
+    }
   }
 
   /*******************************************************************************************
@@ -340,11 +326,6 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
     updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
     // Execute action
     if (updateOptions[option]) {
-      // Check if file has frontmatter
-      if (!hasFrontmatter(content)) {
-        // If not, add it
-        await addFrontmatter();
-      }
       // Then execute the action
       await updateOptions[option]();
     } else {

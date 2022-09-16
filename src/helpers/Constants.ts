@@ -294,11 +294,11 @@ export const OperatorFilter = Object.freeze({
   LESS_THAN: ['LESS_THAN', '<'],
   GREATER_THAN_OR_EQUAL: ['GREATER_THAN_OR_EQUAL', '>='],
   LESS_THAN_OR_EQUAL: ['LESS_THAN_OR_EQUAL', '<='],
-  CONTAINS: ['CONTAINS', 'contains'],
-  STARTS_WITH: ['STARTS_WITH', 'starts with'],
-  ENDS_WITH: ['ENDS_WITH', 'ends with'],
-  IS_EMPTY: ['IS_EMPTY', 'is empty'],
-  IS_NOT_EMPTY: ['IS_NOT_EMPTY', 'is not empty'],
+  CONTAINS: ['CONTAINS', 'operator_contains'],
+  STARTS_WITH: ['STARTS_WITH', 'operator_starts_with'],
+  ENDS_WITH: ['ENDS_WITH', 'operator_ends_with'],
+  IS_EMPTY: ['IS_EMPTY', 'operator_is_empty'],
+  IS_NOT_EMPTY: ['IS_NOT_EMPTY', 'operator_is_not_empty'],
 });
 
 export function getOperatorFilterValue(keyToFind: string): string {

@@ -18,6 +18,7 @@ import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { Notice } from "obsidian";
 import MenuUpIcon from "components/img/MenuUpIcon";
+import { t } from "lang/helpers";
 
 const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const { table } = props;
@@ -150,7 +151,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                 value={key}
                 key={`MenuItem-OperatorSelector-${value[0]}-${selectorProps.index}`}
               >
-                {value[1]}
+                {t(value[1] as any)}
               </MenuItem>
             );
           })}

@@ -59,5 +59,5 @@ export function t(str: keyof typeof en): string {
     LOGGER.error('Error: database locale not found', lang);
   }
 
-  return (locale && locale[str]) || en[str];
+  return (locale && locale[str]) || en[str] || str;
 }

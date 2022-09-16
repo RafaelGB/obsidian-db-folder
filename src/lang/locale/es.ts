@@ -9,7 +9,7 @@ export default {
     /** OPERATOR FILTERS */
     'operator_contains': 'Contiene',
     'operator_starts_with': 'Comienza con',
-    'operator_ends_with': 'Ends with',
+    'operator_ends_with': 'Termina con',
     'operator_is_empty': 'Está vacío',
     'operator_is_not_empty': 'No está vacío',
 };
