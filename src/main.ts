@@ -35,6 +35,7 @@ import { isDatabaseNote } from 'helpers/VaultManagement';
 import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
+import { t } from 'lang/helpers';
 
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
@@ -330,7 +331,7 @@ export default class DBFolderPlugin extends Plugin {
 				if (file instanceof TFolder) {
 					menu.addItem((item) => {
 						item
-							.setTitle('New database folder')
+							.setTitle(t("menu_pane_create_db"))
 							.setIcon(DB_ICONS.NAME)
 							.onClick(() => generateNewDatabase(
 								generateDbConfiguration(this.settings.local_settings),
@@ -360,7 +361,7 @@ export default class DBFolderPlugin extends Plugin {
 					if (!haveDatabaseView) {
 						menu.addItem((item) => {
 							item
-								.setTitle('Open as database folder')
+								.setTitle(t("menu_pane_open_as_db_action"))
 								.setIcon(DB_ICONS.NAME)
 								.setSection('pane')
 								.onClick(() => {
@@ -381,7 +382,7 @@ export default class DBFolderPlugin extends Plugin {
 				) {
 					menu.addItem((item) => {
 						item
-							.setTitle('Open as database folder')
+							.setTitle(t("menu_pane_open_as_db_action"))
 							.setIcon(DB_ICONS.NAME)
 							.setSection('pane')
 							.onClick(() => {
@@ -397,11 +398,11 @@ export default class DBFolderPlugin extends Plugin {
 	registerCommands() {
 		this.addCommand({
 			id: 'create-new-database-folder',
-			name: 'Create a new database table',
+			name: t("ribbon_icon_title"),
 			callback: () => new DatabaseHelperCreationModal(this.settings.local_settings).open(),
 		});
 
-		this.addRibbonIcon(DB_ICONS.NAME, "Create a new database table", async (e) => {
+		this.addRibbonIcon(DB_ICONS.NAME, t("ribbon_icon_title"), async (e) => {
 			new DatabaseHelperCreationModal(this.settings.local_settings).open()
 		});
 	}
