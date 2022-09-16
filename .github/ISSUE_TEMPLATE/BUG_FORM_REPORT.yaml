@@ -50,3 +50,17 @@ body:
       label: Relevant log output
       description: Please copy and paste any relevant log output of Obsidian. (MacOS - cmd+opt+I. Linux/Windows - ctrl+shift+I)
       render: shell
+  - type: checkboxes
+    id: version-checkbox
+    attributes:
+      label: Are you using the latest version of the plugin in your Obsidian vault?
+      options:
+        - label: I have verified that I am on the latest version
+          required: true
+  - type: checkboxes
+    id: issues-duplicates-checkbox
+    attributes:
+      label: Are you check if there is a similar issue?
+      options:
+        - label: I have verified that there are not similar issues
+          required: true

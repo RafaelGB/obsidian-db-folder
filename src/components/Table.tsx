@@ -41,6 +41,7 @@ import Select, { OnChangeValue } from "react-select";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
+import dbfolderColumnSortingFn from "./reducers/CustomSortingFn";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -48,7 +49,6 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
   header: DefaultHeader,
   enableResizing: true,
-  sortingFn: "alphanumeric",
 };
 
 /**
@@ -242,7 +242,10 @@ export function Table(tableData: TableDataType) {
       tableState: tableStore,
       view: view,
     },
-    defaultColumn: defaultColumn,
+    defaultColumn: {
+      ...defaultColumn,
+      sortingFn: dbfolderColumnSortingFn(configInfo.getLocalSettings()),
+    },
     getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

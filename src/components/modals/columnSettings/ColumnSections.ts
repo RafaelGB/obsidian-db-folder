@@ -6,6 +6,7 @@ import { InlineToggleHandler } from "components/modals/columnSettings/handlers/I
 import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/handlers/SelectedColumnOptionsHandler";
 import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
 import { LinkAliasToggleHandler } from "components/modals/columnSettings/handlers/media/LinkAliasToggleHandler";
+import { FormulaInputHandler } from "components/modals/columnSettings/handlers/automations/FormulaInputHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -67,6 +68,9 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.TASK:
                 particularHandlers.push(new HideCompletedTaskToggleHandler());
+            case InputType.FORMULA:
+                particularHandlers.push(new FormulaInputHandler());
+                break;
             default:
                 break;
         }

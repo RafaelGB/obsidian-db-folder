@@ -102,6 +102,7 @@ class DataviewProxy {
                 break;
             case InputType.CALENDAR:
             case InputType.CALENDAR_TIME:
+            case InputType.METATADA_TIME:
                 parsedLiteral = this.parseToCalendar(wrapped);
                 break;
             case InputType.NUMBER:
@@ -111,6 +112,7 @@ class DataviewProxy {
                 parsedLiteral = this.parseToBoolean(wrapped);
                 break;
             case InputType.TASK:
+            case InputType.FORMULA:
                 // Do nothing
                 break;
             default:

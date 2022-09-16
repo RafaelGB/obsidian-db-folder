@@ -1,6 +1,15 @@
-# 2.5.1
+## 2.5.3
+### No longer broken
+- Sorting for created and modified dates working with new table version [ISSUE#368](https://github.com/RafaelGB/obsidian-db-folder/issues/368)
+- Destination folder for query sources fixed [ISSUE#367](https://github.com/RafaelGB/obsidian-db-folder/issues/367)
+## 2.5.2
+### No longer broken
+- hotfix about new rows and import csv rows. Link.file object of dataview just works if the Link is loaded first
+- improving coexistence with old yamls
+## 2.5.1
+### No longer broken
 - hotfix of persist saving introduced in 2.5.0 with the change of config centinel
-# 2.5.0
+## 2.5.0
 *Published on 2022/09/11*
 ### Shiny new things
 - Added support for mobile devices (iOS and Android) and tablets (iPad and Android tablets) [ISSUE#27](https://github.com/RafaelGB/obsidian-db-folder/issues/27)
@@ -15,13 +24,13 @@
 - onBlur did not work well on empty text cells [ISSUE#352](https://github.com/RafaelGB/obsidian-db-folder/issues/352)
 - DnD conflicts with resize fixed [ISSUE#349](https://github.com/RafaelGB/obsidian-db-folder/issues/349)
 - Dark mode for principal and filters menu [ISSUE#350](https://github.com/RafaelGB/obsidian-db-folder/issues/350)
-# 2.4.1
+## 2.4.1
 *Published on 2022/09/09*
 ### Visual
 - Search now indicate the number of avaliable rows always, not just like placeholder [ISSUE#130](https://github.com/RafaelGB/obsidian-db-folder/issues/130)
 ### No longer broken
 - FINALLY, DnD columns is enabled by default and the developer config about it was removed. It does not break Obsidian DnD anymore [ISSUE#239](https://github.com/RafaelGB/obsidian-db-folder/issues/239)
-# 2.4.0
+## 2.4.0
 *Published on 2022/09/08*
 ### Shiny new things
 - Totally renewed row context menu! Now wraps the obsidian context menu, so you can use all the plugins that add items to it(rename and delete file included as custom options too) [ISSUE#152](https://github.com/RafaelGB/obsidian-db-folder/issues/152)
@@ -36,27 +45,27 @@
 ### No longer broken
 - new yaml breaker conditions added (>)
 - Edit a cell in a page out of the first one does not reset the pagination anymore [ISSUE#338](https://github.com/RafaelGB/obsidian-db-folder/issues/338)
-# 2.3.6
+## 2.3.6
 *Published on 2022/09/07*
 ### Improved
 - The tab title bar with Obsidian 0.16 is optional, so the settings of the ddbb where moved to the bar of the plugin itself [ISSUE#330](https://github.com/RafaelGB/obsidian-db-folder/issues/330)
 ### No longer broken
 - render of checkbox fixed [ISSUE#334](https://github.com/RafaelGB/obsidian-db-folder/issues/334)
 - order of multisort is persisted [ISSUE#324](https://github.com/RafaelGB/obsidian-db-folder/issues/324)
-# 2.3.5
+## 2.3.5
 *Published on 2022/09/05*
 ### Shiny new things
 - New command & ribbon icon to generate a new database with a helpful wizard to guide you through the process [ISSUE#126](https://github.com/RafaelGB/obsidian-db-folder/issues/126)
 ### No longer broken
 - Problem with saving query on yaml solved [ISSUE#325](https://github.com/RafaelGB/obsidian-db-folder/issues/325)
-# 2.3.4
+## 2.3.4
 *Published on 2022/09/04*
 ### Improved
 - If you choose a source different of current folder, now you can select the destination of your new notes [ISSUE#318](https://github.com/RafaelGB/obsidian-db-folder/issues/318)
 ### No longer broken
 - Hotfix of add a filter [ISSUE#322](https://github.com/RafaelGB/obsidian-db-folder/issues/322)
 - Hotfix od delete a row in some cases [ISSUE#319](https://github.com/RafaelGB/obsidian-db-folder/issues/319)
-# 2.3.3
+## 2.3.3
 *Published on 2022/09/02*
 ### Shiny new things
 - New filter options: 'is not empty' and 'is empty' with visual improvements of auto resize [ISSUE#151](https://github.com/RafaelGB/obsidian-db-folder/issues/151)
@@ -64,7 +73,7 @@
 - Iterate between databases do not provoke blank screen anymore [ISSUE#309](https://github.com/RafaelGB/obsidian-db-folder/issues/309)
 - Refresh of table after change option color and rename column if is sorted [ISSUE#305](https://github.com/RafaelGB/obsidian-db-folder/issues/305)
 - Multi-sort respect priority now [ISSUE#299](https://github.com/RafaelGB/obsidian-db-folder/issues/299)
-# 2.3.2
+## 2.3.2
 *Published on 2022/09/01*
 ### Shiny new things
 - Inline fields with bold ,italics or underline key is edditable now. Also you can edit those inline fields wrapped with pharentesis in the middle of a line, respecting dataview readability [ISSUE#134](https://github.com/RafaelGB/obsidian-db-folder/issues/134)
@@ -76,12 +85,12 @@
 ### No longer broken
 - Enable frontmatter quotes wrapping does not break config that already has quotes [ISSUE#286](https://github.com/RafaelGB/obsidian-db-folder/issues/286)
 - Problem refreshing column info after modifying the label solved [ISSUE#300](https://github.com/RafaelGB/obsidian-db-folder/issues/300)
-# 2.3.1
+## 2.3.1
 ### No longer broken
 - new row hide last row [ISSUE#295](https://github.com/RafaelGB/obsidian-db-folder/issues/295)
 - new row hide dbsettings using sliding panes [ISSUE#296](https://github.com/RafaelGB/obsidian-db-folder/issues/296)
 - Pagination legend supports dark mode[ISSUE#291](https://github.com/RafaelGB/obsidian-db-folder/issues/291)
-# 2.3.0
+## 2.3.0
 ### Shiny new things
 - Pagination arrived! Now you can organize your ddbb in pages, and you can choose the number of items per page in the settings panel. This also affects to the performance, so theoretically you can have a ddbb with more than 10000 items. [ISSUE#116](https://github.com/RafaelGB/obsidian-db-folder/issues/116)
 - Autocomplete for links and tags in the editor of text column cells. Its an adaption of [Kanban plugin](https://github.com/mgmeyers/obsidian-kanban) feature, so it will be familiar to you. [ISSUE#107](https://github.com/RafaelGB/obsidian-db-folder/issues/107)
@@ -91,7 +100,7 @@
 - Function of obtain all fields now respect uppercase [ISSUE#269](https://github.com/RafaelGB/obsidian-db-folder/issues/269)
 - New rows title are now trimmed to ensure the functionality [ISSUE#279](https://github.com/RafaelGB/obsidian-db-folder/issues/279)
 - Now you can hide/unhide metadata columns too [ISSUE#283](https://github.com/RafaelGB/obsidian-db-folder/issues/283)
-# 2.2.2
+## 2.2.2
 ### Shiny new things
 - First steps of a row context menu. You can now remove a row from a table (and also Obsidian). [ISSUE#62](https://github.com/RafaelGB/obsidian-db-folder/issues/62)
 ### Improved
@@ -104,7 +113,7 @@
 - Select group folder path fixed
 - Date Datetime empty did not open correctly fixed [ISSUE#273](https://github.com/RafaelGB/obsidian-db-folder/issues/273)
 - Label column now admits numbers only [ISSUE#274](https://github.com/RafaelGB/obsidian-db-folder/issues/274)
-# 2.2.1
+## 2.2.1
 ### Visual
 - Opacity of new row form with sticky first column option [ISSUE#251](https://github.com/RafaelGB/obsidian-db-folder/issues/251)
 ### No longer broken
@@ -113,7 +122,7 @@
 - Global menu is avaliable again
 ### Developers
 - Added an option to use DnD columns again with a toggle button. We are working on a better solution but while we are at it, at least this option is available
-# 2.2.0
+## 2.2.0
 ### Shiny new things
 - Refactor of filters. With the new architecture of events (Zustand), it is now possible to use filters in a dynamic way, so they were moved to the navbar menu and the changes doe not need to refresh the page. [ISSUE#73](https://github.com/RafaelGB/obsidian-db-folder/issues/73)
 - Button of enable/disable filters could be use as refresh button [ISSUE#163](https://github.com/RafaelGB/obsidian-db-folder/issues/163)
@@ -123,11 +132,11 @@
 - Tags could be sorted and filtered with the global search now [ISSUE#260](https://github.com/RafaelGB/obsidian-db-folder/issues/260)
 ### No longer broken
 - Minor bugs with global search. Now is case sensitive and sanitized
-# 2.1.2
+## 2.1.2
 ### No longer broken
 - drap/drop incompatibility with Obsidian was fixed [ISSUE#239](https://github.com/RafaelGB/obsidian-db-folder/issues/239)
 - Split pane options was recovered [ISSUE#257](https://github.com/RafaelGB/obsidian-db-folder/issues/257)
-# 2.1.1 (beta)
+## 2.1.1 (beta)
 ### Improved
 - Resizing of columns performed better. [ISSUE#241](https://github.com/RafaelGB/obsidian-db-folder/issues/241)
 ### No longer broken
@@ -137,7 +146,7 @@
 - New rows accepts editions with zustand [ISSUE#254](https://github.com/RafaelGB/obsidian-db-folder/issues/254)
 - Minor bug updating with zustand [ISSUE#245](https://github.com/RafaelGB/obsidian-db-folder/issues/245)
 - new columns respect order[ISSUE#240](https://github.com/RafaelGB/obsidian-db-folder/issues/240)
-# 2.1.0 (beta)
+## 2.1.0 (beta)
 ### Shiny new things
 - The dispatcher of all events was migrated to Zustand! This means a better, more stable, and more efficient way to handle events. [Zustand](https://zustand.js.org/) is a library that provides a simple, efficient, and powerful way to manage state in React. Allowing future changes as formula columns. As PoC, this version update the value of `modified` column every time a cell is changed. [ISSUE#227](https://github.com/RafaelGB/obsidian-db-folder/issues/227)
 ### No longer broken
@@ -145,10 +154,10 @@
 - Fix centered images of all notes [ISSUE#231](https://github.com/RafaelGB/obsidian-db-folder/issues/231)
 - Fix LaTeX formulas presentation incompatibility [ISSUE#228](https://github.com/RafaelGB/obsidian-db-folder/issues/228)
 - now is compatible with windows pane using `activeDocument`[ISSUE#199](https://github.com/RafaelGB/obsidian-db-folder/issues/199)
-# 2.0.1
+## 2.0.1
 ### No longer broken
 -  Fixed selection problem with datetime columns introduced in 2.0.0.
-# 2.0.0
+## 2.0.0
 ### Shiny new things
 - New style for navBar & "new row" button [ISSUE#206](https://github.com/RafaelGB/obsidian-db-folder/issues/206). Now the name of your ddbb is displayed in the navBar. To change it, just edit it into the settings.
 ### Improved
@@ -160,7 +169,7 @@
 - Empty calendar cells will not show placeholder message. Just when are selected. [ISSUE#159](https://github.com/RafaelGB/obsidian-db-folder/issues/159)
 ### No longer broken
 - Controling the duplicated columns using the file template option to create them. [ISSUE#224](https://github.com/RafaelGB/obsidian-db-folder/issues/224)
-# 2.0.0-beta.4
+## 2.0.0-beta.4
 ### Improved
 - Resizing do not move the column. It has its own slider
 - The plugin shows a message when the edition fails including the error message. Common causes were added to the documentation [ISSUE#196](https://github.com/RafaelGB/obsidian-db-folder/issues/196)
@@ -168,7 +177,7 @@
 - do not lose the width property when a column is renamed [ISSUE#222](https://github.com/RafaelGB/obsidian-db-folder/issues/222)
 - Edit inline fields are correctly saved [ISSUE#182](https://github.com/RafaelGB/obsidian-db-folder/issues/182)
 - Where you add/delete new columns, there was ocasions where column order was not updated and provoked unselected columns [ISSUE#102](https://github.com/RafaelGB/obsidian-db-folder/issues/102)
-# 2.0.0-beta.3
+## 2.0.0-beta.3
 ### Improved
 - Delay of DnD improvements in the UI [ISSUE#214](https://github.com/RafaelGB/obsidian-db-folder/issues/214)
 - Resizing of column is smoother [ISSUE#210](https://github.com/RafaelGB/obsidian-db-folder/issues/210)
@@ -178,13 +187,13 @@
 ### No longer broken
 - Control duplicates on tags and select columns [ISSUE#209](https://github.com/RafaelGB/obsidian-db-folder/issues/209)
 - Sorting works with empty cells using a custom comparator (react-table not support it yet) [ISSUE#212](https://github.com/RafaelGB/obsidian-db-folder/issues/212)
-# 2.0.0-beta.2
+## 2.0.0-beta.2
 ### Improved
 - unwanted columns when populating based on all fields removed. Also the memory consumption of the table is reduced significantly [ISSUE#176](https://github.com/RafaelGB/obsidian-db-folder/issues/176)
 ### No longer broken
 - empty cells can be selected again
 - Now table config wraps the value with quotes [ISSUE#207](https://github.com/RafaelGB/obsidian-db-folder/issues/207)
-# 2.0.0-beta.1
+## 2.0.0-beta.1
 ### Shiny new things
 - new option of resizing a column. The Size is persisted. [ISSUE#50](https://github.com/RafaelGB/obsidian-db-folder/issues/50)
 - Performance improvements of rendering components x5 [ISSUE#189](https://github.com/RafaelGB/obsidian-db-folder/issues/189)
@@ -197,7 +206,7 @@
 - Material-ui migrated from Material-UI to MUI ( compatibility with React 18.x )
 - Refactor of all components to be adapted to React 18.x
 - Size of plugin from 16mb to 5mb
-# 1.8.2
+## 1.8.2
 ### No longer broken
 - Hotfix of critical mapping bug [ISSUE#190](https://github.com/RafaelGB/obsidian-db-folder/issues/190)
 ## 1.8.1

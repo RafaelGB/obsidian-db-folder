@@ -32,6 +32,7 @@ function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
+
   const checkBoxTypeOnClick = (e: any) => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
@@ -45,6 +46,7 @@ function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.CHECKBOX
     );
   };
+
   return headerTypeComponent({
     onClick: checkBoxTypeOnClick,
     icon: <TaskIcon />,

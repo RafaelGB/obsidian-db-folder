@@ -12,6 +12,9 @@ import MarkdownObsidian from "components/img/Markdown";
 import CalendarTimeIcon from "components/img/CalendarTime";
 import TaskIcon from "components/img/TaskIcon";
 import TagsIcon from "components/img/TagsIcon";
+import OutlinkIcon from "components/img/OutlinkIcon";
+import IncomingLinkIcon from "components/img/IncomingLinkIcon";
+import CodeIcon from "components/img/CodeIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
@@ -105,12 +108,17 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       propertyIcon = <TagsIcon />;
       break;
     case InputType.INLINKS:
+      propertyIcon = <IncomingLinkIcon />;
+      break;
     case InputType.OUTLINKS:
-      propertyIcon = <TaskIcon />;
+      propertyIcon = <OutlinkIcon />;
       break;
     case InputType.TASK:
     case InputType.CHECKBOX:
       propertyIcon = <TaskIcon />;
+      break;
+    case InputType.FORMULA:
+      propertyIcon = <CodeIcon />;
       break;
     default:
       break;

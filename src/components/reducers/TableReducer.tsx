@@ -1,5 +1,6 @@
 import { TableStateInterface } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
+import useAutomationStore from "stateManagement/useAutomationStore";
 import useColumnsStore from "stateManagement/useColumnsStore";
 import useConfigStore from "stateManagement/useConfigStore";
 import useDataStore from "stateManagement/useDataStore";
@@ -7,6 +8,7 @@ import useRowTemplateStore from "stateManagement/useRowTemplateStore";
 import useSortingStore from "stateManagement/useSortingStore";
 
 function useTableStore(view: DatabaseView): TableStateInterface {
+  const automation = useAutomationStore(view);
   const config = useConfigStore(view);
   const data = useDataStore(view);
   const rowTemplate = useRowTemplateStore(view);
@@ -18,6 +20,7 @@ function useTableStore(view: DatabaseView): TableStateInterface {
     data: data,
     sorting: sorting,
     columns: columns,
+    automations: automation,
   };
 }
 

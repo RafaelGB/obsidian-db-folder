@@ -2,12 +2,7 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import CalendarIcon from "components/img/CalendarIcon";
 import React from "react";
-import {
-  ActionTypes,
-  InputLabel,
-  InputType,
-  MetadataLabels,
-} from "helpers/Constants";
+import { InputLabel, InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
 
@@ -37,7 +32,8 @@ function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
-  const dateOnClick = (e: any) => {
+
+  const dateOnClick = () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
@@ -45,6 +41,7 @@ function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.CALENDAR,
       ddbbConfig
     );
+
     columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.CALENDAR

@@ -3,7 +3,7 @@ import { generateDbConfiguration, generateNewDatabase } from "helpers/CommandsHe
 import { InputType, SourceDataTypes, StyleClasses } from "helpers/Constants";
 import { resolve_tfolder } from "helpers/FileManagement";
 import { generateDataviewTableQuery } from "helpers/QueryHelper";
-import { Modal, Notice, Setting, TFolder } from "obsidian";
+import { Modal, Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { add_dropdown, add_setting_header } from "settings/SettingsComponents";
 import { FileSuggest } from "settings/suggesters/FileSuggester";
