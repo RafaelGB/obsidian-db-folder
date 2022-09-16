@@ -18,6 +18,13 @@
 
 ## YAML & Dataview Inline Fields
 
-The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you'll have to change it in the column's settings. Keep in mind that this change will not convert the underlying YAML to an inline format.
+The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you have two options :
 
-If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database.
+- You can toggle `enable inline field as default` in database or plugin setting, and you can choose between putting the inline fields at the top or at the bottom of the file ;
+- Or you can change it in the column's settings to use it with one property only. Keep in mind that this change will not convert the underlying YAML to an inline format.
+
+If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database. 
+
+## Alignment
+
+You can change the text orientation inside the column setting between `right-oriented`, `centered`, and `left-oriented` for the **text**, **number**, and **formula** properties.
