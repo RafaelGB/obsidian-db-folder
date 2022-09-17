@@ -74,10 +74,10 @@ export function inline_regex_target_in_function_of(position: string, columnId: s
     let regex_target = "";
     switch (position) {
         case INLINE_POSITION.BOTTOM:
-            regex_target = contentHasFrontmatter ? `$1$2${columnId}:: ${newValue}` : `$1${columnId}:: ${newValue}`;
+            regex_target = contentHasFrontmatter ? `$1$2\n${columnId}:: ${newValue}` : `$1\n${columnId}:: ${newValue}`;
             break;
         default:
-            regex_target = contentHasFrontmatter ? `$1${columnId}:: ${newValue}\n$2` : `${columnId}:: ${newValue}\n$1`;
+            regex_target = contentHasFrontmatter ? `$1\n${columnId}:: ${newValue}$2` : `${columnId}:: ${newValue}\n$1`;
     }
     return regex_target;
 }

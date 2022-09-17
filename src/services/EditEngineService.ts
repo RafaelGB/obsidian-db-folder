@@ -1,17 +1,15 @@
-import { RowDatabaseFields } from "cdm/DatabaseModel";
-import { NoteContentAction, TableColumn } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { FileContent } from "helpers/FileContent";
-import { inline_regex_target_in_function_of, resolve_tfile } from "helpers/FileManagement";
-import { Notice, parseYaml, TFile, TFolder } from "obsidian";
-import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
+import { inline_regex_target_in_function_of } from "helpers/FileManagement";
+import { TFile } from "obsidian";
+import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
-import { InputType, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
+import { InputType, UpdateRowOptions } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { VaultManagerDB } from "services/FileManagerService";
 import { inlineRegexInFunctionOf } from "helpers/QueryHelper";
-import { EditionError } from "errors/ErrorTypes";
+import { EditionError, showDBError } from "errors/ErrorTypes";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import obtainRowDatabaseFields from "parsers/FileToRowDatabaseFields";
 class EditEngine {
@@ -26,7 +24,7 @@ class EditEngine {
      */
     public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
         await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
-            throw err;
+            showDBError(EditionError.YamlRead, err);
         });
     }
 
@@ -84,7 +82,7 @@ class EditEngine {
         }
 
         async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-            const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---\n/g : /(^[\s\S]*$)/g;
+            const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
             const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
             const noteObject = {
                 action: 'replace',
@@ -138,7 +136,7 @@ class EditEngine {
         }
 
         async function inlineAddColumn(): Promise<void> {
-            const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---\n)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
+            const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
             const noteObject = {
                 action: 'replace',
                 file: file,
@@ -168,23 +166,19 @@ class EditEngine {
             };
             await VaultManagerDB.editNoteContent(noteObject);
         }
-        try {
-            // Record of options
-            const updateOptions: Record<string, any> = {};
-            updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
-            updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
-            updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
-            updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
-            // Execute action
-            if (updateOptions[option]) {
-                // Then execute the action
-                await updateOptions[option]();
-            } else {
-                throw `Error: option ${option} not supported yet`;
-            }
-        } catch (e) {
-            LOGGER.error(`${EditionError.YamlRead}`, e);
-            new Notice(`${EditionError.YamlRead} : ${e.message}`, 6000);
+
+        // Record of options
+        const updateOptions: Record<string, any> = {};
+        updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
+        updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
+        updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
+        updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
+        // Execute action
+        if (updateOptions[option]) {
+            // Then execute the action
+            await updateOptions[option]();
+        } else {
+            throw `Error: option ${option} not supported yet`;
         }
         LOGGER.info(`<= updateRowFile.asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option} `);
     }
