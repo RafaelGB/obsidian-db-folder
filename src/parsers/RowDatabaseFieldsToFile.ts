@@ -12,7 +12,7 @@ export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields
         }
     });
     if (array.length > 0) {
-        array = [`---`, ...array, `---`];
+        array = [`---`, ...array, `---\n`];
     }
     return array.join('\n');
 }

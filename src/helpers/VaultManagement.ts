@@ -231,14 +231,13 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-    console.log('persistFrontmatter');
     const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---\n/g : /(^[\s\S]*$)/g;
     const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterGroupRegex,
-      newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
+      newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}$1`,
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
