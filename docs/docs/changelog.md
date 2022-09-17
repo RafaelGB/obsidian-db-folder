@@ -1,3 +1,12 @@
+## 2.6.3
+### Improved
+- Translation architecture added. Now you can contribute to the translation of the plugin [ISSUE#386](https://github.com/RafaelGB/obsidian-db-folder/issues/386)
+- Edit engine improved. Now the plugin not inserts frontmatter yaml if is empty [ISSUE#343](https://github.com/RafaelGB/obsidian-db-folder/issues/343)
+### No longer broken
+- [ISSUE#396](https://github.com/RafaelGB/obsidian-db-folder/issues/396)
+- [ISSUE#398](https://github.com/RafaelGB/obsidian-db-folder/issues/398)
+- Problem of portal components with Obsidian .16 resolved [ISSUE#395](https://github.com/RafaelGB/obsidian-db-folder/issues/395)
+- Problem with save columns if quotes wrapped is enabled was resolved [ISSUE#399](https://github.com/RafaelGB/obsidian-db-folder/issues/399)
 ## 2.6.2
 ### Shiny new things
 - aligment options for every column (text,number and formula) [ISSUE#292](https://github.com/RafaelGB/obsidian-db-folder/issues/292)
