@@ -314,6 +314,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alignment" class="md-nav__link">
+    Alignment
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -564,6 +571,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alignment" class="md-nav__link">
+    Alignment
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -589,8 +603,8 @@
 <li><strong>Text</strong>: this property support markdown, links, and tags. If you're using links you can enable alias in the column settings ;</li>
 <li><strong>Number</strong>: this property only accepts numbers ;</li>
 <li><strong>Checkbox</strong>: this property is represented by <code>true/false</code> in the underlying markdown ;</li>
-<li><strong>Date</strong>: this property accepts dates with the format <code>YYYY-MM-DD</code> ;</li>
-<li><strong>Time</strong>: this property accepts time with the format <code>YYYY-MM-DD hh:mm AM/PM</code> ;</li>
+<li><strong>Date</strong>: this property accepts dates. The default format is <code>yyyy-MM-dd</code>, but it can be changed in the plugin settings under <code>editing engine section &gt; Date format</code> ;</li>
+<li><strong>Time</strong>: this property accepts time. The default format is <code>yyyy-MM-dd HH:mm:ss</code>, but it can be changed in the plugin settings under <code>editing engine section &gt; Datetime format</code> ;</li>
 <li><strong>Select</strong>: this property accepts from a list of options you define. Colors are attributed automatically, though you can change them in the column setting. Furthermore, when removing the select option in the setting, it is also removed from the note's metadata ;</li>
 <li><strong>Tags</strong>: similar to the previous property, but instead of only selecting one option, you can select multiples options per cell ;</li>
 <li><strong>Formulas</strong>: property that accepts js code to return dynamic values in function of your code. See the <a href="/obsidian-db-folder/features/Formulas/">Formulas</a> section for more details.</li>
@@ -605,8 +619,14 @@
 </li>
 </ul>
 <h2 id="yaml-dataview-inline-fields">YAML &amp; Dataview Inline Fields</h2>
-<p>The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you'll have to change it in the column's settings. Keep in mind that this change will not convert the underlying YAML to an inline format.</p>
-<p>If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database.</p>
+<p>The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you have two options :</p>
+<ul>
+<li>You can toggle <code>enable inline field as default</code> in database or plugin setting, and you can choose between putting the inline fields at the top or at the bottom of the file ;</li>
+<li>Or you can change it in the column's settings to use it with one property only. Keep in mind that this change will not convert the underlying YAML to an inline format, it was meant to work with metadata already formatted as inline.</li>
+</ul>
+<p>If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database. </p>
+<h2 id="alignment">Alignment</h2>
+<p>You can change the text alignment inside the column setting between <code>right-aligned</code>, <code>centered</code>, and <code>left-aligned</code> for the <strong>text</strong>, <strong>number</strong>, and <strong>formula</strong> properties.</p>
 
               
             </article>

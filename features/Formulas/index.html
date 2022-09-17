@@ -344,29 +344,29 @@
       
         <li class="md-nav__item">
   <a href="#formulas-on-dbfolder" class="md-nav__link">
-    Formulas on dbfolder
+    Formulas on Dbfolder
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#how-to-use" class="md-nav__link">
-    How to use
+    How to Use
   </a>
   
-    <nav class="md-nav" aria-label="How to use">
+    <nav class="md-nav" aria-label="How to Use">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#exposed-variables" class="md-nav__link">
-    Exposed variables
+    Exposed Variables
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#exposed-functions" class="md-nav__link">
-    Exposed functions
+    Exposed Functions
   </a>
   
 </li>
@@ -572,29 +572,29 @@
       
         <li class="md-nav__item">
   <a href="#formulas-on-dbfolder" class="md-nav__link">
-    Formulas on dbfolder
+    Formulas on Dbfolder
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#how-to-use" class="md-nav__link">
-    How to use
+    How to Use
   </a>
   
-    <nav class="md-nav" aria-label="How to use">
+    <nav class="md-nav" aria-label="How to Use">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#exposed-variables" class="md-nav__link">
-    Exposed variables
+    Exposed Variables
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#exposed-functions" class="md-nav__link">
-    Exposed functions
+    Exposed Functions
   </a>
   
 </li>
@@ -624,21 +624,23 @@
 
   <h1>Formulas</h1>
 
-<h2 id="formulas-on-dbfolder">Formulas on dbfolder</h2>
-<p>You can use formulas to create dynamic values in your database. 
-The formula is a javascript code that will be executed when the row is loaded.</p>
-<h2 id="how-to-use">How to use</h2>
-<p>The code can be written in the column settings or in the note's metadata. </p>
-<h3 id="exposed-variables">Exposed variables</h3>
+<h2 id="formulas-on-dbfolder">Formulas on Dbfolder</h2>
+<p>You can use formulas to create dynamic values in your database. </p>
+<p>The formula is a javascript code that will be executed when the row is loaded.</p>
+<h2 id="how-to-use">How to Use</h2>
+<p>The code can be written in the column settings or in the note's metadata. The generated values can be added to the notes' metadata by enabling <code>persist formula output</code> in the column settings.</p>
+<h3 id="exposed-variables">Exposed Variables</h3>
 <ul>
 <li><code>row</code> : the row object</li>
 <li><code>db</code> : the database object with predefined functions that can be used in the formula</li>
 <li><code>config</code> : the table's config information</li>
 </ul>
 <p>To use an exposed variable, use the <code>${}</code> syntax. For example, to get the value of the <code>Name</code> column, you can use <code>${row.Name}</code>.</p>
-<h3 id="exposed-functions">Exposed functions</h3>
-<p>The root object <code>db</code> has the following functions:
-- <code>js</code> : execute a javascript function that you previously defined in the <code>js</code> folder of your table. (I.E.: <code>db.js.myFunction( arg1, arg2)</code>)</p>
+<h3 id="exposed-functions">Exposed Functions</h3>
+<p>The root object <code>db</code> has the following functions:</p>
+<ul>
+<li><code>js</code> : execute a javascript function that you previously defined in the <code>js</code> folder of your table. (I.E.: <code>db.js.myFunction( arg1, arg2)</code>)</li>
+</ul>
 
               
             </article>
