@@ -3,7 +3,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { UpdateRowOptions } from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
-import { updateRowFileProxy } from "helpers/VaultManagement";
+import { EditEngineService } from "services/EditEngineService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTableAction<DataState> {
@@ -13,7 +13,7 @@ export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTab
             const newKey = dbTrim(label);
             // Save on disk
             state.rows.map(async (row: RowDataType) => {
-                await updateRowFileProxy(
+                await EditEngineService.updateRowFileProxy(
                     row.__note__.getFile(),
                     column.id,
                     newKey,

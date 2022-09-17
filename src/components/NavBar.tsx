@@ -93,7 +93,6 @@ export function NavBar(navBarProps: NavBarProps) {
             PaperProps={{
               style: {
                 maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
-                width: "20ch",
               },
             }}
             MenuListProps={{
