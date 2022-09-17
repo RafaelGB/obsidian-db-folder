@@ -4,8 +4,8 @@ import TrashIcon from "components/img/Trash";
 import React from "react";
 import { UpdateRowOptions } from "helpers/Constants";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { updateRowFileProxy } from "helpers/VaultManagement";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
+import { EditEngineService } from "services/EditEngineService";
 
 export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -49,7 +49,7 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
     if (ddbbConfig.remove_field_when_delete_column) {
       Promise.all(
         rows.map(async (row: RowDataType) => {
-          updateRowFileProxy(
+          EditEngineService.updateRowFileProxy(
             row.__note__.getFile(),
             hooks.keyState,
             undefined, // delete does not need this field
