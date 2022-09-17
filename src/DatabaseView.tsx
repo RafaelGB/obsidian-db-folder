@@ -167,7 +167,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       // Obtain base information about columns
       this.columns = await obtainColumnsFromFolder(yamlColumns);
       this.rows = await adapterTFilesToRows(
-        this.file.parent.path,
+        this.file,
         this.columns,
         this.diskConfig.yaml.config,
         this.diskConfig.yaml.filters

@@ -49,7 +49,6 @@ export default class DatabaseInfo {
         }
 
         this.yaml = response.yaml;
-        //await this.saveOnDisk();
         LOGGER.info(`<=initDatabaseconfigYaml`);
     }
 

@@ -73,12 +73,13 @@ export function getNormalizedPath(path: string): NormalizedPath {
  * @param folderPath 
  * @returns 
  */
-export async function adapterTFilesToRows(folderPath: string, columns: TableColumn[], ddbbConfig: LocalSettings, filters: FilterSettings): Promise<Array<RowDataType>> {
+export async function adapterTFilesToRows(dbFile: TFile, columns: TableColumn[], ddbbConfig: LocalSettings, filters: FilterSettings): Promise<Array<RowDataType>> {
+  const folderPath = dbFile.parent.path;
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
 
   let folderFiles = await sourceDataviewPages(folderPath, ddbbConfig, columns);
-  folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
+  folderFiles = folderFiles.where(p => (p.file as any).path !== dbFile.path);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
     folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p, ddbbConfig));
