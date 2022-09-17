@@ -24,3 +24,10 @@ export const EditionError: DBErrorTypeEnum = Object.freeze({
         solution: `https://rafaelgb.github.io/obsidian-db-folder/faq/#possible-edition-issues-while-you-are-saving-a-cell-change`,
     }
 });
+
+export const AutomationError: DBErrorTypeEnum = Object.freeze({
+    LoadFormulas: {
+        error: `Error loading formulas`,
+        solution: `check your js files code`
+    },
+});

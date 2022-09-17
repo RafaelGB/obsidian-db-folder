@@ -6,6 +6,7 @@ export class FormulaJSFolderHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Select the source of your formula JS files';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view, local } = settingHandlerResponse;
+
         const formula_folder_promise = async (value: string): Promise<void> => {
             if (local) {
                 // update settings
