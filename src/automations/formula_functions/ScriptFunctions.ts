@@ -3,6 +3,7 @@ import { IGenerateObject } from "automations/IGenerateObject";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
 import { LocalSettings } from "cdm/SettingsModel";
 import { LOGGER } from "services/Logger";
+import { AutomationError, showDBError } from "errors/ErrorTypes";
 
 export class ScriptFunctions implements IGenerateObject {
     constructor(private config: LocalSettings) { }
@@ -21,10 +22,17 @@ export class ScriptFunctions implements IGenerateObject {
 
         for (const file of files) {
             if (file.extension.toLowerCase() === "js") {
-                await this.load_script_function(
-                    file,
-                    script_functions
-                );
+                try {
+                    await this.load_script_function(
+                        file,
+                        script_functions
+                    );
+                } catch (e) {
+                    showDBError({
+                        error: AutomationError.LoadFormulas.error,
+                        solution: `check your ${file.path} js file code`
+                    }, e);
+                }
             }
         }
         return script_functions;
