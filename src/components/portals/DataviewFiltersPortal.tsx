@@ -298,10 +298,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
       </Button>
 
       {domReady
-        ? ReactDOM.createPortal(
-            currentFilters(),
-            activeDocument.getElementById(`${view.file.path}-popper`)
-          )
+        ? ReactDOM.createPortal(currentFilters(), activeDocument.body)
         : null}
     </>
   );

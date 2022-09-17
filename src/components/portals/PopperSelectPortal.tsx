@@ -215,10 +215,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
         )}
       </div>
       {domReady
-        ? ReactDOM.createPortal(
-            PortalSelect(),
-            activeDocument.getElementById(`${view.file.path}-popper`)
-          )
+        ? ReactDOM.createPortal(PortalSelect(), activeDocument.body)
         : null}
     </>
   );

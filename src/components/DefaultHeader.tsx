@@ -177,7 +177,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
               labelState={labelState}
               setLabelState={setLabelState}
             />,
-            activeDocument.getElementById(`${view.file.path}-popper`)
+            activeDocument.body
           )
         : null}
     </>
