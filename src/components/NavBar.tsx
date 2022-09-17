@@ -20,6 +20,7 @@ import DataviewFilters from "components/reducers/DataviewFilters";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { SettingsModal } from "Settings";
 import CsvReader from "./navbar/CsvReader";
+import { t } from "lang/helpers";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -75,7 +76,7 @@ export function NavBar(navBarProps: NavBarProps) {
             size="large"
             edge="start"
             color="inherit"
-            aria-label="Open table options"
+            aria-label={t("toolbar_menu_aria_label")}
             sx={{ mr: 2 }}
             id="long-button"
             aria-controls={open ? "long-menu" : undefined}
@@ -105,11 +106,11 @@ export function NavBar(navBarProps: NavBarProps) {
           >
             <MenuItem onClick={handleSettingsClick} disableRipple>
               <SettingsIcon {...MenuButtonStyle} />
-              Settings
+              {t("menu_pane_open_db_settings_action")}
             </MenuItem>
             <MenuItem onClick={handleOpenAsMarkdownClick} disableRipple>
               <InsertDriveFileIcon {...MenuButtonStyle} />
-              Open as Markdown
+              {t("menu_pane_open_as_md_action")}
             </MenuItem>
             <MenuItem disableRipple>
               {/* CSV buttton download */}
