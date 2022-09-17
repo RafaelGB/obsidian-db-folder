@@ -7,6 +7,7 @@ import React from "react";
 import { CSVLink } from "react-csv";
 import DownloadIcon from "@mui/icons-material/Download";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
+import { t } from "lang/helpers";
 
 const CsvWriter = (CsvButtonProps: CsvButtonProps) => {
   const { columns, rows, name } = CsvButtonProps;
@@ -36,7 +37,7 @@ const CsvWriter = (CsvButtonProps: CsvButtonProps) => {
         target="_blank"
       >
         <DownloadIcon {...MenuButtonStyle} />
-        Download CSV
+        {t("toolbar_menu_export_csv")}
       </CSVLink>
     </>
   );

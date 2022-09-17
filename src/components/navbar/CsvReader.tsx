@@ -3,6 +3,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import React, { ChangeEventHandler, MouseEventHandler, useRef } from "react";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { NavBarProps } from "cdm/MenuBarModel";
+import { t } from "lang/helpers";
 
 export default function CsvReader(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -30,7 +31,7 @@ export default function CsvReader(navBarProps: NavBarProps) {
   return (
     <MenuItem disableRipple onClick={handleFileUpload}>
       <FileUploadIcon {...MenuButtonStyle} />
-      Upload CSV
+      {t("toolbar_menu_import_csv")}
       {/* Hidden input element to trigger file upload */}
       <input
         ref={inputRef}

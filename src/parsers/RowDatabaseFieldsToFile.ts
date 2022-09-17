@@ -5,14 +5,15 @@ import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DataviewService } from "services/DataviewService";
 export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, localSettings: LocalSettings, deletedColumn?: string): string => {
     const frontmatterFields = databaseFields.frontmatter;
-    const array: string[] = [];
-    array.push(`---`);
+    let array: string[] = [];
     Object.keys(frontmatterFields).forEach(key => {
         if (key !== deletedColumn) {
             array.push(...parseLiteralToString(frontmatterFields[key], 0, localSettings, key));
         }
     });
-    array.push(`---`);
+    if (array.length > 0) {
+        array = [`---`, ...array, `---\n`];
+    }
     return array.join('\n');
 }
 

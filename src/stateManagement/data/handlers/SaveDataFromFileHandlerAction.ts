@@ -60,7 +60,13 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
             const potentialPath = currentline[fileIndex];
             currentline.splice(fileIndex, 1);
             // Obtain just the filename from the path
-            let filename = potentialPath?.split("/").pop().split('.').slice(0, -1).join('.').trim();
+            const sanitizePath = potentialPath?.split("/").pop().split('.');
+            let filename = "";
+            if (sanitizePath.length > 1) {
+                filename = sanitizePath.slice(0, -1).join('.').trim();
+            } else {
+                filename = sanitizePath[0];
+            }
             if (filename) {
 
                 const filepath = config.source_data === SourceDataTypes.CURRENT_FOLDER ? `${view.file.parent.path}/${filename}.md` : `${config.source_destination_path}/${filename}.md`;

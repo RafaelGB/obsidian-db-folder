@@ -42,8 +42,9 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   }
 
   const CalendarContainer = (containerProps: any) => {
-    const el = activeDocument.getElementById(`${view.file.path}-popper`);
-    return <Portal container={el}>{containerProps.children}</Portal>;
+    return (
+      <Portal container={activeDocument.body}>{containerProps.children}</Portal>
+    );
   };
 
   return showDatePicker &&

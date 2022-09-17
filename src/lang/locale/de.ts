@@ -1,0 +1,5 @@
+// Deutsch
+
+export default {
+
+};

@@ -180,29 +180,12 @@ export async function updateRowFileProxy(file: TFile, columnId: string, newValue
 export async function updateRowFile(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
   LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
   const content = await VaultManagerDB.obtainContentFromTfile(file);
+  const contentHasFrontmatter = hasFrontmatter(content);
   const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
   const rowFields = obtainRowDatabaseFields(file, columns, frontmatterKeys);
   const column = columns.find(
     c => c.key === (UpdateRowOptions.COLUMN_KEY === option ? newValue : columnId)
   );
-
-  // Adds an empty frontmatter at the beginning of the file
-  async function addFrontmatter(): Promise<void> {
-    /* Regex explanation
-    * group 1 all content
-    */
-    const frontmatterRegex = /(^[\s\S]*$)/g;
-
-
-    const noteObject = {
-      action: 'replace',
-      file: file,
-      regexp: frontmatterRegex,
-      newValue: `---\n---\n$1`
-    };
-    // update content on disk and in memory
-    await VaultManagerDB.editNoteContent(noteObject);
-  }
   /*******************************************************************************************
    *                              FRONTMATTER GROUP FUNCTIONS
    *******************************************************************************************/
@@ -248,13 +231,13 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function persistFrontmatter(deletedColumn?: string): Promise<void> {
-    const frontmatterGroupRegex = /^---[\s\S]+?---/g;
+    const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---\n/g : /(^[\s\S]*$)/g;
     const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
     const noteObject = {
       action: 'replace',
       file: file,
       regexp: frontmatterGroupRegex,
-      newValue: `${frontmatterFieldsText}`
+      newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}$1`,
     };
     await VaultManagerDB.editNoteContent(noteObject);
   }
@@ -279,7 +262,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       newValue: `$3$6$7$8 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}$10$11`
     };
     await VaultManagerDB.editNoteContent(noteObject);
-    await persistFrontmatter();
+    await persistFrontmatter(columnId);
   }
 
   async function inlineColumnKey(): Promise<void> {
@@ -302,7 +285,7 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
   }
 
   async function inlineAddColumn(): Promise<void> {
-    const inlineAddRegex = new RegExp(`(^---[\\s\\S]+?---\\n)+([\\s\\S]+?$)`, 'g');
+    const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---\n)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
     const noteObject = {
       action: 'replace',
       file: file,
@@ -310,10 +293,11 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
       newValue: inline_regex_target_in_function_of(
         ddbbConfig.inline_new_position,
         columnId,
-        DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString()
+        DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString(),
+        contentHasFrontmatter
       )
     };
-    await persistFrontmatter();
+    await persistFrontmatter(columnId);
     await VaultManagerDB.editNoteContent(noteObject);
   }
 
@@ -340,11 +324,6 @@ export async function updateRowFile(file: TFile, columnId: string, newValue: Lit
     updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
     // Execute action
     if (updateOptions[option]) {
-      // Check if file has frontmatter
-      if (!hasFrontmatter(content)) {
-        // If not, add it
-        await addFrontmatter();
-      }
       // Then execute the action
       await updateOptions[option]();
     } else {

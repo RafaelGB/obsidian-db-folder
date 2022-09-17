@@ -70,14 +70,14 @@ export function destination_folder(view: DatabaseView, ddbbConfig: LocalSettings
     return destination_folder;
 }
 
-export function inline_regex_target_in_function_of(position: string, columnId: string, newValue: string) {
+export function inline_regex_target_in_function_of(position: string, columnId: string, newValue: string, contentHasFrontmatter: boolean) {
     let regex_target = "";
     switch (position) {
         case INLINE_POSITION.BOTTOM:
-            regex_target = `$1$2${columnId}:: ${newValue}`;
+            regex_target = contentHasFrontmatter ? `$1$2${columnId}:: ${newValue}` : `$1${columnId}:: ${newValue}`;
             break;
         default:
-            regex_target = `$1${columnId}:: ${newValue}\n$2`;
+            regex_target = contentHasFrontmatter ? `$1${columnId}:: ${newValue}\n$2` : `${columnId}:: ${newValue}\n$1`;
     }
     return regex_target;
 }
