@@ -188,6 +188,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       // Render database
       const table = createDatabase(tableProps);
       this.rootContainer.render(table);
+      this.diskConfig.saveOnDisk();
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     } catch (e: unknown) {
       LOGGER.error(`initDatabase ${this.file.path}`, e);
