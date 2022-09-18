@@ -72,7 +72,7 @@ export function NavBar(navBarProps: NavBarProps) {
         }}
       >
         <Toolbar>
-          <Grid container spacing={3}>
+          <Grid container spacing={1}>
             <Grid item xs="auto">
               <IconButton
                 size="large"
@@ -130,7 +130,7 @@ export function NavBar(navBarProps: NavBarProps) {
             <Grid item xs="auto">
               <DataviewFilters table={table} />
             </Grid>
-            <Grid item xs="auto">
+            <Grid item xs={5}>
               <PaginationTable table={table} />
             </Grid>
           </Grid>

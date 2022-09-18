@@ -34,8 +34,8 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const [showFilters, setShowFilters] = useState(false);
 
   // Selector popper state
-  const [selectPop, setSelectPop] = useState(null);
-  const { styles, attributes } = usePopper(filtersRef, selectPop);
+  const [popperElement, setPopperElement] = useState(null);
+  const { styles, attributes } = usePopper(filtersRef, popperElement);
 
   const [possibleColumns, setPossibleColumns] = useState([] as string[]);
 
@@ -197,16 +197,13 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         {showFilters && (
           <div
             className="menu"
-            ref={setSelectPop}
-            {...attributes.popper}
+            ref={setPopperElement}
             style={{
               ...styles.popper,
-              zIndex: 4,
-              minWidth: 200,
-              maxWidth: 500,
-              padding: "0.75rem",
+              zIndex: 3,
               background: StyleVariables.BACKGROUND_SECONDARY,
             }}
+            {...attributes.popper}
           >
             <Box sx={{ width: "100%" }}>
               {filters.conditions.map((condition, index) => {
@@ -290,8 +287,11 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
           </div>
         </span>
       </Button>
-
-      {ReactDOM.createPortal(currentFilters(), activeDocument.body)}
+      {ReactDOM.createPortal(
+        currentFilters(),
+        activeDocument.body,
+        "filters-portal-key"
+      )}
     </>
   );
 };
