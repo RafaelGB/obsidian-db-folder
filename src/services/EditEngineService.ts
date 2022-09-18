@@ -46,7 +46,7 @@ class EditEngine {
                 await inlineColumnEdit();
                 return;
             }
-            rowFields.frontmatter[columnId] = DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig);
+            rowFields.frontmatter[columnId] = newValue;
             await persistFrontmatter();
             await inlineRemoveColumn();
         }
