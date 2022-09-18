@@ -16,7 +16,7 @@ import { TableColumn } from "cdm/FolderModel";
 const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
-  const { tableState, view } = table.options.meta;
+  const { tableState } = table.options.meta;
   const dataActions = tableState.data((state) => state.actions);
 
   const selectPortalRow = tableState.data((state) => state.rows[row.index]);
@@ -35,18 +35,10 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { styles, attributes } = usePopper(selectRef, selectPop);
   // Show add button
   const [showAdd, setShowAdd] = useState(false);
-  // Selector popper state
-  const [domReady, setDomReady] = useState(false);
 
   const columnActions = table.options.meta.tableState.columns(
     (state) => state.actions
   );
-
-  React.useEffect(() => {
-    if (!domReady) {
-      setDomReady(true);
-    }
-  });
 
   const handleRemoveOption: MouseEventHandler<HTMLDivElement> = () => {
     dataActions.updateCell(
@@ -216,9 +208,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
           />
         )}
       </div>
-      {domReady
-        ? ReactDOM.createPortal(PortalSelect(), activeDocument.body)
-        : null}
+      {ReactDOM.createPortal(PortalSelect(), activeDocument.body)}
     </>
   );
 };

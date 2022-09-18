@@ -37,8 +37,6 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const [selectPop, setSelectPop] = useState(null);
   const { styles, attributes } = usePopper(filtersRef, selectPop);
 
-  const [domReady, setDomReady] = useState(false);
-
   const [possibleColumns, setPossibleColumns] = useState([] as string[]);
 
   React.useEffect(() => {
@@ -55,12 +53,6 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
       );
     });
   }, [ddbbConfig, columns]);
-
-  React.useEffect(() => {
-    if (!domReady) {
-      setDomReady(true);
-    }
-  });
 
   const onchangeExistedColumnHandler =
     (existedColumnIndex: number) =>
@@ -299,9 +291,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         </span>
       </Button>
 
-      {domReady
-        ? ReactDOM.createPortal(currentFilters(), activeDocument.body)
-        : null}
+      {ReactDOM.createPortal(currentFilters(), activeDocument.body)}
     </>
   );
 };
