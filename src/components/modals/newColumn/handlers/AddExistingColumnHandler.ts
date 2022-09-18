@@ -21,11 +21,13 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
             // Filter out the columns that are already in the table
             const currentColumns = (info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id);
             const filteredColumns: Record<string, string> = {};
-            Object.keys(columnsRaw).filter((columnName: string) => {
-                return !currentColumns.includes(columnName.toLowerCase())
-            }).forEach((columnName: string) => {
-                filteredColumns[columnName] = columnName;
-            });
+            Object.keys(columnsRaw)
+                .sort((a, b) => a.localeCompare(b))
+                .filter((columnName: string) => {
+                    return !currentColumns.includes(columnName.toLowerCase())
+                }).forEach((columnName: string) => {
+                    filteredColumns[columnName] = columnName;
+                });
             new Setting(containerEl)
                 .setName('Select an existing column to add')
                 .setDesc('Select an existing column to add not included yet in the table')

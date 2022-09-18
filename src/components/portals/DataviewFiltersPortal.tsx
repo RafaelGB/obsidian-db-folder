@@ -50,7 +50,9 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         obtainColumnsFromRows(view, ddbbConfig, emptyFilterConditions, columns)
       );
     }).then((columns) => {
-      setPossibleColumns(Object.keys(columns));
+      setPossibleColumns(
+        Object.keys(columns).sort((a, b) => a.localeCompare(b))
+      );
     });
   }, [ddbbConfig, columns]);
 
