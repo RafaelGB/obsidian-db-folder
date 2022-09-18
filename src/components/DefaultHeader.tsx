@@ -73,14 +73,8 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     .columnDef as TableColumn;
   /** reducer asociated to database */
   const [expanded, setExpanded] = useState(created || false);
-  const [domReady, setDomReady] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [labelState, setLabelState] = useState(label);
-  React.useEffect(() => {
-    if (!domReady) {
-      setDomReady(true);
-    }
-  });
 
   let propertyIcon: JSX.Element;
   switch (input) {
@@ -165,21 +159,19 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
           </span>
         )}
       </div>
-      {domReady
-        ? ReactDOM.createPortal(
-            <HeaderMenu
-              headerProps={headerProps}
-              propertyIcon={propertyIcon}
-              expanded={expanded}
-              setExpanded={setExpanded}
-              created={created}
-              referenceElement={referenceElement}
-              labelState={labelState}
-              setLabelState={setLabelState}
-            />,
-            activeDocument.body
-          )
-        : null}
+      {ReactDOM.createPortal(
+        <HeaderMenu
+          headerProps={headerProps}
+          propertyIcon={propertyIcon}
+          expanded={expanded}
+          setExpanded={setExpanded}
+          created={created}
+          referenceElement={referenceElement}
+          labelState={labelState}
+          setLabelState={setLabelState}
+        />,
+        activeDocument.body
+      )}
     </>
   ) : (
     <div

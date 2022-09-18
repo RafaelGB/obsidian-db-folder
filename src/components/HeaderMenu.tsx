@@ -1,7 +1,7 @@
 import { InputType, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
-import React, { useEffect, useState } from "react";
+import React, { FocusEventHandler, useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
@@ -164,10 +164,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
    * When user leaves the input field
    * @param e
    */
-  function handleBlur(e: any) {
+  const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
     persistLabelChange();
-  }
+  };
 
   return (
     <div>

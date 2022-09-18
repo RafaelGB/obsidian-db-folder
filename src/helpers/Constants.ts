@@ -249,6 +249,8 @@ export const StyleClasses = Object.freeze({
   COLUMN_MODAL_BODY: 'database-column-body',
   ADD_COLUMN_MODAL: 'database-add-column-modal',
   ADD_COLUMN_MODAL_BODY: 'database-add-column-body',
+  FILTERS_MODAL: 'database-filters-modal',
+  FILTERS_MODAL_BODY: 'database-filters-body',
 });
 
 
