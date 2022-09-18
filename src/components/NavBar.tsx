@@ -59,7 +59,7 @@ export function NavBar(navBarProps: NavBarProps) {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <>
       <AppBar
         position="static"
         style={{
@@ -143,7 +143,7 @@ export function NavBar(navBarProps: NavBarProps) {
           pointerEvents: "none",
         }}
       />
-    </Box>
+    </>
   );
 }
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {
