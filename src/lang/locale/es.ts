@@ -16,4 +16,10 @@ export default {
     'toolbar_menu_aria_label': 'Abrir opciones de tabla',
     'toolbar_menu_export_csv': 'Exportar CSV',
     'toolbar_menu_import_csv': 'Importar CSV',
+    /** SOURCE OPTIONS */
+    'current_folder': "Carpeta actual",
+    "tag": "Etiqueta",
+    "outgoing_link": "Enlace saliente",
+    "incoming_link": "Enlace entrante",
+    "query": "Consulta de Dataview",
 };

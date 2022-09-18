@@ -16,4 +16,10 @@ export default {
   'toolbar_menu_aria_label': 'Open table options',
   'toolbar_menu_export_csv': 'Export CSV',
   'toolbar_menu_import_csv': 'Import CSV',
+  /** SOURCE OPTIONS */
+  'current_folder': "Current folder",
+  "tag": "Tag",
+  "outgoing_link": "Outgoing link",
+  "incoming_link": "Incoming link",
+  "query": "Dataview query",
 };
