@@ -142,19 +142,21 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
               className="d-flex flex-wrap-wrap"
               style={{ marginTop: "-0.5rem" }}
             >
-              {tableColumn.options.map((option: any) => (
-                <div
-                  key={option.label}
-                  className="cursor-pointer"
-                  style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                  onClick={() => handleOptionClick(option)}
-                >
-                  <Relationship
-                    value={option.label}
-                    backgroundColor={option.backgroundColor}
-                  />
-                </div>
-              ))}
+              {tableColumn.options
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((option) => (
+                  <div
+                    key={option.label}
+                    className="cursor-pointer"
+                    style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                    onClick={() => handleOptionClick(option)}
+                  >
+                    <Relationship
+                      value={option.label}
+                      backgroundColor={option.backgroundColor}
+                    />
+                  </div>
+                ))}
               {showAdd && (
                 <div
                   style={{
