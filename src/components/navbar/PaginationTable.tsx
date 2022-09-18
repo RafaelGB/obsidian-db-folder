@@ -59,7 +59,7 @@ function PaginationTable(props: PaginationProps) {
             shrink: true,
             style: { color: StyleVariables.TEXT_NORMAL },
           }}
-          style={{ width: "100px" }}
+          sx={{ minWidth: 20, maxWidth: 100 }}
           InputProps={{
             inputProps: {
               style: { textAlign: "center" },
@@ -99,21 +99,7 @@ function PaginationTable(props: PaginationProps) {
         >
           {">>"}
         </Button>
-        {/*
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
       </ButtonGroup>
-      {/* <div>{table.getRowModel().rows.length} Rows</div> */}
     </>
   );
 }
