@@ -1,3 +1,13 @@
+## 2.6.4
+### Improved
+- Filters refactor into a modal improving the UX and mobile experience [ISSUE#400](https://github.com/RafaelGB/obsidian-db-folder/issues/400)
+- Select and tag displayed on alfabetical order [ISSUE#323](https://github.com/RafaelGB/obsidian-db-folder/issues/323)
+- Existed column displayed on alfabetical order [ISSUE#306](https://github.com/RafaelGB/obsidian-db-folder/issues/306)
+- new rows does not insert an empty yaml in favor of templates [ISSUE#403](https://github.com/RafaelGB/obsidian-db-folder/issues/403)
+- Edit engine minor improvements. Now empty frontmatter is ignored
+### No longer broken
+- Number type problem with decimals and zero values solved [ISSUE#402](https://github.com/RafaelGB/obsidian-db-folder/issues/402)
+- Navbar on mobiles improved (not perfect not) [392](https://github.com/RafaelGB/obsidian-db-folder/issues/392)
 ## 2.6.3
 ### Improved
 - Translation architecture added. Now you can contribute to the translation of the plugin [ISSUE#386](https://github.com/RafaelGB/obsidian-db-folder/issues/386)
