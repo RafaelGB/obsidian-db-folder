@@ -28,8 +28,7 @@ const NumberCell = (props: CellComponentProps) => {
   // onChange handler
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     // parse value to number
-    const value = parseFloat(event.target.value);
-    setEditableValue(value);
+    setEditableValue(event.target.value);
   };
 
   function persistChange(changedValue: number) {
@@ -51,7 +50,7 @@ const NumberCell = (props: CellComponentProps) => {
   };
 
   const handleOnBlur = () => {
-    persistChange(editableValue);
+    persistChange(parseFloat(editableValue));
     setDirtyCell(false);
   };
 
@@ -69,7 +68,9 @@ const NumberCell = (props: CellComponentProps) => {
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
     >
-      {(numberRow[column.id] && numberRow[column.id].toString()) || ""}
+      {(numberRow[column.id] !== undefined &&
+        numberRow[column.id].toString()) ||
+        ""}
     </span>
   );
 };
