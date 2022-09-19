@@ -59,7 +59,7 @@ export function NavBar(navBarProps: NavBarProps) {
   };
 
   return (
-    <>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
         style={{
@@ -72,68 +72,66 @@ export function NavBar(navBarProps: NavBarProps) {
         }}
       >
         <Toolbar>
-          <Grid container spacing={1}>
-            <Grid item xs="auto">
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label={t("toolbar_menu_aria_label")}
-                id="long-button"
-                aria-controls={open ? "long-menu" : undefined}
-                aria-expanded={open ? "true" : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Grid>
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              PaperProps={{
-                style: {
-                  maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
-                },
-              }}
-              MenuListProps={{
-                "aria-labelledby": "long-button",
-                style: {
-                  backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
-                  color: StyleVariables.TEXT_NORMAL,
-                },
-              }}
-            >
-              <MenuItem onClick={handleSettingsClick} disableRipple>
-                <SettingsIcon {...MenuButtonStyle} />
-                {t("menu_pane_open_db_settings_action")}
-              </MenuItem>
-              <MenuItem onClick={handleOpenAsMarkdownClick} disableRipple>
-                <InsertDriveFileIcon {...MenuButtonStyle} />
-                {t("menu_pane_open_as_md_action")}
-              </MenuItem>
-              <MenuItem disableRipple>
-                {/* CSV buttton download */}
-                <CsvWriter
-                  columns={columnsInfo.getAllColumns()}
-                  rows={table.getRowModel().rows}
-                  name={view.diskConfig.yaml.name}
-                />
-              </MenuItem>
-              <CsvReader {...navBarProps} />
-            </Menu>
-            <Grid item xs="auto">
-              {/** Global filter */}
-              <GlobalFilter {...navBarProps.globalFilterRows} />
-            </Grid>
-            <Grid item xs="auto">
-              <DataviewFilters table={table} />
-            </Grid>
-            <Grid item xs={5}>
-              <PaginationTable table={table} />
-            </Grid>
-          </Grid>
+          <IconButton
+            sx={{ mr: 2 }}
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label={t("toolbar_menu_aria_label")}
+            id="long-button"
+            aria-controls={open ? "long-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+            PaperProps={{
+              style: {
+                maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
+              },
+            }}
+            MenuListProps={{
+              "aria-labelledby": "long-button",
+              style: {
+                backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+                color: StyleVariables.TEXT_NORMAL,
+              },
+            }}
+          >
+            <MenuItem onClick={handleSettingsClick} disableRipple>
+              <SettingsIcon {...MenuButtonStyle} />
+              {t("menu_pane_open_db_settings_action")}
+            </MenuItem>
+            <MenuItem onClick={handleOpenAsMarkdownClick} disableRipple>
+              <InsertDriveFileIcon {...MenuButtonStyle} />
+              {t("menu_pane_open_as_md_action")}
+            </MenuItem>
+            <MenuItem disableRipple>
+              {/* CSV buttton download */}
+              <CsvWriter
+                columns={columnsInfo.getAllColumns()}
+                rows={table.getRowModel().rows}
+                name={view.diskConfig.yaml.name}
+              />
+            </MenuItem>
+            <CsvReader {...navBarProps} />
+          </Menu>
+          {/** Global filter */}
+          <GlobalFilter {...navBarProps.globalFilterRows} />
+          <Box
+            justifyContent={"flex-start"}
+            sx={{
+              display: { xs: "none", md: "flex" },
+            }}
+          >
+            <DataviewFilters table={table} />
+            <PaginationTable table={table} />
+          </Box>
         </Toolbar>
       </AppBar>
       {/** Hacky to stick the bar without move one row before the header*/}
@@ -143,7 +141,7 @@ export function NavBar(navBarProps: NavBarProps) {
           pointerEvents: "none",
         }}
       />
-    </>
+    </Box>
   );
 }
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {

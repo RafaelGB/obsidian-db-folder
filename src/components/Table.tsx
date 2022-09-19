@@ -43,6 +43,8 @@ import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord"
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "./reducers/CustomSortingFn";
 import Grid from "@mui/material/Grid";
+import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -406,13 +408,8 @@ export function Table(tableData: TableDataType) {
         {/* ENDS TABLE */}
       </div>
       {/* INIT NEW ROW */}
-      <Grid
-        container
-        spacing={3}
-        className={`${c("add-row")}`}
-        key={`div-add-row`}
-      >
-        <Grid item xs={2.5} key={`div-add-row-cell`}>
+      <Box sx={{ flexGrow: 1 }}>
+        <Toolbar>
           <input
             type="text"
             ref={newRowRef}
@@ -422,41 +419,41 @@ export function Table(tableData: TableDataType) {
             onKeyDown={handleKeyDown}
             placeholder="filename of new row"
           />
-        </Grid>
-        <Grid
-          item
-          xs={0.5}
-          key={`div-add-row-cell-button`}
-          onClick={handleAddNewRow}
-        >
-          <span className="svg-icon svg-gray">
-            <PlusIcon />
-          </span>
-        </Grid>
-        <Grid item xs={5} key={`div-add-row-cell-padding-left`}>
-          <Select
-            styles={CustomTemplateSelectorStyles}
-            options={templateOptions}
-            value={
-              templateRow
-                ? {
-                    label: templateRow,
-                    value: templateRow,
-                  }
-                : null
-            }
-            isClearable={true}
-            isMulti={false}
-            onChange={handleChangeRowTemplate}
-            placeholder={"Without template. Select one to use..."}
-            menuPortalTarget={document.body}
-            menuShouldBlockScroll={true}
-            isSearchable
-            menuPlacement="top"
-          />
-        </Grid>
+          <div key={`div-add-row-cell-button`} onClick={handleAddNewRow}>
+            <span className="svg-icon svg-gray">
+              <PlusIcon />
+            </span>
+          </div>
+          <Box
+            justifyContent={"flex-start"}
+            sx={{
+              display: { xs: "none", md: "flex" },
+            }}
+          >
+            <Select
+              styles={CustomTemplateSelectorStyles}
+              options={templateOptions}
+              value={
+                templateRow
+                  ? {
+                      label: templateRow,
+                      value: templateRow,
+                    }
+                  : null
+              }
+              isClearable={true}
+              isMulti={false}
+              onChange={handleChangeRowTemplate}
+              placeholder={"Without template. Select one to use..."}
+              menuPortalTarget={document.body}
+              menuShouldBlockScroll={true}
+              isSearchable
+              menuPlacement="top"
+            />
+          </Box>
+        </Toolbar>
         {/* ENDS NEW ROW */}
-      </Grid>
+      </Box>
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
         <pre>
