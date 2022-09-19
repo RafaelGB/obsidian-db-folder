@@ -414,16 +414,15 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__sticky-level-1 {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 2;
+  display: inline-block;
 }
-.database-plugin__sticky-level-1:first-child {
-  left: 0;
-  position: sticky;
-  z-index: 2;
-}
+
 .database-plugin__sticky-level-2 {
+  position: -webkit-sticky;
   position: sticky;
   top: 4rem;
   z-index: 3;

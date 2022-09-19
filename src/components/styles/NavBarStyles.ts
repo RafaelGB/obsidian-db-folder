@@ -64,3 +64,7 @@ export const MenuButtonStyle = {
     }
 }
 
+
+export const ToolBarMenuButtonStyle = {
+    mr: 2
+}
