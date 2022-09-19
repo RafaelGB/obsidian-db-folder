@@ -15,12 +15,7 @@ import {
   getSortedRowModel,
   ColumnSizingState,
 } from "@tanstack/react-table";
-import {
-  TableDataType,
-  RowDataType,
-  TableColumn,
-  RowTemplateOption,
-} from "cdm/FolderModel";
+import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import StateManager from "StateManager";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import {
@@ -29,21 +24,18 @@ import {
   MetadataColumns,
   ResizeConfiguration,
 } from "helpers/Constants";
-import PlusIcon from "components/img/Plus";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/DefaultCell";
 import DefaultHeader from "components/DefaultHeader";
 import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import TableHeader from "components/TableHeader";
-import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
-import Select, { OnChangeValue } from "react-select";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "./reducers/CustomSortingFn";
-import Toolbar from "@mui/material/Toolbar";
-import Box from "@mui/material/Box";
+import { useCallback, useState } from "react";
+import { AddRow } from "./AddRow";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -65,7 +57,6 @@ export function Table(tableData: TableDataType) {
   const columnActions = tableStore.columns((state) => state.actions);
   const columnsInfo = tableStore.columns((state) => state.info);
   const rows = tableStore.data((state) => state.rows);
-  const dataActions = tableStore.data((state) => state.actions);
 
   LOGGER.debug(
     `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
@@ -79,7 +70,6 @@ export function Table(tableData: TableDataType) {
   );
 
   const globalConfig = tableStore.configState((store) => store.global);
-  const configActions = tableStore.configState((store) => store.actions);
   const configInfo = tableStore.configState((store) => store.info);
   /** Plugin services */
   const stateManager: StateManager = tableData.stateManager;
@@ -92,18 +82,18 @@ export function Table(tableData: TableDataType) {
     store.actions,
   ]);
   // Visibility
-  const [columnVisibility, setColumnVisibility] = React.useState(
+  const [columnVisibility, setColumnVisibility] = useState(
     columnsInfo.getVisibilityRecord()
   );
   // Filtering
-  const [globalFilter, setGlobalFilter] = React.useState("");
+  const [globalFilter, setGlobalFilter] = useState("");
   // Resizing
-  const [columnSizing, setColumnSizing] = React.useState(
+  const [columnSizing, setColumnSizing] = useState(
     getInitialColumnSizing(columns)
   );
-  const [persistSizingTimeout, setPersistSizingTimeout] = React.useState(null);
+  const [persistSizingTimeout, setPersistSizingTimeout] = useState(null);
   // Drag and drop
-  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
     columnsInfo.getValueOfAllColumnsAsociatedWith("id")
   );
 
@@ -123,13 +113,8 @@ export function Table(tableData: TableDataType) {
   if (columnOrder.length !== columns.length) {
     setColumnOrder(columnsInfo.getValueOfAllColumnsAsociatedWith("id"));
   }
-
-  // new Row Template
-  const [templateRow, templateOptions, templateUpdate] = tableStore.rowTemplate(
-    (store) => [store.template, store.options, store.update]
-  );
   /** Obsidian event to show page preview */
-  const onMouseOver = React.useCallback(
+  const onMouseOver = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const targetEl = e.target as HTMLElement;
       if (targetEl.tagName !== "A" || !view) return;
@@ -148,7 +133,7 @@ export function Table(tableData: TableDataType) {
     [view]
   );
   /** Obsidian to open an internal link in a new pane */
-  const onClick = React.useCallback(
+  const onClick = useCallback(
     async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (e.type === "auxclick" && e.button == 2) {
         return;
@@ -259,30 +244,6 @@ export function Table(tableData: TableDataType) {
     autoResetPageIndex: false,
   });
 
-  // Manage input of new row
-  const [inputNewRow, setInputNewRow] = React.useState("");
-  const newRowRef = React.useRef(null);
-  function handleKeyDown(e: any) {
-    if (e.key === "Enter") {
-      handleAddNewRow();
-    }
-  }
-
-  function handleAddNewRow() {
-    dataActions.addRow(inputNewRow, columns, configInfo.getLocalSettings());
-    setInputNewRow("");
-    newRowRef.current.value = "";
-  }
-
-  function handleChangeRowTemplate(
-    newValue: OnChangeValue<RowTemplateOption, false>
-  ) {
-    const settingsValue = !!newValue ? newValue.value : "";
-    templateUpdate(settingsValue);
-    configActions.alterConfig({
-      current_row_template: settingsValue,
-    });
-  }
   LOGGER.debug(`<= Table`);
   return (
     <>
@@ -391,59 +352,13 @@ export function Table(tableData: TableDataType) {
                 tableStore={tableStore}
               />
             ))}
-
           {/* ENDS BODY */}
         </div>
         {/* ENDS TABLE */}
       </div>
-      {/* INIT NEW ROW */}
 
-      <Box sx={{ flexGrow: 1 }} className={`${c("add-row")}`}>
-        <Toolbar>
-          <input
-            type="text"
-            ref={newRowRef}
-            onChange={(e) => {
-              setInputNewRow(e.target.value);
-            }}
-            onKeyDown={handleKeyDown}
-            placeholder="filename of new row"
-          />
-          <div key={`div-add-row-cell-button`} onClick={handleAddNewRow}>
-            <span className="svg-icon svg-gray">
-              <PlusIcon />
-            </span>
-          </div>
-          <Box
-            justifyContent={"flex-start"}
-            sx={{
-              display: { xs: "none", md: "flex" },
-            }}
-          >
-            <Select
-              styles={CustomTemplateSelectorStyles}
-              options={templateOptions}
-              value={
-                templateRow
-                  ? {
-                      label: templateRow,
-                      value: templateRow,
-                    }
-                  : null
-              }
-              isClearable={true}
-              isMulti={false}
-              onChange={handleChangeRowTemplate}
-              placeholder={"Without template. Select one to use..."}
-              menuPortalTarget={document.body}
-              menuShouldBlockScroll={true}
-              isSearchable
-              menuPlacement="top"
-            />
-          </Box>
-        </Toolbar>
-        {/* ENDS NEW ROW */}
-      </Box>
+      <AddRow table={table} />
+
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
         <pre>
