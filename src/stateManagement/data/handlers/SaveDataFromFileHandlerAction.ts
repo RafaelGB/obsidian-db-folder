@@ -79,11 +79,11 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
                 await VaultManagerDB.create_markdown_file(
                     resolve_tfolder(destination_folder),
                     filename,
+                    config,
                     {
                         frontmatter: lineRecord,
                         inline: {}
                     },
-                    config
                 );
 
                 const newNote = new NoteInfo({
