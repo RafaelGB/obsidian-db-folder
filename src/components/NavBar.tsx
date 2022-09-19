@@ -147,10 +147,7 @@ export function NavBar(navBarProps: NavBarProps) {
 }
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {
   return (
-    <div
-      className={`${c("navbar sticky-level-1")}`}
-      key="div-navbar-header-cell"
-    >
+    <div className={`${c("navbar")}`} key="div-navbar-header-cell">
       <NavBar {...headerNavBarProps} />
     </div>
   );
