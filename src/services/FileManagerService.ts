@@ -18,13 +18,13 @@ class VaultManager {
    * @param filename 
    * @param content 
    */
-  async create_markdown_file(targetFolder: TFolder, filename: string, databasefields: RowDatabaseFields, localSettings: LocalSettings): Promise<TFile> {
+  async create_markdown_file(targetFolder: TFolder, filename: string, localSettings: LocalSettings, databasefields?: RowDatabaseFields): Promise<TFile> {
     LOGGER.debug(`=> create_markdown_file. name:${targetFolder.path}/${filename})`);
     const created_note = await app.fileManager.createNewMarkdownFile(
       targetFolder,
       filename ?? "Untitled"
     );
-    let content = parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields));
+    let content = databasefields ? parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields)) : "";
 
     // Custom content by source
     switch (localSettings.source_data) {

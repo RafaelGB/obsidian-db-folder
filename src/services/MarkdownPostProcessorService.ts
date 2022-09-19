@@ -135,7 +135,7 @@ export class PreviewDatabaseModeService {
         // Obtain base information about columns
         const columns = await obtainColumnsFromFolder(yamlColumns);
         const rows = await adapterTFilesToRows(
-            dbFile.parent.path,
+            dbFile,
             columns,
             databaseDisk.yaml.config,
             databaseDisk.yaml.filters

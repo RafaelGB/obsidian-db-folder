@@ -8,7 +8,8 @@
 .database-plugin:before,
 .database-plugin:after {
   box-sizing: inherit;
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .database-plugin {
@@ -298,28 +299,21 @@ div.database-plugin__checkbox {
   color: var(--text-accent);
   padding: 0.5rem;
   align-items: center;
-  font-size: 0.875rem;
   cursor: pointer;
   bottom: 0;
-  z-index: 3;
   opacity: 0.8;
+  z-index: 3;
   position: sticky;
   left: 0;
   background-color: var(--background-primary);
+  margin-top: 0 !important;
+  margin-left: 0 !important;
 }
 
 .database-plugin__add-row .svg-icon:hover {
   background-color: var(--background-secondary);
   color: var(--text-accent-hover);
   padding: 0.3rem;
-}
-
-.database-plugin__add-row .database-plugin__td {
-  border: none;
-  background-color: transparent;
-  color: var(--text-muted);
-  display: inline-flex;
-  vertical-align: middle;
 }
 
 .database-plugin__th {
@@ -394,6 +388,7 @@ div.database-plugin__checkbox {
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
   height: 1px; /** Hack to prevent collapsing of table cells */
+  overflow: scroll;
 }
 
 .database-plugin__th:last-child {
@@ -420,15 +415,18 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__sticky-level-1 {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   left: 0;
   z-index: 2;
 }
+
 .database-plugin__sticky-level-2 {
+  position: -webkit-sticky;
   position: sticky;
   top: 4rem;
-  z-index: 2;
+  z-index: 3;
 }
 
 .database-plugin__table-header-group {
@@ -489,16 +487,22 @@ div.database-plugin__checkbox {
   gap: 0.3rem;
 }
 
-span.text-align-right {
+.database-plugin__text-align-right {
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.database-plugin__text-align-center {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .database-plugin__text-align-left {
   display: flex;
-  text-align: left;
   justify-content: flex-start;
+  text-align: left;
 }
 
 .cell-padding {

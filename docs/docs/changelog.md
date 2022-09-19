@@ -1,3 +1,38 @@
+## 2.6.4
+### Improved
+- Filters refactor into a modal improving the UX and mobile experience [ISSUE#400](https://github.com/RafaelGB/obsidian-db-folder/issues/400)
+- Select and tag displayed on alfabetical order [ISSUE#323](https://github.com/RafaelGB/obsidian-db-folder/issues/323)
+- Existed column displayed on alfabetical order [ISSUE#306](https://github.com/RafaelGB/obsidian-db-folder/issues/306)
+- new rows does not insert an empty yaml in favor of templates [ISSUE#403](https://github.com/RafaelGB/obsidian-db-folder/issues/403)
+- Edit engine minor improvements. Now empty frontmatter is ignored
+### No longer broken
+- Number type problem with decimals and zero values solved [ISSUE#402](https://github.com/RafaelGB/obsidian-db-folder/issues/402)
+- Navbar on mobiles improved (not perfect not) [392](https://github.com/RafaelGB/obsidian-db-folder/issues/392)
+## 2.6.3
+### Improved
+- Translation architecture added. Now you can contribute to the translation of the plugin [ISSUE#386](https://github.com/RafaelGB/obsidian-db-folder/issues/386)
+- Edit engine improved. Now the plugin not inserts frontmatter yaml if is empty [ISSUE#343](https://github.com/RafaelGB/obsidian-db-folder/issues/343)
+### No longer broken
+- error habndler of js formulas on load [ISSUE#396](https://github.com/RafaelGB/obsidian-db-folder/issues/396)
+- now you can parse a db form another db [ISSUE#398](https://github.com/RafaelGB/obsidian-db-folder/issues/398)
+- Problem of portal components with Obsidian .16 resolved [ISSUE#395](https://github.com/RafaelGB/obsidian-db-folder/issues/395)
+- Problem with save columns if quotes wrapped is enabled was resolved [ISSUE#399](https://github.com/RafaelGB/obsidian-db-folder/issues/399)
+## 2.6.2
+### Shiny new things
+- aligment options for every column (text,number and formula) [ISSUE#292](https://github.com/RafaelGB/obsidian-db-folder/issues/292)
+- Option for make inline fields as default [ISSUE#304](https://github.com/RafaelGB/obsidian-db-folder/issues/304)
+- Option to choose where to save new inline fields (top or bottom)[ISSUE#304](https://github.com/RafaelGB/obsidian-db-folder/issues/304)
+- Option to persist formulas (make them sortable and searchable) [ISSUE#387](https://github.com/RafaelGB/obsidian-db-folder/issues/387)
+- Configurable Date format [ISSUE#297](https://github.com/RafaelGB/obsidian-db-folder/issues/297)
+## 2.6.1
+- hotfix of global settings and a partial regresion of [ISSUE#375](https://github.com/RafaelGB/obsidian-db-folder/issues/375) cause some columns could not be shown
+## 2.6.0
+### Shiny new things
+- New column type: `Formulas`! You can configure you own formula inside  the column settings. Check our documentation for more details [here](https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/) [ISSUE#49](https://github.com/RafaelGB/obsidian-db-folder/issues/49)
+### No longer broken
+- Group folders with dv query source now respect ther target folder for new entries [ISSUE#372](https://github.com/RafaelGB/obsidian-db-folder/issues/372https://github.com/RafaelGB/obsidian-db-folder/issues/372)
+- Improved sorting to respect all the types of the table [ISSUE#371](https://github.com/RafaelGB/obsidian-db-folder/issues/371)
+- Columns with special characters are allowed now with dv query source [ISSUE#375](https://github.com/RafaelGB/obsidian-db-folder/issues/375)
 ## 2.5.3
 ### No longer broken
 - Sorting for created and modified dates working with new table version [ISSUE#368](https://github.com/RafaelGB/obsidian-db-folder/issues/368)

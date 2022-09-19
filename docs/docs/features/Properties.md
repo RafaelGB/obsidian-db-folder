@@ -7,7 +7,7 @@
 - **Time**: this property accepts time. The default format is `yyyy-MM-dd HH:mm:ss`, but it can be changed in the plugin settings under `editing engine section > Datetime format` ;
 - **Select**: this property accepts from a list of options you define. Colors are attributed automatically, though you can change them in the column setting. Furthermore, when removing the select option in the setting, it is also removed from the note's metadata ;
 - **Tags**: similar to the previous property, but instead of only selecting one option, you can select multiples options per cell ;
-- **Formulas**: property that accepts js code to return dynamic values in function of your code. See the [Formulas](/docs/features/Formulas) section for more details.
+- **Formulas**: property that accepts js code to return dynamic values in function of your code. See the [Formulas](/obsidian-db-folder/features/Formulas/) section for more details.
 - **Image**: you can embed images in the `text` property in this format `![[image]]`. Make sure to enable `media links` in the column setting and adjust the dimensions too ;
 - **Created time**: this column can be added only once from the database settings and will display the created time of the row ;
 - **Modified time**: this column can be added only once from the database settings and will display the last modified time of the row ;

@@ -5,7 +5,7 @@
 This plugin is a Notion like database based on folders.
 
 - **[Documentation](https://rafaelgb.github.io/obsidian-db-folder/)**
-- **[Roadmap](https://github.com/RafaelGB/obsidian-db-folder/projects/1)**
+- **[Roadmap](https://github.com/users/RafaelGB/projects/7/views/4)**
 - **[changelog](https://rafaelgb.github.io/obsidian-db-folder/changelog/)**
 
 ### How to use?

@@ -2,8 +2,8 @@ import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { InputType, UpdateRowOptions } from "helpers/Constants";
-import { updateRowFileProxy } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
+import { EditEngineService } from "services/EditEngineService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class RemoveOptionForAllRowsAction extends AbstractTableAction<DataState> {
@@ -45,7 +45,7 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
                     default:
                         row[column.id] = "";
                 }
-                updateRowFileProxy(
+                EditEngineService.updateRowFileProxy(
                     rowTFile,
                     column.id,
                     row[column.id] as Literal,

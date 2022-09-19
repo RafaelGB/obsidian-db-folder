@@ -5,6 +5,7 @@ import { PaginationProps } from "cdm/MenuBarModel";
 import React, { useEffect } from "react";
 import { PaginationButtonStyle } from "components/styles/NavBarStyles";
 import { StyleVariables } from "helpers/Constants";
+import Grid from "@mui/material/Grid";
 function PaginationTable(props: PaginationProps) {
   const { table } = props;
   const [page, setPage] = React.useState(1);
@@ -22,8 +23,8 @@ function PaginationTable(props: PaginationProps) {
     <>
       <ButtonGroup
         variant="contained"
-        size="small"
         key={`ButtonGroup-PaginationTable`}
+        fullWidth={false}
       >
         <Button
           size="small"
@@ -53,17 +54,17 @@ function PaginationTable(props: PaginationProps) {
           id="Input-Pagination-number-id"
           size="small"
           key={`Input-Pagination-number`}
-          label={`Page of ${table.getPageCount()}`}
+          label={`Pages: ${table.getPageCount()}`}
           type="number"
           InputLabelProps={{
             shrink: true,
             style: { color: StyleVariables.TEXT_NORMAL },
           }}
-          style={{ width: "100px" }}
           InputProps={{
             inputProps: {
               style: { textAlign: "center" },
             },
+            style: { color: StyleVariables.TEXT_NORMAL, width: 120 },
           }}
           value={page}
           onChange={(e) => {
@@ -99,21 +100,7 @@ function PaginationTable(props: PaginationProps) {
         >
           {">>"}
         </Button>
-        {/*
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
       </ButtonGroup>
-      {/* <div>{table.getRowModel().rows.length} Rows</div> */}
     </>
   );
 }

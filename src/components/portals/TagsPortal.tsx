@@ -61,11 +61,14 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
     color: getColor(tag),
   }));
 
-  const multiOptions = tableColumn.options.map((option: RowSelectOption) => ({
-    value: option.label,
-    label: option.label,
-    color: option.backgroundColor,
-  }));
+  const multiOptions = tableColumn.options
+    .sort((a, b) => a.label.localeCompare(b.label))
+    .map((option: RowSelectOption) => ({
+      value: option.label,
+      label: option.label,
+      color: option.backgroundColor,
+    }));
+
   const handleOnChange = (
     newValue: OnChangeValue<any, true>,
     actionMeta: ActionMeta<RowSelectOption>
@@ -125,15 +128,17 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
               onClick={() => setShowSelectTags(true)}
               style={{ width: column.getSize() }}
             >
-              {tagsState.map((tag: string) => (
-                <div key={`key-${tag}`}>
-                  <Relationship
-                    key={`key-Relationship-${tag}`}
-                    value={tag}
-                    backgroundColor={getColor(tag)}
-                  />
-                </div>
-              ))}
+              {tagsState
+                .sort((a: string, b: string) => a.localeCompare(b))
+                .map((tag: string) => (
+                  <div key={`key-${tag}`}>
+                    <Relationship
+                      key={`key-Relationship-${tag}`}
+                      value={tag}
+                      backgroundColor={getColor(tag)}
+                    />
+                  </div>
+                ))}
             </div>
           )}
     </>

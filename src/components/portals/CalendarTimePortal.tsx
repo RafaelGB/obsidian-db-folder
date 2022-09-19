@@ -42,15 +42,16 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   }
 
   const CalendarContainer = (containerProps: any) => {
-    const el = activeDocument.getElementById(`${view.file.path}-popper`);
-    return <Portal container={el}>{containerProps.children}</Portal>;
+    return (
+      <Portal container={activeDocument.body}>{containerProps.children}</Portal>
+    );
   };
 
   return showDatePicker &&
     (tableColumn.isMetadata === undefined || !tableColumn.isMetadata) ? (
     <div className="calendar-time">
       <DatePicker
-        dateFormat="yyyy-MM-dd h:mm aa"
+        dateFormat={configInfo.getLocalSettings().datetime_format}
         selected={
           DateTime.isDateTime(calendarTimeState)
             ? (calendarTimeState as unknown as DateTime).toJSDate()
@@ -72,7 +73,9 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
     <div onClick={handleSpanOnClick}>
       <span className="calendar-time" style={{ width: column.getSize() }}>
         {DateTime.isDateTime(calendarTimeState)
-          ? (calendarTimeState as DateTime).toFormat("yyyy-MM-dd h:mm a")
+          ? (calendarTimeState as DateTime).toFormat(
+              configInfo.getLocalSettings().datetime_format
+            )
           : null}
       </span>
     </div>

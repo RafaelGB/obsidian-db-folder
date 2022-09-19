@@ -71,6 +71,14 @@ export const MetadataLabels = Object.freeze({
   OUTLINKS: 'Outlinks',
   INLINKS: 'Inlinks',
 });
+/******************************************************************************
+ *                          COLUMN CONFIGURATIONS                             *
+ ******************************************************************************/
+export const COLUMN_ALIGNMENT_OPTIONS = Object.freeze({
+  LEFT: 'text-align-left',
+  CENTER: 'text-align-center',
+  RIGHT: 'text-align-right',
+});
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   enable_media_view: true,
@@ -78,7 +86,7 @@ export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   media_width: 100,
   media_height: 100,
   isInline: false,
-  task_hide_completed: true,
+  task_hide_completed: true
 });
 
 export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
@@ -241,6 +249,8 @@ export const StyleClasses = Object.freeze({
   COLUMN_MODAL_BODY: 'database-column-body',
   ADD_COLUMN_MODAL: 'database-add-column-modal',
   ADD_COLUMN_MODAL_BODY: 'database-add-column-body',
+  FILTERS_MODAL: 'database-filters-modal',
+  FILTERS_MODAL_BODY: 'database-filters-body',
 });
 
 
@@ -286,11 +296,11 @@ export const OperatorFilter = Object.freeze({
   LESS_THAN: ['LESS_THAN', '<'],
   GREATER_THAN_OR_EQUAL: ['GREATER_THAN_OR_EQUAL', '>='],
   LESS_THAN_OR_EQUAL: ['LESS_THAN_OR_EQUAL', '<='],
-  CONTAINS: ['CONTAINS', 'contains'],
-  STARTS_WITH: ['STARTS_WITH', 'starts with'],
-  ENDS_WITH: ['ENDS_WITH', 'ends with'],
-  IS_EMPTY: ['IS_EMPTY', 'is empty'],
-  IS_NOT_EMPTY: ['IS_NOT_EMPTY', 'is not empty'],
+  CONTAINS: ['CONTAINS', 'operator_contains'],
+  STARTS_WITH: ['STARTS_WITH', 'operator_starts_with'],
+  ENDS_WITH: ['ENDS_WITH', 'operator_ends_with'],
+  IS_EMPTY: ['IS_EMPTY', 'operator_is_empty'],
+  IS_NOT_EMPTY: ['IS_NOT_EMPTY', 'operator_is_not_empty'],
 });
 
 export function getOperatorFilterValue(keyToFind: string): string {
@@ -323,6 +333,11 @@ export const YAML_INDENT = Object.freeze("  ");
 /******************************************************************************
  *                          SETTINGS CONSTANTS
  ******************************************************************************/
+export const INLINE_POSITION = Object.freeze({
+  TOP: 'top',
+  BOTTOM: 'bottom',
+});
+
 export const DEFAULT_SETTINGS: DatabaseSettings = {
   global_settings: {
     enable_debug_mode: false,
@@ -354,6 +369,10 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     current_row_template: '',
     pagination_size: 10,
     formula_folder_path: '/',
+    inline_default: false,
+    inline_new_position: INLINE_POSITION.TOP,
+    date_format: 'yyyy-MM-dd',
+    datetime_format: 'yyyy-MM-dd HH:mm:ss',
   }
 };
 /******************************************************************************

@@ -1,7 +1,7 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, { useEffect, useRef } from "react";
 
 const FormulaCell = (mdProps: CellComponentProps) => {
@@ -11,7 +11,9 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const tableColumn = column.columnDef as TableColumn;
   const formulaRef = useRef<HTMLDivElement>();
   const formulaRow = tableState.data((state) => state.rows[row.index]);
+  const dataActions = tableState.data((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
+  const columnsInfo = tableState.columns((state) => state.info);
   const formulaInfo = tableState.automations((state) => state.info);
 
   useEffect(() => {
@@ -25,12 +27,28 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         )
         .toString();
       renderMarkdown(defaultCell, formulaResponse, formulaRef.current, 5);
+
+      // Save formula response on disk
+      if (
+        tableColumn.config.persist_formula &&
+        formulaRow[column.id] !== formulaResponse
+      ) {
+        dataActions.updateCell(
+          row.index,
+          tableColumn,
+          formulaResponse,
+          columnsInfo.getAllColumns(),
+          configInfo.getLocalSettings()
+        );
+      }
     }
   }, [row]);
   return (
     <span
       ref={formulaRef}
-      className={`${c("md_cell")}`}
+      className={`${c(
+        "md_cell " + getAlignmentClassname(tableColumn.config.content_alignment)
+      )}`}
       key={`formula_${cell.id}`}
     />
   );

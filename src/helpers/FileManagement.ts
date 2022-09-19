@@ -2,7 +2,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
 import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
-import { SourceDataTypes } from "helpers/Constants";
+import { INLINE_POSITION, SourceDataTypes } from "helpers/Constants";
 
 export function resolve_tfile(file_str: string): TFile {
     file_str = normalizePath(file_str);
@@ -68,4 +68,16 @@ export function destination_folder(view: DatabaseView, ddbbConfig: LocalSettings
         //Current folder
     }
     return destination_folder;
+}
+
+export function inline_regex_target_in_function_of(position: string, columnId: string, newValue: string, contentHasFrontmatter: boolean) {
+    let regex_target = "";
+    switch (position) {
+        case INLINE_POSITION.BOTTOM:
+            regex_target = contentHasFrontmatter ? `$1$2\n${columnId}:: ${newValue}` : `$1\n${columnId}:: ${newValue}`;
+            break;
+        default:
+            regex_target = contentHasFrontmatter ? `$1\n${columnId}:: ${newValue}$2` : `${columnId}:: ${newValue}\n$1`;
+    }
+    return regex_target;
 }
