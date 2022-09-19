@@ -8,7 +8,8 @@
 .database-plugin:before,
 .database-plugin:after {
   box-sizing: inherit;
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .database-plugin {
@@ -386,6 +387,7 @@ div.database-plugin__checkbox {
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
   height: 1px; /** Hack to prevent collapsing of table cells */
+  overflow: scroll;
 }
 
 .database-plugin__th:last-child {
@@ -414,13 +416,17 @@ div.database-plugin__checkbox {
 .database-plugin__sticky-level-1 {
   position: sticky;
   top: 0;
+  z-index: 2;
+}
+.database-plugin__sticky-level-1:first-child {
   left: 0;
+  position: sticky;
   z-index: 2;
 }
 .database-plugin__sticky-level-2 {
   position: sticky;
   top: 4rem;
-  z-index: 2;
+  z-index: 3;
 }
 
 .database-plugin__table-header-group {

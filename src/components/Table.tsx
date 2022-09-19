@@ -42,7 +42,6 @@ import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "./reducers/CustomSortingFn";
-import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 
@@ -287,25 +286,15 @@ export function Table(tableData: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
-      <div
-        key={`div-table-navbar`}
-        className={`${c("table sticky-level-1")}`}
-        style={{
-          width: table.getCenterTotalSize(),
+      <HeaderNavBar
+        key={`div-header-navbar`}
+        table={table}
+        globalFilterRows={{
+          globalFilter: globalFilter,
+          hits: table.getFilteredRowModel().rows.length,
+          setGlobalFilter: setGlobalFilter,
         }}
-      >
-        {/* INIT NAVBAR */}
-        <HeaderNavBar
-          key={`div-header-navbar`}
-          table={table}
-          globalFilterRows={{
-            globalFilter: globalFilter,
-            hits: table.getFilteredRowModel().rows.length,
-            setGlobalFilter: setGlobalFilter,
-          }}
-        />
-        {/* ENDS NAVBAR */}
-      </div>
+      />
       {/* INIT TABLE */}
       <div
         key={`div-table`}
@@ -408,7 +397,7 @@ export function Table(tableData: TableDataType) {
         {/* ENDS TABLE */}
       </div>
       {/* INIT NEW ROW */}
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1 }} className={`${c("add-row")}`}>
         <Toolbar>
           <input
             type="text"

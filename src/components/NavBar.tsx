@@ -5,7 +5,6 @@ import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import PaginationTable from "components/navbar/PaginationTable";
 import { InputType, NavBarConfig, StyleVariables } from "helpers/Constants";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
@@ -20,7 +19,6 @@ import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { SettingsModal } from "Settings";
 import CsvReader from "./navbar/CsvReader";
 import { t } from "lang/helpers";
-import Grid from "@mui/material/Grid";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -59,107 +57,86 @@ export function NavBar(navBarProps: NavBarProps) {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        position="static"
-        style={{
-          color: StyleVariables.TEXT_MUTED,
-          backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
-          width: "calc(100% - 20px)",
-          boxShadow: "none",
-          position: "fixed",
-          left: 0,
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            sx={{ mr: 2 }}
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label={t("toolbar_menu_aria_label")}
-            id="long-button"
-            aria-controls={open ? "long-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleMenuClose}
-            PaperProps={{
-              style: {
-                maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
-              },
-            }}
-            MenuListProps={{
-              "aria-labelledby": "long-button",
-              style: {
-                backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
-                color: StyleVariables.TEXT_NORMAL,
-              },
-            }}
-          >
-            <MenuItem onClick={handleSettingsClick} disableRipple>
-              <SettingsIcon {...MenuButtonStyle} />
-              {t("menu_pane_open_db_settings_action")}
-            </MenuItem>
-            <MenuItem onClick={handleOpenAsMarkdownClick} disableRipple>
-              <InsertDriveFileIcon {...MenuButtonStyle} />
-              {t("menu_pane_open_as_md_action")}
-            </MenuItem>
-            <MenuItem disableRipple>
-              {/* CSV buttton download */}
-              <CsvWriter
-                columns={columnsInfo.getAllColumns()}
-                rows={table.getRowModel().rows}
-                name={view.diskConfig.yaml.name}
-              />
-            </MenuItem>
-            <CsvReader {...navBarProps} />
-          </Menu>
-          {/** Global filter */}
-          <GlobalFilter {...navBarProps.globalFilterRows} />
-          <Box
-            justifyContent={"flex-start"}
-            sx={{
-              display: { xs: "none", md: "flex" },
-            }}
-          >
-            <DataviewFilters table={table} />
-            <PaginationTable table={table} />
-          </Box>
-        </Toolbar>
-      </AppBar>
-      {/** Hacky to stick the bar without move one row before the header*/}
-      <Toolbar
-        style={{
-          opacity: 0,
-          pointerEvents: "none",
-        }}
-      />
+    <Box
+      sx={{ flexGrow: 1 }}
+      style={{
+        color: StyleVariables.TEXT_MUTED,
+        backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+        width: table.getCenterTotalSize(),
+      }}
+    >
+      <Toolbar>
+        <IconButton
+          sx={{ mr: 2 }}
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label={t("toolbar_menu_aria_label")}
+          id="long-button"
+          aria-controls={open ? "long-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleMenuClose}
+          PaperProps={{
+            style: {
+              maxHeight: NavBarConfig.ITEM_HEIGHT * 4.5,
+            },
+          }}
+          MenuListProps={{
+            "aria-labelledby": "long-button",
+            style: {
+              backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+              color: StyleVariables.TEXT_NORMAL,
+            },
+          }}
+        >
+          <MenuItem onClick={handleSettingsClick} disableRipple>
+            <SettingsIcon {...MenuButtonStyle} />
+            {t("menu_pane_open_db_settings_action")}
+          </MenuItem>
+          <MenuItem onClick={handleOpenAsMarkdownClick} disableRipple>
+            <InsertDriveFileIcon {...MenuButtonStyle} />
+            {t("menu_pane_open_as_md_action")}
+          </MenuItem>
+          <MenuItem disableRipple>
+            {/* CSV buttton download */}
+            <CsvWriter
+              columns={columnsInfo.getAllColumns()}
+              rows={table.getRowModel().rows}
+              name={view.diskConfig.yaml.name}
+            />
+          </MenuItem>
+          <CsvReader {...navBarProps} />
+        </Menu>
+        {/** Global filter */}
+        <GlobalFilter {...navBarProps.globalFilterRows} />
+        <Box
+          justifyContent={"flex-start"}
+          sx={{
+            display: { xs: "none", md: "flex" },
+          }}
+        >
+          <DataviewFilters table={table} />
+          <PaginationTable table={table} />
+        </Box>
+      </Toolbar>
     </Box>
   );
 }
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {
-  const { table } = headerNavBarProps;
   return (
     <div
-      key={`div-navbar-header-row`}
-      className={`${c("tr sticky-level-1")}`}
-      style={{
-        width: table.getCenterTotalSize(),
-      }}
+      className={`${c("navbar sticky-level-1")}`}
+      key="div-navbar-header-cell"
     >
-      <div
-        className={`${c("th navbar sticky-level-1")}`}
-        key="div-navbar-header-cell"
-      >
-        <NavBar {...headerNavBarProps} />
-      </div>
+      <NavBar {...headerNavBarProps} />
     </div>
   );
 }
