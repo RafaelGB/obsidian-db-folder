@@ -397,6 +397,7 @@ export function Table(tableData: TableDataType) {
         {/* ENDS TABLE */}
       </div>
       {/* INIT NEW ROW */}
+
       <Box sx={{ flexGrow: 1 }} className={`${c("add-row")}`}>
         <Toolbar>
           <input
