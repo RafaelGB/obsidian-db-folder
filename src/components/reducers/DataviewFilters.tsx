@@ -5,9 +5,7 @@ import { obtainColumnsFromRows } from "components/Columns";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
 import MenuDownIcon from "components/img/MenuDownIcon";
-import MenuUpIcon from "components/img/MenuUpIcon";
 import { FiltersModal } from "components/modals/filters/FiltersModal";
-import DataviewFiltersPortal from "components/portals/DataviewFiltersPortal";
 import React from "react";
 
 export default function DataviewFilters(props: DataviewFiltersProps) {
@@ -80,7 +78,7 @@ export default function DataviewFilters(props: DataviewFiltersProps) {
           key={`Span-FilterConditions-Ref-Portal`}
         >
           <div key={`Div-FilterConditions-Ref-Portal`}>
-            <MenuUpIcon />
+            <MenuDownIcon />
           </div>
         </span>
       </Button>
