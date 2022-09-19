@@ -298,28 +298,20 @@ div.database-plugin__checkbox {
   color: var(--text-accent);
   padding: 0.5rem;
   align-items: center;
-  font-size: 0.875rem;
   cursor: pointer;
   bottom: 0;
   z-index: 3;
-  opacity: 0.8;
   position: sticky;
   left: 0;
   background-color: var(--background-primary);
+  margin-top: 0 !important;
+  margin-left: 0 !important;
 }
 
 .database-plugin__add-row .svg-icon:hover {
   background-color: var(--background-secondary);
   color: var(--text-accent-hover);
   padding: 0.3rem;
-}
-
-.database-plugin__add-row .database-plugin__td {
-  border: none;
-  background-color: transparent;
-  color: var(--text-muted);
-  display: inline-flex;
-  vertical-align: middle;
 }
 
 .database-plugin__th {

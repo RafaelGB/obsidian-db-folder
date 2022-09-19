@@ -42,6 +42,7 @@ import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "./reducers/CustomSortingFn";
+import Grid from "@mui/material/Grid";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -405,8 +406,13 @@ export function Table(tableData: TableDataType) {
         {/* ENDS TABLE */}
       </div>
       {/* INIT NEW ROW */}
-      <div key={`div-add-row`} className={`${c("tr add-row")}`}>
-        <div key={`div-add-row-cell`} className={`${c("td")}`}>
+      <Grid
+        container
+        spacing={3}
+        className={`${c("add-row")}`}
+        key={`div-add-row`}
+      >
+        <Grid item xs={2.5} key={`div-add-row-cell`}>
           <input
             type="text"
             ref={newRowRef}
@@ -416,20 +422,18 @@ export function Table(tableData: TableDataType) {
             onKeyDown={handleKeyDown}
             placeholder="filename of new row"
           />
-        </div>
-        <div
+        </Grid>
+        <Grid
+          item
+          xs={0.5}
           key={`div-add-row-cell-button`}
-          className={`${c("td")}`}
           onClick={handleAddNewRow}
         >
-          <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
+          <span className="svg-icon svg-gray">
             <PlusIcon />
           </span>
-        </div>
-        <div
-          key={`div-add-row-cell-padding-left`}
-          className={`${c("td padding-left-05")}`}
-        >
+        </Grid>
+        <Grid item xs={5} key={`div-add-row-cell-padding-left`}>
           <Select
             styles={CustomTemplateSelectorStyles}
             options={templateOptions}
@@ -450,9 +454,9 @@ export function Table(tableData: TableDataType) {
             isSearchable
             menuPlacement="top"
           />
-        </div>
+        </Grid>
         {/* ENDS NEW ROW */}
-      </div>
+      </Grid>
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
         <pre>
