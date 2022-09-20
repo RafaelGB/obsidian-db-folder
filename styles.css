@@ -82,7 +82,7 @@
 }
 
 div.database-plugin__td.data-input:hover {
-  background-color: var(--text-accent-hover);
+  box-shadow: 0 0 1px 2px var(--text-accent-hover);
 }
 
 .data-input {

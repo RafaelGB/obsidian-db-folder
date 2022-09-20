@@ -119,8 +119,16 @@ export function NavBar(navBarProps: NavBarProps) {
 
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
-          <DataviewFilters table={table} />
-          <PaginationTable table={table} />
+          <Box
+            justifyContent={"flex-start"}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+            }}
+          >
+            <DataviewFilters table={table} />
+            <PaginationTable table={table} />
+          </Box>
         </Toolbar>
       </AppBar>
       {renderMenu}
