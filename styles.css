@@ -306,6 +306,18 @@ div.database-plugin__checkbox {
   padding: 0.3rem;
 }
 
+.database-plugin__add-row-input {
+  height: 30px;
+  max-height: 30px;
+  border: 0 !important;
+}
+
+.database-plugin__add-row-input:focus {
+  outline: none;
+  border: 0 !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
 .database-plugin__th {
   color: var(--text-faint);
   font-weight: 500;

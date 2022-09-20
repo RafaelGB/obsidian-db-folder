@@ -108,14 +108,10 @@ export function AddRow(props: AddRowProps) {
           <input
             type="text"
             value={inputNewRow}
+            className={`${c("add-row-input")}`}
             autoFocus
             onChange={(e) => {
               setInputNewRow(e.target.value);
-            }}
-            style={{
-              height: "30px",
-              maxHeight: "30px",
-              border: "none",
             }}
             onKeyDown={handleKeyDown}
             placeholder="filename of new row"
