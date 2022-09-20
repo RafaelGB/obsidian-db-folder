@@ -63,8 +63,3 @@ export const MenuButtonStyle = {
         color: StyleVariables.TEXT_ACCENT_HOVER,
     }
 }
-
-
-export const ToolBarMenuButtonStyle = {
-    mr: 2
-}

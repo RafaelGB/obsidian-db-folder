@@ -438,7 +438,6 @@ div.database-plugin__checkbox {
 
 .database-plugin__navbar {
   flex: 1 0 auto;
-  background-color: var(--background-secondary);
 }
 
 .database-plugin__padding-left-05 {
