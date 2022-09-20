@@ -15,6 +15,8 @@ const rowContextMenuColumn: TableColumn = {
   config: DEFAULT_COLUMN_CONFIG,
   position: 0,
   header: () => null,
+  width: 30,
+  maxSize: 30,
   cell: ({ row, table }) => {
     const { tableState } = table.options.meta;
     const rowActions = tableState.data((state) => state.actions);

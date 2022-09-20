@@ -8,8 +8,8 @@ import Select, { OnChangeValue } from "react-select";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
-import Input from "@mui/material/Input";
 import { StyleVariables } from "helpers/Constants";
+import Divider from "@mui/material/Divider";
 
 export function AddRow(props: AddRowProps) {
   const { table } = props;
@@ -62,12 +62,13 @@ export function AddRow(props: AddRowProps) {
   };
   return (
     <ButtonGroup
-      variant="outlined"
-      aria-label="Add new row"
+      variant="text"
       className={`${c("add-row")}`}
       size="small"
       sx={{
         padding: 0.5,
+        bordercolor: StyleVariables.TEXT_NORMAL,
+        border: 0.5,
       }}
     >
       <Button
@@ -80,27 +81,43 @@ export function AddRow(props: AddRowProps) {
           ":hover": {
             bgcolor: StyleVariables.BACKGROUND_SECONDARY,
             color: StyleVariables.TEXT_NORMAL,
+            border: 0,
           },
+          height: "30px",
+          maxHeight: "30px",
+          border: 0,
         }}
       >
-        <span className="svg-icon svg-gray">
-          {showNewRow ? <CloseIcon /> : <AddIcon />}
-        </span>
+        {showNewRow ? (
+          <CloseIcon />
+        ) : (
+          <AddIcon
+            style={{
+              border: 0,
+            }}
+          />
+        )}
       </Button>
       {/* INIT NEW ROW */}
       {showNewRow && (
         <>
-          <Input
+          <Divider orientation="vertical" flexItem />
+          <input
             type="text"
             value={inputNewRow}
-            size="small"
             autoFocus
             onChange={(e) => {
               setInputNewRow(e.target.value);
             }}
+            style={{
+              height: "30px",
+              maxHeight: "30px",
+              border: "none",
+            }}
             onKeyDown={handleKeyDown}
             placeholder="filename of new row"
           />
+          <Divider orientation="vertical" flexItem />
           <Select
             styles={CustomTemplateSelectorStyles}
             options={templateOptions}
