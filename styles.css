@@ -81,12 +81,8 @@
   width: 100%;
 }
 
-.database-plugin__tr .data-input {
-  background-color: var(--background-primary);
-}
-
-.database-plugin__tr-hovered .data-input {
-  background-color: var(--background-secondary);
+.database-plugin__tr.data-input:hover {
+  background-color: var(--text-accent-hover);
 }
 
 .data-input {
@@ -578,10 +574,6 @@ div.database-plugin__checkbox {
 /* row context menu shows an icon to the left of the first cell translucent*/
 .database-plugin__row-context-menu {
   padding: 0;
-}
-
-.database-plugin__tr-hovered {
-  background-color: var(--background-secondary);
 }
 
 /**
