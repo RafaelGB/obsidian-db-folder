@@ -73,7 +73,10 @@ export function AddRow(props: AddRowProps) {
     >
       <Button
         key={`div-add-row-cell-button`}
-        onClick={() => setShowNewRow(!showNewRow)}
+        onClick={() => {
+          setInputNewRow("");
+          setShowNewRow(!showNewRow);
+        }}
         size="small"
         sx={{
           bgcolor: StyleVariables.BACKGROUND_PRIMARY,
