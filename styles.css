@@ -291,17 +291,13 @@ div.database-plugin__checkbox {
 
 .database-plugin__add-row {
   color: var(--text-accent);
-  padding: 0.5rem;
   align-items: center;
   cursor: pointer;
   bottom: 0;
-  opacity: 0.8;
   z-index: 3;
   position: sticky;
   left: 0;
   background-color: var(--background-primary);
-  margin-top: 0 !important;
-  margin-left: 0 !important;
 }
 
 .database-plugin__add-row .svg-icon:hover {

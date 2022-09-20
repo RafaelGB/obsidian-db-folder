@@ -3,7 +3,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { RowTemplateOption } from "cdm/FolderModel";
 import { AddRowProps } from "cdm/MenuBarModel";
 import { c } from "helpers/StylesHelper";
-import React, { KeyboardEventHandler, useRef, useState } from "react";
+import React, { KeyboardEventHandler, useState } from "react";
 import Select, { OnChangeValue } from "react-select";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
 import ButtonGroup from "@mui/material/ButtonGroup";
