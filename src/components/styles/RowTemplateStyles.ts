@@ -21,6 +21,13 @@ const CustomTemplateSelectorStyles: StylesConfig<any, true, GroupBase<any>> = {
             backgroundColor: 'var(--background-primary)',
             textAlign: 'left',
         }
+    },
+    menu: (styles) => {
+        return {
+            ...styles,
+            width: "max-content",
+            minWidth: "100%"
+        }
     }
 }
 

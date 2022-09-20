@@ -1,12 +1,15 @@
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 import { RowTemplateOption } from "cdm/FolderModel";
 import { AddRowProps } from "cdm/MenuBarModel";
 import { c } from "helpers/StylesHelper";
 import React, { KeyboardEventHandler, useRef, useState } from "react";
 import Select, { OnChangeValue } from "react-select";
-import PlusIcon from "components/img/Plus";
 import CustomTemplateSelectorStyles from "components/styles/RowTemplateStyles";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
+import Input from "@mui/material/Input";
+import { StyleVariables } from "helpers/Constants";
 
 export function AddRow(props: AddRowProps) {
   const { table } = props;
@@ -19,23 +22,33 @@ export function AddRow(props: AddRowProps) {
   const [templateRow, templateOptions, templateUpdate] = tableState.rowTemplate(
     (store) => [store.template, store.options, store.update]
   );
-  // Manage input of new row
+  const [showNewRow, setShowNewRow] = useState(false);
+
   const [inputNewRow, setInputNewRow] = useState("");
-  const newRowRef = useRef(null);
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === "Enter") {
-      handleAddNewRow();
+    switch (event.key) {
+      case "Enter":
+        handleAddNewRow();
+        break;
+      case "Escape":
+        setShowNewRow(false);
+        setInputNewRow("");
+        break;
+      default:
+      // Do nothing
     }
   };
 
   function handleAddNewRow() {
-    dataActions.addRow(
-      inputNewRow,
-      columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings()
-    );
-    setInputNewRow("");
-    newRowRef.current.value = "";
+    dataActions
+      .addRow(
+        inputNewRow,
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings()
+      )
+      .then(() => {
+        setInputNewRow("");
+      });
   }
 
   const handleChangeRowTemplate = (
@@ -48,29 +61,46 @@ export function AddRow(props: AddRowProps) {
     });
   };
   return (
-    <Box sx={{ flexGrow: 1 }} className={`${c("add-row")}`}>
+    <ButtonGroup
+      variant="outlined"
+      aria-label="Add new row"
+      className={`${c("add-row")}`}
+      size="small"
+      sx={{
+        padding: 0.5,
+      }}
+    >
+      <Button
+        key={`div-add-row-cell-button`}
+        onClick={() => setShowNewRow(!showNewRow)}
+        size="small"
+        sx={{
+          bgcolor: StyleVariables.BACKGROUND_PRIMARY,
+          color: StyleVariables.TEXT_NORMAL,
+          ":hover": {
+            bgcolor: StyleVariables.BACKGROUND_SECONDARY,
+            color: StyleVariables.TEXT_NORMAL,
+          },
+        }}
+      >
+        <span className="svg-icon svg-gray">
+          {showNewRow ? <CloseIcon /> : <AddIcon />}
+        </span>
+      </Button>
       {/* INIT NEW ROW */}
-      <Toolbar>
-        <input
-          type="text"
-          ref={newRowRef}
-          onChange={(e) => {
-            setInputNewRow(e.target.value);
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder="filename of new row"
-        />
-        <div key={`div-add-row-cell-button`} onClick={handleAddNewRow}>
-          <span className="svg-icon svg-gray">
-            <PlusIcon />
-          </span>
-        </div>
-        <Box
-          justifyContent={"flex-start"}
-          sx={{
-            display: { xs: "none", md: "flex" },
-          }}
-        >
+      {showNewRow && (
+        <>
+          <Input
+            type="text"
+            value={inputNewRow}
+            size="small"
+            autoFocus
+            onChange={(e) => {
+              setInputNewRow(e.target.value);
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder="filename of new row"
+          />
           <Select
             styles={CustomTemplateSelectorStyles}
             options={templateOptions}
@@ -85,15 +115,15 @@ export function AddRow(props: AddRowProps) {
             isClearable={true}
             isMulti={false}
             onChange={handleChangeRowTemplate}
-            placeholder={"Without template. Select one to use..."}
+            placeholder={"Select template..."}
             menuPortalTarget={document.body}
             menuShouldBlockScroll={true}
             isSearchable
             menuPlacement="top"
           />
-        </Box>
-      </Toolbar>
-      {/* ENDS NEW ROW */}
-    </Box>
+          {/* ENDS NEW ROW */}
+        </>
+      )}
+    </ButtonGroup>
   );
 }
