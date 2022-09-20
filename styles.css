@@ -81,12 +81,8 @@
   width: 100%;
 }
 
-.database-plugin__tr .data-input {
-  background-color: var(--background-primary);
-}
-
-.database-plugin__tr-hovered .data-input {
-  background-color: var(--background-secondary);
+div.database-plugin__td.data-input:hover {
+  background-color: var(--text-accent-hover);
 }
 
 .data-input {
@@ -285,29 +281,23 @@ div.database-plugin__checkbox {
   padding: 0;
 }
 
-.database-plugin__tr,
-.database-plugin__tr-hovered {
+.database-plugin__tr {
   display: table-row;
 }
 
-.database-plugin__tr:last-child .database-plugin__td,
-.database-plugin__tr-hovered:last-child .database-plugin__td {
+.database-plugin__tr:last-child .database-plugin__td {
   border-bottom: 0;
 }
 
 .database-plugin__add-row {
   color: var(--text-accent);
-  padding: 0.5rem;
   align-items: center;
   cursor: pointer;
   bottom: 0;
-  opacity: 0.8;
   z-index: 3;
   position: sticky;
   left: 0;
   background-color: var(--background-primary);
-  margin-top: 0 !important;
-  margin-left: 0 !important;
 }
 
 .database-plugin__add-row .svg-icon:hover {
@@ -578,10 +568,7 @@ div.database-plugin__checkbox {
 /* row context menu shows an icon to the left of the first cell translucent*/
 .database-plugin__row-context-menu {
   padding: 0;
-}
-
-.database-plugin__tr-hovered {
-  background-color: var(--background-secondary);
+  background-color: var(--background-primary);
 }
 
 /**

@@ -1,13 +1,13 @@
-import IconButton from "@mui/material/IconButton";
 import { TableColumn } from "cdm/FolderModel";
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import {
   DEFAULT_COLUMN_CONFIG,
   InputType,
   MetadataDatabaseColumns,
+  StyleVariables,
 } from "helpers/Constants";
 import React from "react";
 import { showFileMenu } from "components/obsidianArq/commands";
+import Relationship from "components/RelationShip";
 
 const rowContextMenuColumn: TableColumn = {
   ...MetadataDatabaseColumns.ROW_CONTEXT_MENU,
@@ -15,6 +15,8 @@ const rowContextMenuColumn: TableColumn = {
   config: DEFAULT_COLUMN_CONFIG,
   position: 0,
   header: () => null,
+  width: 30,
+  maxSize: 30,
   cell: ({ row, table }) => {
     const { tableState } = table.options.meta;
     const rowActions = tableState.data((state) => state.actions);
@@ -34,24 +36,23 @@ const rowContextMenuColumn: TableColumn = {
         handleRenameRow
       );
     };
-
+    const index = Number(row.index) + 1;
     return (
       <>
-        <IconButton
-          size="small"
-          edge="start"
-          color="inherit"
-          aria-label="Open row context menu"
-          id={`row-context-button-${row.id}`}
-          aria-controls={open ? `row-context-button-${row.id}` : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          sx={{ border: 0, borderRadius: 0 }}
+        <div
           onClick={handleClick}
-          key={`row-context-button-${row.id}`}
+          key={`row-context-button-${index}`}
+          style={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
-          <DragIndicatorIcon />
-        </IconButton>
+          <Relationship
+            value={index}
+            backgroundColor={StyleVariables.BACKGROUND_PRIMARY}
+          />
+        </div>
       </>
     );
   },
