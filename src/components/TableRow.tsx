@@ -13,7 +13,13 @@ export default function TableRow(headerProps: TableCellProps) {
       ? StyleVariables.BACKGROUND_PRIMARY
       : StyleVariables.BACKGROUND_SECONDARY;
   return (
-    <div key={`cell-tr-${row.id}`} className={`${c("tr")}`}>
+    <div
+      key={`cell-tr-${row.id}`}
+      className={`${c("tr")}`}
+      style={{
+        backgroundColor: backgroundColor,
+      }}
+    >
       {row
         .getVisibleCells()
         .map((cell: Cell<RowDataType, Literal>, cellIndex: number) => {
@@ -23,9 +29,6 @@ export default function TableRow(headerProps: TableCellProps) {
               className={`${c(
                 "td" + (cellIndex === 0 ? " row-context-menu" : "")
               )} data-input`}
-              style={{
-                backgroundColor: backgroundColor,
-              }}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </div>

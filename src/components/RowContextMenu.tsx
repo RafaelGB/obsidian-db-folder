@@ -44,20 +44,11 @@ const rowContextMenuColumn: TableColumn = {
             alignItems: "center",
             display: "flex",
             justifyContent: "center",
-            opacity: 1,
-            background:
-              index % 2
-                ? StyleVariables.BACKGROUND_PRIMARY
-                : StyleVariables.BACKGROUND_SECONDARY,
           }}
         >
           <Relationship
             value={index}
-            backgroundColor={
-              index % 2
-                ? StyleVariables.BACKGROUND_SECONDARY
-                : StyleVariables.BACKGROUND_PRIMARY
-            }
+            backgroundColor={StyleVariables.BACKGROUND_PRIMARY}
           />
         </div>
       </>

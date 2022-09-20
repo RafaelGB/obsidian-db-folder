@@ -81,7 +81,7 @@
   width: 100%;
 }
 
-.database-plugin__tr.data-input:hover {
+div.database-plugin__td.data-input:hover {
   background-color: var(--text-accent-hover);
 }
 
@@ -281,13 +281,11 @@ div.database-plugin__checkbox {
   padding: 0;
 }
 
-.database-plugin__tr,
-.database-plugin__tr-hovered {
+.database-plugin__tr {
   display: table-row;
 }
 
-.database-plugin__tr:last-child .database-plugin__td,
-.database-plugin__tr-hovered:last-child .database-plugin__td {
+.database-plugin__tr:last-child .database-plugin__td {
   border-bottom: 0;
 }
 
@@ -574,6 +572,7 @@ div.database-plugin__checkbox {
 /* row context menu shows an icon to the left of the first cell translucent*/
 .database-plugin__row-context-menu {
   padding: 0;
+  background-color: var(--background-primary);
 }
 
 /**
