@@ -14,12 +14,14 @@ import MenuItem from "@mui/material/MenuItem";
 
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
-import DataviewFilters from "components/reducers/DataviewFilters";
+import EditFiltersButton from "components/reducers/DataviewFilters";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { SettingsModal } from "Settings";
 import CsvReader from "./navbar/CsvReader";
 import { t } from "lang/helpers";
 import AppBar from "@mui/material/AppBar";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import ToggleFiltersButton from "./reducers/ToggleFiltersButton";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -126,8 +128,15 @@ export function NavBar(navBarProps: NavBarProps) {
               alignItems: "center",
             }}
           >
-            <DataviewFilters table={table} />
-            <PaginationTable table={table} />
+            <ButtonGroup
+              variant="outlined"
+              size="small"
+              key={`ButtonGroup-DataviewFilters`}
+            >
+              <ToggleFiltersButton table={table} />
+              <EditFiltersButton table={table} />
+              <PaginationTable table={table} />
+            </ButtonGroup>
           </Box>
         </Toolbar>
       </AppBar>

@@ -1,33 +1,20 @@
-import { Button, ButtonGroup } from "@mui/material";
+import { Button } from "@mui/material";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
-import FilterOffIcon from "components/img/FilterOffIcon";
-import FilterOnIcon from "components/img/FilterOnIcon";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import { FiltersModal } from "components/modals/filters/FiltersModal";
 import React from "react";
 
-export default function DataviewFilters(props: DataviewFiltersProps) {
+export default function EditFiltersButton(props: DataviewFiltersProps) {
   const { table } = props;
   const { tableState, view } = table.options.meta;
-  const [configInfo, filters, filterActions] = tableState.configState(
-    (state) => [state.info, state.filters, state.actions]
-  );
+  const [configInfo, filters] = tableState.configState((state) => [
+    state.info,
+    state.filters,
+    state.actions,
+  ]);
   const columns = tableState.columns((state) => state.columns);
-  const dataActions = tableState.data((state) => state.actions);
-
-  const enableFilterHandler = () => {
-    // Invert the filter state
-    const alteredFilterState = { ...filters };
-    alteredFilterState.enabled = !alteredFilterState.enabled;
-    filterActions.alterFilters(alteredFilterState);
-    dataActions.dataviewRefresh(
-      columns,
-      configInfo.getLocalSettings(),
-      alteredFilterState
-    );
-  };
 
   const openFiltersGroupHandler = () => {
     new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
@@ -53,35 +40,20 @@ export default function DataviewFilters(props: DataviewFiltersProps) {
   };
 
   return (
-    <ButtonGroup
-      variant="text"
+    <Button
       size="small"
-      key={`ButtonGroup-DataviewFilters`}
+      onClick={openFiltersGroupHandler}
+      key={`Button-FilterConditions-DataviewFilters`}
     >
-      <Button
-        size="small"
-        onClick={enableFilterHandler}
-        key={`Button-Enabled-DataviewFilters`}
+      <span
+        className="svg-icon svg-gray"
+        style={{ marginRight: 8 }}
+        key={`Span-FilterConditions-Ref-Portal`}
       >
-        <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
-          {filters.enabled ? <FilterOnIcon /> : <FilterOffIcon />}
-        </span>
-      </Button>
-      <Button
-        size="small"
-        onClick={openFiltersGroupHandler}
-        key={`Button-FilterConditions-DataviewFilters`}
-      >
-        <span
-          className="svg-icon svg-gray"
-          style={{ marginRight: 8 }}
-          key={`Span-FilterConditions-Ref-Portal`}
-        >
-          <div key={`Div-FilterConditions-Ref-Portal`}>
-            <MenuDownIcon />
-          </div>
-        </span>
-      </Button>
-    </ButtonGroup>
+        <div key={`Div-FilterConditions-Ref-Portal`}>
+          <MenuDownIcon />
+        </div>
+      </span>
+    </Button>
   );
 }
