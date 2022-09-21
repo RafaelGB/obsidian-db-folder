@@ -342,16 +342,9 @@ export function Table(tableData: TableDataType) {
             display: "table-row-group",
           }}
         >
-          {table
-            .getRowModel()
-            .rows.map((row: Row<RowDataType>, rowIndex: number) => (
-              <TableRow
-                key={`table-cell-${rowIndex}`}
-                row={row}
-                rowIndex={rowIndex}
-                tableStore={tableStore}
-              />
-            ))}
+          {table.getRowModel().rows.map((row: Row<RowDataType>) => (
+            <TableRow key={`table-cell-${row.index}`} row={row} table={table} />
+          ))}
           {/* ENDS BODY */}
         </div>
         {/* ENDS TABLE */}

@@ -7,9 +7,9 @@ import { Literal } from "obsidian-dataview";
 import React from "react";
 
 export default function TableRow(headerProps: TableCellProps) {
-  const { row } = headerProps;
+  const { row, table } = headerProps;
   const backgroundColor =
-    (Number(row.index) + 1) % 2
+    (table.getRowModel().flatRows.indexOf(row) + 1) % 2
       ? StyleVariables.BACKGROUND_PRIMARY
       : StyleVariables.BACKGROUND_SECONDARY;
   return (
