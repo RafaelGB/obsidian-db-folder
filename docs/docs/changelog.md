@@ -1,3 +1,5 @@
+## 2.6.6
+- Hotfix of add row bottom position and min height of navbar
 ## 2.6.5
 ### Shiny new things
 - new UX for the "Add a new page" and navigation menus [ISSUE#410](https://github.com/RafaelGB/obsidian-db-folder/issues/410) [Inspired by javiavid design](https://github.com/javiavid)

@@ -296,6 +296,7 @@ div.database-plugin__checkbox {
   z-index: 3;
   position: fixed;
   margin-top: 2.65rem;
+  bottom: 0;
   background-color: var(--background-primary);
 }
 
