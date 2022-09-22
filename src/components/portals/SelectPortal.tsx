@@ -52,7 +52,8 @@ const SelectPortal = (popperProps: CellComponentProps) => {
     newValue: OnChangeValue<any, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const selection = newValue.value;
+    console.log(newValue, actionMeta);
+    const selection = newValue ? newValue.value : "";
     // Update on disk & memory
     dataActions.updateCell(
       row.index,
@@ -65,6 +66,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
     // Add new option to column options
 
     if (
+      newValue.value &&
       !tableColumn.options.find((option) => option.label === newValue.value)
     ) {
       columnActions.addOptionToColumn(
@@ -83,7 +85,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
           defaultValue={defaultValue}
           isSearchable
           autoFocus
-          menuIsOpen
+          isClearable
           menuPosition="fixed"
           styles={CustomTagsStyles}
           options={multiOptions}
@@ -94,6 +96,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
           menuShouldBlockScroll={true}
           className="react-select-container"
           classNamePrefix="react-select"
+          key={`${tableColumn.key}-select-open`}
         />
       </div>
     );

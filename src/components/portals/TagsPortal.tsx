@@ -100,7 +100,6 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
           isSearchable
           isMulti
           autoFocus
-          menuIsOpen
           menuPosition="fixed"
           styles={CustomTagsStyles}
           options={multiOptions}
