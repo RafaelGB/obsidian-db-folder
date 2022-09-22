@@ -294,9 +294,8 @@ div.database-plugin__checkbox {
   align-items: center;
   cursor: pointer;
   z-index: 3;
-  position: sticky;
-  left: 0;
-  bottom: 0;
+  position: fixed;
+  margin-top: 4rem;
   background-color: var(--background-primary);
 }
 
