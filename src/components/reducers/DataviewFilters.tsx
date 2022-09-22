@@ -44,15 +44,13 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
       size="small"
       onClick={openFiltersGroupHandler}
       key={`Button-FilterConditions-DataviewFilters`}
+      style={{ minWidth: "0px", padding: "2px" }}
     >
       <span
         className="svg-icon svg-gray"
-        style={{ marginRight: 8 }}
         key={`Span-FilterConditions-Ref-Portal`}
       >
-        <div key={`Div-FilterConditions-Ref-Portal`}>
-          <MenuDownIcon />
-        </div>
+        <MenuDownIcon />
       </span>
     </Button>
   );

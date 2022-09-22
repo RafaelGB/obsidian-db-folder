@@ -5,7 +5,6 @@ import {
   Search,
   SearchIconWrapper,
 } from "components/styles/NavBarStyles";
-import SearchIcon from "@mui/icons-material/Search";
 import DebouncedInput from "components/behavior/DebouncedInputFn";
 
 /**
@@ -19,16 +18,13 @@ export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
 
   return (
     <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
+      <SearchIconWrapper>{hits}</SearchIconWrapper>
       <DebouncedInputWrapper>
         <DebouncedInput
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
           placeholder={`Search...`}
         />
-        {hits}
       </DebouncedInputWrapper>
     </Search>
   );
