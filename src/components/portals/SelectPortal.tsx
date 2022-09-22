@@ -52,7 +52,6 @@ const SelectPortal = (popperProps: CellComponentProps) => {
     newValue: OnChangeValue<any, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    console.log(newValue, actionMeta);
     const selection = newValue ? newValue.value : "";
     // Update on disk & memory
     dataActions.updateCell(
