@@ -1,3 +1,12 @@
+## 2.6.5
+### Shiny new things
+- new UX for the "Add a new page" and navigation menus [ISSUE#410](https://github.com/RafaelGB/obsidian-db-folder/issues/410) [Inspired by javiavid design](https://github.com/javiavid)
+  - Option to hide add row form [ISSUE#359](https://github.com/RafaelGB/obsidian-db-folder/issues/359)
+  - Line numbers are shown on row context menu [ISSUE#258](https://github.com/RafaelGB/obsidian-db-folder/issues/258)
+  - Shade alternate rows [ISSUE#290](https://github.com/RafaelGB/obsidian-db-folder/issues/290)
+  - This will improve the UX for mobile users too
+### No longer broken
+- Query tags are saved correctly now [ISSUE#411](https://github.com/RafaelGB/obsidian-db-folder/issues/411)
 ## 2.6.4
 ### Improved
 - Filters refactor into a modal improving the UX and mobile experience [ISSUE#400](https://github.com/RafaelGB/obsidian-db-folder/issues/400)

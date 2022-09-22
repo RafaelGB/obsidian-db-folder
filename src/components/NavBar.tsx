@@ -107,7 +107,11 @@ export function NavBar(navBarProps: NavBarProps) {
           boxShadow: "none",
         }}
       >
-        <Toolbar>
+        <Toolbar
+          style={{
+            minHeight: "unset",
+          }}
+        >
           <IconButton
             size="medium"
             aria-label={t("toolbar_menu_aria_label")}

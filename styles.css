@@ -295,7 +295,7 @@ div.database-plugin__checkbox {
   cursor: pointer;
   z-index: 3;
   position: fixed;
-  margin-top: 4rem;
+  margin-top: 2.65rem;
   background-color: var(--background-primary);
 }
 
@@ -386,7 +386,7 @@ div.database-plugin__checkbox {
 
 .database-plugin__table {
   position: relative;
-  top: 4rem;
+  top: 2.65rem;
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
@@ -420,7 +420,7 @@ div.database-plugin__checkbox {
 .database-plugin__sticky-level-2 {
   position: -webkit-sticky;
   position: sticky;
-  top: 4rem;
+  top: 2.65rem;
   z-index: 3;
 }
 
