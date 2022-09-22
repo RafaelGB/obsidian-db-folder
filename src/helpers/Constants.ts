@@ -47,10 +47,6 @@ export const DatabaseLimits = Object.freeze({
   MAX_COLUMN_HEIGHT: 350,
 });
 
-export const NavBarConfig = Object.freeze({
-  ITEM_HEIGHT: 48,
-});
-
 export const MetadataColumns = Object.freeze({
   FILE: `__file__`,
   CREATED: `__created__`,
@@ -317,7 +313,7 @@ export function getOperatorFilterValue(keyToFind: string): string {
 
 export const MarkdownBreakerRules = Object.freeze({
   INIT_CHARS: ['`', '"', '[', '{', '*', '!', '>'],
-  BETWEEN_CHARS: [':', '"'],
+  BETWEEN_CHARS: [':', '"', '#'],
   UNIQUE_CHARS: ['?'],
 })
 

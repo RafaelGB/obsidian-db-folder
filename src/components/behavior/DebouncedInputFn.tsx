@@ -1,5 +1,5 @@
 import InputBase from "@mui/material/InputBase";
-import React from "react";
+import React, { InputHTMLAttributes, useEffect, useState } from "react";
 
 // A debounced input react component
 export default function DebouncedInput({
@@ -11,14 +11,14 @@ export default function DebouncedInput({
   value: string | number;
   onChange: (value: string | number) => void;
   debounce?: number;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
-  const [value, setValue] = React.useState(initialValue);
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "onChange">) {
+  const [value, setValue] = useState(initialValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
       onChange(value);
     }, debounce);

@@ -44,18 +44,28 @@ const NumberCell = (props: CellComponentProps) => {
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
     event: any
   ) => {
-    if (event.key === "Enter") {
-      event.target.blur();
+    switch (event.key) {
+      case "Enter":
+        event.target.blur();
+        break;
+      case "Escape":
+        setDirtyCell(false);
+        break;
+      default:
+      // Do nothing
     }
   };
 
   const handleOnBlur = () => {
-    persistChange(parseFloat(editableValue));
+    if (editableValue && editableValue !== numberRow[column.id]) {
+      persistChange(parseFloat(editableValue));
+    }
     setDirtyCell(false);
   };
 
   return dirtyCell ? (
     <input
+      autoFocus
       value={(editableValue && editableValue.toString()) || ""}
       onChange={handleOnChange}
       onKeyDown={handleKeyDown}
