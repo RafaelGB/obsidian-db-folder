@@ -17,7 +17,7 @@ export function inlineRegexInFunctionOf(columnId: string) {
     const wrappererKey = `_\\*~\``;
     const conditionalInitWithField = `[${wrappererKey}]{0,2}${columnId}[${wrappererKey}]{0,2}[:]{2}`;
     const thenRegex = `(^${conditionalInitWithField})(.*$)`;
-    const elseRegex = `(.*)([(])(${conditionalInitWithField})(.*)([)])(.*$)`;
+    const elseRegex = `(.*)([\\[(]{1})(${conditionalInitWithField})(.*)([)\\]]{1})(.*$)`;
     const finalExpression = `(?:(?=(^${conditionalInitWithField}))(${thenRegex})|(${elseRegex}))`;
     LOGGER.debug(`<=> inlineRegexInFunctionOf: ${finalExpression}`);
     return new RegExp(`${finalExpression}`, 'gm');
