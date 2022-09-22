@@ -8,7 +8,7 @@ import CustomTagsStyles from "components/styles/TagsStyles";
 import { c } from "helpers/StylesHelper";
 import { ActionMeta, OnChangeValue } from "react-select";
 
-const PopperSelectPortal = (popperProps: CellComponentProps) => {
+const SelectPortal = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
   const { tableState } = table.options.meta;
@@ -73,13 +73,14 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
         randomColor()
       );
     }
+    setShowSelect(false);
   };
+
   function SelectComponent() {
     return (
       <div className={c("tags")}>
         <CreatableSelect
           defaultValue={defaultValue}
-          closeMenuOnSelect={true}
           isSearchable
           autoFocus
           menuIsOpen
@@ -121,4 +122,4 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
   );
 };
 
-export default PopperSelectPortal;
+export default SelectPortal;
