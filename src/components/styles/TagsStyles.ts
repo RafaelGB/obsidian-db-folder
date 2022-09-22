@@ -10,7 +10,7 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
         boxSizing: "border-box",
     }),
     menuPortal: (styles) => ({ ...styles, zIndex: 9999 }),
-    control: (styles) => ({ ...styles, backgroundColor: StyleVariables.BACKGROUND_PRIMARY }),
+    control: (styles) => ({ ...styles, border: "none", boxShadow: "none" }),
     option: (styles, { data, isFocused }) => ({
         ...styles,
         backgroundColor: isFocused ? StyleVariables.TEXT_ACCENT_HOVER : data.color,
@@ -18,9 +18,13 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
         padding: 0,
         textAlign: "center",
         ":hover": {
-            backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+            backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
         },
 
+    }),
+    singleValue: (styles, { data }) => ({
+        ...styles,
+        backgroundColor: data.color
     }),
     multiValue: (styles, { data }) => {
         return {
