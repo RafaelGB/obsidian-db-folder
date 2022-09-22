@@ -13,10 +13,8 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
   const { row, column, table } = defaultCell;
   const { tableState } = table.options.meta;
-  const [columnsInfo, columnActions] = tableState.columns((state) => [
-    state.info,
-    state.actions,
-  ]);
+  const columnsInfo = tableState.columns((state) => state.info);
+  const columnActions = tableState.columns((state) => state.actions);
   const dataActions = tableState.data((state) => state.actions);
 
   const tagsRow = tableState.data((state) => state.rows[row.index]);
@@ -102,6 +100,7 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
           isSearchable
           isMulti
           autoFocus
+          menuIsOpen
           menuPosition="fixed"
           styles={CustomTagsStyles}
           options={multiOptions}
