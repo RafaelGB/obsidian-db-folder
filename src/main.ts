@@ -36,7 +36,6 @@ import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { t } from 'lang/helpers';
-
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -64,7 +63,6 @@ export default class DBFolderPlugin extends Plugin {
 	stateManagers: Map<TFile, StateManager> = new Map();
 
 	windowRegistry: Map<Window, WindowRegistry> = new Map();
-
 	async onload(): Promise<void> {
 		await this.load_settings();
 		addIcon(DB_ICONS.NAME, DB_ICONS.ICON);

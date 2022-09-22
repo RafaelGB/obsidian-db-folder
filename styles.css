@@ -293,10 +293,10 @@ div.database-plugin__checkbox {
   color: var(--text-accent);
   align-items: center;
   cursor: pointer;
-  bottom: 0;
   z-index: 3;
   position: sticky;
   left: 0;
+  bottom: 0;
   background-color: var(--background-primary);
 }
 
@@ -386,6 +386,8 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__table {
+  position: relative;
+  top: 4rem;
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
@@ -416,14 +418,6 @@ div.database-plugin__checkbox {
   background-color: var(--background-secondary);
 }
 
-.database-plugin__sticky-level-1 {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 2;
-}
-
 .database-plugin__sticky-level-2 {
   position: -webkit-sticky;
   position: sticky;
@@ -437,7 +431,10 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__navbar {
-  flex: 1 0 auto;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  z-index: 2;
 }
 
 .database-plugin__padding-left-05 {

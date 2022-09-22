@@ -95,7 +95,7 @@ export function NavBar(navBarProps: NavBarProps) {
     <Box
       sx={{ flexGrow: 1 }}
       style={{
-        width: table.getCenterTotalSize(),
+        width: "100%",
       }}
     >
       <AppBar
@@ -121,6 +121,7 @@ export function NavBar(navBarProps: NavBarProps) {
 
           {/** Global filter */}
           <GlobalFilter {...navBarProps.globalFilterRows} />
+          <Box sx={{ flexGrow: 1 }} />
           <Box
             justifyContent={"flex-start"}
             sx={{
@@ -146,10 +147,7 @@ export function NavBar(navBarProps: NavBarProps) {
 }
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {
   return (
-    <div
-      className={`${c("sticky-level-1 navbar")}`}
-      key="div-navbar-header-cell"
-    >
+    <div className={`${c("navbar")}`} key="div-navbar-header-cell">
       <NavBar {...headerNavBarProps} />
     </div>
   );
