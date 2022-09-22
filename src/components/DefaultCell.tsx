@@ -2,7 +2,7 @@ import React from "react";
 import { InputType } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import PopperSelectPortal from "components/portals/PopperSelectPortal";
+import SelectPortal from "components/portals/SelectPortal";
 import CalendarPortal from "components/portals/CalendarPortal";
 import CalendarTimePortal from "components/portals/CalendarTimePortal";
 import CheckboxCell from "components/cellTypes/CheckboxCell";
@@ -55,7 +55,7 @@ export default function DefaultCell(
 
       /** Selector option */
       case InputType.SELECT:
-        return <PopperSelectPortal defaultCell={defaultCell} />;
+        return <SelectPortal defaultCell={defaultCell} />;
 
       /** Tags option */
       case InputType.TAGS:

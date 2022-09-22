@@ -1,3 +1,4 @@
+import { StyleVariables } from "helpers/Constants";
 import {
     StylesConfig,
     GroupBase,
@@ -8,12 +9,22 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
         position: "static",
         boxSizing: "border-box",
     }),
-    menuPortal: base => ({ ...base, zIndex: 9999 }),
-    control: (styles) => ({ ...styles, backgroundColor: "var(--background-primary)" }),
-    option: (styles, { data }) => ({
+    menuPortal: (styles) => ({ ...styles, zIndex: 9999 }),
+    control: (styles) => ({ ...styles, border: "none", boxShadow: "none" }),
+    option: (styles, { data, isFocused }) => ({
         ...styles,
-        backgroundColor: data.color + " !important",
-        color: "rgb(66, 66, 66) !important"
+        backgroundColor: isFocused ? StyleVariables.TEXT_ACCENT_HOVER : data.color,
+        color: "rgb(66, 66, 66)",
+        padding: 0,
+        textAlign: "center",
+        ":hover": {
+            backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
+        },
+
+    }),
+    singleValue: (styles, { data }) => ({
+        ...styles,
+        backgroundColor: data.color
     }),
     multiValue: (styles, { data }) => {
         return {
