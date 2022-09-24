@@ -85,6 +85,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
           isSearchable
           autoFocus
           isClearable
+          openMenuOnFocus
           menuPosition="fixed"
           styles={CustomTagsStyles}
           options={multiOptions}
