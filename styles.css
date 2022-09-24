@@ -503,6 +503,11 @@ div.database-plugin__checkbox {
   text-align: left;
 }
 
+.database-plugin__text-align-justify {
+  display: flex;
+  text-align: justify;
+}
+
 .cell-padding {
   padding: 0.5rem;
 }

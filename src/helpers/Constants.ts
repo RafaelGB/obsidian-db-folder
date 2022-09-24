@@ -74,6 +74,7 @@ export const COLUMN_ALIGNMENT_OPTIONS = Object.freeze({
   LEFT: 'text-align-left',
   CENTER: 'text-align-center',
   RIGHT: 'text-align-right',
+  JUSTIFY: 'text-align-justify',
 });
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
