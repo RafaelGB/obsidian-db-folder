@@ -5,7 +5,6 @@ import {
   Search,
   SearchIconWrapper,
 } from "components/styles/NavBarStyles";
-import SearchIcon from "@mui/icons-material/Search";
 import DebouncedInput from "components/behavior/DebouncedInputFn";
 
 /**
@@ -19,18 +18,7 @@ export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
 
   return (
     <Search>
-      <SearchIconWrapper>
-        <div
-          style={{
-            listStyleType: "none",
-          }}
-        >
-          <li>
-            <SearchIcon />
-          </li>
-          <li>{hits}</li>
-        </div>
-      </SearchIconWrapper>
+      <SearchIconWrapper>{hits}</SearchIconWrapper>
       <DebouncedInputWrapper>
         <DebouncedInput
           value={globalFilter ?? ""}

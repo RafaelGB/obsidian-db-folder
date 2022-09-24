@@ -81,12 +81,8 @@
   width: 100%;
 }
 
-.database-plugin__tr .data-input {
-  background-color: var(--background-primary);
-}
-
-.database-plugin__tr-hovered .data-input {
-  background-color: var(--background-secondary);
+div.database-plugin__td.data-input:hover {
+  box-shadow: 0 0 1px 2px var(--text-accent-hover);
 }
 
 .data-input {
@@ -285,35 +281,41 @@ div.database-plugin__checkbox {
   padding: 0;
 }
 
-.database-plugin__tr,
-.database-plugin__tr-hovered {
+.database-plugin__tr {
   display: table-row;
 }
 
-.database-plugin__tr:last-child .database-plugin__td,
-.database-plugin__tr-hovered:last-child .database-plugin__td {
+.database-plugin__tr:last-child .database-plugin__td {
   border-bottom: 0;
 }
 
 .database-plugin__add-row {
   color: var(--text-accent);
-  padding: 0.5rem;
   align-items: center;
   cursor: pointer;
-  bottom: 0;
-  opacity: 0.8;
   z-index: 3;
-  position: sticky;
-  left: 0;
+  position: fixed;
+  margin-top: 2.65rem;
+  bottom: 0;
   background-color: var(--background-primary);
-  margin-top: 0 !important;
-  margin-left: 0 !important;
 }
 
 .database-plugin__add-row .svg-icon:hover {
   background-color: var(--background-secondary);
   color: var(--text-accent-hover);
   padding: 0.3rem;
+}
+
+.database-plugin__add-row-input {
+  height: 30px;
+  max-height: 30px;
+  border: 0 !important;
+}
+
+.database-plugin__add-row-input:focus {
+  outline: none;
+  border: 0 !important;
+  box-shadow: 0 0 0 0 !important;
 }
 
 .database-plugin__th {
@@ -384,6 +386,8 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__table {
+  position: relative;
+  top: 2.65rem;
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
@@ -414,18 +418,10 @@ div.database-plugin__checkbox {
   background-color: var(--background-secondary);
 }
 
-.database-plugin__sticky-level-1 {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 2;
-}
-
 .database-plugin__sticky-level-2 {
   position: -webkit-sticky;
   position: sticky;
-  top: 4rem;
+  top: 2.65rem;
   z-index: 3;
 }
 
@@ -435,8 +431,10 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__navbar {
-  flex: 1 0 auto;
-  background-color: var(--background-secondary);
+  width: 100%;
+  position: fixed;
+  left: 0;
+  z-index: 2;
 }
 
 .database-plugin__padding-left-05 {
@@ -578,10 +576,7 @@ div.database-plugin__checkbox {
 /* row context menu shows an icon to the left of the first cell translucent*/
 .database-plugin__row-context-menu {
   padding: 0;
-}
-
-.database-plugin__tr-hovered {
-  background-color: var(--background-secondary);
+  background-color: var(--background-primary);
 }
 
 /**

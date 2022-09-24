@@ -1,17 +1,24 @@
 import { Cell, flexRender } from "@tanstack/react-table";
 import { TableCellProps } from "cdm/CellModel";
 import { RowDataType } from "cdm/FolderModel";
+import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
 import React from "react";
 
 export default function TableRow(headerProps: TableCellProps) {
-  const { row } = headerProps;
-
+  const { row, table } = headerProps;
+  const backgroundColor =
+    (table.getRowModel().flatRows.indexOf(row) + 1) % 2
+      ? StyleVariables.BACKGROUND_PRIMARY
+      : StyleVariables.BACKGROUND_SECONDARY;
   return (
     <div
       key={`cell-tr-${row.id}`}
-      className={`${c(row.getIsSelected() ? " tr-hovered" : "tr")}`}
+      className={`${c("tr")}`}
+      style={{
+        backgroundColor: backgroundColor,
+      }}
     >
       {row
         .getVisibleCells()

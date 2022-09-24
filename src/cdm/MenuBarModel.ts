@@ -6,6 +6,10 @@ export type NavBarProps = {
     globalFilterRows: GlobalFilterProps;
 };
 
+export type AddRowProps = {
+    table: Table<RowDataType>
+};
+
 export type CsvButtonProps = {
     columns: TableColumn[];
     rows: Row<RowDataType>[];
