@@ -2,7 +2,7 @@
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/RafaelGB/obsidian-db-folder?style=for-the-badge&sort=semver)](https://github.com/RafaelGB/obsidian-db-folder/releases/latest)
 [![Github All Releases](https://img.shields.io/github/downloads/RafaelGB/obsidian-db-folder/total?style=for-the-badge)]()
 
-This plugin is a Notion like database based on folders.
+This plugin is a Notion like database based on folders, links, tags, or dataview queries.
 
 - **[Documentation](https://rafaelgb.github.io/obsidian-db-folder/)**
 - **[Roadmap](https://github.com/users/RafaelGB/projects/7/views/4)**
