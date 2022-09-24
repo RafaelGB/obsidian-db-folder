@@ -26,28 +26,14 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                 trimedFilename = `${trimedFilename}-${sufixOfDuplicate}`;
                 filename = `${trimedFilename} copy(${sufixOfDuplicate})`;
             }
-
-            const rowRecord: RowDatabaseFields = { inline: {}, frontmatter: {} };
-            columns
-                .filter((column: TableColumn) => !column.isMetadata)
-                .forEach((column: TableColumn) => {
-                    if (column.config.isInline) {
-                        rowRecord.inline[column.key] = "";
-                    } else {
-                        rowRecord.frontmatter[column.key] = "";
-                    }
-                });
             // Add note to persist row
             await VaultManagerDB.create_markdown_file(
                 resolve_tfolder(folderPath),
                 trimedFilename,
-                rowRecord,
                 ddbbConfig
             );
 
             const newNote = new NoteInfo({
-                ...rowRecord.frontmatter,
-                ...rowRecord.inline,
                 file: {
                     path: filepath,
                     ctime: DateTime.now(),

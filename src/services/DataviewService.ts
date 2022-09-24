@@ -101,7 +101,11 @@ class DataviewProxy {
                 parsedLiteral = this.parseToOptionsArray(wrapped);
                 break;
             case InputType.CALENDAR:
+                parsedLiteral = this.parseToCalendar(wrapped, localSettings.date_format);
+                break;
             case InputType.CALENDAR_TIME:
+                parsedLiteral = this.parseToCalendar(wrapped, localSettings.datetime_format);
+                break;
             case InputType.METATADA_TIME:
                 parsedLiteral = this.parseToCalendar(wrapped);
                 break;
@@ -144,9 +148,15 @@ class DataviewProxy {
         return this.instance;
     }
 
-    private parseToCalendar(wrapped: WrappedLiteral): DateTime {
+    private parseToCalendar(wrapped: WrappedLiteral, format?: string): DateTime {
         if (wrapped.type === 'string') {
-            const calendarCandidate = DateTime.fromISO(wrapped.value);
+            let calendarCandidate;
+            if (format) {
+                calendarCandidate = DateTime.fromFormat(wrapped.value, format);
+            } else {
+                calendarCandidate = DateTime.fromISO(wrapped.value);
+            }
+
             if (calendarCandidate.isValid) {
                 return calendarCandidate;
             }
@@ -205,10 +215,10 @@ class DataviewProxy {
             case 'date':
                 if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
                     // Parse date
-                    auxMarkdown = wrapped.value.toFormat("yyyy-MM-dd");
+                    auxMarkdown = wrapped.value.toFormat(localSettings.date_format);
                 } else {
                     // Parse datetime
-                    auxMarkdown = wrapped.value.toISO()
+                    auxMarkdown = wrapped.value.toFormat(localSettings.datetime_format);
                     auxMarkdown = this.handleMarkdownBreaker(auxMarkdown, localSettings, isInline);
                 }
                 break;

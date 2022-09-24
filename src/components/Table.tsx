@@ -42,6 +42,8 @@ import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "./reducers/CustomSortingFn";
+import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -284,25 +286,15 @@ export function Table(tableData: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
-      <div
-        key={`div-table-navbar`}
-        className={`${c("table sticky-level-1")}`}
-        style={{
-          width: table.getCenterTotalSize(),
+      <HeaderNavBar
+        key={`div-header-navbar`}
+        table={table}
+        globalFilterRows={{
+          globalFilter: globalFilter,
+          hits: table.getFilteredRowModel().rows.length,
+          setGlobalFilter: setGlobalFilter,
         }}
-      >
-        {/* INIT NAVBAR */}
-        <HeaderNavBar
-          key={`div-header-navbar`}
-          table={table}
-          globalFilterRows={{
-            globalFilter: globalFilter,
-            hits: table.getFilteredRowModel().rows.length,
-            setGlobalFilter: setGlobalFilter,
-          }}
-        />
-        {/* ENDS NAVBAR */}
-      </div>
+      />
       {/* INIT TABLE */}
       <div
         key={`div-table`}
@@ -405,8 +397,9 @@ export function Table(tableData: TableDataType) {
         {/* ENDS TABLE */}
       </div>
       {/* INIT NEW ROW */}
-      <div key={`div-add-row`} className={`${c("tr add-row")}`}>
-        <div key={`div-add-row-cell`} className={`${c("td")}`}>
+
+      <Box sx={{ flexGrow: 1 }} className={`${c("add-row")}`}>
+        <Toolbar>
           <input
             type="text"
             ref={newRowRef}
@@ -416,43 +409,41 @@ export function Table(tableData: TableDataType) {
             onKeyDown={handleKeyDown}
             placeholder="filename of new row"
           />
-        </div>
-        <div
-          key={`div-add-row-cell-button`}
-          className={`${c("td")}`}
-          onClick={handleAddNewRow}
-        >
-          <span className="svg-icon svg-gray" style={{ marginRight: 8 }}>
-            <PlusIcon />
-          </span>
-        </div>
-        <div
-          key={`div-add-row-cell-padding-left`}
-          className={`${c("td padding-left-05")}`}
-        >
-          <Select
-            styles={CustomTemplateSelectorStyles}
-            options={templateOptions}
-            value={
-              templateRow
-                ? {
-                    label: templateRow,
-                    value: templateRow,
-                  }
-                : null
-            }
-            isClearable={true}
-            isMulti={false}
-            onChange={handleChangeRowTemplate}
-            placeholder={"Without template. Select one to use..."}
-            menuPortalTarget={document.body}
-            menuShouldBlockScroll={true}
-            isSearchable
-            menuPlacement="top"
-          />
-        </div>
+          <div key={`div-add-row-cell-button`} onClick={handleAddNewRow}>
+            <span className="svg-icon svg-gray">
+              <PlusIcon />
+            </span>
+          </div>
+          <Box
+            justifyContent={"flex-start"}
+            sx={{
+              display: { xs: "none", md: "flex" },
+            }}
+          >
+            <Select
+              styles={CustomTemplateSelectorStyles}
+              options={templateOptions}
+              value={
+                templateRow
+                  ? {
+                      label: templateRow,
+                      value: templateRow,
+                    }
+                  : null
+              }
+              isClearable={true}
+              isMulti={false}
+              onChange={handleChangeRowTemplate}
+              placeholder={"Without template. Select one to use..."}
+              menuPortalTarget={document.body}
+              menuShouldBlockScroll={true}
+              isSearchable
+              menuPlacement="top"
+            />
+          </Box>
+        </Toolbar>
         {/* ENDS NEW ROW */}
-      </div>
+      </Box>
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
         <pre>

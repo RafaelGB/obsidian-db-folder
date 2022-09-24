@@ -1,5 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, {
   ChangeEventHandler,
   KeyboardEventHandler,
@@ -15,7 +16,7 @@ const NumberCell = (props: CellComponentProps) => {
   const dataActions = tableState.data((state) => state.actions);
   const numberRow = tableState.data((state) => state.rows[row.index]);
   const configInfo = tableState.configState((state) => state.info);
-
+  const tableColumn = column.columnDef as TableColumn;
   const [editableValue, setEditableValue] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
@@ -27,14 +28,13 @@ const NumberCell = (props: CellComponentProps) => {
   // onChange handler
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     // parse value to number
-    const value = parseFloat(event.target.value);
-    setEditableValue(value);
+    setEditableValue(event.target.value);
   };
 
   function persistChange(changedValue: number) {
     dataActions.updateCell(
       row.index,
-      column.columnDef as TableColumn,
+      tableColumn,
       changedValue,
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
@@ -50,7 +50,7 @@ const NumberCell = (props: CellComponentProps) => {
   };
 
   const handleOnBlur = () => {
-    persistChange(editableValue);
+    persistChange(parseFloat(editableValue));
     setDirtyCell(false);
   };
 
@@ -60,15 +60,17 @@ const NumberCell = (props: CellComponentProps) => {
       onChange={handleOnChange}
       onKeyDown={handleKeyDown}
       onBlur={handleOnBlur}
-      className="text-align-right"
+      className={c(getAlignmentClassname(tableColumn.config.content_alignment))}
     />
   ) : (
     <span
-      className="text-align-right"
+      className={c(getAlignmentClassname(tableColumn.config.content_alignment))}
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
     >
-      {(numberRow[column.id] && numberRow[column.id].toString()) || ""}
+      {(numberRow[column.id] !== undefined &&
+        numberRow[column.id].toString()) ||
+        ""}
     </span>
   );
 };

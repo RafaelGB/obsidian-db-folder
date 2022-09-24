@@ -5,6 +5,7 @@ import { App, TFile, setIcon } from 'obsidian';
 import StateManager from 'StateManager';
 
 import { StrategyProps } from 'components/cellTypes/Editor/textcomplete/textcomplete-core';
+import { LOGGER } from 'services/Logger';
 
 const linkRegex = /\B\[\[([^\]]*)$/;
 const embedRegex = /\B!\[\[([^\]]*)$/;
@@ -419,7 +420,7 @@ export function getBlockSearchConfig(
             app.vault.modify(result.item.file, newContent);
           })
           .catch((e) => {
-            console.error(e);
+            LOGGER.error(e);
           });
 
         subpath += blockId;

@@ -1,6 +1,6 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { ColorPickerProps } from "cdm/StyleModel";
-import { ColorPicker } from "components/ColorPicker";
+import { ColorPicker } from "components/styles/ColorPicker";
 import { randomColor } from "helpers/Colors";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";

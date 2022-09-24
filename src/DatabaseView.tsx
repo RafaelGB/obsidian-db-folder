@@ -13,11 +13,17 @@ import {
 } from "components/Columns";
 import { createDatabase } from "components/index/Database";
 import { DbFolderException } from "errors/AbstractException";
-import { DatabaseCore, InputType, StyleClasses } from "helpers/Constants";
+import {
+  DatabaseCore,
+  DB_ICONS,
+  InputType,
+  StyleClasses,
+} from "helpers/Constants";
 import { createEmitter, Emitter } from "helpers/Emitter";
 import obtainInitialType from "helpers/InitialType";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import { getParentWindow } from "helpers/WindowElement";
+import { t } from "lang/helpers";
 import DBFolderPlugin from "main";
 
 import {
@@ -109,7 +115,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     menu
       .addItem((item) => {
         item
-          .setTitle("Open as markdown")
+          .setTitle(t("menu_pane_open_as_md_action"))
           .setIcon("document")
           .onClick(() => {
             this.plugin.databaseFileModes[
@@ -120,8 +126,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       })
       .addItem((item) => {
         item
-          .setTitle("Open database settings")
-          .setIcon("gear")
+          .setTitle(t("menu_pane_open_db_settings_action"))
+          .setIcon(DB_ICONS.NAME)
           .onClick(() => {
             new SettingsModal(
               this,
@@ -161,7 +167,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       // Obtain base information about columns
       this.columns = await obtainColumnsFromFolder(yamlColumns);
       this.rows = await adapterTFilesToRows(
-        this.file.parent.path,
+        this.file,
         this.columns,
         this.diskConfig.yaml.config,
         this.diskConfig.yaml.filters
@@ -182,6 +188,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       // Render database
       const table = createDatabase(tableProps);
       this.rootContainer.render(table);
+      this.diskConfig.saveOnDisk();
       LOGGER.info(`<=initDatabase ${this.file.path}`);
     } catch (e: unknown) {
       LOGGER.error(`initDatabase ${this.file.path}`, e);

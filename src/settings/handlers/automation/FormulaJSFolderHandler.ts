@@ -3,14 +3,24 @@ import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handle
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";
 
 export class FormulaJSFolderHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Select the source of database data';
+    settingTitle: string = 'Select the source of your formula JS files';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { settingsManager, containerEl, view } = settingHandlerResponse;
+        const { settingsManager, containerEl, view, local } = settingHandlerResponse;
+
         const formula_folder_promise = async (value: string): Promise<void> => {
-            // update settings
-            view.diskConfig.updateConfig({ formula_folder_path: value });
-            // Force refresh of settings
-            settingsManager.reset(settingHandlerResponse);
+            if (local) {
+                // update settings
+                view.diskConfig.updateConfig({ formula_folder_path: value });
+            } else {
+                // switch show created on/off
+                const update_local_settings = settingsManager.plugin.settings.local_settings;
+                update_local_settings.formula_folder_path = value;
+                // update settings
+                await settingsManager.plugin.updateSettings({
+                    local_settings: update_local_settings
+                });
+            }
+
         };
         // render dropdown inside container
         new Setting(containerEl)
@@ -21,7 +31,7 @@ export class FormulaJSFolderHandler extends AbstractSettingsHandler {
                     cb.inputEl
                 );
                 cb.setPlaceholder("Example: path/to/folder")
-                    .setValue(view.diskConfig.yaml.config.formula_folder_path)
+                    .setValue(local ? view.diskConfig.yaml.config.formula_folder_path : settingsManager.plugin.settings.local_settings.formula_folder_path)
                     .onChange(formula_folder_promise);
             });
         return this.goNext(settingHandlerResponse);

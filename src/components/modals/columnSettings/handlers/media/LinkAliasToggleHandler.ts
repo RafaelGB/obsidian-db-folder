@@ -6,7 +6,6 @@ export class LinkAliasToggleHandler extends AbstractHandlerClass<ColumnSettingsH
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
-        const { config } = column
         // pass if modal opened from local settings
         const link_alias_togle_promise = async (value: boolean): Promise<void> => {
             column.config.link_alias_enabled = value;

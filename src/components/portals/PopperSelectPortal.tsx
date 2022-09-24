@@ -16,7 +16,7 @@ import { TableColumn } from "cdm/FolderModel";
 const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
-  const { tableState, view } = table.options.meta;
+  const { tableState } = table.options.meta;
   const dataActions = tableState.data((state) => state.actions);
 
   const selectPortalRow = tableState.data((state) => state.rows[row.index]);
@@ -35,18 +35,10 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
   const { styles, attributes } = usePopper(selectRef, selectPop);
   // Show add button
   const [showAdd, setShowAdd] = useState(false);
-  // Selector popper state
-  const [domReady, setDomReady] = useState(false);
 
   const columnActions = table.options.meta.tableState.columns(
     (state) => state.actions
   );
-
-  React.useEffect(() => {
-    if (!domReady) {
-      setDomReady(true);
-    }
-  });
 
   const handleRemoveOption: MouseEventHandler<HTMLDivElement> = () => {
     dataActions.updateCell(
@@ -142,19 +134,21 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
               className="d-flex flex-wrap-wrap"
               style={{ marginTop: "-0.5rem" }}
             >
-              {tableColumn.options.map((option: any) => (
-                <div
-                  key={option.label}
-                  className="cursor-pointer"
-                  style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
-                  onClick={() => handleOptionClick(option)}
-                >
-                  <Relationship
-                    value={option.label}
-                    backgroundColor={option.backgroundColor}
-                  />
-                </div>
-              ))}
+              {tableColumn.options
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((option) => (
+                  <div
+                    key={option.label}
+                    className="cursor-pointer"
+                    style={{ marginRight: "0.5rem", marginTop: "0.5rem" }}
+                    onClick={() => handleOptionClick(option)}
+                  >
+                    <Relationship
+                      value={option.label}
+                      backgroundColor={option.backgroundColor}
+                    />
+                  </div>
+                ))}
               {showAdd && (
                 <div
                   style={{
@@ -214,12 +208,7 @@ const PopperSelectPortal = (popperProps: CellComponentProps) => {
           />
         )}
       </div>
-      {domReady
-        ? ReactDOM.createPortal(
-            PortalSelect(),
-            activeDocument.getElementById(`${view.file.path}-popper`)
-          )
-        : null}
+      {ReactDOM.createPortal(PortalSelect(), activeDocument.body)}
     </>
   );
 };

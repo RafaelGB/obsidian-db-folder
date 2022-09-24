@@ -9,7 +9,7 @@ export default class DataviewRefreshHandlerAction extends AbstractTableAction<Da
         const { set, view, implementation } = tableActionResponse;
         implementation.actions.dataviewRefresh = async (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => {
             const refreshedRows = await adapterTFilesToRows(
-                view.file.parent.path,
+                view.file,
                 column,
                 ddbbConfig,
                 filterConfig

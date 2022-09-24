@@ -1,8 +1,9 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { Setting } from "obsidian";
+import { add_toggle } from "settings/SettingsComponents";
 export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Enable link alias';
+    settingTitle: string = 'Formula properties';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -16,6 +17,22 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
             columnSettingsManager.modal.enableReset = true;
         }
 
+        const persist_Formula_toggle_promise = async (value: boolean): Promise<void> => {
+            column.config.link_alias_enabled = value;
+            // Persist value
+            await view.diskConfig.updateColumnConfig(column.key, {
+                persist_formula: value
+            });
+            columnSettingsManager.modal.enableReset = true;
+        }
+        add_toggle(
+            containerEl,
+            "Persist formula output",
+            "Enable/disable to persist formula output on your notes (Only persisted formulas could be searchable and sortable)",
+            column.config.persist_formula,
+            persist_Formula_toggle_promise
+        );
+
         new Setting(containerEl)
             .setName('Formula input')
             .setDesc('Enter your formula here using your js function names')
@@ -24,7 +41,17 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
                 textArea.setPlaceholder('Write here your formula');
                 textArea.onChange(formula_promise);
             });
+        const mainDesc = containerEl.createEl('p');
 
+        mainDesc.appendText('Check our ');
+        mainDesc.appendChild(
+            createEl('a', {
+                text: "documentation",
+                href: "https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/",
+            })
+        );
+
+        mainDesc.appendText(' for more information about how to use formulas');
         return this.goNext(columnHandlerResponse);
     }
 }

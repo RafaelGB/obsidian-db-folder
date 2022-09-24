@@ -43,8 +43,9 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
   }
 
   const CalendarContainer = (containerProps: any) => {
-    const el = activeDocument.getElementById(`${view.file.path}-popper`);
-    return <Portal container={el}>{containerProps.children}</Portal>;
+    return (
+      <Portal container={activeDocument.body}>{containerProps.children}</Portal>
+    );
   };
   return showDatePicker ? (
     <DatePicker
@@ -69,7 +70,9 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
       style={{ width: column.getSize() }}
     >
       {DateTime.isDateTime(calendarValue)
-        ? (calendarValue as unknown as DateTime).toFormat("yyyy-MM-dd")
+        ? (calendarValue as unknown as DateTime).toFormat(
+            configInfo.getLocalSettings().date_format
+          )
         : null}
     </span>
   );
