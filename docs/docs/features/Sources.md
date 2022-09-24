@@ -8,4 +8,6 @@ Just like dataview, you can use multiple sources for your data :
 
 If you right-clicked a folder or selected **current folder** as the source, the folder is used for storing the database and the new notes. But if you select any other source, you'll have to select where to store the new notes and where to store the database.
 
+> When selecting `Current_folder` as the source, if you want to change the folder, you just have to move the database to another folder.
+
 > If you want to combine multiple tags or links or folders, you'll have to use the **Dataview source**.
