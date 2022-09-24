@@ -20,5 +20,5 @@ To use an exposed variable, use the `${}` syntax. For example, to get the value 
 
 The root object `db` has the following functions:
 
-- `js` : execute a javascript function that you previously defined in the `js` folder of your table. (I.E.: `db.js.myFunction( arg1, arg2)`)
+- `js` : execute a javascript function that you previously defined in the `js` folder of your table in the database or plugin settings. (I.E.: `db.js.myFunction( arg1, arg2)`)
 
