@@ -83,7 +83,7 @@ class EditEngine {
 
         async function persistFrontmatter(deletedColumn?: string): Promise<void> {
             const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
-            const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
+            const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, deletedColumn);
             const noteObject = {
                 action: 'replace',
                 file: file,

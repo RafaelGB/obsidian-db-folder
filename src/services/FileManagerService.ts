@@ -24,7 +24,7 @@ class VaultManager {
       targetFolder,
       filename ?? "Untitled"
     );
-    let content = databasefields ? parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields)) : "";
+    let content = databasefields ? parseFrontmatterFieldsToString(databasefields).concat("\n").concat(parseInlineFieldsToString(databasefields)) : "";
 
     // Custom content by source
     switch (localSettings.source_data) {

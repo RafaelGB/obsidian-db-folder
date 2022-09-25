@@ -7,7 +7,8 @@ import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/h
 import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
 import { LinkAliasToggleHandler } from "components/modals/columnSettings/handlers/media/LinkAliasToggleHandler";
 import { FormulaInputHandler } from "components/modals/columnSettings/handlers/automations/FormulaInputHandler";
-import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/AlignmentSelectorHandler";
+import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/styles/AlignmentSelectorHandler";
+import { ToggleWrapContentHandler } from "components/modals/columnSettings/handlers/styles/ToggleWrapContentHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -31,6 +32,7 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
             case InputType.NUMBER:
             case InputType.FORMULA:
                 particularHandlers.push(new AlignmentSelectorHandler());
+                particularHandlers.push(new ToggleWrapContentHandler());
                 break;
             default:
             // do nothing

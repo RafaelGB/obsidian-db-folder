@@ -1,20 +1,17 @@
 import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType } from "helpers/Constants";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { stringifyYaml } from "obsidian";
 import { DataviewService } from "services/DataviewService";
-export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, localSettings: LocalSettings, deletedColumn?: string): string => {
+export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, deletedColumn?: string): string => {
     const frontmatterFields = databaseFields.frontmatter;
-    let array: string[] = [];
-    Object.keys(frontmatterFields).forEach(key => {
-        if (key !== deletedColumn) {
-            array.push(...parseLiteralToString(frontmatterFields[key], 0, localSettings, key));
-        }
-    });
-    if (array.length > 0) {
-        array = [`---`, ...array, `---`];
+    delete frontmatterFields[deletedColumn];
+    let stringify: string = "";
+    if (Object.keys(frontmatterFields).length > 0) {
+        const stringifiedFrontmatter = stringifyYaml(frontmatterFields);
+        stringify = `---\n${stringifiedFrontmatter}---`;
     }
-    return array.join('\n');
+    return stringify;
 }
 
 export const parseInlineFieldsToString = (inlineFields: RowDatabaseFields): string => {
@@ -23,24 +20,6 @@ export const parseInlineFieldsToString = (inlineFields: RowDatabaseFields): stri
         array.push(`${key}:: ${inlineFields.inline[key]}`);
     });
     return array.join('\n');
-}
-
-function parseLiteralToString(literal: Literal, level: number, localSettings: LocalSettings, key?: string): string[] {
-    const literalBlock: string[] = [];
-    literal = DataviewService.parseDataArray(literal);
-    // Manage Arrays
-    if (DataviewService.getDataviewAPI().value.isArray(literal)) {
-        literalBlock.push(`${" ".repeat(level)}${key}:`);
-        literal.forEach((literal, index) => {
-            literalBlock.push(...parseLiteralToString(literal, level + 1, localSettings));
-        });
-    }
-    else if (key) {
-        literalBlock.push(`${" ".repeat(level)}${key}: ${DataviewService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
-    } else {
-        literalBlock.push(`${" ".repeat(level)}- ${DataviewService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
-    }
-    return literalBlock;
 }
 
 export function parseValuetoSanitizeYamlValue(value: string, localSettings: LocalSettings): string {

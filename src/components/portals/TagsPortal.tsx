@@ -107,10 +107,12 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
           menuPortalTarget={activeDocument.body}
+          className={`react-select-container ${c(
+            "tags-container text-align-center"
+          )}`}
+          classNamePrefix="react-select"
           menuPlacement="auto"
           menuShouldBlockScroll={true}
-          className="react-select-container"
-          classNamePrefix="react-select"
         />
       </div>
     );
@@ -121,9 +123,7 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
         ? TagsForm()
         : tagsState && (
             <div
-              className={
-                c("tags-container") + " cell-padding d-flex flex-wrap-wrap"
-              }
+              className={c("tags-container text-align-center")}
               onClick={() => setShowSelectTags(true)}
               style={{ width: column.getSize() }}
             >
