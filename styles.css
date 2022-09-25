@@ -484,7 +484,9 @@ div.database-plugin__checkbox {
 .database-plugin__tags-container {
   gap: 0.3rem;
 }
-
+/************************************************************
+ *  CELL CONTENT STYLES
+ ************************************************************/
 .database-plugin__text-align-right {
   display: flex;
   justify-content: flex-end;
@@ -508,33 +510,17 @@ div.database-plugin__checkbox {
   text-align: justify;
 }
 
-.cell-padding {
-  padding: 0.5rem;
+.database-plugin__text-wrap {
+  white-space: normal;
 }
 
-.d-flex {
-  display: flex;
-}
-
-.cursor-default {
-  cursor: default;
-}
-
-.align-items-center {
-  align-items: center;
-}
-
-.flex-wrap-wrap {
-  flex-wrap: wrap;
+.database-plugin__text-nowrap {
+  white-space: nowrap;
 }
 
 .menu.database-plugin__popper {
   position: relative;
   padding: 0;
-}
-
-.cursor-pointer {
-  cursor: pointer;
 }
 
 .icon-margin {
@@ -547,10 +533,6 @@ div.database-plugin__checkbox {
 
 .font-size-75 {
   font-size: 0.75rem;
-}
-
-.flex-1 {
-  flex: 1;
 }
 
 /**

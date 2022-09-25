@@ -1,3 +1,4 @@
+import { ConfigColumn } from "cdm/FolderModel";
 import { COLUMN_ALIGNMENT_OPTIONS, DatabaseCore, MetadataLabels } from "helpers/Constants";
 
 /**
@@ -41,6 +42,17 @@ export function getLabelHeader(input: string) {
     return labelCandidate === undefined ? input : labelCandidate[1];
 }
 
-export function getAlignmentClassname(alignment: string) {
-    return alignment === undefined ? COLUMN_ALIGNMENT_OPTIONS.LEFT : alignment;
+export function getAlignmentClassname(configColumn: ConfigColumn) {
+    const classes: string[] = [];
+    classes.push(
+        configColumn.content_alignment === undefined ?
+            COLUMN_ALIGNMENT_OPTIONS.LEFT :
+            configColumn.content_alignment
+    );
+    classes.push(
+        configColumn.wrap_content ?
+            COLUMN_ALIGNMENT_OPTIONS.WRAP :
+            COLUMN_ALIGNMENT_OPTIONS.NOWRAP
+    );
+    return classes.join(' ');
 }

@@ -46,9 +46,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   return (
     <span
       ref={formulaRef}
-      className={`${c(
-        "md_cell " + getAlignmentClassname(tableColumn.config.content_alignment)
-      )}`}
+      className={`${c("md_cell " + getAlignmentClassname(tableColumn.config))}`}
       key={`formula_${cell.id}`}
     />
   );

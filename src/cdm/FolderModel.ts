@@ -40,6 +40,7 @@ export interface ConfigColumn {
     media_height: number;
     isInline: boolean;
     content_alignment?: string;
+    wrap_content?: boolean;
     task_hide_completed?: boolean;
     formula_query?: string;
     persist_formula?: boolean;

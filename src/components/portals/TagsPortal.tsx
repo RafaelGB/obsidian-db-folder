@@ -107,7 +107,10 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
           menuPortalTarget={activeDocument.body}
-          className={c("tags-container text-align-center")}
+          className={`react-select-container ${c(
+            "tags-container text-align-center"
+          )}`}
+          classNamePrefix="react-select"
           menuPlacement="auto"
           menuShouldBlockScroll={true}
         />
