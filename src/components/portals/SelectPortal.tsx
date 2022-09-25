@@ -94,8 +94,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
           menuPortalTarget={activeDocument.body}
           menuPlacement="auto"
           menuShouldBlockScroll={true}
-          className="react-select-container"
-          classNamePrefix="react-select"
+          className={c("text-align-center")}
           key={`${tableColumn.key}-select-open`}
         />
       </div>
@@ -109,7 +108,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
       ) : (
         /* Current value of the select */
         <div
-          className="cell-padding d-flex cursor-default align-items-center flex-1"
+          className={`cell-padding d-flex ${c("text-align-center")}`}
           onClick={() => setShowSelect(true)}
           style={{ width: column.getSize() }}
         >

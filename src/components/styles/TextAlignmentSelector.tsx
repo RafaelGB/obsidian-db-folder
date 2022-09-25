@@ -3,13 +3,11 @@ import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
-import WrapTextIcon from "@mui/icons-material/WrapText";
 import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { TextAlignmentProps } from "cdm/StyleModel";
 import { COLUMN_ALIGNMENT_OPTIONS, StyleVariables } from "helpers/Constants";
-import Divider from "@mui/material/Divider";
 
 export default function TextAlignmentSelector(props: TextAlignmentProps) {
   const { modal, columnKey, currentAlignment } = props;

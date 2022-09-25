@@ -6,13 +6,12 @@ import { DataviewService } from "services/DataviewService";
 export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, deletedColumn?: string): string => {
     const frontmatterFields = databaseFields.frontmatter;
     delete frontmatterFields[deletedColumn];
-    let array: string[] = [];
+    let stringify: string = "";
     if (Object.keys(frontmatterFields).length > 0) {
         const stringifiedFrontmatter = stringifyYaml(frontmatterFields);
-        console.log(stringifiedFrontmatter);
-        array = [`---`, stringifiedFrontmatter, `---`];
+        stringify = `---\n${stringifiedFrontmatter}---`;
     }
-    return array.join('\n');
+    return stringify;
 }
 
 export const parseInlineFieldsToString = (inlineFields: RowDatabaseFields): string => {
