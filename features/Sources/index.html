@@ -58,6 +58,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#types" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -245,9 +250,45 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Sources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Sources
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#types" class="md-nav__link">
+    Types
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#destination-folders" class="md-nav__link">
+    Destination Folders
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -503,6 +544,28 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#types" class="md-nav__link">
+    Types
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#destination-folders" class="md-nav__link">
+    Destination Folders
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -521,18 +584,22 @@
 
   <h1>Sources</h1>
 
+<h2 id="types">Types</h2>
 <p>Just like dataview, you can use multiple sources for your data :</p>
 <ol>
-<li><strong>Current_folder</strong>: this will match all files within the selected folder when creating the database;</li>
+<li><strong>Current_folder</strong>: this will match all files within the selected folder when creating the database. If you want to change the folder, just move the database to another folder ;</li>
 <li><strong>Tag</strong>: this will match all files with the given tag ;</li>
 <li><strong>Incoming_link</strong>: this will match all files that have links to the select file ;</li>
 <li><strong>Outgoing_link</strong>: this will match all files that have links from the select file ;</li>
-<li><strong>Dataview</strong>: you can put your dataview query (DQL) without the first line <code>TABLE columns</code> as the plugin will autocomplete this part. For example : <code>FROM "folder" WHERE column = "something" SORT column ASC</code>.</li>
+<li><strong>Dataview</strong>: you can put your dataview query (DQL) without the first line <code>TABLE columns</code> as the plugin will autocomplete this part. For example : <code>FROM "folder" WHERE column = "something" SORT column ASC</code>. Use this source if you want to combine multiple tags, links, or folders.</li>
 </ol>
-<p>If you right-clicked a folder or selected <strong>current folder</strong> as the source, the folder is used for storing the database and the new notes. But if you select any other source, you'll have to select where to store the new notes and where to store the database.</p>
-<blockquote>
-<p>If you want to combine multiple tags or links or folders, you'll have to use the <strong>Dataview source</strong>.</p>
-</blockquote>
+<h2 id="destination-folders">Destination Folders</h2>
+<p>There are two types of destinations : </p>
+<ol>
+<li>Where you will store the database file ;</li>
+<li>Where you will store the notes of the database.</li>
+</ol>
+<p>If you chose <code>tag/incoming_link/outgoing_link/dataview</code> as the source, you'll have to choose both types of destinations. But if you right-clicked a folder or selected <code>current_folder</code> as the source, everything is stored under one folder, so you'll only choose once.</p>
 
               
             </article>

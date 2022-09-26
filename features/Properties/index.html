@@ -600,11 +600,11 @@
 
 <h2 id="types">Types</h2>
 <ul>
-<li><strong>Text</strong>: this property support markdown, links, and tags. If you're using links you can enable alias in the column settings ;</li>
+<li><strong>Text</strong>: this property support markdown, links, and tags. If you're using links you can enable alias in the column settings or in the plugin settings ;</li>
 <li><strong>Number</strong>: this property only accepts numbers ;</li>
 <li><strong>Checkbox</strong>: this property is represented by <code>true/false</code> in the underlying markdown ;</li>
-<li><strong>Date</strong>: this property accepts dates. The default format is <code>yyyy-MM-dd</code>, but it can be changed in the plugin settings under <code>editing engine section &gt; Date format</code> ;</li>
-<li><strong>Time</strong>: this property accepts time. The default format is <code>yyyy-MM-dd HH:mm:ss</code>, but it can be changed in the plugin settings under <code>editing engine section &gt; Datetime format</code> ;</li>
+<li><strong>Date</strong>: this property accepts dates. The default format is <code>yyyy-MM-dd</code>, but it can be changed in the plugin or database settings under <code>editing engine section &gt; Date format</code> ;</li>
+<li><strong>Time</strong>: this property accepts time. The default format is <code>yyyy-MM-dd HH:mm:ss</code>, but it can be changed in the plugin or database settings under <code>editing engine section &gt; Datetime format</code> ;</li>
 <li><strong>Select</strong>: this property accepts from a list of options you define. Colors are attributed automatically, though you can change them in the column setting. Furthermore, when removing the select option in the setting, it is also removed from the note's metadata ;</li>
 <li><strong>Tags</strong>: similar to the previous property, but instead of only selecting one option, you can select multiples options per cell ;</li>
 <li><strong>Formulas</strong>: property that accepts js code to return dynamic values in function of your code. See the <a href="/obsidian-db-folder/features/Formulas/">Formulas</a> section for more details.</li>
@@ -613,11 +613,11 @@
 <li><strong>Modified time</strong>: this column can be added only once from the database settings and will display the last modified time of the row ;</li>
 <li><strong>Tasks</strong>: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings ;</li>
 <li><strong>Inlinks</strong>: this column can be added only once from the database settings and will display the files that have links to the select file ;</li>
-<li><strong>Outlinks</strong>: this column can be added only once from the database settings and will display the files that have links from the select file.<blockquote>
+<li><strong>Outlinks</strong>: this column can be added only once from the database settings and will display the files that have links from the select file.</li>
+</ul>
+<blockquote>
 <p>You can change from one property type to another, and if the format is right, it will be recognized by the plugin.</p>
 </blockquote>
-</li>
-</ul>
 <h2 id="yaml-dataview-inline-fields">YAML &amp; Dataview Inline Fields</h2>
 <p>The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you have two options :</p>
 <ul>
