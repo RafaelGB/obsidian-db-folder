@@ -29,9 +29,13 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             if (ddbbConfig.show_metadata_modified) {
                 modifiedRow[MetadataColumns.MODIFIED] = DateTime.now();
             }
+            const pathColumns: string[] =
+                ddbbConfig.group_folder_column
+                .split(",")
+                .filter(Boolean);
             // Update the row on disk
-            if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
-
+            if ( isMovingFile && pathColumns.includes(column.id)) {
+                const subfolders = pathColumns .map((name) => modifiedRow[name] || "-") .join("/");
                 const moveInfo = {
                     file: rowTFile,
                     id: column.id,
@@ -40,15 +44,15 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     ddbbConfig: ddbbConfig,
                 }
                 const foldePath = destination_folder(view, ddbbConfig);
-                await moveFile(`${foldePath}/${value}`, moveInfo);
+                await moveFile(`${foldePath}/${subfolders}`, moveInfo);
                 // Update row file
                 modifiedRow[
                     MetadataColumns.FILE
-                ] = `${rowTFile.basename}|${foldePath}/${value}/${rowTFile.name}`;
+                ] = `${rowTFile.basename}|${foldePath}/${subfolders}/${rowTFile.name}`;
                 // Check if action.value is a valid folder name
                 const auxPath =
-                    value !== ""
-                        ? `${foldePath}/${value}/${rowTFile.name}`
+                    subfolders !== ""
+                        ? `${foldePath}/${subfolders}/${rowTFile.name}`
                         : `${foldePath}/${rowTFile.name}`;
 
                 const recordRow: Record<string, Literal> = {};
