@@ -50,7 +50,6 @@ export function getAlignmentClassname(configColumn: ConfigColumn, localSettings:
             COLUMN_ALIGNMENT_OPTIONS.LEFT :
             configColumn.content_alignment
     );
-    console.log(localSettings.cell_size);
     classes.push(
         (configColumn.wrap_content && localSettings.cell_size !== CellSizeOptions.COMPACT) ?
             COLUMN_ALIGNMENT_OPTIONS.WRAP :

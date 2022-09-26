@@ -376,13 +376,19 @@ div.database-plugin__checkbox {
   padding: 0.6rem;
 }
 
-.database-plugin__sticky_first_column .database-plugin__td:nth-child(2),
-.database-plugin__sticky_first_column .database-plugin__th:nth-child(2),
 .database-plugin__table .database-plugin__td:first-child,
 .database-plugin__table .database-plugin__th:first-child {
   position: sticky;
   left: 0;
   z-index: 1;
+}
+
+.database-plugin__sticky_first_column .database-plugin__td:nth-child(2),
+.database-plugin__sticky_first_column .database-plugin__th:nth-child(2) {
+  position: sticky;
+  z-index: 2;
+  left: 30px;
+  background-color: var(--background-secondary);
 }
 
 .database-plugin__table {
