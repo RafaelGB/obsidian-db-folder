@@ -46,7 +46,13 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   return (
     <span
       ref={formulaRef}
-      className={`${c("md_cell " + getAlignmentClassname(tableColumn.config))}`}
+      className={`${c(
+        "md_cell " +
+          getAlignmentClassname(
+            tableColumn.config,
+            configInfo.getLocalSettings()
+          )
+      )}`}
       key={`formula_${cell.id}`}
     />
   );

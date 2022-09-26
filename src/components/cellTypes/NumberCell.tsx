@@ -70,11 +70,15 @@ const NumberCell = (props: CellComponentProps) => {
       onChange={handleOnChange}
       onKeyDown={handleKeyDown}
       onBlur={handleOnBlur}
-      className={c(getAlignmentClassname(tableColumn.config))}
+      className={c(
+        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+      )}
     />
   ) : (
     <span
-      className={c(getAlignmentClassname(tableColumn.config))}
+      className={c(
+        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+      )}
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
     >
