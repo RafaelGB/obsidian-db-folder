@@ -5,11 +5,20 @@ export interface MediaSettings {
     height: number;
 }
 
-export type FilterCondition = {
-    field: string;
+export type FilterGroup = AtomicFilter | FilterGroupCondition;
+
+export type FilterGroupCondition = {
+    condition: string;
+    filters: FilterGroup[];
+}
+export type AtomicFilter = {
     operator: string;
     value?: any;
 }
+
+export type FilterCondition = {
+    field: string;
+} & FilterGroup;
 /**
  * Options that affects the behavior of the plugin and defines default values with some fields
  */
