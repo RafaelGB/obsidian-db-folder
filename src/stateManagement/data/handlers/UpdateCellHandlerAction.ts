@@ -6,7 +6,7 @@ import { moveFile } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
-import { destination_folder } from "helpers/FileManagement";
+import { destination_folder, sanitize_path } from "helpers/FileManagement";
 import { EditEngineService } from "services/EditEngineService";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
@@ -36,7 +36,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             const emptyPathColumn = pathColumns.some((columnName) => !modifiedRow[columnName]);
             // Update the row on disk
             if ( isMovingFile && pathColumns.includes(column.id) && !emptyPathColumn) {
-                const subfolders = pathColumns .map((name) => modifiedRow[name]) .join("/");
+                const subfolders = pathColumns .map((name) => sanitize_path(modifiedRow[name] as string, "-")) .join("/");
                 const moveInfo = {
                     file: rowTFile,
                     id: column.id,
