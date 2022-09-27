@@ -26,6 +26,6 @@ The plugin works with YAML and dataview inline fields, but by default, it looks 
 
 If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database. 
 
-## Alignment
+## Appearance
 
-You can change the text alignment inside the column setting between `right-aligned`, `centered`, and `left-aligned` for the **text**, **number**, and **formula** properties.
+You can enable text wrapping or you can change the text alignment between `right-aligned`, `centered`, `left-aligned`, and `justified` from the column setting of the **text**, **number**, and **formula** properties.
