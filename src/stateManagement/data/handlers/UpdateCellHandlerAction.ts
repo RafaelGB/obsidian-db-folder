@@ -33,9 +33,10 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                 ddbbConfig.group_folder_column
                 .split(",")
                 .filter(Boolean);
+            const emptyPathColumn = pathColumns.some((columnName) => !modifiedRow[columnName]);
             // Update the row on disk
-            if ( isMovingFile && pathColumns.includes(column.id)) {
-                const subfolders = pathColumns .map((name) => modifiedRow[name] || "-") .join("/");
+            if ( isMovingFile && pathColumns.includes(column.id) && !emptyPathColumn) {
+                const subfolders = pathColumns .map((name) => modifiedRow[name]) .join("/");
                 const moveInfo = {
                     file: rowTFile,
                     id: column.id,
