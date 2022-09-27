@@ -1,4 +1,4 @@
-import { InputType, getOperatorFilterValue, MarkdownBreakerRules, OperatorFilter } from "helpers/Constants";
+import { InputType, getOperatorFilterValue, MarkdownBreakerRules, OperatorFilter, ConditionFiltersOptions } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { DataviewApi, getAPI, isPluginEnabled } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
@@ -20,77 +20,6 @@ class DataviewProxy {
             new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
             throw new Error('Dataview plugin is not installed');
         }
-    }
-
-    filter(dbFilters: FilterCondition[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
-        if (!dbFilters || dbFilters.length === 0) return true;
-        return !dbFilters.some((filter) => {
-            const filterableValue = this.parseLiteral(p[filter.field], InputType.MARKDOWN, ddbbConfig);
-            return !this.validateFilter(filterableValue, filter);
-        });
-    }
-
-    private validateFilter(filterableValue: Literal, filter: FilterGroup): boolean {
-        if ((filter as FilterGroupCondition).condition) {
-            let groupResult = true;
-            if ((filter as FilterGroupCondition).condition === 'AND') {
-                // If some filter is false, the group is false
-                groupResult = !(filter as FilterGroupCondition).filters.some((f) => {
-                    return !this.validateFilter(filterableValue, f);
-                });
-            } else {
-                // If some filter is true, the group is true
-                groupResult = (filter as FilterGroupCondition).filters.some((f) => {
-                    return this.validateFilter(filterableValue, f);
-                });
-            }
-            return groupResult;
-        }
-        // Atomic filter
-        const operator = (filter as AtomicFilter).operator;
-        const value = (filter as AtomicFilter).value;
-        switch (getOperatorFilterValue(operator)) {
-            case OperatorFilter.IS_EMPTY[1]:
-                if (filterableValue !== '') {
-                    return false;
-                }
-                break;
-            case OperatorFilter.IS_NOT_EMPTY[1]:
-                if (filterableValue === '') {
-                    return false;
-                }
-                break;
-            case OperatorFilter.EQUAL[1]:
-                if (filterableValue !== value) return false;
-                break;
-            case OperatorFilter.NOT_EQUAL[1]:
-                if (filterableValue === value) return false;
-                break;
-            case OperatorFilter.GREATER_THAN[1]:
-                if (filterableValue <= value) return false;
-                break;
-            case OperatorFilter.LESS_THAN[1]:
-                if (filterableValue >= value) return false;
-                break;
-            case OperatorFilter.GREATER_THAN_OR_EQUAL[1]:
-                if (filterableValue < value) return false;
-                break;
-            case OperatorFilter.LESS_THAN_OR_EQUAL[1]:
-                if (filterableValue > value) return false;
-                break;
-            case OperatorFilter.CONTAINS[1]:
-                if (!filterableValue.toString().includes(value)) return false;
-                break;
-            case OperatorFilter.STARTS_WITH[1]:
-                if (!filterableValue.toString().startsWith(value)) return false;
-                break;
-            case OperatorFilter.ENDS_WITH[1]:
-                if (!filterableValue.toString().endsWith(value)) return false;
-                break;
-            default:
-                throw new Error(`Unknown operator ${operator}`);
-        }
-        return true;
     }
 
     wrapLiteral(literal: Literal): WrappedLiteral {
