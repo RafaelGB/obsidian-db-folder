@@ -28,4 +28,4 @@ If there is no metadata in your notes, it will be created when you fill the corr
 
 ## Appearance
 
-You can enable text wrapping or you can change the text alignment between `right-aligned`, `centered`, `left-aligned`, and `justified` from the column setting of the **text**, **number**, and **formula** properties.
+You can enable text wrapping and you can change the text alignment between `right-aligned`, `centered`, `left-aligned`, and `justified` from the column setting of the **text**, **number**, and **formula** propertie s.
