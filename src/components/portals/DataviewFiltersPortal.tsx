@@ -10,10 +10,18 @@ import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { OperatorFilter, StyleVariables } from "helpers/Constants";
+import {
+  ConditionFiltersOptions,
+  OperatorFilter,
+  StyleVariables,
+} from "helpers/Constants";
 import React, { useState } from "react";
 import { t } from "lang/helpers";
-import { AtomicFilter } from "cdm/SettingsModel";
+import {
+  AtomicFilter,
+  FilterGroup,
+  FilterGroupCondition,
+} from "cdm/SettingsModel";
 
 const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const { table } = props;
@@ -54,7 +62,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     };
 
   const onChangeOperatorHandler =
-    (conditionIndex: number) =>
+    (conditionIndex: number, level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
       const alteredFilterState = { ...configInfo.getFilters() };
       (alteredFilterState.conditions[conditionIndex] as AtomicFilter).operator =
@@ -66,6 +74,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const existedColumnSelector = (selectorProps: {
     currentCol: string;
     index: number;
+    level: number;
   }) => {
     return (
       <FormControl
@@ -108,13 +117,15 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   const operatorSelector = (selectorProps: {
     currentOp: string;
     index: number;
+    level: number;
   }) => {
+    const { currentOp, index, level } = selectorProps;
     return (
       <FormControl fullWidth>
         <Select
-          value={selectorProps.currentOp}
+          value={currentOp}
           size="small"
-          onChange={onChangeOperatorHandler(selectorProps.index)}
+          onChange={onChangeOperatorHandler(index, level)}
           style={{
             backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
             color: StyleVariables.TEXT_NORMAL,
@@ -132,7 +143,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
             return (
               <MenuItem
                 value={key}
-                key={`MenuItem-OperatorSelector-${value[0]}-${selectorProps.index}`}
+                key={`MenuItem-OperatorSelector-${value[0]}-${index}`}
               >
                 {t(value[1] as any)}
               </MenuItem>
@@ -143,8 +154,48 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     );
   };
 
+  const ConditionSelector = (selectorProps: {
+    currentCon: string;
+    index: number;
+    level: number;
+  }) => {
+    const { currentCon, index, level } = selectorProps;
+    return (
+      <FormControl fullWidth>
+        <Select
+          value={currentCon}
+          size="small"
+          onChange={onChangeOperatorHandler(index, level)}
+          style={{
+            backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+            color: StyleVariables.TEXT_NORMAL,
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+                color: StyleVariables.TEXT_NORMAL,
+              },
+            },
+          }}
+        >
+          {Object.entries(ConditionFiltersOptions).map(([key, value]) => {
+            return (
+              <MenuItem
+                value={key}
+                key={`MenuItem-ConditionSelector-${value[0]}-${index}`}
+              >
+                {value}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    );
+  };
+
   const onChangeFilterValueHandler =
-    (conditionIndex: number) =>
+    (conditionIndex: number, level: number) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const alteredFilterState = { ...configInfo.getFilters() };
       (alteredFilterState.conditions[conditionIndex] as AtomicFilter).value =
@@ -159,54 +210,128 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     configActions.alterFilters(alteredFilterState);
     dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
   };
+  /** GROUP FILTER COMPONENT */
+  const GroupFilterComponent = (groupProps: {
+    group: FilterGroup;
+    index: number;
+    level: number;
+  }) => {
+    const { group, index, level } = groupProps;
+    if ((group as FilterGroupCondition).condition) {
+      const filtersOfGroup = (group as FilterGroupCondition).filters;
+      const conditionOfGroup = (group as FilterGroupCondition).condition;
+      return (
+        <div
+          key={`div-groupFilterComponent-${index}-${level}`}
+          style={{
+            border: `1px solid ${StyleVariables.BACKGROUND_SECONDARY}`,
+          }}
+        >
+          <Grid
+            container
+            rowSpacing={0.25}
+            columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
+            key={`Grid-AtomicFilter-${index}-${level}`}
+          >
+            <Grid
+              item
+              xs="auto"
+              key={`Grid-AtomicFilter-operator-${index}-${level}`}
+            >
+              {ConditionSelector({
+                currentCon: conditionOfGroup,
+                index: index,
+                level: level,
+              })}
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              key={`Grid-AtomicFilter-value-${index}-${level}`}
+            >
+              {filtersOfGroup.map((filter, filterIndex) => {
+                return GroupFilterComponent({
+                  group: filter as FilterGroupCondition,
+                  index: filterIndex,
+                  level: level + 1,
+                });
+              })}
+            </Grid>
+          </Grid>
+        </div>
+      );
+    } else {
+      return AtomicFilterComponent({
+        index: index,
+        level: 0,
+        atomicFilter: group as AtomicFilter,
+      });
+    }
+  };
+  /** ATOMIC FILTER COMPONENT */
+  const AtomicFilterComponent = (props: {
+    index: number;
+    level: number;
+    atomicFilter: AtomicFilter;
+  }) => {
+    const { index, level, atomicFilter } = props;
+    const { field, operator, value } = atomicFilter;
+    return (
+      <Grid
+        container
+        rowSpacing={0.25}
+        columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
+        key={`Grid-AtomicFilter-${index}-${level}`}
+      >
+        <Grid item xs="auto" key={`Grid-AtomicFilter-field-${index}`}>
+          {existedColumnSelector({
+            currentCol: field,
+            index: index,
+            level: level,
+          })}
+        </Grid>
+        <Grid item xs="auto" key={`Grid-AtomicFilter-operator-${index}`}>
+          {operatorSelector({
+            currentOp: operator,
+            index: index,
+            level: level,
+          })}
+        </Grid>
+        {/* if value exists, show it */}
+        {![OperatorFilter.IS_EMPTY[0], OperatorFilter.IS_NOT_EMPTY[0]].contains(
+          operator
+        ) && (
+          <Grid item xs={3.5} key={`Grid-AtomicFilter-value-${index}`}>
+            <ValueFilterComponent
+              value={value}
+              handler={onChangeFilterValueHandler(index, level)}
+            />
+          </Grid>
+        )}
+        {/* Remove button */}
+        <Grid item xs={0.75} key={`Grid-remove-${index}`}>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={deleteConditionHadler(index)}
+            endIcon={<DeleteIcon />}
+          />
+        </Grid>
+      </Grid>
+    );
+  };
 
   return (
     <div>
-      {configInfo
-        .getFilters()
-        .conditions.map((condition: AtomicFilter, index) => {
-          const { field, operator, value } = condition;
-          return (
-            <Grid
-              container
-              rowSpacing={0.25}
-              columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
-              key={`Grid-container-${index}`}
-            >
-              <Grid item xs="auto" key={`Grid-field-${index}`}>
-                {existedColumnSelector({
-                  currentCol: field,
-                  index: index,
-                })}
-              </Grid>
-              <Grid item xs="auto" key={`Grid-operator-${index}`}>
-                {operatorSelector({ currentOp: operator, index: index })}
-              </Grid>
-              {/* if value exists, show it */}
-              {![
-                OperatorFilter.IS_EMPTY[0],
-                OperatorFilter.IS_NOT_EMPTY[0],
-              ].contains(operator) && (
-                <Grid item xs={3.5} key={`Grid-value-${index}`}>
-                  <ValueFilterComponent
-                    value={value}
-                    handler={onChangeFilterValueHandler(index)}
-                  />
-                </Grid>
-              )}
-              {/* Remove button */}
-              <Grid item xs={0.75} key={`Grid-remove-${index}`}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  onClick={deleteConditionHadler(index)}
-                  endIcon={<DeleteIcon />}
-                />
-              </Grid>
-            </Grid>
-          );
-        })}
+      {configInfo.getFilters().conditions.map((condition, index) => {
+        /** Recursive component */
+        return GroupFilterComponent({
+          group: condition as FilterGroupCondition,
+          index: index,
+          level: 0,
+        });
+      })}
     </div>
   );
 };
