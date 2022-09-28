@@ -1,7 +1,8 @@
 import { InputType } from "helpers/Constants";
+import { organizeNotesIntoSubfolders } from "helpers/VaultManagement";
 import { Notice } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-import { add_text } from "settings/SettingsComponents";
+import { add_button, add_text } from "settings/SettingsComponents";
 
 const createNoticeDebouncer = () =>{
     const timeout: { current: ReturnType<typeof setTimeout>; } = { current: null };
@@ -35,7 +36,7 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
             const debouncedNotice = createNoticeDebouncer();
             const group_folder_column_input_promise =
               async ( value: string ): Promise<void> => {
-                
+
                 const validConfig =
                   value === "" ||
                   value
@@ -66,7 +67,23 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
                 .group_folder_column,
                 group_folder_column_input_promise,
             );
-        }
-        return this.goNext(settingHandlerResponse);
+            add_button(
+              containerEl,
+              "apply structure",
+              "apply the structure to the current folder",
+              "apply",
+              "reflect the setting in the current folder",
+              async () => {
+                try {
+                  const numberOfMovedFiles = await organizeNotesIntoSubfolders( view,);
+                  new Notice( `Moved ${numberOfMovedFiles} file${numberOfMovedFiles>1? 's':''} into subfolders`, 1500,);
+                } catch (e) {
+                  new Notice( `something went wrong while moving the folders: ${e.message}`, 1500,);
+                  console.error(e);
+                }
+              },
+            );
     }
+    return this.goNext(settingHandlerResponse);
+  }
 }

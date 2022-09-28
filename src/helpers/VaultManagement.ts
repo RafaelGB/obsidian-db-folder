@@ -2,14 +2,15 @@ import { RowDataType, NormalizedPath, TableColumn } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
+import { DatabaseCore, MetadataColumns, SourceDataTypes } from "helpers/Constants";
 import { generateDataviewTableQuery } from 'helpers/QueryHelper';
 import { DataviewService } from 'services/DataviewService';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
-import { EditEngineService } from 'services/EditEngineService';
+import { DatabaseView } from 'DatabaseView';
+import { sanitize_path, destination_folder } from './FileManagement';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -166,21 +167,8 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
  * @param folderPath 
  * @param action 
  */
-export async function moveFile(folderPath: string, info: {
-  file: TFile,
-  id: string,
-  value: Literal,
-  columns: TableColumn[],
-  ddbbConfig: LocalSettings
-}): Promise<void> {
-  await EditEngineService.updateRowFileProxy(
-    info.file,
-    info.id,
-    info.value,
-    info.columns,
-    info.ddbbConfig,
-    UpdateRowOptions.COLUMN_VALUE
-  );
+export async function moveFile(folderPath: string, file: TFile): Promise<void> {
+  
   try {
     await createFolder(folderPath);
   } catch (error) {
@@ -188,8 +176,8 @@ export async function moveFile(folderPath: string, info: {
     // Handle error
     throw error;
   }
-  const filePath = `${folderPath}/${info.file.name}`;
-  await app.fileManager.renameFile(info.file, filePath);
+  const filePath = `${folderPath}/${file.name}`;
+  await app.fileManager.renameFile(file, filePath);
 }
 
 export async function createFolder(folderPath: string): Promise<void> {
@@ -199,3 +187,54 @@ export async function createFolder(folderPath: string): Promise<void> {
     }
   });
 }
+
+
+export const postMoveFile = ({ file, row, foldePath, subfolders, }: { row: RowDataType; file: TFile; foldePath: string; subfolders: string; }) => {
+  // Update row file
+  row[ MetadataColumns.FILE ] = `${file.basename}|${foldePath}/${subfolders}/${file.name}`;
+  // Check if action.value is a valid folder name
+  const auxPath =
+      subfolders !== ""
+      ? `${foldePath}/${subfolders}/${file.name}`
+      : `${foldePath}/${file.name}`;
+
+  const recordRow: Record<string, Literal> = {};
+  Object.entries(row).forEach(([key, value]) => {
+      recordRow[key] = value as Literal;
+  });
+
+  row.__note__.filepath = auxPath;
+};
+
+
+export const organizeNotesIntoSubfolders = async ( view: DatabaseView,): Promise<number> => {
+  if(!view.diskConfig.yaml.config.group_folder_column) return 0;
+      let numberOfMovedFiles = 0;
+      const pathColumns: string[] =
+      view.diskConfig.yaml.config.group_folder_column
+          .split(",")
+          .filter(Boolean);
+      for (const row of view.rows) {
+
+      let rowTFile = row.__note__.getFile();
+
+      const pathHasAnEmptyCell = pathColumns.some((columnName) => !row[columnName]);
+
+      // Update the row on disk
+      if (!pathHasAnEmptyCell) {
+          const subfolders = pathColumns .map((name) => sanitize_path(row[name] as string, "-")) .join("/");
+          const foldePath = destination_folder(view, view.diskConfig.yaml.config);
+
+          // Check if file is already in the correct folder
+          const auxPath = `${foldePath}/${subfolders}/${rowTFile.name}`
+          const fileIsAlreadyInCorrectFolder =  row.__note__.filepath === auxPath;
+          if(fileIsAlreadyInCorrectFolder) continue;
+
+          await moveFile(`${foldePath}/${subfolders}`, rowTFile);
+          await postMoveFile({ file: rowTFile, row, foldePath, subfolders });
+          numberOfMovedFiles++;
+      } 
+      
+  }
+  return numberOfMovedFiles;
+};

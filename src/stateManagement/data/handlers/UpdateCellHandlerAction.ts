@@ -2,7 +2,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
-import { moveFile } from "helpers/VaultManagement";
+import { moveFile, postMoveFile } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
@@ -45,23 +45,16 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     ddbbConfig: ddbbConfig,
                 }
                 const foldePath = destination_folder(view, ddbbConfig);
-                await moveFile(`${foldePath}/${subfolders}`, moveInfo);
-                // Update row file
-                modifiedRow[
-                    MetadataColumns.FILE
-                ] = `${rowTFile.basename}|${foldePath}/${subfolders}/${rowTFile.name}`;
-                // Check if action.value is a valid folder name
-                const auxPath =
-                    subfolders !== ""
-                        ? `${foldePath}/${subfolders}/${rowTFile.name}`
-                        : `${foldePath}/${rowTFile.name}`;
-
-                const recordRow: Record<string, Literal> = {};
-                Object.entries(modifiedRow).forEach(([key, value]) => {
-                    recordRow[key] = value as Literal;
-                });
-
-                modifiedRow.__note__.filepath = auxPath;
+                await EditEngineService.updateRowFileProxy(
+                    moveInfo.file,
+                    moveInfo.id,
+                    moveInfo.value,
+                    moveInfo.columns,
+                    moveInfo.ddbbConfig,
+                    UpdateRowOptions.COLUMN_VALUE
+                  );
+                await moveFile(`${foldePath}/${subfolders}`, rowTFile);
+                await postMoveFile({ file: rowTFile, row: modifiedRow, foldePath, subfolders });
             } else {
                 // Save on disk
                 await EditEngineService.updateRowFileProxy(
