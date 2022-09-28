@@ -1,10 +1,10 @@
-import { InputType, getOperatorFilterValue, MarkdownBreakerRules, OperatorFilter, ConditionFiltersOptions } from "helpers/Constants";
+import { InputType, MarkdownBreakerRules } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { DataviewApi, getAPI, isPluginEnabled } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
-import { AtomicFilter, FilterCondition, FilterGroup, FilterGroupCondition, LocalSettings } from "cdm/SettingsModel";
+import { LocalSettings } from "cdm/SettingsModel";
 class DataviewProxy {
 
     private static instance: DataviewProxy;

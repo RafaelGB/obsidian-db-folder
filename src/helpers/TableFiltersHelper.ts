@@ -1,30 +1,29 @@
-import { AtomicFilter, FilterCondition, FilterGroup, FilterGroupCondition, LocalSettings } from "cdm/SettingsModel";
+import { AtomicFilter, FilterGroup, FilterGroupCondition, LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview";
 import { ConditionFiltersOptions, getOperatorFilterValue, InputType, OperatorFilter } from "helpers/Constants";
 import { DataviewService } from "services/DataviewService";
 
-export default function tableFilter(dbFilters: FilterCondition[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
+export default function tableFilter(dbFilters: FilterGroup[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
     if (!dbFilters || dbFilters.length === 0) return true;
     return !dbFilters.some((filter) => {
-        const filterableValue = DataviewService.parseLiteral(p[filter.field], InputType.MARKDOWN, ddbbConfig);
-        return !this.validateFilter(filterableValue, filter);
+        return !validateFilter(p, filter, ddbbConfig);
     });
 }
 
-function validateFilter(filterableValue: Literal, filter: FilterGroup): boolean {
+function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbConfig: LocalSettings): boolean {
     if ((filter as FilterGroupCondition).condition) {
         let groupResult = true;
         switch ((filter as FilterGroupCondition).condition) {
             case ConditionFiltersOptions.AND:
                 // If some filter is false, the group is false
                 groupResult = !(filter as FilterGroupCondition).filters.some((f) => {
-                    return !this.validateFilter(filterableValue, f);
+                    return !validateFilter(p, f, ddbbConfig);
                 });
                 break;
             case ConditionFiltersOptions.OR:
                 // If some filter is true, the group is true
                 groupResult = (filter as FilterGroupCondition).filters.some((f) => {
-                    return this.validateFilter(filterableValue, f);
+                    return validateFilter(p, f, ddbbConfig);
                 });
                 break;
             default:
@@ -32,7 +31,7 @@ function validateFilter(filterableValue: Literal, filter: FilterGroup): boolean 
         }
         return groupResult;
     }
-
+    const filterableValue = DataviewService.parseLiteral(p[(filter as AtomicFilter).field], InputType.MARKDOWN, ddbbConfig);
     // Atomic filter
     const operator = (filter as AtomicFilter).operator;
     const value = (filter as AtomicFilter).value;

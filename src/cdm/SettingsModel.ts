@@ -12,13 +12,10 @@ export type FilterGroupCondition = {
     filters: FilterGroup[];
 }
 export type AtomicFilter = {
+    field: string;
     operator: string;
     value?: any;
 }
-
-export type FilterCondition = {
-    field: string;
-} & FilterGroup;
 /**
  * Options that affects the behavior of the plugin and defines default values with some fields
  */
@@ -56,7 +53,7 @@ export interface LocalSettings {
 
 export interface FilterSettings {
     enabled: boolean;
-    conditions: FilterCondition[];
+    conditions: FilterGroup[];
 }
 
 export interface DatabaseSettings {
