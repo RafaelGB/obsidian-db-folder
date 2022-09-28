@@ -9,9 +9,13 @@ import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSett
 import { TableColumn } from "cdm/FolderModel";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import { destination_folder } from "helpers/FileManagement";
+import { organizeNotesIntoSubfolders } from "helpers/VaultManagement";
+import { removeEmptyFolders } from "helpers/RemoveEmptyFolders";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
+  const { view } = table.options.meta;
   const [columnsInfo, columnActions] = table.options.meta.tableState.columns(
     (state) => [state.info, state.actions]
   );
@@ -150,6 +154,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           .map((item) => item === column.columnDef.id? newKey : item)
           .join(",");
         configActions.alterConfig({ group_folder_column: newGroupFolderColumn });
+        // Reorganize files and remove empty folders
+        const folderPath = destination_folder(view, view.diskConfig.yaml.config);
+        organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config )
+        .then(()=>{ removeEmptyFolders(folderPath, view.diskConfig.yaml.config); })
       }
   }
 

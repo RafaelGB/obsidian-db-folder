@@ -355,6 +355,8 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     cell_size: CellSizeOptions.NORMAL,
     sticky_first_column: false,
     group_folder_column: '',
+    remove_empty_folders: false,
+    automatically_group_files: false,
     show_metadata_created: false,
     show_metadata_modified: false,
     show_metadata_tasks: false,

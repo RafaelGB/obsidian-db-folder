@@ -4,18 +4,17 @@ import { removeEmptyFolders } from "helpers/RemoveEmptyFolders";
 import { organizeNotesIntoSubfolders } from "helpers/VaultManagement";
 import { Notice } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-import { add_button, add_text } from "settings/SettingsComponents";
+import { add_text, add_toggle } from "settings/SettingsComponents";
 
-const createNoticeDebouncer = () =>{
+const createDebouncer = ( callback: (...args: any[])=> void,
+debounceDelay: number,) =>{
     const timeout: { current: ReturnType<typeof setTimeout>; } = { current: null };
     return {
-      notice: (
-        message: string,
-        messageDelay: number,
-        debounceDelay: number,
+      debounce: (
+      ...args: any[]
       ) => {
         clearTimeout(timeout.current);
-        timeout.current = setTimeout(() => { new Notice(message, messageDelay); }, debounceDelay);
+        timeout.current = setTimeout(()=>callback(args), debounceDelay);
       },
       cleanup: () => clearTimeout(timeout.current),
     };
@@ -23,7 +22,7 @@ const createNoticeDebouncer = () =>{
 
 
 export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
-  settingTitle: string = 'Choose columns to organize files into subfolders'
+  settingTitle: string = 'Define a schema to group files into folders';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { containerEl, local, view } = settingHandlerResponse;
         if (local) {
@@ -35,7 +34,12 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
             );
             const lowerCaseAllowedColumns = new Set( Array.from(allowedColumns).map((f) => f.toLowerCase()),);
             const lowerCaseAllowedColumnsMap = new Map( Array.from(allowedColumns).map((key) => [key.toLowerCase(), key]),)
-            const debouncedNotice = createNoticeDebouncer();
+            const debouncedNotice = createDebouncer((message, messageDelay)=>new Notice(message, messageDelay), 1500);
+            const debouncedOrganizeNotesIntoSubfolders = createDebouncer(async ()=>{
+              const folderPath = destination_folder(view, view.diskConfig.yaml.config);
+              await organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config );
+              await removeEmptyFolders(folderPath, view.diskConfig.yaml.config);
+            }, 5000);
             const group_folder_column_input_promise =
               async ( value: string ): Promise<void> => {
 
@@ -47,15 +51,17 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
 
                 if (validConfig){
                     debouncedNotice.cleanup();
+                    debouncedOrganizeNotesIntoSubfolders.cleanup();
                     // make sure the case of each column is correct
                     const correctCaseColumns = value
                         .split(",")
                         .map((column) => lowerCaseAllowedColumnsMap.get(column.toLowerCase()))
                         .join(",");
                     view.diskConfig.updateConfig({ group_folder_column: correctCaseColumns });
+                    debouncedOrganizeNotesIntoSubfolders.debounce();
                 }
                 else {
-                    debouncedNotice.notice(`"${value}" is an invalid value for group_folder_column`, 1500, 1500)
+                    debouncedNotice.debounce(`"${value}" is an invalid value for group_folder_column`, 4000)
                 }
               };
 
@@ -69,45 +75,28 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
                 .group_folder_column,
                 group_folder_column_input_promise,
             );
-            add_button(
+           
+            add_toggle(
               containerEl,
-              "Apply",
-              "Organize files according to the group folder column setting",
-              "Apply",
-              "",
-              async () => {
-                try {
-                  const folderPath = destination_folder(view, view.diskConfig.yaml.config);
-                  const numberOfMovedFiles = await organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config );
-                  new Notice( `Moved ${numberOfMovedFiles} file${numberOfMovedFiles>1? 's':''} into subfolders`, 1500,);
-
-                
-                } catch (e) {
-                  new Notice( `Something went wrong: ${e.message}`, 1500,);
-                  console.error(e);
+              "Automatically group all files into folders",
+              "By default, files are groupped individually, after a value is updated",
+              view.diskConfig.yaml.config.automatically_group_files,
+              async (value) => {
+                view.diskConfig.updateConfig({ automatically_group_files: value });
+                if(value){
+                    debouncedOrganizeNotesIntoSubfolders.debounce();
                 }
-              },
-            );
-
-            add_button(
+              }
+            )
+            add_toggle(
               containerEl,
               "Remove empty folders",
-              "Remove empty folders from the current database folder",
-              "Eemove",
-              "",
-              async () => {
-                try {
-                  const folderPath = destination_folder(view, view.diskConfig.yaml.config);
-                  const removedDirectories = await removeEmptyFolders(folderPath, new Set());
-                  const n = removedDirectories.size;
-                  const message = `Removed ${n} empty director${n===0||n>1? 'ies':'y'}`
-                  new Notice( message, 1500);
-                } catch (e) {
-                  new Notice( `Something went: ${e.message}`, 1500,);
-                  console.error(e);
-                }
-              },
-            );
+              "Automatically remove empty folders after grouping files.",
+              view.diskConfig.yaml.config.remove_empty_folders,
+              async (value) => {
+                view.diskConfig.updateConfig({ remove_empty_folders: value });
+              }
+            )
     }
     return this.goNext(settingHandlerResponse);
   }

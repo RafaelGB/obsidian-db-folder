@@ -6,6 +6,9 @@ import { UpdateRowOptions } from "helpers/Constants";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
 import { EditEngineService } from "services/EditEngineService";
+import { destination_folder } from "helpers/FileManagement";
+import { removeEmptyFolders } from "helpers/RemoveEmptyFolders";
+import { organizeNotesIntoSubfolders } from "helpers/VaultManagement";
 
 export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -31,6 +34,7 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
 function removeButton(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { column, table } = headerActionResponse.headerMenuProps.headerProps;
+  const { view } = table.options.meta;
   const configActions =  table.options.meta.tableState.configState((state) => state.actions);
   const ddbbConfig = table.options.meta.tableState.configState(
     (store) => store.ddbbConfig
@@ -72,6 +76,10 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
         .filter((item) => item !== column.columnDef.id)
         .join(",");
       configActions.alterConfig({ group_folder_column: newGroupFolderColumn });
+      // Reorganize files and remove empty folders
+      const folderPath = destination_folder(view, view.diskConfig.yaml.config);
+      organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config )
+      .then(()=>{ removeEmptyFolders(folderPath,view.diskConfig.yaml.config); })
     }
   };
 

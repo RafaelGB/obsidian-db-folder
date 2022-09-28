@@ -8,6 +8,7 @@ import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 import { destination_folder, sanitize_path } from "helpers/FileManagement";
 import { EditEngineService } from "services/EditEngineService";
+import { removeEmptyFolders } from "helpers/RemoveEmptyFolders";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -44,7 +45,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     columns: columns,
                     ddbbConfig: ddbbConfig,
                 }
-                const foldePath = destination_folder(view, ddbbConfig);
+                const folderPath = destination_folder(view, ddbbConfig);
                 await EditEngineService.updateRowFileProxy(
                     moveInfo.file,
                     moveInfo.id,
@@ -53,8 +54,9 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     moveInfo.ddbbConfig,
                     UpdateRowOptions.COLUMN_VALUE
                   );
-                await moveFile(`${foldePath}/${subfolders}`, rowTFile);
-                await postMoveFile({ file: rowTFile, row: modifiedRow, foldePath, subfolders });
+                await moveFile(`${folderPath}/${subfolders}`, rowTFile);
+                await postMoveFile({ file: rowTFile, row: modifiedRow, folderPath, subfolders });
+                await removeEmptyFolders(folderPath, ddbbConfig);
             } else {
                 // Save on disk
                 await EditEngineService.updateRowFileProxy(

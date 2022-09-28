@@ -188,14 +188,14 @@ export async function createFolder(folderPath: string): Promise<void> {
 }
 
 
-export const postMoveFile = ({ file, row, foldePath, subfolders, }: { row: RowDataType; file: TFile; foldePath: string; subfolders: string; }) => {
+export const postMoveFile = ({ file, row, folderPath, subfolders, }: { row: RowDataType; file: TFile; folderPath: string; subfolders: string; }) => {
   // Update row file
-  row[ MetadataColumns.FILE ] = `${file.basename}|${foldePath}/${subfolders}/${file.name}`;
+  row[ MetadataColumns.FILE ] = `${file.basename}|${folderPath}/${subfolders}/${file.name}`;
   // Check if action.value is a valid folder name
   const auxPath =
       subfolders !== ""
-      ? `${foldePath}/${subfolders}/${file.name}`
-      : `${foldePath}/${file.name}`;
+      ? `${folderPath}/${subfolders}/${file.name}`
+      : `${folderPath}/${file.name}`;
 
   const recordRow: Record<string, Literal> = {};
   Object.entries(row).forEach(([key, value]) => {
@@ -207,38 +207,47 @@ export const postMoveFile = ({ file, row, foldePath, subfolders, }: { row: RowDa
 
 
 export const organizeNotesIntoSubfolders = async (
-    foldePath: string, 
+  folderPath: string, 
     rows: Array<RowDataType>,
     ddbbConfig: LocalSettings
   ): Promise<number> => {
-  if(!ddbbConfig.group_folder_column) return 0;
-      let numberOfMovedFiles = 0;
-      const pathColumns: string[] =
-      ddbbConfig.group_folder_column
-          .split(",")
-          .filter(Boolean);
-      for (const row of rows) {
+    try {
+    if(!ddbbConfig.group_folder_column) return 0;
+    if(!ddbbConfig.automatically_group_files) return 0;
+        let numberOfMovedFiles = 0;
+        const pathColumns: string[] =
+        ddbbConfig.group_folder_column
+            .split(",")
+            .filter(Boolean);
+        for (const row of rows) {
 
-      let rowTFile = row.__note__.getFile();
+        let rowTFile = row.__note__.getFile();
 
-      const pathHasAnEmptyCell = pathColumns.some((columnName) => !row[columnName]);
+        const pathHasAnEmptyCell = pathColumns.some((columnName) => !row[columnName]);
 
-      // Update the row on disk
-      if (!pathHasAnEmptyCell) {
-          const subfolders = pathColumns .map((name) => sanitize_path(row[name] as string, "-")) .join("/");
+        // Update the row on disk
+        if (!pathHasAnEmptyCell) {
+            const subfolders = pathColumns .map((name) => sanitize_path(row[name] as string, "-")) .join("/");
 
-          // Check if file is already in the correct folder
-          const auxPath = `${foldePath}/${subfolders}/${rowTFile.name}`
-          const fileIsAlreadyInCorrectFolder =  row.__note__.filepath === auxPath;
-          if(fileIsAlreadyInCorrectFolder) continue;
+            // Check if file is already in the correct folder
+            const auxPath = `${folderPath}/${subfolders}/${rowTFile.name}`
+            const fileIsAlreadyInCorrectFolder =  row.__note__.filepath === auxPath;
+            if(fileIsAlreadyInCorrectFolder) continue;
 
-          await moveFile(`${foldePath}/${subfolders}`, rowTFile);
-          await postMoveFile({ file: rowTFile, row, foldePath, subfolders });
-          numberOfMovedFiles++;
-      } 
-      
+            await moveFile(`${folderPath}/${subfolders}`, rowTFile);
+            await postMoveFile({ file: rowTFile, row, folderPath, subfolders });
+            numberOfMovedFiles++;
+        } 
+        
+    }
+    if(numberOfMovedFiles > 0) 
+      new Notice( `Moved ${numberOfMovedFiles} file${numberOfMovedFiles>1? 's':''} into subfolders`, 1500,);
+                  
+    return numberOfMovedFiles;
+  } catch (error) {
+    new Notice( `Error while moving files into subfolders: ${error.message}`, 5000);
+    throw error;
   }
-  return numberOfMovedFiles;
 };
 
 
