@@ -31,6 +31,7 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
 function removeButton(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { column, table } = headerActionResponse.headerMenuProps.headerProps;
+  const configActions =  table.options.meta.tableState.configState((state) => state.actions);
   const ddbbConfig = table.options.meta.tableState.configState(
     (store) => store.ddbbConfig
   );
@@ -63,6 +64,15 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
     dataActions.removeDataOfColumn(column.columnDef as TableColumn);
     columnActions.remove(column.columnDef as TableColumn);
     hooks.setExpanded(false);
+    // Remove column from group_folder_column
+    const groupFolderColumn =
+        ddbbConfig.group_folder_column.split(",");
+    if (groupFolderColumn.includes(column.columnDef.id)) {
+      const newGroupFolderColumn = groupFolderColumn
+        .filter((item) => item !== column.columnDef.id)
+        .join(",");
+      configActions.alterConfig({ group_folder_column: newGroupFolderColumn });
+    }
   };
 
   return headerButtonComponent({

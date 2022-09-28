@@ -21,6 +21,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const configInfo = table.options.meta.tableState.configState(
     (state) => state.info
   );
+  const configActions =  table.options.meta.tableState.configState((state) => state.actions);
+  const ddbbConfig = table.options.meta.tableState.configState( (store) => store.ddbbConfig);
 
   /** Header props */
   const {
@@ -140,6 +142,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
           configInfo.getLocalSettings()
         );
       });
+      // Rename column in group_folder_column
+      const groupFolderColumn =
+        ddbbConfig.group_folder_column.split(",");
+      if (groupFolderColumn.includes(column.columnDef.id)) {
+        const newGroupFolderColumn = groupFolderColumn
+          .map((item) => item === column.columnDef.id? newKey : item)
+          .join(",");
+        configActions.alterConfig({ group_folder_column: newGroupFolderColumn });
+      }
   }
 
   function handleKeyDown(e: any) {
