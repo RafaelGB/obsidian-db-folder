@@ -9,8 +9,7 @@ import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
-import { DatabaseView } from 'DatabaseView';
-import { sanitize_path, destination_folder } from './FileManagement';
+import { sanitize_path } from './FileManagement';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -207,14 +206,18 @@ export const postMoveFile = ({ file, row, foldePath, subfolders, }: { row: RowDa
 };
 
 
-export const organizeNotesIntoSubfolders = async ( view: DatabaseView,): Promise<number> => {
-  if(!view.diskConfig.yaml.config.group_folder_column) return 0;
+export const organizeNotesIntoSubfolders = async (
+    foldePath: string, 
+    rows: Array<RowDataType>,
+    ddbbConfig: LocalSettings
+  ): Promise<number> => {
+  if(!ddbbConfig.group_folder_column) return 0;
       let numberOfMovedFiles = 0;
       const pathColumns: string[] =
-      view.diskConfig.yaml.config.group_folder_column
+      ddbbConfig.group_folder_column
           .split(",")
           .filter(Boolean);
-      for (const row of view.rows) {
+      for (const row of rows) {
 
       let rowTFile = row.__note__.getFile();
 
@@ -223,7 +226,6 @@ export const organizeNotesIntoSubfolders = async ( view: DatabaseView,): Promise
       // Update the row on disk
       if (!pathHasAnEmptyCell) {
           const subfolders = pathColumns .map((name) => sanitize_path(row[name] as string, "-")) .join("/");
-          const foldePath = destination_folder(view, view.diskConfig.yaml.config);
 
           // Check if file is already in the correct folder
           const auxPath = `${foldePath}/${subfolders}/${rowTFile.name}`
@@ -238,3 +240,5 @@ export const organizeNotesIntoSubfolders = async ( view: DatabaseView,): Promise
   }
   return numberOfMovedFiles;
 };
+
+

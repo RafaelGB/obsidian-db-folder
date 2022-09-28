@@ -1,4 +1,6 @@
 import { InputType } from "helpers/Constants";
+import { destination_folder } from "helpers/FileManagement";
+import { removeEmptyFolders } from "helpers/RemoveEmptyFolders";
 import { organizeNotesIntoSubfolders } from "helpers/VaultManagement";
 import { Notice } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
@@ -69,16 +71,39 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
             );
             add_button(
               containerEl,
-              "apply structure",
-              "apply the structure to the current folder",
-              "apply",
-              "reflect the setting in the current folder",
+              "Apply",
+              "Organize files according to the group folder column setting",
+              "Apply",
+              "",
               async () => {
                 try {
-                  const numberOfMovedFiles = await organizeNotesIntoSubfolders( view,);
+                  const folderPath = destination_folder(view, view.diskConfig.yaml.config);
+                  const numberOfMovedFiles = await organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config );
                   new Notice( `Moved ${numberOfMovedFiles} file${numberOfMovedFiles>1? 's':''} into subfolders`, 1500,);
+
+                
                 } catch (e) {
-                  new Notice( `something went wrong while moving the folders: ${e.message}`, 1500,);
+                  new Notice( `Something went wrong: ${e.message}`, 1500,);
+                  console.error(e);
+                }
+              },
+            );
+
+            add_button(
+              containerEl,
+              "Remove empty folders",
+              "Remove empty folders from the current database folder",
+              "Eemove",
+              "",
+              async () => {
+                try {
+                  const folderPath = destination_folder(view, view.diskConfig.yaml.config);
+                  const removedDirectories = await removeEmptyFolders(folderPath, new Set());
+                  const n = removedDirectories.size;
+                  const message = `Removed ${n} empty director${n===0||n>1? 'ies':'y'}`
+                  new Notice( message, 1500);
+                } catch (e) {
+                  new Notice( `Something went: ${e.message}`, 1500,);
                   console.error(e);
                 }
               },
