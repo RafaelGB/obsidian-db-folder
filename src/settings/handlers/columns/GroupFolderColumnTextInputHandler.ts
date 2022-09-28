@@ -19,7 +19,7 @@ const createNoticeDebouncer = () =>{
 } 
 
 
-export class GroupFolderColumnDropDownHandler extends AbstractSettingsHandler {
+export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
   settingTitle: string = 'Choose columns to organize files into subfolders'
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { containerEl, local, view } = settingHandlerResponse;
@@ -35,9 +35,13 @@ export class GroupFolderColumnDropDownHandler extends AbstractSettingsHandler {
             const debouncedNotice = createNoticeDebouncer();
             const group_folder_column_input_promise =
               async ( value: string ): Promise<void> => {
-                const validConfig = value
-                  .split(",")
-                  .every((column) => lowerCaseAllowedColumns.has(column.toLowerCase()));
+                
+                const validConfig =
+                  value === "" ||
+                  value
+                    .split(",")
+                    .every((column) => lowerCaseAllowedColumns.has( column.toLowerCase()));
+
                 if (validConfig){
                     debouncedNotice.cleanup();
                     // make sure the case of each column is correct
@@ -48,7 +52,7 @@ export class GroupFolderColumnDropDownHandler extends AbstractSettingsHandler {
                     view.diskConfig.updateConfig({ group_folder_column: correctCaseColumns });
                 }
                 else {
-                    debouncedNotice.notice(`[${value}] is an invalid value for group_folder_column`, 1500, 1500)
+                    debouncedNotice.notice(`"${value}" is an invalid value for group_folder_column`, 1500, 1500)
                 }
               };
 
