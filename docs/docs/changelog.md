@@ -1,3 +1,8 @@
+## 2.7.0
+### Shiny new things
+- Group filters are now available. You can now filter per condition (AND/OR) This is a huhe improvement for the user experience. Those groups could be enabled/disabled easily [ISSUE#268](https://github.com/RafaelGB/obsidian-db-folder/issues/268)
+### Visual
+- flex-wrap for tags [GaboCapo](https://github.com/GaboCapo)
 ## 2.6.7
 ### Shiny new things
 - New options for text columns: wrap and justify content [ISSUE#378](https://github.com/RafaelGB/obsidian-db-folder/issues/378)
