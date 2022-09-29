@@ -4,12 +4,14 @@ import {
   AtomicFilter,
   FilterGroup,
   FilterGroupCondition,
+  FilterSettings,
+  LocalSettings,
 } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
 import React from "react";
 import AtomicFilterComponent from "components/modals/filters/handlers/AtomicFilterComponent";
 import { Table } from "@tanstack/react-table";
-import { RowDataType } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
@@ -20,20 +22,20 @@ import modifyRecursiveFilterGroups, {
 } from "components/modals/filters/handlers/FiltersHelper";
 import ConditionSelectorComponent from "components/modals/filters/handlers/ConditionSelectorComponent";
 import IconButton from "@mui/material/IconButton";
-
-const GroupFilterComponent = (groupProps: {
+type GroupFilterComponentProps = {
   group: FilterGroup;
   recursiveIndex: number[];
   level: number;
   table: Table<RowDataType>;
   possibleColumns: string[];
-}) => {
+};
+const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
   const { group, recursiveIndex, level, table, possibleColumns } = groupProps;
   const { tableState } = table.options.meta;
   const configActions = tableState.configState((state) => state.actions);
+  const dataActions = tableState.data((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
-  const dataActions = tableState.data((state) => state.actions);
   const onChangeCondition =
     (conditionIndex: number[], level: number) =>
     (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
@@ -192,13 +194,16 @@ const GroupFilterComponent = (groupProps: {
             key={`Grid-AtomicFilter-value-${level}-${recursiveIndex[level]}`}
           >
             {filtersOfGroup.map((filter, filterIndex) => {
-              return GroupFilterComponent({
-                group: filter as FilterGroupCondition,
-                recursiveIndex: [...recursiveIndex, filterIndex],
-                level: level + 1,
-                table: table,
-                possibleColumns: possibleColumns,
-              });
+              return (
+                <GroupFilterComponent
+                  group={filter as FilterGroupCondition}
+                  recursiveIndex={[...recursiveIndex, filterIndex]}
+                  level={level + 1}
+                  table={table}
+                  possibleColumns={possibleColumns}
+                  key={`GroupFilterComponent-${level}-${recursiveIndex[level]}-${filterIndex}`}
+                />
+              );
             })}
           </Grid>
         </Grid>
