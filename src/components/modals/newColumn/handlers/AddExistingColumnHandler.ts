@@ -4,6 +4,7 @@ import { obtainColumnsFromRows } from "components/Columns";
 import { MetadataColumns } from "helpers/Constants";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
     settingTitle: string = 'Add existing column';
@@ -12,7 +13,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
         const { filters, ddbbConfig } = addColumnModalManager.props;
         const { actions, info } = addColumnModalManager.props.columnsState;
         const columns = info.getAllColumns();
-        let selectedColumn: string = "-";
+        let selectedColumn: string = "";
         const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve) => {
             resolve(obtainColumnsFromRows(addColumnModalManager.addColumnModal.view, ddbbConfig, filters, columns));
         });
@@ -31,18 +32,21 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
             new Setting(containerEl)
                 .setName('Select an existing column to add')
                 .setDesc('Select an existing column to add not included yet in the table')
-                .addDropdown((dropdown) => {
-                    dropdown
-                    dropdown.addOptions(filteredColumns);
-                    dropdown.setValue(selectedColumn);
-                    dropdown.onChange((value: string) => {
-                        selectedColumn = value;
-                    });
+                .addSearch((cb) => {
+                    new StringSuggest(
+                        cb.inputEl,
+                        filteredColumns
+                    );
+                    cb.setPlaceholder("Search column...")
+                        .setValue(selectedColumn)
+                        .onChange((value: string) => {
+                            selectedColumn = value;
+                        });
                 }).addExtraButton((cb) => {
                     cb.setIcon("create-new")
                         .setTooltip("Create the selected column and refresh the table")
                         .onClick(async (): Promise<void> => {
-                            if (selectedColumn === "-") {
+                            if (!selectedColumn || filteredColumns[selectedColumn] === undefined) {
                                 new Notice("You need to select a column to add", 1500);
                                 return;
                             }

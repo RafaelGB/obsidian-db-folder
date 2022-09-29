@@ -54,18 +54,10 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
                     cb.inputEl,
                     tagRecords
                 );
-                cb.setPlaceholder("Example: path/to/folder")
+                cb.setPlaceholder("search tag...")
                     .setValue(`#${view.diskConfig.yaml.config.source_form_result}`)
                     .onChange(source_form_promise);
             });
-        add_dropdown(
-            containerEl,
-            'Select a tag',
-            'Select tag to get data from',
-            `#${view.diskConfig.yaml.config.source_form_result}`,
-            tagRecords,
-            source_form_promise
-        );
         destinationFolderHandler(view, containerEl);
     }
 }
