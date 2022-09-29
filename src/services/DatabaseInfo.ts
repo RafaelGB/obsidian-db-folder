@@ -7,7 +7,7 @@ import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
 import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
-import { FilterCondition, FilterSettings, LocalSettings } from 'cdm/SettingsModel';
+import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
 import { DATABASE_CONFIG } from 'helpers/Constants';

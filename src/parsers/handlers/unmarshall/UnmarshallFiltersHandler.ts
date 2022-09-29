@@ -1,34 +1,48 @@
 import { DiskHandlerResponse } from "cdm/MashallModel";
+import { AtomicFilter, FilterGroup, FilterGroupCondition } from "cdm/SettingsModel";
 import { YAML_INDENT } from "helpers/Constants";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
-import { DataviewService } from "services/DataviewService";
 
 export class UnmarshallFiltersHandler extends AbstractDiskHandler {
     handlerName: string = 'filters';
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
         const { filters } = handlerResponse.yaml;
+        let indentLevel = 1;
         // Lvl1: filters
         this.localDisk.push(`${this.handlerName}:`);
-        this.localDisk.push(`${YAML_INDENT.repeat(1)}enabled: ${filters.enabled}`);
-        this.localDisk.push(`${YAML_INDENT.repeat(1)}conditions:`);
+        this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}enabled: ${filters.enabled}`);
+        this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}conditions:`);
+        indentLevel++;
         if (filters.conditions) {
             for (const condition of filters.conditions) {
-                // Lvl2: Array of filters
-                this.localDisk.push(`${YAML_INDENT.repeat(2)}- {field: ${DataviewService.getDataviewAPI().
-                    value
-                    .isTruthy(condition.field) ? condition.field : "\"\""
-                    }, operator: ${DataviewService.getDataviewAPI()
-                        .value
-                        .isTruthy(condition.operator) ? condition.operator : "\"\""
-                    }, value: ${DataviewService.getDataviewAPI()
-                        .value
-                        .isTruthy(condition.value) ? condition.value : "\"\""
-                    }}`
-                );
+                // Array of filters
+                this.striginifyFilter(condition, indentLevel + 1);
             }
         }
 
         return this.goNext(handlerResponse);
+    }
+    striginifyFilter(filter: FilterGroup, indentLevel: number, isList = false): void {
+        if ((filter as FilterGroupCondition).condition) {
+            // Is a filter group
+            const condition = (filter as FilterGroupCondition).condition;
+            const disabled = (filter as FilterGroupCondition).disabled;
+            const filters = (filter as FilterGroupCondition).filters;
+            if (filters && filters.length > 0) {
+                this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}- condition: ${condition}`);
+                this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  disabled: ${Boolean(disabled)}`);
+                this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  filters:`);
+                indentLevel++;
+                for (const group of (filter as FilterGroupCondition).filters) {
+                    this.striginifyFilter(group, indentLevel, true);
+                }
+            }
+        } else {
+            // Is a simple filter
+            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}- field: ${(filter as AtomicFilter).field}`);
+            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  operator: ${(filter as AtomicFilter).operator}`);
+            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  value: ${(filter as AtomicFilter).value ?? ""}`);
+        }
     }
 }
