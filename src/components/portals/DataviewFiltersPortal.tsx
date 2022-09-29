@@ -223,18 +223,14 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
 
   const deleteConditionHadler =
     (conditionIndex: number[], level: number) => () => {
-      console.log("Delete condition");
       const alteredFilterState = { ...configInfo.getFilters() };
-      if (level === 0) {
-        alteredFilterState.conditions.splice(conditionIndex[level], 1);
-      } else {
-        modifyRecursiveFilterGroups(
-          alteredFilterState.conditions,
-          conditionIndex,
-          level,
-          "delete"
-        );
-      }
+
+      modifyRecursiveFilterGroups(
+        alteredFilterState.conditions,
+        conditionIndex,
+        level,
+        "delete"
+      );
 
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
@@ -281,7 +277,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
               {filtersOfGroup.map((filter, filterIndex) => {
                 return GroupFilterComponent({
                   group: filter as FilterGroupCondition,
-                  recursiveIndex: recursiveIndex,
+                  recursiveIndex: [...recursiveIndex, filterIndex],
                   level: level + 1,
                 });
               })}
@@ -292,7 +288,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     } else {
       return AtomicFilterComponent({
         recursiveIndex: recursiveIndex,
-        level: 0,
+        level: level,
         atomicFilter: group as AtomicFilter,
       });
     }
@@ -310,7 +306,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         container
         rowSpacing={0.25}
         columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
-        key={`Grid-AtomicFilter-${level}-${recursiveIndex[level]}`}
+        key={`Grid-AtomicFilter-row-${level}-${recursiveIndex[level]}`}
       >
         <Grid
           item
