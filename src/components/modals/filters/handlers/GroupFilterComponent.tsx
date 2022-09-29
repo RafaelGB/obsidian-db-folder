@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import {
   AtomicFilter,
@@ -20,7 +19,7 @@ import modifyRecursiveFilterGroups, {
   ModifyFilterOptionsEnum,
 } from "components/modals/filters/handlers/FiltersHelper";
 import ConditionSelectorComponent from "components/modals/filters/handlers/ConditionSelectorComponent";
-import ToggleButton from "@mui/material/ToggleButton";
+import IconButton from "@mui/material/IconButton";
 
 const GroupFilterComponent = (groupProps: {
   group: FilterGroup;
@@ -94,11 +93,18 @@ const GroupFilterComponent = (groupProps: {
           <Grid
             item
             xs="auto"
+            key={`Grid-level-${level}-${recursiveIndex[level]}`}
+          >
+            {`level ${level}`}
+          </Grid>
+          <Grid
+            item
+            xs="auto"
             key={`Grid-disabled-${level}-${recursiveIndex[level]}`}
           >
-            <ToggleButton
-              value="check"
-              selected={disabledFlag}
+            <IconButton
+              aria-label="enable/disable filter"
+              size="small"
               onClick={() =>
                 commonModifyFilter(
                   recursiveIndex,
@@ -108,23 +114,15 @@ const GroupFilterComponent = (groupProps: {
               }
             >
               {disabledFlag ? <FilterOffIcon /> : <FilterOnIcon />}
-            </ToggleButton>
-          </Grid>
-          <Grid
-            item
-            xs="auto"
-            key={`Grid-level-${level}-${recursiveIndex[level]}`}
-          >
-            {`level ${level}`}
+            </IconButton>
           </Grid>
           <Grid
             item
             xs="auto"
             key={`Grid-remove-group-${level}-${recursiveIndex[level]}`}
           >
-            <Button
-              variant="contained"
-              color="secondary"
+            <IconButton
+              aria-label="delete"
               size="small"
               onClick={() =>
                 commonModifyFilter(
@@ -133,19 +131,17 @@ const GroupFilterComponent = (groupProps: {
                   ModifyFilterOptionsEnum.DELETE
                 )
               }
-              endIcon={
-                <FolderDeleteIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />
-              }
-            />
+            >
+              <FolderDeleteIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />
+            </IconButton>
           </Grid>
           <Grid
             item
             xs="auto"
             key={`Grid-add-atomic-filter-${level}-${recursiveIndex[level]}`}
           >
-            <Button
-              variant="contained"
-              color="secondary"
+            <IconButton
+              aria-label="add atomic filter"
               size="small"
               onClick={() =>
                 commonModifyFilter(
@@ -154,17 +150,17 @@ const GroupFilterComponent = (groupProps: {
                   ModifyFilterOptionsEnum.ADD
                 )
               }
-              endIcon={<AddIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />}
-            />
+            >
+              <AddIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />
+            </IconButton>
           </Grid>
           <Grid
             item
             xs="auto"
             key={`Grid-add-group-filter-${level}-${recursiveIndex[level]}`}
           >
-            <Button
-              variant="contained"
-              color="secondary"
+            <IconButton
+              aria-label="add group filter"
               size="small"
               onClick={() =>
                 commonModifyFilter(
@@ -173,12 +169,9 @@ const GroupFilterComponent = (groupProps: {
                   ModifyFilterOptionsEnum.ADD_GROUP
                 )
               }
-              endIcon={
-                <CreateNewFolderIcon
-                  sx={{ color: StyleVariables.TEXT_ACCENT }}
-                />
-              }
-            />
+            >
+              <CreateNewFolderIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />
+            </IconButton>
           </Grid>
           <Grid
             item
@@ -190,6 +183,7 @@ const GroupFilterComponent = (groupProps: {
               recursiveIndex={recursiveIndex}
               level={level}
               onChange={onChangeCondition}
+              key={`ConditionSelectorComponent-${level}-${recursiveIndex[level]}`}
             />
           </Grid>
           <Grid
@@ -218,6 +212,7 @@ const GroupFilterComponent = (groupProps: {
         atomicFilter={group as AtomicFilter}
         possibleColumns={possibleColumns}
         table={table}
+        key={`AtomicFilterComponent-${level}-${recursiveIndex[level]}`}
       />
     );
   }

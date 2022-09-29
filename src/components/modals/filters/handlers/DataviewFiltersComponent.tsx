@@ -45,6 +45,7 @@ const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
             level={0}
             table={table}
             possibleColumns={possibleColumns}
+            key={`div-groupFilterComponent-${index}`}
           />
         );
       })}

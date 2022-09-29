@@ -11,6 +11,7 @@ import modifyRecursiveFilterGroups, {
 import OperatorSelectorComponent from "components/modals/filters/handlers/OperatorSelectorComponent";
 import ExistedColumnSelectorComponent from "components/modals/filters/handlers/ExistedColumnSelectorComponent";
 import { SelectChangeEvent } from "@mui/material/Select";
+import IconButton from "@mui/material/IconButton";
 
 const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
   const { table, recursiveIndex, level, atomicFilter, possibleColumns } = props;
@@ -125,12 +126,11 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
       {/* Remove button */}
       <Grid
         item
-        xs={0.75}
+        xs={0.55}
         key={`Grid-remove-${level}-${recursiveIndex[level]}`}
       >
-        <Button
-          variant="contained"
-          color="secondary"
+        <IconButton
+          aria-label="delete"
           size="small"
           onClick={() =>
             commonModifyFilter(
@@ -139,8 +139,9 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
               ModifyFilterOptionsEnum.DELETE
             )
           }
-          endIcon={<DeleteIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />}
-        />
+        >
+          <DeleteIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />
+        </IconButton>
       </Grid>
     </Grid>
   );
