@@ -148,8 +148,8 @@ class EditEngine {
                     contentHasFrontmatter
                 )
             };
-            await persistFrontmatter(columnId);
             await VaultManagerDB.editNoteContent(noteObject);
+            await persistFrontmatter(columnId);
         }
 
         async function inlineRemoveColumn(): Promise<void> {

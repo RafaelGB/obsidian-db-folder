@@ -1,4 +1,6 @@
+import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
+import { AtomicFilter, FilterGroup, FilterGroupCondition } from 'cdm/SettingsModel';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 import { DataviewService } from 'services/DataviewService';
 
@@ -26,20 +28,38 @@ export class MarshallFiltersHandler extends AbstractYamlHandler {
         }
 
         for (const filter of yaml.filters.conditions) {
-            if (!DataviewService.isTruthy(filter.field)) {
-                this.addError(`undefined field in filter: ${JSON.stringify(filter)}`);
-                yaml.filters.conditions.splice(yaml.filters.conditions.indexOf(filter), 1);
-            }
-            else if (!DataviewService.isTruthy(filter.operator)) {
-                this.addError(`There was not operator key in filter: ${JSON.stringify(filter)}`);
-                yaml.filters.conditions.splice(yaml.filters.conditions.indexOf(filter), 1);
-            }
-            else if (!DataviewService.isTruthy(filter.value)) {
-                this.addError(`undefined value in filter: ${JSON.stringify(filter)}`);
-                yaml.filters.conditions.splice(yaml.filters.conditions.indexOf(filter), 1);
-            }
+            this.validateFilter(filter, yaml) || yaml.filters.conditions.splice(yaml.filters.conditions.indexOf(filter), 1);
+
         }
         handlerResponse.yaml = yaml;
         return this.goNext(handlerResponse);
+    }
+
+    validateFilter(filter: FilterGroup, yaml: DatabaseYaml): boolean {
+        // Is a filter group
+        if ((filter as FilterGroupCondition).condition) {
+            const condition = (filter as FilterGroupCondition).condition;
+            const filters = (filter as FilterGroupCondition).filters;
+            if (!DataviewService.isTruthy(condition)) {
+                this.addError(`There was not condition key in filter: ${JSON.stringify(filter)}`);
+                return false;
+            }
+            for (const group of filters) {
+                this.validateFilter(group, yaml);
+            }
+            // Is a single filter
+        } else {
+            // Key of filter: Mandatory
+            if (!DataviewService.isTruthy((filter as AtomicFilter).field)) {
+                this.addError(`undefined field in filter: ${JSON.stringify(filter)}`);
+                return false;
+            }
+            // Operator of filter: Mandatory
+            if (!DataviewService.isTruthy((filter as AtomicFilter).operator)) {
+                this.addError(`There was not operator key in filter: ${JSON.stringify(filter)}`);
+                return false;
+            }
+        }
+        return true;
     }
 }

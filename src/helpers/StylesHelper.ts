@@ -1,4 +1,6 @@
-import { COLUMN_ALIGNMENT_OPTIONS, DatabaseCore, MetadataLabels } from "helpers/Constants";
+import { ConfigColumn } from "cdm/FolderModel";
+import { LocalSettings } from "cdm/SettingsModel";
+import { CellSizeOptions, COLUMN_ALIGNMENT_OPTIONS, DatabaseCore, MetadataLabels } from "helpers/Constants";
 
 /**
  * Wrap the classname of css elements
@@ -41,6 +43,17 @@ export function getLabelHeader(input: string) {
     return labelCandidate === undefined ? input : labelCandidate[1];
 }
 
-export function getAlignmentClassname(alignment: string) {
-    return alignment === undefined ? COLUMN_ALIGNMENT_OPTIONS.LEFT : alignment;
+export function getAlignmentClassname(configColumn: ConfigColumn, localSettings: LocalSettings) {
+    const classes: string[] = [];
+    classes.push(
+        configColumn.content_alignment === undefined ?
+            COLUMN_ALIGNMENT_OPTIONS.LEFT :
+            configColumn.content_alignment
+    );
+    classes.push(
+        (configColumn.wrap_content && localSettings.cell_size !== CellSizeOptions.COMPACT) ?
+            COLUMN_ALIGNMENT_OPTIONS.WRAP :
+            COLUMN_ALIGNMENT_OPTIONS.NOWRAP
+    );
+    return classes.join(' ');
 }

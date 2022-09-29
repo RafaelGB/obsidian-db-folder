@@ -73,7 +73,9 @@ const TextCell = (props: CellComponentProps) => {
       ref={containerCellRef}
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
-      className={c(getAlignmentClassname(tableColumn.config.content_alignment))}
+      className={c(
+        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+      )}
     />
   );
 };

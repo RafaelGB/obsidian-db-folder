@@ -1,5 +1,5 @@
 import { FiltersModalHandlerResponse } from "cdm/ModalsModel";
-import DataviewFiltersPortal from "components/portals/DataviewFiltersPortal";
+import DataviewFiltersComponent from "components/modals/filters/handlers/DataviewFiltersComponent";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -13,7 +13,7 @@ export class FilterGroupHandler extends AbstractHandlerClass<FiltersModalHandler
     const { table } = filtersModalManager.props;
 
     createRoot(containerEl.createDiv()).render(
-      <DataviewFiltersPortal table={table} />
+      <DataviewFiltersComponent table={table} />
     );
     return this.goNext(columnHandlerResponse);
   }

@@ -5,7 +5,14 @@ export interface MediaSettings {
     height: number;
 }
 
-export type FilterCondition = {
+export type FilterGroup = AtomicFilter | FilterGroupCondition;
+
+export type FilterGroupCondition = {
+    condition: string;
+    disabled: boolean;
+    filters: FilterGroup[];
+}
+export type AtomicFilter = {
     field: string;
     operator: string;
     value?: any;
@@ -47,7 +54,7 @@ export interface LocalSettings {
 
 export interface FilterSettings {
     enabled: boolean;
-    conditions: FilterCondition[];
+    conditions: FilterGroup[];
 }
 
 export interface DatabaseSettings {

@@ -1,6 +1,7 @@
 import { CellContext, Table } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { AtomicFilter } from "cdm/SettingsModel";
 
 export type RowSelectOption = {
     backgroundColor: string,
@@ -19,3 +20,9 @@ export type EditorCellComponentProps = {
 export type DataviewFiltersProps = {
     table: Table<RowDataType>;
 };
+export type AtomicFilterComponentProps = {
+    recursiveIndex: number[];
+    level: number;
+    atomicFilter: AtomicFilter;
+    possibleColumns: string[];
+} & DataviewFiltersProps;

@@ -1,3 +1,13 @@
+## 2.6.7
+### Shiny new things
+- New options for text columns: wrap and justify content [ISSUE#378](https://github.com/RafaelGB/obsidian-db-folder/issues/378)
+### Improved
+- Inline editions now support [] characters as wrap characters [ISSUE#413](https://github.com/RafaelGB/obsidian-db-folder/issues/413)
+- Select column type now has the same style of tags to give them support for mobiles, also the UX is improved [ISSUE#401](https://github.com/RafaelGB/obsidian-db-folder/issues/401)
+### No longer broken
+- sticky first column is not transparent with the rest of the cells scrolling [ISSUE#424](https://github.com/RafaelGB/obsidian-db-folder/issues/424)
+- Frontmatter editions now respect nested metadata [ISSUE#194](https://github.com/RafaelGB/obsidian-db-folder/issues/194)
+- Bug persisting inline field when the frontmatter was empty [ISSUE#416](https://github.com/RafaelGB/obsidian-db-folder/issues/416)
 ## 2.6.6
 - Hotfix of add row bottom position and min height of navbar
 ## 2.6.5

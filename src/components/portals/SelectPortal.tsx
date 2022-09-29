@@ -85,6 +85,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
           isSearchable
           autoFocus
           isClearable
+          openMenuOnFocus
           menuPosition="fixed"
           styles={CustomTagsStyles}
           options={multiOptions}
@@ -93,7 +94,9 @@ const SelectPortal = (popperProps: CellComponentProps) => {
           menuPortalTarget={activeDocument.body}
           menuPlacement="auto"
           menuShouldBlockScroll={true}
-          className="react-select-container"
+          className={`react-select-container ${c(
+            "tags-container text-align-center"
+          )}`}
           classNamePrefix="react-select"
           key={`${tableColumn.key}-select-open`}
         />
@@ -108,7 +111,7 @@ const SelectPortal = (popperProps: CellComponentProps) => {
       ) : (
         /* Current value of the select */
         <div
-          className="cell-padding d-flex cursor-default align-items-center flex-1"
+          className={`${c("text-align-center")}`}
           onClick={() => setShowSelect(true)}
           style={{ width: column.getSize() }}
         >

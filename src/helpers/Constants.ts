@@ -74,6 +74,9 @@ export const COLUMN_ALIGNMENT_OPTIONS = Object.freeze({
   LEFT: 'text-align-left',
   CENTER: 'text-align-center',
   RIGHT: 'text-align-right',
+  JUSTIFY: 'text-align-justify',
+  NOWRAP: 'text-nowrap',
+  WRAP: 'text-wrap',
 });
 
 export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
@@ -285,6 +288,9 @@ export const ResizeConfiguration = Object.freeze({
   RESIZE_MODE: "onChange",
 });
 
+/******************************************************************************
+ *                            FILTERS
+ ******************************************************************************/
 export const OperatorFilter = Object.freeze({
   EQUAL: ['EQUAL', '='],
   NOT_EQUAL: ['NOT_EQUAL', '!='],
@@ -297,6 +303,11 @@ export const OperatorFilter = Object.freeze({
   ENDS_WITH: ['ENDS_WITH', 'operator_ends_with'],
   IS_EMPTY: ['IS_EMPTY', 'operator_is_empty'],
   IS_NOT_EMPTY: ['IS_NOT_EMPTY', 'operator_is_not_empty'],
+});
+
+export const ConditionFiltersOptions = Object.freeze({
+  AND: 'AND',
+  OR: 'OR'
 });
 
 export function getOperatorFilterValue(keyToFind: string): string {
