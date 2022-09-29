@@ -9,6 +9,8 @@ import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
+import { EditEngineService } from 'services/EditEngineService';
+import tableFilter from 'helpers/TableFiltersHelper';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -81,7 +83,7 @@ export async function adapterTFilesToRows(dbFile: TFile, columns: TableColumn[],
   folderFiles = folderFiles.where(p => (p.file as any).path !== dbFile.path);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p, ddbbConfig));
+    folderFiles = folderFiles.where(p => tableFilter(filters.conditions, p, ddbbConfig));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page as NoteInfoPage);
@@ -99,7 +101,7 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
-    folderFiles = folderFiles.where(p => DataviewService.filter(filters.conditions, p, ddbbConfig));
+    folderFiles = folderFiles.where(p => tableFilter(filters.conditions, p, ddbbConfig));
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page as NoteInfoPage);
