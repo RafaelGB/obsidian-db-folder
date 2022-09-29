@@ -9,7 +9,6 @@ import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
-import { sanitize_path } from './FileManagement';
 
 const noBreakSpace = /\u00A0/g;
 
@@ -161,31 +160,7 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
   }
 }
 
-/**
- * After update a row value, move the file to the new folder path
- * @param folderPath 
- * @param action 
- */
-export async function moveFile(folderPath: string, file: TFile): Promise<void> {
-  
-  try {
-    await createFolder(folderPath);
-  } catch (error) {
-    LOGGER.error(` moveFile Error: ${error.message} `);
-    // Handle error
-    throw error;
-  }
-  const filePath = `${folderPath}/${file.name}`;
-  await app.fileManager.renameFile(file, filePath);
-}
 
-export async function createFolder(folderPath: string): Promise<void> {
-  await app.vault.adapter.exists(folderPath).then(async exists => {
-    if (!exists) {
-      await app.vault.createFolder(`${folderPath}/`);
-    }
-  });
-}
 
 
 export const postMoveFile = ({ file, row, folderPath, subfolders, }: { row: RowDataType; file: TFile; folderPath: string; subfolders: string; }) => {
@@ -203,51 +178,6 @@ export const postMoveFile = ({ file, row, folderPath, subfolders, }: { row: RowD
   });
 
   row.__note__.filepath = auxPath;
-};
-
-
-export const organizeNotesIntoSubfolders = async (
-  folderPath: string, 
-    rows: Array<RowDataType>,
-    ddbbConfig: LocalSettings
-  ): Promise<number> => {
-    try {
-    if(!ddbbConfig.group_folder_column) return 0;
-    if(!ddbbConfig.automatically_group_files) return 0;
-        let numberOfMovedFiles = 0;
-        const pathColumns: string[] =
-        ddbbConfig.group_folder_column
-            .split(",")
-            .filter(Boolean);
-        for (const row of rows) {
-
-        let rowTFile = row.__note__.getFile();
-
-        const pathHasAnEmptyCell = pathColumns.some((columnName) => !row[columnName]);
-
-        // Update the row on disk
-        if (!pathHasAnEmptyCell) {
-            const subfolders = pathColumns .map((name) => sanitize_path(row[name] as string, "-")) .join("/");
-
-            // Check if file is already in the correct folder
-            const auxPath = `${folderPath}/${subfolders}/${rowTFile.name}`
-            const fileIsAlreadyInCorrectFolder =  row.__note__.filepath === auxPath;
-            if(fileIsAlreadyInCorrectFolder) continue;
-
-            await moveFile(`${folderPath}/${subfolders}`, rowTFile);
-            await postMoveFile({ file: rowTFile, row, folderPath, subfolders });
-            numberOfMovedFiles++;
-        } 
-        
-    }
-    if(numberOfMovedFiles > 0) 
-      new Notice( `Moved ${numberOfMovedFiles} file${numberOfMovedFiles>1? 's':''} into subfolders`, 1500,);
-                  
-    return numberOfMovedFiles;
-  } catch (error) {
-    new Notice( `Error while moving files into subfolders: ${error.message}`, 5000);
-    throw error;
-  }
 };
 
 

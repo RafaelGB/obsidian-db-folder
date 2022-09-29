@@ -2,13 +2,13 @@ import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
-import { moveFile, postMoveFile } from "helpers/VaultManagement";
+import { postMoveFile } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 import { destination_folder, sanitize_path } from "helpers/FileManagement";
 import { EditEngineService } from "services/EditEngineService";
-import { removeEmptyFolders } from "helpers/RemoveEmptyFolders";
+import { FileGroupingService } from "services/FileGroupingService";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -54,9 +54,9 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     moveInfo.ddbbConfig,
                     UpdateRowOptions.COLUMN_VALUE
                   );
-                await moveFile(`${folderPath}/${subfolders}`, rowTFile);
+                await FileGroupingService.moveFile(`${folderPath}/${subfolders}`, rowTFile);
                 await postMoveFile({ file: rowTFile, row: modifiedRow, folderPath, subfolders });
-                await removeEmptyFolders(folderPath, ddbbConfig);
+                await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
             } else {
                 // Save on disk
                 await EditEngineService.updateRowFileProxy(

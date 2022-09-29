@@ -1,8 +1,7 @@
 import { InputType } from "helpers/Constants";
 import { destination_folder } from "helpers/FileManagement";
-import { removeEmptyFolders } from "helpers/RemoveEmptyFolders";
-import { organizeNotesIntoSubfolders } from "helpers/VaultManagement";
 import { Notice } from "obsidian";
+import { FileGroupingService } from "services/FileGroupingService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_text, add_toggle } from "settings/SettingsComponents";
 
@@ -14,7 +13,7 @@ debounceDelay: number,) =>{
       ...args: any[]
       ) => {
         clearTimeout(timeout.current);
-        timeout.current = setTimeout(()=>callback(args), debounceDelay);
+        timeout.current = setTimeout(()=>callback(...args), debounceDelay);
       },
       cleanup: () => clearTimeout(timeout.current),
     };
@@ -37,8 +36,8 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
             const debouncedNotice = createDebouncer((message, messageDelay)=>new Notice(message, messageDelay), 1500);
             const debouncedOrganizeNotesIntoSubfolders = createDebouncer(async ()=>{
               const folderPath = destination_folder(view, view.diskConfig.yaml.config);
-              await organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config );
-              await removeEmptyFolders(folderPath, view.diskConfig.yaml.config);
+              await FileGroupingService.organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config );
+              await FileGroupingService.removeEmptyFolders(folderPath, view.diskConfig.yaml.config);
             }, 5000);
             const group_folder_column_input_promise =
               async ( value: string ): Promise<void> => {
