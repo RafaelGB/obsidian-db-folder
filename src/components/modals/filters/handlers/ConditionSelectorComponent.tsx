@@ -13,40 +13,22 @@ const ConditionSelectorComponent = (selectorProps: {
   currentCon: string;
   recursiveIndex: number[];
   level: number;
-  table: Table<RowDataType>;
+  onChange: (
+    conditionIndex: number[],
+    level: number
+  ) => (
+    event: React.ChangeEvent<HTMLInputElement>,
+    child: React.ReactNode
+  ) => void;
 }) => {
-  const { currentCon, recursiveIndex, level, table } = selectorProps;
-  const { tableState } = table.options.meta;
-  const configActions = tableState.configState((state) => state.actions);
-  const configInfo = tableState.configState((state) => state.info);
-  const columns = tableState.columns((state) => state.columns);
-  const dataActions = tableState.data((state) => state.actions);
-  const onChangeCondition =
-    (conditionIndex: number[], level: number) =>
-    (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-      // Alter filter state recursively to the level of the condition
-      modifyRecursiveFilterGroups(
-        [],
-        alteredFilterState.conditions,
-        conditionIndex,
-        level,
-        ModifyFilterOptionsEnum.CONDITION,
-        event.target.value
-      );
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columns,
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
-    };
+  const { currentCon, recursiveIndex, level, onChange } = selectorProps;
+
   return (
     <FormControl fullWidth>
       <Select
         value={currentCon}
         size="small"
-        onChange={onChangeCondition(recursiveIndex, level)}
+        onChange={onChange(recursiveIndex, level)}
         style={{
           backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
           color: StyleVariables.TEXT_NORMAL,

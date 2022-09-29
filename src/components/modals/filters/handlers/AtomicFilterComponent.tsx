@@ -10,6 +10,7 @@ import modifyRecursiveFilterGroups, {
 } from "components/modals/filters/handlers/FiltersHelper";
 import OperatorSelectorComponent from "components/modals/filters/handlers/OperatorSelectorComponent";
 import ExistedColumnSelectorComponent from "components/modals/filters/handlers/ExistedColumnSelectorComponent";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
   const { table, recursiveIndex, level, atomicFilter, possibleColumns } = props;
@@ -17,7 +18,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
   const { field, operator, value } = atomicFilter;
   const configActions = tableState.configState((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
-  const columns = tableState.columns((state) => state.columns);
+  const columnsInfo = tableState.columns((state) => state.info);
   const dataActions = tableState.data((state) => state.actions);
 
   const deleteConditionHadler =
@@ -34,7 +35,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
 
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(
-        columns,
+        columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
         alteredFilterState
       );
@@ -54,12 +55,51 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
       );
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(
-        columns,
+        columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
         alteredFilterState
       );
     };
 
+  const onchangeExistedColumnHandler =
+    (conditionIndex: number[], level: number) =>
+    (event: SelectChangeEvent<string>, child: React.ReactNode) => {
+      const alteredFilterState = { ...configInfo.getFilters() };
+      modifyRecursiveFilterGroups(
+        possibleColumns,
+        alteredFilterState.conditions,
+        conditionIndex,
+        level,
+        ModifyFilterOptionsEnum.FIELD,
+        event.target.value
+      );
+      configActions.alterFilters(alteredFilterState);
+      dataActions.dataviewRefresh(
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings(),
+        alteredFilterState
+      );
+    };
+  const onChangeOperatorHandler =
+    (conditionIndex: number[], level: number) =>
+    (event: SelectChangeEvent<string>, child: React.ReactNode) => {
+      const alteredFilterState = { ...configInfo.getFilters() };
+      // Alter filter state recursively to the level of the condition
+      modifyRecursiveFilterGroups(
+        [],
+        alteredFilterState.conditions,
+        conditionIndex,
+        level,
+        ModifyFilterOptionsEnum.OPERATOR,
+        event.target.value
+      );
+      configActions.alterFilters(alteredFilterState);
+      dataActions.dataviewRefresh(
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings(),
+        alteredFilterState
+      );
+    };
   return (
     <Grid
       container
@@ -69,14 +109,14 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
     >
       <Grid
         item
-        xs="auto"
+        xs={3.5}
         key={`Grid-AtomicFilter-field-${level}-${recursiveIndex[level]}`}
       >
         <ExistedColumnSelectorComponent
           currentCol={field}
           recursiveIndex={recursiveIndex}
           level={level}
-          table={table}
+          onchange={onchangeExistedColumnHandler}
           possibleColumns={possibleColumns}
         />
       </Grid>
@@ -89,7 +129,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
           currentOp={operator}
           recursiveIndex={recursiveIndex}
           level={level}
-          table={table}
+          onChange={onChangeOperatorHandler}
         />
       </Grid>
       {/* if value exists, show it */}
@@ -98,7 +138,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
       ) && (
         <Grid
           item
-          xs={3.5}
+          xs={3}
           key={`Grid-AtomicFilter-value-${level}-${recursiveIndex[level]}`}
         >
           <ValueFilterComponent

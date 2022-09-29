@@ -26,7 +26,7 @@ const modifyRecursiveFilterGroups = (
             (
                 filterGroups[recursiveIndex[level]] as FilterGroupCondition
             ).condition = value;
-        } else if (key === "add") {
+        } else if (key === ModifyFilterOptionsEnum.ADD) {
             (
                 filterGroups[recursiveIndex[level]] as FilterGroupCondition
             ).filters.push({

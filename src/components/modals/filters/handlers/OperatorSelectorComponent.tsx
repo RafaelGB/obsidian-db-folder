@@ -1,53 +1,27 @@
 import { MenuItem } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Table } from "@tanstack/react-table";
-import { RowDataType } from "cdm/FolderModel";
 import { OperatorFilter, StyleVariables } from "helpers/Constants";
 import { t } from "lang/helpers";
 import React from "react";
-import modifyRecursiveFilterGroups, {
-  ModifyFilterOptionsEnum,
-} from "components/modals/filters/handlers/FiltersHelper";
 
 const OperatorSelectorComponent = (selectorProps: {
   currentOp: string;
   recursiveIndex: number[];
   level: number;
-  table: Table<RowDataType>;
+  onChange: (
+    conditionIndex: number[],
+    level: number
+  ) => (event: SelectChangeEvent<string>, child: React.ReactNode) => void;
 }) => {
-  const { currentOp, recursiveIndex, level, table } = selectorProps;
-  const { tableState } = table.options.meta;
-  const configActions = tableState.configState((state) => state.actions);
-  const configInfo = tableState.configState((state) => state.info);
-  const columnsInfo = tableState.columns((state) => state.info);
-  const dataActions = tableState.data((state) => state.actions);
-  const onChangeOperatorHandler =
-    (conditionIndex: number[], level: number) =>
-    (event: SelectChangeEvent<string>, child: React.ReactNode) => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-      // Alter filter state recursively to the level of the condition
-      modifyRecursiveFilterGroups(
-        [],
-        alteredFilterState.conditions,
-        conditionIndex,
-        level,
-        ModifyFilterOptionsEnum.OPERATOR,
-        event.target.value
-      );
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
-    };
+  const { currentOp, recursiveIndex, level, onChange } = selectorProps;
+
   return (
     <FormControl fullWidth>
       <Select
         value={currentOp}
         size="small"
-        onChange={onChangeOperatorHandler(recursiveIndex, level)}
+        onChange={onChange(recursiveIndex, level)}
         style={{
           backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
           color: StyleVariables.TEXT_NORMAL,

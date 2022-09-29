@@ -6,7 +6,7 @@ import {
   FilterGroup,
   FilterGroupCondition,
 } from "cdm/SettingsModel";
-import { ConditionFiltersOptions, StyleVariables } from "helpers/Constants";
+import { StyleVariables } from "helpers/Constants";
 import React from "react";
 import AtomicFilterComponent from "components/modals/filters/handlers/AtomicFilterComponent";
 import { Table } from "@tanstack/react-table";
@@ -14,11 +14,10 @@ import { RowDataType } from "cdm/FolderModel";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
-import modifyRecursiveFilterGroups from "./FiltersHelper";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import ConditionSelectorComponent from "./ConditionSelectorComponent";
+import modifyRecursiveFilterGroups, {
+  ModifyFilterOptionsEnum,
+} from "components/modals/filters/handlers/FiltersHelper";
+import ConditionSelectorComponent from "components/modals/filters/handlers/ConditionSelectorComponent";
 
 const GroupFilterComponent = (groupProps: {
   group: FilterGroup;
@@ -31,7 +30,7 @@ const GroupFilterComponent = (groupProps: {
   const { tableState } = table.options.meta;
   const configActions = tableState.configState((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
-  const columns = tableState.columns((state) => state.columns);
+  const columnsInfo = tableState.columns((state) => state.info);
   const dataActions = tableState.data((state) => state.actions);
   const deleteConditionHadler =
     (conditionIndex: number[], level: number) => () => {
@@ -42,12 +41,12 @@ const GroupFilterComponent = (groupProps: {
         alteredFilterState.conditions,
         conditionIndex,
         level,
-        "delete"
+        ModifyFilterOptionsEnum.DELETE
       );
 
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(
-        columns,
+        columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
         alteredFilterState
       );
@@ -61,12 +60,12 @@ const GroupFilterComponent = (groupProps: {
         alteredFilterState.conditions,
         conditionIndex,
         level,
-        "add"
+        ModifyFilterOptionsEnum.ADD
       );
 
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(
-        columns,
+        columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
         alteredFilterState
       );
@@ -80,17 +79,36 @@ const GroupFilterComponent = (groupProps: {
         alteredFilterState.conditions,
         conditionIndex,
         level,
-        "addGroup"
+        ModifyFilterOptionsEnum.ADD_GROUP
       );
 
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(
-        columns,
+        columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
         alteredFilterState
       );
     };
-
+  const onChangeCondition =
+    (conditionIndex: number[], level: number) =>
+    (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
+      const alteredFilterState = { ...configInfo.getFilters() };
+      // Alter filter state recursively to the level of the condition
+      modifyRecursiveFilterGroups(
+        [],
+        alteredFilterState.conditions,
+        conditionIndex,
+        level,
+        ModifyFilterOptionsEnum.CONDITION,
+        event.target.value
+      );
+      configActions.alterFilters(alteredFilterState);
+      dataActions.dataviewRefresh(
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings(),
+        alteredFilterState
+      );
+    };
   if ((group as FilterGroupCondition).condition) {
     const filtersOfGroup = (group as FilterGroupCondition).filters;
     const conditionOfGroup = (group as FilterGroupCondition).condition;
@@ -170,7 +188,7 @@ const GroupFilterComponent = (groupProps: {
               currentCon={conditionOfGroup}
               recursiveIndex={recursiveIndex}
               level={level}
-              table={table}
+              onChange={onChangeCondition}
             />
           </Grid>
           <Grid
