@@ -503,6 +503,7 @@ div.database-plugin__checkbox {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .database-plugin__text-align-left {
