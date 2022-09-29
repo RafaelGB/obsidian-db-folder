@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
-
 import Input from "@mui/material/Input";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
@@ -11,6 +10,8 @@ import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
+import AddIcon from "@mui/icons-material/Add";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import {
   ConditionFiltersOptions,
   OperatorFilter,
@@ -52,6 +53,63 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     });
   }, [ddbbConfig, columns]);
 
+  const modifyRecursiveFilterGroups = (
+    filterGroups: FilterGroup[],
+    recursiveIndex: number[],
+    level: number,
+    key: string,
+    value?: string,
+    currentLvl = 0
+  ) => {
+    if (level === currentLvl) {
+      // last level
+      if (key === "condition") {
+        (
+          filterGroups[recursiveIndex[level]] as FilterGroupCondition
+        ).condition = value;
+      } else if (key === "add") {
+        (
+          filterGroups[recursiveIndex[level]] as FilterGroupCondition
+        ).filters.push({
+          field: possibleColumns[0],
+          operator: OperatorFilter.CONTAINS[0],
+          value: "",
+        });
+      } else if (key === "addGroup") {
+        (
+          filterGroups[recursiveIndex[level]] as FilterGroupCondition
+        ).filters.push({
+          condition: ConditionFiltersOptions.OR,
+          filters: [
+            {
+              field: possibleColumns[0],
+              operator: OperatorFilter.CONTAINS[0],
+              value: "",
+            },
+          ],
+        });
+      } else if (key === "operator") {
+        (filterGroups[recursiveIndex[level]] as AtomicFilter).operator = value;
+      } else if (key === "field") {
+        (filterGroups[recursiveIndex[level]] as AtomicFilter).field = value;
+      } else if (key === "value") {
+        (filterGroups[recursiveIndex[level]] as AtomicFilter).value = value;
+      } else if (key === "delete") {
+        filterGroups.splice(recursiveIndex[currentLvl], 1);
+      }
+    } else {
+      modifyRecursiveFilterGroups(
+        (filterGroups[recursiveIndex[currentLvl]] as FilterGroupCondition)
+          .filters,
+        recursiveIndex,
+        level,
+        key,
+        value,
+        currentLvl + 1
+      );
+    }
+  };
+
   const onchangeExistedColumnHandler =
     (conditionIndex: number[], level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
@@ -88,7 +146,6 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
       const alteredFilterState = { ...configInfo.getFilters() };
       // Alter filter state recursively to the level of the condition
-      console.log("before", alteredFilterState);
       modifyRecursiveFilterGroups(
         alteredFilterState.conditions,
         conditionIndex,
@@ -96,7 +153,6 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         "condition",
         event.target.value
       );
-      console.log("after", alteredFilterState);
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
     };
@@ -191,7 +247,6 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     level: number;
   }) => {
     const { currentCon, recursiveIndex, level } = selectorProps;
-    console.log(`currentCon: ${currentCon}`);
     return (
       <FormControl fullWidth>
         <Select
@@ -241,13 +296,34 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
       dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
     };
 
-  const deleteGroupConditionHandler = (filterIndex: number) => () => {
-    const alteredFilterState = { ...configInfo.getFilters() };
-    alteredFilterState.conditions.splice(filterIndex, 1);
+  const addAtomicFilterOnGroupHandler =
+    (conditionIndex: number[], level: number) => () => {
+      const alteredFilterState = { ...configInfo.getFilters() };
 
-    configActions.alterFilters(alteredFilterState);
-    dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
-  };
+      modifyRecursiveFilterGroups(
+        alteredFilterState.conditions,
+        conditionIndex,
+        level,
+        "add"
+      );
+
+      configActions.alterFilters(alteredFilterState);
+      dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
+    };
+  const addGroupFilterOnGroupHandler =
+    (conditionIndex: number[], level: number) => () => {
+      const alteredFilterState = { ...configInfo.getFilters() };
+
+      modifyRecursiveFilterGroups(
+        alteredFilterState.conditions,
+        conditionIndex,
+        level,
+        "addGroup"
+      );
+
+      configActions.alterFilters(alteredFilterState);
+      dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
+    };
 
   const deleteConditionHadler =
     (conditionIndex: number[], level: number) => () => {
@@ -263,6 +339,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
     };
+
   /** GROUP FILTER COMPONENT */
   const GroupFilterComponent = (groupProps: {
     group: FilterGroup;
@@ -271,7 +348,6 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   }) => {
     const { group, recursiveIndex, level } = groupProps;
     if ((group as FilterGroupCondition).condition) {
-      console.log(`condition at level ${level}`);
       const filtersOfGroup = (group as FilterGroupCondition).filters;
       const conditionOfGroup = (group as FilterGroupCondition).condition;
       return (
@@ -305,9 +381,39 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
                 variant="contained"
                 color="secondary"
                 size="small"
-                onClick={deleteGroupConditionHandler(recursiveIndex[level])}
+                onClick={deleteConditionHadler(recursiveIndex, level)}
                 endIcon={
                   <FolderDeleteIcon
+                    sx={{ color: StyleVariables.TEXT_ACCENT }}
+                  />
+                }
+              />
+            </Grid>
+            <Grid
+              item
+              xs="auto"
+              key={`Grid-add-atomic-filter-${level}-${recursiveIndex[level]}`}
+            >
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                onClick={addAtomicFilterOnGroupHandler(recursiveIndex, level)}
+                endIcon={<AddIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />}
+              />
+            </Grid>
+            <Grid
+              item
+              xs="auto"
+              key={`Grid-add-group-filter-${level}-${recursiveIndex[level]}`}
+            >
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                onClick={addGroupFilterOnGroupHandler(recursiveIndex, level)}
+                endIcon={
+                  <CreateNewFolderIcon
                     sx={{ color: StyleVariables.TEXT_ACCENT }}
                   />
                 }
@@ -460,41 +566,6 @@ function ValueFilterComponent(props: {
       onChange={proxyHandler}
     />
   );
-}
-
-function modifyRecursiveFilterGroups(
-  filterGroups: FilterGroup[],
-  recursiveIndex: number[],
-  level: number,
-  key: string,
-  value?: string,
-  currentLvl = 0
-) {
-  if (level === currentLvl) {
-    // last level
-    if (key === "condition") {
-      (filterGroups[recursiveIndex[level]] as FilterGroupCondition).condition =
-        value;
-    } else if (key === "operator") {
-      (filterGroups[recursiveIndex[level]] as AtomicFilter).operator = value;
-    } else if (key === "field") {
-      (filterGroups[recursiveIndex[level]] as AtomicFilter).field = value;
-    } else if (key === "value") {
-      (filterGroups[recursiveIndex[level]] as AtomicFilter).value = value;
-    } else if (key === "delete") {
-      filterGroups.splice(recursiveIndex[currentLvl], 1);
-    }
-  } else {
-    modifyRecursiveFilterGroups(
-      (filterGroups[recursiveIndex[currentLvl]] as FilterGroupCondition)
-        .filters,
-      recursiveIndex,
-      level,
-      key,
-      value,
-      currentLvl + 1
-    );
-  }
 }
 
 export default DataviewFiltersPortal;

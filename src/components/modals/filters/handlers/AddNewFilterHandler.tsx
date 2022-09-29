@@ -9,6 +9,7 @@ import {
   StyleVariables,
 } from "helpers/Constants";
 import AddIcon from "@mui/icons-material/Add";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -91,7 +92,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
           size="small"
           key={`Button-Plus-DataviewFilters`}
           variant="outlined"
-          startIcon={<AddIcon />}
+          startIcon={<AddIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />}
           style={{
             borderColor: StyleVariables.TEXT_NORMAL,
             color: StyleVariables.TEXT_NORMAL,
@@ -106,7 +107,9 @@ const NewFiltersForm = (props: FiltersModalProps) => {
           size="small"
           key={`Button-Plus-DataviewFilters`}
           variant="outlined"
-          startIcon={<AddIcon />}
+          startIcon={
+            <CreateNewFolderIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />
+          }
           style={{
             borderColor: StyleVariables.TEXT_NORMAL,
             color: StyleVariables.TEXT_NORMAL,
