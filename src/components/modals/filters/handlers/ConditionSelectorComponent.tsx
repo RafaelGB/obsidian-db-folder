@@ -1,30 +1,29 @@
-import { MenuItem } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import { Table } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
-import { OperatorFilter, StyleVariables } from "helpers/Constants";
-import { t } from "lang/helpers";
+import { ConditionFiltersOptions, StyleVariables } from "helpers/Constants";
 import React from "react";
 import modifyRecursiveFilterGroups, {
   ModifyFilterOptionsEnum,
 } from "components/modals/filters/handlers/FiltersHelper";
 
-const OperatorSelectorComponent = (selectorProps: {
-  currentOp: string;
+const ConditionSelectorComponent = (selectorProps: {
+  currentCon: string;
   recursiveIndex: number[];
   level: number;
   table: Table<RowDataType>;
 }) => {
-  const { currentOp, recursiveIndex, level, table } = selectorProps;
+  const { currentCon, recursiveIndex, level, table } = selectorProps;
   const { tableState } = table.options.meta;
   const configActions = tableState.configState((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
-  const columnsInfo = tableState.columns((state) => state.info);
+  const columns = tableState.columns((state) => state.columns);
   const dataActions = tableState.data((state) => state.actions);
-  const onChangeOperatorHandler =
+  const onChangeCondition =
     (conditionIndex: number[], level: number) =>
-    (event: SelectChangeEvent<string>, child: React.ReactNode) => {
+    (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
       const alteredFilterState = { ...configInfo.getFilters() };
       // Alter filter state recursively to the level of the condition
       modifyRecursiveFilterGroups(
@@ -32,12 +31,12 @@ const OperatorSelectorComponent = (selectorProps: {
         alteredFilterState.conditions,
         conditionIndex,
         level,
-        ModifyFilterOptionsEnum.OPERATOR,
+        ModifyFilterOptionsEnum.CONDITION,
         event.target.value
       );
       configActions.alterFilters(alteredFilterState);
       dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
+        columns,
         configInfo.getLocalSettings(),
         alteredFilterState
       );
@@ -45,9 +44,9 @@ const OperatorSelectorComponent = (selectorProps: {
   return (
     <FormControl fullWidth>
       <Select
-        value={currentOp}
+        value={currentCon}
         size="small"
-        onChange={onChangeOperatorHandler(recursiveIndex, level)}
+        onChange={onChangeCondition(recursiveIndex, level)}
         style={{
           backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
           color: StyleVariables.TEXT_NORMAL,
@@ -61,13 +60,13 @@ const OperatorSelectorComponent = (selectorProps: {
           },
         }}
       >
-        {Object.entries(OperatorFilter).map(([key, value]) => {
+        {Object.entries(ConditionFiltersOptions).map(([key, value]) => {
           return (
             <MenuItem
               value={key}
-              key={`MenuItem-OperatorSelector-${value[0]}-${level}-${recursiveIndex[level]}`}
+              key={`MenuItem-ConditionSelector-${value[0]}-${recursiveIndex[level]}`}
             >
-              {t(value[1] as any)}
+              {value}
             </MenuItem>
           );
         })}
@@ -75,5 +74,4 @@ const OperatorSelectorComponent = (selectorProps: {
     </FormControl>
   );
 };
-
-export default OperatorSelectorComponent;
+export default ConditionSelectorComponent;

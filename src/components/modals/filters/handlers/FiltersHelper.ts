@@ -1,6 +1,16 @@
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from "cdm/SettingsModel";
 import { ConditionFiltersOptions, OperatorFilter } from "helpers/Constants";
 
+export enum ModifyFilterOptionsEnum {
+    CONDITION = "CONDITION",
+    ADD = "ADD",
+    ADD_GROUP = "ADD_GROUP",
+    OPERATOR = "OPERATOR",
+    FIELD = "FIELD",
+    VALUE = "VALUE",
+    DELETE = "DELETE",
+}
+
 const modifyRecursiveFilterGroups = (
     possibleColumns: string[],
     filterGroups: FilterGroup[],
@@ -12,7 +22,7 @@ const modifyRecursiveFilterGroups = (
 ) => {
     if (level === currentLvl) {
         // last level
-        if (key === "condition") {
+        if (key === ModifyFilterOptionsEnum.CONDITION) {
             (
                 filterGroups[recursiveIndex[level]] as FilterGroupCondition
             ).condition = value;
@@ -24,7 +34,7 @@ const modifyRecursiveFilterGroups = (
                 operator: OperatorFilter.CONTAINS[0],
                 value: "",
             });
-        } else if (key === "addGroup") {
+        } else if (key === ModifyFilterOptionsEnum.ADD_GROUP) {
             (
                 filterGroups[recursiveIndex[level]] as FilterGroupCondition
             ).filters.push({
@@ -37,13 +47,13 @@ const modifyRecursiveFilterGroups = (
                     },
                 ],
             });
-        } else if (key === "operator") {
+        } else if (key === ModifyFilterOptionsEnum.OPERATOR) {
             (filterGroups[recursiveIndex[level]] as AtomicFilter).operator = value;
-        } else if (key === "field") {
+        } else if (key === ModifyFilterOptionsEnum.FIELD) {
             (filterGroups[recursiveIndex[level]] as AtomicFilter).field = value;
-        } else if (key === "value") {
+        } else if (key === ModifyFilterOptionsEnum.VALUE) {
             (filterGroups[recursiveIndex[level]] as AtomicFilter).value = value;
-        } else if (key === "delete") {
+        } else if (key === ModifyFilterOptionsEnum.DELETE) {
             filterGroups.splice(recursiveIndex[currentLvl], 1);
         }
     } else {

@@ -1,38 +1,38 @@
-import { MenuItem } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Table } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
-import { OperatorFilter, StyleVariables } from "helpers/Constants";
-import { t } from "lang/helpers";
+import { StyleVariables } from "helpers/Constants";
 import React from "react";
 import modifyRecursiveFilterGroups, {
   ModifyFilterOptionsEnum,
 } from "components/modals/filters/handlers/FiltersHelper";
 
-const OperatorSelectorComponent = (selectorProps: {
-  currentOp: string;
+const ExistedColumnSelectorComponent = (selectorProps: {
+  currentCol: string;
   recursiveIndex: number[];
   level: number;
   table: Table<RowDataType>;
+  possibleColumns: string[];
 }) => {
-  const { currentOp, recursiveIndex, level, table } = selectorProps;
+  const { currentCol, recursiveIndex, level, table, possibleColumns } =
+    selectorProps;
   const { tableState } = table.options.meta;
   const configActions = tableState.configState((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
   const dataActions = tableState.data((state) => state.actions);
-  const onChangeOperatorHandler =
+  const onchangeExistedColumnHandler =
     (conditionIndex: number[], level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
       const alteredFilterState = { ...configInfo.getFilters() };
-      // Alter filter state recursively to the level of the condition
       modifyRecursiveFilterGroups(
-        [],
+        possibleColumns,
         alteredFilterState.conditions,
         conditionIndex,
         level,
-        ModifyFilterOptionsEnum.OPERATOR,
+        ModifyFilterOptionsEnum.FIELD,
         event.target.value
       );
       configActions.alterFilters(alteredFilterState);
@@ -43,11 +43,15 @@ const OperatorSelectorComponent = (selectorProps: {
       );
     };
   return (
-    <FormControl fullWidth>
+    <FormControl
+      fullWidth
+      key={`FormControl-existedColumnSelector-${level}-${recursiveIndex[level]}`}
+    >
       <Select
-        value={currentOp}
+        value={currentCol}
         size="small"
-        onChange={onChangeOperatorHandler(recursiveIndex, level)}
+        key={`Select-existedColumnSelector-${level}-${recursiveIndex[level]}`}
+        onChange={onchangeExistedColumnHandler(recursiveIndex, level)}
         style={{
           backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
           color: StyleVariables.TEXT_NORMAL,
@@ -61,13 +65,13 @@ const OperatorSelectorComponent = (selectorProps: {
           },
         }}
       >
-        {Object.entries(OperatorFilter).map(([key, value]) => {
+        {possibleColumns.map((key) => {
           return (
             <MenuItem
               value={key}
-              key={`MenuItem-OperatorSelector-${value[0]}-${level}-${recursiveIndex[level]}`}
+              key={`MenuItem-existedColumnSelector-${key}--${level}-${recursiveIndex[level]}}`}
             >
-              {t(value[1] as any)}
+              {key}
             </MenuItem>
           );
         })}
@@ -75,5 +79,4 @@ const OperatorSelectorComponent = (selectorProps: {
     </FormControl>
   );
 };
-
-export default OperatorSelectorComponent;
+export default ExistedColumnSelectorComponent;
