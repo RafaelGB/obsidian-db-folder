@@ -3,6 +3,7 @@ import { DatabaseView } from "DatabaseView";
 import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 import { INLINE_POSITION, SourceDataTypes } from "helpers/Constants";
+import { RowDataType } from "cdm/FolderModel";
 
 export function resolve_tfile(file_str: string): TFile {
     file_str = normalizePath(file_str);
@@ -81,3 +82,73 @@ export function inline_regex_target_in_function_of(position: string, columnId: s
     }
     return regex_target;
 }
+
+
+export function sanitize_path(path: string, replacement = ''){
+    const illegalCharacters = /[\*"\\\/<>:\|\?]/g
+    const unsafeCharachersForObsidianLinks = /[#\^\[\]\|]/g
+    const dotAtTheStart = /^\./g
+
+    // credit: https://github.com/parshap/node-sanitize-filename/blob/209c39b914c8eb48ee27bcbde64b2c7822fdf3de/index.js#L33
+    const controlRe  =/[\x00-\x1f\x80-\x9f]/g;
+    const reservedRe = /^\.+$/;
+    const windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
+    const windowsTrailingRe = /[\. ]+$/;
+    
+    let sanitized =  path
+        .replace(illegalCharacters, replacement)
+        .replace(unsafeCharachersForObsidianLinks, replacement)
+        .replace(dotAtTheStart, replacement)
+        .replace(controlRe, replacement)
+        .replace(reservedRe, replacement)
+        .replace(windowsReservedRe, replacement)
+        .replace(windowsTrailingRe, replacement);
+
+    if(replacement)
+        sanitized = sanitized
+            .replace(new RegExp(`${replacement}+`,'g'),replacement)
+            .replace(new RegExp(`^${replacement}(.)|(.)${replacement}$`,'g'),'$1$2');
+    return sanitized
+}
+
+export const resolveNewFilePath = ({
+  pathColumns,
+  row,
+  ddbbConfig,
+  folderPath,
+}: {
+  pathColumns: string[];
+  row: RowDataType;
+  ddbbConfig: LocalSettings;
+  folderPath: string;
+}) => {
+  const fileHasMissingPathAttributes = pathColumns.some(
+    (columnName) => !row[columnName],
+  );
+  let subfolders;
+  if (fileHasMissingPathAttributes) {
+    if (ddbbConfig.hoist_files_with_empty_attributes) {
+      subfolders = "";
+    } else {
+      // Hoist to lowest available attribute
+      subfolders = pathColumns.reduce(
+        (state, name) => {
+          if (row[name] && !state.stop) {
+            state.subfolders =
+              state.subfolders + "/" + sanitize_path(row[name] as string, "-");
+          } else {
+            state.stop = true;
+          }
+
+          return state;
+        },
+        { subfolders: "", stop: false },
+      ).subfolders;
+    }
+  } else
+    subfolders = pathColumns
+      .map((name) => sanitize_path(row[name] as string, "-"))
+      .join("/");
+  return `${folderPath}${subfolders ? `/${subfolders}` : ""}`;
+};
+  
