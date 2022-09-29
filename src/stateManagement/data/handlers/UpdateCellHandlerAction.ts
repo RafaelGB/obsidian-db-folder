@@ -2,12 +2,13 @@ import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
-import { moveFile } from "helpers/VaultManagement";
+import { postMoveFile } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
-import { destination_folder } from "helpers/FileManagement";
+import { destination_folder, resolveNewFilePath } from "helpers/FileManagement";
 import { EditEngineService } from "services/EditEngineService";
+import { FileGroupingService } from "services/FileGroupingService";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -29,9 +30,13 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             if (ddbbConfig.show_metadata_modified) {
                 modifiedRow[MetadataColumns.MODIFIED] = DateTime.now();
             }
-            // Update the row on disk
-            if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
-
+            const pathColumns: string[] =
+                ddbbConfig.group_folder_column
+                .split(",")
+                .filter(Boolean);
+                // Update the row on disk
+                if ( isMovingFile && pathColumns.includes(column.id)) {
+                const folderPath = destination_folder(view, ddbbConfig);
                 const moveInfo = {
                     file: rowTFile,
                     id: column.id,
@@ -39,24 +44,24 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     columns: columns,
                     ddbbConfig: ddbbConfig,
                 }
-                const foldePath = destination_folder(view, ddbbConfig);
-                await moveFile(`${foldePath}/${value}`, moveInfo);
-                // Update row file
-                modifiedRow[
-                    MetadataColumns.FILE
-                ] = `${rowTFile.basename}|${foldePath}/${value}/${rowTFile.name}`;
-                // Check if action.value is a valid folder name
-                const auxPath =
-                    value !== ""
-                        ? `${foldePath}/${value}/${rowTFile.name}`
-                        : `${foldePath}/${rowTFile.name}`;
-
-                const recordRow: Record<string, Literal> = {};
-                Object.entries(modifiedRow).forEach(([key, value]) => {
-                    recordRow[key] = value as Literal;
+              
+                await EditEngineService.updateRowFileProxy(
+                    moveInfo.file,
+                    moveInfo.id,
+                    moveInfo.value,
+                    moveInfo.columns,
+                    moveInfo.ddbbConfig,
+                    UpdateRowOptions.COLUMN_VALUE
+                  );
+                const newFilePath = resolveNewFilePath({
+                    pathColumns,
+                    row: modifiedRow,
+                    ddbbConfig,
+                    folderPath,
                 });
-
-                modifiedRow.__note__.filepath = auxPath;
+                await FileGroupingService.moveFile(newFilePath, rowTFile);
+                await postMoveFile({ file: rowTFile, row: modifiedRow, newFilePath });
+                await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
             } else {
                 // Save on disk
                 await EditEngineService.updateRowFileProxy(

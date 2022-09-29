@@ -1,6 +1,6 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
-import { GroupFolderColumnDropDownHandler } from 'settings/handlers/columns/GroupFolderColumnDropDownHandler';
+import { GroupFolderColumnTextInputHandler } from 'settings/handlers/columns/GroupFolderColumnTextInputHandler';
 import { RemoveFieldsWhenDeleteToggleHandler } from 'settings/handlers/columns/RemoveFieldsWhenDeleteToggleHandler';
 import { MetadataToggleGroupHandler } from 'settings/handlers/columns/MetadataToggleGroupHandler';
 import { TemplateColumnsHandler } from 'settings/handlers/columns/TemplateColumnsHandler';
@@ -18,7 +18,7 @@ class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
         return [
-            new GroupFolderColumnDropDownHandler(),
+            new GroupFolderColumnTextInputHandler(),
             new RemoveFieldsWhenDeleteToggleHandler(),
             new TemplateColumnsHandler(),
             new MetadataToggleGroupHandler(),
