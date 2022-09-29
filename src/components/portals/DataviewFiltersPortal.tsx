@@ -82,6 +82,24 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
       dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
     };
 
+  const onChangeCondition =
+    (conditionIndex: number[], level: number) =>
+    (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
+      const alteredFilterState = { ...configInfo.getFilters() };
+      // Alter filter state recursively to the level of the condition
+      console.log("before", alteredFilterState);
+      modifyRecursiveFilterGroups(
+        alteredFilterState.conditions,
+        conditionIndex,
+        level,
+        "condition",
+        event.target.value
+      );
+      console.log("after", alteredFilterState);
+      configActions.alterFilters(alteredFilterState);
+      dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
+    };
+
   const existedColumnSelector = (selectorProps: {
     currentCol: string;
     recursiveIndex: number[];
@@ -172,12 +190,13 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
     level: number;
   }) => {
     const { currentCon, recursiveIndex, level } = selectorProps;
+    console.log(`currentCon: ${currentCon}`);
     return (
       <FormControl fullWidth>
         <Select
           value={currentCon}
           size="small"
-          onChange={onChangeOperatorHandler(recursiveIndex, level)}
+          onChange={onChangeCondition(recursiveIndex, level)}
           style={{
             backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
             color: StyleVariables.TEXT_NORMAL,
@@ -243,6 +262,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
   }) => {
     const { group, recursiveIndex, level } = groupProps;
     if ((group as FilterGroupCondition).condition) {
+      console.log(`condition at level ${level}`);
       const filtersOfGroup = (group as FilterGroupCondition).filters;
       const conditionOfGroup = (group as FilterGroupCondition).condition;
       return (
@@ -412,9 +432,10 @@ function modifyRecursiveFilterGroups(
   recursiveIndex: number[],
   level: number,
   key: string,
-  value?: string
+  value?: string,
+  currentLvl = 0
 ) {
-  if (level === 0) {
+  if (level === currentLvl) {
     // last level
     if (key === "condition") {
       (filterGroups[recursiveIndex[level]] as FilterGroupCondition).condition =
@@ -426,15 +447,17 @@ function modifyRecursiveFilterGroups(
     } else if (key === "value") {
       (filterGroups[recursiveIndex[level]] as AtomicFilter).value = value;
     } else if (key === "delete") {
-      filterGroups.splice(recursiveIndex[level], 1);
+      filterGroups.splice(recursiveIndex[currentLvl], 1);
     }
   } else {
     modifyRecursiveFilterGroups(
-      (filterGroups[recursiveIndex[level]] as FilterGroupCondition).filters,
+      (filterGroups[recursiveIndex[currentLvl]] as FilterGroupCondition)
+        .filters,
       recursiveIndex,
-      level - 1,
+      level,
       key,
-      value
+      value,
+      currentLvl + 1
     );
   }
 }
