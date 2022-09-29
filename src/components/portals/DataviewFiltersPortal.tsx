@@ -10,6 +10,7 @@ import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import DeleteIcon from "@mui/icons-material/Delete";
+import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
 import {
   ConditionFiltersOptions,
   OperatorFilter,
@@ -240,6 +241,14 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
       dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
     };
 
+  const deleteGroupConditionHandler = (filterIndex: number) => () => {
+    const alteredFilterState = { ...configInfo.getFilters() };
+    alteredFilterState.conditions.splice(filterIndex, 1);
+
+    configActions.alterFilters(alteredFilterState);
+    dataActions.dataviewRefresh(columns, ddbbConfig, alteredFilterState);
+  };
+
   const deleteConditionHadler =
     (conditionIndex: number[], level: number) => () => {
       const alteredFilterState = { ...configInfo.getFilters() };
@@ -269,7 +278,8 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
         <div
           key={`div-groupFilterComponent-${level}-${recursiveIndex[level]}`}
           style={{
-            border: `1px solid ${StyleVariables.BACKGROUND_SECONDARY}`,
+            border: `2px solid ${StyleVariables.BACKGROUND_SECONDARY}`,
+            padding: "4px",
           }}
         >
           <Grid
@@ -278,6 +288,31 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
             columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
             key={`Grid-AtomicFilter-${level}-${recursiveIndex[level]}`}
           >
+            <Box sx={{ flexGrow: 1 }} />
+            <Grid
+              item
+              xs="auto"
+              key={`Grid-label-${level}-${recursiveIndex[level]}`}
+            >
+              {`level ${level}`}
+            </Grid>
+            <Grid
+              item
+              xs="auto"
+              key={`Grid-remove-group-${level}-${recursiveIndex[level]}`}
+            >
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                onClick={deleteGroupConditionHandler(recursiveIndex[level])}
+                endIcon={
+                  <FolderDeleteIcon
+                    sx={{ color: StyleVariables.TEXT_ACCENT }}
+                  />
+                }
+              />
+            </Grid>
             <Grid
               item
               xs="auto"
@@ -376,7 +411,7 @@ const DataviewFiltersPortal = (props: DataviewFiltersProps) => {
             color="secondary"
             size="small"
             onClick={deleteConditionHadler(recursiveIndex, level)}
-            endIcon={<DeleteIcon />}
+            endIcon={<DeleteIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />}
           />
         </Grid>
       </Grid>
