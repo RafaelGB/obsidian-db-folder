@@ -6,6 +6,9 @@ import { DataviewService } from "services/DataviewService";
 export default function tableFilter(dbFilters: FilterGroup[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
     if (!dbFilters || dbFilters.length === 0) return true;
     return !dbFilters.some((filter) => {
+        if ((filter as FilterGroupCondition).disabled) {
+            return true;
+        }
         return !validateFilter(p, filter, ddbbConfig);
     });
 }

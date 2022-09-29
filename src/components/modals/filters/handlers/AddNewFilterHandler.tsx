@@ -74,6 +74,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
     };
 
     alteredFilterState.conditions.push({
+      disabled: false,
       condition: ConditionFiltersOptions.AND,
       filters: [mockAtomicFilter],
     });

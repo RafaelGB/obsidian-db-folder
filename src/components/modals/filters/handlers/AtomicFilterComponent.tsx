@@ -23,83 +23,63 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
 
   const deleteConditionHadler =
     (conditionIndex: number[], level: number) => () => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-
-      modifyRecursiveFilterGroups(
-        possibleColumns,
-        alteredFilterState.conditions,
-        conditionIndex,
-        level,
-        ModifyFilterOptionsEnum.DELETE
-      );
-
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
+      commonModifyFilter(conditionIndex, level, ModifyFilterOptionsEnum.DELETE);
     };
 
   const onChangeFilterValueHandler =
     (conditionIndex: number[], level: number) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-      modifyRecursiveFilterGroups(
-        possibleColumns,
-        alteredFilterState.conditions,
+      commonModifyFilter(
         conditionIndex,
         level,
         ModifyFilterOptionsEnum.VALUE,
         event.target.value
-      );
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
       );
     };
 
   const onchangeExistedColumnHandler =
     (conditionIndex: number[], level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-      modifyRecursiveFilterGroups(
-        possibleColumns,
-        alteredFilterState.conditions,
+      commonModifyFilter(
         conditionIndex,
         level,
         ModifyFilterOptionsEnum.FIELD,
         event.target.value
       );
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
     };
   const onChangeOperatorHandler =
     (conditionIndex: number[], level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-      // Alter filter state recursively to the level of the condition
-      modifyRecursiveFilterGroups(
-        [],
-        alteredFilterState.conditions,
+      commonModifyFilter(
         conditionIndex,
         level,
         ModifyFilterOptionsEnum.OPERATOR,
         event.target.value
       );
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
     };
+  const commonModifyFilter = (
+    conditionIndex: number[],
+    level: number,
+    action: string,
+    value?: string
+  ) => {
+    const alteredFilterState = { ...configInfo.getFilters() };
+    // Alter filter state recursively to the level of the condition
+    modifyRecursiveFilterGroups(
+      possibleColumns,
+      alteredFilterState.conditions,
+      conditionIndex,
+      level,
+      action,
+      value
+    );
+    configActions.alterFilters(alteredFilterState);
+    dataActions.dataviewRefresh(
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings(),
+      alteredFilterState
+    );
+  };
   return (
     <Grid
       container

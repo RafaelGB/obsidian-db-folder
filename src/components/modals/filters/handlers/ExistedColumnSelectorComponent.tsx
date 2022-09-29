@@ -39,11 +39,11 @@ const ExistedColumnSelectorComponent = (selectorProps: {
           },
         }}
       >
-        {possibleColumns.map((key) => {
+        {possibleColumns.map((key, index) => {
           return (
             <MenuItem
               value={key}
-              key={`MenuItem-existedColumnSelector-${key}--${level}-${recursiveIndex[level]}}`}
+              key={`MenuItem-${index}-existedColumnSelector-${key}--${level}-${recursiveIndex[level]}}`}
             >
               {key}
             </MenuItem>

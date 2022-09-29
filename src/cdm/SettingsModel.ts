@@ -9,6 +9,7 @@ export type FilterGroup = AtomicFilter | FilterGroupCondition;
 
 export type FilterGroupCondition = {
     condition: string;
+    disabled: boolean;
     filters: FilterGroup[];
 }
 export type AtomicFilter = {

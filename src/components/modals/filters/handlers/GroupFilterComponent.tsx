@@ -14,10 +14,13 @@ import { RowDataType } from "cdm/FolderModel";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
+import FilterOffIcon from "components/img/FilterOffIcon";
+import FilterOnIcon from "components/img/FilterOnIcon";
 import modifyRecursiveFilterGroups, {
   ModifyFilterOptionsEnum,
 } from "components/modals/filters/handlers/FiltersHelper";
 import ConditionSelectorComponent from "components/modals/filters/handlers/ConditionSelectorComponent";
+import ToggleButton from "@mui/material/ToggleButton";
 
 const GroupFilterComponent = (groupProps: {
   group: FilterGroup;
@@ -34,84 +37,58 @@ const GroupFilterComponent = (groupProps: {
   const dataActions = tableState.data((state) => state.actions);
   const deleteConditionHadler =
     (conditionIndex: number[], level: number) => () => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-
-      modifyRecursiveFilterGroups(
-        possibleColumns,
-        alteredFilterState.conditions,
-        conditionIndex,
-        level,
-        ModifyFilterOptionsEnum.DELETE
-      );
-
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
+      commonModifyFilter(conditionIndex, level, ModifyFilterOptionsEnum.DELETE);
     };
   const addAtomicFilterOnGroupHandler =
     (conditionIndex: number[], level: number) => () => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-
-      modifyRecursiveFilterGroups(
-        possibleColumns,
-        alteredFilterState.conditions,
-        conditionIndex,
-        level,
-        ModifyFilterOptionsEnum.ADD
-      );
-
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
+      commonModifyFilter(conditionIndex, level, ModifyFilterOptionsEnum.ADD);
     };
   const addGroupFilterOnGroupHandler =
     (conditionIndex: number[], level: number) => () => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-
-      modifyRecursiveFilterGroups(
-        possibleColumns,
-        alteredFilterState.conditions,
+      commonModifyFilter(
         conditionIndex,
         level,
         ModifyFilterOptionsEnum.ADD_GROUP
-      );
-
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
       );
     };
   const onChangeCondition =
     (conditionIndex: number[], level: number) =>
     (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
-      const alteredFilterState = { ...configInfo.getFilters() };
-      // Alter filter state recursively to the level of the condition
-      modifyRecursiveFilterGroups(
-        [],
-        alteredFilterState.conditions,
+      commonModifyFilter(
         conditionIndex,
         level,
         ModifyFilterOptionsEnum.CONDITION,
         event.target.value
       );
-      configActions.alterFilters(alteredFilterState);
-      dataActions.dataviewRefresh(
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        alteredFilterState
-      );
     };
+  const commonModifyFilter = (
+    conditionIndex: number[],
+    level: number,
+    action: string,
+    value?: string
+  ) => {
+    const alteredFilterState = { ...configInfo.getFilters() };
+    // Alter filter state recursively to the level of the condition
+    modifyRecursiveFilterGroups(
+      possibleColumns,
+      alteredFilterState.conditions,
+      conditionIndex,
+      level,
+      action,
+      value
+    );
+    configActions.alterFilters(alteredFilterState);
+    dataActions.dataviewRefresh(
+      columnsInfo.getAllColumns(),
+      configInfo.getLocalSettings(),
+      alteredFilterState
+    );
+  };
+
   if ((group as FilterGroupCondition).condition) {
     const filtersOfGroup = (group as FilterGroupCondition).filters;
     const conditionOfGroup = (group as FilterGroupCondition).condition;
+    const disabledFlag = (group as FilterGroupCondition).disabled;
     return (
       <div
         key={`div-groupFilterComponent-${level}-${recursiveIndex[level]}`}
@@ -130,7 +107,22 @@ const GroupFilterComponent = (groupProps: {
           <Grid
             item
             xs="auto"
-            key={`Grid-label-${level}-${recursiveIndex[level]}`}
+            key={`Grid-disabled-${level}-${recursiveIndex[level]}`}
+          >
+            <ToggleButton
+              value="check"
+              selected={disabledFlag}
+              // onChange={() => {
+              //   setSelected(!selected);
+              // }}
+            >
+              {disabledFlag ? <FilterOffIcon /> : <FilterOnIcon />}
+            </ToggleButton>
+          </Grid>
+          <Grid
+            item
+            xs="auto"
+            key={`Grid-level-${level}-${recursiveIndex[level]}`}
           >
             {`level ${level}`}
           </Grid>

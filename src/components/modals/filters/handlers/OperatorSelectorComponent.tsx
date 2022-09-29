@@ -35,11 +35,11 @@ const OperatorSelectorComponent = (selectorProps: {
           },
         }}
       >
-        {Object.entries(OperatorFilter).map(([key, value]) => {
+        {Object.entries(OperatorFilter).map(([key, value], index) => {
           return (
             <MenuItem
               value={key}
-              key={`MenuItem-OperatorSelector-${value[0]}-${level}-${recursiveIndex[level]}`}
+              key={`MenuItem-${index}-OperatorSelector-${value[0]}-${level}-${recursiveIndex[level]}`}
             >
               {t(value[1] as any)}
             </MenuItem>
