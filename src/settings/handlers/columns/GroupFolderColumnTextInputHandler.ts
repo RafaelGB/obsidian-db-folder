@@ -96,6 +96,16 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
                 view.diskConfig.updateConfig({ remove_empty_folders: value });
               }
             )
+
+            add_toggle(
+              containerEl,
+              "Hoist files with missing attributes to root folder",
+              "By default, files with missing attributes are hoisted to the lowest possible folder",
+              view.diskConfig.yaml.config.hoist_files_with_empty_attributes,
+              async (value) => {
+                view.diskConfig.updateConfig({ hoist_files_with_empty_attributes: value});
+              }
+            )
     }
     return this.goNext(settingHandlerResponse);
   }

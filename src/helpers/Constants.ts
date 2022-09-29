@@ -357,6 +357,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     group_folder_column: '',
     remove_empty_folders: false,
     automatically_group_files: false,
+    hoist_files_with_empty_attributes: true,
     show_metadata_created: false,
     show_metadata_modified: false,
     show_metadata_tasks: false,

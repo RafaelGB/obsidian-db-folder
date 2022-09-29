@@ -163,21 +163,16 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
 
 
 
-export const postMoveFile = ({ file, row, folderPath, subfolders, }: { row: RowDataType; file: TFile; folderPath: string; subfolders: string; }) => {
+export const postMoveFile = ({ file, row, newFilePath, }: { row: RowDataType; file: TFile; newFilePath: string }) => {
   // Update row file
-  row[ MetadataColumns.FILE ] = `${file.basename}|${folderPath}/${subfolders}/${file.name}`;
-  // Check if action.value is a valid folder name
-  const auxPath =
-      subfolders !== ""
-      ? `${folderPath}/${subfolders}/${file.name}`
-      : `${folderPath}/${file.name}`;
+  row[ MetadataColumns.FILE ] = `${file.basename}|${newFilePath}/${file.name}`;
 
   const recordRow: Record<string, Literal> = {};
   Object.entries(row).forEach(([key, value]) => {
       recordRow[key] = value as Literal;
   });
 
-  row.__note__.filepath = auxPath;
+  row.__note__.filepath = `${newFilePath}/${file.name}`;
 };
 
 

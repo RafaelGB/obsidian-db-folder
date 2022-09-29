@@ -3,7 +3,7 @@ import { LOGGER } from "./Logger";
 import pLimit from "p-limit";
 import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { sanitize_path } from "helpers/FileManagement";
+import { resolveNewFilePath } from "helpers/FileManagement";
 import { postMoveFile } from "helpers/VaultManagement";
 
 const limitMovingFiles = pLimit(1);
@@ -30,7 +30,6 @@ export class FileGroupingService {
       await FileGroupingService.createFolder(folderPath);
     } catch (error) {
       LOGGER.error(` moveFile Error: ${error.message} `);
-      // Handle error
       throw error;
     }
     const filePath = `${folderPath}/${file.name}`;
@@ -53,7 +52,11 @@ export class FileGroupingService {
     ddbbConfig: LocalSettings,
   ): Promise<number> =>
     limitBatchDeletionAndOrganization(() =>
-      FileGroupingService._organizeNotesIntoSubfolders(folderPath, rows, ddbbConfig),
+      FileGroupingService._organizeNotesIntoSubfolders(
+        folderPath,
+        rows,
+        ddbbConfig,
+      ),
     );
   private static async _organizeNotesIntoSubfolders(
     folderPath: string,
@@ -70,26 +73,20 @@ export class FileGroupingService {
       for (const row of rows) {
         let rowTFile = row.__note__.getFile();
 
-        const pathHasAnEmptyCell = pathColumns.some(
-          (columnName) => !row[columnName],
-        );
+        const newFilePath = resolveNewFilePath({
+          pathColumns,
+          row,
+          ddbbConfig,
+          folderPath,
+        });
+        // Check if file is already in the correct folder
+        const auxPath = `${newFilePath}/${rowTFile.name}`;
+        const fileIsAlreadyInCorrectFolder = row.__note__.filepath === auxPath;
+        if (fileIsAlreadyInCorrectFolder) continue;
 
-        // Update the row on disk
-        if (!pathHasAnEmptyCell) {
-          const subfolders = pathColumns
-            .map((name) => sanitize_path(row[name] as string, "-"))
-            .join("/");
-
-          // Check if file is already in the correct folder
-          const auxPath = `${folderPath}/${subfolders}/${rowTFile.name}`;
-          const fileIsAlreadyInCorrectFolder =
-            row.__note__.filepath === auxPath;
-          if (fileIsAlreadyInCorrectFolder) continue;
-
-          await FileGroupingService.moveFile(`${folderPath}/${subfolders}`, rowTFile);
-          await postMoveFile({ file: rowTFile, row, folderPath, subfolders });
-          numberOfMovedFiles++;
-        }
+        await FileGroupingService.moveFile(newFilePath, rowTFile);
+        await postMoveFile({ file: rowTFile, row, newFilePath });
+        numberOfMovedFiles++;
       }
       if (numberOfMovedFiles > 0)
         new Notice(
@@ -145,7 +142,10 @@ export class FileGroupingService {
     if (!ddbbConfig.remove_empty_folders) return;
     try {
       const removedDirectories =
-        await FileGroupingService.removeEmptyFoldersRecursively(directory, new Set());
+        await FileGroupingService.removeEmptyFoldersRecursively(
+          directory,
+          new Set(),
+        );
       const n = removedDirectories.size;
       if (n > 0) {
         const message = `Removed ${n} empty director${
@@ -159,4 +159,3 @@ export class FileGroupingService {
     }
   }
 }
-

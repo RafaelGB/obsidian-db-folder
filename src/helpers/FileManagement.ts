@@ -3,6 +3,7 @@ import { DatabaseView } from "DatabaseView";
 import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 import { INLINE_POSITION, SourceDataTypes } from "helpers/Constants";
+import { RowDataType } from "cdm/FolderModel";
 
 export function resolve_tfile(file_str: string): TFile {
     file_str = normalizePath(file_str);
@@ -109,3 +110,45 @@ export function sanitize_path(path: string, replacement = ''){
             .replace(new RegExp(`^${replacement}(.)|(.)${replacement}$`,'g'),'$1$2');
     return sanitized
 }
+
+export const resolveNewFilePath = ({
+  pathColumns,
+  row,
+  ddbbConfig,
+  folderPath,
+}: {
+  pathColumns: string[];
+  row: RowDataType;
+  ddbbConfig: LocalSettings;
+  folderPath: string;
+}) => {
+  const fileHasMissingPathAttributes = pathColumns.some(
+    (columnName) => !row[columnName],
+  );
+  let subfolders;
+  if (fileHasMissingPathAttributes) {
+    if (ddbbConfig.hoist_files_with_empty_attributes) {
+      subfolders = "";
+    } else {
+      // Hoist to lowest available attribute
+      subfolders = pathColumns.reduce(
+        (state, name) => {
+          if (row[name] && !state.stop) {
+            state.subfolders =
+              state.subfolders + "/" + sanitize_path(row[name] as string, "-");
+          } else {
+            state.stop = true;
+          }
+
+          return state;
+        },
+        { subfolders: "", stop: false },
+      ).subfolders;
+    }
+  } else
+    subfolders = pathColumns
+      .map((name) => sanitize_path(row[name] as string, "-"))
+      .join("/");
+  return `${folderPath}${subfolders ? `/${subfolders}` : ""}`;
+};
+  

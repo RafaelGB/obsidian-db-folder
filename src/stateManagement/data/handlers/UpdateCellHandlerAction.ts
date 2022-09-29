@@ -6,7 +6,7 @@ import { postMoveFile } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
-import { destination_folder, sanitize_path } from "helpers/FileManagement";
+import { destination_folder, resolveNewFilePath } from "helpers/FileManagement";
 import { EditEngineService } from "services/EditEngineService";
 import { FileGroupingService } from "services/FileGroupingService";
 
@@ -34,10 +34,9 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                 ddbbConfig.group_folder_column
                 .split(",")
                 .filter(Boolean);
-            const emptyPathColumn = pathColumns.some((columnName) => !modifiedRow[columnName]);
-            // Update the row on disk
-            if ( isMovingFile && pathColumns.includes(column.id) && !emptyPathColumn) {
-                const subfolders = pathColumns .map((name) => sanitize_path(modifiedRow[name] as string, "-")) .join("/");
+                // Update the row on disk
+                if ( isMovingFile && pathColumns.includes(column.id)) {
+                const folderPath = destination_folder(view, ddbbConfig);
                 const moveInfo = {
                     file: rowTFile,
                     id: column.id,
@@ -45,7 +44,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     columns: columns,
                     ddbbConfig: ddbbConfig,
                 }
-                const folderPath = destination_folder(view, ddbbConfig);
+              
                 await EditEngineService.updateRowFileProxy(
                     moveInfo.file,
                     moveInfo.id,
@@ -54,8 +53,14 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                     moveInfo.ddbbConfig,
                     UpdateRowOptions.COLUMN_VALUE
                   );
-                await FileGroupingService.moveFile(`${folderPath}/${subfolders}`, rowTFile);
-                await postMoveFile({ file: rowTFile, row: modifiedRow, folderPath, subfolders });
+                const newFilePath = resolveNewFilePath({
+                    pathColumns,
+                    row: modifiedRow,
+                    ddbbConfig,
+                    folderPath,
+                });
+                await FileGroupingService.moveFile(newFilePath, rowTFile);
+                await postMoveFile({ file: rowTFile, row: modifiedRow, newFilePath });
                 await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
             } else {
                 // Save on disk

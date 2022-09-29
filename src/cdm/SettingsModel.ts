@@ -26,6 +26,7 @@ export interface LocalSettings {
     current_row_template: string;
     group_folder_column: string;
     remove_empty_folders: boolean;
+    hoist_files_with_empty_attributes: boolean;
     automatically_group_files: boolean;
     frontmatter_quote_wrap: boolean;
     pagination_size: number;
