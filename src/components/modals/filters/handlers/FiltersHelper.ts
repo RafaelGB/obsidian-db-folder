@@ -9,6 +9,7 @@ export enum ModifyFilterOptionsEnum {
     FIELD = "FIELD",
     VALUE = "VALUE",
     DELETE = "DELETE",
+    TOGGLE_DISABLED = "TOGGLE_DISABLED"
 }
 
 const modifyRecursiveFilterGroups = (
@@ -22,39 +23,51 @@ const modifyRecursiveFilterGroups = (
 ) => {
     if (level === currentLvl) {
         // last level
-        if (key === ModifyFilterOptionsEnum.CONDITION) {
-            (
-                filterGroups[recursiveIndex[level]] as FilterGroupCondition
-            ).condition = value;
-        } else if (key === ModifyFilterOptionsEnum.ADD) {
-            (
-                filterGroups[recursiveIndex[level]] as FilterGroupCondition
-            ).filters.push({
-                field: possibleColumns[0],
-                operator: OperatorFilter.CONTAINS[0],
-                value: "",
-            });
-        } else if (key === ModifyFilterOptionsEnum.ADD_GROUP) {
-            (
-                filterGroups[recursiveIndex[level]] as FilterGroupCondition
-            ).filters.push({
-                condition: ConditionFiltersOptions.OR,
-                filters: [
-                    {
+        switch (key) {
+            case ModifyFilterOptionsEnum.CONDITION:
+                (filterGroups[recursiveIndex[level]] as FilterGroupCondition)
+                    .condition = value;
+                break;
+            case ModifyFilterOptionsEnum.TOGGLE_DISABLED:
+                (filterGroups[recursiveIndex[level]] as FilterGroupCondition)
+                    .disabled = !((filterGroups[recursiveIndex[level]] as FilterGroupCondition)
+                        .disabled);
+                break;
+            case ModifyFilterOptionsEnum.ADD:
+                (filterGroups[recursiveIndex[level]] as FilterGroupCondition)
+                    .filters.push({
                         field: possibleColumns[0],
                         operator: OperatorFilter.CONTAINS[0],
                         value: "",
-                    },
-                ],
-            });
-        } else if (key === ModifyFilterOptionsEnum.OPERATOR) {
-            (filterGroups[recursiveIndex[level]] as AtomicFilter).operator = value;
-        } else if (key === ModifyFilterOptionsEnum.FIELD) {
-            (filterGroups[recursiveIndex[level]] as AtomicFilter).field = value;
-        } else if (key === ModifyFilterOptionsEnum.VALUE) {
-            (filterGroups[recursiveIndex[level]] as AtomicFilter).value = value;
-        } else if (key === ModifyFilterOptionsEnum.DELETE) {
-            filterGroups.splice(recursiveIndex[currentLvl], 1);
+                    });
+                break;
+            case ModifyFilterOptionsEnum.ADD_GROUP:
+                (filterGroups[recursiveIndex[level]] as FilterGroupCondition)
+                    .filters.push({
+                        condition: ConditionFiltersOptions.OR,
+                        disabled: false,
+                        filters: [
+                            {
+                                field: possibleColumns[0],
+                                operator: OperatorFilter.CONTAINS[0],
+                                value: "",
+                            },
+                        ],
+                    });
+                break;
+            case ModifyFilterOptionsEnum.OPERATOR:
+                (filterGroups[recursiveIndex[level]] as AtomicFilter).operator = value;
+                break;
+            case ModifyFilterOptionsEnum.FIELD:
+                (filterGroups[recursiveIndex[level]] as AtomicFilter).field = value;
+                break;
+            case ModifyFilterOptionsEnum.VALUE:
+                (filterGroups[recursiveIndex[level]] as AtomicFilter).value = value;
+                break;
+            case ModifyFilterOptionsEnum.DELETE:
+                filterGroups.splice(recursiveIndex[currentLvl], 1);
+            default:
+            // Do nothing
         }
     } else {
         modifyRecursiveFilterGroups(

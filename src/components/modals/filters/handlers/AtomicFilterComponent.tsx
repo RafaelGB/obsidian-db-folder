@@ -21,11 +21,6 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
   const columnsInfo = tableState.columns((state) => state.info);
   const dataActions = tableState.data((state) => state.actions);
 
-  const deleteConditionHadler =
-    (conditionIndex: number[], level: number) => () => {
-      commonModifyFilter(conditionIndex, level, ModifyFilterOptionsEnum.DELETE);
-    };
-
   const onChangeFilterValueHandler =
     (conditionIndex: number[], level: number) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +132,13 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
           variant="contained"
           color="secondary"
           size="small"
-          onClick={deleteConditionHadler(recursiveIndex, level)}
+          onClick={() =>
+            commonModifyFilter(
+              recursiveIndex,
+              level,
+              ModifyFilterOptionsEnum.DELETE
+            )
+          }
           endIcon={<DeleteIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />}
         />
       </Grid>

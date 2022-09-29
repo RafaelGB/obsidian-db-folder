@@ -35,22 +35,6 @@ const GroupFilterComponent = (groupProps: {
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
   const dataActions = tableState.data((state) => state.actions);
-  const deleteConditionHadler =
-    (conditionIndex: number[], level: number) => () => {
-      commonModifyFilter(conditionIndex, level, ModifyFilterOptionsEnum.DELETE);
-    };
-  const addAtomicFilterOnGroupHandler =
-    (conditionIndex: number[], level: number) => () => {
-      commonModifyFilter(conditionIndex, level, ModifyFilterOptionsEnum.ADD);
-    };
-  const addGroupFilterOnGroupHandler =
-    (conditionIndex: number[], level: number) => () => {
-      commonModifyFilter(
-        conditionIndex,
-        level,
-        ModifyFilterOptionsEnum.ADD_GROUP
-      );
-    };
   const onChangeCondition =
     (conditionIndex: number[], level: number) =>
     (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
@@ -95,6 +79,9 @@ const GroupFilterComponent = (groupProps: {
         style={{
           border: `2px solid ${StyleVariables.BACKGROUND_SECONDARY}`,
           padding: "4px",
+          backgroundColor: disabledFlag
+            ? StyleVariables.BACKGROUND_SECONDARY
+            : StyleVariables.BACKGROUND_PRIMARY,
         }}
       >
         <Grid
@@ -112,9 +99,13 @@ const GroupFilterComponent = (groupProps: {
             <ToggleButton
               value="check"
               selected={disabledFlag}
-              // onChange={() => {
-              //   setSelected(!selected);
-              // }}
+              onClick={() =>
+                commonModifyFilter(
+                  recursiveIndex,
+                  level,
+                  ModifyFilterOptionsEnum.TOGGLE_DISABLED
+                )
+              }
             >
               {disabledFlag ? <FilterOffIcon /> : <FilterOnIcon />}
             </ToggleButton>
@@ -135,7 +126,13 @@ const GroupFilterComponent = (groupProps: {
               variant="contained"
               color="secondary"
               size="small"
-              onClick={deleteConditionHadler(recursiveIndex, level)}
+              onClick={() =>
+                commonModifyFilter(
+                  recursiveIndex,
+                  level,
+                  ModifyFilterOptionsEnum.DELETE
+                )
+              }
               endIcon={
                 <FolderDeleteIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />
               }
@@ -150,7 +147,13 @@ const GroupFilterComponent = (groupProps: {
               variant="contained"
               color="secondary"
               size="small"
-              onClick={addAtomicFilterOnGroupHandler(recursiveIndex, level)}
+              onClick={() =>
+                commonModifyFilter(
+                  recursiveIndex,
+                  level,
+                  ModifyFilterOptionsEnum.ADD
+                )
+              }
               endIcon={<AddIcon sx={{ color: StyleVariables.TEXT_ACCENT }} />}
             />
           </Grid>
@@ -163,7 +166,13 @@ const GroupFilterComponent = (groupProps: {
               variant="contained"
               color="secondary"
               size="small"
-              onClick={addGroupFilterOnGroupHandler(recursiveIndex, level)}
+              onClick={() =>
+                commonModifyFilter(
+                  recursiveIndex,
+                  level,
+                  ModifyFilterOptionsEnum.ADD_GROUP
+                )
+              }
               endIcon={
                 <CreateNewFolderIcon
                   sx={{ color: StyleVariables.TEXT_ACCENT }}

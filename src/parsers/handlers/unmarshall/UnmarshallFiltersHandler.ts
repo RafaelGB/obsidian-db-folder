@@ -27,7 +27,7 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
         if ((filter as FilterGroupCondition).condition) {
             // Is a filter group
             this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}- condition: ${(filter as FilterGroupCondition).condition}`);
-            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}- disabled: ${Boolean((filter as FilterGroupCondition).disabled)}`);
+            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  disabled: ${Boolean((filter as FilterGroupCondition).disabled)}`);
             this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  filters:`);
             indentLevel++;
             for (const group of (filter as FilterGroupCondition).filters) {
