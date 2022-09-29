@@ -26,12 +26,17 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
     striginifyFilter(filter: FilterGroup, indentLevel: number, isList = false): void {
         if ((filter as FilterGroupCondition).condition) {
             // Is a filter group
-            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}- condition: ${(filter as FilterGroupCondition).condition}`);
-            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  disabled: ${Boolean((filter as FilterGroupCondition).disabled)}`);
-            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  filters:`);
-            indentLevel++;
-            for (const group of (filter as FilterGroupCondition).filters) {
-                this.striginifyFilter(group, indentLevel, true);
+            const condition = (filter as FilterGroupCondition).condition;
+            const disabled = (filter as FilterGroupCondition).disabled;
+            const filters = (filter as FilterGroupCondition).filters;
+            if (filters && filters.length > 0) {
+                this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}- condition: ${condition}`);
+                this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  disabled: ${Boolean(disabled)}`);
+                this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  filters:`);
+                indentLevel++;
+                for (const group of (filter as FilterGroupCondition).filters) {
+                    this.striginifyFilter(group, indentLevel, true);
+                }
             }
         } else {
             // Is a simple filter

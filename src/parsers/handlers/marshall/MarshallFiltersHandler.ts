@@ -38,11 +38,13 @@ export class MarshallFiltersHandler extends AbstractYamlHandler {
     validateFilter(filter: FilterGroup, yaml: DatabaseYaml): boolean {
         // Is a filter group
         if ((filter as FilterGroupCondition).condition) {
-            if (!DataviewService.isTruthy((filter as FilterGroupCondition).condition)) {
+            const condition = (filter as FilterGroupCondition).condition;
+            const filters = (filter as FilterGroupCondition).filters;
+            if (!DataviewService.isTruthy(condition)) {
                 this.addError(`There was not condition key in filter: ${JSON.stringify(filter)}`);
                 return false;
             }
-            for (const group of (filter as FilterGroupCondition).filters) {
+            for (const group of filters) {
                 this.validateFilter(group, yaml);
             }
             // Is a single filter
