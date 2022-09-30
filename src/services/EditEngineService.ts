@@ -88,7 +88,7 @@ class EditEngine {
                 action: 'replace',
                 file: file,
                 regexp: frontmatterGroupRegex,
-                newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}$1`,
+                newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
             };
             await VaultManagerDB.editNoteContent(noteObject);
         }
