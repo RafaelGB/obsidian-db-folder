@@ -4,14 +4,12 @@ import {
   AtomicFilter,
   FilterGroup,
   FilterGroupCondition,
-  FilterSettings,
-  LocalSettings,
 } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
-import React from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import AtomicFilterComponent from "components/modals/filters/handlers/AtomicFilterComponent";
 import { Table } from "@tanstack/react-table";
-import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { RowDataType } from "cdm/FolderModel";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
@@ -22,6 +20,7 @@ import modifyRecursiveFilterGroups, {
 } from "components/modals/filters/handlers/FiltersHelper";
 import ConditionSelectorComponent from "components/modals/filters/handlers/ConditionSelectorComponent";
 import IconButton from "@mui/material/IconButton";
+import LabelComponent from "components/modals/filters/handlers/LabelComponent";
 type GroupFilterComponentProps = {
   group: FilterGroup;
   recursiveIndex: number[];
@@ -36,6 +35,29 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
   const dataActions = tableState.data((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
+
+  const [labelTimeout, setLabelTimeout] = useState(null);
+
+  const onChangeLabelHandler: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    // cancelling previous timeout
+    if (labelTimeout) {
+      clearTimeout(labelTimeout);
+    }
+    // setting new timeout
+    setLabelTimeout(
+      setTimeout(() => {
+        commonModifyFilter(
+          recursiveIndex,
+          level,
+          ModifyFilterOptionsEnum.LABEL,
+          event.target.value
+        );
+        // timeout until event is triggered after user has stopped typing
+      }, 1000)
+    );
+  };
   const onChangeCondition =
     (conditionIndex: number[], level: number) =>
     (event: React.ChangeEvent<HTMLInputElement>, child: React.ReactNode) => {
@@ -74,6 +96,7 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
     const filtersOfGroup = (group as FilterGroupCondition).filters;
     const conditionOfGroup = (group as FilterGroupCondition).condition;
     const disabledFlag = (group as FilterGroupCondition).disabled;
+    const label = (group as FilterGroupCondition).label;
     return (
       <div
         key={`div-groupFilterComponent-${level}-${recursiveIndex[level]}`}
@@ -91,14 +114,20 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
           columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
           key={`Grid-AtomicFilter-${level}-${recursiveIndex[level]}`}
         >
+          {level === 0 && (
+            <Grid
+              item
+              xs={1}
+              key={`Grid-level-${level}-${recursiveIndex[level]}`}
+            >
+              <LabelComponent
+                onChangeLabelHandler={onChangeLabelHandler}
+                label={label}
+                index={recursiveIndex[level]}
+              />
+            </Grid>
+          )}
           <Box sx={{ flexGrow: 1 }} />
-          <Grid
-            item
-            xs="auto"
-            key={`Grid-level-${level}-${recursiveIndex[level]}`}
-          >
-            {`level ${level}`}
-          </Grid>
           <Grid
             item
             xs="auto"

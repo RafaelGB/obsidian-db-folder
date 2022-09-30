@@ -17,7 +17,6 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
         info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
         isEmpty ? undefined : newColumnName
       );
-      console.log("newColumnName", newColumnName);
       new Notice(isEmpty ? "New column added" : `"${newColumnName}" added to the table`, 1500);
       (activeDocument.getElementById("SettingsModalManager-addEmptyColumn-input") as HTMLInputElement).value = "";
     }

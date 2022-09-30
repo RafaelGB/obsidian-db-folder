@@ -2,6 +2,7 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { FilterGroupCondition } from "cdm/SettingsModel";
+import { StyleVariables } from "helpers/Constants";
 import React from "react";
 
 const QuickFilters = (props: DataviewFiltersProps) => {
@@ -34,9 +35,19 @@ const QuickFilters = (props: DataviewFiltersProps) => {
     <Stack direction="row" spacing={1}>
       {filters.conditions.map((condition, filterIndex) => {
         if ((condition as FilterGroupCondition).condition) {
+          const label = (condition as FilterGroupCondition).label;
           return (
             <div onClick={toggleFilterGroupOnClickHandler(filterIndex)}>
-              <Chip size="small" label={`filter-${filterIndex}`} />
+              <Chip
+                size="small"
+                label={label ?? `filter-${filterIndex}`}
+                sx={{
+                  backgroundColor: (condition as FilterGroupCondition).disabled
+                    ? StyleVariables.BACKGROUND_SECONDARY
+                    : StyleVariables.TEXT_ACCENT,
+                  border: `1px solid ${StyleVariables.TEXT_NORMAL}`,
+                }}
+              />
             </div>
           );
         }
