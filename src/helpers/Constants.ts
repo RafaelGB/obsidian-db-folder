@@ -255,6 +255,7 @@ export const StyleClasses = Object.freeze({
 
 export const StyleVariables = Object.freeze({
   BACKGROUND_MODIFIER_ERROR: 'var(--background-modifier-error)',
+  BACKGROUND_MODIFIER_SUCCESS: 'var(--background-modifier-success)',
   BACKGROUND_PRIMARY: 'var(--background-primary)',
   BACKGROUND_SECONDARY: 'var(--background-secondary)',
   BACKGROUND_DIVIDER: 'var(--background-divider)',

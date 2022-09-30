@@ -32,7 +32,15 @@ const QuickFilters = (props: DataviewFiltersProps) => {
   };
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack
+      direction="row"
+      spacing={1}
+      style={{
+        display: "flex",
+        overflowX: "scroll",
+        padding: "5px",
+      }}
+    >
       {filters.conditions.map((condition, filterIndex) => {
         if ((condition as FilterGroupCondition).condition) {
           const label = (condition as FilterGroupCondition).label;
@@ -44,8 +52,9 @@ const QuickFilters = (props: DataviewFiltersProps) => {
                 sx={{
                   backgroundColor: (condition as FilterGroupCondition).disabled
                     ? StyleVariables.BACKGROUND_SECONDARY
-                    : StyleVariables.TEXT_ACCENT,
-                  border: `1px solid ${StyleVariables.TEXT_NORMAL}`,
+                    : StyleVariables.BACKGROUND_MODIFIER_SUCCESS,
+                  boxShadow: `1px 1px 1px 1px ${StyleVariables.TEXT_NORMAL}`,
+                  color: StyleVariables.TEXT_NORMAL,
                 }}
               />
             </div>

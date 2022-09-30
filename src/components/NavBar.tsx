@@ -143,15 +143,7 @@ export function NavBar(navBarProps: NavBarProps) {
             <ToggleFiltersButton table={table} />
             <EditFiltersButton table={table} />
           </Paper>
-          <Box
-            justifyContent={"flex-start"}
-            sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-            }}
-          >
-            <QuickFilters table={table} />
-          </Box>
+          <QuickFilters table={table} />
           <Box sx={{ flexGrow: 1 }} />
           <Box
             justifyContent={"flex-start"}

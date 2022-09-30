@@ -117,7 +117,7 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
           {level === 0 && (
             <Grid
               item
-              xs={1}
+              xs={3}
               key={`Grid-level-${level}-${recursiveIndex[level]}`}
             >
               <LabelComponent
