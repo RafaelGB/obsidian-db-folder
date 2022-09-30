@@ -12,7 +12,7 @@ const limitBatchDeletionAndOrganization = pLimit(1);
 
 export class FileGroupingService {
   private static instance: FileGroupingService;
-  private constructor() {}
+  private constructor() { }
   public static getInstance(): FileGroupingService {
     if (!this.instance) {
       this.instance = new FileGroupingService();
@@ -90,8 +90,7 @@ export class FileGroupingService {
       }
       if (numberOfMovedFiles > 0)
         new Notice(
-          `Moved ${numberOfMovedFiles} file${
-            numberOfMovedFiles > 1 ? "s" : ""
+          `Moved ${numberOfMovedFiles} file${numberOfMovedFiles > 1 ? "s" : ""
           } into subfolders`,
           1500,
         );
@@ -122,7 +121,6 @@ export class FileGroupingService {
     if (list.files.length === 0 && list.folders.length === 0) {
       await app.vault.adapter.rmdir(directory, false);
       deletedFolders.add(directory);
-      console.log(`Removed empty folder: ${directory}`);
     }
 
     return deletedFolders;
@@ -148,9 +146,8 @@ export class FileGroupingService {
         );
       const n = removedDirectories.size;
       if (n > 0) {
-        const message = `Removed ${n} empty director${
-          n === 0 || n > 1 ? "ies" : "y"
-        }`;
+        const message = `Removed ${n} empty director${n === 0 || n > 1 ? "ies" : "y"
+          }`;
         new Notice(message, 1500);
       }
     } catch (error) {

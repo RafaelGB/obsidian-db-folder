@@ -11,6 +11,7 @@ export type FilterGroupCondition = {
     condition: string;
     disabled: boolean;
     filters: FilterGroup[];
+    label?: string;
 }
 export type AtomicFilter = {
     field: string;

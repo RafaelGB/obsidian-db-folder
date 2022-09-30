@@ -1,4 +1,3 @@
-import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
