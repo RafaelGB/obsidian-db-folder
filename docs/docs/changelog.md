@@ -7,6 +7,8 @@
 - Improving select tag UX [ISSUE#408](https://github.com/RafaelGB/obsidian-db-folder/issues/408)
 ### Visual
 - flex-wrap for tags [GaboCapo](https://github.com/GaboCapo)
+### No longer broken
+- Add new line when the yaml of the frontmatter does not exist and we insert some field [ISSUE#450](https://github.com/RafaelGB/obsidian-db-folder/issues/450)
 ## 2.6.7
 ### Shiny new things
 - New options for text columns: wrap and justify content [ISSUE#378](https://github.com/RafaelGB/obsidian-db-folder/issues/378)

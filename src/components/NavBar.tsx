@@ -11,7 +11,6 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import EditFiltersButton from "components/reducers/DataviewFilters";
@@ -21,8 +20,9 @@ import CsvReader from "./navbar/CsvReader";
 import { t } from "lang/helpers";
 import AppBar from "@mui/material/AppBar";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import ToggleFiltersButton from "./reducers/ToggleFiltersButton";
+import ToggleFiltersButton from "components/reducers/ToggleFiltersButton";
 import Paper from "@mui/material/Paper";
+import QuickFilters from "./reducers/QuickFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
@@ -143,6 +143,15 @@ export function NavBar(navBarProps: NavBarProps) {
             <ToggleFiltersButton table={table} />
             <EditFiltersButton table={table} />
           </Paper>
+          <Box
+            justifyContent={"flex-start"}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+            }}
+          >
+            <QuickFilters table={table} />
+          </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box
             justifyContent={"flex-start"}
