@@ -1,9 +1,9 @@
 import { InputType } from "helpers/Constants";
 import { destination_folder } from "helpers/FileManagement";
-import { Notice } from "obsidian";
 import { FileGroupingService } from "services/FileGroupingService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-import { add_text, add_toggle } from "settings/SettingsComponents";
+import { add_toggle } from "settings/SettingsComponents";
+import { FileGroupingColumnsSetting } from "./FileGroupingColumnsSetting";
 
 const createDebouncer = ( callback: (...args: any[])=> void,
 debounceDelay: number,) =>{
@@ -31,53 +31,21 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
                 .filter( (f) => columns[f].input === InputType.SELECT)
                 .map((key) => columns[key].label),
             );
-            const lowerCaseAllowedColumns = new Set( Array.from(allowedColumns).map((f) => f.toLowerCase()),);
-            const lowerCaseAllowedColumnsMap = new Map( Array.from(allowedColumns).map((key) => [key.toLowerCase(), key]),)
-            const debouncedNotice = createDebouncer((message, messageDelay)=>new Notice(message, messageDelay), 1500);
-            const debouncedOrganizeNotesIntoSubfolders = createDebouncer(async ()=>{
+        
+
+            const  debouncedOrganizeNotesIntoSubfolders = createDebouncer(async ()=>{
               const folderPath = destination_folder(view, view.diskConfig.yaml.config);
               await FileGroupingService.organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config );
               await FileGroupingService.removeEmptyFolders(folderPath, view.diskConfig.yaml.config);
             }, 5000);
-            const group_folder_column_input_promise =
-              async ( value: string ): Promise<void> => {
+              
+            new FileGroupingColumnsSetting(view, allowedColumns,debouncedOrganizeNotesIntoSubfolders.debounce as any).init(containerEl);
 
-                const validConfig =
-                  value === "" ||
-                  value
-                    .split(",")
-                    .every((column) => lowerCaseAllowedColumns.has( column.toLowerCase()));
 
-                if (validConfig){
-                    debouncedNotice.cleanup();
-                    debouncedOrganizeNotesIntoSubfolders.cleanup();
-                    // make sure the case of each column is correct
-                    const correctCaseColumns = value
-                        .split(",")
-                        .map((column) => lowerCaseAllowedColumnsMap.get(column.toLowerCase()))
-                        .join(",");
-                    view.diskConfig.updateConfig({ group_folder_column: correctCaseColumns });
-                    debouncedOrganizeNotesIntoSubfolders.debounce();
-                }
-                else {
-                    debouncedNotice.debounce(`"${value}" is an invalid value for group_folder_column`, 4000)
-                }
-              };
-
-            add_text(
-                containerEl,
-                this.settingTitle,
-                "Multiple columns can be used, separated by a comma. Available columns: " +
-                [...allowedColumns].join(", "),
-                "Comma separated column names",
-                view.diskConfig.yaml.config
-                .group_folder_column,
-                group_folder_column_input_promise,
-            );
            
             add_toggle(
               containerEl,
-              "Automatically group all files into folders",
+              "Group all files into folders automatically",
               "By default, files are groupped individually, after a value is updated",
               view.diskConfig.yaml.config.automatically_group_files,
               async (value) => {

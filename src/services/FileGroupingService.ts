@@ -64,10 +64,9 @@ export class FileGroupingService {
     ddbbConfig: LocalSettings,
   ): Promise<number> {
     try {
-      if (!ddbbConfig.group_folder_column) return 0;
       if (!ddbbConfig.automatically_group_files) return 0;
       let numberOfMovedFiles = 0;
-      const pathColumns: string[] = ddbbConfig.group_folder_column
+      const pathColumns: string[] = (ddbbConfig.group_folder_column || '')
         .split(",")
         .filter(Boolean);
       for (const row of rows) {
@@ -137,6 +136,7 @@ export class FileGroupingService {
     directory: string,
     ddbbConfig: LocalSettings,
   ) {
+    if(!ddbbConfig.automatically_group_files) return;
     if (!ddbbConfig.remove_empty_folders) return;
     try {
       const removedDirectories =
