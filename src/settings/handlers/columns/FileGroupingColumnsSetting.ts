@@ -17,8 +17,8 @@ export class FileGroupingColumnsSetting {
 
   init = (containerEl: HTMLElement) => {
     new Setting(containerEl)
-      .setName("Column to use for grouping")
-      .setDesc("The column to use for grouping files into subfolders")
+      .setName("Columns to group files by")
+      .setDesc("The folder structure will mirror the values of these columns")
       .addSearch((sc) => {
         sc.setPlaceholder("").setValue("").onChange(this.onSearchChange);
         this.searchComponent = sc;
@@ -90,7 +90,7 @@ export class FileGroupingColumnsSetting {
   private configureDisplay = (containerEl: HTMLElement) => {
     this.labelContainer = containerEl.createEl("div");
     const label = containerEl.createEl("span", {
-      text: "Current path: ",
+      text: "Selected columns: ",
     });
     label.style.color = "#666";
     this.labelContainer.appendChild(label);
