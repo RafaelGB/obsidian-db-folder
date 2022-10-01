@@ -300,6 +300,7 @@ export const OperatorFilter = Object.freeze({
   GREATER_THAN_OR_EQUAL: ['GREATER_THAN_OR_EQUAL', '>='],
   LESS_THAN_OR_EQUAL: ['LESS_THAN_OR_EQUAL', '<='],
   CONTAINS: ['CONTAINS', 'operator_contains'],
+  NOT_CONTAINS: ['NOT_CONTAINS', 'operator_does_not_contain'],
   STARTS_WITH: ['STARTS_WITH', 'operator_starts_with'],
   ENDS_WITH: ['ENDS_WITH', 'operator_ends_with'],
   IS_EMPTY: ['IS_EMPTY', 'operator_is_empty'],

@@ -8,6 +8,7 @@ export default {
   'menu_pane_open_as_md_action': 'Open as Markdown',
   /** OPERATOR FILTERS */
   'operator_contains': 'Contains',
+  'operator_does_not_contain': 'Does not contain',
   'operator_starts_with': 'Starts with',
   'operator_ends_with': 'Ends with',
   'operator_is_empty': 'Is empty',

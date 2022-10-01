@@ -70,6 +70,9 @@ function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbCon
         case OperatorFilter.CONTAINS[1]:
             if (!filterableValue.toString().includes(value)) return false;
             break;
+        case OperatorFilter.NOT_CONTAINS[1]:
+            if (filterableValue.toString().includes(value)) return false;
+            break;
         case OperatorFilter.STARTS_WITH[1]:
             if (!filterableValue.toString().startsWith(value)) return false;
             break;
