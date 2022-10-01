@@ -5,6 +5,7 @@ import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolveNewFilePath } from "helpers/FileManagement";
 import { MetadataColumns } from "helpers/Constants";
+import { __set__ } from "stateManagement/useDataStore";
 
 const limitMovingFiles = pLimit(1);
 const limitCreatingFolders = pLimit(1);
@@ -90,7 +91,12 @@ export class FileGroupingService {
           throw error;
         }
       }
-      if (movedRows.length > 0) {     
+      if (movedRows.length > 0) {   
+        __set__.current(() => {
+          return {
+            rows: [...rows]
+          };
+        });  
         new Notice(
           `Moved ${movedRows.length} file${
             movedRows.length > 1 ? "s" : ""

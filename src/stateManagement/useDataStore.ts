@@ -3,8 +3,13 @@ import { DatabaseView } from "DatabaseView";
 import create from "zustand";
 import data_state_actions from "stateManagement/data/DataStateActions";
 
+export const __set__: {
+  current: TableActionResponse<DataState>["set"];
+} = { current: null };
+
 const useDataStore = (view: DatabaseView) => {
     return create<DataState>()((set, get) => {
+        __set__.current = set;
         const tableActionResponse: TableActionResponse<DataState> = {
             view: view,
             set: set,
