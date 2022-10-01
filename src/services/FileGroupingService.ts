@@ -5,6 +5,7 @@ import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolveNewFilePath } from "helpers/FileManagement";
 import { MetadataColumns } from "helpers/Constants";
+import { __set__ } from "stateManagement/useDataStore";
 
 const limitMovingFiles = pLimit(1);
 const limitCreatingFolders = pLimit(1);
@@ -33,12 +34,12 @@ export class FileGroupingService {
     return deletedFolders;
   }
 
-  static moveFile = async (folderPath: string, row: RowDataType): Promise<void> =>
+  static moveFile = async (folderPath: string, row: RowDataType): Promise<boolean> =>
     limitMovingFiles(async () => {
       let file = row.__note__.getFile();
       const filePath = `${folderPath}/${file.name}`;
       const fileIsAlreadyInCorrectFolder = row.__note__.filepath === filePath;
-      if (fileIsAlreadyInCorrectFolder) return;
+      if (fileIsAlreadyInCorrectFolder) return false;
       try {
         await FileGroupingService.createFolder(folderPath);
       } catch (error) {
@@ -49,6 +50,7 @@ export class FileGroupingService {
       await app.fileManager.renameFile(file, filePath);
       row[MetadataColumns.FILE] = `${file.basename}|${folderPath}/${file.name}`;
       row.__note__.filepath = `${folderPath}/${file.name}`;
+      return true;
     });
 
   static createFolder = async (folderPath: string): Promise<void> =>
@@ -63,39 +65,47 @@ export class FileGroupingService {
   static organizeNotesIntoSubfolders = async (
     folderPath: string,
     rows: Array<RowDataType>,
-    ddbbConfig: LocalSettings
+    ddbbConfig: LocalSettings,
   ): Promise<number> =>
     limitBatchDeletionAndOrganization(async () => {
-      try {
-        if (!ddbbConfig.automatically_group_files) return 0;
-        let numberOfMovedFiles = 0;
-        const pathColumns: string[] = (ddbbConfig.group_folder_column || "")
-          .split(",")
-          .filter(Boolean);
-        for (const row of rows) {
-          const newFilePath = resolveNewFilePath({
-            pathColumns,
-            row,
-            ddbbConfig,
-            folderPath
-          });
+      if (!ddbbConfig.automatically_group_files) return 0;
+      const movedRows = [];
+      const pathColumns: string[] = (ddbbConfig.group_folder_column || "")
+        .split(",")
+        .filter(Boolean);
+      for (const row of rows) {
+        const newFilePath = resolveNewFilePath({
+          pathColumns,
+          row,
+          ddbbConfig,
+          folderPath
+        });
 
-          await this.moveFile(newFilePath, row);
-          numberOfMovedFiles++;
+        try {
+          const fileWasMoved = await FileGroupingService.moveFile(newFilePath, row);
+          if (fileWasMoved) {
+            movedRows.push(row);
+          }
+        } catch (error) {
+          new Notice(`Error while moving files into subfolders: ${error.message}`, 5000);
+          throw error;
         }
-        if (numberOfMovedFiles > 0)
-          new Notice(
-            `Moved ${numberOfMovedFiles} file${
-              numberOfMovedFiles > 1 ? "s" : ""
-            } into subfolders`,
-            1500
-          );
-
-        return numberOfMovedFiles;
-      } catch (error) {
-        new Notice(`Error while moving files into subfolders: ${error.message}`, 5000);
-        throw error;
       }
+      if (movedRows.length > 0) {
+        // Save on memory
+        __set__.current(() => {
+          return {
+            rows: [...rows]
+          };
+        });
+        new Notice(
+          `Moved ${movedRows.length} file${
+            movedRows.length > 1 ? "s" : ""
+          } into subfolders`,
+          1500
+        );
+      }
+      return movedRows.length;
     });
 
   static removeEmptyFolders = async (directory: string, ddbbConfig: LocalSettings) =>
