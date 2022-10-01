@@ -66,7 +66,7 @@ export class FileGroupingColumnsSetting {
     if (values.filter(Boolean).length) {
       this.label.innerHTML =
         values
-          .map((v) => `<span style='color: #ccc;'>${v}</span>`)
+          .map((v) => `<span style='color: #999;'>${v}</span>`)
           .join("<span style='color: #666;'> / </span>") || "None";
       this.labelContainer.style.display = "flex";
     } else {
