@@ -9,13 +9,17 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
         position: "static",
         boxSizing: "border-box",
     }),
-    menuPortal: (styles) => ({ ...styles, zIndex: 9999 }),
-    control: (styles) => ({ ...styles, border: "none", boxShadow: "none" }),
+    menuPortal: (styles) => ({
+        ...styles,
+        zIndex: 9999
+    }),
+    control: (styles) => ({ ...styles, border: "none", boxShadow: "none", minWidth: "100%", }),
     option: (styles, { data, isFocused }) => ({
         ...styles,
         backgroundColor: isFocused ? StyleVariables.TEXT_ACCENT_HOVER : data.color,
         color: "rgb(66, 66, 66)",
         padding: 0,
+        width: "100%",
         textAlign: "center",
         ":hover": {
             backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
