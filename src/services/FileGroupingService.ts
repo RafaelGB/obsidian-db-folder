@@ -5,7 +5,6 @@ import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolveNewFilePath } from "helpers/FileManagement";
 import { MetadataColumns } from "helpers/Constants";
-import { __set__ } from "stateManagement/useDataStore";
 
 const limitMovingFiles = pLimit(1);
 const limitCreatingFolders = pLimit(1);
@@ -28,7 +27,6 @@ export class FileGroupingService {
     if (list.files.length === 0 && list.folders.length === 0) {
       await app.vault.adapter.rmdir(directory, false);
       deletedFolders.add(directory);
-      console.log(`Removed empty folder: ${directory}`);
     }
 
     return deletedFolders;
@@ -66,10 +64,10 @@ export class FileGroupingService {
     folderPath: string,
     rows: Array<RowDataType>,
     ddbbConfig: LocalSettings,
-  ): Promise<number> =>
+  ): Promise<RowDataType[]> =>
     limitBatchDeletionAndOrganization(async () => {
-      if (!ddbbConfig.automatically_group_files) return 0;
-      const movedRows = [];
+      if (!ddbbConfig.automatically_group_files) return [];
+      const movedRows: RowDataType[] = [];
       const pathColumns: string[] = (ddbbConfig.group_folder_column || "")
         .split(",")
         .filter(Boolean);
@@ -91,20 +89,15 @@ export class FileGroupingService {
           throw error;
         }
       }
-      if (movedRows.length > 0) {   
-        __set__.current(() => {
-          return {
-            rows: [...rows]
-          };
-        });  
+      if (movedRows.length > 0) {         
         new Notice(
           `Moved ${movedRows.length} file${
             movedRows.length > 1 ? "s" : ""
           } into subfolders`,
           1500
         );
-      }
-      return movedRows.length;
+      }     
+      return movedRows;
     });
 
   static removeEmptyFolders = async (directory: string, ddbbConfig: LocalSettings) =>

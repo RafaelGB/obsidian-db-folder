@@ -47,6 +47,7 @@ export interface DataState {
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
         renameFile: (rowIndex: number) => Promise<void>;
         saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
+        groupFiles: () => Promise<void>;    
     }
 }
 
