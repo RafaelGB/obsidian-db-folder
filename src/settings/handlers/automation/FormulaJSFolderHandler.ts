@@ -6,34 +6,35 @@ export class FormulaJSFolderHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Select the source of your formula JS files';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view, local } = settingHandlerResponse;
+        if (view.diskConfig.yaml.config.enable_js_formulas) {
+            const formula_folder_promise = async (value: string): Promise<void> => {
+                if (local) {
+                    // update settings
+                    view.diskConfig.updateConfig({ formula_folder_path: value });
+                } else {
+                    // switch show created on/off
+                    const update_local_settings = settingsManager.plugin.settings.local_settings;
+                    update_local_settings.formula_folder_path = value;
+                    // update settings
+                    await settingsManager.plugin.updateSettings({
+                        local_settings: update_local_settings
+                    });
+                }
 
-        const formula_folder_promise = async (value: string): Promise<void> => {
-            if (local) {
-                // update settings
-                view.diskConfig.updateConfig({ formula_folder_path: value });
-            } else {
-                // switch show created on/off
-                const update_local_settings = settingsManager.plugin.settings.local_settings;
-                update_local_settings.formula_folder_path = value;
-                // update settings
-                await settingsManager.plugin.updateSettings({
-                    local_settings: update_local_settings
+            };
+            // render dropdown inside container
+            new Setting(containerEl)
+                .setName('Select the formula JS folder')
+                .setDesc('Select the destination of the formula JS files.')
+                .addSearch((cb) => {
+                    new FolderSuggest(
+                        cb.inputEl
+                    );
+                    cb.setPlaceholder("Example: path/to/folder")
+                        .setValue(local ? view.diskConfig.yaml.config.formula_folder_path : settingsManager.plugin.settings.local_settings.formula_folder_path)
+                        .onChange(formula_folder_promise);
                 });
-            }
-
-        };
-        // render dropdown inside container
-        new Setting(containerEl)
-            .setName('Select the formula JS folder')
-            .setDesc('Select the destination of the formula JS files.')
-            .addSearch((cb) => {
-                new FolderSuggest(
-                    cb.inputEl
-                );
-                cb.setPlaceholder("Example: path/to/folder")
-                    .setValue(local ? view.diskConfig.yaml.config.formula_folder_path : settingsManager.plugin.settings.local_settings.formula_folder_path)
-                    .onChange(formula_folder_promise);
-            });
+        }
         return this.goNext(settingHandlerResponse);
     }
 }

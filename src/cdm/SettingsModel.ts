@@ -49,6 +49,7 @@ export interface LocalSettings {
     source_data: string;
     sticky_first_column: boolean;
     row_templates_folder: string;
+    enable_js_formulas: boolean;
     formula_folder_path: string;
     inline_default: boolean;
     inline_new_position: string;

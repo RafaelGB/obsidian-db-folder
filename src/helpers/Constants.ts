@@ -380,6 +380,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     row_templates_folder: '/',
     current_row_template: '',
     pagination_size: 10,
+    enable_js_formulas: false,
     formula_folder_path: '/',
     inline_default: false,
     inline_new_position: INLINE_POSITION.TOP,
