@@ -1,5 +1,5 @@
 import { Notice } from "obsidian";
-import { LOGGER } from "./Logger";
+import { LOGGER } from "services/Logger";
 import pLimit from "p-limit";
 import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
@@ -89,14 +89,13 @@ export class FileGroupingService {
           throw error;
         }
       }
-      if (movedRows.length > 0) {         
+      if (movedRows.length > 0) {
         new Notice(
-          `Moved ${movedRows.length} file${
-            movedRows.length > 1 ? "s" : ""
+          `Moved ${movedRows.length} file${movedRows.length > 1 ? "s" : ""
           } into subfolders`,
           1500
         );
-      }     
+      }
       return movedRows;
     });
 

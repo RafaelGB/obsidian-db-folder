@@ -16,13 +16,13 @@ import { c } from "helpers/StylesHelper";
 import EditFiltersButton from "components/reducers/DataviewFilters";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
 import { SettingsModal } from "Settings";
-import CsvReader from "./navbar/CsvReader";
+import CsvReader from "components/navbar/CsvReader";
 import { t } from "lang/helpers";
 import AppBar from "@mui/material/AppBar";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ToggleFiltersButton from "components/reducers/ToggleFiltersButton";
 import Paper from "@mui/material/Paper";
-import QuickFilters from "./reducers/QuickFilters";
+import QuickFilters from "components/reducers/QuickFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;

@@ -1,7 +1,6 @@
-import { LOGGER } from "services/Logger";
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
-export class LoggerToggleHandler extends AbstractSettingsHandler {
+export class FormulaJSToggleHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Enable JavaScript formulas';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view, local } = settingHandlerResponse;
@@ -11,15 +10,12 @@ export class LoggerToggleHandler extends AbstractSettingsHandler {
                 // update settings
                 view.diskConfig.updateConfig({ enable_js_formulas: value });
             } else {
-                // set debug mode
                 const update_local_settings = settingsManager.plugin.settings.local_settings;
                 update_local_settings.enable_js_formulas = value;
                 // update settings
                 await settingsManager.plugin.updateSettings({
                     local_settings: update_local_settings
                 });
-                // update service value
-                LOGGER.setDebugMode(value);
             }
             // Force refresh of settings
             settingsManager.reset(settingHandlerResponse);

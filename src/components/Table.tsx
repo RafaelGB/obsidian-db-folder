@@ -33,9 +33,9 @@ import TableHeader from "components/TableHeader";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
-import dbfolderColumnSortingFn from "./reducers/CustomSortingFn";
+import dbfolderColumnSortingFn from "components/reducers/CustomSortingFn";
 import { useCallback, useState } from "react";
-import { AddRow } from "./AddRow";
+import { AddRow } from "components/AddRow";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
