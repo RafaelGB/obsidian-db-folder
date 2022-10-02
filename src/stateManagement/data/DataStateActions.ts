@@ -10,26 +10,25 @@ import DataviewRefreshHandlerAction from "stateManagement/data/handlers/Dataview
 import RemoveOptionForAllRowsAction from "stateManagement/data/handlers/RemoveOptionForAllRowsAction";
 import RenameFileHandlerAction from "stateManagement/data/handlers/RenameFileHandlerAction";
 import SaveDataFromFileHandlerAction from "stateManagement/data/handlers/SaveDataFromFileHandlerAction";
+import GroupFilesHandlerAction from "stateManagement/data/handlers/GroupFilesHandlerAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
-import GroupFilesHandlerAction from "./handlers/GroupFilesHandlerAction";
-
 
 class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
-    protected getHandlers(): AbstractHandler<TableActionResponse<DataState>>[] {
-        return [
-          new AddRowlHandlerAction(),
-          new UpdateCellHandlerAction(),
-          new ParseDataOfColumnHandlerAction(),
-          new UpdateDataAfterLabelChangeHandlerAction(),
-          new RemoveRowHandlerAction(),
-          new RemoveDataOfColumnHandlerAction(),
-          new DataviewRefreshHandlerAction(),
-          new RemoveOptionForAllRowsAction(),
-          new RenameFileHandlerAction(),
-          new SaveDataFromFileHandlerAction(),
-          new GroupFilesHandlerAction()
-        ];
-    }
+  protected getHandlers(): AbstractHandler<TableActionResponse<DataState>>[] {
+    return [
+      new AddRowlHandlerAction(),
+      new UpdateCellHandlerAction(),
+      new ParseDataOfColumnHandlerAction(),
+      new UpdateDataAfterLabelChangeHandlerAction(),
+      new RemoveRowHandlerAction(),
+      new RemoveDataOfColumnHandlerAction(),
+      new DataviewRefreshHandlerAction(),
+      new RemoveOptionForAllRowsAction(),
+      new RenameFileHandlerAction(),
+      new SaveDataFromFileHandlerAction(),
+      new GroupFilesHandlerAction()
+    ];
+  }
 }
 
 const data_state_actions = new DataStateActions();

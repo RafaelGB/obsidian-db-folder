@@ -3,6 +3,7 @@ import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler
 import { AbstractChain } from 'patterns/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/AbstractHandler';
 import { FormulaJSFolderHandler } from 'settings/handlers/automation/FormulaJSFolderHandler';
+import { FormulaJSToggleHandler } from 'settings/handlers/automation/FormulaJSToggleHandler';
 
 class AutomationSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
@@ -14,6 +15,7 @@ class AutomationSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
         return [
+            new FormulaJSToggleHandler(),
             new FormulaJSFolderHandler()
         ];
     }
