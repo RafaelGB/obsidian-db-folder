@@ -34,7 +34,8 @@ function mockDataState(): DataState {
             parseDataOfColumn: null,
             dataviewRefresh: null,
             renameFile: null,
-            saveDataFromFile: null
+            saveDataFromFile: null,
+            groupFiles: null,
         },
     }
 }

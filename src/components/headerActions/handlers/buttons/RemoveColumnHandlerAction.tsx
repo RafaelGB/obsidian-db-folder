@@ -76,9 +76,7 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
         .join(",");
       configActions.alterConfig({ group_folder_column: newGroupFolderColumn });
       // Reorganize files and remove empty folders
-      const folderPath = destination_folder(view, view.diskConfig.yaml.config);
-      FileGroupingService.organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config )
-      .then(()=>{ FileGroupingService.removeEmptyFolders(folderPath,view.diskConfig.yaml.config); })
+      dataActions.groupFiles();
     }
   };
 
