@@ -2,14 +2,13 @@ import { RowDataType, NormalizedPath, TableColumn } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, MetadataColumns, SourceDataTypes } from "helpers/Constants";
+import { DatabaseCore, SourceDataTypes } from "helpers/Constants";
 import { generateDataviewTableQuery } from 'helpers/QueryHelper';
 import { DataviewService } from 'services/DataviewService';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
-import { EditEngineService } from 'services/EditEngineService';
 import tableFilter from 'helpers/TableFiltersHelper';
 
 const noBreakSpace = /\u00A0/g;
@@ -162,19 +161,5 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
   }
 }
 
-
-
-
-export const postMoveFile = ({ file, row, newFilePath, }: { row: RowDataType; file: TFile; newFilePath: string }) => {
-  // Update row file
-  row[ MetadataColumns.FILE ] = `${file.basename}|${newFilePath}/${file.name}`;
-
-  const recordRow: Record<string, Literal> = {};
-  Object.entries(row).forEach(([key, value]) => {
-      recordRow[key] = value as Literal;
-  });
-
-  row.__note__.filepath = `${newFilePath}/${file.name}`;
-};
 
 

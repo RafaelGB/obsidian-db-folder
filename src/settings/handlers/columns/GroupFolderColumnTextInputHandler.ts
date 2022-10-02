@@ -5,25 +5,10 @@ import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handle
 import { add_toggle } from "settings/SettingsComponents";
 import { FileGroupingColumnsSetting } from "./FileGroupingColumnsSetting";
 
-const createDebouncer = ( callback: (...args: any[])=> void,
-debounceDelay: number,) =>{
-    const timeout: { current: ReturnType<typeof setTimeout>; } = { current: null };
-    return {
-      debounce: (
-      ...args: any[]
-      ) => {
-        clearTimeout(timeout.current);
-        timeout.current = setTimeout(()=>callback(...args), debounceDelay);
-      },
-      cleanup: () => clearTimeout(timeout.current),
-    };
-} 
-
-
 export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
   settingTitle: string = 'Define a schema to group files into folders';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
-        const { containerEl, local, view } = settingHandlerResponse;
+        const { containerEl, local, view,settingsManager } = settingHandlerResponse;
         if (local) {
             const columns = view.diskConfig.yaml.columns;
             const allowedColumns = new Set(
@@ -32,17 +17,18 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
                 .map((key) => columns[key].label),
             );
         
-
-            const  debouncedOrganizeNotesIntoSubfolders = createDebouncer(async ()=>{
-              const folderPath = destination_folder(view, view.diskConfig.yaml.config);
-              await FileGroupingService.organizeNotesIntoSubfolders( folderPath, view.rows, view.diskConfig.yaml.config );
-              await FileGroupingService.removeEmptyFolders(folderPath, view.diskConfig.yaml.config);
-            }, 5000);
+              settingsManager.cleanupFns.push(async () => {
+                const config = view.diskConfig.yaml.config;
+                if (config.automatically_group_files) {
+                  const folderPath = destination_folder(view, config);
+                  await FileGroupingService.organizeNotesIntoSubfolders( folderPath, view.rows, config);
+                  await FileGroupingService.removeEmptyFolders(folderPath, config);
+                  view.reloadDatabase();
+                }
+              });
               
-            new FileGroupingColumnsSetting(view, allowedColumns,debouncedOrganizeNotesIntoSubfolders.debounce as any).init(containerEl);
+            new FileGroupingColumnsSetting(view, allowedColumns).init(containerEl);
 
-
-           
             add_toggle(
               containerEl,
               "Group all files into folders automatically",
@@ -50,9 +36,6 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
               view.diskConfig.yaml.config.automatically_group_files,
               async (value) => {
                 view.diskConfig.updateConfig({ automatically_group_files: value });
-                if(value){
-                    debouncedOrganizeNotesIntoSubfolders.debounce();
-                }
               }
             )
             add_toggle(

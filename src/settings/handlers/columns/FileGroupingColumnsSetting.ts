@@ -12,7 +12,6 @@ export class FileGroupingColumnsSetting {
   constructor(
     private view: DatabaseView,
     private allowedColumns: Set<string>,
-    private organize: () => Promise<void>,
   ) {}
 
   init = (containerEl: HTMLElement) => {
@@ -53,7 +52,6 @@ export class FileGroupingColumnsSetting {
       group_folder_column: [...newSeting].join(","),
     });
 
-    this.organize();
     this.searchComponent.clearButtonEl.click();
     this.searchComponent.inputEl.blur();
     this.fileAttributeSuggester.options = [...this.allowedColumns].filter(
@@ -66,7 +64,7 @@ export class FileGroupingColumnsSetting {
     if (values.filter(Boolean).length) {
       this.label.innerHTML =
         values
-          .map((v) => `<span style='color: #ccc;'>${v}</span>`)
+          .map((v) => `<span style='color: #999;'>${v}</span>`)
           .join("<span style='color: #666;'> / </span>") || "None";
       this.labelContainer.style.display = "flex";
     } else {
