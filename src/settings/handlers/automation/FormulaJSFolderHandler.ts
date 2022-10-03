@@ -6,7 +6,10 @@ export class FormulaJSFolderHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Select the source of your formula JS files';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view, local } = settingHandlerResponse;
-        if (view.diskConfig.yaml.config.enable_js_formulas) {
+        const isJSFormulasEnabled = local ?
+            view.diskConfig.yaml.config.enable_js_formulas :
+            settingsManager.plugin.settings.local_settings.enable_js_formulas;
+        if (isJSFormulasEnabled) {
             const formula_folder_promise = async (value: string): Promise<void> => {
                 if (local) {
                     // update settings
