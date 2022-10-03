@@ -3,7 +3,7 @@ import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
-import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 
 const dbfolderColumnSortingFn: (
   ddbbConfig: LocalSettings
@@ -14,7 +14,7 @@ const dbfolderColumnSortingFn: (
     rowB: Row<RowDataType>,
     columnId: string
   ): number => {
-    const a = DataviewService.parseLiteral(
+    const a = ParseService.parseLiteral(
       rowA.getValue<Literal>(columnId),
       InputType.MARKDOWN,
       ddbbConfig,
@@ -22,7 +22,7 @@ const dbfolderColumnSortingFn: (
     )
       .toString()
       .toLowerCase();
-    const b = DataviewService.parseLiteral(
+    const b = ParseService.parseLiteral(
       rowB.getValue<Literal>(columnId),
       InputType.MARKDOWN,
       ddbbConfig,

@@ -1,7 +1,7 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { TFile } from "obsidian";
-import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolve_tfile } from "helpers/FileManagement";
@@ -35,7 +35,7 @@ export default class NoteInfo {
         /** Parse data with the type of column */
         columns.forEach(column => {
             if (dataviewFile[column.key] !== undefined) {
-                aFile[column.key] = DataviewService.parseLiteral((dataviewFile[column.key]) as Literal, column.input, config, column.config.isInline);
+                aFile[column.key] = ParseService.parseLiteral((dataviewFile[column.key]) as Literal, column.input, config, column.config.isInline);
             }
         });
         return aFile;
@@ -51,7 +51,7 @@ export default class NoteInfo {
         Object.keys(this.page)
             .filter(key => !["file"].includes(key))
             .forEach(property => {
-                const value = DataviewService.parseLiteral((this.page[property]) as Literal, InputType.TEXT, config, false);
+                const value = ParseService.parseLiteral((this.page[property]) as Literal, InputType.TEXT, config, false);
                 aFile[property] = value;
             });
 

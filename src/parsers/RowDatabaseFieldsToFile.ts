@@ -4,6 +4,7 @@ import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, localSettings: LocalSettings, deletedColumn?: string): string => {
     const frontmatterFields = databaseFields.frontmatter;
     let array: string[] = [];
@@ -27,7 +28,7 @@ export const parseInlineFieldsToString = (inlineFields: RowDatabaseFields): stri
 }
 
 export function parseValuetoSanitizeYamlValue(value: string, localSettings: LocalSettings): string {
-    return DataviewService.parseLiteral(value, InputType.MARKDOWN, localSettings).toString();
+    return ParseService.parseLiteral(value, InputType.MARKDOWN, localSettings).toString();
 }
 
 function stringifyDbYaml(literal: Literal, level: number, localSettings: LocalSettings, key?: string): string[] {
@@ -42,7 +43,7 @@ function stringifyDbYaml(literal: Literal, level: number, localSettings: LocalSe
     }
     // Manage Dates
     else if (DateTime.isDateTime(literal)) {
-        literalBlock.push(`${" ".repeat(level)}${key}: ${DataviewService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
+        literalBlock.push(`${" ".repeat(level)}${key}: ${ParseService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
     }
     // Manage Objects
     else if (DataviewService.getDataviewAPI().value.isObject(literal)) {
@@ -55,9 +56,9 @@ function stringifyDbYaml(literal: Literal, level: number, localSettings: LocalSe
     }
     // Manage atomic values
     else if (key) {
-        literalBlock.push(`${" ".repeat(level)}${key}: ${DataviewService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
+        literalBlock.push(`${" ".repeat(level)}${key}: ${ParseService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
     } else {
-        literalBlock.push(`${" ".repeat(level)}- ${DataviewService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
+        literalBlock.push(`${" ".repeat(level)}- ${ParseService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
     }
     return literalBlock;
 }

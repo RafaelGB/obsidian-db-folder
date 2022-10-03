@@ -2,7 +2,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { Literal } from "obsidian-dataview";
-import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class ParseDataOfColumnHandlerAction extends AbstractTableAction<DataState> {
@@ -12,7 +12,7 @@ export default class ParseDataOfColumnHandlerAction extends AbstractTableAction<
             set((updater) => {
                 const parsedRows = updater.rows.map((row) => ({
                     ...row,
-                    [column.id]: DataviewService.parseLiteral(
+                    [column.id]: ParseService.parseLiteral(
                         row[column.id] as Literal,
                         input, // Destination type to parse
                         ddbbConfig
