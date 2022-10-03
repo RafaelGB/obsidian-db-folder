@@ -1,5 +1,5 @@
 import { InputType, MarkdownBreakerRules } from "helpers/Constants";
-import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
+import { DataObject, Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
@@ -27,9 +27,6 @@ class Parse {
             .type} to ${dataTypeDst}`);
         // Check empty or undefined literals
         switch (dataTypeDst) {
-            case InputType.TEXT:
-                parsedLiteral = this.parseToString(wrapped);
-                break;
             case InputType.MARKDOWN:
                 parsedLiteral = this.parseToMarkdown(wrapped, localSettings, isInline);
                 break;
@@ -56,7 +53,7 @@ class Parse {
                 // Do nothing
                 break;
             default:
-                parsedLiteral = parsedLiteral = this.parseToString(wrapped);
+                parsedLiteral = this.parseToText(wrapped, localSettings);
 
         }
         LOGGER.debug(`<=parseLiteral`);
@@ -96,13 +93,18 @@ class Parse {
         }
     }
 
-    private parseToString(wrapped: WrappedLiteral): string {
-        if (DateTime.isDateTime(wrapped.value)) {
-            LOGGER.debug("adapting DateTime to string...");
-            // Values of dataview parse to md friendly strings
-            return wrapped.value.toFormat("yyyy-MM-dd");
-        } else {
-            return DataviewService.getDataviewAPI().value.toString(wrapped.value);
+    private parseToText(wrapped: WrappedLiteral, localSettings: LocalSettings): string | DataObject {
+        switch (wrapped.type) {
+            case 'object':
+                if (DateTime.isDateTime(wrapped.value)) {
+                    return wrapped.value.toFormat(localSettings.datetime_format);
+                } else {
+                    // nested metadata exposed as DataObject
+                    return wrapped.value;
+                }
+            // Else go to default
+            default:
+                return DataviewService.getDataviewAPI().value.toString(wrapped.value);
         }
     }
 
@@ -129,9 +131,9 @@ class Parse {
         switch (wrapped.type) {
             case 'boolean':
             case 'number':
-                // Do nothing
                 auxMarkdown = wrapped.value.toString();
                 break;
+
             case 'array':
                 auxMarkdown = wrapped.value
                     .map(v => this.parseToMarkdown(DataviewService.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
@@ -145,7 +147,6 @@ class Parse {
                 } else {
                     // Parse datetime
                     auxMarkdown = wrapped.value.toFormat(localSettings.datetime_format);
-                    auxMarkdown = this.handleMarkdownBreaker(auxMarkdown, localSettings, isInline);
                 }
                 break;
             case 'object':
@@ -154,11 +155,10 @@ class Parse {
                 }
             // Else go to default
             default:
-                auxMarkdown = this.parseToString(wrapped) as string;
-                // Check possible markdown breakers
-                auxMarkdown = this.handleMarkdownBreaker(auxMarkdown, localSettings, isInline);
+                auxMarkdown = DataviewService.getDataviewAPI().value.toString(wrapped.value);
         }
-        return auxMarkdown;
+        // Check possible markdown breakers
+        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);;
     }
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
@@ -168,7 +168,7 @@ class Parse {
         return wrapped.value;
     }
 
-    private handleMarkdownBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {
+    private handleYamlBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {
         // Do nothing if is inline
         if (isInline) {
             return value;
@@ -191,6 +191,7 @@ class Parse {
 
         return value;
     }
+
     /**
      * Singleton instance
      * @returns {VaultManager}
