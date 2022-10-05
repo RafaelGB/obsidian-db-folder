@@ -6,7 +6,7 @@ The formula is a javascript code that will be executed when the row is loaded.
 
 ## How to Use
 
-The code can be written in the column settings or in the note's metadata. The generated values can be added to the notes' metadata by enabling `persist formula output` in the column settings.
+The code can be written in the column settings. The generated values can be added to the notes' metadata by enabling `persist formula output` in the column settings.
 
 ### Exposed Variables
 

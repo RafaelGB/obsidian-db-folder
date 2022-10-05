@@ -16,9 +16,15 @@ In the database settings under `cell size`, you can change the row height betwe
 
 ## Filtering
 
-You can create one or multiple filters using the top bar. The button on the left activates and deactivates the filter. You can also search (normally or with regex) for any metadata displayed in the database.
+You can create one or multiple filters using the top bar or you can search (normally or with regex) for any metadata displayed in the database.
 
-> The database filter holds priority over the dataview query source filter.
+You can either create a `filter` or a `group filter`. The difference is that a `group filter` can include many `filters` with either an **AND** or an **OR** type of relationship, whereas `filters` can only have an **AND** type of relationship between them.
+
+You can create a `group filter` within a `group filter` for more granular filtering, and you can delete or rename them. Keep in mind that deleting a `parent group filter` will delete all the `children group filters` within it.
+
+Each `group filter` will have a dedicated **named button** on the database top bar to quickly enable/disable it. It's important to note that the state of all the filters is determined by another button. So in this case, you have to enable both the **named button** and the **filter button** for `group filters` to work.
+
+> The database filters hold priority over the dataview query source filters.
 
 ## Refresh Database
 
