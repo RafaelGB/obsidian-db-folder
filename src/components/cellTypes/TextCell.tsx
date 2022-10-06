@@ -3,8 +3,9 @@ import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
-import { TableColumn } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
+import { Literal } from "obsidian-dataview";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
@@ -25,7 +26,7 @@ const TextCell = (props: CellComponentProps) => {
     (state) => state.actions
   );
 
-  const textCell = textRow[column.id]?.toString();
+  const textCell = parseTextRowToString(textRow, column.id);
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const [dirtyCell, setDirtyCell] = useState(false);
@@ -51,10 +52,11 @@ const TextCell = (props: CellComponentProps) => {
 
   const persistChange = (changedValue: string) => {
     if (changedValue !== undefined && changedValue !== textCell) {
+      const newCell = parseStringToTextRow(textRow, column.id, changedValue);
       dataActions.updateCell(
         row.index,
         tableColumn,
-        changedValue.trim(),
+        newCell,
         columnsInfo.getAllColumns(),
         configInfo.getLocalSettings()
       );
@@ -79,5 +81,30 @@ const TextCell = (props: CellComponentProps) => {
     />
   );
 };
+
+function parseTextRowToString(row: RowDataType, columnId: string) {
+  const cellRoot = row[columnId];
+  let textCell = "";
+  if (typeof cellRoot === "object") {
+    textCell = JSON.stringify(cellRoot);
+  } else {
+    textCell = cellRoot?.toString();
+  }
+  return textCell;
+}
+
+function parseStringToTextRow(
+  row: RowDataType,
+  columnId: string,
+  newValue: string
+): Literal {
+  const cellRoot = row[columnId];
+  if (typeof cellRoot === "object") {
+    // TODO control anidated values in function of columnId spliting by "."
+    return JSON.parse(newValue);
+  } else {
+    return newValue.trim();
+  }
+}
 
 export default TextCell;

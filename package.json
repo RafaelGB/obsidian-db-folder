@@ -51,10 +51,10 @@
 	"dependencies": {
 		"@emotion/styled": "11.10.4",
 		"@mui/icons-material": "5.10.6",
-		"@mui/material": "5.10.6",
+		"@mui/material": "5.10.8",
 		"@popperjs/core": "2.11.6",
-		"@tanstack/match-sorter-utils": "8.1.1",
-		"@tanstack/react-table": "8.5.13",
+		"@tanstack/match-sorter-utils": "8.5.14",
+		"@tanstack/react-table": "8.5.15",
 		"eventemitter3": "4.0.7",
 		"fuse.js": "6.6.2",
 		"luxon": "3.0.4",

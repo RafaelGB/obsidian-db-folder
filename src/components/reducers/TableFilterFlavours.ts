@@ -3,7 +3,7 @@ import { RowDataType } from "cdm/FolderModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
-import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 
 export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<RowDataType> = (ddbbConfig: LocalSettings) => (
     row: Row<RowDataType>,
@@ -14,7 +14,7 @@ export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<Row
     if (value === undefined) {
         return false;
     }
-    const sanitized = DataviewService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true).toString().toLowerCase();
+    const sanitized = ParseService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true).toString().toLowerCase();
     filterValue = filterValue.toLowerCase();
     return sanitized.includes(filterValue) || searchRegex(sanitized, filterValue);
 }

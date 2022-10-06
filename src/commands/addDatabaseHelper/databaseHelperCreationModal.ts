@@ -5,6 +5,7 @@ import { resolve_tfolder } from "helpers/FileManagement";
 import { generateDataviewTableQuery } from "helpers/QueryHelper";
 import { Modal, Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 import { add_dropdown, add_setting_header } from "settings/SettingsComponents";
 import { FileSuggest } from "settings/suggesters/FileSuggester";
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";
@@ -246,7 +247,7 @@ export class DatabaseHelperCreationModalManager {
     }
 
     parseValueToThuthyYaml(value: string): string {
-        return DataviewService.parseLiteral(
+        return ParseService.parseLiteral(
             value,
             InputType.MARKDOWN,
             this.databaseHelperCreationModal.local_settings
