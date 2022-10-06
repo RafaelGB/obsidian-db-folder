@@ -99,12 +99,20 @@ function parseStringToTextRow(
   newValue: string
 ): Literal {
   const cellRoot = row[columnId];
-  if (typeof cellRoot === "object") {
+  if (
+    typeof cellRoot === "object" ||
+    (newValue.startsWith("{") && newValue.endsWith("}"))
+  ) {
     // TODO control anidated values in function of columnId spliting by "."
-    return JSON.parse(newValue);
+    try {
+      newValue = JSON.parse(newValue);
+    } catch (e) {
+      // Just return the original value
+    }
   } else {
-    return newValue.trim();
+    newValue = newValue.trim();
   }
+  return newValue;
 }
 
 export default TextCell;

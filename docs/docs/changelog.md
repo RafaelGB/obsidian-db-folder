@@ -1,3 +1,6 @@
+## 2.7.1
+- Hotfix for 2.7.0 of global settings developer options
+- Experimental support for Objects on text fields
 ## 2.7.0
 ### Shiny new things
 - Group filters are now available. You can now filter per condition (AND/OR) This is a huhe improvement for the user experience. Those groups could be enabled/disabled easily [ISSUE#268](https://github.com/RafaelGB/obsidian-db-folder/issues/268)
