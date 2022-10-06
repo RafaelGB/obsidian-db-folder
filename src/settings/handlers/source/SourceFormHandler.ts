@@ -8,6 +8,7 @@ import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handle
 import { add_dropdown } from "settings/SettingsComponents";
 import { FileSuggest } from "settings/suggesters/FileSuggester";
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";
+import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class SourceFormHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Form in function of source data';
@@ -45,15 +46,18 @@ function tagHandler(view: DatabaseView, containerEl: HTMLElement) {
             // update settings
             view.diskConfig.updateConfig({ source_form_result: value.slice(1) });
         };
-
-        add_dropdown(
-            containerEl,
-            'Select a tag',
-            'Select tag to get data from',
-            `#${view.diskConfig.yaml.config.source_form_result}`,
-            tagRecords,
-            source_form_promise
-        );
+        new Setting(containerEl)
+            .setName('Select a tag')
+            .setDesc('Select tag to get data from')
+            .addSearch((cb) => {
+                new StringSuggest(
+                    cb.inputEl,
+                    tagRecords
+                );
+                cb.setPlaceholder("search tag...")
+                    .setValue(`#${view.diskConfig.yaml.config.source_form_result}`)
+                    .onChange(source_form_promise);
+            });
         destinationFolderHandler(view, containerEl);
     }
 }

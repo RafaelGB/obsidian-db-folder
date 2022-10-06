@@ -255,6 +255,7 @@ export const StyleClasses = Object.freeze({
 
 export const StyleVariables = Object.freeze({
   BACKGROUND_MODIFIER_ERROR: 'var(--background-modifier-error)',
+  BACKGROUND_MODIFIER_SUCCESS: 'var(--background-modifier-success)',
   BACKGROUND_PRIMARY: 'var(--background-primary)',
   BACKGROUND_SECONDARY: 'var(--background-secondary)',
   BACKGROUND_DIVIDER: 'var(--background-divider)',
@@ -299,6 +300,7 @@ export const OperatorFilter = Object.freeze({
   GREATER_THAN_OR_EQUAL: ['GREATER_THAN_OR_EQUAL', '>='],
   LESS_THAN_OR_EQUAL: ['LESS_THAN_OR_EQUAL', '<='],
   CONTAINS: ['CONTAINS', 'operator_contains'],
+  NOT_CONTAINS: ['NOT_CONTAINS', 'operator_does_not_contain'],
   STARTS_WITH: ['STARTS_WITH', 'operator_starts_with'],
   ENDS_WITH: ['ENDS_WITH', 'operator_ends_with'],
   IS_EMPTY: ['IS_EMPTY', 'operator_is_empty'],
@@ -363,6 +365,9 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     cell_size: CellSizeOptions.NORMAL,
     sticky_first_column: false,
     group_folder_column: '',
+    remove_empty_folders: false,
+    automatically_group_files: false,
+    hoist_files_with_empty_attributes: true,
     show_metadata_created: false,
     show_metadata_modified: false,
     show_metadata_tasks: false,
@@ -375,6 +380,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     row_templates_folder: '/',
     current_row_template: '',
     pagination_size: 10,
+    enable_js_formulas: false,
     formula_folder_path: '/',
     inline_default: false,
     inline_new_position: INLINE_POSITION.TOP,

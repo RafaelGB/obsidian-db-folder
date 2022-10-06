@@ -2,12 +2,12 @@ import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
-import { moveFile } from "helpers/VaultManagement";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
-import { destination_folder } from "helpers/FileManagement";
+import { destination_folder, resolveNewFilePath } from "helpers/FileManagement";
 import { EditEngineService } from "services/EditEngineService";
+import { FileGroupingService } from "services/FileGroupingService";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -29,45 +29,31 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             if (ddbbConfig.show_metadata_modified) {
                 modifiedRow[MetadataColumns.MODIFIED] = DateTime.now();
             }
-            // Update the row on disk
-            if (isMovingFile && ddbbConfig.group_folder_column === column.id) {
 
-                const moveInfo = {
-                    file: rowTFile,
-                    id: column.id,
-                    value: value,
-                    columns: columns,
-                    ddbbConfig: ddbbConfig,
-                }
-                const foldePath = destination_folder(view, ddbbConfig);
-                await moveFile(`${foldePath}/${value}`, moveInfo);
-                // Update row file
-                modifiedRow[
-                    MetadataColumns.FILE
-                ] = `${rowTFile.basename}|${foldePath}/${value}/${rowTFile.name}`;
-                // Check if action.value is a valid folder name
-                const auxPath =
-                    value !== ""
-                        ? `${foldePath}/${value}/${rowTFile.name}`
-                        : `${foldePath}/${rowTFile.name}`;
-
-                const recordRow: Record<string, Literal> = {};
-                Object.entries(modifiedRow).forEach(([key, value]) => {
-                    recordRow[key] = value as Literal;
-                });
-
-                modifiedRow.__note__.filepath = auxPath;
-            } else {
-                // Save on disk
-                await EditEngineService.updateRowFileProxy(
-                    rowTFile,
-                    column.id,
-                    value,
-                    columns,
+            const pathColumns: string[] =
+                ddbbConfig.group_folder_column
+                .split(",")
+                .filter(Boolean);
+                // Update the row on disk
+                if ( isMovingFile && pathColumns.includes(column.id)) {
+                const folderPath = destination_folder(view, ddbbConfig);
+                const newFilePath = resolveNewFilePath({
+                    pathColumns,
+                    row: modifiedRow,
                     ddbbConfig,
-                    UpdateRowOptions.COLUMN_VALUE
-                );
-            }
+                    folderPath,
+                });
+                await FileGroupingService.moveFile(newFilePath, modifiedRow);
+                await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
+            } 
+            await EditEngineService.updateRowFileProxy(
+                rowTFile,
+                column.id,
+                value,
+                columns,
+                ddbbConfig,
+                UpdateRowOptions.COLUMN_VALUE
+            );
             set((state) => {
                 // Save on memory
                 return {

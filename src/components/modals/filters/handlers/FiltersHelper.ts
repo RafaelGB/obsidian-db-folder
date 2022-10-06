@@ -9,7 +9,8 @@ export enum ModifyFilterOptionsEnum {
     FIELD = "FIELD",
     VALUE = "VALUE",
     DELETE = "DELETE",
-    TOGGLE_DISABLED = "TOGGLE_DISABLED"
+    TOGGLE_DISABLED = "TOGGLE_DISABLED",
+    LABEL = "LABEL"
 }
 
 const modifyRecursiveFilterGroups = (
@@ -54,6 +55,9 @@ const modifyRecursiveFilterGroups = (
                             },
                         ],
                     });
+                break;
+            case ModifyFilterOptionsEnum.LABEL:
+                (filterGroups[recursiveIndex[level]] as FilterGroupCondition).label = value;
                 break;
             case ModifyFilterOptionsEnum.OPERATOR:
                 (filterGroups[recursiveIndex[level]] as AtomicFilter).operator = value;

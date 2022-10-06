@@ -14,7 +14,7 @@ export class FormulaFunctions implements IGenerateObject {
     ): Promise<Record<string, unknown>> {
         let user_script_functions = {};
 
-        if (config.formula_folder_path) {
+        if (config.enable_js_formulas && config.formula_folder_path) {
             user_script_functions =
                 await this.js_script_functions.generate_object();
         }

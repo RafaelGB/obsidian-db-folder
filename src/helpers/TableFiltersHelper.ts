@@ -1,7 +1,7 @@
 import { AtomicFilter, FilterGroup, FilterGroupCondition, LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview";
 import { ConditionFiltersOptions, getOperatorFilterValue, InputType, OperatorFilter } from "helpers/Constants";
-import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 
 export default function tableFilter(dbFilters: FilterGroup[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
     if (!dbFilters || dbFilters.length === 0) return true;
@@ -34,7 +34,7 @@ function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbCon
         }
         return groupResult;
     }
-    const filterableValue = DataviewService.parseLiteral(p[(filter as AtomicFilter).field], InputType.MARKDOWN, ddbbConfig);
+    const filterableValue = ParseService.parseLiteral(p[(filter as AtomicFilter).field], InputType.MARKDOWN, ddbbConfig);
     // Atomic filter
     const operator = (filter as AtomicFilter).operator;
     const value = (filter as AtomicFilter).value;
@@ -69,6 +69,9 @@ function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbCon
             break;
         case OperatorFilter.CONTAINS[1]:
             if (!filterableValue.toString().includes(value)) return false;
+            break;
+        case OperatorFilter.NOT_CONTAINS[1]:
+            if (filterableValue.toString().includes(value)) return false;
             break;
         case OperatorFilter.STARTS_WITH[1]:
             if (!filterableValue.toString().startsWith(value)) return false;

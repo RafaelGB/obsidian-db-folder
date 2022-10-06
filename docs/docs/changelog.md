@@ -1,3 +1,19 @@
+## 2.7.1
+- Hotfix for 2.7.0 of global settings developer options
+- Experimental support for Objects on text fields
+## 2.7.0
+### Shiny new things
+- Group filters are now available. You can now filter per condition (AND/OR) This is a huhe improvement for the user experience. Those groups could be enabled/disabled easily [ISSUE#268](https://github.com/RafaelGB/obsidian-db-folder/issues/268)
+- Nested subfolders rules improvement! Use your select column types to create your subdolders with the deep that you need [ISSUE#431](https://github.com/RafaelGB/obsidian-db-folder/issues/431) [ycnmhd](https://github.com/ycnmhd)
+- new options of nested subfolders to remove automatically empty folders and move all the rows in function of you configuration [ISSUE#183](https://github.com/RafaelGB/obsidian-db-folder/issues/183) [ycnmhd](https://github.com/ycnmhd)
+- Improving add column UX [ISSUE#267](https://github.com/RafaelGB/obsidian-db-folder/issues/267)
+- Improving select tag UX [ISSUE#408](https://github.com/RafaelGB/obsidian-db-folder/issues/408)
+### Improved
+- new option for enable/disble load js formulas on init [ISSUE#457](https://github.com/RafaelGB/obsidian-db-folder/issues/457)
+### Visual
+- flex-wrap for tags [GaboCapo](https://github.com/GaboCapo)
+### No longer broken
+- Add new line when the yaml of the frontmatter does not exist and we insert some field [ISSUE#450](https://github.com/RafaelGB/obsidian-db-folder/issues/450)
 ## 2.6.7
 ### Shiny new things
 - New options for text columns: wrap and justify content [ISSUE#378](https://github.com/RafaelGB/obsidian-db-folder/issues/378)

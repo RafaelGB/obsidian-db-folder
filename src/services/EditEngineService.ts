@@ -4,7 +4,7 @@ import { inline_regex_target_in_function_of } from "helpers/FileManagement";
 import { TFile } from "obsidian";
 import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
-import { DataviewService } from "services/DataviewService";
+import { ParseService } from "services/ParseService";
 import { InputType, UpdateRowOptions } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { VaultManagerDB } from "services/FileManagerService";
@@ -66,7 +66,7 @@ class EditEngine {
 
             // Check if the column is already in the frontmatter
             // assign an empty value to the new key
-            rowFields.frontmatter[DataviewService.parseLiteral(newValue, InputType.TEXT, ddbbConfig) as string] = rowFields.frontmatter[columnId] ?? "";
+            rowFields.frontmatter[ParseService.parseLiteral(newValue, InputType.TEXT, ddbbConfig) as string] = rowFields.frontmatter[columnId] ?? "";
             delete rowFields.frontmatter[columnId];
             await persistFrontmatter(columnId);
         }
@@ -88,7 +88,7 @@ class EditEngine {
                 action: 'replace',
                 file: file,
                 regexp: frontmatterGroupRegex,
-                newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}$1`,
+                newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
             };
             await VaultManagerDB.editNoteContent(noteObject);
         }
@@ -110,7 +110,7 @@ class EditEngine {
                 action: 'replace',
                 file: file,
                 regexp: inlineFieldRegex,
-                newValue: `$3$6$7$8 ${DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}$10$11`
+                newValue: `$3$6$7$8 ${ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}$10$11`
             };
             await VaultManagerDB.editNoteContent(noteObject);
             await persistFrontmatter(columnId);
@@ -144,7 +144,7 @@ class EditEngine {
                 newValue: inline_regex_target_in_function_of(
                     ddbbConfig.inline_new_position,
                     columnId,
-                    DataviewService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString(),
+                    ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString(),
                     contentHasFrontmatter
                 )
             };

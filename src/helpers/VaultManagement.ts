@@ -2,14 +2,13 @@ import { RowDataType, NormalizedPath, TableColumn } from 'cdm/FolderModel';
 import { Notice, TFile } from 'obsidian';
 import { LOGGER } from "services/Logger";
 import NoteInfo from 'services/NoteInfo';
-import { DatabaseCore, SourceDataTypes, UpdateRowOptions } from "helpers/Constants";
+import { DatabaseCore, SourceDataTypes } from "helpers/Constants";
 import { generateDataviewTableQuery } from 'helpers/QueryHelper';
 import { DataviewService } from 'services/DataviewService';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
-import { EditEngineService } from 'services/EditEngineService';
 import tableFilter from 'helpers/TableFiltersHelper';
 
 const noBreakSpace = /\u00A0/g;
@@ -162,41 +161,5 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
   }
 }
 
-/**
- * After update a row value, move the file to the new folder path
- * @param folderPath 
- * @param action 
- */
-export async function moveFile(folderPath: string, info: {
-  file: TFile,
-  id: string,
-  value: Literal,
-  columns: TableColumn[],
-  ddbbConfig: LocalSettings
-}): Promise<void> {
-  await EditEngineService.updateRowFileProxy(
-    info.file,
-    info.id,
-    info.value,
-    info.columns,
-    info.ddbbConfig,
-    UpdateRowOptions.COLUMN_VALUE
-  );
-  try {
-    await createFolder(folderPath);
-  } catch (error) {
-    LOGGER.error(` moveFile Error: ${error.message} `);
-    // Handle error
-    throw error;
-  }
-  const filePath = `${folderPath}/${info.file.name}`;
-  await app.fileManager.renameFile(info.file, filePath);
-}
 
-export async function createFolder(folderPath: string): Promise<void> {
-  await app.vault.adapter.exists(folderPath).then(async exists => {
-    if (!exists) {
-      await app.vault.createFolder(`${folderPath}/`);
-    }
-  });
-}
+
