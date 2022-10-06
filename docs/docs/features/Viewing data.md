@@ -16,7 +16,7 @@ In the database settings under `cell size`, you can change the row height betwe
 
 ## Filtering
 
-You can create one or multiple filters using the top bar or you can search (normally or with regex) for any metadata displayed in the database.
+Using the database top bar, you can create one or multiple filters or you can search (normally or with regex) for any metadata displayed in the database.
 
 You can either create a `filter` or a `group filter`. The difference is that a `group filter` can include many `filters` with either an **AND** or an **OR** type of relationship, whereas `filters` can only have an **AND** type of relationship between them.
 
