@@ -719,9 +719,12 @@
 <h2 id="row-height">Row Height</h2>
 <p>In the database settings under <code>cell size</code>, you can change the row height between 3 options (compact, normal, wide).</p>
 <h2 id="filtering">Filtering</h2>
-<p>You can create one or multiple filters using the top bar. The button on the left activates and deactivates the filter. You can also search (normally or with regex) for any metadata displayed in the database.</p>
+<p>Using the database top bar, you can create one or multiple filters or you can search (normally or with regex) for any metadata displayed in the database.</p>
+<p>You can either create a <code>filter</code> or a <code>group filter</code>. The difference is that a <code>group filter</code> can include many <code>filters</code> with either an <strong>AND</strong> or an <strong>OR</strong> type of relationship, whereas <code>filters</code> can only have an <strong>AND</strong> type of relationship between them.</p>
+<p>You can create a <code>group filter</code> within a <code>group filter</code> for more granular filtering, and you can delete or rename them. Keep in mind that deleting a <code>parent group filter</code> will delete all the <code>children group filters</code> within it.</p>
+<p>Each <code>group filter</code> will have a dedicated <strong>named button</strong> on the database top bar to quickly enable/disable it. It's important to note that the state of all the filters is determined by another button. So in this case, you have to enable both the <strong>named button</strong> and the <strong>filter button</strong> for <code>group filters</code> to work.</p>
 <blockquote>
-<p>The database filter holds priority over the dataview query source filter.</p>
+<p>The database filters hold priority over the dataview query source filters.</p>
 </blockquote>
 <h2 id="refresh-database">Refresh Database</h2>
 <p>There is no actual refresh button, but you can use the <code>activate/desactive filter</code> button to refresh the database.</p>
