@@ -23,8 +23,10 @@ class EditEngine {
      * @param option 
      */
     public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
-        await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
-            showDBError(EditionError.YamlRead, err);
+        queueMicrotask(async () => {
+            await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
+                showDBError(EditionError.YamlRead, err);
+            });
         });
     }
 
