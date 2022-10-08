@@ -427,6 +427,7 @@ div.database-plugin__checkbox {
   position: -webkit-sticky;
   position: sticky;
   left: 0;
+  top: 2.65rem;
   z-index: 3;
 }
 
@@ -440,6 +441,7 @@ div.database-plugin__checkbox {
   position: sticky;
   position: -webkit-sticky;
   left: 0;
+  top: 0;
   z-index: 2;
 }
 
