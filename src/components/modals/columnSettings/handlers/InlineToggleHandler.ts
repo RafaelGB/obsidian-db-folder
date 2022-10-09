@@ -13,6 +13,7 @@ export class InlineToggleHandler extends AbstractHandlerClass<ColumnSettingsHand
                 isInline: value
             });
             columnSettingsManager.modal.enableReset = true;
+            columnSettingsManager.reset(columnHandlerResponse);
         }
         add_toggle(
             containerEl,

@@ -64,7 +64,7 @@ class Parse {
      * @param literal 
      * @returns 
      */
-    parseDataArray(literal: Literal): Literal {
+    public parseDataArray(literal: Literal): Literal {
         if ((literal as any).values !== undefined && (literal as any).settings !== undefined) {
             literal = (literal as any).values
         }

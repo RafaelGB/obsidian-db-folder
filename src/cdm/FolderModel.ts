@@ -34,16 +34,24 @@ export type Models = {
 }
 
 export interface ConfigColumn {
+    /** Mandatory */
     enable_media_view: boolean;
-    link_alias_enabled: boolean;
     media_width: number;
     media_height: number;
     isInline: boolean;
+    /** Circunstancial */
+    isNested?: boolean;
+    nested_key?: string;
     content_alignment?: string;
     wrap_content?: boolean;
+    // Text
+    link_alias_enabled?: boolean;
+    // Tasks
     task_hide_completed?: boolean;
+    // Formulas
     formula_query?: string;
     persist_formula?: boolean;
+    /** Extras from yaml */
     [key: string]: Literal;
 }
 
