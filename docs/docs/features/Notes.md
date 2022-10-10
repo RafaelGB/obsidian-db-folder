@@ -10,13 +10,13 @@ You have to choose a template in the bottom bar before creating the note. You ca
 
 ## Deleting & Renaming Notes
 
-You can use the dots to the right of every row, to bring up a menu where you can delete and rename the note associated with the row.
+You can click on the numbers to the right of every row, to bring up a menu where you can delete and rename the note associated with the row.
 
 ## Moving Notes Based on Metadata
 
 The database will watch for changes in the select property column and create folders for each option present. The notes will be placed under the corresponding folder based on the option chosen. 
 
-You can choose one or many select properties by which this rule will run. If you choose more than one, the folders will be nested and the nesting order will follow the order by which the select properties are added in the database setting. For example *"select1/select2/select3"*. This setting can be found under `configuration about columns > Columns to group by`.
+You can choose one or many select properties by which this rule will run. If you choose more than one, the folders will be nested and the nesting order will follow the order by which the select properties are added in the database settings. For example *"select1/select2/select3"*. This setting can be found under `configuration about columns > Columns to group by`.
 
 You have additional settings to customize this rule under `configuration about columns` in the database settings :
 

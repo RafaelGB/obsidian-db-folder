@@ -14,7 +14,7 @@ The plugin can grab all the metadata from all the files included in the selected
 
 ### Add From Template
 
-The plugin can look at only one file (as a template), and grab only this file's metadata as columns. The list of files to choose from is provided from the used source and can be found in the database setting under `select file as column template`.
+The plugin can look at only one file (as a template), and grab only this file's metadata as columns. The list of files to choose from is provided from the used source and can be found in the database settings under `select file as column template`.
 
 ## Hiding
 
@@ -22,7 +22,7 @@ You can hide the columns while keeping the underlying metadata by using the colu
 
 ## Removing
 
-You can remove the column and remove its underlying metadata by using the column menu. Make sure to enable `configuration about columns > remove fields` in the plugin setting or in the database settings.
+You can remove the column and remove its underlying metadata by using the column menu. Make sure to enable `configuration about columns > remove fields` in the plugin global settings or in the database settings.
 
 ## Resizing
 
