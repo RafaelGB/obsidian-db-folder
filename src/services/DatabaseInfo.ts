@@ -75,11 +75,10 @@ export default class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(oldColumnId: string, newColumnId: string, newLabel: string) {
+    async updateColumnKey(oldColumnId: string, newColumnId: string): Promise<void> {
         // clone current column configuration
         const currentCol = this.yaml.columns[oldColumnId];
         // update column id
-        currentCol.label = newLabel;
         currentCol.accessorKey = newColumnId;
         currentCol.key = newColumnId;
         delete this.yaml.columns[oldColumnId];

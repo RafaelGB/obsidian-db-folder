@@ -47,7 +47,7 @@ export interface DataState {
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
         renameFile: (rowIndex: number) => Promise<void>;
         saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
-        groupFiles: () => Promise<void>;    
+        groupFiles: () => Promise<void>;
     }
 }
 
@@ -61,6 +61,7 @@ export interface ColumnsState {
         alterSorting: (column: TableColumn) => void;
         addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
         alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => void;
+        alterColumnId: (column: TableColumn, root: string, nestedIds: string[]) => Promise<void>;
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
         alterColumnSize: (id: string, width: number) => void;
         alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
