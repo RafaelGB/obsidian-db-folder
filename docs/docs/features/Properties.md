@@ -21,7 +21,7 @@
 
 The plugin works with YAML and dataview inline fields, but by default, it looks for metadata in YAML. To make it work with inline fields, you have two options :
 
-- You can toggle `enable inline field as default` in database or plugin global setti☪︎, and you can choose between putting the inline fields at the top or at the bottom of the file ;
+- You can toggle `enable inline field as default` in database or plugin global settings, and you can choose between putting the inline fields at the top or at the bottom of the file ;
 - Or you can change it in the column's settings to use it with one property only. Keep in mind that this change will not convert the underlying YAML to an inline format, it was meant to work with metadata already formatted as inline.
 
 If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database. 
