@@ -7,8 +7,8 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
     settingTitle: string = 'Column id';
     handle(response: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = response;
-        const { view, columnsState, dataState, configState } = columnSettingsManager.modal;
-        let value = `${column.id}${column.nestedId ? `.${column.nestedId}` : ''}`;
+        const { columnsState, dataState, configState } = columnSettingsManager.modal;
+        let value = `${column.key}${column.nestedKey ? `.${column.nestedKey}` : ''}`;
         new Setting(containerEl)
             .setName(this.settingTitle)
             .setDesc("Enter the column id of the column")
@@ -22,35 +22,34 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
                 cb.setIcon("save")
                     .setTooltip("Save column id")
                     .onClick(async (): Promise<void> => {
-                        const arrayId = value.split('.');
-                        const rootId = arrayId.shift();
-                        if (rootId) {
-                            // Update state of altered column
-                            columnsState.actions
-                                .alterColumnId(column, rootId, arrayId)
-                                .then(() => {
-                                    if (rootId !== column.id) {
-                                        // Update key of all notes
-                                        dataState.actions.updateDataAfterLabelChange(
-                                            column,
-                                            rootId,
-                                            columnsState.info.getAllColumns(),
-                                            configState.info.getLocalSettings()
-                                        ).then(() => {
-                                            // Rename column in group_folder_column
-                                            const groupFolderColumn = configState.info.getLocalSettings().group_folder_column.split(",");
-                                            if (groupFolderColumn.includes(column.id)) {
-                                                const newGroupFolderColumn = groupFolderColumn
-                                                    .map((item) => (item === column.id ? rootId : item))
-                                                    .join(",");
-                                                configState.actions.alterConfig({ group_folder_column: newGroupFolderColumn });
-                                                // Reorganize files and remove empty folders
-                                                dataState.actions.groupFiles();
-                                            }
-                                        });
-                                    }
-                                    new Notice(`new column id was saved: ${value}`, 1500);
-                                });
+                        const arrayKey = value.split('.');
+                        const rootKey = arrayKey.shift();
+                        // Update state of altered column
+                        if (rootKey && (column.key !== rootKey || column.nestedKey !== arrayKey.join('.'))) {
+                            await columnsState.actions
+                                .alterColumnId(column, rootKey, arrayKey);
+
+                            if (rootKey !== column.key) {
+                                // Update key of all notes
+                                await dataState.actions.updateDataAfterLabelChange(
+                                    column,
+                                    rootKey,
+                                    columnsState.info.getAllColumns(),
+                                    configState.info.getLocalSettings()
+                                )
+                                // Rename column in group_folder_column
+                                const groupFolderColumn = configState.info.getLocalSettings().group_folder_column.split(",");
+                                if (groupFolderColumn.includes(column.key)) {
+                                    const newGroupFolderColumn = groupFolderColumn
+                                        .map((item) => (item === column.key ? rootKey : item))
+                                        .join(",");
+                                    configState.actions.alterConfig({ group_folder_column: newGroupFolderColumn });
+                                    // Reorganize files and remove empty folders
+                                    await dataState.actions.groupFiles();
+                                }
+
+                            }
+                            new Notice(`new column id was saved: ${value}`, 1500);
                         } else {
                             new Notice(`column id is required`, 1500);
                         }

@@ -33,11 +33,19 @@ export default class NoteInfo {
         aFile[MetadataColumns.OUTLINKS] = dataviewFile.file.outlinks;
         aFile[MetadataColumns.INLINKS] = dataviewFile.file.inlinks;
         /** Parse data with the type of column */
-        columns.forEach(column => {
-            if (dataviewFile[column.key] !== undefined) {
-                aFile[column.key] = ParseService.parseLiteral((dataviewFile[column.key]) as Literal, column.input, config, column.config.isInline);
-            }
-        });
+
+        columns
+            // filter duplicate columns in function of the id
+            .filter((column, index, self) =>
+                index === self.findIndex((t) => (
+                    t.id === column.id
+                ))
+                // Map row data type
+            ).forEach(column => {
+                if (dataviewFile[column.key] !== undefined) {
+                    aFile[column.key] = ParseService.parseLiteral((dataviewFile[column.key]) as Literal, column.input, config, column.config.isInline);
+                }
+            });
         return aFile;
     }
 

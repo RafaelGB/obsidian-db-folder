@@ -97,10 +97,10 @@ const TextCell = (props: CellComponentProps) => {
  * @returns
  */
 function parseTextRowToString(row: RowDataType, column: TableColumn) {
-  const cellRoot = row[column.id];
+  const cellRoot = row[column.key];
   let textCell = "";
-  if (column.nestedId && cellRoot !== undefined) {
-    textCell = obtainAnidatedLiteral(column.nestedId, cellRoot as DataObject);
+  if (column.nestedKey && cellRoot !== undefined) {
+    textCell = obtainAnidatedLiteral(column.nestedKey, cellRoot as DataObject);
   } else {
     textCell = cellRoot?.toString();
   }
@@ -119,12 +119,12 @@ function parseStringToTextRow(
   column: TableColumn,
   newValue: string
 ): Literal {
-  const originalValue = row[column.id];
-  if (column.nestedId) {
+  const originalValue = row[column.key];
+  if (column.nestedKey) {
     try {
       // Generate object with the new value using the nested key anidated in fuction of split .
       const target = (originalValue as DataObject) ?? {};
-      const source = generateLiteral(column.nestedId, newValue);
+      const source = generateLiteral(column.nestedKey, newValue);
       return deepMerge(source, target);
     } catch (e) {
       // Just return the original value

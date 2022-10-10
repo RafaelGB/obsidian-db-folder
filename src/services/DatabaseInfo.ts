@@ -75,15 +75,36 @@ export default class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(oldColumnId: string, newColumnId: string, nestedIds?: string): Promise<void> {
-        // clone current column configuration
-        const currentCol = this.yaml.columns[oldColumnId];
-        // update column id
-        currentCol.nestedId = nestedIds;
-        currentCol.accessorKey = newColumnId;
-        currentCol.key = newColumnId;
-        delete this.yaml.columns[oldColumnId];
-        this.yaml.columns[newColumnId] = currentCol;
+    async updateColumnKey(oldColumnId: string, newColumnId: string, oldNestedIds?: string, nestedIds?: string): Promise<void> {
+        // merge new column with new nested ids
+        const id = `${newColumnId}${nestedIds ? `-${nestedIds}` : ''}`;
+        // Obtain all columns with the same id
+        const recordCols: Record<string, DatabaseColumn> = {};
+        Object
+            .entries(this.yaml.columns)
+            .filter(([, value]) => value.id === oldColumnId)
+            .forEach(([key, value]) => {
+                recordCols[key] = value;
+            });
+
+        Object
+            .entries(recordCols)
+            .forEach(([key, value]) => {
+                const currentCol = this.yaml.columns[key];
+                const isCurrentOne = value.nestedKey === oldNestedIds;
+                // update column id
+                currentCol.id = newColumnId;
+                currentCol.accessorKey = newColumnId;
+                currentCol.key = newColumnId;
+                delete this.yaml.columns[key];
+                if (isCurrentOne) {
+                    currentCol.nestedKey = isCurrentOne ? nestedIds : value.nestedKey;
+                    this.yaml.columns[id] = currentCol;
+                } else {
+                    this.yaml.columns[`${newColumnId}-${value.nestedKey}`] = currentCol;
+                }
+            });
+
         // save on disk
         await this.saveOnDisk();
     }

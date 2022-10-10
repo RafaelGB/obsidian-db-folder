@@ -8,16 +8,15 @@ export default class AlterColumnIdHandlerAction extends AbstractTableAction<Colu
         implementation.actions.alterColumnId = async (column: TableColumn, newId: string, nestedIds: string[]) =>
             set((updater) => {
                 const labelIndex = updater.columns.findIndex(
-                    (col: TableColumn) => col.id === column.id
+                    (col: TableColumn) => (col.key === column.key && col.nestedKey === column.nestedKey)
                 );
                 const alteredColumns = [...updater.columns];
-                alteredColumns[labelIndex].id = newId;
                 alteredColumns[labelIndex].key = newId;
                 alteredColumns[labelIndex].accessorKey = newId;
                 // Control nested information
-                alteredColumns[labelIndex].nestedId = nestedIds.join('.');
+                alteredColumns[labelIndex].nestedKey = nestedIds.join('.');
                 // Update configuration & row files on disk
-                view.diskConfig.updateColumnKey(column.id, newId, alteredColumns[labelIndex].nestedId);
+                view.diskConfig.updateColumnKey(column.id, newId, column.nestedKey, alteredColumns[labelIndex].nestedKey);
                 return { columns: alteredColumns };
             });
         tableActionResponse.implementation = implementation;

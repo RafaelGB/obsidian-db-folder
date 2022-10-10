@@ -55,14 +55,13 @@ export interface ConfigColumn {
 
 export type BaseColumn = {
     /** Mandatory */
-    id: string,
     accessorKey: string;
     label: string;
     key: string;
     input: string;
     config: ConfigColumn;
     /** Circunstancial */
-    nestedId?: string;
+    nestedKey?: string;
     options?: RowSelectOption[];
     csvCandidate?: boolean;
     width?: number;
