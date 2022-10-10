@@ -53,6 +53,7 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
             input: InputType.TEXT,
             accessorKey: columnInfo.name,
             key: columnInfo.name,
+            id: columnInfo.name,
             label: columnInfo.label,
             position: columnInfo.position,
             config: {

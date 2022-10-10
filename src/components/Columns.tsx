@@ -141,6 +141,7 @@ export async function obtainColumnsFromFile(
       accessorKey: key,
       label: key,
       key: key,
+      id: key,
       position: index,
       config: DEFAULT_COLUMN_CONFIG,
     };
@@ -198,6 +199,7 @@ export async function obtainColumnsFromRows(
         accessorKey: key,
         label: key,
         key: key,
+        id: key,
         position: index,
         config: DEFAULT_COLUMN_CONFIG,
       };

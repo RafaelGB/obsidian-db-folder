@@ -9,8 +9,7 @@ import { LinkAliasToggleHandler } from "components/modals/columnSettings/handler
 import { FormulaInputHandler } from "components/modals/columnSettings/handlers/automations/FormulaInputHandler";
 import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/styles/AlignmentSelectorHandler";
 import { ToggleWrapContentHandler } from "components/modals/columnSettings/handlers/styles/ToggleWrapContentHandler";
-import { NestedToggleHandler } from "components/modals/columnSettings/handlers/nestedToggleHandler";
-import { NestedKeyInputHandler } from "components/modals/columnSettings/handlers/NestedKeyInputHandler";
+import { ColumnIdInputHandler } from "components/modals/columnSettings/handlers/ColumnIdInputHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -63,9 +62,8 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
                 // do nothing
                 break;
             default:
+                particularHandlers.push(new ColumnIdInputHandler());
                 particularHandlers.push(new InlineToggleHandler());
-                particularHandlers.push(new NestedToggleHandler());
-                particularHandlers.push(new NestedKeyInputHandler());
         }
         return particularHandlers;
     }

@@ -40,8 +40,6 @@ export interface ConfigColumn {
     media_height: number;
     isInline: boolean;
     /** Circunstancial */
-    isNested?: boolean;
-    nested_key?: string;
     content_alignment?: string;
     wrap_content?: boolean;
     // Text
@@ -56,12 +54,17 @@ export interface ConfigColumn {
 }
 
 export type BaseColumn = {
+    /** Mandatory */
+    id: string,
     accessorKey: string;
     label: string;
     key: string;
     input: string;
-    csvCandidate?: boolean;
+    config: ConfigColumn;
+    /** Circunstancial */
+    nestedId?: string;
     options?: RowSelectOption[];
+    csvCandidate?: boolean;
     width?: number;
     position?: number;
     isMetadata?: boolean;
@@ -71,7 +74,6 @@ export type BaseColumn = {
     isHidden?: boolean;
     skipPersist?: boolean;
     isDragDisabled?: boolean;
-    config: ConfigColumn;
 }
 export type TableColumn = ColumnDef<RowDataType, Literal> & BaseColumn;
 

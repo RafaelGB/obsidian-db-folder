@@ -52,6 +52,7 @@ export const generateYamlColumns = (
       accessorKey: columnKey,
       label: `${columnKey} label`,
       key: columnKey,
+      id: columnKey,
       position: 1,
       isMetadata: false,
       skipPersist: true,

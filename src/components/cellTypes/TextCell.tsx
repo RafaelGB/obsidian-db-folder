@@ -6,7 +6,11 @@ import EditorCell from "components/cellTypes/EditorCell";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { DataObject, Literal } from "obsidian-dataview";
-import { LOGGER } from "services/Logger";
+import {
+  deepMerge,
+  generateLiteral,
+  obtainAnidatedLiteral,
+} from "helpers/DataObjectHelper";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
@@ -27,7 +31,10 @@ const TextCell = (props: CellComponentProps) => {
     (state) => state.actions
   );
 
-  const textCell = parseTextRowToString(textRow, tableColumn);
+  const textCell = tableState.data((state) =>
+    parseTextRowToString(state.rows[row.index], tableColumn)
+  );
+
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const [dirtyCell, setDirtyCell] = useState(false);
@@ -90,14 +97,10 @@ const TextCell = (props: CellComponentProps) => {
  * @returns
  */
 function parseTextRowToString(row: RowDataType, column: TableColumn) {
-  console.log("parseTextRowToString");
   const cellRoot = row[column.id];
   let textCell = "";
-  if (column.config.isNested && cellRoot !== undefined) {
-    textCell = obtainAnidatedValue(
-      column.config.nested_key ?? column.id,
-      cellRoot as DataObject
-    );
+  if (column.nestedId && cellRoot !== undefined) {
+    textCell = obtainAnidatedLiteral(column.nestedId, cellRoot as DataObject);
   } else {
     textCell = cellRoot?.toString();
   }
@@ -116,68 +119,18 @@ function parseStringToTextRow(
   column: TableColumn,
   newValue: string
 ): Literal {
-  console.log("parseStringToTextRow");
   const originalValue = row[column.id];
-  if (column.config.isNested) {
+  if (column.nestedId) {
     try {
       // Generate object with the new value using the nested key anidated in fuction of split .
-      const newObject = {
-        ...((originalValue as DataObject) ?? {}),
-        ...generateLiteral(column.config.nested_key ?? column.id, newValue),
-      };
-      return newObject;
+      const target = (originalValue as DataObject) ?? {};
+      const source = generateLiteral(column.nestedId, newValue);
+      return deepMerge(source, target);
     } catch (e) {
       // Just return the original value
     }
   }
   return newValue.trim();
-}
-
-/**
- * Obtain the value of a nested object in function of the nested key (a.b.c) using recursion
- * I.E.:
- * nestedKey = "a.b.c"
- * object = {a: {b: {c: "test"}}}
- * expected result = "test"
- * @param nestedKey
- * @param original
- */
-function obtainAnidatedValue(nestedKey: string, original: DataObject): string {
-  const keys = nestedKey.split(".");
-  const key = keys.shift();
-  const currentLvlValue = original[key];
-  if (currentLvlValue === undefined) {
-    LOGGER.warn(
-      `nested key ${nestedKey} not found in object ${original}. Returning original by default`
-    );
-    return JSON.stringify(original);
-  }
-  if (keys.length === 0) {
-    const value = original[key];
-    if (typeof value === "object") {
-      return JSON.stringify(value);
-    } else {
-      return value?.toString();
-    }
-  } else {
-    return obtainAnidatedValue(keys.join("."), original[key] as DataObject);
-  }
-}
-
-/**
- * Create an object in function of the nested key (a.b.c) and the value to set in the last key
- * I.E.:
- * nestedKey = "a.b.c"
- * value = "test"
- * expected result = {a: {b: {c: "test"}}}
- * @param nestedKey
- * @param value
- */
-function generateLiteral(nestedKey: string, value: any): DataObject {
-  const keys = nestedKey.split(".");
-  const lastKey = keys.pop();
-  const lastObject = { [lastKey]: value };
-  return keys.reverse().reduce((acc, key) => ({ [key]: acc }), lastObject);
 }
 
 export default TextCell;
