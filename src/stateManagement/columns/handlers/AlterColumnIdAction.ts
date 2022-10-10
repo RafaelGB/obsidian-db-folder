@@ -16,7 +16,7 @@ export default class AlterColumnIdHandlerAction extends AbstractTableAction<Colu
                 // Control nested information
                 alteredColumns[labelIndex].nestedKey = nestedIds.join('.');
                 // Update configuration & row files on disk
-                view.diskConfig.updateColumnKey(column.id, newId, column.nestedKey, alteredColumns[labelIndex].nestedKey);
+                view.diskConfig.updateColumnKey(column.key, newId, column.nestedKey, alteredColumns[labelIndex].nestedKey);
                 return { columns: alteredColumns };
             });
         tableActionResponse.implementation = implementation;

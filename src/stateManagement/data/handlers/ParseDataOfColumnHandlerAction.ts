@@ -12,8 +12,8 @@ export default class ParseDataOfColumnHandlerAction extends AbstractTableAction<
             set((updater) => {
                 const parsedRows = updater.rows.map((row) => ({
                     ...row,
-                    [column.id]: ParseService.parseLiteral(
-                        row[column.id] as Literal,
+                    [column.key]: ParseService.parseLiteral(
+                        row[column.key] as Literal,
                         input, // Destination type to parse
                         ddbbConfig
                     ),

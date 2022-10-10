@@ -32,10 +32,10 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
 
             const pathColumns: string[] =
                 ddbbConfig.group_folder_column
-                .split(",")
-                .filter(Boolean);
-                // Update the row on disk
-                if ( isMovingFile && pathColumns.includes(column.id)) {
+                    .split(",")
+                    .filter(Boolean);
+            // Update the row on disk
+            if (isMovingFile && pathColumns.includes(column.key)) {
                 const folderPath = destination_folder(view, ddbbConfig);
                 const newFilePath = resolveNewFilePath({
                     pathColumns,
@@ -45,10 +45,10 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                 });
                 await FileGroupingService.moveFile(newFilePath, modifiedRow);
                 await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
-            } 
+            }
             await EditEngineService.updateRowFileProxy(
                 rowTFile,
-                column.id,
+                column.key,
                 value,
                 columns,
                 ddbbConfig,

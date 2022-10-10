@@ -35,9 +35,9 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                         const options: OptionSelect[] = [];
                         // Generate selected options
                         parsedRows.forEach((row) => {
-                            if (row[column.id]) {
+                            if (row[column.key]) {
                                 options.push({
-                                    label: row[column.id]?.toString(),
+                                    label: row[column.key]?.toString(),
                                     backgroundColor: randomColor(),
                                 });
                             }

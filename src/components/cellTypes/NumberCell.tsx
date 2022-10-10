@@ -82,8 +82,8 @@ const NumberCell = (props: CellComponentProps) => {
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
     >
-      {(numberRow[column.id] !== undefined &&
-        numberRow[column.id].toString()) ||
+      {(numberRow[tableColumn.key] !== undefined &&
+        numberRow[tableColumn.key].toString()) ||
         ""}
     </span>
   );
