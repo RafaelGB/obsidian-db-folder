@@ -40,7 +40,7 @@ You can view the database markdown note by using the command `open as markdown`
 
 ## Embedding Database
 
-You can embed a database by using this format `![[database file name.md]]`, it'll show a dataview query of the database.
+You can embed a database in another note by using this format `![[database file name.md]]`, it'll show a dataview query of the database.
 
 ## Exporting Data
 
@@ -48,4 +48,4 @@ You can export the database into **CSV** format using the database menu.
 
 ## Importing Data
 
-You can upload a **CSV** file and turn it to a database using the database menu.
+You can upload a **CSV** file and turn it into a database using the database menu. The **CSV** file has to have a header row and before importing you need to define the column used to create the files in the plugin global settings under `CSV section > mandatory header key`.
