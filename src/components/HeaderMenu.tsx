@@ -21,12 +21,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const configInfo = table.options.meta.tableState.configState(
     (state) => state.info
   );
-  const configActions = table.options.meta.tableState.configState(
-    (state) => state.actions
-  );
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (store) => store.ddbbConfig
-  );
 
   /** Header props */
   const {
@@ -92,49 +86,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     strategy: "fixed",
   });
 
-  function isValidLabel(newKey: string): boolean {
-    if (table.getAllColumns().find((o: any) => o.id === newKey)) {
-      return false;
-    }
-
-    if (newKey === undefined || newKey === null) {
-      return false;
-    }
-
-    if (newKey.length === 0) {
-      return false;
-    }
-
-    return true;
-  }
-
   function persistLabelChange() {
-    // trim label will get a valid yaml key
-    const newKey = dbTrim(labelState);
-    // Check if key already exists. If so, mark it as invalid
-    if (!isValidLabel(newKey)) {
-      setLabelStateInvalid(true);
-      return;
-    }
-    // Update state of ordered
-    const updateOrderWithNewKey = table.options.state.columnOrder.map((o) =>
-      o === column.id ? newKey : o
-    );
-    table.setColumnOrder(updateOrderWithNewKey);
-
-    setkeyState(newKey);
-
-    // Update sorted columns
-    if (column.getIsSorted()) {
-      const alterSort = table.options.state.sorting.map((o) => {
-        if (o.id === column.id) {
-          o.id = newKey;
-        }
-        return o;
-      });
-      table.setSorting(alterSort);
-    }
-
     // Update state of altered column
     columnActions.alterColumnLabel(column.columnDef as TableColumn, labelState);
   }

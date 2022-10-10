@@ -1,4 +1,4 @@
-import { Setting } from "obsidian";
+import { Notice, Setting } from "obsidian";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { dbTrim } from "helpers/StylesHelper";
@@ -8,14 +8,14 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
     handle(response: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = response;
         const { view, columnsState, dataState, configState } = columnSettingsManager.modal;
-        let value = column.nestedId ?? column.id;
+        let value = `${column.id}${column.nestedId ? `.${column.nestedId}` : ''}`;
         new Setting(containerEl)
             .setName(this.settingTitle)
             .setDesc("Enter the column id of the column")
             .addText(text => {
                 text.setPlaceholder("Write your nested key...")
                     .setValue(value)
-                    .onChange(async (newId: string): Promise<void> => {
+                    .onChange((newId: string) => {
                         value = dbTrim(newId);
                     })
             }).addExtraButton((cb) => {
@@ -24,45 +24,37 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
                     .onClick(async (): Promise<void> => {
                         const arrayId = value.split('.');
                         const rootId = arrayId.shift();
-                        if (value && value !== column.id) {
-                            if (arrayId.length > 0) {
-                                // Persist changes for complex key
-                                await view.diskConfig.updateColumnProperties(column.key, {
-                                    id: rootId,
-                                    nestedId: arrayId.join('.')
-                                });
-                            } else {
-                                // Persist changes for simple key
-                                await view.diskConfig.updateColumnProperties(column.key, {
-                                    id: rootId,
-                                    nestedId: ''
-                                });
-                            }
+                        if (rootId) {
                             // Update state of altered column
                             columnsState.actions
                                 .alterColumnId(column, rootId, arrayId)
                                 .then(() => {
-                                    // Update key of all notes
-                                    dataState.actions.updateDataAfterLabelChange(
-                                        column,
-                                        rootId,
-                                        columnsState.info.getAllColumns(),
-                                        configState.info.getLocalSettings()
-                                    ).then(() => {
-                                        // Rename column in group_folder_column
-                                        const groupFolderColumn = configState.info.getLocalSettings().group_folder_column.split(",");
-                                        if (groupFolderColumn.includes(column.id)) {
-                                            const newGroupFolderColumn = groupFolderColumn
-                                                .map((item) => (item === column.id ? rootId : item))
-                                                .join(",");
-                                            configState.actions.alterConfig({ group_folder_column: newGroupFolderColumn });
-                                            // Reorganize files and remove empty folders
-                                            dataState.actions.groupFiles();
-                                        }
-                                    });
+                                    if (rootId !== column.id) {
+                                        // Update key of all notes
+                                        dataState.actions.updateDataAfterLabelChange(
+                                            column,
+                                            rootId,
+                                            columnsState.info.getAllColumns(),
+                                            configState.info.getLocalSettings()
+                                        ).then(() => {
+                                            // Rename column in group_folder_column
+                                            const groupFolderColumn = configState.info.getLocalSettings().group_folder_column.split(",");
+                                            if (groupFolderColumn.includes(column.id)) {
+                                                const newGroupFolderColumn = groupFolderColumn
+                                                    .map((item) => (item === column.id ? rootId : item))
+                                                    .join(",");
+                                                configState.actions.alterConfig({ group_folder_column: newGroupFolderColumn });
+                                                // Reorganize files and remove empty folders
+                                                dataState.actions.groupFiles();
+                                            }
+                                        });
+                                    }
+                                    new Notice(`new column id was saved: ${value}`, 1500);
                                 });
-                            columnSettingsManager.modal.enableReset = true;
+                        } else {
+                            new Notice(`column id is required`, 1500);
                         }
+                        columnSettingsManager.modal.enableReset = true;
                     });
             });
 
