@@ -6,7 +6,7 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
-import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
+import { ConfigColumn, NoteContentAction, TableColumn } from 'cdm/FolderModel';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
@@ -75,33 +75,28 @@ export default class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(oldColumnId: string, newColumnId: string, oldNestedIds?: string, nestedIds?: string): Promise<void> {
-        // merge new column with new nested ids
-        const id = `${newColumnId}${nestedIds ? `-${nestedIds}` : ''}`;
-        // Obtain all columns with the same id
-        const recordCols: Record<string, DatabaseColumn> = {};
+    async updateColumnKey(currentCol: TableColumn, newColumnKey: string, newNestedKey: string): Promise<void> {
+        const isRootUpdated = currentCol.key !== newColumnKey;
         Object
             .entries(this.yaml.columns)
-            .filter(([, value]) => value.id === oldColumnId)
             .forEach(([key, value]) => {
-                recordCols[key] = value;
-            });
-
-        Object
-            .entries(recordCols)
-            .forEach(([key, value]) => {
-                const currentCol = this.yaml.columns[key];
-                const isCurrentOne = value.nestedKey === oldNestedIds;
-                // update column id
-                currentCol.id = newColumnId;
-                currentCol.accessorKey = newColumnId;
-                currentCol.key = newColumnId;
-                delete this.yaml.columns[key];
-                if (isCurrentOne) {
-                    currentCol.nestedKey = isCurrentOne ? nestedIds : value.nestedKey;
-                    this.yaml.columns[id] = currentCol;
-                } else {
-                    this.yaml.columns[`${newColumnId}-${value.nestedKey}`] = currentCol;
+                if (isRootUpdated) {
+                    if (value.key === currentCol.key) {
+                        delete this.yaml.columns[`${value.key}-${value.nestedKey}`];
+                        value.key = newColumnKey;
+                        value.accessorKey = newColumnKey;
+                        if (value.nestedKey === currentCol.nestedKey) {
+                            value.nestedKey = newNestedKey;
+                            this.yaml.columns[`${newColumnKey}${newNestedKey ? `-${newNestedKey}` : ''}`] = value;
+                        } else {
+                            delete this.yaml.columns[`${value.key}-${value.nestedKey}`];
+                            this.yaml.columns[`${newColumnKey}-${value.nestedKey}`] = value;
+                        }
+                    }
+                } else if (value.nestedKey === currentCol.nestedKey) {
+                    delete this.yaml.columns[`${value.key}-${value.nestedKey}`];
+                    value.nestedKey = newNestedKey;
+                    this.yaml.columns[`${value.key}${newNestedKey ? `-${newNestedKey}` : ''}`] = value;
                 }
             });
 
