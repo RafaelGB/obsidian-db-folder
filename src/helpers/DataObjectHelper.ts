@@ -1,6 +1,8 @@
+import { LocalSettings } from "cdm/SettingsModel";
 import { DataObject, Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
+import { ParseService } from "services/ParseService";
 
 /**
  * @description Method to perform a deep merge of two DataObjects
@@ -60,24 +62,29 @@ export function generateLiteral(nestedKey: string, value: Literal): Literal {
  * @param nestedKey
  * @param original
  */
-export function obtainAnidatedLiteral(nestedKey: string, original: DataObject): string {
+export function obtainAnidatedLiteral(nestedKey: string, original: Literal, type: string, config: LocalSettings): Literal {
     const keys = nestedKey.split(".");
     const key = keys.shift();
-    const currentLvlValue = original[key];
-    if (currentLvlValue === undefined) {
-        LOGGER.warn(
-            `nested key ${nestedKey} not found in object ${original}. Returning original by default`
+    const wrapped = DataviewService.wrapLiteral(original);
+    if (wrapped.value === undefined) {
+        LOGGER.debug(
+            `nested key ${nestedKey} not found in object ${original}`
         );
-        return JSON.stringify(original);
+        return null;
     }
+
     if (keys.length === 0) {
-        const value = original[key];
-        if (typeof value === "object") {
-            return JSON.stringify(value);
+        if (wrapped.type === "object") {
+            return ParseService.parseLiteral((original as DataObject)[key], type, config);
         } else {
-            return value?.toString();
+            return original;
         }
+    } else if (wrapped.type !== "object") {
+        LOGGER.debug(
+            `nested key ${nestedKey} not found in object ${original}`
+        );
+        return null;
     } else {
-        return obtainAnidatedLiteral(keys.join("."), original[key] as DataObject);
+        return obtainAnidatedLiteral(keys.join("."), (original as DataObject)[key], type, config);
     }
 }

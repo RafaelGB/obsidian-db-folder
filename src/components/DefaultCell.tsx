@@ -8,7 +8,7 @@ import CalendarTimePortal from "components/portals/CalendarTimePortal";
 import CheckboxCell from "components/cellTypes/CheckboxCell";
 import TaskCell from "components/cellTypes/TaskCell";
 import MarkdownCell from "components/cellTypes/MarkdownCell";
-import TagsPortal from "components/portals/TagsPortal";
+import TagsCell from "components/cellTypes/TagsCell";
 import NumberCell from "components/cellTypes/NumberCell";
 import TextCell from "components/cellTypes/TextCell";
 import MetadataTimeCell from "components/cellTypes/MetadataTimeCell";
@@ -59,7 +59,7 @@ export default function DefaultCell(
 
       /** Tags option */
       case InputType.TAGS:
-        return <TagsPortal defaultCell={defaultCell} />;
+        return <TagsCell defaultCell={defaultCell} />;
 
       /** Tasks option */
       case InputType.TASK:

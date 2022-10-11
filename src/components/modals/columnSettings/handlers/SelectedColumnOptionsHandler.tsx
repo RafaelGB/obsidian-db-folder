@@ -35,7 +35,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         backgroundColor: randomColor(),
       });
       // Persist changes
-      view.diskConfig.updateColumnProperties(column.key, {
+      view.diskConfig.updateColumnProperties(column.id, {
         options: options,
       });
       // Force refresh of settings
@@ -77,7 +77,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
             const removedOption = options[index];
             options.splice(index, 1);
             // Persist changes
-            await view.diskConfig.updateColumnProperties(column.key, {
+            await view.diskConfig.updateColumnProperties(column.id, {
               options: options,
             });
 

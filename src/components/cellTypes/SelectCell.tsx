@@ -111,7 +111,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
             "tags-container text-align-center"
           )}`}
           classNamePrefix="react-select"
-          key={`${tableColumn.key}-select-open`}
+          key={`${tableColumn.id}-select-open`}
         />
       </div>
     );

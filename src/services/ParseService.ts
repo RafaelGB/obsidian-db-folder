@@ -121,7 +121,7 @@ class Parse {
     public parseRowToCell(row: RowDataType, column: TableColumn, type: string, config: LocalSettings): Literal {
         let literal = row[column.key] as Literal;
         if (column.nestedKey && literal !== undefined) {
-            literal = obtainAnidatedLiteral(column.nestedKey, literal as DataObject);
+            literal = obtainAnidatedLiteral(column.nestedKey, literal, type, config);
         }
         return this.parseLiteral(literal, type, config);
     }
@@ -233,7 +233,7 @@ class Parse {
         if (wrapped.type !== 'array') {
             return wrapped.value.toString().split(",").map(s => s.trim());
         }
-        return wrapped.value;
+        return wrapped.value.map(v => DataviewService.getDataviewAPI().value.toString(v));
     }
 
     private handleYamlBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {

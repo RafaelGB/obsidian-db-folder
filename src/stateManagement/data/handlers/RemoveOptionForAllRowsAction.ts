@@ -26,9 +26,11 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
                 default:
                 // Do nothing
             }
+
             const rowCandidates = get().rows.filter((row) => {
                 return lambdaFilter(row[column.key] as Literal);
             });
+
             rowCandidates.map((row) => {
                 const rowTFile = row.__note__.getFile();
                 switch (column.input) {

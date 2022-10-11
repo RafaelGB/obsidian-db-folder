@@ -3,31 +3,36 @@ import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
 import { randomColor } from "helpers/Colors";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { TableColumn } from "cdm/FolderModel";
+import { ParseService } from "services/ParseService";
+import { InputType } from "helpers/Constants";
 
-const TagsPortal = (tagsProps: CellComponentProps) => {
+const TagsCell = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
   const { row, column, table } = defaultCell;
   const { tableState } = table.options.meta;
+  const tableColumn = column.columnDef as TableColumn;
   const columnsInfo = tableState.columns((state) => state.info);
+  const configInfo = tableState.configState((state) => state.info);
   const columnActions = tableState.columns((state) => state.actions);
   const dataActions = tableState.data((state) => state.actions);
 
   const tagsRow = tableState.data((state) => state.rows[row.index]);
+  const tagsCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.TAGS,
+        configInfo.getLocalSettings()
+      ) as string[]
+  );
 
-  const configInfo = tableState.configState((state) => state.info);
-
-  const tableColumn = column.columnDef as TableColumn;
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
-  // tags values state
-  const tagsState = Array.isArray(tagsRow[tableColumn.key])
-    ? (tagsRow[tableColumn.key] as Literal[])
-    : [];
 
   function getColor(tag: string) {
     const match = tableColumn.options.find(
@@ -53,11 +58,15 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
     }
   }
 
-  const defaultValue = tagsState.map((tag: string) => ({
-    label: tag,
-    value: tag,
-    color: getColor(tag),
-  }));
+  // Control re renders with useCallback
+  const defaultValue = useCallback(() => {
+    const optionList = tagsCell || [];
+    optionList.map((tag: string) => ({
+      label: tag,
+      value: tag,
+      color: getColor(tag),
+    }));
+  }, [tagsCell]);
 
   const multiOptions = tableColumn.options
     .sort((a, b) => a.label.localeCompare(b.label))
@@ -67,16 +76,22 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
       color: option.backgroundColor,
     }));
 
-  const handleOnChange = (
+  const handleOnChange = async (
     newValue: OnChangeValue<any, true>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
     const arrayTags = newValue.map((tag: any) => tag.value);
+    const newCell = ParseService.parseRowToLiteral(
+      tagsRow,
+      tableColumn,
+      arrayTags
+    );
+
     // Update on disk & memory
-    dataActions.updateCell(
+    await dataActions.updateCell(
       row.index,
       tableColumn,
-      arrayTags,
+      newCell,
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
@@ -119,28 +134,33 @@ const TagsPortal = (tagsProps: CellComponentProps) => {
   }
   return (
     <>
-      {showSelectTags
-        ? TagsForm()
-        : tagsState && (
-            <div
-              className={c("tags-container text-align-center")}
-              onClick={() => setShowSelectTags(true)}
-              style={{ width: column.getSize() }}
-            >
-              {tagsState
-                .sort((a: string, b: string) => a.localeCompare(b))
-                .map((tag: string) => (
-                  <div key={`key-${tag}`}>
-                    <Relationship
-                      key={`key-Relationship-${tag}`}
-                      value={tag}
-                      backgroundColor={getColor(tag)}
-                    />
-                  </div>
-                ))}
-            </div>
+      {showSelectTags ? (
+        TagsForm()
+      ) : (
+        <div
+          className={c("tags-container text-align-center")}
+          onClick={() => setShowSelectTags(true)}
+          style={{ width: column.getSize() }}
+          key={`tags-${row.index}-${tableColumn.key}`}
+        >
+          {tagsCell ? (
+            tagsCell
+              .sort((a: string, b: string) => a.localeCompare(b))
+              .map((tag: string) => (
+                <div key={`key-${tag}`}>
+                  <Relationship
+                    key={`tags-${row.index}-${tableColumn.key}-${tag}`}
+                    value={tag}
+                    backgroundColor={getColor(tag)}
+                  />
+                </div>
+              ))
+          ) : (
+            <span />
           )}
+        </div>
+      )}
     </>
   );
 };
-export default TagsPortal;
+export default TagsCell;
