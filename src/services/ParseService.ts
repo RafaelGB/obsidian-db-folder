@@ -172,12 +172,12 @@ class Parse {
         }
     }
 
-    private parseToBoolean(wrapped: WrappedLiteral): string {
+    private parseToBoolean(wrapped: WrappedLiteral): boolean {
         if (wrapped.type === 'boolean') {
-            return wrapped.value ? 'true' : 'false';
+            return wrapped.value;
         } else {
             const adjustedValue = DataviewService.getDataviewAPI().value.toString(wrapped.value);
-            return adjustedValue === 'true' ? "true" : "false";
+            return adjustedValue === 'true';
         }
     }
 

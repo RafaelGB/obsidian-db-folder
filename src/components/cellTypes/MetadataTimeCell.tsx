@@ -12,15 +12,14 @@ const MetadataTimeCell = (mdProps: CellComponentProps) => {
     if (mdRef.current !== null) {
       mdRef.current.innerHTML = "";
       const cellValue = cell.getValue();
-      let metadataValue = DateTime.isDateTime(cellValue)
-        ? (cellValue as DateTime).toFormat("yyyy-MM-dd h:mm a")
-        : null;
+      // Apply config formatting
+      let metadataValue = (cellValue as DateTime).toFormat("yyyy-MM-dd h:mm a");
+      // Render the markdown with daily notes link
+      // TODO obtain daily format from dailies plugin if its enabled
+      metadataValue = `[[${(cellValue as DateTime).toFormat(
+        "yyyy-MM-dd"
+      )}|${metadataValue}]]`;
 
-      if (metadataValue !== null) {
-        metadataValue = `[[${(cellValue as DateTime).toFormat(
-          "yyyy-MM-dd"
-        )}|${metadataValue}]]`;
-      }
       renderMarkdown(defaultCell, metadataValue, mdRef.current, 5);
     }
   });

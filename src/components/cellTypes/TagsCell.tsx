@@ -3,13 +3,8 @@ import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
 import { randomColor } from "helpers/Colors";
-import React, { useCallback, useMemo, useState } from "react";
-import {
-  ActionMeta,
-  GroupBase,
-  OnChangeValue,
-  OptionsOrGroups,
-} from "react-select";
+import React, { useMemo, useState } from "react";
+import { ActionMeta, OnChangeValue } from "react-select";
 import { c } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
