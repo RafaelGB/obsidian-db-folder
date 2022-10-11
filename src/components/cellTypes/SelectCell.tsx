@@ -7,18 +7,28 @@ import CreatableSelect from "react-select/creatable";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c } from "helpers/StylesHelper";
 import { ActionMeta, OnChangeValue } from "react-select";
+import { ParseService } from "services/ParseService";
+import { InputType } from "helpers/Constants";
 
-const SelectPortal = (popperProps: CellComponentProps) => {
+const SelectCell = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
   const { tableState } = table.options.meta;
+  const tableColumn = column.columnDef as TableColumn;
   const dataActions = tableState.data((state) => state.actions);
 
-  const selectPortalRow = tableState.data((state) => state.rows[row.index]);
+  const selectRow = tableState.data((state) => state.rows[row.index]);
   const columnsInfo = tableState.columns((state) => state.info);
   const configInfo = tableState.configState((state) => state.info);
-
-  const tableColumn = column.columnDef as TableColumn;
+  const selectCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.SELECT,
+        configInfo.getLocalSettings()
+      ) as string
+  );
 
   const [showSelect, setShowSelect] = useState(false);
 
@@ -28,15 +38,14 @@ const SelectPortal = (popperProps: CellComponentProps) => {
 
   function getColor() {
     const match = tableColumn.options.find(
-      (option: { label: string }) =>
-        option.label === selectPortalRow[tableColumn.key]
+      (option: { label: string }) => option.label === selectCell
     );
     return (match && match.backgroundColor) || grey(200);
   }
 
   const defaultValue = {
-    label: selectPortalRow[tableColumn.key]?.toString(),
-    value: selectPortalRow[tableColumn.key]?.toString(),
+    label: selectCell?.toString(),
+    value: selectCell?.toString(),
     color: getColor(),
   };
 
@@ -52,12 +61,16 @@ const SelectPortal = (popperProps: CellComponentProps) => {
     newValue: OnChangeValue<any, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const selection = newValue ? newValue.value : "";
+    const newCell = ParseService.parseRowToLiteral(
+      selectRow,
+      tableColumn,
+      newValue ? newValue.value : ""
+    );
     // Update on disk & memory
     dataActions.updateCell(
       row.index,
       tableColumn,
-      selection,
+      newCell,
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings(),
       true
@@ -115,9 +128,9 @@ const SelectPortal = (popperProps: CellComponentProps) => {
           onClick={() => setShowSelect(true)}
           style={{ width: column.getSize() }}
         >
-          {selectPortalRow[tableColumn.key] && (
+          {selectCell && (
             <Relationship
-              value={selectPortalRow[tableColumn.key]?.toString()}
+              value={selectCell.toString()}
               backgroundColor={getColor()}
             />
           )}
@@ -127,4 +140,4 @@ const SelectPortal = (popperProps: CellComponentProps) => {
   );
 };
 
-export default SelectPortal;
+export default SelectCell;
