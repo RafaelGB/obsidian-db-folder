@@ -3,8 +3,13 @@ import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
 import { randomColor } from "helpers/Colors";
-import React, { useCallback, useState } from "react";
-import { ActionMeta, OnChangeValue } from "react-select";
+import React, { useCallback, useMemo, useState } from "react";
+import {
+  ActionMeta,
+  GroupBase,
+  OnChangeValue,
+  OptionsOrGroups,
+} from "react-select";
 import { c } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
@@ -59,22 +64,26 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   }
 
   // Control re renders with useCallback
-  const defaultValue = useCallback(() => {
+  const defaultValue = useMemo(() => {
     const optionList = tagsCell || [];
-    optionList.map((tag: string) => ({
+    return optionList.map((tag: string) => ({
       label: tag,
       value: tag,
       color: getColor(tag),
     }));
   }, [tagsCell]);
 
-  const multiOptions = tableColumn.options
-    .sort((a, b) => a.label.localeCompare(b.label))
-    .map((option: RowSelectOption) => ({
-      value: option.label,
-      label: option.label,
-      color: option.backgroundColor,
-    }));
+  const multiOptions = useMemo(
+    () =>
+      tableColumn.options
+        .sort((a, b) => a.label.localeCompare(b.label))
+        .map((option: RowSelectOption) => ({
+          value: option.label,
+          label: option.label,
+          color: option.backgroundColor,
+        })),
+    [tagsCell]
+  );
 
   const handleOnChange = async (
     newValue: OnChangeValue<any, true>,
@@ -95,6 +104,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
+
     // Add new option to column options
     newValue
       .filter(

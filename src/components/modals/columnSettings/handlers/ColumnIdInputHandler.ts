@@ -52,7 +52,6 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
                                 // Reorganize files and remove empty folders
                                 await dataState.actions.groupFiles();
                             }
-
                         }
                         new Notice(`new column id was saved: ${value}`, 1500);
                         columnSettingsManager.modal.enableReset = true;
@@ -70,7 +69,6 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
         const conflictId = columns.some((column: TableColumn) =>
             column.id === candidateId
         );
-        console.log(`conflictId: ${conflictId}`);
         return !conflictId;
     }
 }
