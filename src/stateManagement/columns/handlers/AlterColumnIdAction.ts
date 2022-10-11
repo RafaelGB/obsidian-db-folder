@@ -8,7 +8,7 @@ export default class AlterColumnIdHandlerAction extends AbstractTableAction<Colu
         implementation.actions.alterColumnId = async (column: TableColumn, newId: string, nestedIds: string[]) => {
             const newNestedIds = nestedIds.join('.');
             // Update on disk
-            await view.diskConfig.updateColumnKey(column, newId, newNestedIds);
+            await view.diskConfig.updateColumnKey(column, newId, nestedIds);
             set((updater) => {
                 const rootWasUpdated = column.id !== newId;
                 const alteredColumns = [...updater.columns];

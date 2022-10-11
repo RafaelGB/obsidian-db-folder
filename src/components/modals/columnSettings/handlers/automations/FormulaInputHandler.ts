@@ -11,7 +11,7 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
 
         const formula_promise = async (value: string) => {
             // Persist value
-            await view.diskConfig.updateColumnConfig(column.key, {
+            await view.diskConfig.updateColumnConfig(column.id, {
                 formula_query: value
             });
             columnSettingsManager.modal.enableReset = true;
@@ -20,7 +20,7 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
         const persist_Formula_toggle_promise = async (value: boolean): Promise<void> => {
             column.config.link_alias_enabled = value;
             // Persist value
-            await view.diskConfig.updateColumnConfig(column.key, {
+            await view.diskConfig.updateColumnConfig(column.id, {
                 persist_formula: value
             });
             columnSettingsManager.modal.enableReset = true;

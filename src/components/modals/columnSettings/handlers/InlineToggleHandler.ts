@@ -9,7 +9,7 @@ export class InlineToggleHandler extends AbstractHandlerClass<ColumnSettingsHand
         const inline_togle_promise = async (value: boolean): Promise<void> => {
             column.config.isInline = value;
             // Persist value
-            await view.diskConfig.updateColumnConfig(column.key, {
+            await view.diskConfig.updateColumnConfig(column.id, {
                 isInline: value
             });
             columnSettingsManager.modal.enableReset = true;

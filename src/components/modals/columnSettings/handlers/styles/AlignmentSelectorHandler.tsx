@@ -20,7 +20,7 @@ export class AlignmentSelectorHandler extends AbstractHandlerClass<ColumnSetting
     createRoot(alignmentSetting.controlEl.createDiv()).render(
       <TextAlignmentSelector
         modal={columnSettingsManager.modal}
-        columnKey={column.key}
+        columnId={column.id}
         currentAlignment={column.config.content_alignment}
       />
     );

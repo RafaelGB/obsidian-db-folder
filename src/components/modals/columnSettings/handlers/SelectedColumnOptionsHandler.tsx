@@ -67,7 +67,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         modal: columnSettingsManager.modal,
         options: options,
         option: option,
-        columnKey: column.key,
+        columnId: column.id,
       };
 
       const optionContainer = new Setting(containerEl).addExtraButton((cb) => {

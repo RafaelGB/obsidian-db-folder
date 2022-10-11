@@ -75,28 +75,27 @@ export default class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(currentCol: TableColumn, newColumnKey: string, newNestedKey: string): Promise<void> {
-        const isRootUpdated = currentCol.key !== newColumnKey;
+    async updateColumnKey(currentCol: TableColumn, newColumnKey: string, newNestedKey: string[]): Promise<void> {
         Object
             .entries(this.yaml.columns)
             .forEach(([key, value]) => {
-                if (isRootUpdated) {
-                    if (value.key === currentCol.key) {
-                        delete this.yaml.columns[`${value.key}-${value.nestedKey}`];
+                if (value.key === currentCol.key) {
+                    if (currentCol.key !== newColumnKey) {
+                        delete this.yaml.columns[key];
                         value.key = newColumnKey;
                         value.accessorKey = newColumnKey;
                         if (value.nestedKey === currentCol.nestedKey) {
-                            value.nestedKey = newNestedKey;
+                            value.nestedKey = newNestedKey.join('.');
                             this.yaml.columns[`${newColumnKey}${newNestedKey ? `-${newNestedKey}` : ''}`] = value;
                         } else {
-                            delete this.yaml.columns[`${value.key}-${value.nestedKey}`];
-                            this.yaml.columns[`${newColumnKey}-${value.nestedKey}`] = value;
+                            this.yaml.columns[`${newColumnKey}${value.nestedKey ? `-${value.nestedKey}` : ''}`] = value;
                         }
                     }
-                } else if (value.nestedKey === currentCol.nestedKey) {
-                    delete this.yaml.columns[`${value.key}-${value.nestedKey}`];
-                    value.nestedKey = newNestedKey;
-                    this.yaml.columns[`${value.key}${newNestedKey ? `-${newNestedKey}` : ''}`] = value;
+                    else if (value.nestedKey === currentCol.nestedKey) {
+                        delete this.yaml.columns[key];
+                        value.nestedKey = newNestedKey.join('.');
+                        this.yaml.columns[`${value.key}${newNestedKey ? `-${newNestedKey.join("-")}` : ''}`] = value;
+                    }
                 }
             });
 

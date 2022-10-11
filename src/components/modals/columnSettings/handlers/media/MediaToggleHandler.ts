@@ -11,7 +11,7 @@ export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandl
             column.config.enable_media_view = value;
             // Check context to define correct promise
             // Persist value
-            await view.diskConfig.updateColumnConfig(column.key, {
+            await view.diskConfig.updateColumnConfig(column.id, {
                 enable_media_view: value,
                 link_alias_enabled: value ? column.config.link_alias_enabled : false
             });
