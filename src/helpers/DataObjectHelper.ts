@@ -41,17 +41,11 @@ export function deepMerge(source: Literal, target: Literal) {
  * @param nestedKey
  * @param value
  */
-export function generateLiteral(nestedKey: string, value: string): Literal {
+export function generateLiteral(nestedKey: string, value: Literal): Literal {
     const keys = nestedKey.split(".");
     const key = keys.shift();
     if (keys.length === 0) {
-        let literalValue: Literal;
-        try {
-            literalValue = JSON.parse(value);
-        } catch (e) {
-            literalValue = value;
-        }
-        return { [key]: literalValue };
+        return { [key]: value };
     } else {
         return { [key]: generateLiteral(keys.join("."), value) };
     }

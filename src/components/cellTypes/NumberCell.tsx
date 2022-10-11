@@ -1,28 +1,39 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
+import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, {
   ChangeEventHandler,
   KeyboardEventHandler,
   useState,
 } from "react";
+import { ParseService } from "services/ParseService";
 
 const NumberCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
   const { row, column, table } = defaultCell;
   const { tableState } = table.options.meta;
+  const tableColumn = column.columnDef as TableColumn;
   /** Cell information */
   const columnsInfo = tableState.columns((state) => state.info);
   const dataActions = tableState.data((state) => state.actions);
-  const numberRow = tableState.data((state) => state.rows[row.index]);
   const configInfo = tableState.configState((state) => state.info);
-  const tableColumn = column.columnDef as TableColumn;
+  const numberRow = tableState.data((state) => state.rows[row.index]);
+  const numberCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.NUMBER,
+        configInfo.getLocalSettings()
+      ) as number
+  );
   const [editableValue, setEditableValue] = useState(null);
   const [dirtyCell, setDirtyCell] = useState(false);
 
   const handleEditableOnclick = () => {
     setDirtyCell(true);
-    setEditableValue(numberRow[column.id] as number);
+    setEditableValue(numberCell);
   };
 
   // onChange handler
@@ -32,10 +43,15 @@ const NumberCell = (props: CellComponentProps) => {
   };
 
   function persistChange(changedValue: number) {
+    const newCell = ParseService.parseRowToLiteral(
+      numberRow,
+      tableColumn,
+      changedValue
+    );
     dataActions.updateCell(
       row.index,
       tableColumn,
-      changedValue,
+      newCell,
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
@@ -57,7 +73,7 @@ const NumberCell = (props: CellComponentProps) => {
   };
 
   const handleOnBlur = () => {
-    if (editableValue && editableValue !== numberRow[column.id]) {
+    if (editableValue && editableValue !== numberCell) {
       persistChange(parseFloat(editableValue));
     }
     setDirtyCell(false);
@@ -82,9 +98,7 @@ const NumberCell = (props: CellComponentProps) => {
       onClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
     >
-      {(numberRow[tableColumn.key] !== undefined &&
-        numberRow[tableColumn.key].toString()) ||
-        ""}
+      {(numberCell !== undefined && numberCell.toString()) || ""}
     </span>
   );
 };

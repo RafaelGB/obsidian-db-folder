@@ -4,10 +4,13 @@ import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
 import { LocalSettings } from "cdm/SettingsModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { deepMerge, generateLiteral, obtainAnidatedLiteral } from "helpers/DataObjectHelper";
 
 class Parse {
 
     private static instance: Parse;
+
     /**
      * Universal parse method to parse a literal to a specific type
      * @param literal 
@@ -29,6 +32,9 @@ class Parse {
         switch (dataTypeDst) {
             case InputType.MARKDOWN:
                 parsedLiteral = this.parseToMarkdown(wrapped, localSettings, isInline);
+                break;
+            case InputType.SORTING:
+                parsedLiteral = this.parseToEnableSorting(wrapped, localSettings, isInline);
                 break;
             case InputType.TAGS:
                 parsedLiteral = this.parseToOptionsArray(wrapped);
@@ -59,6 +65,7 @@ class Parse {
         LOGGER.debug(`<=parseLiteral`);
         return parsedLiteral;
     }
+
     /**
      * Check if literal is Proxy DataArray, if so, parse it. If not, return same literal
      * @param literal 
@@ -69,6 +76,54 @@ class Parse {
             literal = (literal as any).values
         }
         return literal;
+    }
+
+    /**
+     * Manage the value of the rendered string to save as Literal cell
+     * @param row
+     * @param column
+     * @param newValue
+     * @returns
+     */
+    public parseRowToLiteral(
+        row: RowDataType,
+        column: TableColumn,
+        newValue: Literal
+    ): Literal {
+        if (typeof newValue === "string") {
+            try {
+                newValue = JSON.parse(newValue);
+            } catch (e) {
+                // Do nothing
+            }
+        }
+        if (column.nestedKey) {
+            try {
+                const originalValue = row[column.key];
+                // Generate object with the new value using the nested key anidated in fuction of split .
+                const target = (originalValue as DataObject) ?? {};
+                const source = generateLiteral(column.nestedKey, newValue);
+                return deepMerge(source, target);
+            } catch (e) {
+                // Just return the original value
+            }
+        }
+        return newValue;
+    }
+
+    /**
+     * Manage the value of the cell in function of the type of the column
+     * @param row
+     * @param column
+     * @param config
+     * @returns
+     */
+    public parseRowToCell(row: RowDataType, column: TableColumn, type: string, config: LocalSettings): Literal {
+        let literal = row[column.key] as Literal;
+        if (column.nestedKey && literal !== undefined) {
+            literal = obtainAnidatedLiteral(column.nestedKey, literal as DataObject);
+        }
+        return this.parseLiteral(literal, type, config);
     }
 
     private parseToCalendar(wrapped: WrappedLiteral, format?: string): DateTime {
@@ -124,6 +179,19 @@ class Parse {
             const adjustedValue = DataviewService.getDataviewAPI().value.toString(wrapped.value);
             return adjustedValue === 'true' ? "true" : "false";
         }
+    }
+
+    private parseToEnableSorting(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean): string {
+        let auxMarkdown = '';
+        switch (wrapped.type) {
+            case 'link':
+                auxMarkdown = `${wrapped.value.fileName()}|${wrapped.value.path}`;
+                break;
+            // By default. Use markdown parser
+            default:
+                auxMarkdown = this.parseToMarkdown(wrapped, localSettings, isInline);
+        }
+        return auxMarkdown;
     }
 
     private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean): string {

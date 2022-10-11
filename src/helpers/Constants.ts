@@ -15,6 +15,7 @@ export const InputType = Object.freeze({
   SELECT: 'select',
   TAGS: 'tags',
   MARKDOWN: 'markdown',
+  SORTING: 'sorting',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
   METATADA_TIME: 'metadata_time',

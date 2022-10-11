@@ -3,14 +3,10 @@ import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
-import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
-import { DataObject, Literal } from "obsidian-dataview";
-import {
-  deepMerge,
-  generateLiteral,
-  obtainAnidatedLiteral,
-} from "helpers/DataObjectHelper";
+import { ParseService } from "services/ParseService";
+import { InputType } from "helpers/Constants";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
@@ -31,8 +27,14 @@ const TextCell = (props: CellComponentProps) => {
     (state) => state.actions
   );
 
-  const textCell = tableState.data((state) =>
-    parseTextRowToString(state.rows[row.index], tableColumn)
+  const textCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.TEXT,
+        configInfo.getLocalSettings()
+      ) as string
   );
 
   /** Ref to cell container */
@@ -59,8 +61,14 @@ const TextCell = (props: CellComponentProps) => {
   };
 
   const persistChange = (changedValue: string) => {
+    changedValue = changedValue.trim();
     if (changedValue !== undefined && changedValue !== textCell) {
-      const newCell = parseStringToTextRow(textRow, tableColumn, changedValue);
+      const newCell = ParseService.parseRowToLiteral(
+        textRow,
+        tableColumn,
+        changedValue
+      );
+
       dataActions.updateCell(
         row.index,
         tableColumn,
@@ -89,48 +97,5 @@ const TextCell = (props: CellComponentProps) => {
     />
   );
 };
-
-/**
- * Manage the value of the cell to render as string
- * @param row
- * @param column
- * @returns
- */
-function parseTextRowToString(row: RowDataType, column: TableColumn) {
-  const cellRoot = row[column.key];
-  let textCell = "";
-  if (column.nestedKey && cellRoot !== undefined) {
-    textCell = obtainAnidatedLiteral(column.nestedKey, cellRoot as DataObject);
-  } else {
-    textCell = cellRoot?.toString();
-  }
-  return textCell;
-}
-
-/**
- * Manage the value of the rendered string to save as Literal cell
- * @param row
- * @param column
- * @param newValue
- * @returns
- */
-function parseStringToTextRow(
-  row: RowDataType,
-  column: TableColumn,
-  newValue: string
-): Literal {
-  const originalValue = row[column.key];
-  if (column.nestedKey) {
-    try {
-      // Generate object with the new value using the nested key anidated in fuction of split .
-      const target = (originalValue as DataObject) ?? {};
-      const source = generateLiteral(column.nestedKey, newValue);
-      return deepMerge(source, target);
-    } catch (e) {
-      // Just return the original value
-    }
-  }
-  return newValue.trim();
-}
 
 export default TextCell;

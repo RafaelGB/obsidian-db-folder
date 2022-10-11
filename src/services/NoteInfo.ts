@@ -18,7 +18,7 @@ export default class NoteInfo {
         this.filepath = page.file.path;
     }
 
-    getRowDataType(columns: TableColumn[], config: LocalSettings): RowDataType {
+    getRowDataType(columns: TableColumn[]): RowDataType {
         /** Mandatory fields */
         const aFile: RowDataType = {
             __note__: this
@@ -26,7 +26,7 @@ export default class NoteInfo {
         const dataviewFile = this.page;
         dataviewFile
         /** Metadata fields */
-        aFile[MetadataColumns.FILE] = `${dataviewFile.file.link.fileName()}|${dataviewFile.file.link.path}`;
+        aFile[MetadataColumns.FILE] = dataviewFile.file.link;
         aFile[MetadataColumns.CREATED] = dataviewFile.file.ctime;
         aFile[MetadataColumns.MODIFIED] = dataviewFile.file.mtime;
         aFile[MetadataColumns.TASKS] = dataviewFile.file.tasks;
@@ -43,13 +43,13 @@ export default class NoteInfo {
                 // Map row data type
             ).forEach(column => {
                 if (dataviewFile[column.key] !== undefined) {
-                    aFile[column.key] = ParseService.parseLiteral((dataviewFile[column.key]) as Literal, column.input, config, column.config.isInline);
+                    aFile[column.key] = dataviewFile[column.key];
                 }
             });
         return aFile;
     }
 
-    getAllRowDataType(config: LocalSettings): RowDataType {
+    getAllRowDataType(): RowDataType {
         /** Mandatory fields */
         const aFile: RowDataType = {
             __note__: this
@@ -59,8 +59,7 @@ export default class NoteInfo {
         Object.keys(this.page)
             .filter(key => !["file"].includes(key))
             .forEach(property => {
-                const value = ParseService.parseLiteral((this.page[property]) as Literal, InputType.TEXT, config, false);
-                aFile[property] = value;
+                aFile[property] = this.page[property];
             });
 
         return aFile;
