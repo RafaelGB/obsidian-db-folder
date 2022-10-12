@@ -38,15 +38,15 @@ function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const datetimeOnClick = () => {
+  const datetimeOnClick = async () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
-    dataActions.parseDataOfColumn(
+    await dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.CALENDAR_TIME,
       ddbbConfig
     );
-    columnActions.alterColumnType(
+    await columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.CALENDAR_TIME
     );

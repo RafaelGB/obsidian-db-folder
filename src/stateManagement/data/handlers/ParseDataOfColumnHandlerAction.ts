@@ -1,7 +1,6 @@
 import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { Literal } from "obsidian-dataview";
 import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
@@ -10,14 +9,26 @@ export default class ParseDataOfColumnHandlerAction extends AbstractTableAction<
         const { set, implementation } = tableActionResponse;
         implementation.actions.parseDataOfColumn = (column: TableColumn, input: string, ddbbConfig: LocalSettings) =>
             set((updater) => {
-                const parsedRows = updater.rows.map((row) => ({
-                    ...row,
-                    [column.key]: ParseService.parseLiteral(
-                        row[column.key] as Literal,
-                        input, // Destination type to parse
+                const parsedRows = updater.rows.map((row) => {
+                    // Transform the input into the target type
+                    const parsedValue = ParseService.parseRowToCell(
+                        row,
+                        column,
+                        input,
                         ddbbConfig
-                    ),
-                }));
+                    );
+                    // Construct the new cell with the changed value
+                    const newCell = ParseService.parseRowToLiteral(
+                        row,
+                        column,
+                        parsedValue
+                    );
+                    // return the new row
+                    return {
+                        ...row,
+                        [column.key]: newCell,
+                    }
+                });
                 return { rows: parsedRows };
             });
 
