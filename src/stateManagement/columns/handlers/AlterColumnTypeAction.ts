@@ -4,6 +4,7 @@ import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { randomColor } from "helpers/Colors";
 import { InputType } from "helpers/Constants";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
+import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterColumnTypeHandlerAction extends AbstractTableAction<ColumnsState> {
@@ -33,9 +34,16 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                             const options: OptionSelect[] = [];
                             // Generate selected options
                             parsedRows.forEach((row) => {
-                                if (row[column.key]) {
+                                // Transform the input into the target type
+                                const cellValue = ParseService.parseRowToCell(
+                                    row,
+                                    column,
+                                    targetInput,
+                                    view.diskConfig.yaml.config
+                                );
+                                if (cellValue) {
                                     options.push({
-                                        label: row[column.key]?.toString(),
+                                        label: cellValue?.toString(),
                                         backgroundColor: randomColor(),
                                     });
                                 }

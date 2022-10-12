@@ -26,10 +26,10 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   const columnActions = table.options.meta.tableState.columns(
     (state) => state.actions
   );
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
+  const rows = table.options.meta.tableState.data((state) => state.rows);
+  const dataActions = table.options.meta.tableState.data(
+    (state) => state.actions
+  );
   const ddbbConfig = table.options.meta.tableState.configState(
     (state) => state.ddbbConfig
   );
