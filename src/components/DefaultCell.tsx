@@ -3,8 +3,8 @@ import { InputType } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import SelectCell from "components/cellTypes/SelectCell";
-import CalendarPortal from "components/portals/CalendarPortal";
-import CalendarTimePortal from "components/portals/CalendarTimePortal";
+import CalendarCell from "components/cellTypes/CalendarCell";
+import CalendarTimeCell from "components/cellTypes/CalendarTimeCell";
 import CheckboxCell from "components/cellTypes/CheckboxCell";
 import TaskCell from "components/cellTypes/TaskCell";
 import MarkdownCell from "components/cellTypes/MarkdownCell";
@@ -43,11 +43,11 @@ export default function DefaultCell(
 
       /** Calendar option */
       case InputType.CALENDAR:
-        return <CalendarPortal defaultCell={defaultCell} />;
+        return <CalendarCell defaultCell={defaultCell} />;
 
       /** Calendar with time option */
       case InputType.CALENDAR_TIME:
-        return <CalendarTimePortal defaultCell={defaultCell} />;
+        return <CalendarTimeCell defaultCell={defaultCell} />;
 
       /** Metadata options related with date/datetime */
       case InputType.METATADA_TIME:

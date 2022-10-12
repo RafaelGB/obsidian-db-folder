@@ -56,6 +56,8 @@ class Parse {
                 break;
             case InputType.TASK:
             case InputType.FORMULA:
+            case InputType.INLINKS:
+            case InputType.OUTLINKS:
                 // Do nothing
                 break;
             default:
