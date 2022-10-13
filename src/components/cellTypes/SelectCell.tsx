@@ -1,6 +1,6 @@
 import Relationship from "components/RelationShip";
 import { grey, randomColor } from "helpers/Colors";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { CellComponentProps, RowSelectOption } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import CreatableSelect from "react-select/creatable";
@@ -32,9 +32,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
 
   const [showSelect, setShowSelect] = useState(false);
 
-  const columnActions = table.options.meta.tableState.columns(
-    (state) => state.actions
-  );
+  const columnActions = tableState.columns((state) => state.actions);
 
   function getColor() {
     const match = tableColumn.options.find(
@@ -49,13 +47,21 @@ const SelectCell = (popperProps: CellComponentProps) => {
     color: getColor(),
   };
 
-  const multiOptions = tableColumn.options
-    .sort((a, b) => a.label.localeCompare(b.label))
-    .map((option: RowSelectOption) => ({
-      value: option.label,
-      label: option.label,
-      color: option.backgroundColor,
-    }));
+  const multiOptions = useMemo(
+    () =>
+      tableColumn.options
+        .filter(
+          (option: RowSelectOption) =>
+            option.label !== undefined && option.label !== null
+        )
+        .sort((a, b) => a.label.localeCompare(b.label))
+        .map((option: RowSelectOption) => ({
+          value: option.label,
+          label: option.label,
+          color: option.backgroundColor,
+        })),
+    [selectRow]
+  );
 
   const handleOnChange = (
     newValue: OnChangeValue<any, false>,

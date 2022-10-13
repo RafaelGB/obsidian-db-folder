@@ -71,6 +71,10 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   const multiOptions = useMemo(
     () =>
       tableColumn.options
+        .filter(
+          (option: RowSelectOption) =>
+            option.label !== undefined && option.label !== null
+        )
         .sort((a, b) => a.label.localeCompare(b.label))
         .map((option: RowSelectOption) => ({
           value: option.label,

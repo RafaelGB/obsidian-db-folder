@@ -5,6 +5,8 @@ import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolveNewFilePath } from "helpers/FileManagement";
 import { MetadataColumns } from "helpers/Constants";
+import { Link } from "obsidian-dataview";
+import { DataviewService } from "./DataviewService";
 
 const limitMovingFiles = pLimit(1);
 const limitCreatingFolders = pLimit(1);
@@ -46,7 +48,7 @@ export class FileGroupingService {
       }
 
       await app.fileManager.renameFile(file, filePath);
-      row[MetadataColumns.FILE] = `${file.basename}|${folderPath}/${file.name}`;
+      row[MetadataColumns.FILE] = DataviewService.getDataviewAPI().fileLink(filePath);
       row.__note__.filepath = `${folderPath}/${file.name}`;
       return true;
     });
