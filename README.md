@@ -29,3 +29,5 @@ https://user-images.githubusercontent.com/11924043/172692604-f6a2df6a-85da-4883-
 If you enjoy dbfolder, consider [buy me a coffee](https://www.buymeacoffee.com/5tsytn22v9Z)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/5tsytn22v9Z)
+
+Adding a weird line
