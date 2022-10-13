@@ -156,6 +156,12 @@ class Parse {
                 if (DateTime.isDateTime(wrapped.value)) {
                     return wrapped.value.toFormat(localSettings.datetime_format);
                 } else {
+                    try {
+                        // Try to parse to JSON
+                        return JSON.stringify(wrapped.value);
+                    } catch (e) {
+                        // Do nothing
+                    }
                     // nested metadata exposed as DataObject
                     return wrapped.value;
                 }
