@@ -5,6 +5,7 @@
 - Editions use a new method to update the notes under a queue. It should prevent the plugin from locking the UI when editing a lot of notes or errors editing the same note multiple times
 ### No longer broken
 - support for stack tabs. If a ddbb note is included Obsidian does not crash anymore [ISSUE#435](https://github.com/RafaelGB/obsidian-db-folder/issues/435)
+- empty line was added if yaml did not exist editing inline fields [ISSUE#504](https://github.com/RafaelGB/obsidian-db-folder/issues/504)
 ## 2.7.1
 - Hotfix for 2.7.0 of global settings developer options
 - Experimental support for Objects on text fields
