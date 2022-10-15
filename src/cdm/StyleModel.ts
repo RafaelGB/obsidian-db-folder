@@ -6,11 +6,6 @@ type BaseStyleProps = {
     columnId: string;
 };
 
-export type ColorPickerProps = {
-    options: RowSelectOption[];
-    option: RowSelectOption;
-} & BaseStyleProps;
-
 export type TextAlignmentProps = {
     currentAlignment: string;
 } & BaseStyleProps;

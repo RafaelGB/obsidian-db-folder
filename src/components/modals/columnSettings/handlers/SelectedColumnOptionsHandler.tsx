@@ -1,7 +1,5 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { ColorPickerProps } from "cdm/StyleModel";
-import { ColorPicker } from "components/styles/ColorPicker";
-import { randomColor } from "helpers/Colors";
+import { randomColor, castStringtoHsl, castHslToString } from "helpers/Colors";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import React from "react";
@@ -63,51 +61,65 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       });
 
     options.forEach((option, index) => {
-      const colorPickerProps: ColorPickerProps = {
-        modal: columnSettingsManager.modal,
-        options: options,
-        option: option,
-        columnId: column.id,
-      };
-
-      const optionContainer = new Setting(containerEl).addExtraButton((cb) => {
-        cb.setIcon("cross")
-          .setTooltip("Delete")
-          .onClick(async (): Promise<void> => {
-            const removedOption = options[index];
-            options.splice(index, 1);
-            // Persist changes
-            await view.diskConfig.updateColumnProperties(column.id, {
-              options: options,
-            });
-
-            dataState.actions
-              .removeOptionForAllRows(
-                column,
-                removedOption.label,
-                columnsState.info.getAllColumns(),
-                configState.info.getLocalSettings()
-              )
-              .then(() => {
-                new Notice(
-                  `Option ${removedOption.label} was removed from all rows`,
-                  1500
-                );
-              })
-              .catch((err) => {
-                const errMsg = `Error removing ${removedOption.label}`;
-                LOGGER.error(errMsg, err);
-                new Notice(errMsg, 3000);
+      new Setting(containerEl)
+        // Show current label
+        .addText((text) => {
+          text.setValue(option.label).setDisabled(true);
+        })
+        // Color picker for background color
+        .addColorPicker((colorPicker) => {
+          colorPicker
+            .setValueHsl(castStringtoHsl(option.backgroundColor))
+            .onChange(async () => {
+              const optionIndex = options.findIndex(
+                (option) => option.label === option.label
+              );
+              options[optionIndex].backgroundColor = castHslToString(
+                colorPicker.getValueHsl()
+              );
+              await view.diskConfig.updateColumnProperties(column.id, {
+                options: options,
               });
-            columnHandlerResponse.columnSettingsManager.modal.enableReset =
-              true;
-            // Force refresh of settings
-            columnSettingsManager.reset(columnHandlerResponse);
-          });
-      });
-      createRoot(optionContainer.settingEl.createDiv()).render(
-        <ColorPicker {...colorPickerProps} />
-      );
+              columnHandlerResponse.columnSettingsManager.modal.enableReset =
+                true;
+            });
+        })
+        // Delete button
+        .addExtraButton((cb) => {
+          cb.setIcon("cross")
+            .setTooltip("Delete")
+            .onClick(async (): Promise<void> => {
+              const removedOption = options[index];
+              options.splice(index, 1);
+              // Persist changes
+              await view.diskConfig.updateColumnProperties(column.id, {
+                options: options,
+              });
+
+              dataState.actions
+                .removeOptionForAllRows(
+                  column,
+                  removedOption.label,
+                  columnsState.info.getAllColumns(),
+                  configState.info.getLocalSettings()
+                )
+                .then(() => {
+                  new Notice(
+                    `Option ${removedOption.label} was removed from all rows`,
+                    1500
+                  );
+                })
+                .catch((err) => {
+                  const errMsg = `Error removing ${removedOption.label}`;
+                  LOGGER.error(errMsg, err);
+                  new Notice(errMsg, 3000);
+                });
+              columnHandlerResponse.columnSettingsManager.modal.enableReset =
+                true;
+              // Force refresh of settings
+              columnSettingsManager.reset(columnHandlerResponse);
+            });
+        });
     });
 
     return this.goNext(columnHandlerResponse);
