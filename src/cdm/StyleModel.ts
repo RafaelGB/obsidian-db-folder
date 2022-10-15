@@ -3,7 +3,7 @@ import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSett
 
 type BaseStyleProps = {
     modal: ColumnSettingsModal;
-    columnKey: string;
+    columnId: string;
 };
 
 export type ColorPickerProps = {

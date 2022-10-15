@@ -59,7 +59,7 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                 },
             });
 
-            const row: RowDataType = newNote.getRowDataType(columns, ddbbConfig);
+            const row: RowDataType = newNote.getRowDataType(columns);
             set((state) => {
 
                 return { rows: [...state.rows, row] }

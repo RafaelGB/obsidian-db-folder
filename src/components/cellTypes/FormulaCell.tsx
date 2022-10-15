@@ -31,7 +31,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
       // Save formula response on disk
       if (
         tableColumn.config.persist_formula &&
-        formulaRow[column.id] !== formulaResponse
+        formulaRow[tableColumn.key] !== formulaResponse
       ) {
         dataActions.updateCell(
           row.index,

@@ -26,29 +26,31 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
                 default:
                 // Do nothing
             }
+
             const rowCandidates = get().rows.filter((row) => {
-                return lambdaFilter(row[column.id] as Literal);
+                return lambdaFilter(row[column.key] as Literal);
             });
+
             rowCandidates.map((row) => {
                 const rowTFile = row.__note__.getFile();
                 switch (column.input) {
                     case InputType.TAGS:
-                        row[column.id] = Array.isArray(
-                            row[column.id] as Literal
+                        row[column.key] = Array.isArray(
+                            row[column.key] as Literal
                         ) ?
                             (
-                                row[column.id] as Literal[]
+                                row[column.key] as Literal[]
                             )
                                 .filter(value => value !== option) :
                             [];
                         break;
                     default:
-                        row[column.id] = "";
+                        row[column.key] = "";
                 }
                 EditEngineService.updateRowFileProxy(
                     rowTFile,
-                    column.id,
-                    row[column.id] as Literal,
+                    column.key,
+                    row[column.key] as Literal,
                     columns,
                     ddbbConfig,
                     UpdateRowOptions.COLUMN_VALUE

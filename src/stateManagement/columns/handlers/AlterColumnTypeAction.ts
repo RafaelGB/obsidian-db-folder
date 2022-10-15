@@ -4,62 +4,71 @@ import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { randomColor } from "helpers/Colors";
 import { InputType } from "helpers/Constants";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
+import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterColumnTypeHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
-        const { view, set, implementation } = tableActionResponse;
-        implementation.actions.alterColumnType = (
+        const { view, get, set, implementation } = tableActionResponse;
+        implementation.actions.alterColumnType = async (
             column: TableColumn,
-            input: string,
+            targetInput: string,
             parsedRows?: RowDataType[]
-        ) =>
-            set((updater) => {
-                const typeIndex = updater.columns.findIndex(
-                    (col: TableColumn) => col.id === column.id
-                );
-                if (updater.columns[typeIndex].input === input) {
-                    // If the type is the same, do nothing
-                    return {};
-                }
-
-                const alteredColumns = [...updater.columns];
+        ) => {
+            const typeIndex = get().columns.findIndex(
+                (col: TableColumn) => col.id === column.id
+            );
+            // Alter column type just in case it is not the same
+            if (get().columns[typeIndex].input !== targetInput) {
                 // Save the new type in the disk config
-                view.diskConfig.updateColumnProperties(column.id, {
-                    input: input,
+                await view.diskConfig.updateColumnProperties(column.id, {
+                    input: targetInput,
                 });
-                alteredColumns[typeIndex].input = input;
-                switch (input) {
-                    case InputType.SELECT:
-                    case InputType.TAGS:
-                        const options: OptionSelect[] = [];
-                        // Generate selected options
-                        parsedRows.forEach((row) => {
-                            if (row[column.id]) {
-                                options.push({
-                                    label: row[column.id]?.toString(),
-                                    backgroundColor: randomColor(),
-                                });
-                            }
-                        });
-                        alteredColumns[typeIndex].options =
-                            obtainUniqueOptionValues(options);
-                        break;
-                    default:
-                    /**
-                     * GENERIC COLUMN TYPE Doesn't have options
-                     * Aplied to:
-                     * - TEXT
-                     * - NUMBER
-                     * - CALENDAR
-                     * - CALENDAR_TIME
-                     * - CHECKBOX
-                     * - FORMULA
-                     */
-                }
-                return { columns: alteredColumns };
-            });
+                set((updater) => {
+
+                    const alteredColumns = [...updater.columns];
+                    alteredColumns[typeIndex].input = targetInput;
+                    switch (targetInput) {
+                        case InputType.SELECT:
+                        case InputType.TAGS:
+                            const options: OptionSelect[] = [];
+                            // Generate selected options
+                            parsedRows.forEach((row) => {
+                                // Transform the input into the target type
+                                const cellValue = ParseService.parseRowToCell(
+                                    row,
+                                    column,
+                                    targetInput,
+                                    view.diskConfig.yaml.config
+                                );
+                                if (cellValue) {
+                                    options.push({
+                                        label: cellValue?.toString(),
+                                        backgroundColor: randomColor(),
+                                    });
+                                }
+                            });
+                            alteredColumns[typeIndex].options =
+                                obtainUniqueOptionValues(options);
+                            break;
+                        default:
+                        /**
+                         * GENERIC COLUMN TYPE Doesn't have options
+                         * Aplied to:
+                         * - TEXT
+                         * - NUMBER
+                         * - CALENDAR
+                         * - CALENDAR_TIME
+                         * - CHECKBOX
+                         * - FORMULA
+                         */
+                    }
+                    return { columns: alteredColumns };
+                });
+            }
+        };
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
+
     }
 }

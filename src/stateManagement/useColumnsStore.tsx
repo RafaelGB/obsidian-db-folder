@@ -33,6 +33,7 @@ function mockColumnsState(): ColumnsState {
       alterSorting: null,
       addOptionToColumn: null,
       alterColumnType: null,
+      alterColumnId: null,
       alterColumnLabel: null,
       alterColumnSize: null,
       alterIsHidden: null,

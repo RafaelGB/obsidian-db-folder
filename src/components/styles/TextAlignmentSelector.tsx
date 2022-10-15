@@ -10,7 +10,7 @@ import { TextAlignmentProps } from "cdm/StyleModel";
 import { COLUMN_ALIGNMENT_OPTIONS, StyleVariables } from "helpers/Constants";
 
 export default function TextAlignmentSelector(props: TextAlignmentProps) {
-  const { modal, columnKey, currentAlignment } = props;
+  const { modal, columnId, currentAlignment } = props;
   const { view } = modal;
   const [alignment, setAlignment] = React.useState(currentAlignment);
 
@@ -20,7 +20,7 @@ export default function TextAlignmentSelector(props: TextAlignmentProps) {
   ) => {
     if (newAlignment !== null) {
       // Persist changes
-      await view.diskConfig.updateColumnConfig(columnKey, {
+      await view.diskConfig.updateColumnConfig(columnId, {
         content_alignment: newAlignment,
       });
       modal.enableReset = true;

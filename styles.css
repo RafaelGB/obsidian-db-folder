@@ -294,8 +294,8 @@ div.database-plugin__checkbox {
   align-items: center;
   cursor: pointer;
   z-index: 3;
-  position: fixed;
-  margin-top: 2.65rem;
+  position: sticky;
+  left: 0;
   bottom: 0;
   background-color: var(--background-primary);
 }
@@ -393,7 +393,6 @@ div.database-plugin__checkbox {
 
 .database-plugin__table {
   position: relative;
-  top: 2.65rem;
   border-spacing: 0;
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
@@ -427,6 +426,7 @@ div.database-plugin__checkbox {
 .database-plugin__sticky-level-2 {
   position: -webkit-sticky;
   position: sticky;
+  left: 0;
   top: 2.65rem;
   z-index: 3;
 }
@@ -438,8 +438,10 @@ div.database-plugin__checkbox {
 
 .database-plugin__navbar {
   width: 100%;
-  position: fixed;
+  position: sticky;
+  position: -webkit-sticky;
   left: 0;
+  top: 0;
   z-index: 2;
 }
 
@@ -545,6 +547,23 @@ div.database-plugin__checkbox {
 /**
 *  Database Styles
 */
+.dbfolder-table-container {
+  contain: content;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.database-plugin__scroll-horizontal {
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.database-plugin__scroll-container {
+  will-change: transform;
+}
+
 .dbfolder-table-container tr input {
   background: var(--background-modifier-box-shadow);
 }
@@ -1034,15 +1053,7 @@ div.database-plugin__checkbox {
   .react-datepicker-time__input-container
   .react-datepicker-time__input
   input[type="time"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
   margin: 0;
-}
-
-.react-datepicker__input-time-container
-  .react-datepicker-time__input-container
-  .react-datepicker-time__input
-  input[type="time"] {
-  -moz-appearance: textfield;
 }
 
 .react-datepicker__input-time-container

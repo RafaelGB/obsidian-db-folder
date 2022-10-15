@@ -23,8 +23,10 @@ class EditEngine {
      * @param option 
      */
     public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
-        await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
-            showDBError(EditionError.YamlRead, err);
+        queueMicrotask(async () => {
+            await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
+                showDBError(EditionError.YamlRead, err);
+            });
         });
     }
 
@@ -84,13 +86,15 @@ class EditEngine {
         async function persistFrontmatter(deletedColumn?: string): Promise<void> {
             const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
             const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
-            const noteObject = {
-                action: 'replace',
-                file: file,
-                regexp: frontmatterGroupRegex,
-                newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
-            };
-            await VaultManagerDB.editNoteContent(noteObject);
+            if (frontmatterFieldsText) {
+                const noteObject = {
+                    action: 'replace',
+                    file: file,
+                    regexp: frontmatterGroupRegex,
+                    newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
+                };
+                await VaultManagerDB.editNoteContent(noteObject);
+            }
         }
 
         /*******************************************************************************************
