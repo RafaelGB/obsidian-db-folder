@@ -23,7 +23,7 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
                             const validatedNumber = isNaN(parsedNumber) ? config.media_height : parsedNumber;
                             config.media_height = validatedNumber;
                             // Persist changes in local config
-                            await view.diskConfig.updateColumnConfig(column.key, {
+                            await view.diskConfig.updateColumnConfig(column.id, {
                                 media_height: validatedNumber
                             });
                             columnSettingsManager.modal.enableReset = true;
@@ -36,7 +36,7 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
                             const parsedNumber = Number(value);
                             const validatedNumber = isNaN(parsedNumber) ? config.media_width : parsedNumber;
                             // Persist changes in local config
-                            view.diskConfig.updateColumnConfig(column.key, {
+                            view.diskConfig.updateColumnConfig(column.id, {
                                 media_width: validatedNumber
                             });
                         })
@@ -45,7 +45,7 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
                         .setTooltip("Restart default values")
                         .onClick(async (): Promise<void> => {
                             // Persist change
-                            view.diskConfig.updateColumnConfig(column.key, {
+                            view.diskConfig.updateColumnConfig(column.id, {
                                 media_width: dbSettings.global_settings.media_settings.width,
                                 media_height: dbSettings.global_settings.media_settings.height
                             });

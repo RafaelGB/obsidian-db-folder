@@ -8,7 +8,7 @@ export default class RemoveDataOfColumnHandlerAction extends AbstractTableAction
         implementation.actions.removeDataOfColumn = (column: TableColumn) => set((state) => {
             const newRows = [...state.rows];
             newRows.forEach((row) => {
-                delete row[column.id];
+                delete row[column.key];
             });
 
             return { rows: newRows };

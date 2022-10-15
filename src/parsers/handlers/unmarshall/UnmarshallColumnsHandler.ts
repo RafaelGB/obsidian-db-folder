@@ -31,8 +31,8 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
 
             // Lvl4: column config
             Object.keys(column.config).forEach(key => {
-                const connfValue = parseValuetoSanitizeYamlValue(column.config[key]?.toString(), config);
-                this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${connfValue}`);
+                const confValue = parseValuetoSanitizeYamlValue(column.config[key]?.toString(), config);
+                this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${confValue}`);
             });
         };
         return this.goNext(handlerResponse);

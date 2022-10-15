@@ -114,7 +114,7 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
                     },
                 });
 
-                rows.push(newNote.getRowDataType(columns, config));
+                rows.push(newNote.getRowDataType(columns));
             }
         }
 

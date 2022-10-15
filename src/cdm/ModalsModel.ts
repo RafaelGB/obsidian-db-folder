@@ -26,7 +26,7 @@ export type ColumnSettingsHandlerResponse = {
 
 export type ColumnSettingsModalProps = {
     dataState: Pick<DataState, "actions">,
-    columnState: Pick<ColumnsState, "info">,
+    columnState: Pick<ColumnsState, "info" | "actions">,
     configState: Pick<ConfigState, "info">,
     view: DatabaseView,
     headerMenuProps: HeaderMenuProps

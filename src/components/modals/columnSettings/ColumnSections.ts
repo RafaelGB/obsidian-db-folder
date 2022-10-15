@@ -9,6 +9,7 @@ import { LinkAliasToggleHandler } from "components/modals/columnSettings/handler
 import { FormulaInputHandler } from "components/modals/columnSettings/handlers/automations/FormulaInputHandler";
 import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/styles/AlignmentSelectorHandler";
 import { ToggleWrapContentHandler } from "components/modals/columnSettings/handlers/styles/ToggleWrapContentHandler";
+import { ColumnIdInputHandler } from "components/modals/columnSettings/handlers/ColumnIdInputHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -61,6 +62,7 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
                 // do nothing
                 break;
             default:
+                particularHandlers.push(new ColumnIdInputHandler());
                 particularHandlers.push(new InlineToggleHandler());
         }
         return particularHandlers;

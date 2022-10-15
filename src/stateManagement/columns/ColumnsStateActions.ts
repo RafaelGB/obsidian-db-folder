@@ -9,6 +9,7 @@ import AlterColumnLabelHandlerAction from "stateManagement/columns/handlers/Alte
 import AlterColumnSizeHandlerAction from "stateManagement/columns/handlers/AlterColumnSizeAction";
 import InfoColumnFunctions from "stateManagement/columns/handlers/InfoColumnFunctions";
 import AlterIsHiddenColumnHandlerAction from "stateManagement/columns/handlers/AlterIsHiddenColumnAction";
+import AlterColumnIdHandlerAction from "stateManagement/columns/handlers/AlterColumnIdAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
 class ColumnsStateActions extends AbstractChain<TableActionResponse<ColumnsState>> {
     protected getHandlers(): AbstractHandler<TableActionResponse<ColumnsState>>[] {
@@ -22,6 +23,7 @@ class ColumnsStateActions extends AbstractChain<TableActionResponse<ColumnsState
             new AlterColumnSizeHandlerAction(),
             new AlterIsHiddenColumnHandlerAction(),
             new InfoColumnFunctions(),
+            new AlterColumnIdHandlerAction()
 
         ];
     }

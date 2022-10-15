@@ -16,8 +16,8 @@ export default class GroupFilesHandlerAction extends AbstractTableAction<DataSta
         view.diskConfig.yaml.config
       );
       await FileGroupingService.removeEmptyFolders(
-         folderPath,
-         view.diskConfig.yaml.config
+        folderPath,
+        view.diskConfig.yaml.config
       );
       const rowsMap = new Map(movedRows.map((row) => [row.__note__.filepath, row]));
       set((state) => {

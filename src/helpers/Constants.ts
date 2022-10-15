@@ -15,6 +15,7 @@ export const InputType = Object.freeze({
   SELECT: 'select',
   TAGS: 'tags',
   MARKDOWN: 'markdown',
+  SORTING: 'sorting',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
   METATADA_TIME: 'metadata_time',
@@ -92,6 +93,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   FILE:
   {
     key: MetadataColumns.FILE,
+    id: MetadataColumns.FILE,
     input: InputType.MARKDOWN,
     label: MetadataLabels.FILE,
     accessorKey: MetadataColumns.FILE,
@@ -106,6 +108,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
+    id: MetadataColumns.ADD_COLUMN,
     input: InputType.NEW_COLUMN,
     label: MetadataLabels.ADD_COLUMN,
     accessorKey: MetadataColumns.ADD_COLUMN,
@@ -117,6 +120,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   CREATED: {
     key: MetadataColumns.CREATED,
+    id: MetadataColumns.CREATED,
     input: InputType.METATADA_TIME,
     label: MetadataLabels.CREATED,
     accessorKey: MetadataColumns.CREATED,
@@ -128,6 +132,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
+    id: MetadataColumns.MODIFIED,
     input: InputType.METATADA_TIME,
     label: MetadataLabels.MODIFIED,
     accessorKey: MetadataColumns.MODIFIED,
@@ -139,6 +144,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   TASKS: {
     key: MetadataColumns.TASKS,
+    id: MetadataColumns.TASKS,
     input: InputType.TASK,
     label: MetadataLabels.TASK,
     accessorKey: MetadataColumns.TASKS,
@@ -150,6 +156,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   INLINKS: {
     key: MetadataColumns.INLINKS,
+    id: MetadataColumns.INLINKS,
     input: InputType.INLINKS,
     label: MetadataLabels.INLINKS,
     accessorKey: MetadataColumns.INLINKS,
@@ -161,6 +168,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   OUTLINKS: {
     key: MetadataColumns.OUTLINKS,
+    id: MetadataColumns.OUTLINKS,
     input: InputType.OUTLINKS,
     label: MetadataLabels.OUTLINKS,
     accessorKey: MetadataColumns.OUTLINKS,
@@ -325,7 +333,7 @@ export function getOperatorFilterValue(keyToFind: string): string {
 }
 
 export const MarkdownBreakerRules = Object.freeze({
-  INIT_CHARS: ['`', '"', '[', '{', '*', '!', '>'],
+  INIT_CHARS: ['`', '[', '{', '*', '!', '>'],
   BETWEEN_CHARS: [':', '"', '#'],
   UNIQUE_CHARS: ['?'],
 })

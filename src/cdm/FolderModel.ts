@@ -34,26 +34,36 @@ export type Models = {
 }
 
 export interface ConfigColumn {
+    /** Mandatory */
     enable_media_view: boolean;
-    link_alias_enabled: boolean;
     media_width: number;
     media_height: number;
     isInline: boolean;
+    /** Circunstancial */
     content_alignment?: string;
     wrap_content?: boolean;
+    // Text
+    link_alias_enabled?: boolean;
+    // Tasks
     task_hide_completed?: boolean;
+    // Formulas
     formula_query?: string;
     persist_formula?: boolean;
+    /** Extras from yaml */
     [key: string]: Literal;
 }
 
 export type BaseColumn = {
+    /** Mandatory */
     accessorKey: string;
     label: string;
     key: string;
     input: string;
-    csvCandidate?: boolean;
+    config: ConfigColumn;
+    /** Circunstancial */
+    nestedKey?: string;
     options?: RowSelectOption[];
+    csvCandidate?: boolean;
     width?: number;
     position?: number;
     isMetadata?: boolean;
@@ -63,7 +73,6 @@ export type BaseColumn = {
     isHidden?: boolean;
     skipPersist?: boolean;
     isDragDisabled?: boolean;
-    config: ConfigColumn;
 }
 export type TableColumn = ColumnDef<RowDataType, Literal> & BaseColumn;
 

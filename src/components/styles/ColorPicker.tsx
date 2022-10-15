@@ -5,7 +5,7 @@ import { c } from "helpers/StylesHelper";
 import { castHslToString } from "helpers/Colors";
 
 export function ColorPicker(colorPickerProps: ColorPickerProps) {
-  const { modal, options, option, columnKey } = colorPickerProps;
+  const { modal, options, option, columnId } = colorPickerProps;
   const { view } = modal;
   const [colorState, setColorState] = React.useState(option.backgroundColor);
   const [showColorPicker, setShowColorPicker] = React.useState(false);
@@ -26,7 +26,7 @@ export function ColorPicker(colorPickerProps: ColorPickerProps) {
   ) {
     handleChange(color, event);
     // Persist changes
-    await view.diskConfig.updateColumnProperties(columnKey, {
+    await view.diskConfig.updateColumnProperties(columnId, {
       options: options,
     });
     modal.enableReset = true;

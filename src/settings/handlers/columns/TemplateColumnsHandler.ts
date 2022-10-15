@@ -35,8 +35,8 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                         selected_file = value;
                     });
                 }).addExtraButton((cb) => {
-                    cb.setIcon("create-new")
-                        .setTooltip("Load columns from file")
+                    cb.setIcon("save")
+                        .setTooltip("Save columns from file")
                         .onClick(async (): Promise<void> => {
                             const tfile = resolve_tfile(selected_file);
                             const columns = await obtainColumnsFromFile(tfile);
@@ -53,8 +53,8 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                 .setName('Use all fields')
                 .setDesc('WARNING! This will override any previous columns')
                 .addButton((button) => {
-                    button.setIcon("create-new")
-                        .setTooltip("Load columns from file")
+                    button.setIcon("save")
+                        .setTooltip("Save all possible columns")
                         .onClick(async (): Promise<void> => {
                             const allColumns = await obtainColumnsFromRows(
                                 view,

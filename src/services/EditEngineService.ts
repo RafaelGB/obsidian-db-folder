@@ -86,13 +86,15 @@ class EditEngine {
         async function persistFrontmatter(deletedColumn?: string): Promise<void> {
             const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
             const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
-            const noteObject = {
-                action: 'replace',
-                file: file,
-                regexp: frontmatterGroupRegex,
-                newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
-            };
-            await VaultManagerDB.editNoteContent(noteObject);
+            if (frontmatterFieldsText) {
+                const noteObject = {
+                    action: 'replace',
+                    file: file,
+                    regexp: frontmatterGroupRegex,
+                    newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
+                };
+                await VaultManagerDB.editNoteContent(noteObject);
+            }
         }
 
         /*******************************************************************************************

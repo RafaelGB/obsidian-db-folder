@@ -4,22 +4,28 @@ import DatePicker from "react-datepicker";
 import { Portal } from "@mui/material";
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
+import { ParseService } from "services/ParseService";
+import { InputType } from "helpers/Constants";
 
-const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
+const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
   const { row, table, column } = defaultCell;
-  const { tableState, view } = table.options.meta;
+  const { tableState } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
+
   const dataActions = tableState.data((state) => state.actions);
-
-  const calendatTimeRow = tableState.data((state) => state.rows[row.index]);
-
+  const calendarRow = tableState.data((state) => state.rows[row.index]);
   const columnsInfo = tableState.columns((state) => state.info);
-
   const configInfo = tableState.configState((state) => state.info);
-
-  // Calendar state
-  const calendarTimeState = calendatTimeRow[tableColumn.key];
+  const calendarCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.CALENDAR_TIME,
+        configInfo.getLocalSettings()
+      ) as DateTime
+  );
 
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -31,10 +37,17 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
 
   function handleCalendarChange(date: Date) {
     const changed = date !== null ? DateTime.fromJSDate(date) : null;
+
+    const newCell = ParseService.parseRowToLiteral(
+      calendarRow,
+      tableColumn,
+      changed
+    );
+
     dataActions.updateCell(
       row.index,
       tableColumn,
-      changed,
+      newCell,
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
@@ -53,8 +66,8 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
       <DatePicker
         dateFormat={configInfo.getLocalSettings().datetime_format}
         selected={
-          DateTime.isDateTime(calendarTimeState)
-            ? (calendarTimeState as unknown as DateTime).toJSDate()
+          DateTime.isDateTime(calendarCell)
+            ? (calendarCell as unknown as DateTime).toJSDate()
             : null
         }
         onChange={handleCalendarChange}
@@ -72,8 +85,8 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   ) : (
     <div onClick={handleSpanOnClick}>
       <span className="calendar-time" style={{ width: column.getSize() }}>
-        {DateTime.isDateTime(calendarTimeState)
-          ? (calendarTimeState as DateTime).toFormat(
+        {DateTime.isDateTime(calendarCell)
+          ? (calendarCell as DateTime).toFormat(
               configInfo.getLocalSettings().datetime_format
             )
           : null}
@@ -82,4 +95,4 @@ const CalendarTimePortal = (calendarTimeProps: CellComponentProps) => {
   );
 };
 
-export default CalendarTimePortal;
+export default CalendarTimeCell;

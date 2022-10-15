@@ -11,7 +11,7 @@ export class ToggleWrapContentHandler extends AbstractHandlerClass<ColumnSetting
     const { view } = columnSettingsManager.modal;
     const wrap_content_togle_promise = async (value: boolean): Promise<void> => {
       // Persist value
-      await view.diskConfig.updateColumnConfig(column.key, {
+      await view.diskConfig.updateColumnConfig(column.id, {
         wrap_content: value,
       });
       columnSettingsManager.modal.enableReset = true;

@@ -16,7 +16,7 @@ const dbfolderColumnSortingFn: (
   ): number => {
     const a = ParseService.parseLiteral(
       rowA.getValue<Literal>(columnId),
-      InputType.MARKDOWN,
+      InputType.SORTING,
       ddbbConfig,
       true
     )
@@ -24,7 +24,7 @@ const dbfolderColumnSortingFn: (
       .toLowerCase();
     const b = ParseService.parseLiteral(
       rowB.getValue<Literal>(columnId),
-      InputType.MARKDOWN,
+      InputType.SORTING,
       ddbbConfig,
       true
     )

@@ -6,7 +6,7 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
-import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
+import { ConfigColumn, NoteContentAction, TableColumn } from 'cdm/FolderModel';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
@@ -75,15 +75,30 @@ export default class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(oldColumnId: string, newColumnId: string, newLabel: string) {
-        // clone current column configuration
-        const currentCol = this.yaml.columns[oldColumnId];
-        // update column id
-        currentCol.label = newLabel;
-        currentCol.accessorKey = newColumnId;
-        currentCol.key = newColumnId;
-        delete this.yaml.columns[oldColumnId];
-        this.yaml.columns[newColumnId] = currentCol;
+    async updateColumnKey(currentCol: TableColumn, newColumnKey: string, newNestedKey: string[]): Promise<void> {
+        Object
+            .entries(this.yaml.columns)
+            .forEach(([key, value]) => {
+                if (value.key === currentCol.key) {
+                    if (currentCol.key !== newColumnKey) {
+                        delete this.yaml.columns[key];
+                        value.key = newColumnKey;
+                        value.accessorKey = newColumnKey;
+                        if (value.nestedKey === currentCol.nestedKey) {
+                            value.nestedKey = newNestedKey.join('.');
+                            this.yaml.columns[`${newColumnKey}${newNestedKey ? `-${newNestedKey}` : ''}`] = value;
+                        } else {
+                            this.yaml.columns[`${newColumnKey}${value.nestedKey ? `-${value.nestedKey}` : ''}`] = value;
+                        }
+                    }
+                    else if (value.nestedKey === currentCol.nestedKey) {
+                        delete this.yaml.columns[key];
+                        value.nestedKey = newNestedKey.join('.');
+                        this.yaml.columns[`${value.key}${newNestedKey ? `-${newNestedKey.join("-")}` : ''}`] = value;
+                    }
+                }
+            });
+
         // save on disk
         await this.saveOnDisk();
     }
