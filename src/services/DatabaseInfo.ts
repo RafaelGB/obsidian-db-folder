@@ -79,18 +79,22 @@ export default class DatabaseInfo {
         Object
             .entries(this.yaml.columns)
             .forEach(([key, value]) => {
+                // Check if column key is the same as the one we are updating 
                 if (value.key === currentCol.key) {
+                    // Check if we are updating the key
                     if (currentCol.key !== newColumnKey) {
                         delete this.yaml.columns[key];
                         value.key = newColumnKey;
                         value.accessorKey = newColumnKey;
+                        // If the nested key is the same as the column key, we use the new column key
                         if (value.nestedKey === currentCol.nestedKey) {
                             value.nestedKey = newNestedKey.join('.');
-                            this.yaml.columns[`${newColumnKey}${newNestedKey ? `-${newNestedKey}` : ''}`] = value;
+                            this.yaml.columns[`${newColumnKey}${newNestedKey.length > 0 ? `-${newNestedKey}` : ''}`] = value;
                         } else {
                             this.yaml.columns[`${newColumnKey}${value.nestedKey ? `-${value.nestedKey}` : ''}`] = value;
                         }
                     }
+                    // Check if we are updating the nested key without changing the column key
                     else if (value.nestedKey === currentCol.nestedKey) {
                         delete this.yaml.columns[key];
                         value.nestedKey = newNestedKey.join('.');
