@@ -2,8 +2,6 @@ import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { randomColor, castStringtoHsl, castHslToString } from "helpers/Colors";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
-import React from "react";
-import { createRoot } from "react-dom/client";
 import { LOGGER } from "services/Logger";
 
 export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
@@ -71,10 +69,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
           colorPicker
             .setValueHsl(castStringtoHsl(option.backgroundColor))
             .onChange(async () => {
-              const optionIndex = options.findIndex(
-                (option) => option.label === option.label
-              );
-              options[optionIndex].backgroundColor = castHslToString(
+              options[index].backgroundColor = castHslToString(
                 colorPicker.getValueHsl()
               );
               await view.diskConfig.updateColumnProperties(column.id, {

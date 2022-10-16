@@ -43,17 +43,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     } else {
       // In case of new tag, generate random color
       const color = randomColor();
-      const newOption: RowSelectOption = {
-        label: tag,
-        backgroundColor: color,
-      };
-      const currentColumn = columnsInfo
-        .getAllColumns()
-        .find((col: TableColumn) => col.key === tableColumn.key);
-      currentColumn.options.push(newOption);
-      table.options.meta.view.diskConfig.updateColumnProperties(column.id, {
-        options: currentColumn.options,
-      });
+      columnActions.addOptionToColumn(tableColumn, tag, color);
       return color;
     }
   }
