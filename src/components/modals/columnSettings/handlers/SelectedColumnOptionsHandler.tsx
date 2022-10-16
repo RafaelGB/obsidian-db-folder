@@ -59,10 +59,57 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       });
 
     options.forEach((option, index) => {
+      let currentLabel = option.label;
       new Setting(containerEl)
         // Show current label
         .addText((text) => {
-          text.setValue(option.label).setDisabled(true);
+          text
+            .setValue(currentLabel)
+            .onChange(async (value: string): Promise<void> => {
+              currentLabel = value;
+            });
+        })
+        // Edit label button
+        .addExtraButton((cb) => {
+          cb.setIcon("pencil")
+            .setTooltip("Save new label")
+            .onClick(async (): Promise<void> => {
+              const oldLabel = option.label;
+              if (currentLabel === oldLabel) {
+                new Notice(
+                  `Option label "${currentLabel}" was not changed!`,
+                  1500
+                );
+                return;
+              }
+              // Persist on disk
+              options[index].label = currentLabel;
+              await view.diskConfig.updateColumnProperties(column.id, {
+                options: options,
+              });
+              // Update in memory
+              dataState.actions
+                .editOptionForAllRows(
+                  column,
+                  oldLabel,
+                  currentLabel,
+                  columnsState.info.getAllColumns(),
+                  configState.info.getLocalSettings()
+                )
+                .then(() => {
+                  new Notice(
+                    `Option was updated for all rows. Please refresh the view to see the changes.`,
+                    1500
+                  );
+                })
+                .catch((err) => {
+                  const errMsg = `Error editing ${currentLabel}`;
+                  LOGGER.error(errMsg, err);
+                  new Notice(errMsg, 3000);
+                });
+              columnHandlerResponse.columnSettingsManager.modal.enableReset =
+                true;
+            });
         })
         // Color picker for background color
         .addColorPicker((colorPicker) => {

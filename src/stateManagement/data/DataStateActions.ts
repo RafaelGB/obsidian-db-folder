@@ -11,6 +11,7 @@ import RemoveOptionForAllRowsAction from "stateManagement/data/handlers/RemoveOp
 import RenameFileHandlerAction from "stateManagement/data/handlers/RenameFileHandlerAction";
 import SaveDataFromFileHandlerAction from "stateManagement/data/handlers/SaveDataFromFileHandlerAction";
 import GroupFilesHandlerAction from "stateManagement/data/handlers/GroupFilesHandlerAction";
+import EditOptionForAllRowsHandlerAction from "stateManagement/data/handlers/EditOptionForAllRowsHandlerAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
 
 class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
@@ -23,6 +24,7 @@ class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
       new RemoveRowHandlerAction(),
       new RemoveDataOfColumnHandlerAction(),
       new DataviewRefreshHandlerAction(),
+      new EditOptionForAllRowsHandlerAction(),
       new RemoveOptionForAllRowsAction(),
       new RenameFileHandlerAction(),
       new SaveDataFromFileHandlerAction(),
