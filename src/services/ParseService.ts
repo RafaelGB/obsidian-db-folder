@@ -195,6 +195,12 @@ class Parse {
             case 'link':
                 auxMarkdown = `${wrapped.value.fileName()}|${wrapped.value.path}`;
                 break;
+            case 'object':
+            case 'date':
+                if (DateTime.isDateTime(wrapped.value)) {
+                    auxMarkdown = wrapped.value.toMillis().toString();
+                    break;
+                }
             // By default. Use markdown parser
             default:
                 auxMarkdown = this.parseToMarkdown(wrapped, localSettings, isInline);
@@ -209,7 +215,6 @@ class Parse {
             case 'number':
                 auxMarkdown = wrapped.value.toString();
                 break;
-
             case 'array':
                 auxMarkdown = wrapped.value
                     .map(v => this.parseToMarkdown(DataviewService.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
