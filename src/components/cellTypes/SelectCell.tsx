@@ -62,7 +62,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
       tableColumn.options
         .filter(
           (option: RowSelectOption) =>
-            option.label !== undefined && option.label !== null
+            option && option.label !== undefined && option.label !== null
         )
         .sort((a, b) => a.label.localeCompare(b.label))
         .map((option: RowSelectOption) => ({
