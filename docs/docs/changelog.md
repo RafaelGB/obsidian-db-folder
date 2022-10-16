@@ -1,3 +1,8 @@
+## 2.7.3
+### Improved
+- Use of Obsidian 1.0 color picker [ISSUE#497](https://github.com/RafaelGB/obsidian-db-folder/issues/497)
+### No longer broken
+- Hotfix with rename ids breaking the rendering of the plugin [ISSUE#505](https://github.com/RafaelGB/obsidian-db-folder/issues/505)
 ## 2.7.2
 ### Shiny new things
 - Edit nested metadata arrives! You can now edit nested metadata in the cell editor [ISSUE#442](https://github.com/RafaelGB/obsidian-db-folder/issues/442)

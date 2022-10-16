@@ -38,21 +38,31 @@ const SelectCell = (popperProps: CellComponentProps) => {
     const match = tableColumn.options.find(
       (option: { label: string }) => option.label === selectCell
     );
-    return (match && match.backgroundColor) || grey(200);
+    if (match) {
+      return match.backgroundColor;
+    } else {
+      // In case of new select, generate random color
+      const color = randomColor();
+      columnActions.addOptionToColumn(tableColumn, selectCell, color);
+      return color;
+    }
   }
 
-  const defaultValue = {
-    label: selectCell?.toString(),
-    value: selectCell?.toString(),
-    color: getColor(),
-  };
+  const defaultValue = useMemo(
+    () => ({
+      label: selectCell?.toString(),
+      value: selectCell?.toString(),
+      color: selectCell ? getColor() : grey(200),
+    }),
+    [selectCell]
+  );
 
   const multiOptions = useMemo(
     () =>
       tableColumn.options
         .filter(
           (option: RowSelectOption) =>
-            option.label !== undefined && option.label !== null
+            option && option.label !== undefined && option.label !== null
         )
         .sort((a, b) => a.label.localeCompare(b.label))
         .map((option: RowSelectOption) => ({
