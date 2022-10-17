@@ -1,11 +1,10 @@
-import { Notice } from "obsidian";
+import { normalizePath, Notice } from "obsidian";
 import { LOGGER } from "services/Logger";
 import pLimit from "p-limit";
 import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolveNewFilePath } from "helpers/FileManagement";
 import { MetadataColumns } from "helpers/Constants";
-import { Link } from "obsidian-dataview";
 import { DataviewService } from "./DataviewService";
 
 const limitMovingFiles = pLimit(1);
@@ -54,12 +53,11 @@ export class FileGroupingService {
     });
 
   static createFolder = async (folderPath: string): Promise<void> =>
-    limitCreatingFolders(async () => {
-      await app.vault.adapter.exists(folderPath).then(async (exists) => {
-        if (!exists) {
-          await app.vault.createFolder(`${folderPath}/`);
-        }
-      });
+    await limitCreatingFolders(async () => {
+      const isFolderExist = await app.vault.adapter.exists(normalizePath(folderPath));
+      if (!isFolderExist) {
+        await app.vault.createFolder(`${folderPath}/`);
+      }
     });
 
   static organizeNotesIntoSubfolders = async (
