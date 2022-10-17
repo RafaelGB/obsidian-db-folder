@@ -1,10 +1,9 @@
 import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { InputType, UpdateRowOptions } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { EditEngineService } from "services/EditEngineService";
-import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class EditOptionForAllRowsHandlerAction extends AbstractTableAction<DataState> {
@@ -12,6 +11,7 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
         const { get, implementation } = tableActionResponse;
         implementation.actions.editOptionForAllRows = async (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => {
+            // Lambda to select the rows to update
             let lambdaFilter: (cellValue: Literal) => boolean;
             switch (column.input) {
                 case InputType.TAGS:
@@ -30,57 +30,35 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
                 default:
                 // Do nothing
             }
+            // Lambda to update the content of the column of the selected rows
+            let lambdaUpdate: (cellValue: Literal) => Literal;
+            switch (column.input) {
+                case InputType.TAGS:
+                    lambdaUpdate = (cellValue: Literal) => {
+                        const array = Array.isArray(cellValue)
+                            ? (cellValue as Literal[])
+                            : []
+                        return array.map(value => value?.toString() === oldLabel ? newLabel : value);
+                    }
+                    break;
+                case InputType.SELECT:
+                    lambdaUpdate = (cellValue: Literal) => {
+                        return newLabel;
+                    };
+                    break;
+                default:
+                // Do nothing
+            }
 
-            const rowCandidates = get().rows.filter((row) => {
-                const cellContent = ParseService.parseRowToCell(
-                    row,
-                    column,
-                    column.input,
-                    ddbbConfig
-                );
-                return lambdaFilter(cellContent);
-            });
-
-            rowCandidates.map((row) => {
-                const rowTFile = row.__note__.getFile();
-                const cellContent = ParseService.parseRowToCell(
-                    row,
-                    column,
-                    column.input,
-                    ddbbConfig
-                );
-
-                let editedCell: Literal;
-                switch (column.input) {
-                    case InputType.TAGS:
-                        editedCell = Array.isArray(
-                            cellContent
-                        ) ?
-                            (
-                                cellContent as Literal[]
-                            )
-                                .map(value => value === oldLabel ? newLabel : value) :
-                            [];
-                        break;
-                    default:
-                        editedCell = newLabel;
-                }
-
-                const editedRow = ParseService.parseRowToLiteral(
-                    row,
-                    column,
-                    editedCell
-                );
-
-                EditEngineService.updateRowFileProxy(
-                    rowTFile,
-                    column.key,
-                    editedRow,
-                    columns,
-                    ddbbConfig,
-                    UpdateRowOptions.COLUMN_VALUE
-                );
-            });
+            // Update the rows batch processing
+            EditEngineService.batchUpdateRowFiles(
+                lambdaUpdate,
+                lambdaFilter,
+                get().rows,
+                column,
+                columns,
+                ddbbConfig
+            )
         }
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
