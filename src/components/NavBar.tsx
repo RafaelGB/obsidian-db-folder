@@ -151,7 +151,7 @@ export function NavBar(navBarProps: NavBarProps) {
               padding: { xs: "0", md: "5px" },
             }}
           >
-            <QuickFilters table={table} />
+            <QuickFilters table={table} key={`ButtonGroup-QuickFilters`} />
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box
