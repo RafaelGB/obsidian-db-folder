@@ -244,7 +244,7 @@ class Parse {
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
         if (wrapped.type !== 'array') {
-            return wrapped.value.toString().split(",").map(s => s.trim());
+            return wrapped.value.toString().split(",").map(s => s.toString().trim());
         }
         return wrapped.value.map(v => DataviewService.getDataviewAPI().value.toString(v));
     }
