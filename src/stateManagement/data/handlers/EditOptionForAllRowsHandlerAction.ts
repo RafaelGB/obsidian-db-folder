@@ -4,6 +4,7 @@ import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { InputType, UpdateRowOptions } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { EditEngineService } from "services/EditEngineService";
+import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class EditOptionForAllRowsHandlerAction extends AbstractTableAction<DataState> {
@@ -11,9 +12,7 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
         const { get, implementation } = tableActionResponse;
         implementation.actions.editOptionForAllRows = async (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => {
-            let lambdaFilter = (cellValue: Literal) => {
-                return (cellValue?.toString().length > 0 && cellValue?.toString() === oldLabel);
-            };
+            let lambdaFilter: (cellValue: Literal) => boolean;
             switch (column.input) {
                 case InputType.TAGS:
                     lambdaFilter = (cellValue: Literal) => {
@@ -23,35 +22,60 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
                         return array.length > 0 && array.some(value => value?.toString() === oldLabel);
                     }
                     break;
+                case InputType.SELECT:
+                    lambdaFilter = (cellValue: Literal) => {
+                        return (cellValue?.toString().length > 0 && cellValue?.toString() === oldLabel);
+                    };
+                    break;
                 default:
                 // Do nothing
             }
 
             const rowCandidates = get().rows.filter((row) => {
-                return lambdaFilter(row[column.key] as Literal);
+                const cellContent = ParseService.parseRowToCell(
+                    row,
+                    column,
+                    column.input,
+                    ddbbConfig
+                );
+                return lambdaFilter(cellContent);
             });
 
             rowCandidates.map((row) => {
                 const rowTFile = row.__note__.getFile();
+                const cellContent = ParseService.parseRowToCell(
+                    row,
+                    column,
+                    column.input,
+                    ddbbConfig
+                );
+
+                let editedCell: Literal;
                 switch (column.input) {
                     case InputType.TAGS:
-                        row[column.key] = Array.isArray(
-                            row[column.key] as Literal
+                        editedCell = Array.isArray(
+                            cellContent
                         ) ?
                             (
-                                row[column.key] as Literal[]
+                                cellContent as Literal[]
                             )
                                 .map(value => value === oldLabel ? newLabel : value) :
                             [];
                         break;
                     default:
-                        row[column.key] = newLabel;
+                        editedCell = newLabel;
                 }
+
+                const editedRow = ParseService.parseRowToLiteral(
+                    row,
+                    column,
+                    editedCell
+                );
 
                 EditEngineService.updateRowFileProxy(
                     rowTFile,
                     column.key,
-                    row[column.key] as Literal,
+                    editedRow,
                     columns,
                     ddbbConfig,
                     UpdateRowOptions.COLUMN_VALUE
