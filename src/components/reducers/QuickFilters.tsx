@@ -32,12 +32,15 @@ const QuickFilters = (props: DataviewFiltersProps) => {
   };
 
   return filters.conditions.length > 0 ? (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} key="stack-quick-filters">
       {filters.conditions.map((condition, filterIndex) => {
         if ((condition as FilterGroupCondition).condition) {
           const label = (condition as FilterGroupCondition).label;
           return (
-            <div onClick={toggleFilterGroupOnClickHandler(filterIndex)}>
+            <div
+              onClick={toggleFilterGroupOnClickHandler(filterIndex)}
+              key={`quickFilter-chip-${label}`}
+            >
               <Chip
                 size="small"
                 label={label ?? `filter-${filterIndex}`}

@@ -232,14 +232,16 @@ class Parse {
                 break;
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
-                    return this.parseToMarkdown({ type: 'date', value: wrapped.value }, localSettings, isInline);
+                    auxMarkdown = this.parseToMarkdown({ type: 'date', value: wrapped.value }, localSettings, isInline);
+                } else {
+                    auxMarkdown = JSON.stringify(wrapped.value);
                 }
-            // Else go to default
+                break;
             default:
-                auxMarkdown = DataviewService.getDataviewAPI().value.toString(wrapped.value);
+                auxMarkdown = wrapped.value?.toString().trim();
         }
         // Check possible markdown breakers
-        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);;
+        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);
     }
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
