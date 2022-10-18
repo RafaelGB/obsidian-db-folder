@@ -26,7 +26,7 @@ The root object `db` has the following functions:
 
 If you have a column ID (not always the name of the column) named "Date" you can add time:
 
-`${row.Date.plus({years: 1}).toFormat("DD")}` adds 1 year
-`${row.Date.plus({months: 1}).toFormat("DD")}` adds 1 month
-`${row.Date.plus({weeks: 1}).toFormat("DD")}` adds 1 week
-`${row.Date.plus({days: 1}).toFormat("DD")}` adds 1 day
+- `${row.Date.plus({years: 1}).toFormat("DD")}` adds 1 year
+- `${row.Date.plus({months: 1}).toFormat("DD")}` adds 1 month
+- `${row.Date.plus({weeks: 1}).toFormat("DD")}` adds 1 week
+- `${row.Date.plus({days: 1}).toFormat("DD")}` adds 1 day
