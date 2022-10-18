@@ -15,7 +15,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       columnSettingsManager.modal;
     let newLabel = "";
     const options = column.options;
-    const onClickAddPromise = async (): Promise<void> => {
+    const addLabelPromise = async (): Promise<void> => {
       // Error handling
       if (newLabel === "") {
         new Notice("Empty label could not be added!");
@@ -49,13 +49,20 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
           .onChange(async (value: string): Promise<void> => {
             newLabel = value;
           });
+        text.inputEl.onkeydown = (e: KeyboardEvent) => {
+          switch (e.key) {
+            case "Enter":
+              addLabelPromise();
+              break;
+          }
+        };
       })
       .addButton((button: ButtonComponent) => {
         button
           .setTooltip("Adds new option of Selected column")
           .setButtonText("+")
           .setCta()
-          .onClick(onClickAddPromise);
+          .onClick(addLabelPromise);
       });
 
     options.forEach((option, index) => {
