@@ -35,7 +35,7 @@ export class FileGroupingService {
 
   static moveFile = async (folderPath: string, row: RowDataType): Promise<boolean> =>
     limitMovingFiles(async () => {
-      let file = row.__note__.getFile();
+      const file = row.__note__.getFile();
       const filePath = `${folderPath}/${file.name}`;
       const fileIsAlreadyInCorrectFolder = row.__note__.filepath === filePath;
       if (fileIsAlreadyInCorrectFolder) return false;
