@@ -22,3 +22,11 @@ The root object `db` has the following functions:
 
 - `js` : execute a javascript function that you previously defined in the `js` folder of your table in the database or plugin global settings. (I.E.: `db.js.myFunction( arg1, arg2)`)
 
+## Examples
+
+If you have a column ID (not always the name of the column) named "Date" you can add time:
+
+`${row.Date.plus({years: 1}).toFormat("DD")}` adds 1 year
+`${row.Date.plus({months: 1}).toFormat("DD")}` adds 1 month
+`${row.Date.plus({weeks: 1}).toFormat("DD")}` adds 1 week
+`${row.Date.plus({days: 1}).toFormat("DD")}` adds 1 day
