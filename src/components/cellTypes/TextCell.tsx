@@ -54,7 +54,7 @@ const TextCell = (props: CellComponentProps) => {
 
       renderMarkdown(defaultCell, textCell, containerCellRef.current, 5);
     }
-  }, [dirtyCell, cell.getValue()]);
+  }, [dirtyCell, textCell]);
 
   const handleEditableOnclick: MouseEventHandler<HTMLSpanElement> = () => {
     setDirtyCell(true);

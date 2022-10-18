@@ -12,6 +12,7 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
         const { get, implementation } = tableActionResponse;
         implementation.actions.removeOptionForAllRows = async (column: TableColumn, option: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => {
+            // Lambda to select the rows to update
             let lambdaFilter: (cellValue: Literal) => boolean;
             switch (column.input) {
                 case InputType.TAGS:
@@ -30,56 +31,34 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
                 default:
                 // Do nothing
             }
-
-            const rowCandidates = get().rows.filter((row) => {
-                const cellContent = ParseService.parseRowToCell(
-                    row,
-                    column,
-                    column.input,
-                    ddbbConfig
-                );
-                return lambdaFilter(cellContent);
-            });
-
-            rowCandidates.map((row) => {
-                const rowTFile = row.__note__.getFile();
-                const cellContent = ParseService.parseRowToCell(
-                    row,
-                    column,
-                    column.input,
-                    ddbbConfig
-                );
-                let editedCell: Literal;
-                switch (column.input) {
-                    case InputType.TAGS:
-                        editedCell = Array.isArray(
-                            cellContent
-                        ) ?
-                            (
-                                cellContent as Literal[]
-                            )
-                                .filter(value => value !== option) :
-                            [];
-                        break;
-                    default:
-                        editedCell = "";
-                }
-
-                const editedRow = ParseService.parseRowToLiteral(
-                    row,
-                    column,
-                    editedCell
-                );
-
-                EditEngineService.updateRowFileProxy(
-                    rowTFile,
-                    column.key,
-                    editedRow,
-                    columns,
-                    ddbbConfig,
-                    UpdateRowOptions.COLUMN_VALUE
-                );
-            });
+            // Lambda to update the content of the column of the selected rows
+            let lambdaUpdate: (cellValue: Literal) => Literal;
+            switch (column.input) {
+                case InputType.TAGS:
+                    lambdaUpdate = (cellValue: Literal) => {
+                        const array = Array.isArray(cellValue)
+                            ? (cellValue as Literal[])
+                            : []
+                        return array.filter(value => value?.toString() !== option);
+                    }
+                    break;
+                case InputType.SELECT:
+                    lambdaUpdate = (cellValue: Literal) => {
+                        return "";
+                    };
+                    break;
+                default:
+                // Do nothing
+            }
+            // Update the rows batch processing
+            EditEngineService.batchUpdateRowFiles(
+                lambdaUpdate,
+                lambdaFilter,
+                get().rows,
+                column,
+                columns,
+                ddbbConfig
+            )
         }
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
