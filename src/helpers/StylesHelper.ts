@@ -1,7 +1,6 @@
 import { ConfigColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { CellSizeOptions, COLUMN_ALIGNMENT_OPTIONS, DatabaseCore, MetadataLabels } from "helpers/Constants";
-import { HSL } from "obsidian";
 
 /**
  * Wrap the classname of css elements
