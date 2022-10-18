@@ -1,7 +1,11 @@
 import Relationship from "components/RelationShip";
 import { grey, randomColor } from "helpers/Colors";
 import React, { useMemo, useState } from "react";
-import { CellComponentProps, RowSelectOption } from "cdm/ComponentsModel";
+import {
+  CellComponentProps,
+  RowSelectOption,
+  SelectValue,
+} from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import CreatableSelect from "react-select/creatable";
 import CustomTagsStyles from "components/styles/TagsStyles";
@@ -74,7 +78,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
   );
 
   const handleOnChange = (
-    newValue: OnChangeValue<any, false>,
+    newValue: OnChangeValue<SelectValue, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
     const newCell = ParseService.parseRowToLiteral(
@@ -120,6 +124,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
           options={multiOptions}
           onBlur={() => setShowSelect(false)}
           onChange={handleOnChange}
+          isMulti={false}
           menuPortalTarget={activeDocument.body}
           menuPlacement="auto"
           menuShouldBlockScroll={true}

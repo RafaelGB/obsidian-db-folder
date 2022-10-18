@@ -1,4 +1,8 @@
-import { RowSelectOption, CellComponentProps } from "cdm/ComponentsModel";
+import {
+  RowSelectOption,
+  CellComponentProps,
+  SelectValue,
+} from "cdm/ComponentsModel";
 import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
@@ -75,10 +79,10 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   );
 
   const handleOnChange = async (
-    newValue: OnChangeValue<any, true>,
+    newValue: OnChangeValue<SelectValue, true>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const arrayTags = newValue.map((tag: any) => tag.value);
+    const arrayTags = newValue.map((tag) => tag.value);
     const newCell = ParseService.parseRowToLiteral(
       tagsRow,
       tableColumn,

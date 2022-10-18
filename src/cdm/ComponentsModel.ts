@@ -8,6 +8,11 @@ export type RowSelectOption = {
     label: string,
 }
 
+export type SelectValue = {
+    label: string;
+    value: string;
+};
+
 export type CellComponentProps = {
     defaultCell: CellContext<RowDataType, Literal>;
 }
