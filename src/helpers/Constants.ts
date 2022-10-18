@@ -212,35 +212,6 @@ export const DatabaseCore = Object.freeze({
   DATAVIEW_FILE: 'file',
 });
 
-export const DatabaseFrontmatterOptions = Object.freeze({
-  BASIC: [
-    '---',
-    '',
-    `${DatabaseCore.FRONTMATTER_KEY}: basic`,
-    '',
-    '---',
-    '',
-    '%% dbfolder:yaml',
-    'name: new database',
-    'description: new description',
-    'columns:',
-    ' column1:',
-    '  input: text',
-    '  key: column1',
-    '  accessorKey: column1',
-    '  label: Column 1',
-    '  position: 0',
-    '  config:',
-    '   enable_media_view: true',
-    '   media_width: 100',
-    '   media_height: 100',
-    '   isInline: false',
-    'filters:',
-    ' enabled: false',
-    ' conditions:'
-  ].join('\n')
-});
-
 export const UpdateRowOptions = Object.freeze({
   COLUMN_VALUE: 'column_value',
   COLUMN_KEY: 'column_key',
@@ -396,16 +367,49 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     datetime_format: 'yyyy-MM-dd HH:mm:ss',
   }
 };
+
 /******************************************************************************
  *                            DATABASE_CONFIG REGEX
  ******************************************************************************/
 export const DATABASE_CONFIG = Object.freeze({
-  YAML: /%%\sdbfolder:yaml\s+([\w\W]+?)\s+%%/,
-  REPLACE_YAML_REGEX: new RegExp(`%%\\sdbfolder:yaml\\s+([\\w\\W]+?)\\s+%%`, "g"),
-  START_CENTINEL: '%% dbfolder:yaml',
-  END_CENTINEL: '%%',
-  START_CENTINEL_LEGACY: '<%%',
-  END_CENTINEL_LEGACY: '%%>',
+  YAML: /```yaml:dbfolder\s+([\w\W]+?)\s+```/,
+  REPLACE_YAML_REGEX: new RegExp('```yaml:dbfolder\\s+([\\w\\W]+?)\\s+```', "g"),
+  START_CENTINEL: '```yaml:dbfolder',
+  END_CENTINEL: '```',
+  START_CENTINEL_LEGACY: '%% dbfolder:yaml',
+  END_CENTINEL_LEGACY: '%%',
+});
+
+/******************************************************************************
+ *                            DATABASE BASE YAML
+ ******************************************************************************/
+export const DatabaseFrontmatterOptions = Object.freeze({
+  BASIC: [
+    '---',
+    '',
+    `${DatabaseCore.FRONTMATTER_KEY}: basic`,
+    '',
+    '---',
+    '',
+    DATABASE_CONFIG.START_CENTINEL,
+    'name: new database',
+    'description: new description',
+    'columns:',
+    ' column1:',
+    '  input: text',
+    '  key: column1',
+    '  accessorKey: column1',
+    '  label: Column 1',
+    '  position: 0',
+    '  config:',
+    '   enable_media_view: true',
+    '   media_width: 100',
+    '   media_height: 100',
+    '   isInline: false',
+    'filters:',
+    ' enabled: false',
+    ' conditions:'
+  ].join('\n')
 });
 /******************************************************************************
  *                            SUGGESTER REGEX
