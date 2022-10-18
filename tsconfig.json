@@ -7,7 +7,7 @@
       "target": "es6",
       "allowJs": true,
       "noImplicitAny": true,
-      "moduleResolution": "node",
+      "moduleResolution": "Node",
       "importHelpers": true,
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
