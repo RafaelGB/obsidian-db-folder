@@ -20,8 +20,9 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
                 const optionIndex = updater.columns.findIndex(
                     (col: TableColumn) => col.id === column.id
                 );
-                updater.columns[optionIndex].options = newOptions;
-                return { columns: updater.columns };
+                const updatedColumns = [...updater.columns];
+                updatedColumns[optionIndex].options = newOptions;
+                return { columns: updatedColumns };
             });
         }
 

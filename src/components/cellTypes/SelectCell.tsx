@@ -81,10 +81,11 @@ const SelectCell = (popperProps: CellComponentProps) => {
     newValue: OnChangeValue<SelectValue, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
+    const selectValue = newValue ? newValue.value : "";
     const newCell = ParseService.parseRowToLiteral(
       selectRow,
       tableColumn,
-      newValue ? newValue.value : ""
+      selectValue
     );
     // Update on disk & memory
     dataActions.updateCell(
@@ -98,14 +99,10 @@ const SelectCell = (popperProps: CellComponentProps) => {
     // Add new option to column options
 
     if (
-      newValue.value &&
-      !tableColumn.options.find((option) => option.label === newValue.value)
+      selectValue &&
+      !tableColumn.options.find((option) => option.label === selectValue)
     ) {
-      columnActions.addOptionToColumn(
-        tableColumn,
-        newValue.value,
-        randomColor()
-      );
+      columnActions.addOptionToColumn(tableColumn, selectValue, randomColor());
     }
     setShowSelect(false);
   };
