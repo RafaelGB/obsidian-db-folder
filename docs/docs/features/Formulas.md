@@ -52,3 +52,5 @@ Change the date format using 1st January 2000 1pm British Standard time as an ex
 - `${row.Date.toFormat("ffff")}` shows day(name), day/month(full name)/year/ 24 hour time, full timezone eg: **Saturday, 01 January 2000, 13:00, British Summer Time** 
 
 If you replace f with F then seconds will be included.
+
+For further information go to the [Luxon Documentation](https://moment.github.io/luxon/#/).
