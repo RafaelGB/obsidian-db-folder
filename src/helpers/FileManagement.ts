@@ -83,7 +83,8 @@ export function inline_regex_target_in_function_of(position: string, columnId: s
   return regex_target;
 }
 
-
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-control-regex */
 export function sanitize_path(path: string, replacement = '') {
   const illegalCharacters = /[\*"\\\/<>:\|\?]/g
   const unsafeCharachersForObsidianLinks = /[#\^\[\]\|]/g

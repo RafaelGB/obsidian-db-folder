@@ -199,8 +199,10 @@ class Parse {
             case 'date':
                 if (DateTime.isDateTime(wrapped.value)) {
                     auxMarkdown = wrapped.value.toMillis().toString();
-                    break;
+                } else {
+                    auxMarkdown = JSON.stringify(wrapped.value);
                 }
+                break;
             // By default. Use markdown parser
             default:
                 auxMarkdown = this.parseToMarkdown(wrapped, localSettings, isInline);
