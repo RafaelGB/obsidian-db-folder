@@ -243,6 +243,9 @@ export const StyleVariables = Object.freeze({
   TEXT_NORMAL: 'var(--text-normal)',
   TEXT_ACCENT_HOVER: 'var(--text-accent-hover)',
   TEXT_ACCENT: 'var(--text-accent)',
+  LINK_COLOR: 'var(--link-color)',
+  INTERACTIVE_NORMAL: 'var(--interactive-normal)',
+  INPUT_SHADOW: 'var(--input-shadow)',
 });
 
 export const SourceDataTypes = Object.freeze({

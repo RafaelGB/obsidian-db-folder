@@ -123,6 +123,7 @@ export function NavBar(navBarProps: NavBarProps) {
               mr: 2,
               maxWidth: 40,
               marginRight: 1,
+              padding: 0.5,
             }}
           >
             <MenuIcon />
