@@ -47,6 +47,8 @@ export const PaginationButtonStyle = {
             opacity: 0.5,
             cursor: "not-allowed",
             backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+            boxShadow: StyleVariables.INPUT_SHADOW,
+            color: StyleVariables.TEXT_NORMAL,
         },
         ":hover": {
             backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
