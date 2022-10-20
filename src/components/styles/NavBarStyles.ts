@@ -21,7 +21,8 @@ export const SearchIconWrapper = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: StyleVariables.TEXT_NORMAL,
 }));
 
 export const DebouncedInputWrapper = styled('div')(({ theme }) => ({

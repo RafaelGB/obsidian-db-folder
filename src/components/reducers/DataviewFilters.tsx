@@ -44,7 +44,7 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
       size="small"
       onClick={openFiltersGroupHandler}
       key={`Button-FilterConditions-DataviewFilters`}
-      style={{ minWidth: "0px", padding: "2px" }}
+      style={{ minWidth: "0px", padding: "2px", borderRadius: "0px" }}
     >
       <span
         className="svg-icon svg-gray"

@@ -110,6 +110,8 @@ export function NavBar(navBarProps: NavBarProps) {
         <Toolbar
           style={{
             minHeight: "2.65rem",
+            padding: 0,
+            paddingLeft: "2px",
           }}
         >
           <IconButton

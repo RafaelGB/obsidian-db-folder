@@ -68,7 +68,6 @@ export function AddRow(props: AddRowProps) {
       sx={{
         bordercolor: StyleVariables.TEXT_NORMAL,
         border: 0,
-        minWidth: "30px",
       }}
     >
       <Button
@@ -77,7 +76,6 @@ export function AddRow(props: AddRowProps) {
           setInputNewRow("");
           setShowNewRow(!showNewRow);
         }}
-        size="small"
         sx={{
           bgcolor: StyleVariables.BACKGROUND_PRIMARY,
           color: StyleVariables.TEXT_NORMAL,
@@ -86,10 +84,9 @@ export function AddRow(props: AddRowProps) {
             color: StyleVariables.TEXT_NORMAL,
             border: 0,
           },
-          height: "30px",
-          maxHeight: "30px",
           border: 0,
         }}
+        style={{ minWidth: "30px" }}
       >
         {showNewRow ? (
           <CloseIcon />
