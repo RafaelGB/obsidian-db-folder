@@ -66,9 +66,9 @@ export function AddRow(props: AddRowProps) {
       className={`${c("add-row")}`}
       size="small"
       sx={{
-        padding: 0.5,
         bordercolor: StyleVariables.TEXT_NORMAL,
-        border: 0.5,
+        border: 0,
+        minWidth: "30px",
       }}
     >
       <Button
@@ -97,6 +97,7 @@ export function AddRow(props: AddRowProps) {
           <AddIcon
             style={{
               border: 0,
+              fontSize: "1.35rem",
             }}
           />
         )}

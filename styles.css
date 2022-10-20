@@ -395,7 +395,7 @@ div.database-plugin__checkbox {
 
 .database-plugin__table {
   position: relative;
-  border-spacing: 0;
+  border-spacing: 2px;
   border-bottom: 1px solid var(--background-modifier-border);
   display: table;
   height: 1px; /** Hack to prevent collapsing of table cells */

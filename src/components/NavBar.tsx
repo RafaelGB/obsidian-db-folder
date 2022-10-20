@@ -137,6 +137,7 @@ export function NavBar(navBarProps: NavBarProps) {
               scale: 0.7,
               padding: 0,
               boxShadow: "none",
+              backgroundColor: "transparent",
             }}
           >
             {/** Global filter */}
