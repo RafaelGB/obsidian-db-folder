@@ -16,7 +16,7 @@ function sanitizeDataCSV(rows: Row<RowDataType>[]): object[] {
             switch (cellKey) {
                 case MetadataColumns.FILE:
                     rowObject = updateFromPartial(rowObject, {
-                        [cellKey]: (cellValue as Link).fileName
+                        [cellKey]: (cellValue as Link).fileName()
                     });
                     break;
                 default:
