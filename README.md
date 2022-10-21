@@ -14,7 +14,7 @@ The database has its own type of view. It will search all notes depending on man
 The information you add or edit will be saved into the target obsidian note.
 
 
-https://user-images.githubusercontent.com/11924043/172692604-f6a2df6a-85da-4883-b25e-d80fef750142.mov
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ibarYqG4W5I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Sources
 ### Search engine:
