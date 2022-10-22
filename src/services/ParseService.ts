@@ -222,7 +222,9 @@ class Parse {
                     .map(v => this.parseToMarkdown(DataviewService.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
                     .join(', ');
                 break;
-
+            case 'link':
+                auxMarkdown = wrapped.value.markdown();
+                break;
             case 'date':
                 if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
                     // Parse date
