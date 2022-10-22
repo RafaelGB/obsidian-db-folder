@@ -131,7 +131,6 @@ export function NavBar(navBarProps: NavBarProps) {
             <MenuIcon />
           </IconButton>
           <Paper
-            component="form"
             sx={{
               p: "2px 4px",
               display: "flex",

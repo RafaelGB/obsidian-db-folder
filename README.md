@@ -13,8 +13,8 @@ The database has its own type of view. It will search all notes depending on man
 
 The information you add or edit will be saved into the target obsidian note.
 
-
-https://user-images.githubusercontent.com/11924043/172692604-f6a2df6a-85da-4883-b25e-d80fef750142.mov
+Most recent tutorials:
+- [Notion databases in Obsidian](https://www.youtube.com/watch?v=ibarYqG4W5I)
 
 ## Sources
 ### Search engine:
