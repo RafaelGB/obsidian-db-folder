@@ -1,9 +1,6 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { InputType, MetadataColumns } from "helpers/Constants";
+import { MetadataColumns } from "helpers/Constants";
 import { TFile } from "obsidian";
-import { ParseService } from "services/ParseService";
-import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { LocalSettings } from "cdm/SettingsModel";
 import { resolve_tfile } from "helpers/FileManagement";
 import { NoteInfoPage } from "cdm/DatabaseModel";
 /**

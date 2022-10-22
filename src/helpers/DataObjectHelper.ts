@@ -19,7 +19,7 @@ export function deepMerge(source: Literal, target: Literal) {
 
     for (const key in source as DataObject) {
         const sourceValue = DataviewService.wrapLiteral((source as DataObject)[key]);
-        if (target.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(target, key)) {
             const targetValue = DataviewService.wrapLiteral((target as DataObject)[key]);
             if (sourceValue.type === "object" && targetValue.type === "object") {
                 deepMerge(sourceValue.value, targetValue.value);

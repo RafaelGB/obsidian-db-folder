@@ -42,6 +42,7 @@ export interface DataState {
         updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         removeRow: (row: RowDataType) => Promise<void>;
         removeDataOfColumn: (column: TableColumn) => void;
+        editOptionForAllRows: (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => Promise<void>;
         dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
@@ -59,7 +60,7 @@ export interface ColumnsState {
         addToRight: (column: TableColumn, customName?: string) => void;
         remove: (column: TableColumn) => void;
         alterSorting: (column: TableColumn) => void;
-        addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
+        addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => Promise<void>;
         alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => Promise<void>;
         alterColumnId: (column: TableColumn, root: string, nestedIds: string[]) => Promise<void>;
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;

@@ -1,4 +1,8 @@
-import { RowSelectOption, CellComponentProps } from "cdm/ComponentsModel";
+import {
+  RowSelectOption,
+  CellComponentProps,
+  SelectValue,
+} from "cdm/ComponentsModel";
 import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
@@ -43,17 +47,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     } else {
       // In case of new tag, generate random color
       const color = randomColor();
-      const newOption: RowSelectOption = {
-        label: tag,
-        backgroundColor: color,
-      };
-      const currentColumn = columnsInfo
-        .getAllColumns()
-        .find((col: TableColumn) => col.key === tableColumn.key);
-      currentColumn.options.push(newOption);
-      table.options.meta.view.diskConfig.updateColumnProperties(column.id, {
-        options: currentColumn.options,
-      });
+      columnActions.addOptionToColumn(tableColumn, tag, color);
       return color;
     }
   }
@@ -73,7 +67,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       tableColumn.options
         .filter(
           (option: RowSelectOption) =>
-            option.label !== undefined && option.label !== null
+            option && option.label !== undefined && option.label !== null
         )
         .sort((a, b) => a.label.localeCompare(b.label))
         .map((option: RowSelectOption) => ({
@@ -85,10 +79,10 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   );
 
   const handleOnChange = async (
-    newValue: OnChangeValue<any, true>,
+    newValue: OnChangeValue<SelectValue, true>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const arrayTags = newValue.map((tag: any) => tag.value);
+    const arrayTags = newValue.map((tag) => tag.value);
     const newCell = ParseService.parseRowToLiteral(
       tagsRow,
       tableColumn,

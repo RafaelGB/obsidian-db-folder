@@ -21,7 +21,8 @@ export const SearchIconWrapper = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: StyleVariables.TEXT_NORMAL,
 }));
 
 export const DebouncedInputWrapper = styled('div')(({ theme }) => ({
@@ -46,6 +47,8 @@ export const PaginationButtonStyle = {
             opacity: 0.5,
             cursor: "not-allowed",
             backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+            boxShadow: StyleVariables.INPUT_SHADOW,
+            color: StyleVariables.TEXT_NORMAL,
         },
         ":hover": {
             backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,

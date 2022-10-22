@@ -25,9 +25,9 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
                     .onClick(async (): Promise<void> => {
                         const arrayKey = value.split('.');
                         const rootKey = arrayKey.shift();
-
-                        if (!this.validateNewId(rootKey, arrayKey, columnsState.info.getAllColumns())) {
-                            new Notice(`Error saving id. There is a conflict with another column id or the id is empty`, 3000);
+                        const validateMessage = this.validateNewId(rootKey, arrayKey, columnsState.info.getAllColumns());
+                        if (validateMessage) {
+                            new Notice(`Error saving id. ${validateMessage}`, 3000);
                             return;
                         }
                         // Update state of altered column
@@ -61,14 +61,23 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
 
         return this.goNext(response);
     }
-    private validateNewId(rootKey: string, arrayKey: string[], columns: TableColumn[]): boolean {
+    private validateNewId(rootKey: string, arrayKey: string[], columns: TableColumn[]): string {
         const candidateId = `${rootKey}${arrayKey.length > 0 ? `-${arrayKey.join('-')}` : ''}`;
+        // Check if new root key is not empty
         if (!rootKey) {
-            return false;
+            return "The root key is required";
         }
+        // Validate special characters in root key
+        if (rootKey.match(/[^a-zA-Z0-9_]/)) {
+            return "The root key can only contain letters, numbers and underscores";
+        }
+        // Validate if new root key is not duplicated
         const conflictId = columns.some((column: TableColumn) =>
             column.id === candidateId
         );
-        return !conflictId;
+        if (conflictId) {
+            return "The id already exists";
+        }
+        return '';
     }
 }

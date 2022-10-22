@@ -1,11 +1,9 @@
-// ts
+import { faker } from "@faker-js/faker";
 import { randomColor } from "helpers/Colors";
 import { InputType, DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
 import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromFolder } from "components/Columns";
-
-const { faker } = require("@faker-js/faker");
 /**
  * Generate a random initialState table with the given number of rows.
  * @param count number of rows to generate
@@ -17,7 +15,7 @@ export async function makeData(count: number): Promise<TableDataType> {
   const note: any = null;
   for (let i = 0; i < count; i++) {
     const row = {
-      id: faker.mersenne.rand(),
+      id: faker.datatype.number(),
       title: faker.system.fileName(),
       __note__: note,
     };
@@ -46,7 +44,7 @@ export const generateYamlColumns = (
 ): Record<string, DatabaseColumn> => {
   const yamlColumns: Record<string, DatabaseColumn> = {};
   for (let i = 0; i < count; i++) {
-    const columnKey: string = faker.unique(faker.name.firstName);
+    const columnKey: string = faker.helpers.unique(faker.name.firstName);
     yamlColumns[columnKey] = {
       input: getRandomEnumValue(InputType),
       accessorKey: columnKey,

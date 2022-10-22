@@ -195,6 +195,14 @@ class Parse {
             case 'link':
                 auxMarkdown = `${wrapped.value.fileName()}|${wrapped.value.path}`;
                 break;
+            case 'object':
+            case 'date':
+                if (DateTime.isDateTime(wrapped.value)) {
+                    auxMarkdown = wrapped.value.toMillis().toString();
+                } else {
+                    auxMarkdown = JSON.stringify(wrapped.value);
+                }
+                break;
             // By default. Use markdown parser
             default:
                 auxMarkdown = this.parseToMarkdown(wrapped, localSettings, isInline);
@@ -209,7 +217,6 @@ class Parse {
             case 'number':
                 auxMarkdown = wrapped.value.toString();
                 break;
-
             case 'array':
                 auxMarkdown = wrapped.value
                     .map(v => this.parseToMarkdown(DataviewService.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
@@ -227,19 +234,21 @@ class Parse {
                 break;
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
-                    return this.parseToMarkdown({ type: 'date', value: wrapped.value }, localSettings, isInline);
+                    auxMarkdown = this.parseToMarkdown({ type: 'date', value: wrapped.value }, localSettings, isInline);
+                } else {
+                    auxMarkdown = JSON.stringify(wrapped.value);
                 }
-            // Else go to default
+                break;
             default:
-                auxMarkdown = DataviewService.getDataviewAPI().value.toString(wrapped.value);
+                auxMarkdown = wrapped.value?.toString().trim();
         }
         // Check possible markdown breakers
-        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);;
+        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);
     }
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
         if (wrapped.type !== 'array') {
-            return wrapped.value.toString().split(",").map(s => s.trim());
+            return wrapped.value.toString().split(",").map(s => s.toString().trim());
         }
         return wrapped.value.map(v => DataviewService.getDataviewAPI().value.toString(v));
     }

@@ -1,7 +1,11 @@
 import Relationship from "components/RelationShip";
 import { grey, randomColor } from "helpers/Colors";
 import React, { useMemo, useState } from "react";
-import { CellComponentProps, RowSelectOption } from "cdm/ComponentsModel";
+import {
+  CellComponentProps,
+  RowSelectOption,
+  SelectValue,
+} from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import CreatableSelect from "react-select/creatable";
 import CustomTagsStyles from "components/styles/TagsStyles";
@@ -38,21 +42,31 @@ const SelectCell = (popperProps: CellComponentProps) => {
     const match = tableColumn.options.find(
       (option: { label: string }) => option.label === selectCell
     );
-    return (match && match.backgroundColor) || grey(200);
+    if (match) {
+      return match.backgroundColor;
+    } else {
+      // In case of new select, generate random color
+      const color = randomColor();
+      columnActions.addOptionToColumn(tableColumn, selectCell, color);
+      return color;
+    }
   }
 
-  const defaultValue = {
-    label: selectCell?.toString(),
-    value: selectCell?.toString(),
-    color: getColor(),
-  };
+  const defaultValue = useMemo(
+    () => ({
+      label: selectCell?.toString(),
+      value: selectCell?.toString(),
+      color: selectCell ? getColor() : grey(200),
+    }),
+    [selectCell]
+  );
 
   const multiOptions = useMemo(
     () =>
       tableColumn.options
         .filter(
           (option: RowSelectOption) =>
-            option.label !== undefined && option.label !== null
+            option && option.label !== undefined && option.label !== null
         )
         .sort((a, b) => a.label.localeCompare(b.label))
         .map((option: RowSelectOption) => ({
@@ -64,13 +78,14 @@ const SelectCell = (popperProps: CellComponentProps) => {
   );
 
   const handleOnChange = (
-    newValue: OnChangeValue<any, false>,
+    newValue: OnChangeValue<SelectValue, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
+    const selectValue = newValue ? newValue.value : "";
     const newCell = ParseService.parseRowToLiteral(
       selectRow,
       tableColumn,
-      newValue ? newValue.value : ""
+      selectValue
     );
     // Update on disk & memory
     dataActions.updateCell(
@@ -84,14 +99,10 @@ const SelectCell = (popperProps: CellComponentProps) => {
     // Add new option to column options
 
     if (
-      newValue.value &&
-      !tableColumn.options.find((option) => option.label === newValue.value)
+      selectValue &&
+      !tableColumn.options.find((option) => option.label === selectValue)
     ) {
-      columnActions.addOptionToColumn(
-        tableColumn,
-        newValue.value,
-        randomColor()
-      );
+      columnActions.addOptionToColumn(tableColumn, selectValue, randomColor());
     }
     setShowSelect(false);
   };
@@ -110,6 +121,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
           options={multiOptions}
           onBlur={() => setShowSelect(false)}
           onChange={handleOnChange}
+          isMulti={false}
           menuPortalTarget={activeDocument.body}
           menuPlacement="auto"
           menuShouldBlockScroll={true}
