@@ -15,6 +15,7 @@ export const InputType = Object.freeze({
   SELECT: 'select',
   TAGS: 'tags',
   MARKDOWN: 'markdown',
+  SORTING: 'sorting',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
   METATADA_TIME: 'metadata_time',
@@ -92,6 +93,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   FILE:
   {
     key: MetadataColumns.FILE,
+    id: MetadataColumns.FILE,
     input: InputType.MARKDOWN,
     label: MetadataLabels.FILE,
     accessorKey: MetadataColumns.FILE,
@@ -106,6 +108,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   ADD_COLUMN: {
     key: MetadataColumns.ADD_COLUMN,
+    id: MetadataColumns.ADD_COLUMN,
     input: InputType.NEW_COLUMN,
     label: MetadataLabels.ADD_COLUMN,
     accessorKey: MetadataColumns.ADD_COLUMN,
@@ -117,6 +120,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   CREATED: {
     key: MetadataColumns.CREATED,
+    id: MetadataColumns.CREATED,
     input: InputType.METATADA_TIME,
     label: MetadataLabels.CREATED,
     accessorKey: MetadataColumns.CREATED,
@@ -128,6 +132,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   MODIFIED: {
     key: MetadataColumns.MODIFIED,
+    id: MetadataColumns.MODIFIED,
     input: InputType.METATADA_TIME,
     label: MetadataLabels.MODIFIED,
     accessorKey: MetadataColumns.MODIFIED,
@@ -139,6 +144,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   TASKS: {
     key: MetadataColumns.TASKS,
+    id: MetadataColumns.TASKS,
     input: InputType.TASK,
     label: MetadataLabels.TASK,
     accessorKey: MetadataColumns.TASKS,
@@ -150,6 +156,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   INLINKS: {
     key: MetadataColumns.INLINKS,
+    id: MetadataColumns.INLINKS,
     input: InputType.INLINKS,
     label: MetadataLabels.INLINKS,
     accessorKey: MetadataColumns.INLINKS,
@@ -161,6 +168,7 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
   },
   OUTLINKS: {
     key: MetadataColumns.OUTLINKS,
+    id: MetadataColumns.OUTLINKS,
     input: InputType.OUTLINKS,
     label: MetadataLabels.OUTLINKS,
     accessorKey: MetadataColumns.OUTLINKS,
@@ -204,35 +212,6 @@ export const DatabaseCore = Object.freeze({
   DATAVIEW_FILE: 'file',
 });
 
-export const DatabaseFrontmatterOptions = Object.freeze({
-  BASIC: [
-    '---',
-    '',
-    `${DatabaseCore.FRONTMATTER_KEY}: basic`,
-    '',
-    '---',
-    '',
-    '%% dbfolder:yaml',
-    'name: new database',
-    'description: new description',
-    'columns:',
-    ' column1:',
-    '  input: text',
-    '  key: column1',
-    '  accessorKey: column1',
-    '  label: Column 1',
-    '  position: 0',
-    '  config:',
-    '   enable_media_view: true',
-    '   media_width: 100',
-    '   media_height: 100',
-    '   isInline: false',
-    'filters:',
-    ' enabled: false',
-    ' conditions:'
-  ].join('\n')
-});
-
 export const UpdateRowOptions = Object.freeze({
   COLUMN_VALUE: 'column_value',
   COLUMN_KEY: 'column_key',
@@ -264,6 +243,9 @@ export const StyleVariables = Object.freeze({
   TEXT_NORMAL: 'var(--text-normal)',
   TEXT_ACCENT_HOVER: 'var(--text-accent-hover)',
   TEXT_ACCENT: 'var(--text-accent)',
+  LINK_COLOR: 'var(--link-color)',
+  INTERACTIVE_NORMAL: 'var(--interactive-normal)',
+  INPUT_SHADOW: 'var(--input-shadow)',
 });
 
 export const SourceDataTypes = Object.freeze({
@@ -325,7 +307,7 @@ export function getOperatorFilterValue(keyToFind: string): string {
 }
 
 export const MarkdownBreakerRules = Object.freeze({
-  INIT_CHARS: ['`', '"', '[', '{', '*', '!', '>'],
+  INIT_CHARS: ['`', '[', '{', '*', '!', '>'],
   BETWEEN_CHARS: [':', '"', '#'],
   UNIQUE_CHARS: ['?'],
 })
@@ -388,16 +370,49 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     datetime_format: 'yyyy-MM-dd HH:mm:ss',
   }
 };
+
 /******************************************************************************
  *                            DATABASE_CONFIG REGEX
  ******************************************************************************/
 export const DATABASE_CONFIG = Object.freeze({
-  YAML: /%%\sdbfolder:yaml\s+([\w\W]+?)\s+%%/,
-  REPLACE_YAML_REGEX: new RegExp(`%%\\sdbfolder:yaml\\s+([\\w\\W]+?)\\s+%%`, "g"),
-  START_CENTINEL: '%% dbfolder:yaml',
-  END_CENTINEL: '%%',
-  START_CENTINEL_LEGACY: '<%%',
-  END_CENTINEL_LEGACY: '%%>',
+  YAML: /```yaml:dbfolder\s+([\w\W]+?)\s+```/,
+  REPLACE_YAML_REGEX: new RegExp('```yaml:dbfolder\\s+([\\w\\W]+?)\\s+```', "g"),
+  START_CENTINEL: '```yaml:dbfolder',
+  END_CENTINEL: '```',
+  START_CENTINEL_LEGACY: '%% dbfolder:yaml',
+  END_CENTINEL_LEGACY: '%%',
+});
+
+/******************************************************************************
+ *                            DATABASE BASE YAML
+ ******************************************************************************/
+export const DatabaseFrontmatterOptions = Object.freeze({
+  BASIC: [
+    '---',
+    '',
+    `${DatabaseCore.FRONTMATTER_KEY}: basic`,
+    '',
+    '---',
+    '',
+    DATABASE_CONFIG.START_CENTINEL,
+    'name: new database',
+    'description: new description',
+    'columns:',
+    ' column1:',
+    '  input: text',
+    '  key: column1',
+    '  accessorKey: column1',
+    '  label: Column 1',
+    '  position: 0',
+    '  config:',
+    '   enable_media_view: true',
+    '   media_width: 100',
+    '   media_height: 100',
+    '   isInline: false',
+    'filters:',
+    ' enabled: false',
+    ' conditions:'
+  ].join('\n')
 });
 /******************************************************************************
  *                            SUGGESTER REGEX

@@ -11,15 +11,15 @@ export default class AlterColumnLabelHandlerAction extends AbstractTableAction<C
                 const labelIndex = updater.columns.findIndex(
                     (col: TableColumn) => col.id === column.id
                 );
-                const alteredColumns = [...updater.columns];
-                const newKey = dbTrim(newLabel);
-                alteredColumns[labelIndex].label = newLabel;
-                alteredColumns[labelIndex].id = newKey;
-                alteredColumns[labelIndex].key = newKey;
-                alteredColumns[labelIndex].accessorKey = newKey;
+
                 // Update configuration & row files on disk
-                view.diskConfig.updateColumnKey(column.id, newKey, newLabel);
-                return { columns: alteredColumns };
+                view.diskConfig.updateColumnProperties(column.id, {
+                    label: newLabel
+                });
+                // Update state on memory
+                const alteredColumn = updater.columns[labelIndex];
+                alteredColumn.label = newLabel;
+                return { columns: [...updater.columns] };
             });
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);

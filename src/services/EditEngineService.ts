@@ -1,4 +1,4 @@
-import { TableColumn } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { inline_regex_target_in_function_of } from "helpers/FileManagement";
 import { TFile } from "obsidian";
@@ -16,6 +16,59 @@ class EditEngine {
     private static instance: EditEngine;
 
     /**
+     * Modify all the files asociated to the rows using lambaUpdate per every row filtered by the lambdaFilter
+     * @param lambdaUpdate 
+     * @param lambdaFilter 
+     * @param allRows 
+     * @param affectedColumn 
+     * @param columns 
+     * @param ddbbConfig 
+     */
+    public async batchUpdateRowFiles(
+        lambdaUpdate: (cellValue: Literal) => Literal,
+        lambdaFilter: (cellValue: Literal) => boolean,
+        allRows: RowDataType[],
+        affectedColumn: TableColumn,
+        columns: TableColumn[],
+        ddbbConfig: LocalSettings
+    ): Promise<void> {
+        const rowCandidates = allRows.filter((row) => {
+            const cellContent = ParseService.parseRowToCell(
+                row,
+                affectedColumn,
+                affectedColumn.input,
+                ddbbConfig
+            );
+            return lambdaFilter(cellContent);
+        });
+
+        rowCandidates.map((row) => {
+            const rowTFile = row.__note__.getFile();
+            const cellContent = ParseService.parseRowToCell(
+                row,
+                affectedColumn,
+                affectedColumn.input,
+                ddbbConfig
+            );
+            const editedCell = lambdaUpdate(cellContent);
+            const editedRow = ParseService.parseRowToLiteral(
+                row,
+                affectedColumn,
+                editedCell
+            );
+
+            EditEngineService.updateRowFileProxy(
+                rowTFile,
+                affectedColumn.key,
+                editedRow,
+                columns,
+                ddbbConfig,
+                UpdateRowOptions.COLUMN_VALUE
+            );
+        });
+    }
+
+    /**
      * Modify the file asociated to the row in function of input options
      * @param asociatedCFilePathToCell 
      * @param columnId 
@@ -23,8 +76,10 @@ class EditEngine {
      * @param option 
      */
     public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
-        await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
-            showDBError(EditionError.YamlRead, err);
+        queueMicrotask(async () => {
+            await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
+                showDBError(EditionError.YamlRead, err);
+            });
         });
     }
 
@@ -84,13 +139,15 @@ class EditEngine {
         async function persistFrontmatter(deletedColumn?: string): Promise<void> {
             const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---/g : /(^[\s\S]*$)/g;
             const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
-            const noteObject = {
-                action: 'replace',
-                file: file,
-                regexp: frontmatterGroupRegex,
-                newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
-            };
-            await VaultManagerDB.editNoteContent(noteObject);
+            if (frontmatterFieldsText) {
+                const noteObject = {
+                    action: 'replace',
+                    file: file,
+                    regexp: frontmatterGroupRegex,
+                    newValue: contentHasFrontmatter ? `${frontmatterFieldsText}` : `${frontmatterFieldsText}\n$1`,
+                };
+                await VaultManagerDB.editNoteContent(noteObject);
+            }
         }
 
         /*******************************************************************************************

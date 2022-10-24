@@ -9,12 +9,9 @@ import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSett
 import { TableColumn } from "cdm/FolderModel";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
-import { destination_folder } from "helpers/FileManagement";
-import { FileGroupingService } from "services/FileGroupingService";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
-  const { view } = table.options.meta;
   const [columnsInfo, columnActions] = table.options.meta.tableState.columns(
     (state) => [state.info, state.actions]
   );
@@ -24,8 +21,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const configInfo = table.options.meta.tableState.configState(
     (state) => state.info
   );
-  const configActions =  table.options.meta.tableState.configState((state) => state.actions);
-  const ddbbConfig = table.options.meta.tableState.configState( (store) => store.ddbbConfig);
 
   /** Header props */
   const {
@@ -91,71 +86,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     strategy: "fixed",
   });
 
-  function isValidLabel(newKey: string): boolean {
-    if (table.getAllColumns().find((o: any) => o.id === newKey)) {
-      return false;
-    }
-
-    if (newKey === undefined || newKey === null) {
-      return false;
-    }
-
-    if (newKey.length === 0) {
-      return false;
-    }
-
-    return true;
-  }
-
   function persistLabelChange() {
-    // trim label will get a valid yaml key
-    const newKey = dbTrim(labelState);
-    // Check if key already exists. If so, mark it as invalid
-    if (!isValidLabel(newKey)) {
-      setLabelStateInvalid(true);
-      return;
-    }
-    // Update state of ordered
-    const updateOrderWithNewKey = table.options.state.columnOrder.map((o) =>
-      o === column.id ? newKey : o
-    );
-    table.setColumnOrder(updateOrderWithNewKey);
-
-    setkeyState(newKey);
-
-    // Update sorted columns
-    if (column.getIsSorted()) {
-      const alterSort = table.options.state.sorting.map((o) => {
-        if (o.id === column.id) {
-          o.id = newKey;
-        }
-        return o;
-      });
-      table.setSorting(alterSort);
-    }
-
     // Update state of altered column
-    columnActions
-      .alterColumnLabel(column.columnDef as TableColumn, labelState)
-      .then(() => {
-        dataActions.updateDataAfterLabelChange(
-          column.columnDef as TableColumn,
-          labelState,
-          columnsInfo.getAllColumns(),
-          configInfo.getLocalSettings()
-        );
-      });
-      // Rename column in group_folder_column
-      const groupFolderColumn =
-        ddbbConfig.group_folder_column.split(",");
-      if (groupFolderColumn.includes(column.columnDef.id)) {
-        const newGroupFolderColumn = groupFolderColumn
-          .map((item) => item === column.columnDef.id? newKey : item)
-          .join(",");
-        configActions.alterConfig({ group_folder_column: newGroupFolderColumn });
-        // Reorganize files and remove empty folders
-        dataActions.groupFiles()
-      }
+    columnActions.alterColumnLabel(column.columnDef as TableColumn, labelState);
   }
 
   function handleKeyDown(e: any) {
@@ -300,7 +233,10 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     onClick={() => {
                       new ColumnSettingsModal({
                         dataState: { actions: dataActions },
-                        columnState: { info: columnsInfo },
+                        columnState: {
+                          info: columnsInfo,
+                          actions: columnActions,
+                        },
                         configState: { info: configInfo },
                         view: table.options.meta.view,
                         headerMenuProps: headerMenuProps,

@@ -14,22 +14,36 @@ const dbfolderColumnSortingFn: (
     rowB: Row<RowDataType>,
     columnId: string
   ): number => {
+    const cellA = rowA.getValue<Literal>(columnId);
+    const cellB = rowB.getValue<Literal>(columnId);
+    // Check if a and b are numbers
+    const aIsNumber = !isNaN(Number(cellA));
+    const bIsNumber = !isNaN(Number(cellB));
+
+    // If both are numbers, compare as numbers
+    if (aIsNumber && bIsNumber) {
+      return Number(cellA) - Number(cellB);
+    }
+
+    // If both are strings, compare as strings
     const a = ParseService.parseLiteral(
-      rowA.getValue<Literal>(columnId),
-      InputType.MARKDOWN,
+      cellA,
+      InputType.SORTING,
       ddbbConfig,
       true
     )
       .toString()
       .toLowerCase();
     const b = ParseService.parseLiteral(
-      rowB.getValue<Literal>(columnId),
-      InputType.MARKDOWN,
+      cellB,
+      InputType.SORTING,
       ddbbConfig,
       true
     )
       .toString()
       .toLowerCase();
+
+    // String comparison
     return a === b ? 0 : a > b ? 1 : -1;
   };
 

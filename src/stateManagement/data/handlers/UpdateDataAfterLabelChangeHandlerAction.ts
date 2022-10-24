@@ -15,7 +15,7 @@ export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTab
             state.rows.map(async (row: RowDataType) => {
                 await EditEngineService.updateRowFileProxy(
                     row.__note__.getFile(),
-                    column.id,
+                    column.key,
                     newKey,
                     columns,
                     ddbbConfig,
@@ -25,8 +25,8 @@ export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTab
 
             // Save on memory
             const alterRows = state.rows.map((row) => {
-                row[newKey] = row[column.id];
-                delete row[column.id];
+                row[newKey] = row[column.key];
+                delete row[column.key];
                 return row;
             });
             return { rows: alterRows };

@@ -3,13 +3,8 @@ import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSett
 
 type BaseStyleProps = {
     modal: ColumnSettingsModal;
-    columnKey: string;
+    columnId: string;
 };
-
-export type ColorPickerProps = {
-    options: RowSelectOption[];
-    option: RowSelectOption;
-} & BaseStyleProps;
 
 export type TextAlignmentProps = {
     currentAlignment: string;

@@ -2,13 +2,13 @@ import React from "react";
 import { InputType } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import SelectPortal from "components/portals/SelectPortal";
-import CalendarPortal from "components/portals/CalendarPortal";
-import CalendarTimePortal from "components/portals/CalendarTimePortal";
+import SelectCell from "components/cellTypes/SelectCell";
+import CalendarCell from "components/cellTypes/CalendarCell";
+import CalendarTimeCell from "components/cellTypes/CalendarTimeCell";
 import CheckboxCell from "components/cellTypes/CheckboxCell";
 import TaskCell from "components/cellTypes/TaskCell";
 import MarkdownCell from "components/cellTypes/MarkdownCell";
-import TagsPortal from "components/portals/TagsPortal";
+import TagsCell from "components/cellTypes/TagsCell";
 import NumberCell from "components/cellTypes/NumberCell";
 import TextCell from "components/cellTypes/TextCell";
 import MetadataTimeCell from "components/cellTypes/MetadataTimeCell";
@@ -43,11 +43,11 @@ export default function DefaultCell(
 
       /** Calendar option */
       case InputType.CALENDAR:
-        return <CalendarPortal defaultCell={defaultCell} />;
+        return <CalendarCell defaultCell={defaultCell} />;
 
       /** Calendar with time option */
       case InputType.CALENDAR_TIME:
-        return <CalendarTimePortal defaultCell={defaultCell} />;
+        return <CalendarTimeCell defaultCell={defaultCell} />;
 
       /** Metadata options related with date/datetime */
       case InputType.METATADA_TIME:
@@ -55,11 +55,11 @@ export default function DefaultCell(
 
       /** Selector option */
       case InputType.SELECT:
-        return <SelectPortal defaultCell={defaultCell} />;
+        return <SelectCell defaultCell={defaultCell} />;
 
       /** Tags option */
       case InputType.TAGS:
-        return <TagsPortal defaultCell={defaultCell} />;
+        return <TagsCell defaultCell={defaultCell} />;
 
       /** Tasks option */
       case InputType.TASK:

@@ -11,8 +11,8 @@ const TaskCell = (taskProps: CellComponentProps) => {
   const { defaultCell } = taskProps;
   const { cell, column, table, row } = defaultCell;
   const { view } = table.options.meta;
-  let taskValue = cell.getValue();
   useEffect(() => {
+    let taskValue = cell.getValue();
     // Check if there are tasks in the cell
     if (taskValue !== "") {
       taskRef.current.innerHTML = "";

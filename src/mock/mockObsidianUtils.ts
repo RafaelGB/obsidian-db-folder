@@ -1,6 +1,8 @@
 import { generateYamlColumns } from "mock/mockTableUtils";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
 import { TFile } from "obsidian";
+
+/* eslint-disable */
 const { faker } = require("@faker-js/faker");
 
 /** Mock parseYaml returning YamlHandlerResponse object */

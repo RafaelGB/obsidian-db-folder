@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { randomColor } from "helpers/Colors";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
@@ -21,32 +20,7 @@ import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
-import { RowSelectOption } from "cdm/ComponentsModel";
 import { AddColumnModalProps } from "cdm/ModalsModel";
-
-/**
- * Generate column Options with Select type
- * @param options
- * @param rows
- * @param columnId
- * @returns
- */
-function setOptionsOfSelectDataType(
-  options: RowSelectOption[],
-  rows: any,
-  columnId: string
-): any[] {
-  rows.forEach((row: any) => {
-    const rowValue = row.original[columnId];
-    let match = options.find(
-      (option: { label: string }) => option.label === rowValue
-    );
-    if (!match && rowValue !== undefined && rowValue !== "") {
-      options.push({ label: rowValue, backgroundColor: randomColor() });
-    }
-  });
-  return options;
-}
 
 /**
  * Default headers of the table
@@ -85,7 +59,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       propertyIcon = <TextIcon />;
       break;
     case InputType.SELECT:
-      setOptionsOfSelectDataType(options, table.getRowModel().rows, id);
       propertyIcon = <MultiIcon />;
       break;
     case InputType.CALENDAR:

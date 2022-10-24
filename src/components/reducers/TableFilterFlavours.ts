@@ -3,6 +3,7 @@ import { RowDataType } from "cdm/FolderModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
+import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
 
 export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<RowDataType> = (ddbbConfig: LocalSettings) => (
@@ -10,13 +11,18 @@ export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<Row
     columnId: string,
     filterValue: string
 ) => {
-    const value = row.getValue<Literal>(columnId);
-    if (value === undefined) {
+    try {
+        const value = row.getValue<Literal>(columnId);
+        if (value === undefined) {
+            return false;
+        }
+        const sanitized = ParseService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true).toString().toLowerCase();
+        filterValue = filterValue.toLowerCase();
+        return sanitized.includes(filterValue) || searchRegex(sanitized, filterValue);
+    } catch (e) {
+        LOGGER.error(`Error while searching with globalDatabaseFilterFn: ${e}`);
         return false;
     }
-    const sanitized = ParseService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true).toString().toLowerCase();
-    filterValue = filterValue.toLowerCase();
-    return sanitized.includes(filterValue) || searchRegex(sanitized, filterValue);
 }
 
 function searchRegex(sanitized: string, filterValue: string): boolean {

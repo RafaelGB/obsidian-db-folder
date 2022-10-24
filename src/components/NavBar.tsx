@@ -110,6 +110,8 @@ export function NavBar(navBarProps: NavBarProps) {
         <Toolbar
           style={{
             minHeight: "2.65rem",
+            padding: 0,
+            paddingLeft: "2px",
           }}
         >
           <IconButton
@@ -123,12 +125,12 @@ export function NavBar(navBarProps: NavBarProps) {
               mr: 2,
               maxWidth: 40,
               marginRight: 1,
+              padding: 0.5,
             }}
           >
             <MenuIcon />
           </IconButton>
           <Paper
-            component="form"
             sx={{
               p: "2px 4px",
               display: "flex",
@@ -136,6 +138,7 @@ export function NavBar(navBarProps: NavBarProps) {
               scale: 0.7,
               padding: 0,
               boxShadow: "none",
+              backgroundColor: "transparent",
             }}
           >
             {/** Global filter */}
@@ -151,7 +154,7 @@ export function NavBar(navBarProps: NavBarProps) {
               padding: { xs: "0", md: "5px" },
             }}
           >
-            <QuickFilters table={table} />
+            <QuickFilters table={table} key={`ButtonGroup-QuickFilters`} />
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box

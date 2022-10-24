@@ -3,9 +3,10 @@ import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
-import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { TableColumn } from "cdm/FolderModel";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
-import { Literal } from "obsidian-dataview";
+import { ParseService } from "services/ParseService";
+import { InputType } from "helpers/Constants";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
@@ -26,7 +27,16 @@ const TextCell = (props: CellComponentProps) => {
     (state) => state.actions
   );
 
-  const textCell = parseTextRowToString(textRow, column.id);
+  const textCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.TEXT,
+        configInfo.getLocalSettings()
+      ) as string
+  );
+
   /** Ref to cell container */
   const containerCellRef = useRef<HTMLDivElement>();
   const [dirtyCell, setDirtyCell] = useState(false);
@@ -44,15 +54,21 @@ const TextCell = (props: CellComponentProps) => {
 
       renderMarkdown(defaultCell, textCell, containerCellRef.current, 5);
     }
-  }, [dirtyCell, cell.getValue()]);
+  }, [dirtyCell, textCell]);
 
   const handleEditableOnclick: MouseEventHandler<HTMLSpanElement> = () => {
     setDirtyCell(true);
   };
 
   const persistChange = (changedValue: string) => {
+    changedValue = changedValue.trim();
     if (changedValue !== undefined && changedValue !== textCell) {
-      const newCell = parseStringToTextRow(textRow, column.id, changedValue);
+      const newCell = ParseService.parseRowToLiteral(
+        textRow,
+        tableColumn,
+        changedValue
+      );
+
       dataActions.updateCell(
         row.index,
         tableColumn,
@@ -81,38 +97,5 @@ const TextCell = (props: CellComponentProps) => {
     />
   );
 };
-
-function parseTextRowToString(row: RowDataType, columnId: string) {
-  const cellRoot = row[columnId];
-  let textCell = "";
-  if (typeof cellRoot === "object") {
-    textCell = JSON.stringify(cellRoot);
-  } else {
-    textCell = cellRoot?.toString();
-  }
-  return textCell;
-}
-
-function parseStringToTextRow(
-  row: RowDataType,
-  columnId: string,
-  newValue: string
-): Literal {
-  const cellRoot = row[columnId];
-  if (
-    typeof cellRoot === "object" ||
-    (newValue.startsWith("{") && newValue.endsWith("}"))
-  ) {
-    // TODO control anidated values in function of columnId spliting by "."
-    try {
-      newValue = JSON.parse(newValue);
-    } catch (e) {
-      // Just return the original value
-    }
-  } else {
-    newValue = newValue.trim();
-  }
-  return newValue;
-}
 
 export default TextCell;

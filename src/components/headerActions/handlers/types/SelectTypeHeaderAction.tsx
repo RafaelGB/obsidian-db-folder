@@ -2,7 +2,7 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import MultiIcon from "components/img/Multi";
 import React from "react";
-import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
+import { InputLabel, InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
 
@@ -22,30 +22,30 @@ export default class SelectTypeHeaderAction extends AbstractHeaderAction {
 function selectTypeComponent(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { table, column } = headerActionResponse.headerMenuProps.headerProps;
-  const columnActions = table.options.meta.tableState.columns(
-    (state) => state.actions
-  );
-  const [rows, dataActions] = table.options.meta.tableState.data((state) => [
-    state.rows,
-    state.actions,
-  ]);
-  const ddbbConfig = table.options.meta.tableState.configState(
-    (state) => state.ddbbConfig
-  );
-  const selectOnClick = () => {
+  const { tableState } = table.options.meta;
+  const columnActions = tableState.columns((state) => state.actions);
+  const rows = tableState.data((state) => state.rows);
+  const dataActions = tableState.data((state) => state.actions);
+
+  const configInfo = tableState.configState((state) => state.info);
+
+  const selectOnClick = async () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
+
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.SELECT,
-      ddbbConfig
+      configInfo.getLocalSettings()
     );
-    columnActions.alterColumnType(
+
+    await columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.SELECT,
       rows
     );
   };
+
   return headerTypeComponent({
     onClick: selectOnClick,
     icon: <MultiIcon />,

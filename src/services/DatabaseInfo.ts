@@ -6,7 +6,7 @@ import {
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
-import { ConfigColumn, NoteContentAction } from 'cdm/FolderModel';
+import { ConfigColumn, NoteContentAction, TableColumn } from 'cdm/FolderModel';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
@@ -75,15 +75,34 @@ export default class DatabaseInfo {
      * @param oldColumnId 
      * @param newColumnId 
      */
-    async updateColumnKey(oldColumnId: string, newColumnId: string, newLabel: string) {
-        // clone current column configuration
-        const currentCol = this.yaml.columns[oldColumnId];
-        // update column id
-        currentCol.label = newLabel;
-        currentCol.accessorKey = newColumnId;
-        currentCol.key = newColumnId;
-        delete this.yaml.columns[oldColumnId];
-        this.yaml.columns[newColumnId] = currentCol;
+    async updateColumnKey(currentCol: TableColumn, newColumnKey: string, newNestedKey: string[]): Promise<void> {
+        Object
+            .entries(this.yaml.columns)
+            .forEach(([key, value]) => {
+                // Check if column key is the same as the one we are updating 
+                if (value.key === currentCol.key) {
+                    // Check if we are updating the key
+                    if (currentCol.key !== newColumnKey) {
+                        delete this.yaml.columns[key];
+                        value.key = newColumnKey;
+                        value.accessorKey = newColumnKey;
+                        // If the nested key is the same as the column key, we use the new column key
+                        if (value.nestedKey === currentCol.nestedKey) {
+                            value.nestedKey = newNestedKey.join('.');
+                            this.yaml.columns[`${newColumnKey}${newNestedKey.length > 0 ? `-${newNestedKey}` : ''}`] = value;
+                        } else {
+                            this.yaml.columns[`${newColumnKey}${value.nestedKey ? `-${value.nestedKey}` : ''}`] = value;
+                        }
+                    }
+                    // Check if we are updating the nested key without changing the column key
+                    else if (value.nestedKey === currentCol.nestedKey) {
+                        delete this.yaml.columns[key];
+                        value.nestedKey = newNestedKey.join('.');
+                        this.yaml.columns[`${value.key}${newNestedKey ? `-${newNestedKey.join("-")}` : ''}`] = value;
+                    }
+                }
+            });
+
         // save on disk
         await this.saveOnDisk();
     }

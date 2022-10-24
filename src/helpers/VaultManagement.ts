@@ -86,7 +86,7 @@ export async function adapterTFilesToRows(dbFile: TFile, columns: TableColumn[],
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page as NoteInfoPage);
-    rows.push(noteInfo.getRowDataType(columns, ddbbConfig));
+    rows.push(noteInfo.getRowDataType(columns));
   });
 
   LOGGER.debug(`<= adapterTFilesToRows.  number of rows:${rows.length}`);
@@ -104,7 +104,7 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
   }
   folderFiles.map((page) => {
     const noteInfo = new NoteInfo(page as NoteInfoPage);
-    rows.push(noteInfo.getAllRowDataType(ddbbConfig));
+    rows.push(noteInfo.getAllRowDataType());
   });
 
   LOGGER.debug(`<= obtainAllPossibleRows.  number of rows:${rows.length}`);

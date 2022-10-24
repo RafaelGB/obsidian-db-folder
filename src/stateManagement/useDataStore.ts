@@ -29,6 +29,7 @@ function mockDataState(): DataState {
             updateCell: null,
             updateDataAfterLabelChange: null,
             removeRow: null,
+            editOptionForAllRows: null,
             removeDataOfColumn: null,
             removeOptionForAllRows: null,
             parseDataOfColumn: null,

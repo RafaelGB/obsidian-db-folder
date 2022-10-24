@@ -1,3 +1,30 @@
+
+## 2.7.4
+### Shiny new things
+- names of tags are now editable (updating all the related rows) [ISSUE#443](https://github.com/RafaelGB/obsidian-db-folder/issues/443)
+### Improved
+- ddbb yaml now supports linter plugins [ISSUE#509](https://github.com/RafaelGB/obsidian-db-folder/issues/509)
+- Enter event added to add tags on column settings [ISSUE#520](https://github.com/RafaelGB/obsidian-db-folder/issues/520)
+- Improved nested matadata behaviour [ISSUE#500](https://github.com/RafaelGB/obsidian-db-folder/issues/500)
+### Visual
+- UX of navbar and addRow forms improved with some redesigns [ISSUE#534](https://github.com/RafaelGB/obsidian-db-folder/issues/534) [cesarpereira904](https://github.com/cesarpereira904)
+### No longer broken
+- problem with dataview query without any column informed fixed [ISSUE#531](https://github.com/RafaelGB/obsidian-db-folder/issues/531)
+- Sorting dates and numbers is now more precise [ISSUE#507](https://github.com/RafaelGB/obsidian-db-folder/issues/507) [ISSUE#516](https://github.com/RafaelGB/obsidian-db-folder/issues/516) [ISSUE#533](https://github.com/RafaelGB/obsidian-db-folder/issues/533)
+- CSV export button fixed. the bug was introduced in 2.7.3 [ISSUE#535](https://github.com/RafaelGB/obsidian-db-folder/issues/535)
+## 2.7.3
+### Improved
+- Use of Obsidian 1.0 color picker [ISSUE#497](https://github.com/RafaelGB/obsidian-db-folder/issues/497)
+### No longer broken
+- Hotfix with rename ids breaking the rendering of the plugin [ISSUE#505](https://github.com/RafaelGB/obsidian-db-folder/issues/505)
+## 2.7.2
+### Shiny new things
+- Edit nested metadata arrives! You can now edit nested metadata in the cell editor [ISSUE#442](https://github.com/RafaelGB/obsidian-db-folder/issues/442)
+### Performance
+- Editions use a new method to update the notes under a queue. It should prevent the plugin from locking the UI when editing a lot of notes or errors editing the same note multiple times
+### No longer broken
+- support for stack tabs. If a ddbb note is included Obsidian does not crash anymore [ISSUE#435](https://github.com/RafaelGB/obsidian-db-folder/issues/435)
+- empty line was added if yaml did not exist editing inline fields [ISSUE#504](https://github.com/RafaelGB/obsidian-db-folder/issues/504)
 ## 2.7.1
 - Hotfix for 2.7.0 of global settings developer options
 - Experimental support for Objects on text fields

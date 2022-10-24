@@ -4,10 +4,13 @@ import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
 import { LocalSettings } from "cdm/SettingsModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { deepMerge, generateLiteral, obtainAnidatedLiteral } from "helpers/DataObjectHelper";
 
 class Parse {
 
     private static instance: Parse;
+
     /**
      * Universal parse method to parse a literal to a specific type
      * @param literal 
@@ -30,6 +33,9 @@ class Parse {
             case InputType.MARKDOWN:
                 parsedLiteral = this.parseToMarkdown(wrapped, localSettings, isInline);
                 break;
+            case InputType.SORTING:
+                parsedLiteral = this.parseToEnableSorting(wrapped, localSettings, isInline);
+                break;
             case InputType.TAGS:
                 parsedLiteral = this.parseToOptionsArray(wrapped);
                 break;
@@ -50,6 +56,8 @@ class Parse {
                 break;
             case InputType.TASK:
             case InputType.FORMULA:
+            case InputType.INLINKS:
+            case InputType.OUTLINKS:
                 // Do nothing
                 break;
             default:
@@ -59,16 +67,65 @@ class Parse {
         LOGGER.debug(`<=parseLiteral`);
         return parsedLiteral;
     }
+
     /**
      * Check if literal is Proxy DataArray, if so, parse it. If not, return same literal
      * @param literal 
      * @returns 
      */
-    parseDataArray(literal: Literal): Literal {
+    public parseDataArray(literal: Literal): Literal {
         if ((literal as any).values !== undefined && (literal as any).settings !== undefined) {
             literal = (literal as any).values
         }
         return literal;
+    }
+
+    /**
+     * Manage the value of the rendered string to save as Literal cell
+     * @param row
+     * @param column
+     * @param newValue
+     * @returns
+     */
+    public parseRowToLiteral(
+        row: RowDataType,
+        column: TableColumn,
+        newValue: Literal
+    ): Literal {
+        if (typeof newValue === "string") {
+            try {
+                newValue = JSON.parse(newValue);
+            } catch (e) {
+                // Do nothing
+            }
+        }
+        if (column.nestedKey) {
+            try {
+                const originalValue = row[column.key];
+                // Generate object with the new value using the nested key anidated in fuction of split .
+                const target = (originalValue as DataObject) ?? {};
+                const source = generateLiteral(column.nestedKey, newValue);
+                return deepMerge(source, target);
+            } catch (e) {
+                // Just return the original value
+            }
+        }
+        return newValue;
+    }
+
+    /**
+     * Manage the value of the cell in function of the type of the column
+     * @param row
+     * @param column
+     * @param config
+     * @returns
+     */
+    public parseRowToCell(row: RowDataType, column: TableColumn, type: string, config: LocalSettings): Literal {
+        let literal = row[column.key] as Literal;
+        if (column.nestedKey && literal !== undefined) {
+            literal = obtainAnidatedLiteral(column.nestedKey, literal, type, config);
+        }
+        return this.parseLiteral(literal, type, config);
     }
 
     private parseToCalendar(wrapped: WrappedLiteral, format?: string): DateTime {
@@ -99,6 +156,12 @@ class Parse {
                 if (DateTime.isDateTime(wrapped.value)) {
                     return wrapped.value.toFormat(localSettings.datetime_format);
                 } else {
+                    try {
+                        // Try to parse to JSON
+                        return JSON.stringify(wrapped.value);
+                    } catch (e) {
+                        // Do nothing
+                    }
                     // nested metadata exposed as DataObject
                     return wrapped.value;
                 }
@@ -117,13 +180,34 @@ class Parse {
         }
     }
 
-    private parseToBoolean(wrapped: WrappedLiteral): string {
+    private parseToBoolean(wrapped: WrappedLiteral): boolean {
         if (wrapped.type === 'boolean') {
-            return wrapped.value ? 'true' : 'false';
+            return wrapped.value;
         } else {
             const adjustedValue = DataviewService.getDataviewAPI().value.toString(wrapped.value);
-            return adjustedValue === 'true' ? "true" : "false";
+            return adjustedValue === 'true';
         }
+    }
+
+    private parseToEnableSorting(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean): string {
+        let auxMarkdown = '';
+        switch (wrapped.type) {
+            case 'link':
+                auxMarkdown = `${wrapped.value.fileName()}|${wrapped.value.path}`;
+                break;
+            case 'object':
+            case 'date':
+                if (DateTime.isDateTime(wrapped.value)) {
+                    auxMarkdown = wrapped.value.toMillis().toString();
+                } else {
+                    auxMarkdown = JSON.stringify(wrapped.value);
+                }
+                break;
+            // By default. Use markdown parser
+            default:
+                auxMarkdown = this.parseToMarkdown(wrapped, localSettings, isInline);
+        }
+        return auxMarkdown;
     }
 
     private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean): string {
@@ -133,7 +217,6 @@ class Parse {
             case 'number':
                 auxMarkdown = wrapped.value.toString();
                 break;
-
             case 'array':
                 auxMarkdown = wrapped.value
                     .map(v => this.parseToMarkdown(DataviewService.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
@@ -151,21 +234,23 @@ class Parse {
                 break;
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
-                    return this.parseToMarkdown({ type: 'date', value: wrapped.value }, localSettings, isInline);
+                    auxMarkdown = this.parseToMarkdown({ type: 'date', value: wrapped.value }, localSettings, isInline);
+                } else {
+                    auxMarkdown = JSON.stringify(wrapped.value);
                 }
-            // Else go to default
+                break;
             default:
-                auxMarkdown = DataviewService.getDataviewAPI().value.toString(wrapped.value);
+                auxMarkdown = wrapped.value?.toString().trim();
         }
         // Check possible markdown breakers
-        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);;
+        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);
     }
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
         if (wrapped.type !== 'array') {
-            return wrapped.value.toString().split(",").map(s => s.trim());
+            return wrapped.value.toString().split(",").map(s => s.toString().trim());
         }
-        return wrapped.value;
+        return wrapped.value.map(v => DataviewService.getDataviewAPI().value.toString(v));
     }
 
     private handleYamlBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {

@@ -30,7 +30,7 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
       size="small"
       onClick={enableFilterHandler}
       key={`Button-Enabled-DataviewFilters`}
-      style={{ minWidth: "0px", padding: "2px" }}
+      style={{ minWidth: "0px", padding: "2px", borderRadius: "0px" }}
     >
       <span className="svg-icon svg-gray">
         {filters.enabled ? <FilterOnIcon /> : <FilterOffIcon />}

@@ -1,16 +1,15 @@
 import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { InputType, UpdateRowOptions } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { EditEngineService } from "services/EditEngineService";
-import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
-export default class RemoveOptionForAllRowsAction extends AbstractTableAction<DataState> {
+export default class EditOptionForAllRowsHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { get, implementation } = tableActionResponse;
-        implementation.actions.removeOptionForAllRows = async (column: TableColumn, option: string, columns: TableColumn[],
+        implementation.actions.editOptionForAllRows = async (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => {
             // Lambda to select the rows to update
             let lambdaFilter: (cellValue: Literal) => boolean;
@@ -20,12 +19,12 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
                         const array = Array.isArray(cellValue)
                             ? (cellValue as Literal[])
                             : []
-                        return array.length > 0 && array.some(value => value?.toString() === option);
+                        return array.length > 0 && array.some(value => value?.toString() === oldLabel);
                     }
                     break;
                 case InputType.SELECT:
                     lambdaFilter = (cellValue: Literal) => {
-                        return (cellValue?.toString().length > 0 && cellValue?.toString() === option);
+                        return (cellValue?.toString().length > 0 && cellValue?.toString() === oldLabel);
                     };
                     break;
                 default:
@@ -39,17 +38,18 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
                         const array = Array.isArray(cellValue)
                             ? (cellValue as Literal[])
                             : []
-                        return array.filter(value => value?.toString() !== option);
+                        return array.map(value => value?.toString() === oldLabel ? newLabel : value);
                     }
                     break;
                 case InputType.SELECT:
                     lambdaUpdate = (cellValue: Literal) => {
-                        return "";
+                        return newLabel;
                     };
                     break;
                 default:
                 // Do nothing
             }
+
             // Update the rows batch processing
             EditEngineService.batchUpdateRowFiles(
                 lambdaUpdate,

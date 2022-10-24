@@ -40,6 +40,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     column.label = key;
                 }
 
+                column.position = this.parseNumber(column.position);
 
                 column.skipPersist = this.parseBoolean(column.skipPersist);
 

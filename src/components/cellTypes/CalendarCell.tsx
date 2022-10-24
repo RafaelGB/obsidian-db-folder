@@ -5,24 +5,31 @@ import { Portal } from "@mui/material";
 import { c } from "helpers/StylesHelper";
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
+import { ParseService } from "services/ParseService";
+import { InputType } from "helpers/Constants";
 
-const CalendarPortal = (calendarProps: CellComponentProps) => {
+const CalendarCell = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
   const { row, column, table } = defaultCell;
-  const { tableState, view } = table.options.meta;
+  const { tableState } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
+
   const dataActions = tableState.data((state) => state.actions);
-
-  const calendarPortalRow = tableState.data((state) => state.rows[row.index]);
-
+  const calendarRow = tableState.data((state) => state.rows[row.index]);
   const columnsInfo = tableState.columns((state) => state.info);
   const configInfo = tableState.configState((state) => state.info);
+  const calendarCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.CALENDAR,
+        configInfo.getLocalSettings()
+      ) as DateTime
+  );
 
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [calendarValue, setCalendarValue] = useState(
-    calendarPortalRow[tableColumn.key]
-  );
 
   function handleSpanOnClick(event: any) {
     event.preventDefault();
@@ -31,14 +38,19 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
 
   function handleCalendarChange(date: Date) {
     const changed = date !== null ? DateTime.fromJSDate(date) : null;
+    const newCell = ParseService.parseRowToLiteral(
+      calendarRow,
+      tableColumn,
+      changed
+    );
+
     dataActions.updateCell(
       row.index,
       tableColumn,
-      changed,
+      newCell,
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
-    setCalendarValue(changed);
     setShowDatePicker(false);
   }
 
@@ -51,8 +63,8 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
     <DatePicker
       dateFormat="yyyy-MM-dd"
       selected={
-        DateTime.isDateTime(calendarValue)
-          ? (calendarValue as unknown as DateTime).toJSDate()
+        DateTime.isDateTime(calendarCell)
+          ? (calendarCell as unknown as DateTime).toJSDate()
           : null
       }
       onChange={handleCalendarChange}
@@ -69,8 +81,8 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
       onClick={handleSpanOnClick}
       style={{ width: column.getSize() }}
     >
-      {DateTime.isDateTime(calendarValue)
-        ? (calendarValue as unknown as DateTime).toFormat(
+      {DateTime.isDateTime(calendarCell)
+        ? (calendarCell as unknown as DateTime).toFormat(
             configInfo.getLocalSettings().date_format
           )
         : null}
@@ -78,4 +90,4 @@ const CalendarPortal = (calendarProps: CellComponentProps) => {
   );
 };
 
-export default CalendarPortal;
+export default CalendarCell;

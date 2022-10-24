@@ -2,7 +2,7 @@ import { Row } from "@tanstack/react-table"
 import { LabelKeyObject } from "react-csv/components/CommonPropTypes";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { MetadataColumns } from "helpers/Constants";
-import { getNormalizedPath } from "helpers/VaultManagement";
+import { Link } from "obsidian-dataview";
 
 export const normalizeRowsToCsvData = (rows: Row<RowDataType>[]): object[] => {
     // Filter out empty rows
@@ -16,7 +16,7 @@ function sanitizeDataCSV(rows: Row<RowDataType>[]): object[] {
             switch (cellKey) {
                 case MetadataColumns.FILE:
                     rowObject = updateFromPartial(rowObject, {
-                        [cellKey]: getNormalizedPath(cellValue).alias
+                        [cellKey]: (cellValue as Link).fileName()
                     });
                     break;
                 default:

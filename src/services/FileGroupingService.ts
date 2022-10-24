@@ -1,10 +1,11 @@
-import { Notice } from "obsidian";
+import { normalizePath, Notice } from "obsidian";
 import { LOGGER } from "services/Logger";
 import pLimit from "p-limit";
 import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolveNewFilePath } from "helpers/FileManagement";
 import { MetadataColumns } from "helpers/Constants";
+import { DataviewService } from "./DataviewService";
 
 const limitMovingFiles = pLimit(1);
 const limitCreatingFolders = pLimit(1);
@@ -34,7 +35,7 @@ export class FileGroupingService {
 
   static moveFile = async (folderPath: string, row: RowDataType): Promise<boolean> =>
     limitMovingFiles(async () => {
-      let file = row.__note__.getFile();
+      const file = row.__note__.getFile();
       const filePath = `${folderPath}/${file.name}`;
       const fileIsAlreadyInCorrectFolder = row.__note__.filepath === filePath;
       if (fileIsAlreadyInCorrectFolder) return false;
@@ -46,18 +47,17 @@ export class FileGroupingService {
       }
 
       await app.fileManager.renameFile(file, filePath);
-      row[MetadataColumns.FILE] = `${file.basename}|${folderPath}/${file.name}`;
+      row[MetadataColumns.FILE] = DataviewService.getDataviewAPI().fileLink(filePath);
       row.__note__.filepath = `${folderPath}/${file.name}`;
       return true;
     });
 
   static createFolder = async (folderPath: string): Promise<void> =>
-    limitCreatingFolders(async () => {
-      await app.vault.adapter.exists(folderPath).then(async (exists) => {
-        if (!exists) {
-          await app.vault.createFolder(`${folderPath}/`);
-        }
-      });
+    await limitCreatingFolders(async () => {
+      const isFolderExist = await app.vault.adapter.exists(normalizePath(folderPath));
+      if (!isFolderExist) {
+        await app.vault.createFolder(`${folderPath}/`);
+      }
     });
 
   static organizeNotesIntoSubfolders = async (
