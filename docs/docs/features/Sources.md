@@ -16,3 +16,6 @@ There are two types of destinations :
 2. Where you will store the notes of the database.
 
 If you chose `tag/incoming_link/outgoing_link/dataview` as the source, you'll have to choose both types of destinations. But if you right-clicked a folder or selected `current_folder` as the source, everything is stored under one folder, so you'll only choose once.
+
+#video 
+#video 

@@ -2,17 +2,25 @@
 
 You can change the database name and description in the database settings.
 
+#image 
+
 ## Sticky First Column
 
 You can make the first column sticky in the database settings to make it always visible even when scrolling horizontally.
+
+#video 
 
 ## Pagination
 
 To help with displaying a lot of data, by default the database displays only 10 rows and allows changing the pages using the top bar. You can change the number of rows displayed per page in the database settings.
 
+#video 
+
 ## Row Height
 
 In the database settings under `cell size`, you can change the row height between 3 options (compact, normal, wide).
+
+#video 
 
 ## Filtering
 
@@ -26,26 +34,40 @@ Each `group filter` will have a dedicated **named button** on the database top b
 
 > The database filters hold priority over the dataview query source filters.
 
+#video 
+
 ## Refresh Database
 
 There is no actual refresh button, but you can use the `activate/desactive filter` button to refresh the database.
+
+#video 
 
 ## Sorting
 
 You can sort one column or multiple columns from the column's menu in descending or ascending order. The sort priority is displayed as a number next the arrow in the column header. To remove the sort, just use the column menu.
 
+#video 
+
 ## Database Markdown
 
-You can view the database markdown note by using the command `open as markdown` in obsidian menu or in the database menu.
+You can view the database markdown note by using the command `open as markdown` in obsidian menu or in the database menu. To re-enable the database view, just close the pane and re-open it again.
+
+#video 
 
 ## Embedding Database
 
 You can embed a database in another note by using this format `![[database file name.md]]`, it'll show a dataview query of the database.
 
+#video 
+
 ## Exporting Data
 
 You can export the database into **CSV** format using the database menu.
 
+#video  
+
 ## Importing Data
 
 You can upload a **CSV** file and turn it into a database using the database menu. The **CSV** file has to have a header row and before importing you need to define the column used to create the files in the plugin global settings under `CSV section > mandatory header key`.
+
+#video 

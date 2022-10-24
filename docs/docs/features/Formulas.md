@@ -8,6 +8,8 @@ The formula is a javascript code that will be executed when the row is loaded.
 
 The code can be written in the column settings. The generated values can be added to the notes' metadata by enabling `persist formula output` in the column settings.
 
+#video 
+
 ### Exposed Variables
 
 - `row` : the row object
