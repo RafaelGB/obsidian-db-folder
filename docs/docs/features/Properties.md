@@ -19,9 +19,11 @@
 
 ## Column ID
 
-Where you create a column, the `column name` (name displayed in the database) is the same as the `column id` (the metadata persisted in your notes). You can change the column ID in the column settings. Keep in mind though, that the `column id` is used by the **filters**, so don't get confused when choosing what column to filter.
+Where you create a column, the `column name` (name displayed in the database) is the same as the `column id` (the metadata persisted in your notes). You can change the column ID in the column settings. This ID is used by the **filters**, so keep that in mind when choosing what column to filter.
 
-#video
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197635378-256e2468-bb90-477f-8760-393f792777d6.mov" type="video/mp4">
+</video>
 
 ## YAML & Dataview Inline Fields
 
@@ -32,7 +34,9 @@ The plugin works with YAML and dataview inline fields, but looks for metadata in
 
 If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database. 
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197635449-507ea33b-5213-4976-a7a2-bbb4e7b888b1.mov" type="video/mp4">
+</video> 
 
 ## Nested Metadata
 
@@ -47,10 +51,14 @@ metadata1:
 
 If you want to add existing nested metadata, you'll have to abide by the format described above.
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197635608-8c638ab0-1551-498f-b859-a9ab58eff34b.mov" type="video/mp4">
+</video>
 
 ## Appearance
 
 You can enable text wrapping and you can change the text alignment between `right-aligned`, `centered`, `left-aligned`, and `justified` from the column settings of the **text**, **number**, and **formula** properties.
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197635327-31c273a1-6cb5-4283-a9a5-dddbdcc6b831.mov" type="video/mp4">
+</video>

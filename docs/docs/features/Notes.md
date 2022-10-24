@@ -2,23 +2,31 @@
 
 You can create blank notes by typing the name in the bottom bar while leaving the template field empty.
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197633841-2e54a360-ce90-4b95-8032-34409fe4a1bc.mov" type="video/mp4">
+</video>
 
 ## Creating Notes with a Template
 
 You have to choose a template in the bottom bar before creating the note. You can filter the files suggested in the bottom bar by adding a folder in the settings under `rows template file folder location`.
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634718-98463157-f7d7-4323-87ab-e280211eeed7.mov" type="video/mp4">
+</video>
 
 > It works with the core template plugin. But with the templater plugin, you have to activate the option `Trigger templater on new file creation` in templater settings.
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634584-7420f211-bec2-4e0e-a031-dab809cbc1ab.mov" type="video/mp4">
+</video>
 
 ## Deleting & Renaming Notes
 
 You can click on the numbers to the right of every row, to bring up a menu where you can delete and rename the note associated with the row.
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634302-a1081f6b-12da-40a5-a476-b222d4686b98.mov" type="video/mp4">
+</video>
 
 ## Moving Notes Based on Metadata
 
@@ -34,4 +42,6 @@ You have additional settings to customize this rule under `configuration about c
 
 > The `column name` and the `column id` have to be the same for this to work.
 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634397-54e28827-6629-492a-a529-89ecd49622cd.mov" type="video/mp4">
+</video>

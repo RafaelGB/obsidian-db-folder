@@ -17,5 +17,6 @@ There are two types of destinations :
 
 If you chose `tag/incoming_link/outgoing_link/dataview` as the source, you'll have to choose both types of destinations. But if you right-clicked a folder or selected `current_folder` as the source, everything is stored under one folder, so you'll only choose once.
 
-#video 
-#video 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197635750-10d783f1-169a-4e6c-8c07-9c38dcf7938d.mov" type="video/mp4">
+</video>
