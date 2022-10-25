@@ -3,11 +3,13 @@ import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { InputType } from "helpers/Constants";
+import { recordRowsFromRelation } from "helpers/RelationHelper";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Link } from "obsidian-dataview";
 import React, { useEffect, useRef, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { ParseService } from "services/ParseService";
+import RelationEditor from "./Editor/RelationEditor";
 
 const RelationCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
@@ -51,60 +53,16 @@ const RelationCell = (mdProps: CellComponentProps) => {
     }
   }, [relationRow, dirtyCell]);
 
-  const EditRelations = () => {
-    const initValue = relationCell
-      ? relationCell.map((link: Link) => ({
-          label: link.fileName(),
-          value: link.path,
-          color: "var(--text-normal)",
-        }))
-      : [];
-
-    const multiOptions = [
-      {
-        label: "test",
-        value: "test",
-        color: "var(--text-normal)",
-      },
-      {
-        label: "test2",
-        value: "test2",
-        color: "var(--text-normal)",
-      },
-      {
-        label: "test3",
-        value: "test3",
-        color: "var(--text-normal)",
-      },
-    ];
-    return (
-      <div className={c("relation")}>
-        <CreatableSelect
-          defaultValue={initValue}
-          closeMenuOnSelect={false}
-          isSearchable
-          isMulti
-          autoFocus
-          openMenuOnFocus
-          menuPosition="fixed"
-          styles={CustomTagsStyles}
-          options={multiOptions}
-          onBlur={() => setDirtyCell(false)}
-          //onChange={handleOnChange}
-          menuPortalTarget={activeDocument.body}
-          className={`react-select-container ${c(
-            "tags-container text-align-center"
-          )}`}
-          classNamePrefix="react-select"
-          menuPlacement="auto"
-          menuShouldBlockScroll={true}
-        />
-      </div>
-    );
+  const persistChange = (newPath: string[]) => {
+    console.log("persistChange", newPath);
   };
 
   return dirtyCell ? (
-    EditRelations()
+    <RelationEditor
+      defaultCell={defaultCell}
+      persistChange={persistChange}
+      relationCell={relationCell}
+    />
   ) : (
     <span
       ref={containerCellRef}

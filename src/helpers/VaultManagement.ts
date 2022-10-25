@@ -78,7 +78,7 @@ export async function adapterTFilesToRows(dbFile: TFile, columns: TableColumn[],
   LOGGER.debug(`=> adapterTFilesToRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
 
-  let folderFiles = await sourceDataviewPages(folderPath, ddbbConfig, columns);
+  let folderFiles = await sourceDataviewPages(ddbbConfig, folderPath, columns);
   folderFiles = folderFiles.where(p => (p.file as any).path !== dbFile.path);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
@@ -96,7 +96,7 @@ export async function adapterTFilesToRows(dbFile: TFile, columns: TableColumn[],
 export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: LocalSettings, filters: FilterSettings, columns: TableColumn[]): Promise<Array<RowDataType>> {
   LOGGER.debug(`=> obtainAllPossibleRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
-  let folderFiles = await sourceDataviewPages(folderPath, ddbbConfig, columns);
+  let folderFiles = await sourceDataviewPages(ddbbConfig, folderPath, columns);
   folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
@@ -111,7 +111,7 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
   return rows;
 }
 
-export async function sourceDataviewPages(folderPath: string, ddbbConfig: LocalSettings, columns: TableColumn[]): Promise<DataArray<Record<string, Literal>>> {
+export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath: string, columns?: TableColumn[]): Promise<DataArray<Record<string, Literal>>> {
   let pagesResult: DataArray<Record<string, Literal>>;
   switch (ddbbConfig.source_data) {
     case SourceDataTypes.TAG:
