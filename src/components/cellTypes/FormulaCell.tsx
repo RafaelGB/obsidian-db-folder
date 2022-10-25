@@ -1,8 +1,10 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
+import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, { useEffect, useRef } from "react";
+import { ParseService } from "services/ParseService";
 
 const FormulaCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
@@ -19,6 +21,15 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   useEffect(() => {
     if (formulaRef.current !== null) {
       formulaRef.current.innerHTML = "";
+      const formulaCell = tableState.data(
+        (state) =>
+          ParseService.parseRowToCell(
+            state.rows[row.index],
+            tableColumn,
+            InputType.FORMULA,
+            configInfo.getLocalSettings()
+          ) as string
+      );
       const formulaResponse = formulaInfo
         .runFormula(
           tableColumn.config.formula_query,
@@ -31,12 +42,18 @@ const FormulaCell = (mdProps: CellComponentProps) => {
       // Save formula response on disk
       if (
         tableColumn.config.persist_formula &&
-        formulaRow[tableColumn.key] !== formulaResponse
+        formulaCell !== formulaResponse
       ) {
+        const newCell = ParseService.parseRowToLiteral(
+          formulaRow,
+          tableColumn,
+          formulaResponse
+        );
+
         dataActions.updateCell(
           row.index,
           tableColumn,
-          formulaResponse,
+          newCell,
           columnsInfo.getAllColumns(),
           configInfo.getLocalSettings()
         );

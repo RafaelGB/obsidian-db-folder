@@ -10,7 +10,7 @@ import { InputType } from "helpers/Constants";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, column, table, row } = defaultCell;
+  const { column, table, row } = defaultCell;
   const { tableState } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
   const textRow = tableState.data((state) => state.rows[row.index]);

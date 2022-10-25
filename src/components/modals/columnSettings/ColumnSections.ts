@@ -10,6 +10,7 @@ import { FormulaInputHandler } from "components/modals/columnSettings/handlers/a
 import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/styles/AlignmentSelectorHandler";
 import { ToggleWrapContentHandler } from "components/modals/columnSettings/handlers/styles/ToggleWrapContentHandler";
 import { ColumnIdInputHandler } from "components/modals/columnSettings/handlers/ColumnIdInputHandler";
+import { DatabaseSelectorHandler } from "components/modals/columnSettings/handlers/dropdowns/DatabaseSelectorHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -57,12 +58,15 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
     }
     protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
         const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
+        // Mandatory
+        particularHandlers.push(new ColumnIdInputHandler());
+        // Particular
         switch (this.input) {
             case InputType.TASK:
+            case InputType.RELATION:
                 // do nothing
                 break;
             default:
-                particularHandlers.push(new ColumnIdInputHandler());
                 particularHandlers.push(new InlineToggleHandler());
         }
         return particularHandlers;
@@ -105,6 +109,8 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
             case InputType.FORMULA:
                 particularHandlers.push(new FormulaInputHandler());
                 break;
+            case InputType.RELATION:
+                particularHandlers.push(new DatabaseSelectorHandler());
             default:
                 break;
         }

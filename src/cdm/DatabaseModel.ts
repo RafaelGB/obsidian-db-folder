@@ -3,7 +3,7 @@ import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { TableOptions } from "@tanstack/react-table";
 import { BaseColumn, RowDataType } from "cdm/FolderModel";
-import { DateTime, SMarkdownPage, STask } from "obsidian-dataview";
+import { SMarkdownPage } from "obsidian-dataview";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {

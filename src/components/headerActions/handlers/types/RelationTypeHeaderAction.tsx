@@ -4,7 +4,7 @@ import React from "react";
 import { InputLabel, InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
-import ArrowUpRight from "components/img/ArrowUpRight";
+import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
 
 export default class RelationTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -49,7 +49,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
 
   return headerTypeComponent({
     onClick: relationOnClick,
-    icon: <ArrowUpRight />,
+    icon: <RelationBidirectionalIcon />,
     label: InputLabel.RELATION,
   });
 }

@@ -14,7 +14,7 @@ import TagsIcon from "components/img/TagsIcon";
 import OutlinkIcon from "components/img/OutlinkIcon";
 import IncomingLinkIcon from "components/img/IncomingLinkIcon";
 import CodeIcon from "components/img/CodeIcon";
-import ArrowUpRight from "components/img/ArrowUpRight";
+import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
@@ -89,7 +89,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       propertyIcon = <CodeIcon />;
       break;
     case InputType.RELATION:
-      propertyIcon = <ArrowUpRight />;
+      propertyIcon = <RelationBidirectionalIcon />;
       break;
     default:
       break;
