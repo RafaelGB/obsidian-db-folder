@@ -4,34 +4,34 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterOptionToColumnHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
-        const { view, set, implementation } = tableActionResponse;
-        implementation.actions.addOptionToColumn = async (
+        const { view, set, get, implementation } = tableActionResponse;
+        implementation.actions.addOptionToColumn = (
             column: TableColumn,
             option: string,
             backgroundColor: string
         ) => {
             // Wrap in a promise of a queue to avoid concurrency issues
-            queueMicrotask(async () => {
-                // Check if the option already exists
-                const optionIndex = column.options.findIndex((o) => o.label === option);
-                // Add the option to the column if it doesn't exist
-                if (optionIndex === -1) {
-                    // Save on disk
-                    const newOptions = [...column.options, { label: option, backgroundColor: backgroundColor }];
-                    await view.diskConfig.updateColumnProperties(column.id, {
-                        options: newOptions,
-                    });
+            const columnIndex = get().columns.findIndex(
+                (col: TableColumn) => col.id === column.id
+            );
+            const memoryColumn = get().columns[columnIndex];
+            // Check if the option already exists
+            const optionIndex = memoryColumn.options.findIndex((o) => o.label === option);
+            // Add the option to the column if it doesn't exist
+            if (optionIndex === -1) {
+                // Save on disk
+                const newOptions = [...memoryColumn.options, { label: option, backgroundColor: backgroundColor }];
+                view.diskConfig.updateColumnProperties(column.id, {
+                    options: newOptions,
+                });
 
-                    // Save on memory
-                    set((updater) => {
-                        const optionIndex = updater.columns.findIndex(
-                            (col: TableColumn) => col.id === column.id
-                        );
-                        updater.columns[optionIndex].options = newOptions;
-                        return { columns: updater.columns };
-                    });
-                }
-            });
+                // Save on memory
+                set((updater) => {
+                    memoryColumn.options = newOptions;
+                    updater.columns[columnIndex] = memoryColumn;
+                    return { columns: updater.columns };
+                });
+            }
         }
 
         tableActionResponse.implementation = implementation;
