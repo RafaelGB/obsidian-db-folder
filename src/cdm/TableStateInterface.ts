@@ -60,7 +60,7 @@ export interface ColumnsState {
         addToRight: (column: TableColumn, customName?: string) => void;
         remove: (column: TableColumn) => void;
         alterSorting: (column: TableColumn) => void;
-        addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => Promise<void>;
+        addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
         alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => Promise<void>;
         alterColumnId: (column: TableColumn, root: string, nestedIds: string[]) => Promise<void>;
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
