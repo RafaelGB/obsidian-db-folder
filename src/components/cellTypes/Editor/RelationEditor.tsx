@@ -1,18 +1,6 @@
-import {
-  EditorCellComponentProps,
-  RelationEditorComponentProps,
-  SelectValue,
-} from "cdm/ComponentsModel";
-
-import React, {
-  ChangeEventHandler,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { RelationEditorComponentProps, SelectValue } from "cdm/ComponentsModel";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
-import { MarkdownEditor } from "components/cellTypes/Editor/MarkdownEditor";
 import CreatableSelect from "react-select/creatable";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c } from "helpers/StylesHelper";
@@ -44,10 +32,12 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
 
   // onChange handler
   const handleOnChange = async (newValue: OnChangeValue<SelectValue, true>) => {
-    const arrayTags = newValue.map((tag) => tag.value);
-    // TODO: generate Links with paths
-    //setRelationValue(arrayTags);
-    //setEditorValue(value);
+    const arrayTags = newValue.map((tag) => ({
+      label: tag.value,
+      value: tag.value,
+      color: "var(--text-normal)",
+    }));
+    setRelationValue(arrayTags);
   };
 
   /** Call onBlur */

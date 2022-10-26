@@ -8,6 +8,7 @@ import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Link } from "obsidian-dataview";
 import React, { useEffect, useRef, useState } from "react";
 import CreatableSelect from "react-select/creatable";
+import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "./Editor/RelationEditor";
 
@@ -53,17 +54,35 @@ const RelationCell = (mdProps: CellComponentProps) => {
     }
   }, [relationRow, dirtyCell]);
 
-  const persistChange = (newPath: string[]) => {
-    // Check if the new group differs from the old one
-    const oldPath = relationCell.map((relation) => relation.path);
-    if (newPath !== undefined && newPath !== oldPath) {
-      console.log("persistChange", newPath);
+  const persistChange = (newPaths: string[]) => {
+    const oldPaths = relationCell
+      ? relationCell.map((relation) => relation.path)
+      : [];
+    const updatedRequired =
+      newPaths.length !== oldPaths.length ||
+      newPaths.some((path) => !oldPaths.includes(path));
+
+    if (updatedRequired) {
+      const newRelations = newPaths
+        .filter((path) => !oldPaths.includes(path))
+        // Create a new link for each path
+        .map((path) => DataviewService.getDataviewAPI().fileLink(path));
+
       const newCell = ParseService.parseRowToLiteral(
         relationRow,
         tableColumn,
-        newPath
+        newRelations
+      );
+
+      dataActions.updateCell(
+        row.index,
+        tableColumn,
+        newCell,
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings()
       );
     }
+    setDirtyCell(false);
   };
 
   return dirtyCell ? (
