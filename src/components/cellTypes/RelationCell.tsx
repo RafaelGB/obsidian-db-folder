@@ -54,7 +54,16 @@ const RelationCell = (mdProps: CellComponentProps) => {
   }, [relationRow, dirtyCell]);
 
   const persistChange = (newPath: string[]) => {
-    console.log("persistChange", newPath);
+    // Check if the new group differs from the old one
+    const oldPath = relationCell.map((relation) => relation.path);
+    if (newPath !== undefined && newPath !== oldPath) {
+      console.log("persistChange", newPath);
+      const newCell = ParseService.parseRowToLiteral(
+        relationRow,
+        tableColumn,
+        newPath
+      );
+    }
   };
 
   return dirtyCell ? (

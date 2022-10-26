@@ -1,6 +1,7 @@
 import {
   EditorCellComponentProps,
   RelationEditorComponentProps,
+  SelectValue,
 } from "cdm/ComponentsModel";
 
 import React, {
@@ -18,6 +19,7 @@ import { c } from "helpers/StylesHelper";
 import { recordRowsFromRelation } from "helpers/RelationHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
+import { OnChangeValue } from "react-select";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
@@ -38,27 +40,13 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
         }))
       : []
   );
-  const [relationOptions, setRelationOptions] = useState([
-    {
-      label: "test",
-      value: "test",
-      color: "var(--text-normal)",
-    },
-    {
-      label: "test2",
-      value: "test2",
-      color: "var(--text-normal)",
-    },
-    {
-      label: "test3",
-      value: "test3",
-      color: "var(--text-normal)",
-    },
-  ]);
+  const [relationOptions, setRelationOptions] = useState([]);
 
   // onChange handler
-  const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const { value } = event.target;
+  const handleOnChange = async (newValue: OnChangeValue<SelectValue, true>) => {
+    const arrayTags = newValue.map((tag) => tag.value);
+    // TODO: generate Links with paths
+    //setRelationValue(arrayTags);
     //setEditorValue(value);
   };
 
@@ -81,16 +69,6 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
     persistChange(relationValue.map((link) => link.value));
   };
 
-  const initValue = useMemo(() => {
-    return relationCell
-      ? relationCell.map((link: Link) => ({
-          label: link.fileName(),
-          value: link.path,
-          color: "var(--text-normal)",
-        }))
-      : [];
-  }, []);
-
   const relationRowsCallBack = useCallback(async () => {
     const relationRows = await recordRowsFromRelation(
       tableColumn.config.related_note_path,
@@ -107,10 +85,11 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   useEffect(() => {
     relationRowsCallBack();
   }, []);
+
   return (
     <div className={c("relation")}>
       <CreatableSelect
-        defaultValue={initValue}
+        defaultValue={relationValue}
         closeMenuOnSelect={false}
         isSearchable
         isMulti
@@ -120,7 +99,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
         styles={CustomTagsStyles}
         options={relationOptions}
         onBlur={handleOnBlur}
-        //onChange={handleOnChange}
+        onChange={handleOnChange}
         menuPortalTarget={activeDocument.body}
         className={`react-select-container ${c(
           "tags-container text-align-center"
