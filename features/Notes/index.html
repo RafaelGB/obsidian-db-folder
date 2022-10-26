@@ -614,13 +614,29 @@
 
 <h2 id="creating-blank-notes">Creating Blank Notes</h2>
 <p>You can create blank notes by typing the name in the bottom bar while leaving the template field empty.</p>
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197633841-2e54a360-ce90-4b95-8032-34409fe4a1bc.mov" type="video/mp4">
+</video>
+
 <h2 id="creating-notes-with-a-template">Creating Notes with a Template</h2>
 <p>You have to choose a template in the bottom bar before creating the note. You can filter the files suggested in the bottom bar by adding a folder in the settings under <code>rows template file folder location</code>.</p>
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634718-98463157-f7d7-4323-87ab-e280211eeed7.mov" type="video/mp4">
+</video>
+
 <blockquote>
 <p>It works with the core template plugin. But with the templater plugin, you have to activate the option <code>Trigger templater on new file creation</code> in templater settings.</p>
 </blockquote>
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634584-7420f211-bec2-4e0e-a031-dab809cbc1ab.mov" type="video/mp4">
+</video>
+
 <h2 id="deleting-renaming-notes">Deleting &amp; Renaming Notes</h2>
 <p>You can click on the numbers to the right of every row, to bring up a menu where you can delete and rename the note associated with the row.</p>
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634302-a1081f6b-12da-40a5-a476-b222d4686b98.mov" type="video/mp4">
+</video>
+
 <h2 id="moving-notes-based-on-metadata">Moving Notes Based on Metadata</h2>
 <p>The database will watch for changes in the select property column and create folders for each option present. The notes will be placed under the corresponding folder based on the option chosen. </p>
 <p>You can choose one or many select properties by which this rule will run. If you choose more than one, the folders will be nested and the nesting order will follow the order by which the select properties are added in the database settings. For example <em>"select1/select2/select3"</em>. This setting can be found under <code>configuration about columns &gt; Columns to group by</code>.</p>
@@ -630,6 +646,12 @@
 <li>You can enable folder deletion if a folder is empty. Because, by default, if the select option is not chosen by any notes, in other words, the associated folder is empty, it is not deleted. Don't worry though, the folder will be created again if the appropriate select option is chosen.</li>
 <li>When you're grouping by more than one select property. Let's say you have one note that has 2 select properties <code>select1/select2</code> with <code>select1 = something</code> and <code>select2 = (nothing)</code>. By default, because this note is missing one select property, it will be stored at the root of the folder used for storing the database notes. You can disable the setting <code>hoist files with missing attributes to root folder</code> and the note will be stored in the last used folder, in the example that would be the folder called <code>something</code>. </li>
 </ol>
+<blockquote>
+<p>The <code>column name</code> and the <code>column id</code> have to be the same for this to work.</p>
+</blockquote>
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197634397-54e28827-6629-492a-a529-89ecd49622cd.mov" type="video/mp4">
+</video>
 
               
             </article>

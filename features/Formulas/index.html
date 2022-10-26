@@ -643,6 +643,10 @@
 <p>The formula is a javascript code that will be executed when the row is loaded.</p>
 <h2 id="how-to-use">How to Use</h2>
 <p>The code can be written in the column settings. The generated values can be added to the notes' metadata by enabling <code>persist formula output</code> in the column settings.</p>
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197597294-aaf809e6-bb28-4e30-9e26-4281f6030236.mov" type="video/mp4">
+</video>
+
 <h3 id="exposed-variables">Exposed Variables</h3>
 <ul>
 <li><code>row</code> : the row object</li>
@@ -656,7 +660,7 @@
 <li><code>js</code> : execute a javascript function that you previously defined in the <code>js</code> folder of your table in the database or plugin global settings. (I.E.: <code>db.js.myFunction( arg1, arg2)</code>)</li>
 </ul>
 <h2 id="examples">Examples</h2>
-<p>If you have a column ID (not always the name of the column) named "Date" you can add time:</p>
+<p>If you have a column ID named "Date" you can add time:</p>
 <ul>
 <li><code>${row.Date.plus({years: 1}).toFormat("DD")}</code> adds 1 year</li>
 <li><code>${row.Date.plus({months: 1}).toFormat("DD")}</code> adds 1 month</li>
