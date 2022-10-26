@@ -8,6 +8,10 @@ The formula is a javascript code that will be executed when the row is loaded.
 
 The code can be written in the column settings. The generated values can be added to the notes' metadata by enabling `persist formula output` in the column settings.
 
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197597294-aaf809e6-bb28-4e30-9e26-4281f6030236.mov" type="video/mp4">
+</video>
+
 ### Exposed Variables
 
 - `row` : the row object
@@ -24,7 +28,7 @@ The root object `db` has the following functions:
 
 ## Examples
 
-If you have a column ID (not always the name of the column) named "Date" you can add time:
+If you have a column ID named "Date" you can add time:
 
 - `${row.Date.plus({years: 1}).toFormat("DD")}` adds 1 year
 - `${row.Date.plus({months: 1}).toFormat("DD")}` adds 1 month
