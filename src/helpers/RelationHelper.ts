@@ -31,9 +31,11 @@ export async function recordRowsFromRelation(ddbbPath: string, ddbbConfig: Local
     const ddbbInfo = new DatabaseInfo(ddbbFile);
     ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
     const ddbbRows = await sourceDataviewPages(ddbbConfig, ddbbFile.parent.path);
-    ddbbRows.forEach((page) => {
-        const file = (page as SMarkdownPage).file;
-        relationRows[file.path] = file.name;
-    });
+    ddbbRows
+        .filter((page) => page[DatabaseCore.FRONTMATTER_KEY] === undefined)
+        .forEach((page) => {
+            const file = (page as SMarkdownPage).file;
+            relationRows[file.path] = file.name;
+        });
     return relationRows;
 }

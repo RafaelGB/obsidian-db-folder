@@ -5,8 +5,9 @@ import CustomTagsStyles from "components/styles/TagsStyles";
 import { InputType } from "helpers/Constants";
 import { recordRowsFromRelation } from "helpers/RelationHelper";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
+import { Notice } from "obsidian";
 import { Link } from "obsidian-dataview";
-import React, { useEffect, useRef, useState } from "react";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
@@ -64,7 +65,6 @@ const RelationCell = (mdProps: CellComponentProps) => {
 
     if (updatedRequired) {
       const newRelations = newPaths
-        .filter((path) => !oldPaths.includes(path))
         // Create a new link for each path
         .map((path) => DataviewService.getDataviewAPI().fileLink(path));
 
@@ -83,6 +83,19 @@ const RelationCell = (mdProps: CellComponentProps) => {
       );
     }
     setDirtyCell(false);
+  };
+
+  const handleOnClick: MouseEventHandler<HTMLSpanElement> = (event) => {
+    event.stopPropagation();
+    // Check if the column has a relation asotiated
+    if (tableColumn.config.related_note_path) {
+      setDirtyCell(true);
+    } else {
+      new Notice(
+        "This column is not associated with a relation. Please, edit the column configuration first",
+        1500
+      );
+    }
   };
 
   return dirtyCell ? (
