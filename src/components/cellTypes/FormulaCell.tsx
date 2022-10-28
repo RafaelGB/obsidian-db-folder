@@ -17,19 +17,20 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
   const formulaInfo = tableState.automations((state) => state.info);
+  const formulaCell = tableState.data(
+    (state) =>
+      ParseService.parseRowToCell(
+        state.rows[row.index],
+        tableColumn,
+        InputType.FORMULA,
+        configInfo.getLocalSettings()
+      ) as string
+  );
 
   useEffect(() => {
     if (formulaRef.current !== null) {
       formulaRef.current.innerHTML = "";
-      const formulaCell = tableState.data(
-        (state) =>
-          ParseService.parseRowToCell(
-            state.rows[row.index],
-            tableColumn,
-            InputType.FORMULA,
-            configInfo.getLocalSettings()
-          ) as string
-      );
+
       const formulaResponse = formulaInfo
         .runFormula(
           tableColumn.config.formula_query,
@@ -37,6 +38,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
           configInfo.getLocalSettings()
         )
         .toString();
+
       renderMarkdown(defaultCell, formulaResponse, formulaRef.current, 5);
 
       // Save formula response on disk

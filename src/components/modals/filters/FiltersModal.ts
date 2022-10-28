@@ -2,7 +2,6 @@ import {
   FiltersModalHandlerResponse,
   FiltersModalProps,
 } from "cdm/ModalsModel";
-import { DatabaseView } from "DatabaseView";
 import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";

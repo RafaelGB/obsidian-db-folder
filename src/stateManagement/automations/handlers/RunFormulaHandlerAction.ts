@@ -15,7 +15,7 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
     }
-    evalInput(input: string, row: RowDataType, config: LocalSettings, db: {
+    private evalInput(input: string, row: RowDataType, config: LocalSettings, db: {
         [key: string]: unknown;
     }): Literal {
         const dynamicJS = 'return `' + input + '`';
@@ -26,7 +26,7 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
         }
         return result;
     }
-    proxyFunction(input: string, row: RowDataType, config: LocalSettings, db: {
+    private proxyFunction(input: string, row: RowDataType, config: LocalSettings, db: {
         [key: string]: unknown;
     }): Literal {
         try {

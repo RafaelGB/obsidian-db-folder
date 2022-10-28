@@ -1,14 +1,11 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
-import CustomTagsStyles from "components/styles/TagsStyles";
 import { InputType } from "helpers/Constants";
-import { recordRowsFromRelation } from "helpers/RelationHelper";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
 import { Link } from "obsidian-dataview";
 import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
-import CreatableSelect from "react-select/creatable";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "./Editor/RelationEditor";
@@ -107,7 +104,7 @@ const RelationCell = (mdProps: CellComponentProps) => {
   ) : (
     <span
       ref={containerCellRef}
-      onClick={() => setDirtyCell(true)}
+      onClick={handleOnClick}
       style={{ width: column.getSize() }}
       className={c(
         getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())

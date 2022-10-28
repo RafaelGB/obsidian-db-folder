@@ -33,6 +33,7 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
             case InputType.TEXT:
             case InputType.NUMBER:
             case InputType.FORMULA:
+            case InputType.RELATION:
                 particularHandlers.push(new AlignmentSelectorHandler());
                 particularHandlers.push(new ToggleWrapContentHandler());
                 break;

@@ -1,6 +1,7 @@
 import { FormulaFunctions } from "automations/formula_functions/FormulaFunctions";
 import { IGenerateObject } from "automations/IGenerateObject";
 import { LocalSettings } from "cdm/SettingsModel";
+import { DataviewService } from "services/DataviewService";
 export class FormulaGenerator implements IGenerateObject {
     public js_functions: FormulaFunctions;
 
@@ -9,7 +10,6 @@ export class FormulaGenerator implements IGenerateObject {
     }
 
     private async generate_js_functions(): Promise<Record<string, unknown>> {
-
         return await this.js_functions.generate_object(this.config);
     }
 
@@ -17,7 +17,9 @@ export class FormulaGenerator implements IGenerateObject {
         const final_object: Record<string, any> = {};
         Object.assign(final_object, {
             js: await this.generate_js_functions(),
-        });
+            dataview: DataviewService.getDataviewAPI()
+        }
+        );
         return final_object;
     }
 }
