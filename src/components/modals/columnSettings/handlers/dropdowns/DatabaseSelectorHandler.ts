@@ -2,9 +2,6 @@ import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
-import { DataviewService } from "services/DataviewService";
-import { DatabaseCore } from "helpers/Constants";
-import { SMarkdownPage } from "obsidian-dataview";
 import { recordAllDatabases } from "helpers/RelationHelper";
 
 export class DatabaseSelectorHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {

@@ -49,8 +49,13 @@ export interface ConfigColumn {
     // Formulas
     formula_query?: string;
     persist_formula?: boolean;
-    // Reletions
+    // Relations
     related_note_path?: string;
+    // Rollups
+    asociated_relation_id?: string;
+    rollup_action?: string;
+    rollup_key?: string;
+    persist_rollup?: boolean;
     /** Extras from yaml */
     [key: string]: Literal;
 }

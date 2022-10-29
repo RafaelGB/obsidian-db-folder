@@ -11,6 +11,7 @@ import { AlignmentSelectorHandler } from "components/modals/columnSettings/handl
 import { ToggleWrapContentHandler } from "components/modals/columnSettings/handlers/styles/ToggleWrapContentHandler";
 import { ColumnIdInputHandler } from "components/modals/columnSettings/handlers/ColumnIdInputHandler";
 import { DatabaseSelectorHandler } from "components/modals/columnSettings/handlers/dropdowns/DatabaseSelectorHandler";
+import { RollupInputHandler } from "components/modals/columnSettings/handlers/automations/RollupInputHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
@@ -34,6 +35,7 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
             case InputType.NUMBER:
             case InputType.FORMULA:
             case InputType.RELATION:
+            case InputType.ROLLUP:
                 particularHandlers.push(new AlignmentSelectorHandler());
                 particularHandlers.push(new ToggleWrapContentHandler());
                 break;
@@ -112,6 +114,10 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.RELATION:
                 particularHandlers.push(new DatabaseSelectorHandler());
+                break;
+            case InputType.ROLLUP:
+                particularHandlers.push(new RollupInputHandler());
+                break;
             default:
                 break;
         }

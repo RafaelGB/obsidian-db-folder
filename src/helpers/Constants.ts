@@ -26,6 +26,7 @@ export const InputType = Object.freeze({
   NEW_COLUMN: 'new_column',
   FORMULA: 'formula',
   RELATION: 'relation',
+  ROLLUP: 'rollup',
 });
 
 export const InputLabel = Object.freeze({
@@ -40,6 +41,7 @@ export const InputLabel = Object.freeze({
   CHECKBOX: 'Checkbox',
   FORMULA: 'Formula',
   RELATION: 'Relation',
+  ROLLUP: 'Rollup',
 });
 
 export const DatabaseLimits = Object.freeze({

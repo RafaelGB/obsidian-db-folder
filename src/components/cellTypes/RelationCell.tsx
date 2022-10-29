@@ -8,7 +8,7 @@ import { Link } from "obsidian-dataview";
 import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
-import RelationEditor from "./Editor/RelationEditor";
+import RelationEditor from "components/cellTypes/Editor/RelationEditor";
 
 const RelationCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;

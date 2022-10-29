@@ -1,8 +1,8 @@
 import { ColumnOrderState, SortingState } from "@tanstack/react-table";
-import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
-import { Literal } from "obsidian-dataview";
+import { Link, Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 
 export type TableActionResponse<T> = {
@@ -92,6 +92,7 @@ export interface AutomationState {
     info: {
         getFormula: (name: string) => unknown;
         runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
+        dispatchRollup: (configColumn: ConfigColumn, relation: Link[], dbbConfig: LocalSettings) => Literal;
     },
     actions: {
         loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;
