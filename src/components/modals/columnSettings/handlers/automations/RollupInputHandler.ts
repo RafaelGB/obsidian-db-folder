@@ -3,7 +3,7 @@ import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { Setting } from "obsidian";
 import { add_toggle } from "settings/SettingsComponents";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
-import { InputType } from "helpers/Constants";
+import { InputType, ROLLUP_ACTIONS } from "helpers/Constants";
 export class RollupInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = 'rollup properties';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
@@ -45,7 +45,30 @@ export class RollupInputHandler extends AbstractHandlerClass<ColumnSettingsHandl
                     .setValue(column.config.asociated_relation_id)
                     .onChange(relation_selector_promise);
             });
-        // TODO select rollup action
+        // select rollup action
+        const rollup_action_options: Record<string, string> = {};
+        Object.entries(ROLLUP_ACTIONS).forEach(([key, value]) => {
+            rollup_action_options[key] = value;
+        });
+        const rollup_action_promise = async (value: string): Promise<void> => {
+            // Persist on disk
+            await view.diskConfig.updateColumnConfig(column.id, {
+                rollup_action: value
+            });
+            columnSettingsManager.modal.enableReset = true;
+        };
+        new Setting(containerEl)
+            .setName("Select action")
+            .setDesc('Select the action to perform on the rollup')
+            .addSearch((cb) => {
+                new StringSuggest(
+                    cb.inputEl,
+                    rollup_action_options
+                );
+                cb.setPlaceholder("Select action...")
+                    .setValue(column.config.rollup_action)
+                    .onChange(rollup_action_promise);
+            });
         // TODO select key column (if action allows it)
         // Enable persist rollup toggle
         add_toggle(

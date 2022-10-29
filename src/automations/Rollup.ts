@@ -1,3 +1,4 @@
+import { ROLLUP_ACTIONS } from "helpers/Constants";
 import { Link, Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
@@ -17,7 +18,7 @@ class Rollup {
     }
     public dispatch(): string {
         switch (this.action) {
-            case "sum":
+            case ROLLUP_ACTIONS.SUM:
                 return this.sum();
             default:
                 // No valid action found
