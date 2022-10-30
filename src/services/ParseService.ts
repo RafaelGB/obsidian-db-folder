@@ -59,6 +59,7 @@ class Parse {
                 break;
             case InputType.TASK:
             case InputType.FORMULA:
+            case InputType.ROLLUP:
             case InputType.INLINKS:
             case InputType.OUTLINKS:
                 // Do nothing
@@ -185,6 +186,8 @@ class Parse {
                     // nested metadata exposed as DataObject
                     return wrapped.value;
                 }
+            case 'link':
+                return wrapped.value.markdown()
             // Else go to default
             default:
                 return DataviewService.getDataviewAPI().value.toString(wrapped.value);

@@ -40,6 +40,12 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
                 textArea.setValue(config.formula_query);
                 textArea.setPlaceholder('Write here your formula');
                 textArea.onChange(formula_promise);
+                // style textarea size in function of formula length
+                const formula_length = config.formula_query ? config.formula_query.length : 0;
+                textArea.inputEl.rows = Math.max(4, formula_length / 30);
+                textArea.inputEl.cols = Math.min(Math.max(10, formula_length * 2), 45);
+                textArea.inputEl.style.width = 'auto';
+
             });
         const mainDesc = containerEl.createEl('p');
 

@@ -9,6 +9,7 @@ nav:
       - Properties: "features/Properties.md"
       - Notes: "features/Notes.md"
       - Viewing data: "features/Viewing data.md"
+      - Relations: "features/Relations.md"
       - Formulas: "features/Formulas.md"
   - About: "about.md"
   - FAQ: "faq.md"
