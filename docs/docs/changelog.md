@@ -2,6 +2,13 @@
 ## 2.8.0
 ### Shiny new things
 - Added video examples to the docs for each section [imeed166](https://github.com/imeed166)
+- Relation/Rollups arrives! Now you can create a relation between two models and use it to create a rollup. Both with its own column properties. [ISSUE#53](https://github.com/RafaelGB/obsidian-db-folder/issues/53)
+- `db.dataview` and `db.rollup` functions were included to use in your formulas. dataview returns the API of the dv plugin and rollup returns the predefined functions of dbfolder rollups (check [documentation](https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/#exposed-variables))
+### Visual
+- formula textarea size calculated in funcion of length [ISSUE#518](https://github.com/RafaelGB/obsidian-db-folder/issues/518)
+### No longer broken
+- enter key listener bug for search input removed [ISSUE#546](https://github.com/RafaelGB/obsidian-db-folder/issues/546)
+- add multiple tags at the same time do not cause a concurrency problem [ISSUE#555](https://github.com/RafaelGB/obsidian-db-folder/issues/555)
 ## 2.7.4
 ### Shiny new things
 - names of tags are now editable (updating all the related rows) [ISSUE#443](https://github.com/RafaelGB/obsidian-db-folder/issues/443)
