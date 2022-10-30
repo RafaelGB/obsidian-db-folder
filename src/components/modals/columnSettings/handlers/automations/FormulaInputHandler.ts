@@ -40,6 +40,8 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
                 textArea.setValue(config.formula_query);
                 textArea.setPlaceholder('Write here your formula');
                 textArea.onChange(formula_promise);
+                // style textarea to be bigger
+                textArea.inputEl.setAttribute('style', 'width: 25rem; height: 10rem;');
             });
         const mainDesc = containerEl.createEl('p');
 
