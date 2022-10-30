@@ -92,7 +92,7 @@ export interface AutomationState {
     info: {
         getFormula: (name: string) => unknown;
         runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
-        dispatchRollup: (configColumn: ConfigColumn, relation: Link[], dbbConfig: LocalSettings) => Literal;
+        dispatchRollup: (configColumn: ConfigColumn, relation: Literal, dbbConfig: LocalSettings) => Literal;
     },
     actions: {
         loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;
