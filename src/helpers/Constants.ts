@@ -442,5 +442,7 @@ export const DB_ICONS = Object.freeze({
 });
 
 export const ROLLUP_ACTIONS = Object.freeze({
-  SUM: 'sum',
+  SUM: 'Summatory',
+  COUNT_ALL: 'Count All',
+  ORIGINAL_VALUE: 'Original Value',
 });

@@ -10,6 +10,7 @@ export class RollupKeyHandler extends AbstractHandlerClass<ColumnSettingsHandler
         const { view, columnsState, configState } = columnSettingsManager.modal;
         const { config } = column
         const allColumns = columnsState.info.getAllColumns();
+
         // TODO select key column (if action allows it)
         const relationColumn = allColumns.find((col) => col.id === config.asociated_relation_id);
         const rollup_key_promise = async (value: string): Promise<void> => {

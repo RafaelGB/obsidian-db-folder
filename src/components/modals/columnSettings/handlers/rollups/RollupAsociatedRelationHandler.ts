@@ -18,13 +18,18 @@ export class RollupAsociatedRelationHandler extends AbstractHandlerClass<ColumnS
                 avaliableRelations[col.id] = col.label;
             });
         const relation_selector_promise = async (value: string): Promise<void> => {
-            config.asociated_relation_id = value;
-            // Persist value
-            await view.diskConfig.updateColumnConfig(column.id, {
-                rollup_relation: value
-            });
-            columnSettingsManager.modal.enableReset = true;
+            if (config.asociated_relation_id !== value) {
+                config.asociated_relation_id = value;
+                // Persist on disk
+                await view.diskConfig.updateColumnConfig(column.id, {
+                    rollup_relation: value
+                });
+                columnSettingsManager.modal.enableReset = true;
+                // re-render column settings
+                columnSettingsManager.reset(columnHandlerResponse);
+            }
         };
+
         new Setting(containerEl)
             .setName(this.settingTitle)
             .setDesc('Select from the existing columns to rollup')
@@ -34,7 +39,7 @@ export class RollupAsociatedRelationHandler extends AbstractHandlerClass<ColumnS
                     avaliableRelations
                 );
                 cb.setPlaceholder("Search Relation...")
-                    .setValue(column.config.asociated_relation_id)
+                    .setValue(config.asociated_relation_id)
                     .onChange(relation_selector_promise);
             });
         return this.goNext(columnHandlerResponse);
