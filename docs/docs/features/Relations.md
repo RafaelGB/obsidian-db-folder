@@ -19,3 +19,7 @@ Once you create a relation, you can use the `rollup` function to get the related
 - Count All: Count all the values informed in a column.
 
 See also [Rollup API](https://github.com/RafaelGB/obsidian-db-folder/blob/master/src/automations/Rollup.ts)
+
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/198901340-66bf84a6-35a0-4018-b860-1f9731332ea6.mp4" type="video/mp4">
+</video>
