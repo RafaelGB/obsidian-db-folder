@@ -1,7 +1,7 @@
 import { LocalSettings } from "cdm/SettingsModel";
 import { Notice, TFile, TFolder } from "obsidian";
 import { LOGGER } from "services/Logger";
-import { DatabaseCore, DatabaseFrontmatterOptions, DEFAULT_SETTINGS, YAML_INDENT } from "helpers/Constants";
+import { DatabaseCore, DatabaseFrontmatterOptions, DATABASE_CONFIG, DEFAULT_SETTINGS, YAML_INDENT } from "helpers/Constants";
 
 export async function generateNewDatabase(ddbbConfig: string, folder?: TFolder, ddbbName?: string) {
     const targetFolder = folder
@@ -20,7 +20,7 @@ export async function generateNewDatabase(ddbbConfig: string, folder?: TFolder, 
                 .concat('\n')
                 .concat(ddbbConfig)
                 .concat('\n')
-                .concat('%%')
+                .concat(DATABASE_CONFIG.END_CENTINEL)
         );
         await app.workspace.getMostRecentLeaf().setViewState({
             type: DatabaseCore.FRONTMATTER_KEY,

@@ -1,4 +1,7 @@
 
+## 2.8.0
+### Shiny new things
+- Added video examples to the docs for each section [imeed166](https://github.com/imeed166)
 ## 2.7.4
 ### Shiny new things
 - names of tags are now editable (updating all the related rows) [ISSUE#443](https://github.com/RafaelGB/obsidian-db-folder/issues/443)

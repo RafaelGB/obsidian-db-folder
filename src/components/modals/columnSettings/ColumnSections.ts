@@ -10,9 +10,15 @@ import { FormulaInputHandler } from "components/modals/columnSettings/handlers/a
 import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/styles/AlignmentSelectorHandler";
 import { ToggleWrapContentHandler } from "components/modals/columnSettings/handlers/styles/ToggleWrapContentHandler";
 import { ColumnIdInputHandler } from "components/modals/columnSettings/handlers/ColumnIdInputHandler";
+import { DatabaseSelectorHandler } from "components/modals/columnSettings/handlers/dropdowns/DatabaseSelectorHandler";
+import { RollupAsociatedRelationHandler } from "components/modals/columnSettings/handlers/rollups/RollupAsociatedRelationHandler";
+import { RollupActionHandler } from "components/modals/columnSettings/handlers/rollups/RollupActionHandler";
+import { RollupKeyHandler } from "components/modals/columnSettings/handlers/rollups/RollupKeyHandler";
+import { RollupPersistToggleHandler } from "components/modals/columnSettings/handlers/rollups/RollupPersistToggleHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/AbstractHandler";
+
 
 class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
     private input: string = InputType.TEXT;
@@ -32,6 +38,8 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
             case InputType.TEXT:
             case InputType.NUMBER:
             case InputType.FORMULA:
+            case InputType.RELATION:
+            case InputType.ROLLUP:
                 particularHandlers.push(new AlignmentSelectorHandler());
                 particularHandlers.push(new ToggleWrapContentHandler());
                 break;
@@ -57,12 +65,15 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
     }
     protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
         const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
+        // Mandatory
+        particularHandlers.push(new ColumnIdInputHandler());
+        // Particular
         switch (this.input) {
             case InputType.TASK:
+            case InputType.RELATION:
                 // do nothing
                 break;
             default:
-                particularHandlers.push(new ColumnIdInputHandler());
                 particularHandlers.push(new InlineToggleHandler());
         }
         return particularHandlers;
@@ -104,6 +115,15 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.FORMULA:
                 particularHandlers.push(new FormulaInputHandler());
+                break;
+            case InputType.RELATION:
+                particularHandlers.push(new DatabaseSelectorHandler());
+                break;
+            case InputType.ROLLUP:
+                particularHandlers.push(new RollupAsociatedRelationHandler());
+                particularHandlers.push(new RollupActionHandler())
+                particularHandlers.push(new RollupKeyHandler());
+                particularHandlers.push(new RollupPersistToggleHandler());
                 break;
             default:
                 break;

@@ -10,22 +10,16 @@ import { InputType } from "helpers/Constants";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
-  const { cell, column, table, row } = defaultCell;
+  const { column, table, row } = defaultCell;
   const { tableState } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
   const textRow = tableState.data((state) => state.rows[row.index]);
 
-  const configInfo = table.options.meta.tableState.configState(
-    (state) => state.info
-  );
+  const configInfo = tableState.configState((state) => state.info);
 
-  const columnsInfo = table.options.meta.tableState.columns(
-    (state) => state.info
-  );
+  const columnsInfo = tableState.columns((state) => state.info);
 
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
+  const dataActions = tableState.data((state) => state.actions);
 
   const textCell = tableState.data(
     (state) =>

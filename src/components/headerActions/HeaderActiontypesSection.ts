@@ -8,6 +8,8 @@ import NumberTypeHeaderAction from "components/headerActions/handlers/types/Numb
 import DateTypeHeaderAction from "components/headerActions/handlers/types/DateTypeHeaderAction";
 import DatetimeTypeHeaderAction from "components/headerActions/handlers/types/DatetimeTypeHeaderAction";
 import FormulaTypeHeaderAction from "components/headerActions/handlers/types/FormulaTypeHeaderAction";
+import RelationTypeHeaderAction from "components/headerActions/handlers/types/RelationTypeHeaderAction";
+import RollupTypeHeaderAction from "components/headerActions/handlers/types/RollupTypeHeaderAction";
 import { AbstractHandler } from "patterns/AbstractHandler";
 
 class HeaderActionTypesSection extends AbstractChain<HeaderActionResponse> {
@@ -20,7 +22,9 @@ class HeaderActionTypesSection extends AbstractChain<HeaderActionResponse> {
             new CheckboxTypeHandlerAction(),
             new DateTypeHeaderAction(),
             new DatetimeTypeHeaderAction(),
-            new FormulaTypeHeaderAction()
+            new FormulaTypeHeaderAction(),
+            new RelationTypeHeaderAction(),
+            new RollupTypeHeaderAction(),
         ];
     }
 }

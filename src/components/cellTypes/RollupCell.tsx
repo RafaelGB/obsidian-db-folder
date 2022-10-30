@@ -3,10 +3,11 @@ import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
+import { Link } from "obsidian-dataview";
 import React, { useEffect, useRef } from "react";
 import { ParseService } from "services/ParseService";
 
-const FormulaCell = (mdProps: CellComponentProps) => {
+const RollupCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
   const { cell, table, row, column } = defaultCell;
   const { tableState } = table.options.meta;
@@ -17,12 +18,12 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
   const formulaInfo = tableState.automations((state) => state.info);
-  const formulaCell = tableState.data(
+  const rollupCell = tableState.data(
     (state) =>
       ParseService.parseRowToCell(
         state.rows[row.index],
         tableColumn,
-        InputType.FORMULA,
+        InputType.ROLLUP,
         configInfo.getLocalSettings()
       ) as string
   );
@@ -30,26 +31,26 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   useEffect(() => {
     if (formulaRef.current !== null) {
       formulaRef.current.innerHTML = "";
-
-      const formulaResponse = formulaInfo
-        .runFormula(
-          tableColumn.config.formula_query,
-          formulaRow,
+      const relation = formulaRow[tableColumn.config.asociated_relation_id];
+      if (!relation) {
+        return;
+      }
+      const rollupResponse = formulaInfo
+        .dispatchRollup(
+          tableColumn.config,
+          relation as Link[],
           configInfo.getLocalSettings()
         )
         .toString();
 
-      renderMarkdown(defaultCell, formulaResponse, formulaRef.current, 5);
+      renderMarkdown(defaultCell, rollupResponse, formulaRef.current, 5);
 
       // Save formula response on disk
-      if (
-        tableColumn.config.persist_formula &&
-        formulaCell !== formulaResponse
-      ) {
+      if (tableColumn.config.persist_rollup && rollupCell !== rollupResponse) {
         const newCell = ParseService.parseRowToLiteral(
           formulaRow,
           tableColumn,
-          formulaResponse
+          rollupResponse
         );
 
         dataActions.updateCell(
@@ -72,9 +73,9 @@ const FormulaCell = (mdProps: CellComponentProps) => {
             configInfo.getLocalSettings()
           )
       )}`}
-      key={`formula_${cell.id}`}
+      key={`rollup_${cell.id}`}
     />
   );
 };
 
-export default FormulaCell;
+export default RollupCell;

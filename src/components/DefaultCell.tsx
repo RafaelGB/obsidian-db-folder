@@ -14,6 +14,8 @@ import TextCell from "components/cellTypes/TextCell";
 import MetadataTimeCell from "components/cellTypes/MetadataTimeCell";
 import InOutLinksCell from "components/cellTypes/InOutLinksCell";
 import FormulaCell from "components/cellTypes/FormulaCell";
+import RelationCell from "components/cellTypes/RelationCell";
+import RollupCell from "components/cellTypes/RollupCell";
 import { CellContext } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview";
 
@@ -77,6 +79,14 @@ export default function DefaultCell(
       /** Formula option */
       case InputType.FORMULA:
         return <FormulaCell defaultCell={defaultCell} />;
+
+      /** Relation with another ddbb */
+      case InputType.RELATION:
+        return <RelationCell defaultCell={defaultCell} />;
+
+      /** Rollup info of a relation */
+      case InputType.ROLLUP:
+        return <RollupCell defaultCell={defaultCell} />;
 
       /** New column option */
       case InputType.NEW_COLUMN:
