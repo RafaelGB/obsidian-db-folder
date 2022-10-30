@@ -1,8 +1,8 @@
 import { ColumnOrderState, SortingState } from "@tanstack/react-table";
-import { RowDataType, TableColumn } from "cdm/FolderModel";
+import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
-import { Literal } from "obsidian-dataview";
+import { Link, Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 
 export type TableActionResponse<T> = {
@@ -60,7 +60,7 @@ export interface ColumnsState {
         addToRight: (column: TableColumn, customName?: string) => void;
         remove: (column: TableColumn) => void;
         alterSorting: (column: TableColumn) => void;
-        addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => Promise<void>;
+        addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
         alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => Promise<void>;
         alterColumnId: (column: TableColumn, root: string, nestedIds: string[]) => Promise<void>;
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
@@ -92,6 +92,7 @@ export interface AutomationState {
     info: {
         getFormula: (name: string) => unknown;
         runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
+        dispatchRollup: (configColumn: ConfigColumn, relation: Link[], dbbConfig: LocalSettings) => Literal;
     },
     actions: {
         loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;

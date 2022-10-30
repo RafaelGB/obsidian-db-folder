@@ -77,7 +77,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
     [selectRow]
   );
 
-  const handleOnChange = (
+  const handleOnChange = async (
     newValue: OnChangeValue<SelectValue, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
@@ -102,7 +102,11 @@ const SelectCell = (popperProps: CellComponentProps) => {
       selectValue &&
       !tableColumn.options.find((option) => option.label === selectValue)
     ) {
-      columnActions.addOptionToColumn(tableColumn, selectValue, randomColor());
+      await columnActions.addOptionToColumn(
+        tableColumn,
+        selectValue,
+        randomColor()
+      );
     }
     setShowSelect(false);
   };

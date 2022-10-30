@@ -1,5 +1,5 @@
 import { InputType, MarkdownBreakerRules } from "helpers/Constants";
-import { DataObject, Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
+import { DataObject, Link, Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
@@ -53,6 +53,9 @@ class Parse {
                 break;
             case InputType.CHECKBOX:
                 parsedLiteral = this.parseToBoolean(wrapped);
+                break;
+            case InputType.RELATION:
+                parsedLiteral = this.parseToLink(wrapped);
                 break;
             case InputType.TASK:
             case InputType.FORMULA:
@@ -126,6 +129,23 @@ class Parse {
             literal = obtainAnidatedLiteral(column.nestedKey, literal, type, config);
         }
         return this.parseLiteral(literal, type, config);
+    }
+
+    private parseToLink(wrapped: WrappedLiteral): Link[] {
+        // If is a link, return it into an array
+        if (wrapped.type === 'link') {
+            return [wrapped.value];
+        }
+        // If is an array of links, return it
+        if (wrapped.type === 'array') {
+            const filteredLinks = wrapped.value.filter((value) => {
+                const wrappedValue = DataviewService.wrapLiteral(value);
+                return wrappedValue.type === 'link';
+            });
+            return filteredLinks as Link[];
+        }
+        // If is something else, return empty array
+        return [];
     }
 
     private parseToCalendar(wrapped: WrappedLiteral, format?: string): DateTime {
@@ -222,7 +242,9 @@ class Parse {
                     .map(v => this.parseToMarkdown(DataviewService.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
                     .join(', ');
                 break;
-
+            case 'link':
+                auxMarkdown = wrapped.value.markdown();
+                break;
             case 'date':
                 if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
                     // Parse date

@@ -25,6 +25,8 @@ export const InputType = Object.freeze({
   CHECKBOX: 'checkbox',
   NEW_COLUMN: 'new_column',
   FORMULA: 'formula',
+  RELATION: 'relation',
+  ROLLUP: 'rollup',
 });
 
 export const InputLabel = Object.freeze({
@@ -38,6 +40,8 @@ export const InputLabel = Object.freeze({
   TASK: 'Task',
   CHECKBOX: 'Checkbox',
   FORMULA: 'Formula',
+  RELATION: 'Relation',
+  ROLLUP: 'Rollup',
 });
 
 export const DatabaseLimits = Object.freeze({
@@ -414,6 +418,7 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     ' conditions:'
   ].join('\n')
 });
+
 /******************************************************************************
  *                            SUGGESTER REGEX
  ******************************************************************************/
@@ -434,4 +439,10 @@ export const SUGGESTER_REGEX = Object.freeze({
 export const DB_ICONS = Object.freeze({
   NAME: 'database-folder-icon',
   ICON: `<g transform="matrix(0.06 0 0 0.05 52 52)"><path stroke="currentColor" fill="#fff" vector-effect="non-scaling-stroke"  transform=" translate(-896, -896)" d="M 896 768 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 768 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 -384 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 -1152 q 208 0 385 34.5 t 280 93.5 t 103 128 v 128 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -128 q 0 -69 103 -128 t 280 -93.5 t 385 -34.5 z" stroke-linecap="round" /></g>`
+});
+
+export const ROLLUP_ACTIONS = Object.freeze({
+  SUM: 'Summatory',
+  COUNT_ALL: 'Count All',
+  ORIGINAL_VALUE: 'Original Value',
 });

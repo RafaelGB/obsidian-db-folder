@@ -30,6 +30,7 @@ function mockAutomationState(): AutomationState {
         info: {
             getFormula: null,
             runFormula: null,
+            dispatchRollup: null,
         },
         actions: {
             loadFormulas: null,
