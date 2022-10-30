@@ -14,8 +14,7 @@
 - **Tasks**: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings ;
 - **Inlinks**: this column can be added only once from the database settings and will display the files that have links to the select file ;
 - **Outlinks**: this column can be added only once from the database settings and will display the files that have links from the select file ;
-- **Relation**: You can make a relation between two databases, this will create a dropdown of the files available in the database you want to relate to. For this to work, you will need to choose a database in the column setting. This property is often used with the rollup property described below ;
-- **Rollup**: In the column setting, choose your relation column and choose the property of that database that you want to work with. Then you can either display the property itself, count the number of relations, or perform a sum if they are numbers.
+- **Relation** and **Rollup**: See the [Relations](/obsidian-db-folder/features/Relations/) section.
 
 > You can change from one property type to another, and if the format is right, it will be recognized by the plugin.
 
