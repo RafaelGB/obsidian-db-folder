@@ -4,11 +4,12 @@ import { Setting } from "obsidian";
 import { add_toggle } from "settings/SettingsComponents";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 import { InputType, ROLLUP_ACTIONS } from "helpers/Constants";
+import { recordFieldsFromRelation } from "helpers/RelationHelper";
 export class RollupInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = 'rollup properties';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
-        const { view, columnsState } = columnSettingsManager.modal;
+        const { view, columnsState, configState } = columnSettingsManager.modal;
         const { config } = column
 
         const persist_rollup_toggle_promise = async (value: boolean): Promise<void> => {
@@ -34,7 +35,7 @@ export class RollupInputHandler extends AbstractHandlerClass<ColumnSettingsHandl
             columnSettingsManager.modal.enableReset = true;
         };
         new Setting(containerEl)
-            .setName("Select relation to rollup")
+            .setName("Select relation column")
             .setDesc('Select from the existing columns to rollup')
             .addSearch((cb) => {
                 new StringSuggest(
@@ -70,15 +71,37 @@ export class RollupInputHandler extends AbstractHandlerClass<ColumnSettingsHandl
                     .onChange(rollup_action_promise);
             });
         // TODO select key column (if action allows it)
-        // Enable persist rollup toggle
-        add_toggle(
-            containerEl,
-            "Persist rollup output",
-            "Enable/disable to persist rollup output on your notes (Only persisted rollups could be searchable and sortable)",
-            config.persist_rollup,
-            persist_rollup_toggle_promise
-        );
+        const rollup_key_promise = async (value: string): Promise<void> => {
+            // Persist on disk
+            await view.diskConfig.updateColumnConfig(column.id, {
+                rollup_key: value
+            });
+            columnSettingsManager.modal.enableReset = true;
+        };
+        recordFieldsFromRelation("Incidencias/ropa/clothing ddbb.md", configState.info.getLocalSettings()).then((fields) => {
+            new Setting(containerEl)
+                .setName("Select property of relation")
+                .setDesc('Select the property to rollup from the relation')
+                .addSearch((cb) => {
+                    new StringSuggest(
+                        cb.inputEl,
+                        fields
+                    );
+                    cb.setPlaceholder("Select property...")
+                        .setValue(column.config.rollup_key)
+                        .onChange(rollup_key_promise);
+                });
+            // Enable persist rollup toggle
+            add_toggle(
+                containerEl,
+                "Persist rollup output",
+                "Enable/disable to persist rollup output on your notes (Only persisted rollups could be searchable and sortable)",
+                config.persist_rollup,
+                persist_rollup_toggle_promise
+            );
 
-        return this.goNext(columnHandlerResponse);
+            return this.goNext(columnHandlerResponse);
+        });
+        return null;
     }
 }

@@ -39,3 +39,22 @@ export async function recordRowsFromRelation(ddbbPath: string, ddbbConfig: Local
         });
     return relationRows;
 }
+
+export async function recordFieldsFromRelation(ddbbPath: string, ddbbConfig: LocalSettings): Promise<Record<string, string>> {
+    const relationFields: Record<string, string> = {};
+    const ddbbFile = resolve_tfile(ddbbPath);
+    const ddbbInfo = new DatabaseInfo(ddbbFile);
+    ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
+    const ddbbRows = await sourceDataviewPages(ddbbConfig, ddbbFile.parent.path);
+    // get unique fields from all rows
+    ddbbRows.forEach((page) => {
+        // iterate over all fields in the row
+        Object.keys(page).forEach((key) => {
+            if (relationFields[key] === undefined) {
+                relationFields[key] = key;
+            }
+        });
+    }
+    );
+    return relationFields;
+}
