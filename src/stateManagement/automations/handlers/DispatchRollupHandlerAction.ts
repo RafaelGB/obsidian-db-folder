@@ -22,7 +22,7 @@ export default class DispatchRollupHandlerAction extends AbstractTableAction<Aut
                 throw new Error("Invalid relation type");
             }
             try {
-                return new Rollup(validatedRelation, configColumn.rollup_action, configColumn.rollup_key).dispatch();
+                return new Rollup(validatedRelation).dispatch(configColumn.rollup_action, configColumn.rollup_key);
             } catch (e) {
                 LOGGER.error(`Error dispatching rollup of ${configColumn.asociated_relation_id} relation: `, e);
                 return "";
