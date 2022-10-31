@@ -39,7 +39,8 @@ Each database has a yaml local configuration that is read when you open the data
 database-plugin: basic
 
 ---
-%% dbfolder:yaml
+
+```yaml:dbfolder
 name: Entertaiment
 description: All media contain that I consume
 columns:
@@ -167,5 +168,4 @@ config:
   source_data: current_folder
   source_form_result: zettelcaster/meet
 filters:
-%%
 ```

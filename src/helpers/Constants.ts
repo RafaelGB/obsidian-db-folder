@@ -441,8 +441,21 @@ export const DB_ICONS = Object.freeze({
   ICON: `<g transform="matrix(0.06 0 0 0.05 52 52)"><path stroke="currentColor" fill="#fff" vector-effect="non-scaling-stroke"  transform=" translate(-896, -896)" d="M 896 768 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 768 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 -384 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 -1152 q 208 0 385 34.5 t 280 93.5 t 103 128 v 128 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -128 q 0 -69 103 -128 t 280 -93.5 t 385 -34.5 z" stroke-linecap="round" /></g>`
 });
 
+export const ROLLUP_EMBED_ACTIONS = {
+  TASK_TODO: 'Task TODO',
+  TASK_COMPLETED: 'Task Completed'
+};
+
 export const ROLLUP_ACTIONS = Object.freeze({
+  // Key is needed for the action to be executed
   SUM: 'Summatory',
   COUNT_ALL: 'Count All',
+  COUNT_UNIQUE: 'Count Unique Values',
   ORIGINAL_VALUE: 'Original Value',
+  TRUTHY_COUNT: 'Truthy Count',
+  FALSY_COUNT: 'Falsy Count',
+  PERCENT_EMPTY: 'Percent Empty',
+  PERCENT_FILLED: 'Percent Filled',
+  // Key is not needed for the action to be executed
+  ...ROLLUP_EMBED_ACTIONS
 });
