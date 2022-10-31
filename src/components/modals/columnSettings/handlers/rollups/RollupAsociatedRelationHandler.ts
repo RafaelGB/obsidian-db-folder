@@ -22,7 +22,7 @@ export class RollupAsociatedRelationHandler extends AbstractHandlerClass<ColumnS
                 config.asociated_relation_id = value;
                 // Persist on disk
                 await view.diskConfig.updateColumnConfig(column.id, {
-                    rollup_relation: value
+                    asociated_relation_id: value
                 });
                 columnSettingsManager.modal.enableReset = true;
                 // re-render column settings

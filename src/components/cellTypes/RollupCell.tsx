@@ -3,7 +3,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
-import { Link } from "obsidian-dataview";
+import { Link, Literal } from "obsidian-dataview";
 import React, { useEffect, useRef } from "react";
 import { ParseService } from "services/ParseService";
 
@@ -38,7 +38,7 @@ const RollupCell = (mdProps: CellComponentProps) => {
       const rollupResponse = formulaInfo
         .dispatchRollup(
           tableColumn.config,
-          relation as Link[],
+          relation as Literal,
           configInfo.getLocalSettings()
         )
         .toString();
