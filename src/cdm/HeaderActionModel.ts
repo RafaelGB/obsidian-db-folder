@@ -14,7 +14,7 @@ export type HeaderActionResponse = {
 export type HeaderActionModel = {
     label: string;
     icon: React.ReactNode;
-    onClick: (e: any) => void;
+    onClick: (e: any) => Promise<void>;
 };
 export interface HeaderAction {
     setNext(handler: HeaderAction): HeaderAction;

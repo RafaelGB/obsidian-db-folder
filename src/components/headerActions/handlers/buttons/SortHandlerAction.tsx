@@ -49,7 +49,7 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
     (store) => store.actions
   );
 
-  const sortingUpOnClick = () => {
+  const sortingUpOnClick = async () => {
     tablecolumn.isSorted =
       tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = false;
@@ -75,6 +75,7 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
     // Save on disk
     columnActions.alterSorting(tablecolumn);
   };
+
   const isAscSorted = column.getIsSorted() === "asc";
   return headerButtonComponent({
     onClick: sortingUpOnClick,
@@ -94,7 +95,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
     (store) => store.actions
   );
 
-  const sortingDownOnClick = () => {
+  const sortingDownOnClick = async () => {
     tablecolumn.isSorted =
       tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = true;
