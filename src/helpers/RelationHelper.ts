@@ -5,6 +5,7 @@ import { resolve_tfile } from "helpers/FileManagement";
 import DatabaseInfo from "services/DatabaseInfo";
 import { sourceDataviewPages } from "helpers/VaultManagement";
 import { LocalSettings } from "cdm/SettingsModel";
+import { TableColumn } from "cdm/FolderModel";
 
 /**
  * Search for all databases in the vault returning a Record of all databases
@@ -25,12 +26,12 @@ export function recordAllDatabases(currentPath?: string): Record<string, string>
     return avaliableDDBB;
 }
 
-export async function recordRowsFromRelation(ddbbPath: string, ddbbConfig: LocalSettings): Promise<Record<string, string>> {
+export async function recordRowsFromRelation(ddbbPath: string, ddbbConfig: LocalSettings, columns?: TableColumn[]): Promise<Record<string, string>> {
     const relationRows: Record<string, string> = {};
     const ddbbFile = resolve_tfile(ddbbPath);
     const ddbbInfo = new DatabaseInfo(ddbbFile);
     ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
-    const ddbbRows = await sourceDataviewPages(ddbbConfig, ddbbFile.parent.path);
+    const ddbbRows = await sourceDataviewPages(ddbbConfig, ddbbFile.parent.path, columns);
     ddbbRows
         .filter((page) => page[DatabaseCore.FRONTMATTER_KEY] === undefined)
         .forEach((page) => {
@@ -40,12 +41,12 @@ export async function recordRowsFromRelation(ddbbPath: string, ddbbConfig: Local
     return relationRows;
 }
 
-export async function recordFieldsFromRelation(ddbbPath: string, ddbbConfig: LocalSettings): Promise<Record<string, string>> {
+export async function recordFieldsFromRelation(ddbbPath: string, ddbbConfig: LocalSettings, columns?: TableColumn[]): Promise<Record<string, string>> {
     const relationFields: Record<string, string> = {};
     const ddbbFile = resolve_tfile(ddbbPath);
     const ddbbInfo = new DatabaseInfo(ddbbFile);
     ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
-    const ddbbRows = await sourceDataviewPages(ddbbConfig, ddbbFile.parent.path);
+    const ddbbRows = await sourceDataviewPages(ddbbConfig, ddbbFile.parent.path, columns);
     // get unique fields from all rows
     ddbbRows.forEach((page) => {
         // iterate over all fields in the row

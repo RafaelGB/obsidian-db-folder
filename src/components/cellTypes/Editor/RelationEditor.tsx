@@ -15,6 +15,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   const tableColumn = column.columnDef as TableColumn;
   const { tableState } = table.options.meta;
   const configInfo = tableState.configState((state) => state.info);
+  const columnsInfo = tableState.columns((state) => state.info);
 
   const [relationValue, setRelationValue] = useState(
     relationCell
@@ -47,13 +48,15 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   const relationRowsCallBack = useCallback(async () => {
     const relationRows = await recordRowsFromRelation(
       tableColumn.config.related_note_path,
-      configInfo.getLocalSettings()
+      configInfo.getLocalSettings(),
+      columnsInfo.getAllColumns()
     );
     const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
       label: value,
       value: key,
       color: "var(--text-normal)",
     }));
+
     setRelationOptions(multiOptions);
   }, []);
 

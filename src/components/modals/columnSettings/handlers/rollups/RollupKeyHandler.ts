@@ -27,7 +27,8 @@ export class RollupKeyHandler extends AbstractHandlerClass<ColumnSettingsHandler
             };
             recordFieldsFromRelation(
                 relationColumn.config.related_note_path,
-                configState.info.getLocalSettings()
+                configState.info.getLocalSettings(),
+                allColumns
             ).then((fields) => {
                 new Setting(containerEl)
                     .setName(this.settingTitle)
