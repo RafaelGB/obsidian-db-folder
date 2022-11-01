@@ -1,4 +1,13 @@
 
+## 2.8.1
+### Shiny new things
+- New rollup functions: Count unique values,Truthy count, Falsy count, Percent empty, Percent filled, Task TODO, Task completed
+- Rollup API improvements for use inside the formulas
+### No longer broken
+- Rollups now works with just 1 row inside the relation
+- Edit engine works correctly with empty yaml when we remove the last field or change the last field to inline [ISSUE#553](https://github.com/RafaelGB/obsidian-db-folder/issues/553)
+- Relations now works too with dataview sources [ISSUE#568](https://github.com/RafaelGB/obsidian-db-folder/issues/568)
+- useEffect loop when we persisted a  formula in some cases fixed [ISSUE#569](https://github.com/RafaelGB/obsidian-db-folder/issues/569)
 ## 2.8.0
 ### Shiny new things
 - Added video examples to the docs for each section [imeed166](https://github.com/imeed166)
