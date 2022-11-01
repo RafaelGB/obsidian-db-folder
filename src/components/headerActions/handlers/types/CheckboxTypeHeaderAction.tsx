@@ -33,7 +33,7 @@ function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const checkBoxTypeOnClick = (e: any) => {
+  const checkBoxTypeOnClick = async () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
@@ -41,7 +41,8 @@ function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.CHECKBOX,
       ddbbConfig
     );
-    columnActions.alterColumnType(
+
+    await columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.CHECKBOX
     );

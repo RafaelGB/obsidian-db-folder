@@ -20,7 +20,7 @@ export class FormulaGenerator implements IGenerateObject {
         Object.assign(final_object, {
             js: await this.generate_js_functions(),
             dataview: DataviewService.getDataviewAPI(),
-            rollup: (relation: Link[], action?: string, key?: string) => new Rollup(relation, action, key)
+            rollup: (relation: Link[]) => new Rollup(relation)
         }
         );
         return final_object;

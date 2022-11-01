@@ -29,39 +29,47 @@ const FormulaCell = (mdProps: CellComponentProps) => {
 
   useEffect(() => {
     if (formulaRef.current !== null) {
-      formulaRef.current.innerHTML = "";
+      const effectCallback = async () => {
+        formulaRef.current.innerHTML = "";
 
-      const formulaResponse = formulaInfo
-        .runFormula(
-          tableColumn.config.formula_query,
-          formulaRow,
-          configInfo.getLocalSettings()
-        )
-        .toString();
+        const formulaResponse = formulaInfo
+          .runFormula(
+            tableColumn.config.formula_query,
+            formulaRow,
+            configInfo.getLocalSettings()
+          )
+          .toString();
 
-      renderMarkdown(defaultCell, formulaResponse, formulaRef.current, 5);
-
-      // Save formula response on disk
-      if (
-        tableColumn.config.persist_formula &&
-        formulaCell !== formulaResponse
-      ) {
-        const newCell = ParseService.parseRowToLiteral(
-          formulaRow,
-          tableColumn,
-          formulaResponse
+        await renderMarkdown(
+          defaultCell,
+          formulaResponse,
+          formulaRef.current,
+          5
         );
 
-        dataActions.updateCell(
-          row.index,
-          tableColumn,
-          newCell,
-          columnsInfo.getAllColumns(),
-          configInfo.getLocalSettings()
-        );
-      }
+        // Save formula response on disk
+        if (
+          tableColumn.config.persist_formula &&
+          formulaCell !== formulaResponse
+        ) {
+          const newCell = ParseService.parseRowToLiteral(
+            formulaRow,
+            tableColumn,
+            formulaResponse
+          );
+
+          await dataActions.updateCell(
+            row.index,
+            tableColumn,
+            newCell,
+            columnsInfo.getAllColumns(),
+            configInfo.getLocalSettings()
+          );
+        }
+      };
+      effectCallback();
     }
-  }, [row]);
+  }, [formulaRow]);
   return (
     <span
       ref={formulaRef}

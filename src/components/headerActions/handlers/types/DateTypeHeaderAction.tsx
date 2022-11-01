@@ -33,7 +33,7 @@ function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const dateOnClick = () => {
+  const dateOnClick = async () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
@@ -42,7 +42,7 @@ function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
       ddbbConfig
     );
 
-    columnActions.alterColumnType(
+    await columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.CALENDAR
     );

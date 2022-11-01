@@ -6,8 +6,6 @@ import { UpdateRowOptions } from "helpers/Constants";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
 import { EditEngineService } from "services/EditEngineService";
-import { destination_folder } from "helpers/FileManagement";
-import { FileGroupingService } from "services/FileGroupingService";
 
 export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -34,7 +32,9 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { column, table } = headerActionResponse.headerMenuProps.headerProps;
   const { view } = table.options.meta;
-  const configActions =  table.options.meta.tableState.configState((state) => state.actions);
+  const configActions = table.options.meta.tableState.configState(
+    (state) => state.actions
+  );
   const ddbbConfig = table.options.meta.tableState.configState(
     (store) => store.ddbbConfig
   );
@@ -49,27 +49,24 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
     (store) => store.actions
   );
 
-  const onClick = (e: any) => {
+  const onClick = async () => {
     if (ddbbConfig.remove_field_when_delete_column) {
-      Promise.all(
-        rows.map(async (row: RowDataType) => {
-          EditEngineService.updateRowFileProxy(
-            row.__note__.getFile(),
-            hooks.keyState,
-            undefined, // delete does not need this field
-            columns,
-            ddbbConfig,
-            UpdateRowOptions.REMOVE_COLUMN
-          );
-        })
-      );
+      rows.map(async (row: RowDataType) => {
+        await EditEngineService.updateRowFileProxy(
+          row.__note__.getFile(),
+          hooks.keyState,
+          undefined, // delete does not need this field
+          columns,
+          ddbbConfig,
+          UpdateRowOptions.REMOVE_COLUMN
+        );
+      });
     }
     dataActions.removeDataOfColumn(column.columnDef as TableColumn);
     columnActions.remove(column.columnDef as TableColumn);
     hooks.setExpanded(false);
     // Remove column from group_folder_column
-    const groupFolderColumn =
-        ddbbConfig.group_folder_column.split(",");
+    const groupFolderColumn = ddbbConfig.group_folder_column.split(",");
     if (groupFolderColumn.includes(column.columnDef.id)) {
       const newGroupFolderColumn = groupFolderColumn
         .filter((item) => item !== column.columnDef.id)

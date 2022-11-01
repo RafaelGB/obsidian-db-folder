@@ -34,7 +34,7 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const tagsOnClick = () => {
+  const tagsOnClick = async () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
@@ -42,7 +42,8 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
       InputType.TAGS,
       ddbbConfig
     );
-    columnActions.alterColumnType(
+
+    await columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.TAGS,
       rows

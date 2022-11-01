@@ -8,6 +8,7 @@ import { recordRowsFromRelation } from "helpers/RelationHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
 import { OnChangeValue } from "react-select";
+import { StyleVariables } from "helpers/Constants";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
@@ -15,13 +16,14 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   const tableColumn = column.columnDef as TableColumn;
   const { tableState } = table.options.meta;
   const configInfo = tableState.configState((state) => state.info);
+  const columnsInfo = tableState.columns((state) => state.info);
 
   const [relationValue, setRelationValue] = useState(
     relationCell
       ? relationCell.map((link: Link) => ({
           label: link.fileName(),
           value: link.path,
-          color: "var(--text-normal)",
+          color: StyleVariables.TEXT_NORMAL,
         }))
       : []
   );
@@ -32,7 +34,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
     const arrayTags = newValue.map((tag) => ({
       label: tag.value,
       value: tag.value,
-      color: "var(--text-normal)",
+      color: StyleVariables.TEXT_NORMAL,
     }));
     setRelationValue(arrayTags);
   };
@@ -47,13 +49,15 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   const relationRowsCallBack = useCallback(async () => {
     const relationRows = await recordRowsFromRelation(
       tableColumn.config.related_note_path,
-      configInfo.getLocalSettings()
+      configInfo.getLocalSettings(),
+      columnsInfo.getAllColumns()
     );
     const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
       label: value,
       value: key,
-      color: "var(--text-normal)",
+      color: StyleVariables.TEXT_NORMAL,
     }));
+
     setRelationOptions(multiOptions);
   }, []);
 

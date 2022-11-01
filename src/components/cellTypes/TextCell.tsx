@@ -54,7 +54,7 @@ const TextCell = (props: CellComponentProps) => {
     setDirtyCell(true);
   };
 
-  const persistChange = (changedValue: string) => {
+  const persistChange = async (changedValue: string) => {
     changedValue = changedValue.trim();
     if (changedValue !== undefined && changedValue !== textCell) {
       const newCell = ParseService.parseRowToLiteral(
@@ -63,7 +63,7 @@ const TextCell = (props: CellComponentProps) => {
         changedValue
       );
 
-      dataActions.updateCell(
+      await dataActions.updateCell(
         row.index,
         tableColumn,
         newCell,

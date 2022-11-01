@@ -35,7 +35,7 @@ function addColumnToRightButton(headerActionResponse: HeaderActionResponse) {
     (state) => state.actions
   );
 
-  const addColumnToRightOnClick = () => {
+  const addColumnToRightOnClick = async () => {
     columnActions.addToRight(column);
     hooks.setExpanded(false);
   };
@@ -54,10 +54,12 @@ function addColumnToLeftButton(headerActionResponse: HeaderActionResponse) {
   const columnActions = table.options.meta.tableState.columns(
     (state) => state.actions
   );
-  const addColumnToLeftOnClick = (e: any) => {
+
+  const addColumnToLeftOnClick = async () => {
     columnActions.addToLeft(column);
     hooks.setExpanded(false);
   };
+
   return headerButtonComponent({
     onClick: addColumnToLeftOnClick,
     icon: <ArrowLeftIcon />,
