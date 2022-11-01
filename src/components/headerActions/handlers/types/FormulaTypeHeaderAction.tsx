@@ -32,7 +32,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const formulaOnClick = () => {
+  const formulaOnClick = async () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
@@ -41,7 +41,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
       ddbbConfig
     );
 
-    columnActions.alterColumnType(
+    await columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.FORMULA
     );

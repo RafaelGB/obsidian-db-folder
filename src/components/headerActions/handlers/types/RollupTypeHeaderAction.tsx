@@ -32,7 +32,7 @@ function rollupTypeComponent(headerActionResponse: HeaderActionResponse) {
     (state) => state.ddbbConfig
   );
 
-  const rollupOnClick = () => {
+  const rollupOnClick = async () => {
     hooks.setShowType(false);
     hooks.setExpanded(false);
     dataActions.parseDataOfColumn(
@@ -41,7 +41,7 @@ function rollupTypeComponent(headerActionResponse: HeaderActionResponse) {
       ddbbConfig
     );
 
-    columnActions.alterColumnType(
+    await columnActions.alterColumnType(
       column.columnDef as TableColumn,
       InputType.ROLLUP
     );
