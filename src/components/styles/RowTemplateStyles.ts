@@ -1,9 +1,10 @@
+import { StyleVariables } from "helpers/Constants";
 import { GroupBase, StylesConfig } from "react-select";
 
 const CustomTemplateSelectorStyles: StylesConfig<any, true, GroupBase<any>> = {
     singleValue: (styles) => ({
         ...styles,
-        color: 'var(--text-normal)',
+        color: StyleVariables.TEXT_NORMAL,
         width: "max-content",
         minWidth: "100%",
         border: 0
@@ -12,16 +13,16 @@ const CustomTemplateSelectorStyles: StylesConfig<any, true, GroupBase<any>> = {
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
         return {
             ...styles,
-            color: 'var(--text-normal)',
-            backgroundColor: 'var(--background-primary)',
+            color: StyleVariables.TEXT_NORMAL,
+            backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
             textAlign: 'left',
         }
     },
     control: (styles) => {
         return {
             ...styles,
-            color: 'var(--text-normal)',
-            backgroundColor: 'var(--background-primary)',
+            color: StyleVariables.TEXT_NORMAL,
+            backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
             textAlign: 'left',
             height: "max-content",
             maxHeight: "30px",

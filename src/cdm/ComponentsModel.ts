@@ -18,7 +18,7 @@ export type CellComponentProps = {
 }
 
 export type EditorCellComponentProps = {
-    persistChange: (changedValue: string) => void;
+    persistChange: (changedValue: string) => Promise<void>;
     textCell: string;
 } & CellComponentProps;
 

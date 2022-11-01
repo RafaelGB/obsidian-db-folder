@@ -111,7 +111,8 @@ class Parse {
                 const source = generateLiteral(column.nestedKey, newValue);
                 return deepMerge(source, target);
             } catch (e) {
-                // Just return the original value
+                LOGGER.error(`Error parsing row to literal: ${e}`);
+                newValue = "";
             }
         }
         return newValue;
