@@ -36,7 +36,7 @@ import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { t } from 'lang/helpers';
-import ProjectAPI from 'api/obsidian-project-api';
+import ProjectAPI from 'api/obsidian-projects-api';
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
