@@ -59,6 +59,11 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       <Portal container={activeDocument.body}>{containerProps.children}</Portal>
     );
   };
+
+  const onClickOutside = () => {
+    setShowDatePicker(false);
+  };
+
   return showDatePicker ? (
     <DatePicker
       dateFormat="yyyy-MM-dd"
@@ -69,7 +74,7 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       }
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
-      onBlur={() => setShowDatePicker(false)}
+      onClickOutside={onClickOutside}
       autoFocus
       isClearable
       clearButtonTitle="Clear"

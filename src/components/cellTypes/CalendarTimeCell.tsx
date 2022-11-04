@@ -72,7 +72,7 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
         }
         onChange={handleCalendarChange}
         popperContainer={CalendarContainer}
-        onBlur={() => setShowDatePicker(false)}
+        onClickOutside={() => setShowDatePicker(false)}
         timeFormat="HH:mm"
         timeCaption="time"
         showTimeSelect
