@@ -35,7 +35,7 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
     setShowDatePicker(true);
   }
 
-  function handleCalendarChange(date: Date) {
+  async function handleCalendarChange(date: Date) {
     const changed = date !== null ? DateTime.fromJSDate(date) : null;
 
     const newCell = ParseService.parseRowToLiteral(
@@ -44,7 +44,7 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       changed
     );
 
-    dataActions.updateCell(
+    await dataActions.updateCell(
       row.index,
       tableColumn,
       newCell,
