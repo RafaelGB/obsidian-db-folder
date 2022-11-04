@@ -29,7 +29,7 @@ class ProjectAPI extends ProjectView {
         return DB_ICONS.NAME;
     }
 
-    async onData({ data, readonly }: DataQueryResult) {
+    async onData({ data }: DataQueryResult) {
         // Do nothing here
         // Data is handled by the database itself and will be updated automatically every time the view is opened
 
@@ -41,25 +41,21 @@ class ProjectAPI extends ProjectView {
     // `contentEl`    HTML element where you can attach your view.
     // `config`       JSON object with optional view configuration.
     // `saveConfig`   Callback to save configuration changes.
-    async onOpen({ contentEl, config, saveConfig }: ProjectViewProps) {
-        if (!this.view) {
-            // TODO Asociate the view with the plugin
-            const [firstKey] = this.plugin.viewMap.keys();
-            this.view = this.plugin.viewMap.get(firstKey)
-        }
-
-        this.view.initDatabase().then(() => {
-            LOGGER.debug("Database initialized successfully from project view");
-            this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
-        })
+    async onOpen({ contentEl, config, saveConfig, }: ProjectViewProps) {
+        console.log(config);
+        this.generateDataview(contentEl);
     }
 
     async onClose() {
         LOGGER.debug("Closing project view ", this.getDisplayName());
     }
 
-    private generateDataview(folder: TFolder) {
-        new DatabaseView(app.workspace.getMostRecentLeaf(), this.plugin)
+    private generateDataview(contentEl: HTMLElement) {
+        this.view = new DatabaseView(app.workspace.getMostRecentLeaf(), this.plugin);
+        this.view.initDatabase().then(() => {
+            LOGGER.debug("Database initialized successfully from project view");
+            this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
+        });
     }
 }
 
