@@ -1386,8 +1386,8 @@ div.database-plugin__checkbox {
 }
 
 .react-datepicker__input-container {
-  position: relative;
-  display: inline-block;
+  display: flex;
+  justify-content: space-around;
   width: 100%;
 }
 
@@ -1520,17 +1520,13 @@ div.database-plugin__checkbox {
   border: 0;
   box-shadow: none;
   outline: 0;
-  padding: 0 6px 0 0;
-  position: absolute;
-  top: 0;
+  padding: 6px;
   right: 0;
-  display: table-cell;
-  vertical-align: middle;
+  align-self: center;
 }
 
 .react-datepicker__close-icon::after {
   cursor: pointer;
-  background-color: var(--text-accent);
   color: var(--text-primary);
   border-radius: 50%;
   text-align: center;
