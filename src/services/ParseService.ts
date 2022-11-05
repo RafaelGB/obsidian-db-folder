@@ -78,9 +78,15 @@ class Parse {
      * @returns 
      */
     public parseDataArray(literal: Literal): Literal {
-        if ((literal as any).values !== undefined && (literal as any).settings !== undefined) {
+        if (literal === null || literal === undefined) {
+            return literal;
+        }
+
+        if (typeof literal === 'object' &&
+            (literal as any).values !== undefined && (literal as any).settings !== undefined) {
             literal = (literal as any).values
         }
+
         return literal;
     }
 

@@ -33,7 +33,7 @@ export function parseValuetoSanitizeYamlValue(value: string, localSettings: Loca
 
 function stringifyDbYaml(literal: Literal, level: number, localSettings: LocalSettings, key?: string): string[] {
     const literalBlock: string[] = [];
-    literal = DataviewService.parseDataArray(literal);
+    literal = ParseService.parseDataArray(literal);
     // Manage Arrays
     if (DataviewService.getDataviewAPI().value.isArray(literal)) {
         literalBlock.push(`${" ".repeat(level)}${key}:`);
