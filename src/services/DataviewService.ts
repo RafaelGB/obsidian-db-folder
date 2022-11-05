@@ -27,17 +27,6 @@ class DataviewProxy {
     }
 
     /**
-     * Check if literal is Proxy DataArray, if so, parse it. If not, return same literal
-     * @param literal 
-     * @returns 
-     */
-    parseDataArray(literal: Literal): Literal {
-        if ((literal as any).values !== undefined && (literal as any).settings !== undefined) {
-            literal = (literal as any).values
-        }
-        return literal;
-    }
-    /**
      * Singleton instance
      * @returns {VaultManager}
      */
