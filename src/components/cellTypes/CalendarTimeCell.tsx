@@ -6,6 +6,7 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
 
 const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
@@ -62,36 +63,36 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
 
   return showDatePicker &&
     (tableColumn.isMetadata === undefined || !tableColumn.isMetadata) ? (
-    <div className="calendar-time">
-      <DatePicker
-        dateFormat={configInfo.getLocalSettings().datetime_format}
-        selected={
-          DateTime.isDateTime(calendarCell)
-            ? (calendarCell as unknown as DateTime).toJSDate()
-            : null
-        }
-        onChange={handleCalendarChange}
-        popperContainer={CalendarContainer}
-        onClickOutside={() => setShowDatePicker(false)}
-        timeFormat="HH:mm"
-        timeCaption="time"
-        showTimeSelect
-        autoFocus
-        isClearable
-        clearButtonTitle="Clear"
-        placeholderText="Pick a moment..."
-      />
-    </div>
+    <DatePicker
+      dateFormat={configInfo.getLocalSettings().datetime_format}
+      selected={
+        DateTime.isDateTime(calendarCell)
+          ? (calendarCell as unknown as DateTime).toJSDate()
+          : null
+      }
+      onChange={handleCalendarChange}
+      popperContainer={CalendarContainer}
+      onClickOutside={() => setShowDatePicker(false)}
+      timeFormat="HH:mm"
+      timeCaption="time"
+      showTimeSelect
+      autoFocus
+      isClearable
+      ariaLabelClose="Clear"
+      placeholderText="Pick a moment..."
+    />
   ) : (
-    <div onClick={handleSpanOnClick}>
-      <span className="calendar-time" style={{ width: column.getSize() }}>
-        {DateTime.isDateTime(calendarCell)
-          ? (calendarCell as DateTime).toFormat(
-              configInfo.getLocalSettings().datetime_format
-            )
-          : null}
-      </span>
-    </div>
+    <span
+      className={`${c("calendar")}`}
+      style={{ width: column.getSize() }}
+      onClick={handleSpanOnClick}
+    >
+      {DateTime.isDateTime(calendarCell)
+        ? (calendarCell as DateTime).toFormat(
+            configInfo.getLocalSettings().datetime_format
+          )
+        : null}
+    </span>
   );
 };
 

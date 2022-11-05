@@ -77,7 +77,7 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       onClickOutside={onClickOutside}
       autoFocus
       isClearable
-      clearButtonTitle="Clear"
+      ariaLabelClose="Clear"
       placeholderText="Pick a date..."
     />
   ) : (
