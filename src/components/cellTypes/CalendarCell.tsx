@@ -51,7 +51,6 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
-    setShowDatePicker(false);
   }
 
   const CalendarContainer = (containerProps: any) => {
@@ -60,8 +59,11 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
     );
   };
 
-  const onClickOutside = () => {
-    setShowDatePicker(false);
+  const closeEditCalendarCell = () => {
+    // We need a delay to allow the click event of clearing the date to propagate
+    setTimeout(() => {
+      setShowDatePicker(false);
+    }, 100);
   };
 
   return showDatePicker ? (
@@ -74,7 +76,8 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       }
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
-      onClickOutside={onClickOutside}
+      onClickOutside={closeEditCalendarCell}
+      onCalendarClose={closeEditCalendarCell}
       autoFocus
       isClearable
       ariaLabelClose="Clear"

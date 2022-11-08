@@ -52,13 +52,19 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
-    setShowDatePicker(false);
   }
 
   const CalendarContainer = (containerProps: any) => {
     return (
       <Portal container={activeDocument.body}>{containerProps.children}</Portal>
     );
+  };
+
+  const closeEditCalendarTimeCell = () => {
+    // We need a delay to allow the click event of clearing the date to propagate
+    setTimeout(() => {
+      setShowDatePicker(false);
+    }, 100);
   };
 
   return showDatePicker &&
@@ -72,7 +78,8 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       }
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
-      onClickOutside={() => setShowDatePicker(false)}
+      onClickOutside={closeEditCalendarTimeCell}
+      onCalendarClose={closeEditCalendarTimeCell}
       timeFormat="HH:mm"
       timeCaption="time"
       showTimeSelect
