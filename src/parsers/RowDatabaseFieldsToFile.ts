@@ -58,7 +58,7 @@ function stringifyDbYaml(literal: Literal, level: number, localSettings: LocalSe
     else if (key) {
         literalBlock.push(`${" ".repeat(level)}${key}: ${ParseService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
     } else {
-        literalBlock.push(`${" ".repeat(level)}- ${ParseService.parseLiteral(literal, InputType.MARKDOWN, localSettings)}`);
+        literalBlock.push(`${" ".repeat(level)}- ${ParseService.parseLiteral(literal, InputType.MARKDOWN, { ...localSettings, frontmatter_quote_wrap: true })}`);
     }
     return literalBlock;
 }
