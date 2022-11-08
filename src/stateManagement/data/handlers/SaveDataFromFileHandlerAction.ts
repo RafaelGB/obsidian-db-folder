@@ -58,7 +58,6 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
 
             const currentline = this.normalizeArray(lines[i].split(","));
             const potentialPath = currentline[fileIndex];
-            currentline.splice(fileIndex, 1);
             // Obtain just the filename from the path
             const sanitizePath = potentialPath?.split("/").pop().split('.');
             let filename = "";
