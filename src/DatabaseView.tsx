@@ -53,10 +53,11 @@ export class DatabaseView extends TextFileView implements HoverParent {
   initial: InitialType;
   formulas: Record<string, unknown>;
 
-  constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin) {
+  constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
     super(leaf);
     this.plugin = plugin;
     this.emitter = createEmitter();
+    this.file = file;
     this.register(
       this.containerEl.onWindowMigrated(() => {
         this.plugin.removeView(this);
@@ -218,13 +219,17 @@ export class DatabaseView extends TextFileView implements HoverParent {
     return await super.onUnloadFile(file);
   }
 
+  initRootContainer(file: TFile) {
+    this.tableContainer = this.contentEl.createDiv(
+      StyleClasses.TABLE_CONTAINER
+    );
+    this.tableContainer.setAttribute("id", file.path);
+    this.rootContainer = createRoot(this.tableContainer);
+  }
+
   async onLoadFile(file: TFile) {
     try {
-      this.tableContainer = this.contentEl.createDiv(
-        StyleClasses.TABLE_CONTAINER
-      );
-      this.tableContainer.setAttribute("id", file.path);
-      this.rootContainer = createRoot(this.tableContainer);
+      this.initRootContainer(file);
       return await super.onLoadFile(file);
     } catch (e) {
       const stateManager = this.plugin.stateManagers.get(this.file);

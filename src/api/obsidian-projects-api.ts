@@ -1,11 +1,13 @@
 import { DB_ICONS } from "helpers/Constants";
 import DBFolderPlugin from "main";
-import { DataQueryResult, ProjectView, ProjectViewProps } from "obsidian-projects-types";
+
 import {
     DatabaseView,
 } from 'DatabaseView';
 import { LOGGER } from "services/Logger";
 import { TFolder } from "obsidian";
+import { DataQueryResult, ProjectView, ProjectViewProps } from "obsidian-projects-types";
+import { resolve_tfile } from "helpers/FileManagement";
 
 class ProjectAPI extends ProjectView {
     private plugin: DBFolderPlugin;
@@ -42,20 +44,26 @@ class ProjectAPI extends ProjectView {
     // `config`       JSON object with optional view configuration.
     // `saveConfig`   Callback to save configuration changes.
     async onOpen({ contentEl, config, saveConfig, }: ProjectViewProps) {
-        console.log(config);
-        this.generateDataview(contentEl);
+        if (this.isConfigEmpty(config)) {
+            // If the config is empty, we need to create a Default 
+            const leaf = app.workspace.getLeaf();
+            const file = resolve_tfile("pruebas.md");
+            this.view = new DatabaseView(leaf, this.plugin, file);
+            this.view.initRootContainer(file);
+            this.view.initDatabase().then(() => {
+                LOGGER.debug("Database initialized successfully from project view");
+                this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
+            });
+        }
+
     }
 
     async onClose() {
         LOGGER.debug("Closing project view ", this.getDisplayName());
     }
 
-    private generateDataview(contentEl: HTMLElement) {
-        this.view = new DatabaseView(app.workspace.getMostRecentLeaf(), this.plugin);
-        this.view.initDatabase().then(() => {
-            LOGGER.debug("Database initialized successfully from project view");
-            this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
-        });
+    private isConfigEmpty(config: Record<string, any>): boolean {
+        return Object.keys(config).length === 0;
     }
 }
 
