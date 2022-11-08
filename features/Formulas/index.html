@@ -383,6 +383,19 @@
     Exposed Functions
   </a>
   
+    <nav class="md-nav" aria-label="Exposed Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-file-structure" class="md-nav__link">
+    Javascript file structure
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -618,6 +631,19 @@
     Exposed Functions
   </a>
   
+    <nav class="md-nav" aria-label="Exposed Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-file-structure" class="md-nav__link">
+    Javascript file structure
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -675,6 +701,23 @@
 <li><code>dataview</code>: expose the dataview API. (see <a href="https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts">Dataview API</a>)</li>
 <li><code>rollup</code>: expose the rollup functions of the dbfolder plugin.  (see <a href="/features/Relations/#rollups">Rollup documentation</a>)</li>
 </ul>
+<h4 id="javascript-file-structure">Javascript file structure</h4>
+<p>To add a javascript file to the <code>js</code> folder, it must be a <code>.js</code> file and have the following structure:</p>
+<pre><code class="language-js">function optionalFunction( arg1, arg2){
+    // do something
+    return value
+}
+
+// Your main function inside the file (arguments are optional)
+function myFunction(arg1, arg2) {
+  // do something
+  // You can use another functions defined in the file
+  return result;
+}
+
+// expose the main function to the formula
+module.exports = myFunction;
+</code></pre>
 <h2 id="examples">Examples</h2>
 <p>If you have a column ID named "Date" you can add time:</p>
 <ul>
