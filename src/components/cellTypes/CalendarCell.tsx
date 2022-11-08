@@ -66,7 +66,7 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
 
   return showDatePicker ? (
     <DatePicker
-      dateFormat="yyyy-MM-dd"
+      dateFormat={configInfo.getLocalSettings().date_format}
       selected={
         DateTime.isDateTime(calendarCell)
           ? (calendarCell as unknown as DateTime).toJSDate()
