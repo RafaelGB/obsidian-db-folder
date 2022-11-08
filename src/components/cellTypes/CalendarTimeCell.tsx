@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, {
+  DetailedHTMLProps,
+  forwardRef,
+  InputHTMLAttributes,
+  useState,
+} from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import { Portal } from "@mui/material";
@@ -7,6 +12,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
+import { Platform } from "obsidian";
 
 const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
@@ -52,7 +58,6 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
-    setShowDatePicker(false);
   }
 
   const CalendarContainer = (containerProps: any) => {
@@ -60,6 +65,18 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       <Portal container={activeDocument.body}>{containerProps.children}</Portal>
     );
   };
+
+  const closeEditCalendarTimeCell = () => {
+    // We need a delay to allow the click event of clearing the date to propagate
+    setTimeout(() => {
+      setShowDatePicker(false);
+    }, 100);
+  };
+
+  const ReactDatePickerInput = forwardRef<
+    HTMLInputElement,
+    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+  >((props, ref) => <input ref={ref} {...props} readOnly />);
 
   return showDatePicker &&
     (tableColumn.isMetadata === undefined || !tableColumn.isMetadata) ? (
@@ -72,7 +89,9 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       }
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
-      onClickOutside={() => setShowDatePicker(false)}
+      onClickOutside={closeEditCalendarTimeCell}
+      onCalendarClose={closeEditCalendarTimeCell}
+      customInput={Platform.isMobile ? <ReactDatePickerInput /> : null}
       timeFormat="HH:mm"
       timeCaption="time"
       showTimeSelect
