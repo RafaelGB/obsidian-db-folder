@@ -1,4 +1,11 @@
-
+## 2.8.2
+### Visual
+- UX improvements for date picker and time picker
+- Checkbox design improvements [randomsnowflake](https://github.com/randomsnowflake)
+### No longer broken
+- Tags are now properly saved when it's a number with decimals with zero at the end (e.g. 1.0, 1.00, 1.000, etc.)
+- Datepicker clear button now works properly [ISSUE#564](https://github.com/RafaelGB/obsidian-db-folder/issues/564)
+- Vertical scroll on mobile improved [ISSUE#488](https://github.com/RafaelGB/obsidian-db-folder/issues/488)
 ## 2.8.1
 ### Shiny new things
 - New rollup functions: Count unique values,Truthy count, Falsy count, Percent empty, Percent filled, Task TODO, Task completed

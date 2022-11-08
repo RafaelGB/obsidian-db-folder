@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, {
+  DetailedHTMLProps,
+  forwardRef,
+  InputHTMLAttributes,
+  useState,
+} from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import { Portal } from "@mui/material";
@@ -7,6 +12,7 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
+import { Platform } from "obsidian";
 
 const CalendarCell = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
@@ -66,6 +72,11 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
     }, 100);
   };
 
+  const ReactDatePickerInput = forwardRef<
+    HTMLInputElement,
+    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+  >((props, ref) => <input ref={ref} {...props} readOnly />);
+
   return showDatePicker ? (
     <DatePicker
       dateFormat={configInfo.getLocalSettings().date_format}
@@ -78,6 +89,7 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       popperContainer={CalendarContainer}
       onClickOutside={closeEditCalendarCell}
       onCalendarClose={closeEditCalendarCell}
+      customInput={Platform.isMobile ? <ReactDatePickerInput /> : null}
       autoFocus
       isClearable
       ariaLabelClose="Clear"
