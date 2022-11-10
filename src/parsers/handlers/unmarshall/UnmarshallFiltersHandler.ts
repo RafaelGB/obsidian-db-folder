@@ -47,7 +47,7 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
             // Is a simple filter
             this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}- field: ${(filter as AtomicFilter).field}`);
             this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  operator: ${(filter as AtomicFilter).operator}`);
-            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  value: ${(filter as AtomicFilter).value ?? ""}`);
+            this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  value: "${(filter as AtomicFilter).value ?? ''}"`);
         }
     }
 }
