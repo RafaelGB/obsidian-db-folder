@@ -82,7 +82,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     newValue: OnChangeValue<SelectValue, true>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const arrayTags = newValue.map((tag) => tag.value);
+    const arrayTags = newValue.map((tag) => `${tag.value}`);
     const newCell = ParseService.parseRowToLiteral(
       tagsRow,
       tableColumn,
@@ -153,7 +153,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
                 <div key={`key-${tag}`}>
                   <Relationship
                     key={`tags-${row.index}-${tableColumn.key}-${tag}`}
-                    value={tag}
+                    value={tag.toString()}
                     backgroundColor={getColor(tag)}
                   />
                 </div>

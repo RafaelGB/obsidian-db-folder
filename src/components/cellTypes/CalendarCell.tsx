@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, {
+  DetailedHTMLProps,
+  forwardRef,
+  InputHTMLAttributes,
+  useState,
+} from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import { Portal } from "@mui/material";
@@ -7,6 +12,7 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
+import { Platform } from "obsidian";
 
 const CalendarCell = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
@@ -51,7 +57,6 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings()
     );
-    setShowDatePicker(false);
   }
 
   const CalendarContainer = (containerProps: any) => {
@@ -60,13 +65,21 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
     );
   };
 
-  const onClickOutside = () => {
-    setShowDatePicker(false);
+  const closeEditCalendarCell = () => {
+    // We need a delay to allow the click event of clearing the date to propagate
+    setTimeout(() => {
+      setShowDatePicker(false);
+    }, 100);
   };
+
+  const ReactDatePickerInput = forwardRef<
+    HTMLInputElement,
+    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+  >((props, ref) => <input ref={ref} {...props} readOnly />);
 
   return showDatePicker ? (
     <DatePicker
-      dateFormat="yyyy-MM-dd"
+      dateFormat={configInfo.getLocalSettings().date_format}
       selected={
         DateTime.isDateTime(calendarCell)
           ? (calendarCell as unknown as DateTime).toJSDate()
@@ -74,7 +87,9 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       }
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
-      onClickOutside={onClickOutside}
+      onClickOutside={closeEditCalendarCell}
+      onCalendarClose={closeEditCalendarCell}
+      customInput={Platform.isMobile ? <ReactDatePickerInput /> : null}
       autoFocus
       isClearable
       ariaLabelClose="Clear"
