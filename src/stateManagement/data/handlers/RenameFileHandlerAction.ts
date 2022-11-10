@@ -3,6 +3,8 @@ import { PromptModal } from "components/modals/PromptModal";
 import { MetadataColumns } from "helpers/Constants";
 import { resolve_tfile } from "helpers/FileManagement";
 import { Notice } from "obsidian";
+import { Link } from "obsidian-dataview";
+import { DataviewService } from "services/DataviewService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class RenameFileHandlerAction extends AbstractTableAction<DataState> {
@@ -11,17 +13,16 @@ export default class RenameFileHandlerAction extends AbstractTableAction<DataSta
         implementation.actions.renameFile = async (rowIndex: number) => {
             try {
                 const rowToRename = get().rows[rowIndex];
-
-                const oldFile = rowToRename[MetadataColumns.FILE].toString().split("|");
-                const prompt_filename = new PromptModal(oldFile[0], "");
+                const fileLink = rowToRename[MetadataColumns.FILE] as Link;
+                const oldFile = fileLink.fileName();
+                const prompt_filename = new PromptModal(oldFile, "");
 
                 const renameFilePromise = (newFilename: string) => {
-                    const oldTfile = resolve_tfile(oldFile[1]);
+                    const oldTfile = resolve_tfile(fileLink.path);
                     const newPath = `${oldTfile.parent.path}/${newFilename}.md`;
                     app.vault.rename(oldTfile, newPath);
-                    const newFile = `${newFilename}|${newPath}`;
                     rowToRename.__note__.filepath = newPath;
-                    rowToRename[MetadataColumns.FILE] = newFile;
+                    rowToRename[MetadataColumns.FILE] = DataviewService.getDataviewAPI().fileLink(newPath);
                     set((state) => {
                         return {
                             rows: [...state.rows.slice(0, rowIndex), rowToRename, ...state.rows.slice(rowIndex + 1)]
