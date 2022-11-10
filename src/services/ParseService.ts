@@ -249,7 +249,13 @@ class Parse {
                 break;
             case 'array':
                 auxMarkdown = wrapped.value
-                    .map(v => this.parseToMarkdown(DataviewService.getDataviewAPI().value.wrapValue(v), localSettings, isInline))
+                    .map(
+                        v => this.parseToMarkdown(
+                            DataviewService.wrapLiteral(v),
+                            localSettings,
+                            isInline
+                        )
+                    )
                     .join(', ');
                 break;
             case 'link':
