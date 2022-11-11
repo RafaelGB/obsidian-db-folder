@@ -6,7 +6,8 @@ import {
 } from 'DatabaseView';
 import { LOGGER } from "services/Logger";
 import { DataQueryResult, ProjectView, ProjectViewProps } from "obsidian-projects-types";
-import { createDatabaseFile, resolve_tfile } from "helpers/FileManagement";
+import { resolve_tfile, resolve_tfolder } from "helpers/FileManagement";
+import { generateDbConfiguration, generateNewDatabase } from "helpers/CommandsHelper";
 
 class ProjectAPI extends ProjectView {
     private plugin: DBFolderPlugin;
@@ -46,9 +47,11 @@ class ProjectAPI extends ProjectView {
         const { path } = project;
         let filePath = config.filepath;
         if (!filePath) {
-            // If the config is empty, we need to create a Default 
-            filePath = await createDatabaseFile(path, `${viewId}_db`, this.plugin.settings.local_settings);
-            saveConfig({ filepath: filePath });
+            const folder = resolve_tfolder(path);
+            // If the config is empty, we need to create a Default
+            const dbConfig = generateDbConfiguration(this.plugin.settings.local_settings);
+            await generateNewDatabase(dbConfig, folder, `${viewId}_db`, false);
+            saveConfig({ filepath: `${path}/${viewId}_db.md` });
         }
         const leaf = app.workspace.getLeaf();
         const file = resolve_tfile(filePath);

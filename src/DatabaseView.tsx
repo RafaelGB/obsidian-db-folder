@@ -57,13 +57,18 @@ export class DatabaseView extends TextFileView implements HoverParent {
     super(leaf);
     this.plugin = plugin;
     this.emitter = createEmitter();
-    this.file = file;
-    this.register(
-      this.containerEl.onWindowMigrated(() => {
-        this.plugin.removeView(this);
-        this.plugin.addView(this, this.data);
-      })
-    );
+    if (file) {
+      this.file = file;
+      this.plugin.removeView(this);
+      this.plugin.addView(this, this.data);
+    } else {
+      this.register(
+        this.containerEl.onWindowMigrated(() => {
+          this.plugin.removeView(this);
+          this.plugin.addView(this, this.data);
+        })
+      );
+    }
   }
 
   /**

@@ -166,7 +166,7 @@ export const resolveNewFilePath = ({
  * @param ddbbConfig 
  * @returns 
  */
-export async function createDatabaseFile(
+export async function create_row_file(
   folderPath: string,
   filename: string,
   ddbbConfig: LocalSettings
