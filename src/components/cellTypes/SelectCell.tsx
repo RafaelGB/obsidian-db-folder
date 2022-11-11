@@ -81,7 +81,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
     newValue: OnChangeValue<SelectValue, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const selectValue = newValue ? newValue.value : "";
+    const selectValue = newValue ? newValue.value.toString() : "";
     const newCell = ParseService.parseRowToLiteral(
       selectRow,
       tableColumn,

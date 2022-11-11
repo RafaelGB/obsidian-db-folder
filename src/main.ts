@@ -36,6 +36,7 @@ import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { t } from 'lang/helpers';
+import ProjectAPI from 'api/obsidian-projects-api';
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -49,6 +50,7 @@ export default class DBFolderPlugin extends Plugin {
 	/** External-facing plugin API */
 	public api: DbfAPIInterface;
 
+	onRegisterProjectView = () => new ProjectAPI(this);
 	public hover: { linkText: string; sourcePath: string } = {
 		linkText: null,
 		sourcePath: null,

@@ -59,6 +59,7 @@ export function NavBar(navBarProps: NavBarProps) {
       InputType.MARKDOWN;
     view.plugin.setMarkdownView(view.leaf);
   };
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
