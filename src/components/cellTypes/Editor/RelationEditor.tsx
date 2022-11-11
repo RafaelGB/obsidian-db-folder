@@ -8,7 +8,7 @@ import { recordRowsFromRelation } from "helpers/RelationHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
 import { OnChangeValue } from "react-select";
-import { StyleVariables } from "helpers/Constants";
+import { DEFAULT_SETTINGS, StyleVariables } from "helpers/Constants";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
@@ -49,7 +49,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   const relationRowsCallBack = useCallback(async () => {
     const relationRows = await recordRowsFromRelation(
       tableColumn.config.related_note_path,
-      configInfo.getLocalSettings(),
+      DEFAULT_SETTINGS.local_settings,
       columnsInfo.getAllColumns()
     );
     const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
