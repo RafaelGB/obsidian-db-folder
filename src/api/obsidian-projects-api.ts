@@ -5,9 +5,8 @@ import {
     DatabaseView,
 } from 'DatabaseView';
 import { LOGGER } from "services/Logger";
-import { TFolder } from "obsidian";
 import { DataQueryResult, ProjectView, ProjectViewProps } from "obsidian-projects-types";
-import { resolve_tfile } from "helpers/FileManagement";
+import { createDatabaseFile, resolve_tfile } from "helpers/FileManagement";
 
 class ProjectAPI extends ProjectView {
     private plugin: DBFolderPlugin;
@@ -43,27 +42,25 @@ class ProjectAPI extends ProjectView {
     // `contentEl`    HTML element where you can attach your view.
     // `config`       JSON object with optional view configuration.
     // `saveConfig`   Callback to save configuration changes.
-    async onOpen({ contentEl, config, saveConfig, }: ProjectViewProps) {
-        if (this.isConfigEmpty(config)) {
+    async onOpen({ contentEl, config, saveConfig, project, viewId }: ProjectViewProps) {
+        const { path } = project;
+        let filePath = config.filepath;
+        if (!filePath) {
             // If the config is empty, we need to create a Default 
-            const leaf = app.workspace.getLeaf();
-            const file = resolve_tfile("pruebas.md");
-            this.view = new DatabaseView(leaf, this.plugin, file);
-            this.view.initRootContainer(file);
-            this.view.initDatabase().then(() => {
-                LOGGER.debug("Database initialized successfully from project view");
-                this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
-            });
+            filePath = await createDatabaseFile(path, `${viewId}_db`, this.plugin.settings.local_settings);
+            saveConfig({ filepath: filePath });
         }
-
+        const leaf = app.workspace.getLeaf();
+        const file = resolve_tfile(filePath);
+        this.view = new DatabaseView(leaf, this.plugin, file);
+        this.view.initRootContainer(file);
+        await this.view.initDatabase();
+        LOGGER.debug("Database initialized successfully from project view");
+        this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
     }
 
     async onClose() {
         LOGGER.debug("Closing project view ", this.getDisplayName());
-    }
-
-    private isConfigEmpty(config: Record<string, any>): boolean {
-        return Object.keys(config).length === 0;
     }
 }
 

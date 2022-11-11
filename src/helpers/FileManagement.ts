@@ -4,16 +4,22 @@ import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 import { INLINE_POSITION, SourceDataTypes } from "helpers/Constants";
 import { RowDataType } from "cdm/FolderModel";
+import { VaultManagerDB } from "services/FileManagerService";
 
-export function resolve_tfile(file_str: string): TFile {
+export function resolve_tfile(file_str: string, restrict: boolean = true): TFile {
   file_str = normalizePath(file_str);
 
   const file = app.vault.getAbstractFileByPath(file_str);
-  if (!file) {
+  if (!file && restrict) {
     throw new HelperException(`File "${file_str}" doesn't exist`);
   }
+
   if (!(file instanceof TFile)) {
-    throw new HelperException(`${file_str} is a folder, not a file`);
+    if (restrict) {
+      throw new HelperException(`${file_str} is a folder, not a file`);
+    } else {
+      return null;
+    }
   }
 
   return file;
@@ -152,3 +158,37 @@ export const resolveNewFilePath = ({
       .join("/");
   return `${folderPath}${subfolders ? `/${subfolders}` : ""}`;
 };
+
+/**
+ * Generate a new file with the structure of a database view
+ * @param folderPath 
+ * @param filename 
+ * @param ddbbConfig 
+ * @returns 
+ */
+export async function createDatabaseFile(
+  folderPath: string,
+  filename: string,
+  ddbbConfig: LocalSettings
+): Promise<string> {
+  let trimedFilename = filename.replace(/\.[^/.]+$/, "").trim();
+  let filepath = `${folderPath}/${trimedFilename}.md`;
+  // Validate possible duplicates
+  let sufixOfDuplicate = 0;
+  while (resolve_tfile(filepath, false)) {
+    sufixOfDuplicate++;
+    filepath = `${folderPath}/${trimedFilename}-${sufixOfDuplicate}.md`;
+  }
+
+  if (sufixOfDuplicate > 0) {
+    trimedFilename = `${trimedFilename}-${sufixOfDuplicate}`;
+    filename = `${trimedFilename} copy(${sufixOfDuplicate})`;
+  }
+  // Add note to persist row
+  await VaultManagerDB.create_markdown_file(
+    resolve_tfolder(folderPath),
+    trimedFilename,
+    ddbbConfig
+  );
+  return filepath;
+}
