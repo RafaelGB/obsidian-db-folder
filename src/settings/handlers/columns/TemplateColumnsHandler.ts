@@ -39,10 +39,22 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                         .setTooltip("Save columns from file")
                         .onClick(async (): Promise<void> => {
                             const tfile = resolve_tfile(selected_file);
-                            const columns = await obtainColumnsFromFile(tfile);
-                            view.diskConfig.yaml.columns = columns;
+                            const templateYamlColumns = await obtainColumnsFromFile(tfile);
+                            // Merge columns with existing ones at the end
+                            const new_columns = { ...view.diskConfig.yaml.columns };
+                            let currentSize = columns.length;
+                            let colsAdded = 0;
+                            Object.entries(templateYamlColumns).forEach(([key, value]) => {
+                                if (!new_columns[key]) {
+                                    value.position = currentSize;
+                                    new_columns[key] = value;
+                                    currentSize++;
+                                    colsAdded++;
+                                }
+                            });
+                            view.diskConfig.yaml.columns = new_columns;
                             view.diskConfig.saveOnDisk();
-                            new Notice(`${Object.keys(columns).length} Columns were loaded from file "${tfile.basename}"! Close this dialog to show the database changes`);
+                            new Notice(`${colsAdded} Columns were loaded from file "${tfile.basename}". Total: ${currentSize}\nClose settings modal to show the database changes`);
                         });
                 });
 
