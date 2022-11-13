@@ -36,6 +36,10 @@ import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours"
 import dbfolderColumnSortingFn from "components/reducers/CustomSortingFn";
 import { useCallback, useState } from "react";
 import { AddRow } from "components/AddRow";
+import {
+  obsidianMdLinksOnClickCallback,
+  obsidianMdLinksOnMouseOverMenuCallback,
+} from "./obsidianArq/markdownLinks";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -114,67 +118,10 @@ export function Table(tableData: TableDataType) {
     setColumnOrder(columnsInfo.getValueOfAllColumnsAsociatedWith("id"));
   }
   /** Obsidian event to show page preview */
-  const onMouseOver = useCallback(
-    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      const targetEl = e.target as HTMLElement;
-      if (targetEl.tagName !== "A" || !view) return;
-
-      if (targetEl.hasClass("internal-link")) {
-        app.workspace.trigger("hover-link", {
-          event: e.nativeEvent,
-          source: DatabaseCore.FRONTMATTER_KEY,
-          hoverParent: view,
-          targetEl,
-          linktext: targetEl.getAttr("href"),
-          sourcePath: view.file.path,
-        });
-      }
-    },
-    [view]
-  );
+  const onMouseOver = obsidianMdLinksOnMouseOverMenuCallback(view);
   /** Obsidian to open an internal link in a new pane */
-  const onClick = useCallback(
-    async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      if (e.type === "auxclick" && e.button == 2) {
-        return;
-      }
+  const onClick = obsidianMdLinksOnClickCallback(stateManager, view, filePath);
 
-      const targetEl = e.target as HTMLElement;
-      const closestAnchor =
-        targetEl.tagName === "A" ? targetEl : targetEl.closest("a");
-
-      if (!closestAnchor) return;
-
-      if (closestAnchor.hasClass("file-link")) {
-        e.preventDefault();
-        const href = closestAnchor.getAttribute("href");
-        const normalizedPath = getNormalizedPath(href);
-        const target =
-          typeof href === "string" &&
-          app.metadataCache.getFirstLinkpathDest(
-            normalizedPath.root,
-            view.file.path
-          );
-
-        if (!target) return;
-        (app as any).openWithDefaultApp(target.path);
-
-        return;
-      }
-
-      if (closestAnchor.hasClass("internal-link")) {
-        e.preventDefault();
-        const destination = closestAnchor.getAttr("href");
-        const inNewLeaf = e.button === 1 || e.ctrlKey || e.metaKey;
-        const isUnresolved = closestAnchor.hasClass("is-unresolved");
-
-        app.workspace.openLinkText(destination, filePath, inNewLeaf);
-
-        return;
-      }
-    },
-    [stateManager, filePath]
-  );
   const table: Table<RowDataType> = useReactTable({
     columns: columns,
     data: rows,
