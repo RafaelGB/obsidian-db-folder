@@ -17,14 +17,14 @@ import { Menu, TFile } from "obsidian";
 export function showFileMenu(file: TFile, event: MouseEvent, removeRow: () => void, rewriteFileOfRow: () => void) {
     const fileMenu = new Menu();
     fileMenu.addItem((item) => item
-        .setTitle("Delete")
-        .setIcon("trash")
-        .onClick(removeRow));
-    fileMenu.addItem((item) => item
         .setTitle("Rename")
         .setIcon("pencil")
         .onClick(rewriteFileOfRow));
-
+    fileMenu.addItem((item) => item
+        .setTitle("Delete")
+        .setIcon("trash")
+        .onClick(removeRow));
+    fileMenu.addSeparator();
     app.workspace.trigger("file-menu", fileMenu, file, null, app.workspace.getMostRecentLeaf());
     fileMenu.showAtMouseEvent(event);
 }
