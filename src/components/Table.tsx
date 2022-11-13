@@ -120,7 +120,7 @@ export function Table(tableData: TableDataType) {
       if (targetEl.tagName !== "A" || !view) return;
 
       if (targetEl.hasClass("internal-link")) {
-        view.app.workspace.trigger("hover-link", {
+        app.workspace.trigger("hover-link", {
           event: e.nativeEvent,
           source: DatabaseCore.FRONTMATTER_KEY,
           hoverParent: view,
@@ -151,7 +151,7 @@ export function Table(tableData: TableDataType) {
         const normalizedPath = getNormalizedPath(href);
         const target =
           typeof href === "string" &&
-          view.app.metadataCache.getFirstLinkpathDest(
+          app.metadataCache.getFirstLinkpathDest(
             normalizedPath.root,
             view.file.path
           );

@@ -1,3 +1,13 @@
+## 2.8.3
+### Shiny new things
+- Obsidian-projects support (experimental) [ISSUE#574](https://github.com/RafaelGB/obsidian-db-folder/issues/574)
+### Improved
+- `Select file as Column template` option improved. Now the columns does not replace the current ones, but add the new ones to the right of the current ones. [ISSUE#230](https://github.com/RafaelGB/obsidian-db-folder/issues/230)
+### No longer broken
+- Wrong atributtes order on CSV import fixed. [ISSUE#551](https://github.com/RafaelGB/obsidian-db-folder/issues/551)
+- Value of filters now support special characters. [ISSUE#579](https://github.com/RafaelGB/obsidian-db-folder/issues/579)
+- Relations are now correctly configured for dataview/tags sources [ISSUE#572](https://github.com/RafaelGB/obsidian-db-folder/issues/572) [ISSUE#573](https://github.com/RafaelGB/obsidian-db-folder/issues/573)
+- Rename file function fixed for Obsidian 1.0.x
 ## 2.8.2
 ### Visual
 - UX improvements for date picker and time picker

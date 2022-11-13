@@ -100,7 +100,6 @@ export type TableDataType = {
     stateManager: StateManager,
     tableStore?: TableStateInterface
 }
-
 export interface DatabaseHeaderProps {
     column: Column<RowDataType, Literal>,
     header: Header<RowDataType, Literal>,

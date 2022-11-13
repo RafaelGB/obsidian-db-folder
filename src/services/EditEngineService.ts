@@ -202,7 +202,7 @@ class EditEngine {
                 newValue: inline_regex_target_in_function_of(
                     ddbbConfig.inline_new_position,
                     columnId,
-                    ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig).toString(),
+                    ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true).toString(),
                     contentHasFrontmatter
                 )
             };
