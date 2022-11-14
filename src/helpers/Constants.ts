@@ -443,6 +443,7 @@ export const DB_ICONS = Object.freeze({
 });
 
 export const ROLLUP_EMBED_ACTIONS = {
+  ALL_TASKS: 'All Tasks',
   TASK_TODO: 'Task TODO',
   TASK_COMPLETED: 'Task Completed'
 };
