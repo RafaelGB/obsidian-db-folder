@@ -19,6 +19,7 @@ export default {
   'toolbar_menu_import_csv': 'Import CSV',
   /** SOURCE OPTIONS */
   'current_folder': "Current folder",
+  'current_folder_without_subfolders': "Current folder without subfolders",
   "tag": "Tag",
   "outgoing_link": "Outgoing link",
   "incoming_link": "Incoming link",

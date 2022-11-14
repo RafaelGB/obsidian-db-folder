@@ -117,10 +117,6 @@ export function Table(tableData: TableDataType) {
   if (columnOrder.length !== columns.length) {
     setColumnOrder(columnsInfo.getValueOfAllColumnsAsociatedWith("id"));
   }
-  /** Obsidian event to show page preview */
-  const onMouseOver = obsidianMdLinksOnMouseOverMenuCallback(view);
-  /** Obsidian to open an internal link in a new pane */
-  const onClick = obsidianMdLinksOnClickCallback(stateManager, view, filePath);
 
   const table: Table<RowDataType> = useReactTable({
     columns: columns,
@@ -211,8 +207,10 @@ export function Table(tableData: TableDataType) {
             cell_size_config +
             (sticky_first_column_config ? " sticky_first_column" : "")
         )}`}
-        onMouseOver={onMouseOver}
-        onClick={onClick}
+        /** Obsidian event to show page preview */
+        onMouseOver={obsidianMdLinksOnMouseOverMenuCallback(view)}
+        /** Obsidian to open an internal link in a new pane */
+        onClick={obsidianMdLinksOnClickCallback(stateManager, view, filePath)}
         style={{
           width: table.getCenterTotalSize(),
         }}
