@@ -254,6 +254,7 @@ export const StyleVariables = Object.freeze({
 
 export const SourceDataTypes = Object.freeze({
   CURRENT_FOLDER: 'current_folder',
+  CURRENT_FOLDER_WITHOUT_SUBFOLDERS: 'current_folder_without_subfolders',
   TAG: 'tag',
   OUTGOING_LINK: 'outgoing_link',
   INCOMING_LINK: 'incoming_link',
