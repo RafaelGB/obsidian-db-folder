@@ -21,7 +21,11 @@ export async function renderMarkdown(
     const { media_height, media_width, enable_media_view } = column.config;
     if (isValidHttpUrl(markdownString)) {
       const media_inclusion = enable_media_view ? `|${media_height}x${media_width}` : "";
-      const linkname = column.config.link_alias_enabled ? `${column.label}` : `${markdownString}`;
+
+      const linkname = column.config.link_alias_enabled ?
+        column.config.custom_link_alias ? column.config.custom_link_alias : `${column.label}`
+        : `${markdownString}`;
+
       markdownString = `[${linkname}${media_inclusion}](${markdownString})`;
       if (enable_media_view) {
         markdownString = `!${markdownString}`;
