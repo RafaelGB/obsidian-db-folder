@@ -13,6 +13,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
 import { Platform } from "obsidian";
+import { parseLuxonDateToString } from "helpers/LuxonHelper";
 
 const CalendarCell = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
@@ -101,11 +102,10 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       onClick={handleSpanOnClick}
       style={{ width: column.getSize() }}
     >
-      {DateTime.isDateTime(calendarCell)
-        ? (calendarCell as unknown as DateTime).toFormat(
-            configInfo.getLocalSettings().date_format
-          )
-        : null}
+      {parseLuxonDateToString(
+        calendarCell,
+        configInfo.getLocalSettings().date_format
+      )}
     </span>
   );
 };
