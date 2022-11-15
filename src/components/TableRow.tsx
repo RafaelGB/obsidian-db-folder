@@ -8,10 +8,12 @@ import React from "react";
 
 export default function TableRow(headerProps: TableCellProps) {
   const { row, table } = headerProps;
-  const backgroundColor =
-    (table.getRowModel().flatRows.indexOf(row) + 1) % 2
+  const { view } = table.options.meta;
+  const backgroundColor = view.plugin.settings.global_settings.enable_row_shadow
+    ? (table.getRowModel().flatRows.indexOf(row) + 1) % 2
       ? StyleVariables.BACKGROUND_PRIMARY
-      : StyleVariables.BACKGROUND_SECONDARY;
+      : StyleVariables.BACKGROUND_SECONDARY
+    : StyleVariables.BACKGROUND_PRIMARY;
   return (
     <div
       key={`cell-tr-${row.id}`}

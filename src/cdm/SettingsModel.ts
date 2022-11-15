@@ -27,6 +27,7 @@ export interface GlobalSettings {
     media_settings: MediaSettings;
     enable_show_state: boolean;
     csv_file_header_key: string;
+    enable_row_shadow: boolean;
 }
 
 export interface LocalSettings {
