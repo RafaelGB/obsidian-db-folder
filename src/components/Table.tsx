@@ -34,7 +34,7 @@ import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "components/reducers/CustomSortingFn";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { AddRow } from "components/AddRow";
 import {
   obsidianMdLinksOnClickCallback,

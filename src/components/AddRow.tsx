@@ -48,6 +48,7 @@ export function AddRow(props: AddRowProps) {
       )
       .then(() => {
         setInputNewRow("");
+        table.setPageIndex(table.getPageCount() - 1);
       });
   }
 
