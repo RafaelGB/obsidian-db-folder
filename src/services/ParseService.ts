@@ -316,27 +316,34 @@ class Parse {
     }
 
     private handleYamlBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {
-        // Do nothing if is inline
-        if (isInline) {
-            return value;
-        }
-
         // Remove a possible already existing quote wrapper
         if (value.startsWith('"') && value.endsWith('"')) {
             value = value.substring(1, value.length - 1);
         }
 
+        // Wrap in quotes if is configured to do so
+        if (localSettings.frontmatter_quote_wrap) {
+            return this.wrapWithQuotes(value);
+        }
+
+        // Do nothing if is inline
+        if (isInline) {
+            return value;
+        }
+
         // Check possible markdown breakers of the yaml
         if (MarkdownBreakerRules.INIT_CHARS.some(c => value.startsWith(c)) ||
             MarkdownBreakerRules.BETWEEN_CHARS.some(rule => value.includes(rule)) ||
-            MarkdownBreakerRules.UNIQUE_CHARS.some(c => value === c) ||
-            localSettings.frontmatter_quote_wrap) {
-            value = value.replaceAll(`\\`, ``);
-            value = value.replaceAll(`"`, `\\"`);
-            return `"${value}"`;
+            MarkdownBreakerRules.UNIQUE_CHARS.some(c => value === c)) {
+            return this.wrapWithQuotes(value);
         }
-
         return value;
+    }
+
+    private wrapWithQuotes(value: string): string {
+        value = value.replaceAll(`\\`, ``);
+        value = value.replaceAll(`"`, `\\"`);
+        return `"${value}"`;
     }
 
     /**
