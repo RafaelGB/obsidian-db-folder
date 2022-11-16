@@ -58,6 +58,10 @@ class Rollup {
                 result = this.percentFilled(key);
                 break;
 
+            case ROLLUP_ACTIONS.ALL_TASKS:
+                result = this.allTasks();
+                break;
+
             case ROLLUP_ACTIONS.TASK_COMPLETED:
                 result = this.taskCompleted();
                 break;
@@ -170,6 +174,13 @@ class Rollup {
         const total = this.pages.length;
         const filled = this.pages.filter((page) => page[key] !== undefined).length;
         return `${((filled / total) * 100).toFixed(2)}%`;
+    }
+
+    public allTasks(): string {
+        return this.pages.map((page: SMarkdownPage) => {
+            const file_tasks = page.file.tasks;
+            return file_tasks.length
+        }).reduce((a, b) => a + b, 0).toString();
     }
 
     public taskCompleted(): string {

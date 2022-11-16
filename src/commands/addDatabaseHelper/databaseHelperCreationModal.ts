@@ -68,6 +68,7 @@ export class DatabaseHelperCreationModalManager {
             this.databaseHelperCreationModal.local_settings.source_data,
             {
                 current_folder: SourceDataTypes.CURRENT_FOLDER,
+                current_folder_without_subfolders: SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS,
                 tag: SourceDataTypes.TAG,
                 outgoing_link: SourceDataTypes.OUTGOING_LINK,
                 incoming_link: SourceDataTypes.INCOMING_LINK,

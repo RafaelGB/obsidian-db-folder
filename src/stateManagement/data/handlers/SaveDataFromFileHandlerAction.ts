@@ -45,7 +45,8 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
         const rows: RowDataType[] = [];
         const lines = csv.toString().split("\n");
         const headers = this.normalizeArray(lines[0].split(","));
-        const destination_folder = config.source_data === SourceDataTypes.CURRENT_FOLDER ? view.file.parent.path : config.source_destination_path;
+        const isCurrentFolder = config.source_data in [SourceDataTypes.CURRENT_FOLDER, SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS];
+        const destination_folder = isCurrentFolder ? view.file.parent.path : config.source_destination_path;
         // Obtain File from headers array
         const fileIndex = headers.indexOf(
             view.plugin.settings.global_settings.csv_file_header_key ?? DEFAULT_SETTINGS.global_settings.csv_file_header_key
@@ -68,7 +69,7 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
             }
             if (filename) {
 
-                const filepath = config.source_data === SourceDataTypes.CURRENT_FOLDER ? `${view.file.parent.path}/${filename}.md` : `${config.source_destination_path}/${filename}.md`;
+                const filepath = isCurrentFolder ? `${view.file.parent.path}/${filename}.md` : `${config.source_destination_path}/${filename}.md`;
                 const lineRecord: Record<string, Literal> = {};
 
                 currentline.forEach((value, index) => {

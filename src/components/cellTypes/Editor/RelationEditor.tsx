@@ -15,7 +15,6 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   const { table, column } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
   const { tableState } = table.options.meta;
-  const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
 
   const [relationValue, setRelationValue] = useState(

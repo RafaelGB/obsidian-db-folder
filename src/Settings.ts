@@ -83,9 +83,9 @@ export class SettingsManager {
     if (settingHandlerResponse.local) {
       /** Source section */
       source_settings_section(settingHandlerResponse);
-      /** Folder section */
-      folder_settings_section(settingHandlerResponse);
     }
+    /** Folder section */
+    folder_settings_section(settingHandlerResponse);
     /** Columns section */
     columns_settings_section.run(settingHandlerResponse);
     /** Rows section */

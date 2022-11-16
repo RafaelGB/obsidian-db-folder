@@ -44,6 +44,7 @@ export interface ConfigColumn {
     wrap_content?: boolean;
     // Text
     link_alias_enabled?: boolean;
+    custom_link_alias?: string;
     // Tasks
     task_hide_completed?: boolean;
     // Formulas

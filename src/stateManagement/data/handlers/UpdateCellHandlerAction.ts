@@ -46,6 +46,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                 await FileGroupingService.moveFile(newFilePath, modifiedRow);
                 await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
             }
+
             await EditEngineService.updateRowFileProxy(
                 rowTFile,
                 column.key,
@@ -54,6 +55,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
                 ddbbConfig,
                 UpdateRowOptions.COLUMN_VALUE
             );
+
             set((state) => {
                 // Save on memory
                 return {
