@@ -11,8 +11,9 @@ import { c } from "helpers/StylesHelper";
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
-import { InputType } from "helpers/Constants";
+import { DEFAULT_SETTINGS, InputType } from "helpers/Constants";
 import { Platform } from "obsidian";
+import { parseLuxonDateToString } from "helpers/LuxonHelper";
 
 const CalendarCell = (calendarProps: CellComponentProps) => {
   const { defaultCell } = calendarProps;
@@ -79,7 +80,7 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
 
   return showDatePicker ? (
     <DatePicker
-      dateFormat={configInfo.getLocalSettings().date_format}
+      dateFormat={DEFAULT_SETTINGS.local_settings.date_format}
       selected={
         DateTime.isDateTime(calendarCell)
           ? (calendarCell as unknown as DateTime).toJSDate()
@@ -101,11 +102,10 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
       onClick={handleSpanOnClick}
       style={{ width: column.getSize() }}
     >
-      {DateTime.isDateTime(calendarCell)
-        ? (calendarCell as unknown as DateTime).toFormat(
-            configInfo.getLocalSettings().date_format
-          )
-        : null}
+      {parseLuxonDateToString(
+        calendarCell,
+        configInfo.getLocalSettings().date_format
+      )}
     </span>
   );
 };

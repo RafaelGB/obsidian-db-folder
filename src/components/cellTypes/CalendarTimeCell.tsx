@@ -10,9 +10,10 @@ import { Portal } from "@mui/material";
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
-import { InputType } from "helpers/Constants";
+import { DEFAULT_SETTINGS, InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Platform } from "obsidian";
+import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
 
 const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
@@ -81,12 +82,8 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   return showDatePicker &&
     (tableColumn.isMetadata === undefined || !tableColumn.isMetadata) ? (
     <DatePicker
-      dateFormat={configInfo.getLocalSettings().datetime_format}
-      selected={
-        DateTime.isDateTime(calendarCell)
-          ? (calendarCell as unknown as DateTime).toJSDate()
-          : null
-      }
+      dateFormat={DEFAULT_SETTINGS.local_settings.datetime_format}
+      selected={calendarCell ? calendarCell.toJSDate() : null}
       onChange={handleCalendarChange}
       popperContainer={CalendarContainer}
       onClickOutside={closeEditCalendarTimeCell}
@@ -106,11 +103,10 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       style={{ width: column.getSize() }}
       onClick={handleSpanOnClick}
     >
-      {DateTime.isDateTime(calendarCell)
-        ? (calendarCell as DateTime).toFormat(
-            configInfo.getLocalSettings().datetime_format
-          )
-        : null}
+      {parseLuxonDatetimeToString(
+        calendarCell,
+        configInfo.getLocalSettings().datetime_format
+      )}
     </span>
   );
 };
