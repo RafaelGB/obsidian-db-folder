@@ -93,7 +93,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
       tableColumn,
       newCell,
       columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings(),
+      { ...configInfo.getLocalSettings(), frontmatter_quote_wrap: true },
       true
     );
     // Add new option to column options

@@ -105,7 +105,10 @@ class Parse {
     ): Literal {
         if (typeof newValue === "string") {
             try {
-                newValue = JSON.parse(newValue);
+                // Check if is a valid JSON
+                if (newValue.startsWith("{") && newValue.endsWith("}")) {
+                    newValue = JSON.parse(newValue);
+                }
             } catch (e) {
                 // Do nothing
             }

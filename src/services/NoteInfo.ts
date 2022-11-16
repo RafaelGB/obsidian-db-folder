@@ -58,7 +58,6 @@ export default class NoteInfo {
             .forEach(property => {
                 aFile[property] = this.page[property];
             });
-
         return aFile;
     }
 
