@@ -210,7 +210,7 @@ export async function obtainColumnsFromRows(
 
 function getInputInFuctionOfLiteral(literal: Literal) {
   const wrappedLiteral = DataviewService.wrapLiteral(literal);
-  let input = InputType.TEXT;
+  let input: string = InputType.TEXT;
   switch (wrappedLiteral.type) {
     case InputType.NUMBER:
       input = InputType.NUMBER;
