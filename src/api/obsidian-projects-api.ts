@@ -1,4 +1,4 @@
-import { DatabaseCore, DB_ICONS, DEFAULT_COLUMN_CONFIG, InputType, SourceDataTypes } from "helpers/Constants";
+import { DB_ICONS, DEFAULT_COLUMN_CONFIG, InputType, SourceDataTypes } from "helpers/Constants";
 import DBFolderPlugin from "main";
 
 import {
@@ -12,6 +12,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { dbTrim } from "helpers/StylesHelper";
 
+const projectsMetadataColumns = ["File", "name", "path"];
 class ProjectAPI extends ProjectView {
     private plugin: DBFolderPlugin;
     private view: DatabaseView;
@@ -40,10 +41,11 @@ class ProjectAPI extends ProjectView {
             .values(this.view.diskConfig.yaml.columns)
             .filter((column) => !column.isMetadata).length;
         const actualFields = fields
-            .filter((field) => ![DatabaseCore.FRONTMATTER_KEY, "File"].contains(field.name));
+            .filter((field) => !projectsMetadataColumns.contains(field.name));
+
         if (currentColumnsLength !== actualFields.length) {
             const newColumns: Record<string, DatabaseColumn> = {};
-            fields.forEach((field, index) => {
+            actualFields.forEach((field, index) => {
                 const { name, type } = field;
                 /**
                  * I can not use the view object here without make it a class variable
@@ -71,6 +73,7 @@ class ProjectAPI extends ProjectView {
 
             this.view.diskConfig.yaml.columns = newColumns;
             await this.view.diskConfig.saveOnDisk();
+            await this.view.reloadDatabase();
         }
     }
 
