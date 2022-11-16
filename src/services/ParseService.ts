@@ -202,7 +202,7 @@ class Parse {
         switch (wrapped.type) {
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
-                    return wrapped.value.toFormat(localSettings.datetime_format);
+                    return parseLuxonDatetimeToString(wrapped.value, localSettings.datetime_format);
                 } else {
                     try {
                         // Try to parse to JSON
