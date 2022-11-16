@@ -1,3 +1,15 @@
+## 2.8.4
+- New rollup. All task count [ISSUE#602](https://github.com/RafaelGB/obsidian-db-folder/issues/602)
+- New db source, current folder without subfolders [ISSUE#281](https://github.com/RafaelGB/obsidian-db-folder/issues/281)
+- Now row context menu will display with right click (long press on mobile). Left click will open the note.
+### Improved
+- Default values avaliable for cell size and sticky of first colum on global settings [ISSUE#358](https://github.com/RafaelGB/obsidian-db-folder/issues/358)
+- New toggle global configuration to show/hide the row shadow [ISSUE#421](https://github.com/RafaelGB/obsidian-db-folder/issues/421)
+- New column text configuration to customize the name of URL alias [ISSUE#356](https://github.com/RafaelGB/obsidian-db-folder/issues/356)
+- Go to page of entry creation [ISSUE#332](https://github.com/RafaelGB/obsidian-db-folder/issues/332)
+- Support for external links [ISSUE#232](https://github.com/RafaelGB/obsidian-db-folder/issues/232)
+### No longer broken
+- Error handler with not correct calendar formats. Use a default one [ISSUE#595](https://github.com/RafaelGB/obsidian-db-folder/issues/595)
 ## 2.8.3
 ### Shiny new things
 - Obsidian-projects support (experimental) [ISSUE#574](https://github.com/RafaelGB/obsidian-db-folder/issues/574)
