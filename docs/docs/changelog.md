@@ -1,4 +1,5 @@
 ## 2.8.4
+### Shiny new things
 - New rollup. All task count [ISSUE#602](https://github.com/RafaelGB/obsidian-db-folder/issues/602)
 - New db source, current folder without subfolders [ISSUE#281](https://github.com/RafaelGB/obsidian-db-folder/issues/281)
 - Now row context menu will display with right click (long press on mobile). Left click will open the note.
