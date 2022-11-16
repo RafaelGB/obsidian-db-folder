@@ -10,6 +10,7 @@
 - Support for external links [ISSUE#232](https://github.com/RafaelGB/obsidian-db-folder/issues/232)
 ### No longer broken
 - Error handler with not correct calendar formats. Use a default one [ISSUE#595](https://github.com/RafaelGB/obsidian-db-folder/issues/595)
+- Relations of dataview sources are now filtered correctly
 ## 2.8.3
 ### Shiny new things
 - Obsidian-projects support (experimental) [ISSUE#574](https://github.com/RafaelGB/obsidian-db-folder/issues/574)
