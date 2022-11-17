@@ -69,7 +69,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
       };
       effectCallback();
     }
-  }, [formulaRow]);
+  }, [row]);
   return (
     <span
       ref={formulaRef}
