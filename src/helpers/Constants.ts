@@ -339,6 +339,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
     enable_show_state: false,
     enable_row_shadow: true,
+    enable_ribbon_icon: true,
     logger_level_info: 'error',
     csv_file_header_key: 'File',
     media_settings: {

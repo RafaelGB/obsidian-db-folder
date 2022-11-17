@@ -65,6 +65,9 @@ export default class DBFolderPlugin extends Plugin {
 	stateManagers: Map<TFile, StateManager> = new Map();
 
 	windowRegistry: Map<Window, WindowRegistry> = new Map();
+
+	ribbonIcon: HTMLElement;
+
 	async onload(): Promise<void> {
 		await this.load_settings();
 		addIcon(DB_ICONS.NAME, DB_ICONS.ICON);
@@ -402,7 +405,13 @@ export default class DBFolderPlugin extends Plugin {
 			callback: () => new DatabaseHelperCreationModal(this.settings.local_settings).open(),
 		});
 
-		this.addRibbonIcon(DB_ICONS.NAME, t("ribbon_icon_title"), async (e) => {
+		if (this.settings.global_settings.enable_ribbon_icon) {
+			this.showRibbonIcon();
+		}
+	}
+
+	showRibbonIcon() {
+		this.ribbonIcon = this.addRibbonIcon(DB_ICONS.NAME, t("ribbon_icon_title"), async (e) => {
 			new DatabaseHelperCreationModal(this.settings.local_settings).open()
 		});
 	}
