@@ -132,8 +132,13 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
       );
       break;
     case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
-      pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
-        .where(p => (p.file as any).folder === folderPath);
+      if (!folderPath || folderPath === '/') {
+        pagesResult = DataviewService.getDataviewAPI().pages()
+          .where(p => !(p.file as any).folder);
+      } else {
+        pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
+          .where(p => (p.file as any).folder === folderPath);
+      }
       break;
     default:
       pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);

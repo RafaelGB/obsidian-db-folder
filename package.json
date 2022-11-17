@@ -3,10 +3,9 @@
 	"version": "2.8.4",
 	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
-	"type": "module",
 	"scripts": {
-		"dev": "rollup --config rollup.config.js -w",
-		"build": "rollup --config rollup.config.js",
+		"dev": "rollup --config rollup.config.mjs -w",
+		"build": "rollup --config rollup.config.mjs",
 		"test": "jest --colors --coverage test",
 		"pretest": "eslint --ignore-path .gitignore src/**/*.ts"
 	},

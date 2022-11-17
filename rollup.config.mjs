@@ -23,7 +23,6 @@ const getRollupPlugins = (tsconfig, ...plugins) =>
         nodeResolve({ browser: true }),
         json(),
         commonjs(),
-        terser(),
         // This is needed to make work the plugin on mobile
         replace({
             'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
