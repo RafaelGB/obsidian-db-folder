@@ -12,6 +12,7 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import Box from "@mui/material/Box";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { Platform } from "obsidian";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
@@ -104,11 +105,22 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     persistLabelChange();
   };
 
+  const handleClickAway = () => {
+    setMenuEl(null);
+    setTypesEl(null);
+    setTypesTimeout(null);
+  };
+
   return (
     <Popper id={idMenu} open={openMenu} anchorEl={menuEl} key={idMenu}>
-      <ClickAwayListener onClickAway={() => setMenuEl(null)}>
+      <ClickAwayListener onClickAway={handleClickAway}>
         <Box>
-          <div className={`menu ${c("popper")}`}>
+          <div
+            className={`menu ${c("popper")}`}
+            style={{
+              width: Platform.isMobile ? "240px" : "auto",
+            }}
+          >
             {/** Edit header label section */}
             {!isMetadata && (
               <>
