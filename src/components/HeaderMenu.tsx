@@ -3,15 +3,18 @@ import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { FocusEventHandler, useEffect, useState } from "react";
 import { usePopper } from "react-popper";
+import Popper from "@mui/material/Popper";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
 import { TableColumn } from "cdm/FolderModel";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import Box from "@mui/material/Box";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
+
   const [columnsInfo, columnActions] = table.options.meta.tableState.columns(
     (state) => [state.info, state.actions]
   );
@@ -23,40 +26,31 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   );
 
   /** Header props */
-  const {
-    propertyIcon,
-    expanded,
-    setExpanded,
-    created,
-    referenceElement,
-    labelState,
-    setLabelState,
-  } = headerMenuProps;
+  const { propertyIcon, menuEl, setMenuEl, labelState, setLabelState } =
+    headerMenuProps;
 
   const { key, isMetadata, input } = column.columnDef as TableColumn;
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(key));
-  const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: "bottom",
-    strategy: "absolute",
-  });
   // Manage type of data
   const [typeReferenceElement, setTypeReferenceElement] = useState(null);
   const [typePopperElement, setTypePopperElement] = useState(null);
   const [showType, setShowType] = useState(false);
 
+  // Manage Popper
+  const open = Boolean(menuEl);
+  const id = open ? `header-menu-${column.id}` : undefined;
   // Manage errors
   const [labelStateInvalid, setLabelStateInvalid] = useState(false);
 
   /** Event driven actions */
-  useEffect(() => {
-    // Throw event if created changed to expand or collapse the menu
-    if (created) {
-      setExpanded(true);
-    }
-  }, [created]);
+  // useEffect(() => {
+  //   // Throw event if created changed to expand or collapse the menu
+  //   if (created) {
+  //     setExpanded(true);
+  //   }
+  // }, [created]);
 
   /**
    * Array of action buttons asociated to the header
@@ -65,7 +59,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     buttons: [],
     headerMenuProps: headerMenuProps,
     hooks: {
-      setExpanded: setExpanded,
+      setMenuEl: setMenuEl,
       keyState: keyState,
       setKeyState: setkeyState,
       setShowType: setShowType,
@@ -74,9 +68,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const headerButtons =
     header_action_button_section.run(headerActionResponse).buttons;
 
-  /**
-   * Array of type headers available to change the data type of the column
-   */
+  // /**
+  //  * Array of type headers available to change the data type of the column
+  //  */
   headerActionResponse.buttons = [];
   const typesButtons =
     header_action_types_section.run(headerActionResponse).buttons;
@@ -119,143 +113,135 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   };
 
   return (
-    <div>
-      {expanded && (
-        <div className="overlay" onClick={() => setExpanded(false)} />
-      )}
-      {expanded && (
+    <Popper id={id} open={open} anchorEl={menuEl}>
+      <Box>
+        <div className="overlay" onClick={() => setMenuEl(null)} />
         <div
-          ref={setPopperElement}
-          style={{ ...styles.popper, zIndex: 3 }}
-          {...attributes.popper}
+          className={`menu ${c("popper")}`}
+          style={{
+            width: 240,
+          }}
         >
-          <div
-            className={`menu ${c("popper")}`}
-            style={{
-              width: 240,
-            }}
-          >
-            {/** Edit header label section */}
-            {!isMetadata && (
-              <>
-                <div
+          {/** Edit header label section */}
+          {!isMetadata && (
+            <>
+              <div
+                style={{
+                  paddingTop: "0.75rem",
+                  paddingLeft: "0.75rem",
+                  paddingRight: "0.75rem",
+                }}
+              >
+                <div className="is-fullwidth" style={{ marginBottom: 12 }}>
+                  <input
+                    className={
+                      labelStateInvalid
+                        ? `${c("invalid-form")}`
+                        : `${c("form-input")}`
+                    }
+                    ref={setInputRef}
+                    type="text"
+                    value={labelState}
+                    style={{ width: "100%" }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    onMouseLeave={handleOnMouseLeaveLabel}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+
+                <span
+                  className="font-weight-600 font-size-75"
                   style={{
-                    paddingTop: "0.75rem",
-                    paddingLeft: "0.75rem",
-                    paddingRight: "0.75rem",
+                    textTransform: "uppercase",
+                    color: StyleVariables.TEXT_FAINT,
                   }}
                 >
-                  <div className="is-fullwidth" style={{ marginBottom: 12 }}>
-                    <input
-                      className={
-                        labelStateInvalid
-                          ? `${c("invalid-form")}`
-                          : `${c("form-input")}`
-                      }
-                      ref={setInputRef}
-                      type="text"
-                      value={labelState}
-                      style={{ width: "100%" }}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      onMouseLeave={handleOnMouseLeaveLabel}
-                      onKeyDown={handleKeyDown}
-                    />
-                  </div>
-
-                  <span
-                    className="font-weight-600 font-size-75"
-                    style={{
-                      textTransform: "uppercase",
-                      color: StyleVariables.TEXT_FAINT,
-                    }}
-                  >
-                    Property Type
+                  Property Type
+                </span>
+              </div>
+              {/** Type of column section */}
+              <div style={{ padding: "4px 0px" }}>
+                <div
+                  className="menu-item sort-button"
+                  onMouseEnter={() => setShowType(true)}
+                  onMouseLeave={() => setShowType(false)}
+                  ref={setTypeReferenceElement}
+                >
+                  <span className="svg-icon svg-text icon-margin">
+                    {propertyIcon}
+                  </span>
+                  <span style={{ textTransform: "capitalize" }}>
+                    {getLabelHeader(input)}
                   </span>
                 </div>
-                {/** Type of column section */}
-                <div style={{ padding: "4px 0px" }}>
+                {showType && (
                   <div
-                    className="menu-item sort-button"
+                    className={`menu ${c("popper")}`}
+                    ref={setTypePopperElement}
                     onMouseEnter={() => setShowType(true)}
                     onMouseLeave={() => setShowType(false)}
-                    ref={setTypeReferenceElement}
+                    {...typePopper.attributes.popper}
+                    style={{
+                      ...typePopper.styles.popper,
+                      width: 200,
+                      zIndex: 4,
+                      padding: "4px 0px",
+                    }}
                   >
-                    <span className="svg-icon svg-text icon-margin">
-                      {propertyIcon}
-                    </span>
-                    <span style={{ textTransform: "capitalize" }}>
-                      {getLabelHeader(input)}
-                    </span>
+                    {/** Childs of typesButtons */}
+                    {typesButtons}
                   </div>
-                  {showType && (
-                    <div
-                      className={`menu ${c("popper")}`}
-                      ref={setTypePopperElement}
-                      onMouseEnter={() => setShowType(true)}
-                      onMouseLeave={() => setShowType(false)}
-                      {...typePopper.attributes.popper}
-                      style={{
-                        ...typePopper.styles.popper,
-                        width: 200,
-                        zIndex: 4,
-                        padding: "4px 0px",
-                      }}
-                    >
-                      {/** Childs of typesButtons */}
-                      {typesButtons}
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-            {/** Action buttons section */}
+                )}
+              </div>
+            </>
+          )}
+          {/** Action buttons section */}
+          <div
+            style={{
+              borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+              padding: "4px 0px",
+            }}
+          >
+            {headerButtons}
+          </div>
+          {(!isMetadata || input === InputType.TASK) && (
             <div
               style={{
                 borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
                 padding: "4px 0px",
               }}
             >
-              {headerButtons}
-            </div>
-            {(!isMetadata || input === InputType.TASK) && (
-              <div
-                style={{
-                  borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
-                  padding: "4px 0px",
-                }}
-              >
-                {/** Column settings section */}
+              {/** Column settings section */}
 
-                <div style={{ padding: "4px 0px" }}>
-                  <div
-                    className="menu-item sort-button"
-                    onClick={() => {
-                      new ColumnSettingsModal({
-                        dataState: { actions: dataActions },
-                        columnState: {
-                          info: columnsInfo,
-                          actions: columnActions,
-                        },
-                        configState: { info: configInfo },
-                        view: table.options.meta.view,
-                        headerMenuProps: headerMenuProps,
-                      }).open();
-                      setExpanded(false);
-                    }}
-                  >
-                    <span className="svg-icon svg-text icon-margin">
-                      <AdjustmentsIcon />
-                    </span>
-                    <span>Settings</span>
-                  </div>
+              <div style={{ padding: "4px 0px" }}>
+                <div
+                  className="menu-item sort-button"
+                  onClick={() => {
+                    new ColumnSettingsModal({
+                      dataState: { actions: dataActions },
+                      columnState: {
+                        info: columnsInfo,
+                        actions: columnActions,
+                      },
+                      configState: { info: configInfo },
+                      view: table.options.meta.view,
+                      headerMenuProps: headerMenuProps,
+                    }).open();
+                    setMenuEl(null);
+                  }}
+                >
+                  <span className="svg-icon svg-text icon-margin">
+                    <AdjustmentsIcon />
+                  </span>
+                  <span>Settings</span>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </Box>
+    </Popper>
   );
 };
 

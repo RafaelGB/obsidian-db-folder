@@ -4,9 +4,8 @@ import { DatabaseHeaderProps, RowDataType, TableColumn } from "cdm/FolderModel";
 export type HeaderMenuProps = {
     headerProps: DatabaseHeaderProps;
     propertyIcon: JSX.Element;
-    expanded: boolean;
-    setExpanded: (expanded: boolean) => void;
-    created: boolean;
+    menuEl: null | HTMLElement;
+    setMenuEl: (menuEl: null | HTMLElement) => void;
     referenceElement: HTMLDivElement;
     labelState: string;
     setLabelState: (label: string) => void;

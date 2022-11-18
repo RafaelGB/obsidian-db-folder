@@ -34,7 +34,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
 
   const relationOnClick = async () => {
     hooks.setShowType(false);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.RELATION,

@@ -34,7 +34,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
 
   const formulaOnClick = async () => {
     hooks.setShowType(false);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.FORMULA,

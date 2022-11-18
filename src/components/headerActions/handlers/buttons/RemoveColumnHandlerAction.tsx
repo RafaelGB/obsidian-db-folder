@@ -64,7 +64,7 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
     }
     dataActions.removeDataOfColumn(column.columnDef as TableColumn);
     columnActions.remove(column.columnDef as TableColumn);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
     // Remove column from group_folder_column
     const groupFolderColumn = ddbbConfig.group_folder_column.split(",");
     if (groupFolderColumn.includes(column.columnDef.id)) {

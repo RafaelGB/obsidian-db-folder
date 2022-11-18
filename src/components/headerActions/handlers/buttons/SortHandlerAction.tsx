@@ -53,7 +53,7 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
     tablecolumn.isSorted =
       tablecolumn.isSorted && !tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = false;
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
     // Save on memory
     let currentSorting = [...table.options.state.sorting];
     if (tablecolumn.isSorted) {
@@ -100,7 +100,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
       tablecolumn.isSorted && tablecolumn.isSortedDesc ? false : true;
     tablecolumn.isSortedDesc = true;
 
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
     // Update on memory
     let currentSorting = [...table.options.state.sorting];
     if (tablecolumn.isSorted) {

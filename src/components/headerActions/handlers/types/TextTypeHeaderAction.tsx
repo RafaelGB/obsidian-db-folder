@@ -34,7 +34,7 @@ function textTypeComponent(headerActionResponse: HeaderActionResponse) {
   );
   const tagsOnClick = async () => {
     hooks.setShowType(false);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.TEXT,

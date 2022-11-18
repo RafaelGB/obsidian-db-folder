@@ -35,7 +35,7 @@ function checkboxTypeComponent(headerActionResponse: HeaderActionResponse) {
 
   const checkBoxTypeOnClick = async () => {
     hooks.setShowType(false);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.CHECKBOX,
