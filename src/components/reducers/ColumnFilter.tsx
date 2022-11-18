@@ -1,14 +1,16 @@
-import { DatabaseHeaderProps } from "cdm/FolderModel";
+import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { DynamicDebouncedInput } from "components/behavior/DebouncedInputFn";
 import React from "react";
 
-export default function ColumnFilter(headerProps: DatabaseHeaderProps) {
+/** Filters in function of input type */
+export function TextFilter(headerProps: DatabaseHeaderProps) {
   const { column } = headerProps;
 
   const sortedUniqueValues = React.useMemo(
     () => Array.from(column.getFacetedUniqueValues().keys()).sort(),
     [column.getFacetedUniqueValues()]
   );
+
   return (
     <>
       <datalist id={`${column.id}-list`}>

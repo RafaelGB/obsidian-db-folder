@@ -17,12 +17,12 @@ import CodeIcon from "components/img/CodeIcon";
 import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
 import RollupIcon from "components/img/RollupIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
+import { TextFilter } from "components/reducers/ColumnFilter";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 import { AddColumnModalProps } from "cdm/ModalsModel";
-import ColumnFilter from "./reducers/ColumnFilter";
 
 /**
  * Default headers of the table
@@ -50,12 +50,14 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const [labelState, setLabelState] = useState(label);
 
   let propertyIcon: JSX.Element;
+  let columnSearch: JSX.Element = <></>;
   switch (input) {
     case InputType.NUMBER:
       propertyIcon = <HashIcon />;
       break;
     case InputType.TEXT:
       propertyIcon = <TextIcon />;
+      columnSearch = <TextFilter {...headerProps} />;
       break;
     case InputType.SELECT:
       propertyIcon = <MultiIcon />;
@@ -142,7 +144,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
         )}
       </div>
       {/** Header Filter */}
-      <ColumnFilter {...headerProps} />
+      {columnSearch}
       {/** Header Menu Popper */}
       <HeaderMenu
         headerProps={headerProps}
