@@ -14,11 +14,15 @@ export const PopperTypesStyleModifiers = () => {
             enabled: true,
             options: {
                 altAxis: true,
-                altBoundary: true,
+                altBoundary: false,
                 tether: true,
                 rootBoundary: 'document',
                 padding: 8,
             },
         },
+        {
+            name: 'arrow',
+            enabled: true,
+        }
     ]
 }
