@@ -11,6 +11,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import Box from "@mui/material/Box";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
@@ -105,140 +106,142 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
 
   return (
     <Popper id={idMenu} open={openMenu} anchorEl={menuEl} key={idMenu}>
-      <Box>
-        <div className={`menu ${c("popper")}`}>
-          {/** Edit header label section */}
-          {!isMetadata && (
-            <>
-              <div
-                style={{
-                  paddingTop: "0.75rem",
-                  paddingLeft: "0.75rem",
-                  paddingRight: "0.75rem",
-                }}
-              >
-                <div className="is-fullwidth" style={{ marginBottom: 12 }}>
-                  <input
-                    className={
-                      labelStateInvalid
-                        ? `${c("invalid-form")}`
-                        : `${c("form-input")}`
-                    }
-                    ref={setInputRef}
-                    type="text"
-                    value={labelState}
-                    style={{ width: "100%" }}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    onMouseLeave={handleOnMouseLeaveLabel}
-                    onKeyDown={handleKeyDown}
-                  />
-                </div>
-
-                <span
-                  className="font-weight-600 font-size-75"
-                  style={{
-                    textTransform: "uppercase",
-                    color: StyleVariables.TEXT_FAINT,
-                  }}
-                >
-                  Property Type
-                </span>
-              </div>
-              {/** Type of column section */}
-              <div style={{ padding: "4px 0px" }}>
+      <ClickAwayListener onClickAway={() => setMenuEl(null)}>
+        <Box>
+          <div className={`menu ${c("popper")}`}>
+            {/** Edit header label section */}
+            {!isMetadata && (
+              <>
                 <div
-                  className="menu-item sort-button"
-                  onMouseOver={async (event) => {
-                    setTypesEl(event.currentTarget);
-                  }}
-                  onMouseLeave={() => {
-                    const timeoutId = setTimeout(() => {
-                      setTypesEl(null);
-                      setTypesTimeout(null);
-                      // timeout until event is triggered after user has stopped typing
-                    }, 250);
-                    setTypesTimeout(timeoutId);
+                  style={{
+                    paddingTop: "0.75rem",
+                    paddingLeft: "0.75rem",
+                    paddingRight: "0.75rem",
                   }}
                 >
-                  <span className="svg-icon svg-text icon-margin">
-                    {propertyIcon}
-                  </span>
-                  <span style={{ textTransform: "capitalize" }}>
-                    {getLabelHeader(input)}
+                  <div className="is-fullwidth" style={{ marginBottom: 12 }}>
+                    <input
+                      className={
+                        labelStateInvalid
+                          ? `${c("invalid-form")}`
+                          : `${c("form-input")}`
+                      }
+                      ref={setInputRef}
+                      type="text"
+                      value={labelState}
+                      style={{ width: "100%" }}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      onMouseLeave={handleOnMouseLeaveLabel}
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+
+                  <span
+                    className="font-weight-600 font-size-75"
+                    style={{
+                      textTransform: "uppercase",
+                      color: StyleVariables.TEXT_FAINT,
+                    }}
+                  >
+                    Property Type
                   </span>
                 </div>
-                <Popper
-                  id={idTypes}
-                  open={isTypesShown}
-                  anchorEl={typesEl}
-                  placement="right"
-                  disablePortal={false}
-                  key={idTypes}
-                  modifiers={PopperTypesStyleModifiers()}
-                  onMouseOver={() => {
-                    if (typesTimeout) {
-                      clearTimeout(typesTimeout);
-                      setTypesTimeout(null);
-                    }
-                  }}
-                  onMouseLeave={async () => {
-                    setTypesEl(null);
-                  }}
-                >
-                  <Box className={`menu ${c("popper")}`}>
-                    {/** Childs of typesButtons */}
-                    {typesButtons}
-                  </Box>
-                </Popper>
-              </div>
-            </>
-          )}
-          {/** Action buttons section */}
-          <div
-            style={{
-              borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
-              padding: "4px 0px",
-            }}
-          >
-            {headerButtons}
-          </div>
-          {(!isMetadata || input === InputType.TASK) && (
+                {/** Type of column section */}
+                <div style={{ padding: "4px 0px" }}>
+                  <div
+                    className="menu-item sort-button"
+                    onMouseOver={async (event) => {
+                      setTypesEl(event.currentTarget);
+                    }}
+                    onMouseLeave={() => {
+                      const timeoutId = setTimeout(() => {
+                        setTypesEl(null);
+                        setTypesTimeout(null);
+                        // timeout until event is triggered after user has stopped typing
+                      }, 250);
+                      setTypesTimeout(timeoutId);
+                    }}
+                  >
+                    <span className="svg-icon svg-text icon-margin">
+                      {propertyIcon}
+                    </span>
+                    <span style={{ textTransform: "capitalize" }}>
+                      {getLabelHeader(input)}
+                    </span>
+                  </div>
+                  <Popper
+                    id={idTypes}
+                    open={isTypesShown}
+                    anchorEl={typesEl}
+                    placement="right"
+                    disablePortal={false}
+                    key={idTypes}
+                    modifiers={PopperTypesStyleModifiers()}
+                    onMouseOver={() => {
+                      if (typesTimeout) {
+                        clearTimeout(typesTimeout);
+                        setTypesTimeout(null);
+                      }
+                    }}
+                    onMouseLeave={async () => {
+                      setTypesEl(null);
+                    }}
+                  >
+                    <Box className={`menu ${c("popper")}`}>
+                      {/** Childs of typesButtons */}
+                      {typesButtons}
+                    </Box>
+                  </Popper>
+                </div>
+              </>
+            )}
+            {/** Action buttons section */}
             <div
               style={{
                 borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
                 padding: "4px 0px",
               }}
             >
-              {/** Column settings section */}
+              {headerButtons}
+            </div>
+            {(!isMetadata || input === InputType.TASK) && (
+              <div
+                style={{
+                  borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                  padding: "4px 0px",
+                }}
+              >
+                {/** Column settings section */}
 
-              <div style={{ padding: "4px 0px" }}>
-                <div
-                  className="menu-item sort-button"
-                  onClick={() => {
-                    new ColumnSettingsModal({
-                      dataState: { actions: dataActions },
-                      columnState: {
-                        info: columnsInfo,
-                        actions: columnActions,
-                      },
-                      configState: { info: configInfo },
-                      view: table.options.meta.view,
-                      headerMenuProps: headerMenuProps,
-                    }).open();
-                    setMenuEl(null);
-                  }}
-                >
-                  <span className="svg-icon svg-text icon-margin">
-                    <AdjustmentsIcon />
-                  </span>
-                  <span>Settings</span>
+                <div style={{ padding: "4px 0px" }}>
+                  <div
+                    className="menu-item sort-button"
+                    onClick={() => {
+                      new ColumnSettingsModal({
+                        dataState: { actions: dataActions },
+                        columnState: {
+                          info: columnsInfo,
+                          actions: columnActions,
+                        },
+                        configState: { info: configInfo },
+                        view: table.options.meta.view,
+                        headerMenuProps: headerMenuProps,
+                      }).open();
+                      setMenuEl(null);
+                    }}
+                  >
+                    <span className="svg-icon svg-text icon-margin">
+                      <AdjustmentsIcon />
+                    </span>
+                    <span>Settings</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      </Box>
+            )}
+          </div>
+        </Box>
+      </ClickAwayListener>
     </Popper>
   );
 };
