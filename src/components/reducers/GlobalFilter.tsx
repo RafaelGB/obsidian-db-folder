@@ -5,7 +5,7 @@ import {
   Search,
   SearchIconWrapper,
 } from "components/styles/NavBarStyles";
-import DebouncedInput from "components/behavior/DebouncedInputFn";
+import { GlobalDebouncedInput } from "components/behavior/DebouncedInputFn";
 
 /**
  * Filter component based on react-table.
@@ -20,7 +20,7 @@ export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
     <Search>
       <SearchIconWrapper>{hits}</SearchIconWrapper>
       <DebouncedInputWrapper>
-        <DebouncedInput
+        <GlobalDebouncedInput
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
           placeholder={`Search...`}

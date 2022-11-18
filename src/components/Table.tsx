@@ -14,12 +14,13 @@ import {
   Row,
   getSortedRowModel,
   ColumnSizingState,
+  getFacetedRowModel,
+  getFacetedMinMaxValues,
+  getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import StateManager from "StateManager";
-import { getNormalizedPath } from "helpers/VaultManagement";
 import {
-  DatabaseCore,
   DatabaseLimits,
   MetadataColumns,
   ResizeConfiguration,
@@ -168,6 +169,7 @@ export function Table(tableData: TableDataType) {
     // Hack to force react-table to use all columns when filtering
     getColumnCanGlobalFilter: () => true,
     globalFilterFn: globalDatabaseFilterFn(configInfo.getLocalSettings()),
+
     meta: {
       tableState: tableStore,
       view: view,
@@ -175,12 +177,16 @@ export function Table(tableData: TableDataType) {
     defaultColumn: {
       ...defaultColumn,
       sortingFn: dbfolderColumnSortingFn(configInfo.getLocalSettings()),
+      filterFn: globalDatabaseFilterFn(configInfo.getLocalSettings()),
     },
     getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
     debugTable: globalConfig.enable_debug_mode,
     debugHeaders: globalConfig.enable_debug_mode,
     debugColumns: globalConfig.enable_debug_mode,

@@ -20,9 +20,9 @@ import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
-import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { AddColumnModalProps } from "cdm/ModalsModel";
+import ColumnFilter from "./reducers/ColumnFilter";
 
 /**
  * Default headers of the table
@@ -32,7 +32,7 @@ import { AddColumnModalProps } from "cdm/ModalsModel";
 export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
   /** Properties of header */
-  const { header, table } = headerProps;
+  const { header, table, column } = headerProps;
   const { tableState } = table.options.meta;
 
   const [columnInfo, columnActions] = tableState.columns((state) => [
@@ -141,6 +141,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
           </span>
         )}
       </div>
+      {/** Header Filter */}
+      <ColumnFilter {...headerProps} />
+      {/** Header Menu Popper */}
       <HeaderMenu
         headerProps={headerProps}
         propertyIcon={propertyIcon}
