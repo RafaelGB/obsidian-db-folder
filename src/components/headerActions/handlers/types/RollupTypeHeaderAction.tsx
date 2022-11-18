@@ -33,7 +33,7 @@ function rollupTypeComponent(headerActionResponse: HeaderActionResponse) {
   );
 
   const rollupOnClick = async () => {
-    hooks.setShowType(false);
+    hooks.setTypesEl(null);
     hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,

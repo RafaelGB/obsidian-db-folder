@@ -1,12 +1,12 @@
 import { InputType, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
-import React, { FocusEventHandler, useEffect, useState } from "react";
-import { usePopper } from "react-popper";
+import React, { FocusEventHandler, useState } from "react";
 import Popper from "@mui/material/Popper";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
+import { PopperTypesStyleModifiers } from "components/styles/PopperStyles";
 import { TableColumn } from "cdm/FolderModel";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
@@ -33,24 +33,17 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(key));
   const [inputRef, setInputRef] = useState(null);
-  // Manage type of data
-  const [typeReferenceElement, setTypeReferenceElement] = useState(null);
-  const [typePopperElement, setTypePopperElement] = useState(null);
-  const [showType, setShowType] = useState(false);
 
-  // Manage Popper
-  const open = Boolean(menuEl);
-  const id = open ? `header-menu-${column.id}` : undefined;
+  // Manage menu Popper
+  const openMenu = Boolean(menuEl);
+  const idMenu = openMenu ? `header-menu-${column.id}` : undefined;
+
+  // Manage type Popper
+  const [typesEl, setTypesEl] = useState<null | HTMLElement>(null);
+  const [isTypesShown, setTypesIsShown] = useState(false);
+  const idTypes = isTypesShown ? `types-menu-${column.id}` : undefined;
   // Manage errors
   const [labelStateInvalid, setLabelStateInvalid] = useState(false);
-
-  /** Event driven actions */
-  // useEffect(() => {
-  //   // Throw event if created changed to expand or collapse the menu
-  //   if (created) {
-  //     setExpanded(true);
-  //   }
-  // }, [created]);
 
   /**
    * Array of action buttons asociated to the header
@@ -60,9 +53,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     headerMenuProps: headerMenuProps,
     hooks: {
       setMenuEl: setMenuEl,
+      setTypesEl: setTypesEl,
       keyState: keyState,
       setKeyState: setkeyState,
-      setShowType: setShowType,
     },
   };
   const headerButtons =
@@ -74,11 +67,6 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   headerActionResponse.buttons = [];
   const typesButtons =
     header_action_types_section.run(headerActionResponse).buttons;
-
-  const typePopper = usePopper(typeReferenceElement, typePopperElement, {
-    placement: "right",
-    strategy: "fixed",
-  });
 
   function persistLabelChange() {
     // Update state of altered column
@@ -113,9 +101,8 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   };
 
   return (
-    <Popper id={id} open={open} anchorEl={menuEl}>
+    <Popper id={idMenu} open={openMenu} anchorEl={menuEl}>
       <Box>
-        <div className="overlay" onClick={() => setMenuEl(null)} />
         <div
           className={`menu ${c("popper")}`}
           style={{
@@ -164,9 +151,11 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
               <div style={{ padding: "4px 0px" }}>
                 <div
                   className="menu-item sort-button"
-                  onMouseEnter={() => setShowType(true)}
-                  onMouseLeave={() => setShowType(false)}
-                  ref={setTypeReferenceElement}
+                  onMouseEnter={async (event) => {
+                    setTypesEl(event.currentTarget);
+                    setTypesIsShown(true);
+                  }}
+                  onMouseLeave={async () => setTypesIsShown(false)}
                 >
                   <span className="svg-icon svg-text icon-margin">
                     {propertyIcon}
@@ -175,24 +164,21 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                     {getLabelHeader(input)}
                   </span>
                 </div>
-                {showType && (
-                  <div
-                    className={`menu ${c("popper")}`}
-                    ref={setTypePopperElement}
-                    onMouseEnter={() => setShowType(true)}
-                    onMouseLeave={() => setShowType(false)}
-                    {...typePopper.attributes.popper}
-                    style={{
-                      ...typePopper.styles.popper,
-                      width: 200,
-                      zIndex: 4,
-                      padding: "4px 0px",
-                    }}
-                  >
+                <Popper
+                  id={idTypes}
+                  open={isTypesShown}
+                  anchorEl={typesEl}
+                  placement="right"
+                  disablePortal={false}
+                  modifiers={PopperTypesStyleModifiers()}
+                  onMouseEnter={async () => setTypesIsShown(true)}
+                  onMouseLeave={async () => setTypesIsShown(false)}
+                >
+                  <Box className={`menu ${c("popper")}`}>
                     {/** Childs of typesButtons */}
                     {typesButtons}
-                  </div>
-                )}
+                  </Box>
+                </Popper>
               </div>
             </>
           )}

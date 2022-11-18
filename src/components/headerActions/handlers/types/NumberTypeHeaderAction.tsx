@@ -33,7 +33,7 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   );
 
   const numberOnClick = async () => {
-    hooks.setShowType(false);
+    hooks.setTypesEl(null);
     hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,

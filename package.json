@@ -64,7 +64,6 @@
 		"react-csv": "2.2.2",
 		"react-datepicker": "4.8.0",
 		"react-dom": "18.2.0",
-		"react-popper": "2.3.0",
 		"react-select": "5.6.1",
 		"react-window": "1.8.8",
 		"zustand": "4.1.4"

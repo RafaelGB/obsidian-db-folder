@@ -34,7 +34,7 @@ function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
   );
 
   const dateOnClick = async () => {
-    hooks.setShowType(false);
+    hooks.setTypesEl(null);
     hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,

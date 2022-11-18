@@ -39,7 +39,7 @@ function datetimeTypeComponent(headerActionResponse: HeaderActionResponse) {
   );
 
   const datetimeOnClick = async () => {
-    hooks.setShowType(false);
+    hooks.setTypesEl(null);
     hooks.setMenuEl(null);
     await dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
