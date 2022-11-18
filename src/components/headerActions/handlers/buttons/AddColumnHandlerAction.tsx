@@ -37,7 +37,7 @@ function addColumnToRightButton(headerActionResponse: HeaderActionResponse) {
 
   const addColumnToRightOnClick = async () => {
     columnActions.addToRight(column);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
   };
   return headerButtonComponent({
     onClick: addColumnToRightOnClick,
@@ -57,7 +57,7 @@ function addColumnToLeftButton(headerActionResponse: HeaderActionResponse) {
 
   const addColumnToLeftOnClick = async () => {
     columnActions.addToLeft(column);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
   };
 
   return headerButtonComponent({

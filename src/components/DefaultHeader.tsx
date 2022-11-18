@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import TextIcon from "components/img/Text";
 import MultiIcon from "components/img/Multi";
 import HashIcon from "components/img/Hash";
@@ -31,8 +31,6 @@ import { AddColumnModalProps } from "cdm/ModalsModel";
  */
 export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
-  // TODO : add a tooltip to the header
-  const created: boolean = false;
   /** Properties of header */
   const { header, table } = headerProps;
   const { tableState } = table.options.meta;
@@ -47,7 +45,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   /** Column values */
   const { id, input, label, config } = header.column.columnDef as TableColumn;
   /** reducer asociated to database */
-  const [expanded, setExpanded] = useState(created || false);
+  const [menuEl, setMenuEl] = useState<null | HTMLElement>(null);
   const [referenceElement, setReferenceElement] = useState(null);
   const [labelState, setLabelState] = useState(label);
 
@@ -110,12 +108,16 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     new AddColumnModal(table.options.meta.view, addColumnProps).open();
   }
 
+  const openMenuHandler: MouseEventHandler<HTMLDivElement> = (event) => {
+    setMenuEl(menuEl ? null : event.currentTarget);
+  };
+
   LOGGER.debug(`<=Header ${label}`);
   return id !== MetadataColumns.ADD_COLUMN ? (
     <>
       <div
         className={`${c("th-content")}`}
-        onClick={() => setExpanded(true)}
+        onClick={openMenuHandler}
         ref={setReferenceElement}
       >
         <span className="svg-icon svg-gray icon-margin">{propertyIcon}</span>
@@ -139,19 +141,15 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
           </span>
         )}
       </div>
-      {ReactDOM.createPortal(
-        <HeaderMenu
-          headerProps={headerProps}
-          propertyIcon={propertyIcon}
-          expanded={expanded}
-          setExpanded={setExpanded}
-          created={created}
-          referenceElement={referenceElement}
-          labelState={labelState}
-          setLabelState={setLabelState}
-        />,
-        activeDocument.body
-      )}
+      <HeaderMenu
+        headerProps={headerProps}
+        propertyIcon={propertyIcon}
+        menuEl={menuEl}
+        setMenuEl={setMenuEl}
+        referenceElement={referenceElement}
+        labelState={labelState}
+        setLabelState={setLabelState}
+      />
     </>
   ) : (
     <div

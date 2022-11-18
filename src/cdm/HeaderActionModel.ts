@@ -4,7 +4,8 @@ export type HeaderActionResponse = {
     buttons: JSX.Element[]
     headerMenuProps: HeaderMenuProps
     hooks: {
-        setExpanded: (expanded: boolean) => void,
+        setMenuEl: (expanded: null | HTMLElement) => void,
+        setTypesEl: (expanded: null | HTMLElement) => void,
         setKeyState: (key: string) => void,
         keyState: string,
         [key: string]: any | ((a: any) => void)

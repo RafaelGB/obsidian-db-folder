@@ -35,8 +35,8 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   );
 
   const tagsOnClick = async () => {
-    hooks.setShowType(false);
-    hooks.setExpanded(false);
+    hooks.setTypesEl(null);
+    hooks.setMenuEl(null);
     dataActions.parseDataOfColumn(
       column.columnDef as TableColumn,
       InputType.TAGS,
