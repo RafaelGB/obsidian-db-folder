@@ -36,12 +36,15 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
 
   // Manage menu Popper
   const openMenu = Boolean(menuEl);
-  const idMenu = openMenu ? `header-menu-${column.id}` : undefined;
+  const idMenu = openMenu ? `header-menu-popper` : undefined;
 
   // Manage type Popper
   const [typesEl, setTypesEl] = useState<null | HTMLElement>(null);
-  const [isTypesShown, setTypesIsShown] = useState(false);
-  const idTypes = isTypesShown ? `types-menu-${column.id}` : undefined;
+  const [typesTimeout, setTypesTimeout] = useState(null);
+
+  const isTypesShown = Boolean(typesEl);
+  const idTypes = isTypesShown ? `types-menu-popper` : undefined;
+
   // Manage errors
   const [labelStateInvalid, setLabelStateInvalid] = useState(false);
 
@@ -101,14 +104,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   };
 
   return (
-    <Popper id={idMenu} open={openMenu} anchorEl={menuEl}>
+    <Popper id={idMenu} open={openMenu} anchorEl={menuEl} key={idMenu}>
       <Box>
-        <div
-          className={`menu ${c("popper")}`}
-          style={{
-            width: 240,
-          }}
-        >
+        <div className={`menu ${c("popper")}`}>
           {/** Edit header label section */}
           {!isMetadata && (
             <>
@@ -151,11 +149,17 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
               <div style={{ padding: "4px 0px" }}>
                 <div
                   className="menu-item sort-button"
-                  onMouseEnter={async (event) => {
+                  onMouseOver={async (event) => {
                     setTypesEl(event.currentTarget);
-                    setTypesIsShown(true);
                   }}
-                  onMouseLeave={async () => setTypesIsShown(false)}
+                  onMouseLeave={() => {
+                    const timeoutId = setTimeout(() => {
+                      setTypesEl(null);
+                      setTypesTimeout(null);
+                      // timeout until event is triggered after user has stopped typing
+                    }, 250);
+                    setTypesTimeout(timeoutId);
+                  }}
                 >
                   <span className="svg-icon svg-text icon-margin">
                     {propertyIcon}
@@ -170,9 +174,17 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   anchorEl={typesEl}
                   placement="right"
                   disablePortal={false}
+                  key={idTypes}
                   modifiers={PopperTypesStyleModifiers()}
-                  onMouseEnter={async () => setTypesIsShown(true)}
-                  onMouseLeave={async () => setTypesIsShown(false)}
+                  onMouseOver={() => {
+                    if (typesTimeout) {
+                      clearTimeout(typesTimeout);
+                      setTypesTimeout(null);
+                    }
+                  }}
+                  onMouseLeave={async () => {
+                    setTypesEl(null);
+                  }}
                 >
                   <Box className={`menu ${c("popper")}`}>
                     {/** Childs of typesButtons */}
