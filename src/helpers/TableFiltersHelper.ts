@@ -98,6 +98,11 @@ export function getFilterKeyInFunctionOfInputType(inputType: string): string {
         case InputType.MARKDOWN:
             filterKey = 'markdown';
             break;
+        case InputType.OUTLINKS:
+        case InputType.INLINKS:
+        case InputType.RELATION:
+            filterKey = 'linksGroup';
+            break;
         default:
             filterKey = 'auto';
     }

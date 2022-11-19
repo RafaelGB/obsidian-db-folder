@@ -2,7 +2,7 @@ import { FilterFn, FilterFns, Row } from "@tanstack/react-table"
 import { RowDataType } from "cdm/FolderModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType } from "helpers/Constants";
-import { Literal } from "obsidian-dataview";
+import { Link, Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
@@ -53,8 +53,30 @@ const MarkdownFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId
     }
 }
 
+const LinksGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, filterValue: string) => {
+    try {
+        const value = row.getValue<Literal>(columnId);
+        const wrapLiteral = DataviewService.wrapLiteral(value);
+        if (value === undefined || wrapLiteral.type !== "array") {
+            return false;
+        }
+        return wrapLiteral.value
+            .filter((l) => DataviewService.wrapLiteral(l).type === "link")
+            .some((l: Link) => {
+                // Sanitize the value to obtain the file name
+                const sanitized = l.fileName().toLowerCase();
+                filterValue = filterValue.toString().toLowerCase();
+                return sanitized.includes(filterValue) || searchRegex(sanitized, filterValue);
+            });
+
+    } catch (e) {
+        LOGGER.error(`Error while searching with MarkdownFilterFn: ${e}`);
+        return false;
+    }
+}
 const customSortingfns: FilterFns = {
     markdown: MarkdownFilterFn,
+    linksGroup: LinksGroupFilterFn,
 };
 
 export default customSortingfns;

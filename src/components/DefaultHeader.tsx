@@ -54,7 +54,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const [labelState, setLabelState] = useState(label);
 
   let propertyIcon: JSX.Element;
-  let columnSearch: JSX.Element = <></>;
+  let columnSearch: JSX.Element = null;
   switch (input) {
     case InputType.NUMBER:
       propertyIcon = <HashIcon />;
@@ -62,11 +62,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.TEXT:
       propertyIcon = <TextIcon />;
-      columnSearch = <TextFilter {...headerProps} />;
       break;
     case InputType.SELECT:
       propertyIcon = <MultiIcon />;
-      columnSearch = <TextFilter {...headerProps} />;
       break;
     case InputType.CALENDAR:
       propertyIcon = <CalendarIcon />;
@@ -84,9 +82,11 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.INLINKS:
       propertyIcon = <IncomingLinkIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.OUTLINKS:
       propertyIcon = <OutlinkIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.TASK:
     case InputType.CHECKBOX:
@@ -94,17 +94,19 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.FORMULA:
       propertyIcon = <CodeIcon />;
-      columnSearch = <TextFilter {...headerProps} />;
       break;
     case InputType.RELATION:
       propertyIcon = <RelationBidirectionalIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.ROLLUP:
       propertyIcon = <RollupIcon />;
-      columnSearch = <TextFilter {...headerProps} />;
       break;
     default:
       break;
+  }
+  if (!columnSearch) {
+    columnSearch = <TextFilter {...headerProps} />;
   }
 
   function handlerAddColumnToLeft() {
