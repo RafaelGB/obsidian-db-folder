@@ -96,6 +96,7 @@ export function getFilterKeyInFunctionOfInputType(inputType: string): string {
     let filterKey: string;
     switch (inputType) {
         case InputType.MARKDOWN:
+            filterKey = 'markdown';
             break;
         default:
             filterKey = 'auto';

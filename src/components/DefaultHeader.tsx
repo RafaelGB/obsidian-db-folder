@@ -17,7 +17,11 @@ import CodeIcon from "components/img/CodeIcon";
 import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
 import RollupIcon from "components/img/RollupIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
-import { NumberFilter, TextFilter } from "components/reducers/ColumnFilter";
+import {
+  BaseFilter,
+  NumberFilter,
+  TextFilter,
+} from "components/reducers/ColumnFilter";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
@@ -32,7 +36,7 @@ import { AddColumnModalProps } from "cdm/ModalsModel";
 export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
   /** Properties of header */
-  const { header, table, column } = headerProps;
+  const { header, table } = headerProps;
   const { tableState } = table.options.meta;
 
   const [columnInfo, columnActions] = tableState.columns((state) => [
@@ -73,6 +77,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.MARKDOWN:
       propertyIcon = <MarkdownObsidian />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.TAGS:
       propertyIcon = <TagsIcon />;

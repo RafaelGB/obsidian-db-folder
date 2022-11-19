@@ -1,10 +1,37 @@
-import { FilterFns } from "@tanstack/react-table";
 import { DatabaseHeaderProps } from "cdm/FolderModel";
 import { DynamicDebouncedInput } from "components/behavior/DebouncedInputFn";
-import { InputType } from "helpers/Constants";
 import React from "react";
 
-/** Filters in function of input type */
+/**
+ * Filter input for text columns
+ * @param headerProps
+ * @returns
+ */
+export function BaseFilter(headerProps: DatabaseHeaderProps) {
+  const { column } = headerProps;
+
+  return (
+    <>
+      <DynamicDebouncedInput
+        type="text"
+        value={(column.getFilterValue() ?? "") as string}
+        onChange={(value) => column.setFilterValue(value)}
+        placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
+        className="w-36 border shadow rounded"
+        style={{
+          width: "100%",
+        }}
+      />
+      <div className="h-1" />
+    </>
+  );
+}
+
+/**
+ * Filter input with dropdown list with unique values
+ * @param headerProps
+ * @returns
+ */
 export function TextFilter(headerProps: DatabaseHeaderProps) {
   const { column } = headerProps;
 
