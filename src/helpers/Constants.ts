@@ -72,6 +72,11 @@ export const MetadataLabels = Object.freeze({
   OUTLINKS: 'Outlinks',
   INLINKS: 'Inlinks',
 });
+
+export const Filterkeys = Object.freeze({
+  CALENDAR_RANGE: 'calendar_range',
+});
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/

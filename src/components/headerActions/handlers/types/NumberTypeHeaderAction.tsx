@@ -5,7 +5,6 @@ import React from "react";
 import { InputLabel, InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
-import { ColumnFilter } from "@tanstack/react-table";
 
 export default class NumberTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -40,12 +39,6 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
     dataActions.parseDataOfColumn(tableColumn, InputType.NUMBER, ddbbConfig);
 
     await columnActions.alterColumnType(tableColumn, InputType.NUMBER);
-
-    const numberColumnFilter: ColumnFilter = {
-      id: column.id,
-      value: "basic",
-    };
-    table.setColumnFilters([numberColumnFilter]);
   };
 
   return headerTypeComponent({

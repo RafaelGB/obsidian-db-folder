@@ -1,4 +1,5 @@
-import { FilterFn, Row } from "@tanstack/react-table"
+import { rankItem } from "@tanstack/match-sorter-utils";
+import { FilterFn, FilterFns, FilterMeta, Row } from "@tanstack/react-table"
 import { RowDataType } from "cdm/FolderModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType } from "helpers/Constants";
@@ -35,7 +36,7 @@ function searchRegex(sanitized: string, filterValue: string): boolean {
     }
 }
 
-
-const customSortingfns = {};
+const customSortingfns: FilterFns = {
+};
 
 export default customSortingfns;
