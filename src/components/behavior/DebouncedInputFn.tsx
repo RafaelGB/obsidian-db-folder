@@ -7,7 +7,6 @@ export function GlobalDebouncedInput({
   onChange,
   debounce = 500,
   placeholder,
-  ...props
 }: {
   value: string | number;
   onChange: (value: string | number) => void;

@@ -17,7 +17,8 @@ export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<Row
             return false;
         }
         const sanitized = ParseService.parseLiteral(value, InputType.MARKDOWN, ddbbConfig, true).toString().toLowerCase();
-        filterValue = filterValue.toLowerCase();
+
+        filterValue = filterValue.toString().toLowerCase();
         return sanitized.includes(filterValue) || searchRegex(sanitized, filterValue);
     } catch (e) {
         LOGGER.error(`Error while searching with globalDatabaseFilterFn: ${e}`);
@@ -33,3 +34,8 @@ function searchRegex(sanitized: string, filterValue: string): boolean {
         return false;
     }
 }
+
+
+const customSortingfns = {};
+
+export default customSortingfns;

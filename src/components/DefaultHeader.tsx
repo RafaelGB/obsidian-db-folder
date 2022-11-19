@@ -17,7 +17,7 @@ import CodeIcon from "components/img/CodeIcon";
 import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
 import RollupIcon from "components/img/RollupIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
-import { TextFilter } from "components/reducers/ColumnFilter";
+import { NumberFilter, TextFilter } from "components/reducers/ColumnFilter";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
@@ -54,6 +54,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   switch (input) {
     case InputType.NUMBER:
       propertyIcon = <HashIcon />;
+      columnSearch = <NumberFilter {...headerProps} />;
       break;
     case InputType.TEXT:
       propertyIcon = <TextIcon />;
@@ -61,6 +62,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.SELECT:
       propertyIcon = <MultiIcon />;
+      columnSearch = <TextFilter {...headerProps} />;
       break;
     case InputType.CALENDAR:
       propertyIcon = <CalendarIcon />;
@@ -87,12 +89,14 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.FORMULA:
       propertyIcon = <CodeIcon />;
+      columnSearch = <TextFilter {...headerProps} />;
       break;
     case InputType.RELATION:
       propertyIcon = <RelationBidirectionalIcon />;
       break;
     case InputType.ROLLUP:
       propertyIcon = <RollupIcon />;
+      columnSearch = <TextFilter {...headerProps} />;
       break;
     default:
       break;

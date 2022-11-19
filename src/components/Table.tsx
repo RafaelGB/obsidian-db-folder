@@ -33,7 +33,9 @@ import { HeaderNavBar } from "components/NavBar";
 import TableHeader from "components/TableHeader";
 import TableRow from "components/TableRow";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
-import { globalDatabaseFilterFn } from "components/reducers/TableFilterFlavours";
+import customSortingfns, {
+  globalDatabaseFilterFn,
+} from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "components/reducers/CustomSortingFn";
 import { useState } from "react";
 import { AddRow } from "components/AddRow";
@@ -169,7 +171,7 @@ export function Table(tableData: TableDataType) {
     // Hack to force react-table to use all columns when filtering
     getColumnCanGlobalFilter: () => true,
     globalFilterFn: globalDatabaseFilterFn(configInfo.getLocalSettings()),
-
+    filterFns: customSortingfns,
     meta: {
       tableState: tableStore,
       view: view,
