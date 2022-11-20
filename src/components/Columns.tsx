@@ -16,7 +16,7 @@ import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DatabaseView } from "DatabaseView";
 import { obtainAllPossibleRows } from "helpers/VaultManagement";
-import rowContextMenuColumn from "components/RowContextMenu";
+import rowContextMenuColumn from "components/contextMenu/RowContextMenu";
 import { containsUpper } from "helpers/WindowElement";
 import { getFilterKeyInFunctionOfInputType } from "helpers/TableFiltersHelper";
 

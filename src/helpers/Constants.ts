@@ -1,6 +1,7 @@
 import { DatabaseColumn, MetadataColumnsModel } from "cdm/DatabaseModel";
 import { ConfigColumn, TableColumn } from "cdm/FolderModel";
 import { DatabaseSettings } from "cdm/SettingsModel";
+import { EphimeralSettings } from "cdm/TableStateInterface";
 
 /** Table Actions */
 export const ActionTypes = Object.freeze({
@@ -275,6 +276,10 @@ export const DnDConfiguration = Object.freeze({
 
 export const ResizeConfiguration = Object.freeze({
   RESIZE_MODE: "onChange",
+});
+
+export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
+  enable_columns_filter: false,
 });
 
 /******************************************************************************

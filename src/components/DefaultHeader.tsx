@@ -45,6 +45,10 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     state.actions,
   ]);
 
+  const areColumnsFilterable = tableState.configState(
+    (state) => state.ephimeral.enable_columns_filter
+  );
+
   const configInfo = tableState.configState((state) => state.info);
 
   /** Column values */
@@ -158,7 +162,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
         )}
       </div>
       {/** Header Filter */}
-      {columnSearch}
+      {areColumnsFilterable && columnSearch}
       {/** Header Menu Popper */}
       <HeaderMenu
         headerProps={headerProps}

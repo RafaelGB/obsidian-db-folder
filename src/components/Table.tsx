@@ -43,6 +43,7 @@ import {
   obsidianMdLinksOnClickCallback,
   obsidianMdLinksOnMouseOverMenuCallback,
 } from "./obsidianArq/markdownLinks";
+import HeaderContextMenuWrapper from "./contextMenu/HeaderContextMenuWrapper";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -234,57 +235,55 @@ export function Table(tableData: TableDataType) {
               (
                 headerGroup: HeaderGroup<RowDataType>,
                 headerGroupIndex: number
-              ) => (
-                <div
-                  key={`${headerGroup.id}-${headerGroupIndex}`}
-                  className={`${c("tr header-group")}`}
-                >
-                  {headerGroup.headers
-                    .filter(
-                      (o: Header<RowDataType, TableColumn>) =>
-                        (o.column.columnDef as TableColumn).key !==
-                        MetadataColumns.ADD_COLUMN
-                    )
-                    .map(
-                      (
-                        header: Header<RowDataType, TableColumn>,
-                        headerIndex: number
-                      ) => (
-                        <TableHeader
-                          key={`${header.id}-${headerIndex}`}
-                          table={table}
-                          header={header}
-                          reorderColumn={reorderColumn}
-                          headerIndex={headerIndex}
-                        />
+              ) => {
+                //headerGroup.headers.find((h) => h.id === "expander");
+                const headerContext = headerGroup.headers.find(
+                  (h) => h.id === MetadataColumns.ROW_CONTEXT_MENU
+                );
+                const addColumnHeader = headerGroup.headers.find(
+                  (h) => h.id === MetadataColumns.ADD_COLUMN
+                );
+                console.log("headerGroup");
+                return (
+                  <div
+                    key={`${headerGroup.id}-${headerGroupIndex}`}
+                    className={`${c("tr header-group")}`}
+                  >
+                    {/** HEADER CONTEXT */}
+                    {<HeaderContextMenuWrapper {...headerContext} />}
+                    {/** LIST OF COLUMNS */}
+                    {headerGroup.headers
+                      .filter(
+                        (h) =>
+                          h.id !== MetadataColumns.ROW_CONTEXT_MENU &&
+                          h.id !== MetadataColumns.ADD_COLUMN
                       )
-                    )}
-                  {headerGroup.headers
-                    .filter(
-                      (o: Header<RowDataType, TableColumn>) =>
-                        (o.column.columnDef as TableColumn).key ===
-                        MetadataColumns.ADD_COLUMN
-                    )
-                    .map(
-                      (
-                        header: Header<RowDataType, unknown>,
-                        headerIndex: number
-                      ) => (
-                        <div
-                          key={`${header.id}-${headerIndex}`}
-                          className={`${c("th")}`}
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </div>
-                      )
-                    )}
-                </div>
-              )
+                      .map(
+                        (
+                          header: Header<RowDataType, TableColumn>,
+                          headerIndex: number
+                        ) => (
+                          <TableHeader
+                            key={`${header.id}-${headerIndex}`}
+                            table={table}
+                            header={header}
+                            reorderColumn={reorderColumn}
+                            headerIndex={headerIndex + 1}
+                          />
+                        )
+                      )}
+                    {/** ADD COLUMN HEADER*/}
+                    <div key={`${addColumnHeader.id}`} className={`${c("th")}`}>
+                      {addColumnHeader.isPlaceholder
+                        ? null
+                        : flexRender(
+                            addColumnHeader.column.columnDef.header,
+                            addColumnHeader.getContext()
+                          )}
+                    </div>
+                  </div>
+                );
+              }
             )}
           {/* ENDS HEADERS */}
         </div>

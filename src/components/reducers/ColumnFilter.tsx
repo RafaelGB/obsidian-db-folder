@@ -2,7 +2,6 @@ import { DatabaseHeaderProps } from "cdm/FolderModel";
 import { DynamicDebouncedInput } from "components/behavior/DebouncedInputFn";
 import DatePicker from "react-datepicker";
 import React, { useState } from "react";
-import { StyleVariables } from "helpers/Constants";
 
 /**
  * Filter input for text columns
