@@ -1,6 +1,8 @@
 import { DatabaseHeaderProps } from "cdm/FolderModel";
 import { DynamicDebouncedInput } from "components/behavior/DebouncedInputFn";
-import React from "react";
+import DatePicker from "react-datepicker";
+import React, { useState } from "react";
+import { StyleVariables } from "helpers/Constants";
 
 /**
  * Filter input for text columns
@@ -70,7 +72,7 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
   const minValue = (column.getFilterValue() as [number, number])?.[0] ?? "";
   const maxValue = (column.getFilterValue() as [number, number])?.[1] ?? "";
   return (
-    <div>
+    <>
       <div className="flex space-x-2">
         <DynamicDebouncedInput
           type="number"
@@ -110,6 +112,65 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
         />
       </div>
       <div className="h-1" />
-    </div>
+    </>
+  );
+}
+
+export function DateRangeFilter(headerProps: DatabaseHeaderProps) {
+  const { column } = headerProps;
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  return (
+    <>
+      <div
+        style={{
+          display: "flex",
+        }}
+      >
+        <div
+          className="w-24 border shadow rounded"
+          style={{
+            width: "50%",
+            border: "1px solid",
+            borderRadius: "5px",
+          }}
+        >
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => {
+              setStartDate(date);
+              column.setFilterValue((old: [Date, Date]) => [date, old?.[1]]);
+            }}
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            placeholderText="Start..."
+          />
+        </div>
+        <div
+          className="w-24 border shadow rounded"
+          style={{
+            width: "50%",
+            border: "1px solid",
+            borderRadius: "5px",
+          }}
+        >
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => {
+              setEndDate(date);
+              column.setFilterValue((old: [Date, Date]) => [old?.[0], date]);
+            }}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            placeholderText="End..."
+          />
+        </div>
+      </div>
+      <div className="h-1" />
+    </>
   );
 }

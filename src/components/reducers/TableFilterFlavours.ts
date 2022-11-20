@@ -6,6 +6,7 @@ import { Link, Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
+import { DateTime } from "luxon";
 
 export const globalDatabaseFilterFn: (ddbbConfig: LocalSettings) => FilterFn<RowDataType> = (ddbbConfig: LocalSettings) => (
     row: Row<RowDataType>,
@@ -74,9 +75,39 @@ const LinksGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, column
         return false;
     }
 }
+
+const CalendarGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, dateRange: [Date, Date]) => {
+    const value = row.getValue<Literal>(columnId);
+    const calendarValue = DateTime.isDateTime(value) ? value.toJSDate() : null;
+
+    // If there is no filter, we return true
+    if (!dateRange[0] && !dateRange[1]) {
+        return true;
+    }
+
+    // If there is no value, we return false
+    if (calendarValue === null) {
+        return false;
+    }
+
+    // If there is no start date, we return true if the value is before the end date
+    if (!dateRange[0]) {
+        return calendarValue <= dateRange[1];
+    }
+
+    // If there is no end date, we return true if the value is after the start date
+    if (!dateRange[1]) {
+        return calendarValue >= dateRange[0];
+    }
+
+    // If there is a start date and an end date, we return true if the value is between the two dates
+    return calendarValue >= dateRange[0] && calendarValue <= dateRange[1];
+}
+
 const customSortingfns: FilterFns = {
     markdown: MarkdownFilterFn,
     linksGroup: LinksGroupFilterFn,
+    calendar: CalendarGroupFilterFn,
 };
 
 export default customSortingfns;

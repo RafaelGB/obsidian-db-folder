@@ -19,6 +19,7 @@ import RollupIcon from "components/img/RollupIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import {
   BaseFilter,
+  DateRangeFilter,
   NumberFilter,
   TextFilter,
 } from "components/reducers/ColumnFilter";
@@ -68,10 +69,12 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.CALENDAR:
       propertyIcon = <CalendarIcon />;
+      columnSearch = <DateRangeFilter {...headerProps} />;
       break;
     case InputType.CALENDAR_TIME:
     case InputType.METATADA_TIME:
       propertyIcon = <CalendarTimeIcon />;
+      columnSearch = <DateRangeFilter {...headerProps} />;
       break;
     case InputType.MARKDOWN:
       propertyIcon = <MarkdownObsidian />;

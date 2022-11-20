@@ -103,6 +103,11 @@ export function getFilterKeyInFunctionOfInputType(inputType: string): string {
         case InputType.RELATION:
             filterKey = 'linksGroup';
             break;
+        case InputType.CALENDAR:
+        case InputType.CALENDAR_TIME:
+        case InputType.METATADA_TIME:
+            filterKey = 'calendar';
+            break;
         default:
             filterKey = 'auto';
     }
