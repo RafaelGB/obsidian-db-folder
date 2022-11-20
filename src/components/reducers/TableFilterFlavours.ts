@@ -104,10 +104,21 @@ const CalendarGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, col
     return calendarValue >= dateRange[0] && calendarValue <= dateRange[1];
 }
 
+
+const BooleanGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, selectedOption: number) => {
+    const value = row.getValue<Literal>(columnId);
+    if (selectedOption === undefined || selectedOption === null) {
+        return true;
+    }
+
+    return Boolean(value) === Boolean(selectedOption);
+
+}
 const customSortingfns: FilterFns = {
     markdown: MarkdownFilterFn,
     linksGroup: LinksGroupFilterFn,
     calendar: CalendarGroupFilterFn,
+    boolean: BooleanGroupFilterFn,
 };
 
 export default customSortingfns;

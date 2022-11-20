@@ -2,6 +2,8 @@ import { DatabaseHeaderProps } from "cdm/FolderModel";
 import { DynamicDebouncedInput } from "components/behavior/DebouncedInputFn";
 import DatePicker from "react-datepicker";
 import React, { useState } from "react";
+import { ChangeEventHandler } from "react";
+import { StyleVariables } from "helpers/Constants";
 
 /**
  * Filter input for text columns
@@ -42,10 +44,10 @@ export function TextFilter(headerProps: DatabaseHeaderProps) {
   );
 
   return (
-    <>
-      <datalist id={`${column.id}-list`}>
-        {sortedUniqueValues.slice(0, 5000).map((value: any) => (
-          <option value={value} key={value} />
+    <div key={`${column.id}-text-filter`}>
+      <datalist id={`${column.id}-list`} key={`${column.id}-datalist`}>
+        {sortedUniqueValues.slice(0, 5000).map((value, index) => (
+          <option value={value} key={`${column.id}-option-${index}`} />
         ))}
       </datalist>
       <DynamicDebouncedInput
@@ -60,7 +62,7 @@ export function TextFilter(headerProps: DatabaseHeaderProps) {
         }}
       />
       <div className="h-1" />
-    </>
+    </div>
   );
 }
 
@@ -72,7 +74,7 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
   const maxValue = (column.getFilterValue() as [number, number])?.[1] ?? "";
   return (
     <>
-      <div className="flex space-x-2">
+      <div className="flex space-x-2" key={`${column.id}-number-filter`}>
         <DynamicDebouncedInput
           type="number"
           min={min}
@@ -93,8 +95,8 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
         />
         <DynamicDebouncedInput
           type="number"
-          min={min}
-          max={max}
+          min={Number.isNaN(min) ? undefined : min}
+          max={Number.isNaN(max) ? undefined : max}
           value={maxValue}
           onChange={(value) =>
             column.setFilterValue((old: [number, number]) => [old?.[0], value])
@@ -126,6 +128,7 @@ export function DateRangeFilter(headerProps: DatabaseHeaderProps) {
         style={{
           display: "flex",
         }}
+        key={`${column.id}-date-filter`}
       >
         <div
           className="w-24 border shadow rounded"
@@ -169,6 +172,38 @@ export function DateRangeFilter(headerProps: DatabaseHeaderProps) {
           />
         </div>
       </div>
+      <div className="h-1" />
+    </>
+  );
+}
+
+export function BooleanFilter(headerProps: DatabaseHeaderProps) {
+  const { column } = headerProps;
+  const [value, setValue] = useState<number | string>("All");
+
+  const handlerOnChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
+    const newValue =
+      event.target.value !== "All" ? Number(event.target.value) : null;
+    column.setFilterValue(newValue);
+    setValue(newValue);
+  };
+  return (
+    <>
+      <select
+        typeof="select"
+        value={value}
+        onChange={handlerOnChange}
+        className="w-36 border shadow rounded"
+        style={{
+          width: "100%",
+          background: StyleVariables.BACKGROUND_MODIFIER_FORM_FIELD,
+        }}
+        key={`${column.id}-select-filter`}
+      >
+        <option value={"All"}>All</option>
+        <option value={1}>True</option>
+        <option value={0}>False</option>
+      </select>
       <div className="h-1" />
     </>
   );

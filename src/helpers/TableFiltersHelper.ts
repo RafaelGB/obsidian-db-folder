@@ -108,6 +108,9 @@ export function getFilterKeyInFunctionOfInputType(inputType: string): string {
         case InputType.METATADA_TIME:
             filterKey = 'calendar';
             break;
+        case InputType.CHECKBOX:
+            filterKey = 'boolean';
+            break;
         default:
             filterKey = 'auto';
     }

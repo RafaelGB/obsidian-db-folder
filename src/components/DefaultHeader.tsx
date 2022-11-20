@@ -19,10 +19,11 @@ import RollupIcon from "components/img/RollupIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import {
   BaseFilter,
+  BooleanFilter,
   DateRangeFilter,
   NumberFilter,
   TextFilter,
-} from "components/reducers/ColumnFilter";
+} from "components/reducers/ColumnFilters";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
@@ -96,8 +97,11 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.TASK:
+      propertyIcon = <TaskIcon />;
+      break;
     case InputType.CHECKBOX:
       propertyIcon = <TaskIcon />;
+      columnSearch = <BooleanFilter {...headerProps} />;
       break;
     case InputType.FORMULA:
       propertyIcon = <CodeIcon />;
