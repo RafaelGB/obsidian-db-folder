@@ -1,6 +1,7 @@
 import { DatabaseColumn, MetadataColumnsModel } from "cdm/DatabaseModel";
 import { ConfigColumn, TableColumn } from "cdm/FolderModel";
 import { DatabaseSettings } from "cdm/SettingsModel";
+import { EphimeralSettings } from "cdm/TableStateInterface";
 
 /** Table Actions */
 export const ActionTypes = Object.freeze({
@@ -72,6 +73,7 @@ export const MetadataLabels = Object.freeze({
   OUTLINKS: 'Outlinks',
   INLINKS: 'Inlinks',
 });
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
@@ -242,6 +244,7 @@ export const StyleVariables = Object.freeze({
   BACKGROUND_PRIMARY: 'var(--background-primary)',
   BACKGROUND_SECONDARY: 'var(--background-secondary)',
   BACKGROUND_DIVIDER: 'var(--background-divider)',
+  BACKGROUND_MODIFIER_FORM_FIELD: "var(--background-modifier-form-field)",
   TEXT_FAINT: 'var(--text-faint)',
   TEXT_MUTED: 'var(--text-muted)',
   TEXT_NORMAL: 'var(--text-normal)',
@@ -274,6 +277,10 @@ export const DnDConfiguration = Object.freeze({
 
 export const ResizeConfiguration = Object.freeze({
   RESIZE_MODE: "onChange",
+});
+
+export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
+  enable_columns_filter: false,
 });
 
 /******************************************************************************

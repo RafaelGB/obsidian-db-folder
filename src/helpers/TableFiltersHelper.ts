@@ -3,6 +3,13 @@ import { Literal } from "obsidian-dataview";
 import { ConditionFiltersOptions, getOperatorFilterValue, InputType, OperatorFilter } from "helpers/Constants";
 import { ParseService } from "services/ParseService";
 
+/**
+ * Check if a row is valid for a filter
+ * @param dbFilters 
+ * @param p 
+ * @param ddbbConfig 
+ * @returns 
+ */
 export default function tableFilter(dbFilters: FilterGroup[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
     if (!dbFilters || dbFilters.length === 0) return true;
     return !dbFilters.some((filter) => {
@@ -83,4 +90,32 @@ function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbCon
             throw new Error(`Unknown operator ${operator}`);
     }
     return true;
+}
+
+export function getFilterKeyInFunctionOfInputType(inputType: string): string {
+    let filterKey: string;
+    switch (inputType) {
+        case InputType.MARKDOWN:
+            filterKey = 'markdown';
+            break;
+        case InputType.OUTLINKS:
+        case InputType.INLINKS:
+        case InputType.RELATION:
+            filterKey = 'linksGroup';
+            break;
+        case InputType.CALENDAR:
+        case InputType.CALENDAR_TIME:
+        case InputType.METATADA_TIME:
+            filterKey = 'calendar';
+            break;
+        case InputType.CHECKBOX:
+            filterKey = 'boolean';
+            break;
+        case InputType.TASK:
+            filterKey = 'task';
+            break;
+        default:
+            filterKey = 'auto';
+    }
+    return filterKey;
 }

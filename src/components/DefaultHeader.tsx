@@ -17,10 +17,16 @@ import CodeIcon from "components/img/CodeIcon";
 import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
 import RollupIcon from "components/img/RollupIcon";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
+import {
+  BaseFilter,
+  BooleanFilter,
+  DateRangeFilter,
+  NumberFilter,
+  TextFilter,
+} from "components/reducers/ColumnFilters";
 import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
-import ReactDOM from "react-dom";
 import { c } from "helpers/StylesHelper";
 import { AddColumnModalProps } from "cdm/ModalsModel";
 
@@ -40,6 +46,10 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
     state.actions,
   ]);
 
+  const areColumnsFilterable = tableState.configState(
+    (state) => state.ephimeral.enable_columns_filter
+  );
+
   const configInfo = tableState.configState((state) => state.info);
 
   /** Column values */
@@ -50,9 +60,11 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const [labelState, setLabelState] = useState(label);
 
   let propertyIcon: JSX.Element;
+  let columnSearch = <TextFilter {...headerProps} />;
   switch (input) {
     case InputType.NUMBER:
       propertyIcon = <HashIcon />;
+      columnSearch = <NumberFilter {...headerProps} />;
       break;
     case InputType.TEXT:
       propertyIcon = <TextIcon />;
@@ -62,38 +74,48 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.CALENDAR:
       propertyIcon = <CalendarIcon />;
+      columnSearch = <DateRangeFilter {...headerProps} />;
       break;
     case InputType.CALENDAR_TIME:
     case InputType.METATADA_TIME:
       propertyIcon = <CalendarTimeIcon />;
+      columnSearch = <DateRangeFilter {...headerProps} />;
       break;
     case InputType.MARKDOWN:
       propertyIcon = <MarkdownObsidian />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.TAGS:
       propertyIcon = <TagsIcon />;
       break;
     case InputType.INLINKS:
       propertyIcon = <IncomingLinkIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.OUTLINKS:
       propertyIcon = <OutlinkIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.TASK:
+      propertyIcon = <TaskIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
+      break;
     case InputType.CHECKBOX:
       propertyIcon = <TaskIcon />;
+      columnSearch = <BooleanFilter {...headerProps} />;
       break;
     case InputType.FORMULA:
       propertyIcon = <CodeIcon />;
       break;
     case InputType.RELATION:
       propertyIcon = <RelationBidirectionalIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.ROLLUP:
       propertyIcon = <RollupIcon />;
       break;
     default:
-      break;
+    // Do nothing
   }
 
   function handlerAddColumnToLeft() {
@@ -141,6 +163,9 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
           </span>
         )}
       </div>
+      {/** Header Filter */}
+      {areColumnsFilterable && columnSearch}
+      {/** Header Menu Popper */}
       <HeaderMenu
         headerProps={headerProps}
         propertyIcon={propertyIcon}

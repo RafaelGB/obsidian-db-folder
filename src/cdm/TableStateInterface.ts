@@ -1,8 +1,8 @@
-import { ColumnOrderState, SortingState } from "@tanstack/react-table";
+import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
-import { Link, Literal } from "obsidian-dataview";
+import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 
 export type TableActionResponse<T> = {
@@ -19,17 +19,24 @@ export type TableAction<T> = {
 /**
  * TABLE STATE INTERFACE
  */
+export type EphimeralSettings = {
+    enable_columns_filter: boolean,
+}
+
 export interface ConfigState {
     ddbbConfig: LocalSettings;
     filters: FilterSettings;
     global: GlobalSettings;
+    ephimeral: EphimeralSettings;
     actions: {
         alterFilters: (filters: Partial<FilterSettings>) => Promise<void>;
         alterConfig: (config: Partial<LocalSettings>) => void;
+        alterEphimeral: (ephimeral: Partial<EphimeralSettings>) => Promise<void>;
     }
     info: {
         getLocalSettings: () => LocalSettings;
         getFilters: () => FilterSettings;
+        getEphimeralSettings: () => EphimeralSettings;
     }
 }
 
