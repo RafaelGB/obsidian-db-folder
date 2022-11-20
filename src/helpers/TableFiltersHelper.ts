@@ -111,6 +111,9 @@ export function getFilterKeyInFunctionOfInputType(inputType: string): string {
         case InputType.CHECKBOX:
             filterKey = 'boolean';
             break;
+        case InputType.TASK:
+            filterKey = 'task';
+            break;
         default:
             filterKey = 'auto';
     }

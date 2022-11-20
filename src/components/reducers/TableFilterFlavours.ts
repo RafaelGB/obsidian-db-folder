@@ -2,7 +2,7 @@ import { FilterFn, FilterFns, Row } from "@tanstack/react-table"
 import { RowDataType } from "cdm/FolderModel"
 import { LocalSettings } from "cdm/SettingsModel";
 import { InputType } from "helpers/Constants";
-import { Link, Literal } from "obsidian-dataview";
+import { Link, Literal, STask } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
@@ -114,11 +114,28 @@ const BooleanGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, colu
     return Boolean(value) === Boolean(selectedOption);
 
 }
+
+const TaskGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, selectedOption: string) => {
+    const value = row.getValue<Literal>(columnId) as STask[];
+    if (selectedOption === undefined || selectedOption === null) {
+        return true;
+    }
+    const sanitizedSelectedOption = selectedOption.toLowerCase();
+    return value.some((task) => {
+        // Sanitize the value to obtain the file name
+        const sanitized = task.text.toLowerCase();
+        return sanitized.includes(sanitizedSelectedOption) || searchRegex(sanitized, sanitizedSelectedOption);
+    });
+
+
+}
+
 const customSortingfns: FilterFns = {
     markdown: MarkdownFilterFn,
     linksGroup: LinksGroupFilterFn,
     calendar: CalendarGroupFilterFn,
     boolean: BooleanGroupFilterFn,
+    task: TaskGroupFilterFn
 };
 
 export default customSortingfns;

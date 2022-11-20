@@ -60,7 +60,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const [labelState, setLabelState] = useState(label);
 
   let propertyIcon: JSX.Element;
-  let columnSearch: JSX.Element = null;
+  let columnSearch = <TextFilter {...headerProps} />;
   switch (input) {
     case InputType.NUMBER:
       propertyIcon = <HashIcon />;
@@ -98,6 +98,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.TASK:
       propertyIcon = <TaskIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.CHECKBOX:
       propertyIcon = <TaskIcon />;
@@ -114,10 +115,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       propertyIcon = <RollupIcon />;
       break;
     default:
-      break;
-  }
-  if (!columnSearch) {
-    columnSearch = <TextFilter {...headerProps} />;
+    // Do nothing
   }
 
   function handlerAddColumnToLeft() {
