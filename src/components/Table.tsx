@@ -243,20 +243,23 @@ export function Table(tableData: TableDataType) {
                 const addColumnHeader = headerGroup.headers.find(
                   (h) => h.id === MetadataColumns.ADD_COLUMN
                 );
-                console.log("headerGroup");
                 return (
                   <div
                     key={`${headerGroup.id}-${headerGroupIndex}`}
                     className={`${c("tr header-group")}`}
                   >
                     {/** HEADER CONTEXT */}
-                    {<HeaderContextMenuWrapper {...headerContext} />}
+                    <HeaderContextMenuWrapper
+                      header={headerContext}
+                      style={{
+                        width: "30px",
+                      }}
+                    />
                     {/** LIST OF COLUMNS */}
                     {headerGroup.headers
                       .filter(
                         (h) =>
-                          h.id !== MetadataColumns.ROW_CONTEXT_MENU &&
-                          h.id !== MetadataColumns.ADD_COLUMN
+                          ![headerContext.id, addColumnHeader.id].includes(h.id)
                       )
                       .map(
                         (
@@ -273,14 +276,7 @@ export function Table(tableData: TableDataType) {
                         )
                       )}
                     {/** ADD COLUMN HEADER*/}
-                    <div key={`${addColumnHeader.id}`} className={`${c("th")}`}>
-                      {addColumnHeader.isPlaceholder
-                        ? null
-                        : flexRender(
-                            addColumnHeader.column.columnDef.header,
-                            addColumnHeader.getContext()
-                          )}
-                    </div>
+                    <HeaderContextMenuWrapper header={addColumnHeader} />
                   </div>
                 );
               }

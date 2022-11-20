@@ -23,21 +23,18 @@ export default function HeaderContextMenu(
       enable_columns_filter: !columnsFilterAreEnabled,
     });
   };
-  console.log("HeaderContextMenu");
   return (
-    <Button
-      size="small"
+    <span
+      className="svg-icon svg-gray"
       onClick={enableColumnsFilterHandler}
       key={`Button-Enabled-DataviewFilters`}
-      style={{ minWidth: "0px", padding: "2px", borderRadius: "0px" }}
+      style={{ width: "30px", height: "100%" }}
     >
-      <span className="svg-icon svg-gray">
-        {columnsFilterAreEnabled ? (
-          <SearchOffIcon {...MenuButtonStyle} />
-        ) : (
-          <ManageSearchIcon {...MenuButtonStyle} />
-        )}
-      </span>
-    </Button>
+      {columnsFilterAreEnabled ? (
+        <SearchOffIcon {...MenuButtonStyle} fontSize="small" />
+      ) : (
+        <ManageSearchIcon {...MenuButtonStyle} fontSize="small" />
+      )}
+    </span>
   );
 }
