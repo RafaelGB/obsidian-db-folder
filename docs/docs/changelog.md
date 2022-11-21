@@ -1,3 +1,12 @@
+## 2.9.0
+### Shiny new things
+- New search filters customize per type of content. You can enable/disable them in the header context menu.
+  - Date range filter
+  - Checkboxes filter
+  - Links filter
+  - Number range filter
+  - Text filter with unique values suggestions
+  - Tasks filter
 ## 2.8.4
 ### Shiny new things
 - New rollup. All task count [ISSUE#602](https://github.com/RafaelGB/obsidian-db-folder/issues/602)

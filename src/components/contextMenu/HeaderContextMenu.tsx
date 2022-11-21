@@ -19,9 +19,15 @@ export default function HeaderContextMenu(
 
   const enableColumnsFilterHandler = () => {
     // Invert the columns filter state
+    const newColumnsFilterState = !columnsFilterAreEnabled;
     configActions.alterEphimeral({
-      enable_columns_filter: !columnsFilterAreEnabled,
+      enable_columns_filter: newColumnsFilterState,
     });
+
+    // If the columns filter is disabled, remove all the filters
+    if (!newColumnsFilterState) {
+      table.resetColumnFilters();
+    }
   };
   return (
     <span
