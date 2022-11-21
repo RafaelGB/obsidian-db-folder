@@ -7,6 +7,7 @@
   - Number range filter
   - Text filter with unique values suggestions
   - Tasks filter
+
 ## 2.8.4
 ### Shiny new things
 - New rollup. All task count [ISSUE#602](https://github.com/RafaelGB/obsidian-db-folder/issues/602)

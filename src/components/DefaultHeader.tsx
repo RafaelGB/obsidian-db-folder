@@ -87,6 +87,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.TAGS:
       propertyIcon = <TagsIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.INLINKS:
       propertyIcon = <IncomingLinkIcon />;

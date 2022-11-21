@@ -115,6 +115,28 @@ const BooleanGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, colu
 
 }
 
+const TagsGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, filterValue: string) => {
+    const value = row.getValue<Literal>(columnId);
+    const wrapLiteral = DataviewService.wrapLiteral(value);
+    if (filterValue === undefined || filterValue === null) {
+        return true;
+    }
+
+    if (value === undefined || value === null) {
+        return false;
+    }
+    const sanitizedFilterValue = filterValue.toLowerCase();
+    if (wrapLiteral.type === "array") {
+        return wrapLiteral.value.some((tag) => {
+            const sanitizedTag = tag.toString().toLowerCase();
+            return sanitizedTag.includes(sanitizedFilterValue) || searchRegex(sanitizedTag, sanitizedFilterValue);
+        });
+    } else {
+        const sanitizedTag = wrapLiteral.value.toString().toLowerCase();
+        return sanitizedTag.includes(sanitizedFilterValue) || searchRegex(sanitizedTag, sanitizedFilterValue);
+    }
+}
+
 const TaskGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, selectedOption: string) => {
     const value = row.getValue<Literal>(columnId) as STask[];
     if (selectedOption === undefined || selectedOption === null) {
@@ -126,8 +148,6 @@ const TaskGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnI
         const sanitized = task.text.toLowerCase();
         return sanitized.includes(sanitizedSelectedOption) || searchRegex(sanitized, sanitizedSelectedOption);
     });
-
-
 }
 
 const customSortingfns: FilterFns = {
@@ -135,7 +155,8 @@ const customSortingfns: FilterFns = {
     linksGroup: LinksGroupFilterFn,
     calendar: CalendarGroupFilterFn,
     boolean: BooleanGroupFilterFn,
-    task: TaskGroupFilterFn
+    task: TaskGroupFilterFn,
+    tags: TagsGroupFilterFn,
 };
 
 export default customSortingfns;
