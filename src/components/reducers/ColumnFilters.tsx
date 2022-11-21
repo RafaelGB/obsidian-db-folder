@@ -47,7 +47,10 @@ export function TextFilter(headerProps: DatabaseHeaderProps) {
     <div key={`${column.id}-text-filter`}>
       <datalist id={`${column.id}-list`} key={`${column.id}-datalist`}>
         {sortedUniqueValues.slice(0, 5000).map((value, index) => (
-          <option value={value} key={`${column.id}-option-${index}`} />
+          <option
+            value={value?.toString()}
+            key={`${column.id}-option-${index}`}
+          />
         ))}
       </datalist>
       <DynamicDebouncedInput
@@ -68,10 +71,12 @@ export function TextFilter(headerProps: DatabaseHeaderProps) {
 
 export function NumberFilter(headerProps: DatabaseHeaderProps) {
   const { column } = headerProps;
-  const min = Number(column.getFacetedMinMaxValues()?.[0] ?? "");
-  const max = Number(column.getFacetedMinMaxValues()?.[1] ?? "");
-  const minValue = (column.getFilterValue() as [number, number])?.[0] ?? "";
-  const maxValue = (column.getFilterValue() as [number, number])?.[1] ?? "";
+  const min = Number(column.getFacetedMinMaxValues()?.[0] ?? undefined);
+  const max = Number(column.getFacetedMinMaxValues()?.[1] ?? undefined);
+  const minValue =
+    (column.getFilterValue() as [number, number])?.[0] ?? undefined;
+  const maxValue =
+    (column.getFilterValue() as [number, number])?.[1] ?? undefined;
   return (
     <>
       <div className="flex space-x-2" key={`${column.id}-number-filter`}>
@@ -80,9 +85,12 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
           min={min}
           max={max}
           value={minValue}
-          onChange={(value) =>
-            column.setFilterValue((old: [number, number]) => [value, old?.[1]])
-          }
+          onChange={(value) => {
+            if (value === "" || value === null) {
+              value = undefined;
+            }
+            column.setFilterValue((old: [number, number]) => [value, old?.[1]]);
+          }}
           placeholder={`Min ${
             column.getFacetedMinMaxValues()?.[0]
               ? `(${column.getFacetedMinMaxValues()?.[0]})`
@@ -98,9 +106,12 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
           min={Number.isNaN(min) ? undefined : min}
           max={Number.isNaN(max) ? undefined : max}
           value={maxValue}
-          onChange={(value) =>
-            column.setFilterValue((old: [number, number]) => [old?.[0], value])
-          }
+          onChange={(value) => {
+            if (value === "" || value === null) {
+              value = undefined;
+            }
+            column.setFilterValue((old: [number, number]) => [old?.[0], value]);
+          }}
           placeholder={`Max ${
             column.getFacetedMinMaxValues()?.[1]
               ? `(${column.getFacetedMinMaxValues()?.[1]})`

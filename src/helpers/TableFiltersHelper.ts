@@ -117,6 +117,15 @@ export function getFilterKeyInFunctionOfInputType(inputType: string): string {
         case InputType.TASK:
             filterKey = 'task';
             break;
+        case InputType.SELECT:
+        case InputType.TEXT:
+        case InputType.ROLLUP:
+        case InputType.FORMULA:
+            filterKey = 'plainText';
+            break;
+        case InputType.NUMBER:
+            filterKey = 'number';
+            break;
         default:
             filterKey = 'auto';
     }

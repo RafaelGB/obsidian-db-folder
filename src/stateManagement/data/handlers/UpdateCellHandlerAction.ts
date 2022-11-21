@@ -23,7 +23,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             let rowTFile = modifiedRow.__note__.getFile();
 
             // Update the row on memory
-            modifiedRow[column.key] = value;
+            modifiedRow[column.key] = value.toString().replaceAll('"', "");
 
             // Row Rules
             if (ddbbConfig.show_metadata_modified) {

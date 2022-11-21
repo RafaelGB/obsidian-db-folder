@@ -319,6 +319,7 @@ class Parse {
         // Remove a possible already existing quote wrapper
         if (value.startsWith('"') && value.endsWith('"')) {
             value = value.substring(1, value.length - 1);
+            return this.wrapWithQuotes(value);
         }
 
         // Wrap in quotes if is configured to do so

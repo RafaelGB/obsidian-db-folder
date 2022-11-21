@@ -86,14 +86,16 @@ const SelectCell = (popperProps: CellComponentProps) => {
       selectRow,
       tableColumn,
       selectValue
-    );
+    )
+      .toString()
+      .replaceAll('"', "");
     // Update on disk & memory
     dataActions.updateCell(
       row.index,
       tableColumn,
-      newCell,
+      `"${newCell}"`,
       columnsInfo.getAllColumns(),
-      { ...configInfo.getLocalSettings(), frontmatter_quote_wrap: true },
+      configInfo.getLocalSettings(),
       true
     );
     // Add new option to column options
@@ -151,10 +153,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
           style={{ width: column.getSize() }}
         >
           {selectCell && (
-            <Relationship
-              value={selectCell.toString()}
-              backgroundColor={getColor()}
-            />
+            <Relationship value={selectCell} backgroundColor={getColor()} />
           )}
         </div>
       )}

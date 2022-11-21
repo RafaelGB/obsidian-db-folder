@@ -180,7 +180,6 @@ export function Table(tableData: TableDataType) {
     defaultColumn: {
       ...defaultColumn,
       sortingFn: dbfolderColumnSortingFn(configInfo.getLocalSettings()),
-      filterFn: globalDatabaseFilterFn(configInfo.getLocalSettings()),
     },
     getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),

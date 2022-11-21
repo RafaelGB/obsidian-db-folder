@@ -61,6 +61,7 @@ const LinksGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, column
         if (value === undefined || wrapLiteral.type !== "array") {
             return false;
         }
+
         return wrapLiteral.value
             .filter((l) => DataviewService.wrapLiteral(l).type === "link")
             .some((l: Link) => {
@@ -150,6 +151,43 @@ const TaskGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnI
     });
 }
 
+const PlainTextGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, selectedOption: string) => {
+    const value = row.getValue<Literal>(columnId);
+    if (selectedOption === undefined || selectedOption === null) {
+        return true;
+    }
+    if (value === undefined || value === null) {
+        return false;
+    }
+
+    const sanitizedSelectedOption = selectedOption.toLowerCase();
+    const sanitized = value.toString().toLowerCase();
+    return sanitized.includes(sanitizedSelectedOption) || searchRegex(sanitized, sanitizedSelectedOption);
+}
+
+const NumberGroupFilterFn: FilterFn<RowDataType> = (row: Row<RowDataType>, columnId: string, numberRange: [number, number]) => {
+    const value = row.getValue<Literal>(columnId);
+    const minRange = numberRange[0];
+    const maxRange = numberRange[1];
+    if (minRange === undefined && maxRange === undefined) {
+        return true;
+    }
+
+    const sanitizedValue = Number(value);
+    if (value === undefined || value === null || Number.isNaN(sanitizedValue)) {
+        return false;
+    }
+
+    if (minRange === undefined) {
+        return sanitizedValue <= maxRange;
+    }
+
+    if (maxRange === undefined) {
+        return sanitizedValue >= minRange;
+    }
+
+    return sanitizedValue >= minRange && sanitizedValue <= maxRange;
+}
 const customSortingfns: FilterFns = {
     markdown: MarkdownFilterFn,
     linksGroup: LinksGroupFilterFn,
@@ -157,6 +195,8 @@ const customSortingfns: FilterFns = {
     boolean: BooleanGroupFilterFn,
     task: TaskGroupFilterFn,
     tags: TagsGroupFilterFn,
+    plainText: PlainTextGroupFilterFn,
+    number: NumberGroupFilterFn
 };
 
 export default customSortingfns;
