@@ -45,7 +45,11 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
         const rows: RowDataType[] = [];
         const lines = csv.toString().split("\n");
         const headers = this.normalizeArray(lines[0].split(","));
-        const isCurrentFolder = config.source_data in [SourceDataTypes.CURRENT_FOLDER, SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS];
+        const localSources = [
+            SourceDataTypes.CURRENT_FOLDER,
+            SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS
+        ] as string[];
+        const isCurrentFolder = localSources.contains(config.source_data);
         const destination_folder = isCurrentFolder ? view.file.parent.path : config.source_destination_path;
         // Obtain File from headers array
         const fileIndex = headers.indexOf(
@@ -54,7 +58,6 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
         if (fileIndex === -1) {
             throw new Error(`${view.plugin.settings.global_settings.csv_file_header_key} column not found in CSV file`);
         }
-
         for (let i = 1; i < lines.length; i++) {
 
             const currentline = this.normalizeArray(lines[i].split(","));
