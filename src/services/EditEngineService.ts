@@ -81,16 +81,16 @@ class EditEngine {
      */
     public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
         this.onFlyEditions.push({ file, columnId, newValue, columns, ddbbConfig, option });
-        if (this.currentTimeout) {
-            clearTimeout(this.currentTimeout);
-        }
+        clearTimeout(this.currentTimeout);
         this.currentTimeout = setTimeout(async () => {
             // Call all onFlyEditions
             while (this.onFlyEditions.length > 0) {
                 const { file, columnId, newValue, columns, ddbbConfig, option } = this.onFlyEditions.pop();
-                await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
-                    showDBError(EditionError.YamlRead, err);
-                });
+                await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option)
+                    .catch((err) => {
+                        showDBError(EditionError.YamlRead, err);
+                    });
+                this.currentTimeout = null;
             }
         }, 250);
     }
