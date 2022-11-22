@@ -255,6 +255,8 @@ export const StyleVariables = Object.freeze({
   INPUT_SHADOW: 'var(--input-shadow)',
 });
 
+
+
 export const SourceDataTypes = Object.freeze({
   CURRENT_FOLDER: 'current_folder',
   CURRENT_FOLDER_WITHOUT_SUBFOLDERS: 'current_folder_without_subfolders',
