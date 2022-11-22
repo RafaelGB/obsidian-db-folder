@@ -86,9 +86,8 @@ const SelectCell = (popperProps: CellComponentProps) => {
       selectRow,
       tableColumn,
       selectValue
-    )
-      .toString()
-      .replaceAll('"', "");
+    );
+
     // Update on disk & memory
     dataActions.updateCell(
       row.index,

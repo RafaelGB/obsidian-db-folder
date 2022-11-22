@@ -1,3 +1,5 @@
+## 2.9.1
+- hotfix for 2.9.0. Not string editions typo fixed
 ## 2.9.0
 ### Shiny new things
 - New search filters customize per type of content. You can enable/disable them in the header context menu.
