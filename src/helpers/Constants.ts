@@ -237,7 +237,6 @@ export const StyleClasses = Object.freeze({
   FILTERS_MODAL_BODY: 'database-filters-body',
 });
 
-
 export const StyleVariables = Object.freeze({
   BACKGROUND_MODIFIER_ERROR: 'var(--background-modifier-error)',
   BACKGROUND_MODIFIER_SUCCESS: 'var(--background-modifier-success)',
@@ -255,8 +254,6 @@ export const StyleVariables = Object.freeze({
   INPUT_SHADOW: 'var(--input-shadow)',
 });
 
-
-
 export const SourceDataTypes = Object.freeze({
   CURRENT_FOLDER: 'current_folder',
   CURRENT_FOLDER_WITHOUT_SUBFOLDERS: 'current_folder_without_subfolders',
@@ -265,7 +262,6 @@ export const SourceDataTypes = Object.freeze({
   INCOMING_LINK: 'incoming_link',
   QUERY: 'query',
 });
-
 
 export const CellSizeOptions = Object.freeze({
   COMPACT: 'compact',
