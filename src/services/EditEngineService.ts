@@ -12,9 +12,13 @@ import { inlineRegexInFunctionOf } from "helpers/QueryHelper";
 import { EditionError, showDBError } from "errors/ErrorTypes";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import obtainRowDatabaseFields from "parsers/FileToRowDatabaseFields";
+import { EditArguments } from "cdm/ServicesModel";
+
 class EditEngine {
     private static instance: EditEngine;
 
+    private onFlyEditions: EditArguments[] = [];
+    private currentTimeout: NodeJS.Timeout = null;
     /**
      * Modify all the files asociated to the rows using lambaUpdate per every row filtered by the lambdaFilter
      * @param lambdaUpdate 
@@ -76,11 +80,19 @@ class EditEngine {
      * @param option 
      */
     public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
-        queueMicrotask(async () => {
-            await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
-                showDBError(EditionError.YamlRead, err);
-            });
-        });
+        this.onFlyEditions.push({ file, columnId, newValue, columns, ddbbConfig, option });
+        if (this.currentTimeout) {
+            clearTimeout(this.currentTimeout);
+        }
+        this.currentTimeout = setTimeout(async () => {
+            // Call all onFlyEditions
+            while (this.onFlyEditions.length > 0) {
+                const { file, columnId, newValue, columns, ddbbConfig, option } = this.onFlyEditions.pop();
+                await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
+                    showDBError(EditionError.YamlRead, err);
+                });
+            }
+        }, 250);
     }
 
     private async updateRowFile(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
