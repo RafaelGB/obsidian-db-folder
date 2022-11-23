@@ -92,7 +92,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
     dataActions.updateCell(
       row.index,
       tableColumn,
-      `"${newCell}"`,
+      newCell,
       columnsInfo.getAllColumns(),
       configInfo.getLocalSettings(),
       true
