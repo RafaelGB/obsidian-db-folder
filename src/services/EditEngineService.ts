@@ -79,19 +79,31 @@ class EditEngine {
      * @param newColumnValue 
      * @param option 
      */
-    public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
-        this.onFlyEditions.push({ file, columnId, newValue, columns, ddbbConfig, option });
-        clearTimeout(this.currentTimeout);
+    public async updateRowFileProxy(p_file: TFile, p_columnId: string, p_newValue: Literal, p_columns: TableColumn[], p_ddbbConfig: LocalSettings, p_option: string): Promise<void> {
+        await this.onFlyEditions.push({
+            file: p_file,
+            columnId: p_columnId,
+            newValue: p_newValue,
+            columns: p_columns,
+            ddbbConfig: p_ddbbConfig,
+            option: p_option
+        });
+        if (this.currentTimeout) {
+            clearTimeout(this.currentTimeout);
+        }
         this.currentTimeout = setTimeout(async () => {
             // Call all onFlyEditions
             while (this.onFlyEditions.length > 0) {
-                const { file, columnId, newValue, columns, ddbbConfig, option } = this.onFlyEditions.pop();
+
+                const { file, columnId, newValue, columns, ddbbConfig, option } = this.onFlyEditions.shift();
                 await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option)
                     .catch((err) => {
                         showDBError(EditionError.YamlRead, err);
                     });
-                this.currentTimeout = null;
+                // Delay to avoid overloading the system
+                await new Promise((resolve) => setTimeout(resolve, 25));
             }
+            this.currentTimeout = null;
         }, 250);
     }
 
