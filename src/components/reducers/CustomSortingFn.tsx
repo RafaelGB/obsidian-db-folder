@@ -25,7 +25,7 @@ const dbfolderColumnSortingFn: (
       const cellB = rowB.getValue<Literal>(columnId);
 
       // If both are numbers, compare as numbers
-      if (!Number.isNaN(cellA) && !Number.isNaN(cellB)) {
+      if (!Number.isNaN(Number(cellA)) && !Number.isNaN(Number(cellB))) {
         return Number(cellA) - Number(cellB);
       }
 

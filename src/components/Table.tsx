@@ -7,7 +7,6 @@ import {
   getPaginationRowModel,
   ColumnDef,
   ColumnOrderState,
-  flexRender,
   Table,
   Header,
   HeaderGroup,
@@ -42,7 +41,7 @@ import { AddRow } from "components/AddRow";
 import {
   obsidianMdLinksOnClickCallback,
   obsidianMdLinksOnMouseOverMenuCallback,
-} from "./obsidianArq/markdownLinks";
+} from "components/obsidianArq/markdownLinks";
 import HeaderContextMenuWrapper from "./contextMenu/HeaderContextMenuWrapper";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
