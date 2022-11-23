@@ -1,3 +1,5 @@
+## 2.9.2
+- Hotfix sorting and selects [ISSUE#620](https://github.com/RafaelGB/obsidian-db-folder/issues/620) [ISSUE#622](https://github.com/RafaelGB/obsidian-db-folder/issues/622)
 ## 2.9.1
 - hotfix for 2.9.0. Not string editions typo fixed
 ## 2.9.0
