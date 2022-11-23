@@ -123,30 +123,13 @@ export class DatabaseView extends TextFileView implements HoverParent {
         item
           .setTitle(t("menu_pane_open_as_md_action"))
           .setIcon("document")
-          .onClick(() => {
-            this.plugin.databaseFileModes[
-              (this.leaf as any).id || this.file.path
-            ] = InputType.MARKDOWN;
-            this.plugin.setMarkdownView(this.leaf);
-          });
+          .onClick(this.markdownAction.bind(this));
       })
       .addItem((item) => {
         item
           .setTitle(t("menu_pane_open_db_settings_action"))
           .setIcon(DB_ICONS.NAME)
-          .onClick(() => {
-            new SettingsModal(
-              this,
-              {
-                onSettingsChange: (settings) => {
-                  /**
-                   * Settings are saved into the database file, so we don't need to do anything here.
-                   */
-                },
-              },
-              this.plugin.settings
-            ).open();
-          });
+          .onClick(this.settingsAction.bind(this));
       })
       .addSeparator();
 
@@ -204,6 +187,26 @@ export class DatabaseView extends TextFileView implements HoverParent {
         throw e;
       }
     }
+  }
+
+  initActions(): void {
+    // Settings action
+    this.addAction(
+      DB_ICONS.NAME,
+      `${t("menu_pane_open_db_settings_action")}`,
+      this.settingsAction.bind(this)
+    );
+    // Open as markdown action
+    this.addAction(
+      "document",
+      `${t("menu_pane_open_as_md_action")}`,
+      this.markdownAction.bind(this)
+    );
+  }
+
+  onload(): void {
+    super.onload();
+    this.initActions();
   }
 
   destroy() {
@@ -266,5 +269,33 @@ export class DatabaseView extends TextFileView implements HoverParent {
         there's nothing to do in this method.  (We can't omit it, since it's
         abstract.)
         */
+  }
+
+  /****************************************************************
+   *                         BAR ACTIONS
+   ****************************************************************/
+
+  /**
+   *
+   * @param evt
+   */
+  settingsAction(evt: MouseEvent): void {
+    new SettingsModal(
+      this,
+      {
+        onSettingsChange: (settings) => {
+          /**
+           * Settings are saved into the database file, so we don't need to do anything here.
+           */
+        },
+      },
+      this.plugin.settings
+    ).open();
+  }
+
+  markdownAction(evt: MouseEvent): void {
+    this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
+      InputType.MARKDOWN;
+    this.plugin.setMarkdownView(this.leaf);
   }
 }
