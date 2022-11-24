@@ -1,18 +1,12 @@
-import * as React from "react";
-import CsvWriter from "components/navbar/CsvWriter";
-import MenuIcon from "components/img/MenuIcon";
+import React from "react";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import PaginationTable from "components/navbar/PaginationTable";
 import { StyleVariables } from "helpers/Constants";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import EditFiltersButton from "components/reducers/DataviewFilters";
-import { t } from "lang/helpers";
 import AppBar from "@mui/material/AppBar";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ToggleFiltersButton from "components/reducers/ToggleFiltersButton";
@@ -21,42 +15,7 @@ import QuickFilters from "components/reducers/QuickFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
-  const { view, tableState } = table.options.meta;
-  const columnsInfo = tableState.columns((state) => state.info);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      open={open}
-      onClose={handleMenuClose}
-      keepMounted
-      id="long-button"
-      MenuListProps={{
-        style: {
-          backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
-          color: StyleVariables.TEXT_NORMAL,
-        },
-      }}
-    >
-      <MenuItem disableRipple>
-        {/* CSV buttton download */}
-        <CsvWriter
-          columns={columnsInfo.getAllColumns()}
-          rows={table.getRowModel().rows}
-          name={view.diskConfig.yaml.name}
-        />
-      </MenuItem>
-    </Menu>
-  );
   return (
     <Box
       sx={{ flexGrow: 1 }}
@@ -79,22 +38,6 @@ export function NavBar(navBarProps: NavBarProps) {
             paddingLeft: "2px",
           }}
         >
-          <IconButton
-            size="medium"
-            aria-label={t("toolbar_menu_aria_label")}
-            aria-controls="long-button"
-            aria-haspopup="true"
-            onClick={handleClick}
-            color="inherit"
-            sx={{
-              mr: 2,
-              maxWidth: 40,
-              marginRight: 1,
-              padding: 0.5,
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Paper
             sx={{
               p: "2px 4px",
@@ -139,7 +82,6 @@ export function NavBar(navBarProps: NavBarProps) {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMenu}
     </Box>
   );
 }

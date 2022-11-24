@@ -21,9 +21,6 @@ export type TableAction<T> = {
  */
 export type EphimeralSettings = {
     enable_columns_filter: boolean,
-    // actions Flags
-    isImportActionEnabled: boolean,
-    isExportActionEnabled: boolean,
 }
 
 export interface ConfigState {
