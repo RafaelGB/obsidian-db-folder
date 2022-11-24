@@ -1,4 +1,9 @@
-import React, { ChangeEventHandler, useEffect, useRef } from "react";
+import React, {
+  ChangeEventHandler,
+  StrictMode,
+  useEffect,
+  useRef,
+} from "react";
 import { TableActionProps } from "cdm/MenuBarModel";
 import { t } from "lang/helpers";
 
@@ -15,11 +20,14 @@ export default function ImportCsvAction(actionProps: TableActionProps) {
   };
 
   useEffect(() => {
-    const isActionEnabled = activeDocument.querySelector(
-      `div .view-actions a[aria-label='${t("toolbar_menu_import_csv")}']`
-    );
-    if (!isActionEnabled) {
-      view.addAction("import", t("toolbar_menu_import_csv"), handleFileUpload);
+    if (!view.actionButtons["import"]) {
+      const importElement = view.addAction(
+        "import",
+        t("toolbar_menu_import_csv"),
+        handleFileUpload,
+        3
+      );
+      view.actionButtons.import = importElement;
     }
   }, []);
 

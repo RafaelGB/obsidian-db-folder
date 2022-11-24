@@ -32,15 +32,13 @@ const ExportCsvAction = (actionProps: TableActionProps) => {
     inputRef.current.click();
   };
   useEffect(() => {
-    const isActionEnabled = activeDocument.querySelector(
-      `div .view-actions a[aria-label='${t("toolbar_menu_export_csv")}']`
-    );
-    if (!isActionEnabled) {
-      view.addAction(
+    if (!view.actionButtons["export"]) {
+      const exportElement = view.addAction(
         "download",
         t("toolbar_menu_export_csv"),
         handleCsvDownload
       );
+      view.actionButtons.export = exportElement;
     }
   }, []);
 

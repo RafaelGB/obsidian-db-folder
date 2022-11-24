@@ -52,6 +52,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   shadowColumns: Array<TableColumn>;
   initial: InitialType;
   formulas: Record<string, unknown>;
+  actionButtons: Record<string, HTMLElement> = {};
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
     super(leaf);
@@ -217,6 +218,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     this.getStateManager().unregisterView(this);
     this.plugin.removeView(this);
     this.tableContainer.remove();
+    this.detachActionButtons();
     LOGGER.info(`<=destroy ${this.file.path}`);
   }
 
@@ -250,6 +252,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   async reloadDatabase() {
     this.rootContainer.unmount();
     this.rootContainer = createRoot(this.tableContainer);
+    this.detachActionButtons();
     this.initDatabase();
   }
 
@@ -273,6 +276,15 @@ export class DatabaseView extends TextFileView implements HoverParent {
         */
   }
 
+  /**
+   * Remove all action buttons from the view
+   */
+  detachActionButtons(): void {
+    Object.values(this.actionButtons).forEach((button) => {
+      button.detach();
+    });
+    this.actionButtons = {};
+  }
   /****************************************************************
    *                         BAR ACTIONS
    ****************************************************************/
