@@ -189,7 +189,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
   }
 
-  initActions(): void {
+  private initActions(): void {
     // Settings action
     this.addAction(
       DB_ICONS.NAME,
@@ -203,6 +203,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       this.markdownAction.bind(this)
     );
   }
+
+  postRenderActions(): void {}
 
   onload(): void {
     super.onload();

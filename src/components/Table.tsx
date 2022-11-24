@@ -42,7 +42,8 @@ import {
   obsidianMdLinksOnClickCallback,
   obsidianMdLinksOnMouseOverMenuCallback,
 } from "components/obsidianArq/markdownLinks";
-import HeaderContextMenuWrapper from "./contextMenu/HeaderContextMenuWrapper";
+import HeaderContextMenuWrapper from "components/contextMenu/HeaderContextMenuWrapper";
+import TableActions from "components/tableActions/TableActions";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -83,6 +84,8 @@ export function Table(tableData: TableDataType) {
   const filePath = stateManager.file.path;
 
   /** Table services */
+  // Actions
+
   // Sorting
   const [sortBy, sortActions] = tableStore.sorting((store) => [
     store.sortBy,
@@ -305,6 +308,8 @@ export function Table(tableData: TableDataType) {
         </pre>
       )}
       {/* ENDS DEBUG INFO */}
+      {/* INIT TABLE ACTIONS */}
+      <TableActions table={table} />
     </>
   );
 }

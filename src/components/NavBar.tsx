@@ -12,7 +12,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import EditFiltersButton from "components/reducers/DataviewFilters";
-import CsvReader from "components/navbar/CsvReader";
 import { t } from "lang/helpers";
 import AppBar from "@mui/material/AppBar";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -56,7 +55,6 @@ export function NavBar(navBarProps: NavBarProps) {
           name={view.diskConfig.yaml.name}
         />
       </MenuItem>
-      <CsvReader {...navBarProps} />
     </Menu>
   );
   return (

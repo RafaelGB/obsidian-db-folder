@@ -46,7 +46,6 @@ const dbfolderColumnSortingFn: (
       )
         .toString()
         .toLowerCase();
-
       // String comparison
       return a === b ? 0 : a > b ? 1 : -1;
     };
