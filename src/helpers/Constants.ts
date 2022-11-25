@@ -279,6 +279,7 @@ export const ResizeConfiguration = Object.freeze({
 
 export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
   enable_columns_filter: false,
+  enable_navbar: false,
 });
 
 /******************************************************************************

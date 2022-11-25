@@ -17,7 +17,7 @@ export const DebouncedInputWrapper = styled('div')(({ theme }) => ({
     color: "inherit",
     opacity: 0.6,
     "& div *": {
-        padding: theme.spacing(0, 0, 0, 0),
+        padding: theme.spacing(0, 1, 0, 1),
         transition: theme.transitions.create("width"),
         width: "100%",
         [theme.breakpoints.up("md")]: {

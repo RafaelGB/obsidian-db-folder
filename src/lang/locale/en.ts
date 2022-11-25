@@ -17,6 +17,7 @@ export default {
   'toolbar_menu_aria_label': 'Open table options',
   'toolbar_menu_export_csv': 'Export CSV',
   'toolbar_menu_import_csv': 'Import CSV',
+  'toolbar_menu_search_bar': 'Global search',
   /** SOURCE OPTIONS */
   'current_folder': "Current folder",
   'current_folder_without_subfolders': "Current folder without subfolders",

@@ -77,6 +77,10 @@ export function Table(tableData: TableDataType) {
     (store) => store.ddbbConfig.sticky_first_column
   );
 
+  const isNavbarEnabled = tableStore.configState(
+    (state) => state.ephimeral.enable_navbar
+  );
+
   const globalConfig = tableStore.configState((store) => store.global);
   const configInfo = tableStore.configState((store) => store.info);
   /** Plugin services */
@@ -226,7 +230,11 @@ export function Table(tableData: TableDataType) {
       >
         <div
           key={`div-table-header-group-sticky`}
-          className={c("table-header-group sticky-level-2")}
+          className={c(
+            `table-header-group ${
+              isNavbarEnabled ? "sticky-level-2" : "navbar"
+            }`
+          )}
         >
           {/* INIT HEADERS */}
           {table

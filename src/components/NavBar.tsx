@@ -15,7 +15,11 @@ import QuickFilters from "components/reducers/QuickFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
-  const { view } = table.options.meta;
+  const { view, tableState } = table.options.meta;
+
+  const isNavbarEnabled = tableState.configState(
+    (state) => state.ephimeral.enable_navbar
+  );
 
   // Control
   useEffect(() => {
@@ -31,72 +35,74 @@ export function NavBar(navBarProps: NavBarProps) {
   }, [table.getFilteredRowModel().rows.length]);
 
   return (
-    <Box
-      sx={{ flexGrow: 1 }}
-      style={{
-        width: "100%",
-      }}
-    >
-      <AppBar
-        position="sticky"
+    isNavbarEnabled && (
+      <Box
+        sx={{ flexGrow: 1 }}
         style={{
-          color: StyleVariables.TEXT_MUTED,
-          backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
-          boxShadow: "none",
+          width: "100%",
         }}
       >
-        <Toolbar
+        <AppBar
+          position="sticky"
           style={{
-            minHeight: "2.65rem",
-            padding: 0,
-            paddingLeft: "2px",
+            color: StyleVariables.TEXT_MUTED,
+            backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
+            boxShadow: "none",
           }}
         >
-          <Paper
-            sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
-              scale: 0.7,
+          <Toolbar
+            style={{
+              minHeight: "2.65rem",
               padding: 0,
-              boxShadow: "none",
-              backgroundColor: "transparent",
+              paddingLeft: "2px",
             }}
           >
-            {/** Global filter */}
-            <GlobalFilter {...navBarProps.globalFilterRows} />
-            <ToggleFiltersButton table={table} />
-            <EditFiltersButton table={table} />
-          </Paper>
-
-          <Box
-            sx={{
-              overflowX: "auto",
-              display: "flex",
-              padding: { xs: "0", md: "5px" },
-            }}
-          >
-            <QuickFilters table={table} key={`ButtonGroup-QuickFilters`} />
-          </Box>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box
-            justifyContent={"flex-start"}
-            sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-            }}
-          >
-            <ButtonGroup
-              variant="outlined"
-              size="small"
-              key={`ButtonGroup-DataviewFilters`}
+            <Paper
+              sx={{
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                scale: 0.7,
+                padding: 0,
+                boxShadow: "none",
+                backgroundColor: "transparent",
+              }}
             >
-              <PaginationTable table={table} />
-            </ButtonGroup>
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+              {/** Global filter */}
+              <GlobalFilter {...navBarProps.globalFilterRows} />
+              <ToggleFiltersButton table={table} />
+              <EditFiltersButton table={table} />
+            </Paper>
+
+            <Box
+              sx={{
+                overflowX: "auto",
+                display: "flex",
+                padding: { xs: "0", md: "5px" },
+              }}
+            >
+              <QuickFilters table={table} key={`ButtonGroup-QuickFilters`} />
+            </Box>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box
+              justifyContent={"flex-start"}
+              sx={{
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
+              }}
+            >
+              <ButtonGroup
+                variant="outlined"
+                size="small"
+                key={`ButtonGroup-DataviewFilters`}
+              >
+                <PaginationTable table={table} />
+              </ButtonGroup>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    )
   );
 }
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {
