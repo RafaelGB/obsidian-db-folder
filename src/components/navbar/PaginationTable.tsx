@@ -1,7 +1,5 @@
-import Button from "@mui/material/Button";
 import { PaginationProps } from "cdm/MenuBarModel";
 import React, { useEffect } from "react";
-import { PaginationButtonStyle } from "components/styles/NavBarStyles";
 import { c } from "helpers/StylesHelper";
 import { Platform } from "obsidian";
 function PaginationTable(props: PaginationProps) {

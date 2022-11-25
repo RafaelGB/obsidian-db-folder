@@ -204,14 +204,16 @@ export function Table(tableData: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
-      <HeaderNavBar
-        key={`div-header-navbar`}
-        table={table}
-        globalFilterRows={{
-          globalFilter: globalFilter,
-          setGlobalFilter: setGlobalFilter,
-        }}
-      />
+      {isNavbarEnabled && (
+        <HeaderNavBar
+          key={`div-header-navbar`}
+          table={table}
+          globalFilterRows={{
+            globalFilter: globalFilter,
+            setGlobalFilter: setGlobalFilter,
+          }}
+        />
+      )}
       {/* INIT TABLE */}
       <div
         key={`div-table`}
@@ -232,7 +234,7 @@ export function Table(tableData: TableDataType) {
           key={`div-table-header-group-sticky`}
           className={c(
             `table-header-group ${
-              isNavbarEnabled ? "sticky-level-2" : "navbar"
+              isNavbarEnabled ? "sticky-level-2" : "sticky-level-1"
             }`
           )}
         >

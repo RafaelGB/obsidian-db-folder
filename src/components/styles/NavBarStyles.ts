@@ -26,23 +26,6 @@ export const DebouncedInputWrapper = styled('div')(({ theme }) => ({
     },
 }));
 
-
-export const PaginationButtonStyle = {
-    mx: {
-        ":disabled": {
-            opacity: 0.5,
-            cursor: "not-allowed",
-            backgroundColor: StyleVariables.BACKGROUND_SECONDARY,
-            boxShadow: StyleVariables.INPUT_SHADOW,
-            color: StyleVariables.TEXT_NORMAL,
-        },
-        ":hover": {
-            backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
-        },
-        backgroundColor: StyleVariables.TEXT_ACCENT,
-    }
-}
-
 export const MenuButtonStyle = {
     sx: {
         color: StyleVariables.TEXT_ACCENT_HOVER,
