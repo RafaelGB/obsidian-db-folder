@@ -464,6 +464,19 @@ div.database-plugin__checkbox {
   z-index: 2;
 }
 
+.database-plugin__nabvar-button {
+  min-width: 30px;
+  min-height: 30px;
+  padding: 2px;
+  border-radius: 0;
+  max-width: 30px;
+  max-height: 30px;
+}
+.database-plugin__nabvar-button:disabled {
+  background-color: var(--background-secondary);
+  opacity: 0.5;
+}
+
 .database-plugin__padding-left-05 {
   padding-left: 0.5rem;
 }

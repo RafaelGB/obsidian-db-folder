@@ -1,7 +1,7 @@
-import { Button } from "@mui/material";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
+import { c } from "helpers/StylesHelper";
 import React from "react";
 
 export default function ToggleFiltersButton(props: DataviewFiltersProps) {
@@ -26,15 +26,15 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
   };
 
   return (
-    <Button
-      size="small"
+    <button
+      type="button"
       onClick={enableFilterHandler}
       key={`Button-Enabled-DataviewFilters`}
-      style={{ minWidth: "0px", padding: "2px", borderRadius: "0px" }}
+      className={c("nabvar-button")}
     >
       <span className="svg-icon svg-gray">
         {filters.enabled ? <FilterOnIcon /> : <FilterOffIcon />}
       </span>
-    </Button>
+    </button>
   );
 }

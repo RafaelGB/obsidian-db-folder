@@ -469,3 +469,14 @@ export const ROLLUP_ACTIONS = Object.freeze({
   // Key is not needed for the action to be executed
   ...ROLLUP_EMBED_ACTIONS
 });
+
+/******************************************************************************
+ *                                EMITTERS
+ ******************************************************************************/
+export const EMITTERS_GROUPS = Object.freeze({
+  HOTKEY: 'hotkey',
+});
+
+export const EMITTERS_HOTKEY = Object.freeze({
+  OPEN_SEARCH: "editor:open-search"
+});

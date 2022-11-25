@@ -436,6 +436,26 @@ export default class DBFolderPlugin extends Plugin {
 	registerMonkeyPatches() {
 		const self = this;
 
+		// Monkey path to manage hotkey emitters
+		app.workspace.onLayoutReady(() => {
+			this.register(
+				around((app as any).commands, {
+
+					executeCommand(next) {
+						return function (command: any) {
+							const view = app.workspace.getActiveViewOfType(DatabaseView);
+
+							if (view && command?.id) {
+								view.emitter.emit('hotkey', command.id);
+							}
+
+							return next.call(this, command);
+						};
+					},
+				})
+			);
+		});
+
 		// Monkey patch WorkspaceLeaf to open Databases with DatabaseView by default
 		this.register(
 			around(WorkspaceLeaf.prototype, {

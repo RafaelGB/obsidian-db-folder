@@ -1,9 +1,9 @@
-import { Button } from "@mui/material";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import { FiltersModal } from "components/modals/filters/FiltersModal";
+import { c } from "helpers/StylesHelper";
 import React from "react";
 
 export default function EditFiltersButton(props: DataviewFiltersProps) {
@@ -38,13 +38,12 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
       }).open();
     });
   };
-
   return (
-    <Button
-      size="small"
+    <button
+      type="button"
       onClick={openFiltersGroupHandler}
       key={`Button-FilterConditions-DataviewFilters`}
-      style={{ minWidth: "0px", padding: "2px", borderRadius: "0px" }}
+      className={c("nabvar-button")}
     >
       <span
         className="svg-icon svg-gray"
@@ -52,6 +51,6 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
       >
         <MenuDownIcon />
       </span>
-    </Button>
+    </button>
   );
 }
