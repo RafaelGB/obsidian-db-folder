@@ -22,7 +22,6 @@ export type CsvButtonProps = {
 
 export type GlobalFilterProps = {
     setGlobalFilter: (updater: any) => void;
-    hits: number;
     globalFilter: string;
 };
 

@@ -53,6 +53,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   initial: InitialType;
   formulas: Record<string, unknown>;
   actionButtons: Record<string, HTMLElement> = {};
+  statusBarItems: Record<string, HTMLElement> = {};
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
     super(leaf);
@@ -162,7 +163,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.diskConfig.yaml.config,
         this.diskConfig.yaml.filters
       );
-
       this.initial = obtainInitialType(this.columns);
 
       this.formulas = await obtainFormulasFromFolder(
@@ -218,7 +218,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     this.getStateManager().unregisterView(this);
     this.plugin.removeView(this);
     this.tableContainer.remove();
-    this.detachActionButtons();
+    this.detachViewComponents();
     LOGGER.info(`<=destroy ${this.file.path}`);
   }
 
@@ -252,7 +252,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   async reloadDatabase() {
     this.rootContainer.unmount();
     this.rootContainer = createRoot(this.tableContainer);
-    this.detachActionButtons();
+    this.detachViewComponents();
     this.initDatabase();
   }
 
@@ -279,10 +279,16 @@ export class DatabaseView extends TextFileView implements HoverParent {
   /**
    * Remove all action buttons from the view
    */
-  detachActionButtons(): void {
+  detachViewComponents(): void {
     Object.values(this.actionButtons).forEach((button) => {
       button.detach();
     });
+
+    Object.values(this.statusBarItems).forEach((item) => {
+      item.detach();
+    });
+
+    this.statusBarItems = {};
     this.actionButtons = {};
   }
   /****************************************************************

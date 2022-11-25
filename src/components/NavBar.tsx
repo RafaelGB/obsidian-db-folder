@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
 import PaginationTable from "components/navbar/PaginationTable";
@@ -15,6 +15,20 @@ import QuickFilters from "components/reducers/QuickFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
+  const { view } = table.options.meta;
+
+  // Control
+  useEffect(() => {
+    if (!view.statusBarItems.hits) {
+      view.statusBarItems.hits = view.plugin.addStatusBarItem();
+    }
+    view.statusBarItems.hits.replaceChildren();
+    view.statusBarItems.hits.createEl("span", {
+      text: `${table.getFilteredRowModel().rows.length}/${view.rows.length} '${
+        view.diskConfig.yaml.name
+      }'`,
+    });
+  }, [table.getFilteredRowModel().rows.length]);
 
   return (
     <Box
