@@ -445,7 +445,7 @@ div.database-plugin__checkbox {
 .database-plugin__sticky-level-1 {
   position: -webkit-sticky;
   position: sticky;
-  height: 2.65rem;
+  height: 42.5px;
   left: 0;
   top: 0;
   z-index: 2;
@@ -455,7 +455,7 @@ div.database-plugin__checkbox {
   position: -webkit-sticky;
   position: sticky;
   left: 0;
-  top: 2.65rem;
+  top: 42.5px;
   z-index: 3;
 }
 
@@ -466,7 +466,7 @@ div.database-plugin__checkbox {
 
 .database-plugin__navbar {
   width: 100%;
-  height: 2.65rem;
+  height: 42.5px;
   position: sticky;
   position: -webkit-sticky;
   left: 0;

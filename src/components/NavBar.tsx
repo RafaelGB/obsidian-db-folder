@@ -15,7 +15,10 @@ import QuickFilters from "components/reducers/QuickFilters";
 
 export function NavBar(navBarProps: NavBarProps) {
   const { table } = navBarProps;
-  const { view } = table.options.meta;
+  const { view, tableState } = table.options.meta;
+  const isNavbarEnabled = tableState.configState(
+    (state) => state.ephimeral.enable_navbar
+  );
 
   // Control
   useEffect(() => {
@@ -64,7 +67,9 @@ export function NavBar(navBarProps: NavBarProps) {
             }}
           >
             {/** Global filter */}
-            <GlobalFilter {...navBarProps.globalFilterRows} />
+            {isNavbarEnabled && (
+              <GlobalFilter {...navBarProps.globalFilterRows} />
+            )}
             <ToggleFiltersButton table={table} />
             <EditFiltersButton table={table} />
           </Paper>
@@ -74,25 +79,27 @@ export function NavBar(navBarProps: NavBarProps) {
               overflowX: "auto",
               display: "flex",
               padding: { xs: "0", md: "5px" },
+              width: "100%",
             }}
           >
             <QuickFilters table={table} key={`ButtonGroup-QuickFilters`} />
-          </Box>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box
-            justifyContent={"flex-start"}
-            sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-            }}
-          >
-            <ButtonGroup
-              variant="outlined"
-              size="small"
-              key={`ButtonGroup-DataviewFilters`}
+            {/* <Box sx={{ flexGrow: 1 }} /> */}
+            <Box
+              justifyContent={"flex-end"}
+              sx={{
+                alignItems: "center",
+                marginLeft: "auto",
+                paddingLeft: "10px",
+              }}
             >
-              <PaginationTable table={table} />
-            </ButtonGroup>
+              <ButtonGroup
+                variant="outlined"
+                size="small"
+                key={`ButtonGroup-DataviewFilters`}
+              >
+                <PaginationTable table={table} />
+              </ButtonGroup>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
@@ -100,8 +107,20 @@ export function NavBar(navBarProps: NavBarProps) {
   );
 }
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {
+  const { table } = headerNavBarProps;
+  const { tableState } = table.options.meta;
+  const isNavbarEnabled = tableState.configState(
+    (state) => state.ephimeral.enable_navbar
+  );
+
   return (
-    <div className={`${c("navbar")}`} key="div-navbar-header-cell">
+    <div
+      className={`${c("navbar")}`}
+      key="div-navbar-header-cell"
+      style={{
+        display: isNavbarEnabled ? "flex" : "none",
+      }}
+    >
       <NavBar {...headerNavBarProps} />
     </div>
   );

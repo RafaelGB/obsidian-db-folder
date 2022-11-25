@@ -204,16 +204,14 @@ export function Table(tableData: TableDataType) {
   LOGGER.debug(`<= Table`);
   return (
     <>
-      {isNavbarEnabled && (
-        <HeaderNavBar
-          key={`div-header-navbar`}
-          table={table}
-          globalFilterRows={{
-            globalFilter: globalFilter,
-            setGlobalFilter: setGlobalFilter,
-          }}
-        />
-      )}
+      <HeaderNavBar
+        key={`div-header-navbar`}
+        table={table}
+        globalFilterRows={{
+          globalFilter: globalFilter,
+          setGlobalFilter: setGlobalFilter,
+        }}
+      />
       {/* INIT TABLE */}
       <div
         key={`div-table`}
@@ -307,9 +305,7 @@ export function Table(tableData: TableDataType) {
         </div>
         {/* ENDS TABLE */}
       </div>
-
       <AddRow table={table} />
-
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
         <pre>
