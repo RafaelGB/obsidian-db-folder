@@ -16,6 +16,8 @@ import { DbFolderException } from "errors/AbstractException";
 import {
   DatabaseCore,
   DB_ICONS,
+  EMITTERS_GROUPS,
+  EMITTERS_SHORTCUT,
   InputType,
   StyleClasses,
 } from "helpers/Constants";
@@ -317,5 +319,19 @@ export class DatabaseView extends TextFileView implements HoverParent {
     this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
       InputType.MARKDOWN;
     this.plugin.setMarkdownView(this.leaf);
+  }
+  /****************************************************************
+   *                     KEYBOARD SHORTCUTS
+   ****************************************************************/
+
+  goNextPage() {
+    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.GO_NEXT_PAGE);
+  }
+
+  goPreviousPage() {
+    this.emitter.emit(
+      EMITTERS_GROUPS.SHORTCUT,
+      EMITTERS_SHORTCUT.GO_PREVIOUS_PAGE
+    );
   }
 }

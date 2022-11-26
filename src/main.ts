@@ -28,7 +28,7 @@ import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
-import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
+import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, EMITTERS_GROUPS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 import { unmountComponentAtNode } from 'react-dom';
 import { isDatabaseNote } from 'helpers/VaultManagement';
@@ -399,12 +399,39 @@ export default class DBFolderPlugin extends Plugin {
 		);
 	}
 	registerCommands() {
+		// Creator Helper Command
 		this.addCommand({
 			id: 'create-new-database-folder',
 			name: t("ribbon_icon_title"),
 			callback: () => new DatabaseHelperCreationModal(this.settings.local_settings).open(),
 		});
 
+		// Active View Go Next Page
+		this.addCommand({
+			id: 'active-go-next-page',
+			name: t('active_go_next_page'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.goNextPage();
+			},
+		});
+
+		this.addCommand({
+			id: 'active-go-previous-page',
+			name: t('active_go_previous_page'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.goPreviousPage();
+			},
+		});
+
+		// Ribbon Icon
 		if (this.settings.global_settings.enable_ribbon_icon) {
 			this.showRibbonIcon();
 		}
@@ -436,7 +463,7 @@ export default class DBFolderPlugin extends Plugin {
 	registerMonkeyPatches() {
 		const self = this;
 
-		// Monkey path to manage hotkey emitters
+		// Monkey patch to manage hotkey emitters
 		app.workspace.onLayoutReady(() => {
 			this.register(
 				around((app as any).commands, {
@@ -446,7 +473,7 @@ export default class DBFolderPlugin extends Plugin {
 							const view = app.workspace.getActiveViewOfType(DatabaseView);
 
 							if (view && command?.id) {
-								view.emitter.emit('hotkey', command.id);
+								view.emitter.emit(EMITTERS_GROUPS.HOTKEY, command.id);
 							}
 
 							return next.call(this, command);

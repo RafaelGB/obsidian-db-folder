@@ -31,11 +31,12 @@ export default function SearchBarAction(actionProps: TableActionProps) {
         handleGlobalSearchDisplay();
       }
     };
+
     view.emitter.on(EMITTERS_GROUPS.HOTKEY, onSearchHotkey);
+
     return () => {
       view.emitter.off(EMITTERS_GROUPS.HOTKEY, onSearchHotkey);
     };
   }, []);
-
   return <></>;
 }

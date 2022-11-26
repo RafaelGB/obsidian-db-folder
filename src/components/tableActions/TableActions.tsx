@@ -3,6 +3,7 @@ import React from "react";
 import ImportCsvAction from "components/tableActions/ImportCsvAction";
 import ExportCsvAction from "components/tableActions/ExportCsvAction";
 import SearchBarAction from "components/tableActions/SearchBarAction";
+import ShortcutsAction from "components/tableActions/ShortcutsAction";
 
 export default function TableActions(actionProps: TableActionProps) {
   return (
@@ -10,6 +11,7 @@ export default function TableActions(actionProps: TableActionProps) {
       <ImportCsvAction {...actionProps} />
       <ExportCsvAction {...actionProps} />
       <SearchBarAction {...actionProps} />
+      <ShortcutsAction {...actionProps} />
     </>
   );
 }

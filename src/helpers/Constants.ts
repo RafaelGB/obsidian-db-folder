@@ -475,8 +475,14 @@ export const ROLLUP_ACTIONS = Object.freeze({
  ******************************************************************************/
 export const EMITTERS_GROUPS = Object.freeze({
   HOTKEY: 'hotkey',
+  SHORTCUT: 'shortcut',
 });
 
 export const EMITTERS_HOTKEY = Object.freeze({
   OPEN_SEARCH: "editor:open-search"
+});
+
+export const EMITTERS_SHORTCUT = Object.freeze({
+  GO_NEXT_PAGE: "pagination:next",
+  GO_PREVIOUS_PAGE: "pagination:previous",
 });

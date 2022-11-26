@@ -25,4 +25,7 @@ export default {
   "outgoing_link": "Outgoing link",
   "incoming_link": "Incoming link",
   "query": "Dataview query",
+  /** COMMAND OPTIONS */
+  "active_go_next_page": "Go to next page",
+  "active_go_previous_page": "Go to previous page",
 };
