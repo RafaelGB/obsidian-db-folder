@@ -20,7 +20,7 @@ export default function ImportCsvAction(actionProps: TableActionProps) {
   };
 
   useEffect(() => {
-    if (!view.actionButtons["import"]) {
+    if (!view.actionButtons.import) {
       const importElement = view.addAction(
         "import",
         t("toolbar_menu_import_csv"),

@@ -16,12 +16,11 @@ export default function SearchBarAction(actionProps: TableActionProps) {
         enable_navbar: !configInfo.getEphimeralSettings().enable_navbar,
       });
     };
-    if (!view.actionButtons["search"]) {
+    if (!view.actionButtons.search) {
       const searchElement = view.addAction(
         "search",
         t("toolbar_menu_search_bar"),
-        handleGlobalSearchDisplay,
-        3
+        handleGlobalSearchDisplay
       );
       view.actionButtons.search = searchElement;
     }
