@@ -74,6 +74,12 @@ export const MetadataLabels = Object.freeze({
   INLINKS: 'Inlinks',
 });
 
+export const PaginationRenderOptions = Object.freeze({
+  INITIAL: 'initial',
+  FINAL: 'final',
+  BASIC: 'basic',
+});
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
