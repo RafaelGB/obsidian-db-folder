@@ -482,9 +482,31 @@ div.database-plugin__checkbox {
   max-width: 30px;
   max-height: 30px;
 }
+
 .database-plugin__nabvar-button:disabled {
   background-color: var(--background-secondary);
   opacity: 0.5;
+}
+
+.database-plugin__pagination {
+  background-color: var(--background-primary);
+  display: "flex";
+}
+
+.database-plugin__pagination-button {
+  background-color: var(--text-accent);
+}
+
+.database-plugin__pagination-button:hover {
+  background-color: var(--background-text-accent-hover);
+}
+
+.database-plugin__pagination-button:disabled {
+  opacity: 0.5;
+  cursor: "not-allowed";
+  background-color: var(--background-secondary);
+  box-shadow: var(--input-shadow);
+  color: var(--text-normal);
 }
 
 .database-plugin__padding-left-05 {

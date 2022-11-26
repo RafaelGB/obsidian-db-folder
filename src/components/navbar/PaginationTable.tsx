@@ -27,12 +27,11 @@ function PaginationTable(props: PaginationProps) {
         <button
           type="button"
           key={`Button-Pagination-Initial`}
-          //sx={PaginationButtonStyle}
           onClick={() => {
             table.setPageIndex(0);
           }}
           disabled={!table.getCanPreviousPage()}
-          className={c("nabvar-button")}
+          className={c("pagination-button")}
         >
           {"<<"}
         </button>
@@ -40,12 +39,11 @@ function PaginationTable(props: PaginationProps) {
       <button
         type="button"
         key={`Button-Pagination-Previous`}
-        //sx={PaginationButtonStyle}
         onClick={() => {
           table.previousPage();
         }}
         disabled={!table.getCanPreviousPage()}
-        className={c("nabvar-button")}
+        className={c("pagination-button")}
       >
         {"<"}
       </button>
@@ -93,12 +91,11 @@ function PaginationTable(props: PaginationProps) {
       <button
         type="button"
         key={`Button-Pagination-Next`}
-        //sx={PaginationButtonStyle}
         onClick={() => {
           table.nextPage();
         }}
         disabled={!table.getCanNextPage()}
-        className={c("nabvar-button")}
+        className={c("pagination-button")}
       >
         {">"}
       </button>
@@ -106,12 +103,11 @@ function PaginationTable(props: PaginationProps) {
         <button
           type="button"
           key={`Button-Pagination-Last`}
-          //sx={PaginationButtonStyle}
           onClick={() => {
             table.setPageIndex(table.getPageCount() - 1);
           }}
           disabled={!table.getCanNextPage()}
-          className={c("nabvar-button")}
+          className={c("pagination-button")}
         >
           {">>"}
         </button>

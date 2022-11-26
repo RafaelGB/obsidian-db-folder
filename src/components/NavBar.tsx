@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import PaginationTable from "components/navbar/PaginationTable";
 import { StyleVariables } from "helpers/Constants";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
 import EditFiltersButton from "components/reducers/DataviewFilters";
 import AppBar from "@mui/material/AppBar";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import ToggleFiltersButton from "components/reducers/ToggleFiltersButton";
 import Paper from "@mui/material/Paper";
 import QuickFilters from "components/reducers/QuickFilters";
@@ -73,7 +71,6 @@ export function NavBar(navBarProps: NavBarProps) {
             <ToggleFiltersButton table={table} />
             <EditFiltersButton table={table} />
           </Paper>
-
           <Box
             sx={{
               overflowX: "auto",
@@ -83,23 +80,6 @@ export function NavBar(navBarProps: NavBarProps) {
             }}
           >
             <QuickFilters table={table} key={`ButtonGroup-QuickFilters`} />
-            {/* <Box sx={{ flexGrow: 1 }} /> */}
-            <Box
-              justifyContent={"flex-end"}
-              sx={{
-                alignItems: "center",
-                marginLeft: "auto",
-                paddingLeft: "10px",
-              }}
-            >
-              <ButtonGroup
-                variant="outlined"
-                size="small"
-                key={`ButtonGroup-DataviewFilters`}
-              >
-                <PaginationTable table={table} />
-              </ButtonGroup>
-            </Box>
           </Box>
         </Toolbar>
       </AppBar>

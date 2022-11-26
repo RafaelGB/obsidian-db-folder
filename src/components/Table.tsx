@@ -23,6 +23,7 @@ import {
   DatabaseLimits,
   MetadataColumns,
   ResizeConfiguration,
+  StyleVariables,
 } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/DefaultCell";
@@ -44,6 +45,8 @@ import {
 } from "components/obsidianArq/markdownLinks";
 import HeaderContextMenuWrapper from "components/contextMenu/HeaderContextMenuWrapper";
 import TableActions from "components/tableActions/TableActions";
+import PaginationTable from "./navbar/PaginationTable";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -305,6 +308,17 @@ export function Table(tableData: TableDataType) {
         </div>
         {/* ENDS TABLE */}
       </div>
+      {/* INIT PAGINATION */}
+      <div key={`cell-tr-pagination`} className={`${c("pagination")}`}>
+        <ButtonGroup
+          variant="outlined"
+          size="small"
+          key={`ButtonGroup-DataviewFilters`}
+        >
+          <PaginationTable table={table} />
+        </ButtonGroup>
+        {/* ENDS PAGINATION */}
+      </div>
       <AddRow table={table} />
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
@@ -315,6 +329,7 @@ export function Table(tableData: TableDataType) {
       {/* ENDS DEBUG INFO */}
       {/* INIT TABLE ACTIONS */}
       <TableActions table={table} />
+      {/* ENDS TABLE ACTIONS */}
     </>
   );
 }
