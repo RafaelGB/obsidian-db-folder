@@ -23,6 +23,7 @@ import {
 } from "helpers/Constants";
 import { createEmitter, Emitter } from "helpers/Emitter";
 import obtainInitialType from "helpers/InitialType";
+import { c } from "helpers/StylesHelper";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import { getParentWindow } from "helpers/WindowElement";
 import { t } from "lang/helpers";
@@ -234,9 +235,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   }
 
   initRootContainer(file: TFile) {
-    this.tableContainer = this.contentEl.createDiv(
-      StyleClasses.TABLE_CONTAINER
-    );
+    this.tableContainer = this.contentEl.createDiv(c("container"));
     this.tableContainer.setAttribute("id", file.path);
     this.rootContainer = createRoot(this.tableContainer);
   }

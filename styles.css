@@ -445,7 +445,6 @@ div.database-plugin__checkbox {
 .database-plugin__sticky-level-1 {
   position: -webkit-sticky;
   position: sticky;
-  height: 42.5px;
   left: 0;
   top: 0;
   z-index: 2;
@@ -455,7 +454,7 @@ div.database-plugin__checkbox {
   position: -webkit-sticky;
   position: sticky;
   left: 0;
-  top: 42.5px;
+  top: 0;
   z-index: 3;
 }
 
@@ -466,7 +465,6 @@ div.database-plugin__checkbox {
 
 .database-plugin__navbar {
   width: 100%;
-  height: 42.5px;
   position: sticky;
   position: -webkit-sticky;
   left: 0;
@@ -490,7 +488,16 @@ div.database-plugin__checkbox {
 
 .database-plugin__pagination {
   background-color: var(--background-primary);
-  display: "flex";
+  display: flex;
+  justify-content: flex-end;
+}
+
+.database-plugin__pagination-navbar {
+  background-color: var(--background-primary);
+  display: absolute;
+  margin-bottom: 1.6em;
+  bottom: 0;
+  right: 0;
 }
 
 .database-plugin__pagination-button {
@@ -611,12 +618,15 @@ div.database-plugin__checkbox {
 /**
 *  Database Styles
 */
-.dbfolder-table-container {
+.database-plugin__container {
   contain: content;
   height: 100%;
   width: 100%;
   position: relative;
-  display: flex;
+}
+
+.database-plugin__container tr input {
+  background: var(--background-modifier-box-shadow);
 }
 
 .database-plugin__scroll-horizontal {
@@ -627,10 +637,7 @@ div.database-plugin__checkbox {
 .database-plugin__scroll-container {
   will-change: transform;
   width: 100%;
-}
-
-.dbfolder-table-container tr input {
-  background: var(--background-modifier-box-shadow);
+  height: 92%;
 }
 
 .draggable {

@@ -11,9 +11,7 @@ export function Database(tableProps: TableDataType) {
   const tableStore = useTableStore(tableProps.view);
   return (
     <StrictMode>
-      <div className={c("scroll-container scroll-horizontal")}>
-        <Table {...tableProps} tableStore={tableStore} />
-      </div>
+      <Table {...tableProps} tableStore={tableStore} />
     </StrictMode>
   );
 }

@@ -226,7 +226,6 @@ export const UpdateRowOptions = Object.freeze({
 });
 
 export const StyleClasses = Object.freeze({
-  TABLE_CONTAINER: 'dbfolder-table-container',
   SETTINGS_MODAL: 'database-settings-modal',
   SETTINGS_MODAL_BODY: 'database-settings-body',
   COLUMN_MODAL: 'database-column-modal',
