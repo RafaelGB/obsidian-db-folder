@@ -29,4 +29,5 @@ export default {
   /** COMMAND OPTIONS */
   "active_go_next_page": "Go to next page",
   "active_go_previous_page": "Go to previous page",
+  "active_add_new_row": "Add new row",
 };

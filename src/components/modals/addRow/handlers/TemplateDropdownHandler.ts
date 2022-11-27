@@ -9,7 +9,7 @@ export class TemplateDropdownHandler extends AbstractHandlerClass<AddRowModalHan
         response: AddRowModalHandlerResponse
     ): AddRowModalHandlerResponse {
         const { containerEl, addRowModalManager } = response;
-        const { rowTemplate } = addRowModalManager.modal.state;
+        const { rowTemplate, configState } = addRowModalManager.modal.state;
 
         const avaliableOptions: Record<string, string> = {};
         rowTemplate.options.forEach((option) => {
@@ -18,6 +18,9 @@ export class TemplateDropdownHandler extends AbstractHandlerClass<AddRowModalHan
 
         const updateTemplatHandler = async (value: string): Promise<void> => {
             rowTemplate.update(value);
+            configState.actions.alterConfig({
+                current_row_template: value,
+            });
         }
 
         new Setting(containerEl)
@@ -31,6 +34,8 @@ export class TemplateDropdownHandler extends AbstractHandlerClass<AddRowModalHan
                 cb.setPlaceholder("Select a template...")
                     .setValue(rowTemplate.template)
                     .onChange(updateTemplatHandler);
+
+                cb.inputEl.style.width = "auto";
             });
 
         return this.goNext(response);

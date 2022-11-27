@@ -333,4 +333,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
       EMITTERS_SHORTCUT.GO_PREVIOUS_PAGE
     );
   }
+
+  addNewRow() {
+    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.ADD_NEW_ROW);
+  }
 }

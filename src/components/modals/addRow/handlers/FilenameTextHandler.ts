@@ -9,20 +9,19 @@ export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandler
         response: AddRowModalHandlerResponse
     ): AddRowModalHandlerResponse {
         const { containerEl, addRowModalManager } = response;
-        const { dataState, columnsState, ddbbConfig, table } = addRowModalManager.modal.state;
+        const { dataState, columnsState, configState, table } = addRowModalManager.modal.state;
         let newFilename = "";
         const addNewRowPromise = async () => {
-            dataState.actions
+            await dataState.actions
                 .addRow(
                     newFilename,
                     columnsState.info.getAllColumns(),
-                    ddbbConfig
-                )
-                .then(() => {
-                    newFilename = "";
-                    activeDocument.getElementById(this.textElId).innerHTML = "";
-                    table.setPageIndex(table.getPageCount() - 1);
-                });
+                    configState.info.getLocalSettings()
+                );
+            newFilename = "";
+            (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";
+            table.setPageIndex(table.getPageCount() - 1);
+
         }
 
         /**************

@@ -11,6 +11,7 @@ export default function AddRowAction(actionProps: TableActionProps) {
 
   const dataActions = tableState.data((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
+  const configActions = tableState.configState((state) => state.actions);
   const columnsInfo = tableState.columns((state) => state.info);
   const templateOptions = tableState.rowTemplate((state) => state.options);
   const templateRow = tableState.rowTemplate((state) => state.template);
@@ -19,6 +20,7 @@ export default function AddRowAction(actionProps: TableActionProps) {
    * Keyboard shortcuts
    */
   useEffect(() => {
+    // Open Add Row Modal
     const handleAddRow = (e?: MouseEvent) => {
       const props: AddRowModalProps = {
         dataState: {
@@ -32,12 +34,16 @@ export default function AddRowAction(actionProps: TableActionProps) {
           template: templateRow,
           update: templateUpdate,
         },
+        configState: {
+          info: configInfo,
+          actions: configActions,
+        },
         view,
-        ddbbConfig: configInfo.getLocalSettings(),
         table: table,
       };
       new AddRowModal(props).open();
     };
+    // Manage bar action for add row
     if (!view.actionButtons.addRow) {
       const exportElement = view.addAction(
         "plus",
@@ -46,6 +52,18 @@ export default function AddRowAction(actionProps: TableActionProps) {
       );
       view.actionButtons.addRow = exportElement;
     }
+    // Manage Keyboard shortcut for add row
+    const addRowShortcut = (e: string) => {
+      if (e === EMITTERS_SHORTCUT.ADD_NEW_ROW) {
+        handleAddRow();
+      }
+    };
+
+    view.emitter.on(EMITTERS_GROUPS.SHORTCUT, addRowShortcut);
+
+    return () => {
+      view.emitter.off(EMITTERS_GROUPS.SHORTCUT, addRowShortcut);
+    };
   }, []);
   return <></>;
 }

@@ -492,4 +492,5 @@ export const EMITTERS_HOTKEY = Object.freeze({
 export const EMITTERS_SHORTCUT = Object.freeze({
   GO_NEXT_PAGE: "pagination:next",
   GO_PREVIOUS_PAGE: "pagination:previous",
+  ADD_NEW_ROW: "table:add-new-row",
 });

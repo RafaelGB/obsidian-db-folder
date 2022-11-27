@@ -71,7 +71,7 @@ export type AddRowModalProps = {
     dataState: Pick<DataState, "actions">,
     columnsState: Pick<ColumnsState, "info">,
     rowTemplate: Pick<RowTemplateState, "options" | "template" | "update">,
-    ddbbConfig: LocalSettings,
+    configState: Pick<ConfigState, "info" | "actions">
     view: DatabaseView,
     table: Table<RowDataType>
 }

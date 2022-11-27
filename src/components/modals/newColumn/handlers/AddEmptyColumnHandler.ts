@@ -5,6 +5,7 @@ import { AbstractHandlerClass } from "patterns/AbstractHandler";
 
 export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
   settingTitle: string = "Add empty column";
+  textElId: string = "SettingsModalManager-addEmptyColumn-input";
   handle(
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
@@ -18,7 +19,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
         isEmpty ? undefined : newColumnName
       );
       new Notice(isEmpty ? "New column added" : `"${newColumnName}" added to the table`, 1500);
-      (activeDocument.getElementById("SettingsModalManager-addEmptyColumn-input") as HTMLInputElement).value = "";
+      (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";
     }
 
     /**************
@@ -28,7 +29,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
       .setName(this.settingTitle)
       .setDesc("Add a new column which do not exist yet in any row")
       .addText(text => {
-        text.inputEl.setAttribute("id", "SettingsModalManager-addEmptyColumn-input");
+        text.inputEl.setAttribute("id", this.textElId);
         text.inputEl.onkeydown = (e: KeyboardEvent) => {
           switch (e.key) {
             case "Enter":

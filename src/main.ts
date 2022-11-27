@@ -419,6 +419,7 @@ export default class DBFolderPlugin extends Plugin {
 			},
 		});
 
+		// Active View Go Previous Page
 		this.addCommand({
 			id: 'active-go-previous-page',
 			name: t('active_go_previous_page'),
@@ -431,6 +432,19 @@ export default class DBFolderPlugin extends Plugin {
 			},
 		});
 
+
+		// Active View Add New Row
+		this.addCommand({
+			id: 'active-add-new-row',
+			name: t('active_add_new_row'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.addNewRow();
+			},
+		});
 		// Ribbon Icon
 		if (this.settings.global_settings.enable_ribbon_icon) {
 			this.showRibbonIcon();
