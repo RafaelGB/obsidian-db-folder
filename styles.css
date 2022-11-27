@@ -494,7 +494,7 @@ div.database-plugin__checkbox {
 
 .database-plugin__pagination-navbar {
   background-color: var(--background-primary);
-  display: absolute;
+  position: absolute;
   margin-bottom: 1.6em;
   bottom: 0;
   right: 0;

@@ -31,11 +31,12 @@ const ExportCsvAction = (actionProps: TableActionProps) => {
   const handleCsvDownload = (e: MouseEvent) => {
     inputRef.current.click();
   };
+
   useEffect(() => {
     if (!view.actionButtons.export) {
       const exportElement = view.addAction(
         "download",
-        t("toolbar_menu_export_csv"),
+        t("toolbar_menu_add_row"),
         handleCsvDownload
       );
       view.actionButtons.export = exportElement;

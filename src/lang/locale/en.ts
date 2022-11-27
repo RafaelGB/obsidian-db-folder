@@ -18,6 +18,7 @@ export default {
   'toolbar_menu_export_csv': 'Export CSV',
   'toolbar_menu_import_csv': 'Import CSV',
   'toolbar_menu_search_bar': 'Global search',
+  'toolbar_menu_add_row': 'Add row',
   /** SOURCE OPTIONS */
   'current_folder': "Current folder",
   'current_folder_without_subfolders': "Current folder without subfolders",
