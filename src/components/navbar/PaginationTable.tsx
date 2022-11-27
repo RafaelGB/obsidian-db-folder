@@ -22,7 +22,7 @@ function PaginationTable(props: PaginationProps) {
   };
 
   return (
-    <>
+    <div key={`div-pagination`} className={`${c("pagination")}`}>
       {getVisiblePages(
         table.getState().pagination.pageIndex + 1,
         table.getPageCount()
@@ -43,7 +43,7 @@ function PaginationTable(props: PaginationProps) {
           </button>
         );
       })}
-    </>
+    </div>
   );
 }
 

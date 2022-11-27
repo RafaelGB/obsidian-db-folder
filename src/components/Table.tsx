@@ -46,7 +46,6 @@ import {
 import HeaderContextMenuWrapper from "components/contextMenu/HeaderContextMenuWrapper";
 import TableActions from "components/tableActions/TableActions";
 import PaginationTable from "./navbar/PaginationTable";
-import ButtonGroup from "@mui/material/ButtonGroup";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -78,10 +77,6 @@ export function Table(tableData: TableDataType) {
   );
   const sticky_first_column_config = tableStore.configState(
     (store) => store.ddbbConfig.sticky_first_column
-  );
-
-  const isNavbarEnabled = tableStore.configState(
-    (state) => state.ephimeral.enable_navbar
   );
 
   const globalConfig = tableStore.configState((store) => store.global);
@@ -316,19 +311,9 @@ export function Table(tableData: TableDataType) {
         {/* ENDS SCROLL PANE */}
       </div>
       {/* INIT PAGINATION */}
-      <div
-        key={`div-pagination`}
-        className={`${c(isNavbarEnabled ? "pagination-navbar" : "pagination")}`}
-      >
-        <ButtonGroup
-          variant="outlined"
-          size="small"
-          key={`ButtonGroup-DataviewFilters`}
-        >
-          <PaginationTable table={table} />
-        </ButtonGroup>
-        {/* ENDS PAGINATION */}
-      </div>
+      <PaginationTable table={table} />
+      {/* ENDS PAGINATION */}
+
       {/* <AddRow table={table} /> */}
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (

@@ -36,7 +36,6 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
   useEffect(() => {
     const toggleFilterShortcutHandler = (commandId: string) => {
       if (commandId === EMITTERS_SHORTCUT.TOGGLE_FILTERS) {
-        console.log("Toggle filters");
         buttonRef.current?.click();
       }
     };

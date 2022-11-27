@@ -487,19 +487,19 @@ div.database-plugin__checkbox {
 .database-plugin__pagination {
   background-color: var(--background-primary);
   display: flex;
-  justify-content: flex-end;
-}
-
-.database-plugin__pagination-navbar {
-  background-color: var(--background-primary);
   position: absolute;
-  margin-bottom: 1.6em;
-  bottom: 0;
-  right: 0;
+  bottom: 1.6em;
+  width: 100%;
+  height: 40px;
+  justify-content: flex-end;
 }
 
 .database-plugin__pagination-button {
   background-color: var(--text-accent);
+  max-width: 30px;
+  max-height: 30px;
+  min-width: 40px;
+  min-height: 40px;
 }
 
 .database-plugin__pagination-button:hover {
