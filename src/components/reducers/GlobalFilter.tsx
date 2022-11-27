@@ -1,10 +1,6 @@
 import React from "react";
 import { GlobalFilterProps } from "cdm/MenuBarModel";
-import {
-  DebouncedInputWrapper,
-  Search,
-  SearchIconWrapper,
-} from "components/styles/NavBarStyles";
+import { DebouncedInputWrapper, Search } from "components/styles/NavBarStyles";
 import { GlobalDebouncedInput } from "components/behavior/DebouncedInputFn";
 
 /**
@@ -14,11 +10,10 @@ import { GlobalDebouncedInput } from "components/behavior/DebouncedInputFn";
  * @returns
  */
 export default function GlobalFilter(globalFilterProps: GlobalFilterProps) {
-  const { hits, globalFilter, setGlobalFilter } = globalFilterProps;
+  const { globalFilter, setGlobalFilter } = globalFilterProps;
 
   return (
     <Search>
-      <SearchIconWrapper>{hits}</SearchIconWrapper>
       <DebouncedInputWrapper>
         <GlobalDebouncedInput
           value={globalFilter ?? ""}

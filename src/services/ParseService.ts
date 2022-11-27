@@ -246,7 +246,7 @@ class Parse {
         let auxMarkdown = '';
         switch (wrapped.type) {
             case 'link':
-                auxMarkdown = `${wrapped.value.fileName()}|${wrapped.value.path}`;
+                auxMarkdown = wrapped.value.fileName();
                 break;
             case 'object':
             case 'date':

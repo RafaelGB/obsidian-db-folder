@@ -1,5 +1,5 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
+import { ColumnsState, ConfigState, DataState, RowTemplateState } from "cdm/TableStateInterface";
 import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
 import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
@@ -7,6 +7,7 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 import { DatabaseView } from "DatabaseView";
 import { FiltersModalManager } from "components/modals/filters/FiltersModal";
 import { Table } from "@tanstack/react-table";
+import { AddRowModalManager } from "components/modals/addRow/AddRowModal";
 
 /**
  * Base class for all modal responses.
@@ -14,6 +15,10 @@ import { Table } from "@tanstack/react-table";
 type BaseModalHandlerResponse = {
     containerEl: HTMLElement;
 };
+
+/***************************************
+ *      COLUMN SETTINGS MODAL
+ ***************************************/
 
 /**
  * Response for the ColumnSettingsModal.
@@ -32,11 +37,10 @@ export type ColumnSettingsModalProps = {
     headerMenuProps: HeaderMenuProps
 }
 
-export type AddColumnModalProps = {
-    columnsState: Partial<ColumnsState>;
-    ddbbConfig: LocalSettings,
-    filters: FilterSettings
-}
+/***************************************
+ *         ADD COLUMN MODAL
+ ***************************************/
+
 /**
  * Response for the AddColumnModal.
  * @extends BaseModalHandlerResponse
@@ -44,6 +48,37 @@ export type AddColumnModalProps = {
 export type AddColumnModalHandlerResponse = {
     addColumnModalManager: AddColumnModalManager,
 } & BaseModalHandlerResponse;
+
+export type AddColumnModalProps = {
+    columnsState: Partial<ColumnsState>;
+    ddbbConfig: LocalSettings,
+    filters: FilterSettings
+}
+
+/***************************************
+ *         ADD ROW MODAL
+ ***************************************/
+
+/**
+ * Response for the AddRowModal.
+ * @extends BaseModalHandlerResponse
+ */
+export type AddRowModalHandlerResponse = {
+    addRowModalManager: AddRowModalManager,
+} & BaseModalHandlerResponse;
+
+export type AddRowModalProps = {
+    dataState: Pick<DataState, "actions">,
+    columnsState: Pick<ColumnsState, "info">,
+    rowTemplate: Pick<RowTemplateState, "options" | "template" | "update">,
+    configState: Pick<ConfigState, "info" | "actions">
+    view: DatabaseView,
+    table: Table<RowDataType>
+}
+
+/***************************************
+ *         FILTERS  MODAL
+ ***************************************/
 
 /** Filters Modal */
 export type FiltersModalProps = {

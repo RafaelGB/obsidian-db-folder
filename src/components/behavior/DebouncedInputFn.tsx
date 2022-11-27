@@ -32,6 +32,7 @@ export function GlobalDebouncedInput({
       onChange={(e) => setValue(e.target.value)}
       placeholder={placeholder}
       style={{}}
+      autoFocus={true}
     />
   );
 }

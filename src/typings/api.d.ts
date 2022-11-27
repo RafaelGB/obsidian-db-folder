@@ -6,9 +6,7 @@ import {
     FolderModel
 } from 'cdm/FolderModel';
 
-import {
-    DatabaseSettings
-} from 'Settings';
+import { DatabaseSettings } from 'cdm/SettingsModel';
 
 export interface DbfAPIInterface {
     app: App;

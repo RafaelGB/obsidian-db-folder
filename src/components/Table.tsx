@@ -23,6 +23,7 @@ import {
   DatabaseLimits,
   MetadataColumns,
   ResizeConfiguration,
+  StyleVariables,
 } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/DefaultCell";
@@ -42,7 +43,9 @@ import {
   obsidianMdLinksOnClickCallback,
   obsidianMdLinksOnMouseOverMenuCallback,
 } from "components/obsidianArq/markdownLinks";
-import HeaderContextMenuWrapper from "./contextMenu/HeaderContextMenuWrapper";
+import HeaderContextMenuWrapper from "components/contextMenu/HeaderContextMenuWrapper";
+import TableActions from "components/tableActions/TableActions";
+import PaginationTable from "./navbar/PaginationTable";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -83,6 +86,8 @@ export function Table(tableData: TableDataType) {
   const filePath = stateManager.file.path;
 
   /** Table services */
+  // Actions
+
   // Sorting
   const [sortBy, sortActions] = tableStore.sorting((store) => [
     store.sortBy,
@@ -202,102 +207,114 @@ export function Table(tableData: TableDataType) {
         table={table}
         globalFilterRows={{
           globalFilter: globalFilter,
-          hits: table.getFilteredRowModel().rows.length,
           setGlobalFilter: setGlobalFilter,
         }}
       />
-      {/* INIT TABLE */}
-      <div
-        key={`div-table`}
-        className={`${c(
-          "table noselect cell_size_" +
-            cell_size_config +
-            (sticky_first_column_config ? " sticky_first_column" : "")
-        )}`}
-        /** Obsidian event to show page preview */
-        onMouseOver={obsidianMdLinksOnMouseOverMenuCallback(view)}
-        /** Obsidian to open an internal link in a new pane */
-        onClick={obsidianMdLinksOnClickCallback(stateManager, view, filePath)}
-        style={{
-          width: table.getCenterTotalSize(),
-        }}
-      >
+      {/* INIT SCROLL PANE */}
+      <div className={c("scroll-container scroll-horizontal")}>
+        {/* INIT TABLE */}
         <div
-          key={`div-table-header-group-sticky`}
-          className={c("table-header-group sticky-level-2")}
-        >
-          {/* INIT HEADERS */}
-          {table
-            .getHeaderGroups()
-            .map(
-              (
-                headerGroup: HeaderGroup<RowDataType>,
-                headerGroupIndex: number
-              ) => {
-                //headerGroup.headers.find((h) => h.id === "expander");
-                const headerContext = headerGroup.headers.find(
-                  (h) => h.id === MetadataColumns.ROW_CONTEXT_MENU
-                );
-                const addColumnHeader = headerGroup.headers.find(
-                  (h) => h.id === MetadataColumns.ADD_COLUMN
-                );
-                return (
-                  <div
-                    key={`${headerGroup.id}-${headerGroupIndex}`}
-                    className={`${c("tr header-group")}`}
-                  >
-                    {/** HEADER CONTEXT */}
-                    <HeaderContextMenuWrapper
-                      header={headerContext}
-                      style={{
-                        width: "30px",
-                      }}
-                    />
-                    {/** LIST OF COLUMNS */}
-                    {headerGroup.headers
-                      .filter(
-                        (h) =>
-                          ![headerContext.id, addColumnHeader.id].includes(h.id)
-                      )
-                      .map(
-                        (
-                          header: Header<RowDataType, TableColumn>,
-                          headerIndex: number
-                        ) => (
-                          <TableHeader
-                            key={`${header.id}-${headerIndex}`}
-                            table={table}
-                            header={header}
-                            reorderColumn={reorderColumn}
-                            headerIndex={headerIndex + 1}
-                          />
-                        )
-                      )}
-                    {/** ADD COLUMN HEADER*/}
-                    <HeaderContextMenuWrapper header={addColumnHeader} />
-                  </div>
-                );
-              }
-            )}
-          {/* ENDS HEADERS */}
-        </div>
-        {/* INIT BODY */}
-        <div
-          key={`div-tbody`}
+          key={`div-table`}
+          className={`${c(
+            "table noselect cell_size_" +
+              cell_size_config +
+              (sticky_first_column_config ? " sticky_first_column" : "")
+          )}`}
+          /** Obsidian event to show page preview */
+          onMouseOver={obsidianMdLinksOnMouseOverMenuCallback(view)}
+          /** Obsidian to open an internal link in a new pane */
+          onClick={obsidianMdLinksOnClickCallback(stateManager, view, filePath)}
           style={{
-            display: "table-row-group",
+            width: table.getCenterTotalSize(),
           }}
         >
-          {table.getRowModel().rows.map((row: Row<RowDataType>) => (
-            <TableRow key={`table-cell-${row.index}`} row={row} table={table} />
-          ))}
-          {/* ENDS BODY */}
+          <div
+            key={`div-table-header-group-sticky`}
+            className={c(`table-header-group ${"sticky-top"}`)}
+          >
+            {/* INIT HEADERS */}
+            {table
+              .getHeaderGroups()
+              .map(
+                (
+                  headerGroup: HeaderGroup<RowDataType>,
+                  headerGroupIndex: number
+                ) => {
+                  //headerGroup.headers.find((h) => h.id === "expander");
+                  const headerContext = headerGroup.headers.find(
+                    (h) => h.id === MetadataColumns.ROW_CONTEXT_MENU
+                  );
+                  const addColumnHeader = headerGroup.headers.find(
+                    (h) => h.id === MetadataColumns.ADD_COLUMN
+                  );
+                  return (
+                    <div
+                      key={`${headerGroup.id}-${headerGroupIndex}`}
+                      className={`${c("tr header-group")}`}
+                    >
+                      {/** HEADER CONTEXT */}
+                      <HeaderContextMenuWrapper
+                        header={headerContext}
+                        style={{
+                          width: "30px",
+                        }}
+                      />
+                      {/** LIST OF COLUMNS */}
+                      {headerGroup.headers
+                        .filter(
+                          (h) =>
+                            ![headerContext.id, addColumnHeader.id].includes(
+                              h.id
+                            )
+                        )
+                        .map(
+                          (
+                            header: Header<RowDataType, TableColumn>,
+                            headerIndex: number
+                          ) => (
+                            <TableHeader
+                              key={`${header.id}-${headerIndex}`}
+                              table={table}
+                              header={header}
+                              reorderColumn={reorderColumn}
+                              headerIndex={headerIndex + 1}
+                            />
+                          )
+                        )}
+                      {/** ADD COLUMN HEADER*/}
+                      <HeaderContextMenuWrapper header={addColumnHeader} />
+                    </div>
+                  );
+                }
+              )}
+            {/* ENDS HEADERS */}
+          </div>
+          {/* INIT BODY */}
+
+          <div
+            key={`div-tbody`}
+            style={{
+              display: "table-row-group",
+            }}
+          >
+            {table.getRowModel().rows.map((row: Row<RowDataType>) => (
+              <TableRow
+                key={`table-cell-${row.index}`}
+                row={row}
+                table={table}
+              />
+            ))}
+            {/* ENDS BODY */}
+          </div>
+          {/* ENDS TABLE */}
         </div>
-        {/* ENDS TABLE */}
+        {/* ENDS SCROLL PANE */}
       </div>
+      {/* INIT PAGINATION */}
+      <PaginationTable table={table} />
+      {/* ENDS PAGINATION */}
 
-      <AddRow table={table} />
-
+      {/* <AddRow table={table} /> */}
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
         <pre>
@@ -305,6 +322,9 @@ export function Table(tableData: TableDataType) {
         </pre>
       )}
       {/* ENDS DEBUG INFO */}
+      {/* INIT TABLE ACTIONS */}
+      <TableActions table={table} />
+      {/* ENDS TABLE ACTIONS */}
     </>
   );
 }

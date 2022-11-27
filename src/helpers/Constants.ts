@@ -74,6 +74,12 @@ export const MetadataLabels = Object.freeze({
   INLINKS: 'Inlinks',
 });
 
+export const PaginationRenderOptions = Object.freeze({
+  INITIAL: 'initial',
+  FINAL: 'final',
+  BASIC: 'basic',
+});
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
@@ -226,11 +232,12 @@ export const UpdateRowOptions = Object.freeze({
 });
 
 export const StyleClasses = Object.freeze({
-  TABLE_CONTAINER: 'dbfolder-table-container',
   SETTINGS_MODAL: 'database-settings-modal',
   SETTINGS_MODAL_BODY: 'database-settings-body',
   COLUMN_MODAL: 'database-column-modal',
   COLUMN_MODAL_BODY: 'database-column-body',
+  ADD_ROW_MODAL: 'add-row-modal',
+  ADD_ROW_MODAL_BODY: 'add-row-body',
   ADD_COLUMN_MODAL: 'database-add-column-modal',
   ADD_COLUMN_MODAL_BODY: 'database-add-column-body',
   FILTERS_MODAL: 'database-filters-modal',
@@ -279,6 +286,7 @@ export const ResizeConfiguration = Object.freeze({
 
 export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
   enable_columns_filter: false,
+  enable_navbar: false,
 });
 
 /******************************************************************************
@@ -467,4 +475,24 @@ export const ROLLUP_ACTIONS = Object.freeze({
   PERCENT_FILLED: 'Percent Filled',
   // Key is not needed for the action to be executed
   ...ROLLUP_EMBED_ACTIONS
+});
+
+/******************************************************************************
+ *                                EMITTERS
+ ******************************************************************************/
+export const EMITTERS_GROUPS = Object.freeze({
+  HOTKEY: 'hotkey',
+  SHORTCUT: 'shortcut',
+});
+
+export const EMITTERS_HOTKEY = Object.freeze({
+  OPEN_SEARCH: "editor:open-search"
+});
+
+export const EMITTERS_SHORTCUT = Object.freeze({
+  GO_NEXT_PAGE: "pagination:next",
+  GO_PREVIOUS_PAGE: "pagination:previous",
+  ADD_NEW_ROW: "table:add-new-row",
+  TOGGLE_FILTERS: "table:toggle-filters",
+  OPEN_FILTERS: "table:open-filters",
 });

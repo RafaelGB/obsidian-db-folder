@@ -16,6 +16,7 @@ const projectsMetadataColumns = ["File", "name", "path"];
 class ProjectAPI extends ProjectView {
     private plugin: DBFolderPlugin;
     private view: DatabaseView;
+    private enableAutoReload: boolean;
 
     constructor(plugin: DBFolderPlugin) {
         super();
@@ -36,6 +37,11 @@ class ProjectAPI extends ProjectView {
     }
 
     async onData({ data }: DataQueryResult) {
+        // Check if the there is a data view
+        if (!this.view || !this.enableAutoReload) {
+            return;
+        }
+
         const { fields } = data;
         const currentColumnsLength = Object
             .values(this.view.diskConfig.yaml.columns)
@@ -99,11 +105,16 @@ class ProjectAPI extends ProjectView {
         this.view = new DatabaseView(leaf, this.plugin, file);
         this.view.initRootContainer(file);
         await this.view.initDatabase();
-        LOGGER.debug("Database initialized successfully from project view");
         this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
+        this.view.onload();
+        this.enableAutoReload = true;
+        LOGGER.debug("Database initialized successfully from project view");
     }
 
     async onClose() {
+        this.view.destroy();
+        this.view = null;
+        this.enableAutoReload = false;
         LOGGER.debug("Closing project view ", this.getDisplayName());
     }
 

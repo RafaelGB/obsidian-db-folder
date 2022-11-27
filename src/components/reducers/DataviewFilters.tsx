@@ -1,10 +1,11 @@
-import { Button } from "@mui/material";
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import { FiltersModal } from "components/modals/filters/FiltersModal";
-import React from "react";
+import { EMITTERS_GROUPS, EMITTERS_SHORTCUT } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
+import React, { useEffect } from "react";
 
 export default function EditFiltersButton(props: DataviewFiltersProps) {
   const { table } = props;
@@ -16,7 +17,7 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
   ]);
   const columns = tableState.columns((state) => state.columns);
 
-  const openFiltersGroupHandler = () => {
+  const openFiltersGroupHandler = async () => {
     new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
       // Empty conditions to refresh the dataview
       const emptyFilterConditions = { ...filters };
@@ -39,12 +40,27 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
     });
   };
 
+  /**
+   * Keyboard shortcut
+   */
+  useEffect(() => {
+    const openFilterShortcutHandler = (commandId: string) => {
+      if (commandId === EMITTERS_SHORTCUT.OPEN_FILTERS) {
+        openFiltersGroupHandler();
+      }
+    };
+    view.emitter.on(EMITTERS_GROUPS.SHORTCUT, openFilterShortcutHandler);
+    return () => {
+      view.emitter.off(EMITTERS_GROUPS.SHORTCUT, openFilterShortcutHandler);
+    };
+  }, []);
+
   return (
-    <Button
-      size="small"
+    <button
+      type="button"
       onClick={openFiltersGroupHandler}
       key={`Button-FilterConditions-DataviewFilters`}
-      style={{ minWidth: "0px", padding: "2px", borderRadius: "0px" }}
+      className={c("nabvar-button")}
     >
       <span
         className="svg-icon svg-gray"
@@ -52,6 +68,6 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
       >
         <MenuDownIcon />
       </span>
-    </Button>
+    </button>
   );
 }

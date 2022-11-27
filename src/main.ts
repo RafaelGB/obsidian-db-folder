@@ -28,7 +28,7 @@ import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
-import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, YAML_INDENT } from 'helpers/Constants';
+import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, EMITTERS_GROUPS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
 import { unmountComponentAtNode } from 'react-dom';
 import { isDatabaseNote } from 'helpers/VaultManagement';
@@ -399,12 +399,92 @@ export default class DBFolderPlugin extends Plugin {
 		);
 	}
 	registerCommands() {
+		// Creator Helper Command
 		this.addCommand({
 			id: 'create-new-database-folder',
 			name: t("ribbon_icon_title"),
 			callback: () => new DatabaseHelperCreationModal(this.settings.local_settings).open(),
 		});
 
+		// Active View Go Next Page
+		this.addCommand({
+			id: 'active-database-folder-go-next-page',
+			name: t('active_go_next_page'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.goNextPage();
+			},
+		});
+
+		// Active View Go Previous Page
+		this.addCommand({
+			id: 'active-database-folder-go-previous-page',
+			name: t('active_go_previous_page'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.goPreviousPage();
+			},
+		});
+
+		// Active View Add New Row Modal
+		this.addCommand({
+			id: 'active-database-folder-add-new-row',
+			name: t('active_add_new_row'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.addNewRow();
+			},
+		});
+
+		// Active View Open Settings
+		this.addCommand({
+			id: 'activ-database-folder-open-settings',
+			name: t('active_open_settings'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.settingsAction();
+			},
+		});
+
+		// Active View Enable/Disable Filters
+		this.addCommand({
+			id: 'active-database-folder-toggle-filters',
+			name: t('active_toggle_filters'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.toggleFilters();
+			},
+		});
+
+		// Active View Open Filters Modal
+		this.addCommand({
+			id: 'active-database-folder-open-filters',
+			name: t('active_open_filters'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.openFilters();
+			},
+		});
+
+		// Ribbon Icon
 		if (this.settings.global_settings.enable_ribbon_icon) {
 			this.showRibbonIcon();
 		}
@@ -435,6 +515,26 @@ export default class DBFolderPlugin extends Plugin {
 	 */
 	registerMonkeyPatches() {
 		const self = this;
+
+		// Monkey patch to manage hotkey emitters
+		app.workspace.onLayoutReady(() => {
+			this.register(
+				around((app as any).commands, {
+
+					executeCommand(next) {
+						return function (command: any) {
+							const view = app.workspace.getActiveViewOfType(DatabaseView);
+
+							if (view && command?.id) {
+								view.emitter.emit(EMITTERS_GROUPS.HOTKEY, command.id);
+							}
+
+							return next.call(this, command);
+						};
+					},
+				})
+			);
+		});
 
 		// Monkey patch WorkspaceLeaf to open Databases with DatabaseView by default
 		this.register(
