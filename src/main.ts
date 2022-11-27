@@ -408,7 +408,7 @@ export default class DBFolderPlugin extends Plugin {
 
 		// Active View Go Next Page
 		this.addCommand({
-			id: 'active-go-next-page',
+			id: 'active-database-folder-go-next-page',
 			name: t('active_go_next_page'),
 			checkCallback: (checking) => {
 				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
@@ -421,7 +421,7 @@ export default class DBFolderPlugin extends Plugin {
 
 		// Active View Go Previous Page
 		this.addCommand({
-			id: 'active-go-previous-page',
+			id: 'active-database-folder-go-previous-page',
 			name: t('active_go_previous_page'),
 			checkCallback: (checking) => {
 				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
@@ -432,10 +432,9 @@ export default class DBFolderPlugin extends Plugin {
 			},
 		});
 
-
-		// Active View Add New Row
+		// Active View Add New Row Modal
 		this.addCommand({
-			id: 'active-add-new-row',
+			id: 'active-database-folder-add-new-row',
 			name: t('active_add_new_row'),
 			checkCallback: (checking) => {
 				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
@@ -445,6 +444,46 @@ export default class DBFolderPlugin extends Plugin {
 				activeView.addNewRow();
 			},
 		});
+
+		// Active View Open Settings
+		this.addCommand({
+			id: 'activ-database-folder-open-settings',
+			name: t('active_open_settings'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.settingsAction();
+			},
+		});
+
+		// Active View Enable/Disable Filters
+		this.addCommand({
+			id: 'active-database-folder-toggle-filters',
+			name: t('active_toggle_filters'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.toggleFilters();
+			},
+		});
+
+		// Active View Open Filters Modal
+		this.addCommand({
+			id: 'active-database-folder-open-filters',
+			name: t('active_open_filters'),
+			checkCallback: (checking) => {
+				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+
+				if (!activeView) return false;
+				if (checking) return true;
+				activeView.openFilters();
+			},
+		});
+
 		// Ribbon Icon
 		if (this.settings.global_settings.enable_ribbon_icon) {
 			this.showRibbonIcon();

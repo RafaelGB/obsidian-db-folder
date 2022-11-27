@@ -30,4 +30,7 @@ export default {
   "active_go_next_page": "Go to next page",
   "active_go_previous_page": "Go to previous page",
   "active_add_new_row": "Add new row",
+  "active_open_settings": "Open Database settings",
+  "active_toggle_filters": "Toggle filters",
+  "active_open_filters": "Open filters",
 };

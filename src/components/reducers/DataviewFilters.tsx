@@ -3,8 +3,9 @@ import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import { FiltersModal } from "components/modals/filters/FiltersModal";
+import { EMITTERS_GROUPS, EMITTERS_SHORTCUT } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function EditFiltersButton(props: DataviewFiltersProps) {
   const { table } = props;
@@ -16,7 +17,7 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
   ]);
   const columns = tableState.columns((state) => state.columns);
 
-  const openFiltersGroupHandler = () => {
+  const openFiltersGroupHandler = async () => {
     new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
       // Empty conditions to refresh the dataview
       const emptyFilterConditions = { ...filters };
@@ -38,6 +39,22 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
       }).open();
     });
   };
+
+  /**
+   * Keyboard shortcut
+   */
+  useEffect(() => {
+    const openFilterShortcutHandler = (commandId: string) => {
+      if (commandId === EMITTERS_SHORTCUT.OPEN_FILTERS) {
+        openFiltersGroupHandler();
+      }
+    };
+    view.emitter.on(EMITTERS_GROUPS.SHORTCUT, openFilterShortcutHandler);
+    return () => {
+      view.emitter.off(EMITTERS_GROUPS.SHORTCUT, openFilterShortcutHandler);
+    };
+  }, []);
+
   return (
     <button
       type="button"

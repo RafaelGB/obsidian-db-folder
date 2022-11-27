@@ -300,7 +300,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
    *
    * @param evt
    */
-  settingsAction(evt: MouseEvent): void {
+  settingsAction(evt?: MouseEvent): void {
     new SettingsModal(
       this,
       {
@@ -336,5 +336,16 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
   addNewRow() {
     this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.ADD_NEW_ROW);
+  }
+
+  toggleFilters() {
+    this.emitter.emit(
+      EMITTERS_GROUPS.SHORTCUT,
+      EMITTERS_SHORTCUT.TOGGLE_FILTERS
+    );
+  }
+
+  openFilters() {
+    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
   }
 }
