@@ -4,7 +4,7 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
 import { AddRowModalHandlerResponse, AddRowModalProps } from "cdm/ModalsModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
-import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
+import { ConfigState, DataState } from "cdm/TableStateInterface";
 import { c } from "helpers/StylesHelper";
 import { t } from "lang/helpers";
 import { add_row_section } from "components/modals/addRow/addRowSections";
@@ -13,17 +13,15 @@ export class AddRowModal extends Modal {
     view: DatabaseView;
     headerMenuProps: HeaderMenuProps;
     addRowModalManager: AddRowModalManager;
+    state: AddRowModalProps;
     dataState: Partial<DataState>;
     configState: Partial<ConfigState>;
-    columnsState: Partial<ColumnsState>;
     enableReset: boolean = false;
     constructor(
         props: AddRowModalProps
     ) {
-        const { view, dataState } = props;
         super(app);
-        this.view = view;
-        this.dataState = dataState;
+        this.state = props;
         this.addRowModalManager = new AddRowModalManager(this);
     }
 

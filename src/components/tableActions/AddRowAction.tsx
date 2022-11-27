@@ -11,6 +11,10 @@ export default function AddRowAction(actionProps: TableActionProps) {
 
   const dataActions = tableState.data((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
+  const columnsInfo = tableState.columns((state) => state.info);
+  const templateOptions = tableState.rowTemplate((state) => state.options);
+  const templateRow = tableState.rowTemplate((state) => state.template);
+  const templateUpdate = tableState.rowTemplate((state) => state.update);
   /**
    * Keyboard shortcuts
    */
@@ -20,8 +24,17 @@ export default function AddRowAction(actionProps: TableActionProps) {
         dataState: {
           actions: dataActions,
         },
+        columnsState: {
+          info: columnsInfo,
+        },
+        rowTemplate: {
+          options: templateOptions,
+          template: templateRow,
+          update: templateUpdate,
+        },
         view,
         ddbbConfig: configInfo.getLocalSettings(),
+        table: table,
       };
       new AddRowModal(props).open();
     };

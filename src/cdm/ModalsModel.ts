@@ -1,5 +1,5 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
+import { ColumnsState, ConfigState, DataState, RowTemplateState } from "cdm/TableStateInterface";
 import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
 import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
@@ -69,8 +69,11 @@ export type AddRowModalHandlerResponse = {
 
 export type AddRowModalProps = {
     dataState: Pick<DataState, "actions">,
+    columnsState: Pick<ColumnsState, "info">,
+    rowTemplate: Pick<RowTemplateState, "options" | "template" | "update">,
     ddbbConfig: LocalSettings,
     view: DatabaseView,
+    table: Table<RowDataType>
 }
 
 /***************************************

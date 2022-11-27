@@ -1,16 +1,28 @@
 import { AddRowModalHandlerResponse } from "cdm/ModalsModel";
-import { Notice, Setting } from "obsidian";
+import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 
 export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandlerResponse> {
-    settingTitle: string = "Add Row";
+    settingTitle: string = "Filename";
+    textElId: string = "AddRowModalManager-addRow-input";
     handle(
         response: AddRowModalHandlerResponse
     ): AddRowModalHandlerResponse {
         const { containerEl, addRowModalManager } = response;
-
-        let newColumnName = "";
-        const addNewROWPromise = async () => {
+        const { dataState, columnsState, ddbbConfig, table } = addRowModalManager.modal.state;
+        let newFilename = "";
+        const addNewRowPromise = async () => {
+            dataState.actions
+                .addRow(
+                    newFilename,
+                    columnsState.info.getAllColumns(),
+                    ddbbConfig
+                )
+                .then(() => {
+                    newFilename = "";
+                    activeDocument.getElementById(this.textElId).innerHTML = "";
+                    table.setPageIndex(table.getPageCount() - 1);
+                });
         }
 
         /**************
@@ -18,27 +30,27 @@ export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandler
          **************/
         new Setting(containerEl)
             .setName(this.settingTitle)
-            .setDesc("Add a new file associated with a row")
+            .setDesc("Filename associated with the new row")
             .addText(text => {
-                text.inputEl.setAttribute("id", "AddRowModalManager-addRow-input");
+                text.inputEl.setAttribute("id", this.textElId);
                 text.inputEl.onkeydown = (e: KeyboardEvent) => {
                     switch (e.key) {
                         case "Enter":
-                            addNewROWPromise();
+                            addNewRowPromise();
                             break;
                     }
                 };
                 text.setPlaceholder("Enter filename")
-                    .setValue(newColumnName)
+                    .setValue(newFilename)
                     .onChange(async (value: string): Promise<void> => {
-                        newColumnName = value;
+                        newFilename = value;
                     });
             })
             .addButton((button) => {
                 button
                     .setIcon("create-new")
                     .setTooltip("Add new row")
-                    .onClick(addNewROWPromise);
+                    .onClick(addNewRowPromise);
             });
         return this.goNext(response);
     }
