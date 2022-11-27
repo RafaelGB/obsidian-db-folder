@@ -46,13 +46,7 @@ export function NavBar(navBarProps: NavBarProps) {
           boxShadow: "none",
         }}
       >
-        <Toolbar
-          style={{
-            minHeight: "2.65rem",
-            padding: 0,
-            paddingLeft: "2px",
-          }}
-        >
+        <Toolbar className={`${c("toolbar-navbar")}`}>
           <Paper
             sx={{
               p: "2px 4px",

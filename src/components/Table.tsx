@@ -235,11 +235,7 @@ export function Table(tableData: TableDataType) {
         >
           <div
             key={`div-table-header-group-sticky`}
-            className={c(
-              `table-header-group ${
-                isNavbarEnabled ? "sticky-level-2" : "sticky-level-1"
-              }`
-            )}
+            className={c(`table-header-group ${"sticky-top"}`)}
           >
             {/* INIT HEADERS */}
             {table

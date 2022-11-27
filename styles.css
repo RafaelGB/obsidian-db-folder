@@ -442,20 +442,12 @@ div.database-plugin__checkbox {
   background-color: var(--background-secondary);
 }
 
-.database-plugin__sticky-level-1 {
+.database-plugin__sticky-top {
   position: -webkit-sticky;
   position: sticky;
   left: 0;
   top: 0;
   z-index: 2;
-}
-
-.database-plugin__sticky-level-2 {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  top: 0;
-  z-index: 3;
 }
 
 .database-plugin__table-header-group {
@@ -470,6 +462,12 @@ div.database-plugin__checkbox {
   left: 0;
   top: 0;
   z-index: 2;
+}
+.database-plugin__toolbar-navbar {
+  min-height: 40px !important;
+  padding: 0;
+  padding-left: 2px !important;
+  max-height: 40px !important;
 }
 
 .database-plugin__nabvar-button {
