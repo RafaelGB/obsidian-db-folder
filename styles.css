@@ -494,21 +494,24 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__pagination {
-  background-color: var(--background-primary);
-  display: flex;
-  position: absolute;
-  bottom: 1.3em;
   width: 100%;
   height: 40px;
   justify-content: flex-end;
+  list-style: none;
+  bottom: 1em;
+  position: sticky;
+  margin: 0;
+  padding: 0 10px 0 0;
+  display: flex;
+  column-gap: 2px;
 }
 
 .database-plugin__pagination-button {
   background-color: var(--text-accent);
   max-width: 30px;
   max-height: 30px;
-  min-width: 35px;
-  min-height: 35px;
+  min-width: 32px;
+  min-height: 32px;
 }
 
 .database-plugin__pagination-button:hover {
@@ -652,6 +655,14 @@ div.database-plugin__checkbox {
   will-change: transform;
   width: 100%;
   height: 92%;
+}
+
+@media only screen and (max-width: 768px) {
+  .database-plugin__scroll-container {
+    will-change: transform;
+    width: 100%;
+    height: 85%;
+  }
 }
 
 .draggable {
