@@ -3,8 +3,10 @@ import { RowDataType } from "cdm/FolderModel";
 import { showFileMenu } from "components/obsidianArq/commands";
 import Relationship from "components/RelationShip";
 import { StyleVariables } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
 import React from "react";
+import KeyboardControlKeyIcon from "@mui/icons-material/KeyboardControlKey";
 
 export default function CellContextMenu(
   context: CellContext<RowDataType, Literal>
@@ -12,20 +14,13 @@ export default function CellContextMenu(
   const { row, table } = context;
   const { tableState } = table.options.meta;
   const rowActions = tableState.data((state) => state.actions);
-  const handleDeleteRow = () => {
-    rowActions.removeRow(row.original);
-  };
-
-  const handleRenameRow = () => {
-    rowActions.renameFile(row.index);
-  };
 
   /**
    * Handle left click
    * @param event
    */
   const handleClick = async () => {
-    await app.workspace.getLeaf().openFile(row.original.__note__.getFile());
+    row.toggleExpanded(!row.getIsExpanded());
   };
 
   /**
@@ -36,8 +31,8 @@ export default function CellContextMenu(
     showFileMenu(
       row.original.__note__.getFile(),
       event.nativeEvent,
-      handleDeleteRow,
-      handleRenameRow
+      row,
+      rowActions
     );
   };
 
@@ -49,21 +44,20 @@ export default function CellContextMenu(
         onClick={handleClick}
         onContextMenu={handlerContextMenu}
         key={`row-context-button-${index}`}
-        style={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-          height: "100%",
-          width: "100%",
-          margin: "0",
-        }}
+        className={c(`cell-context-button`)}
       >
-        {
+        {row.getIsExpanded() ? (
+          <KeyboardControlKeyIcon
+            sx={{
+              fontSize: "1.5rem",
+            }}
+          />
+        ) : (
           <Relationship
             value={index}
             backgroundColor={StyleVariables.BACKGROUND_PRIMARY}
           />
-        }
+        )}
       </div>
     </>
   );

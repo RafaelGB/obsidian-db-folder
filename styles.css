@@ -370,6 +370,15 @@ div.database-plugin__checkbox {
   flex-direction: column;
 }
 
+.database-plugin__expanded-td {
+  overflow: hidden;
+  display: table-caption;
+  left: 0;
+  position: sticky;
+  padding: 0;
+  justify-content: center;
+}
+
 .database-plugin__td-content {
   display: block;
   align-items: center;
@@ -488,7 +497,7 @@ div.database-plugin__checkbox {
   background-color: var(--background-primary);
   display: flex;
   position: absolute;
-  bottom: 1.6em;
+  bottom: 1.3em;
   width: 100%;
   height: 40px;
   justify-content: flex-end;
@@ -498,8 +507,8 @@ div.database-plugin__checkbox {
   background-color: var(--text-accent);
   max-width: 30px;
   max-height: 30px;
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 35px;
+  min-height: 35px;
 }
 
 .database-plugin__pagination-button:hover {
@@ -561,6 +570,13 @@ div.database-plugin__checkbox {
 .database-plugin__tags-container {
   gap: 0.3rem;
 }
+
+.database-plugin__row-extend-decorator {
+  padding: 5px;
+  box-shadow: var(--input-shadow) 0px 14px 28px,
+    var(--input-shadow-hover) 0px 10px 10px;
+}
+
 /************************************************************
  *  CELL CONTENT STYLES
  ************************************************************/
@@ -660,6 +676,15 @@ div.database-plugin__checkbox {
 .database-plugin__row-context-menu {
   padding: 0;
   background-color: var(--background-primary);
+}
+
+.database-plugin__cell-context-menu {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
 /**

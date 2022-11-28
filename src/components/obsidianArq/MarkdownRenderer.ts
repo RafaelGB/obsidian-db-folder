@@ -3,7 +3,7 @@ import { MediaExtensions } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { MarkdownRenderer, MarkdownPreviewView, TFile } from "obsidian";
-import { CellContext } from "@tanstack/react-table";
+import { CellContext, Table } from "@tanstack/react-table";
 import { LOGGER } from "services/Logger";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { Literal } from "obsidian-dataview";
@@ -16,7 +16,6 @@ export async function renderMarkdown(
 ) {
   try {
     const { table } = defaultCell;
-    const view: DatabaseView = table.options.meta.view;
     const column = defaultCell.column.columnDef as TableColumn;
     const { media_height, media_width, enable_media_view } = column.config;
     if (isValidHttpUrl(markdownString)) {
@@ -31,50 +30,64 @@ export async function renderMarkdown(
         markdownString = `!${markdownString}`;
       }
     }
-    domElement.empty();
-    const dom = domElement.createDiv();
 
-    dom.addClasses(["markdown-preview-view", c("markdown-preview-view")]);
-    dom.createDiv(c("embed-link-wrapper"), (wrapper) => {
-      wrapper.createEl(
-        "a",
-        {
-          href: domElement.getAttr("src") || view.file.basename,
-          cls: `internal-link ${c("embed-link")}`,
-        },
-        (link) => {
-          link.setAttr("aria-label", view.file.basename);
-        }
-      );
-    });
-    if (
-      markdownString &&
-      markdownString.startsWith("![[") &&
-      markdownString.endsWith("]]")
-    ) {
-      MarkdownPreviewView.renderMarkdown(
-        markdownString,
-        dom.createDiv(),
-        view.file.path,
-        view
-      );
-    } else {
-      await MarkdownRenderer.renderMarkdown(
-        markdownString,
-        dom.createDiv(),
-        view.file.path,
-        view
-      );
-    }
-    domElement.addClass("is-loaded");
-    if (depth > 0) {
-      await handleEmbeds(dom, view, --depth);
-    }
+    await renderStringAsMarkdown(
+      table,
+      markdownString,
+      domElement,
+      depth,
+    );
   } catch (e) {
     LOGGER.error(e);
   }
 }
+export async function renderStringAsMarkdown(
+  table: Table<RowDataType>,
+  markdownString: string,
+  domElement: HTMLDivElement,
+  depth: number) {
+  const view: DatabaseView = table.options.meta.view;
 
+  domElement.empty();
+  const dom = domElement.createDiv();
+
+  dom.addClasses(["markdown-preview-view", c("markdown-preview-view")]);
+  dom.createDiv(c("embed-link-wrapper"), (wrapper) => {
+    wrapper.createEl(
+      "a",
+      {
+        href: domElement.getAttr("src") || view.file.basename,
+        cls: `internal-link ${c("embed-link")}`,
+      },
+      (link) => {
+        link.setAttr("aria-label", view.file.basename);
+      }
+    );
+  });
+  if (
+    markdownString &&
+    markdownString.startsWith("![[") &&
+    markdownString.endsWith("]]")
+  ) {
+    MarkdownPreviewView.renderMarkdown(
+      markdownString,
+      dom.createDiv(),
+      view.file.path,
+      view
+    );
+  } else {
+    await MarkdownRenderer.renderMarkdown(
+      markdownString,
+      dom.createDiv(),
+      view.file.path,
+      view
+    );
+  }
+  domElement.addClass("is-loaded");
+  if (depth > 0) {
+    await handleEmbeds(dom, view, --depth);
+  }
+}
 function handleEmbeds(dom: HTMLDivElement, view: DatabaseView, depth: number) {
   return Promise.all(
     dom.findAll(".internal-embed").map(async (el) => {

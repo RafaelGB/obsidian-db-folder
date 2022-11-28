@@ -38,7 +38,6 @@ import customSortingfns, {
 } from "components/reducers/TableFilterFlavours";
 import dbfolderColumnSortingFn from "components/reducers/CustomSortingFn";
 import { useState } from "react";
-import { AddRow } from "components/AddRow";
 import {
   obsidianMdLinksOnClickCallback,
   obsidianMdLinksOnMouseOverMenuCallback,
@@ -129,6 +128,8 @@ export function Table(tableData: TableDataType) {
   const table: Table<RowDataType> = useReactTable({
     columns: columns,
     data: rows,
+    enableExpanding: true,
+    getRowCanExpand: () => true,
     columnResizeMode: ResizeConfiguration.RESIZE_MODE,
     state: {
       globalFilter: globalFilter,
@@ -313,8 +314,6 @@ export function Table(tableData: TableDataType) {
       {/* INIT PAGINATION */}
       <PaginationTable table={table} />
       {/* ENDS PAGINATION */}
-
-      {/* <AddRow table={table} /> */}
       {/* INIT DEBUG INFO */}
       {globalConfig.enable_show_state && (
         <pre>
