@@ -1,10 +1,14 @@
-import { Cell, flexRender } from "@tanstack/react-table";
+import { Cell, flexRender, Row, Table } from "@tanstack/react-table";
 import { TableCellProps } from "cdm/CellModel";
 import { RowDataType } from "cdm/FolderModel";
 import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
+import ro from "lang/locale/ro";
+import { MarkdownRenderer } from "obsidian";
 import { Literal } from "obsidian-dataview";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { VaultManagerDB } from "services/FileManagerService";
+import { renderStringAsMarkdown } from "./obsidianArq/MarkdownRenderer";
 
 export default function TableRow(headerProps: TableCellProps) {
   const { row, table } = headerProps;
@@ -14,28 +18,65 @@ export default function TableRow(headerProps: TableCellProps) {
       ? StyleVariables.BACKGROUND_PRIMARY
       : StyleVariables.BACKGROUND_SECONDARY
     : StyleVariables.BACKGROUND_PRIMARY;
+
   return (
-    <div
-      key={`cell-tr-${row.id}`}
-      className={`${c("tr")}`}
-      style={{
-        backgroundColor: backgroundColor,
-      }}
-    >
-      {row
-        .getVisibleCells()
-        .map((cell: Cell<RowDataType, Literal>, cellIndex: number) => {
-          return (
-            <div
-              key={`cell-td-${cell.id}-${cellIndex}`}
-              className={`${c(
-                "td" + (cellIndex === 0 ? " row-context-menu" : "")
-              )} data-input`}
-            >
-              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-            </div>
-          );
-        })}
-    </div>
+    <>
+      {/** INIT TABLE ROW */}
+      <div
+        key={`cell-tr-${row.id}`}
+        className={`${c("tr")}`}
+        style={{
+          backgroundColor: backgroundColor,
+        }}
+      >
+        {row
+          .getVisibleCells()
+          .map((cell: Cell<RowDataType, Literal>, cellIndex: number) => {
+            return (
+              <div
+                key={`cell-td-${cell.id}-${cellIndex}`}
+                className={`${c(
+                  "td" + (cellIndex === 0 ? " row-context-menu" : "")
+                )} data-input`}
+              >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </div>
+            );
+          })}
+        {/** ENDS TABLE ROW */}
+      </div>
+      {/** INIT MD FILE COMPONENT */}
+      {row.getIsExpanded() && (
+        <tr key={`expanded-cell-tr-${row.id}`}>
+          <td colSpan={row.getVisibleCells().length}>
+            <MdFileComponent row={row} table={table} />
+          </td>
+          {/** EDNS MD FILE COMPONENT */}
+        </tr>
+      )}
+    </>
   );
 }
+
+const MdFileComponent = ({
+  row,
+  table,
+}: {
+  row: Row<RowDataType>;
+  table: Table<RowDataType>;
+}) => {
+  const containerCellRef = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    const effectCallback = async () => {
+      const content = await VaultManagerDB.obtainContentFromTfile(
+        row.original.__note__.getFile()
+      );
+      renderStringAsMarkdown(table, content, containerCellRef.current, 5);
+    };
+
+    effectCallback();
+  }, []);
+
+  return <span ref={containerCellRef} key={`expanded-md-file-${row.index}`} />;
+};

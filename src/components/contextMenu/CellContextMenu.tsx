@@ -12,20 +12,13 @@ export default function CellContextMenu(
   const { row, table } = context;
   const { tableState } = table.options.meta;
   const rowActions = tableState.data((state) => state.actions);
-  const handleDeleteRow = () => {
-    rowActions.removeRow(row.original);
-  };
-
-  const handleRenameRow = () => {
-    rowActions.renameFile(row.index);
-  };
 
   /**
    * Handle left click
    * @param event
    */
   const handleClick = async () => {
-    await app.workspace.getLeaf().openFile(row.original.__note__.getFile());
+    row.toggleExpanded(!row.getIsExpanded());
   };
 
   /**
@@ -36,8 +29,8 @@ export default function CellContextMenu(
     showFileMenu(
       row.original.__note__.getFile(),
       event.nativeEvent,
-      handleDeleteRow,
-      handleRenameRow
+      row,
+      rowActions
     );
   };
 
