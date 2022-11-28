@@ -3,8 +3,10 @@ import { RowDataType } from "cdm/FolderModel";
 import { showFileMenu } from "components/obsidianArq/commands";
 import Relationship from "components/RelationShip";
 import { StyleVariables } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
 import React from "react";
+import KeyboardControlKeyIcon from "@mui/icons-material/KeyboardControlKey";
 
 export default function CellContextMenu(
   context: CellContext<RowDataType, Literal>
@@ -42,21 +44,20 @@ export default function CellContextMenu(
         onClick={handleClick}
         onContextMenu={handlerContextMenu}
         key={`row-context-button-${index}`}
-        style={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-          height: "100%",
-          width: "100%",
-          margin: "0",
-        }}
+        className={c(`cell-context-button`)}
       >
-        {
+        {row.getIsExpanded() ? (
+          <KeyboardControlKeyIcon
+            sx={{
+              fontSize: "1.5rem",
+            }}
+          />
+        ) : (
           <Relationship
             value={index}
             backgroundColor={StyleVariables.BACKGROUND_PRIMARY}
           />
-        }
+        )}
       </div>
     </>
   );

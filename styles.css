@@ -570,6 +570,13 @@ div.database-plugin__checkbox {
 .database-plugin__tags-container {
   gap: 0.3rem;
 }
+
+.database-plugin__row-extend-decorator {
+  padding: 5px;
+  box-shadow: var(--input-shadow) 0px 14px 28px,
+    var(--input-shadow-hover) 0px 10px 10px;
+}
+
 /************************************************************
  *  CELL CONTENT STYLES
  ************************************************************/
@@ -669,6 +676,15 @@ div.database-plugin__checkbox {
 .database-plugin__row-context-menu {
   padding: 0;
   background-color: var(--background-primary);
+}
+
+.database-plugin__cell-context-menu {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
 /**

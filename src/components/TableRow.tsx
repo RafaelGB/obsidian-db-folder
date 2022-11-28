@@ -48,7 +48,10 @@ export default function TableRow(headerProps: TableCellProps) {
       {/** INIT MD FILE COMPONENT */}
       {row.getIsExpanded() && (
         <tr key={`expanded-cell-tr-${row.id}`}>
-          <td colSpan={row.getVisibleCells().length}>
+          <td
+            colSpan={row.getVisibleCells().length}
+            className={c("row-extend-decorator")}
+          >
             <MdFileComponent row={row} table={table} />
           </td>
           {/** EDNS MD FILE COMPONENT */}
