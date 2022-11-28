@@ -1,6 +1,5 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
@@ -9,6 +8,7 @@ import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "components/cellTypes/Editor/RelationEditor";
+import { MarkdownService } from "services/MarkdownRenderService";
 
 const RelationCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
@@ -48,7 +48,12 @@ const RelationCell = (mdProps: CellComponentProps) => {
           return relation.markdown();
         })
         .join(", ");
-      renderMarkdown(defaultCell, mdRelations, containerCellRef.current, 5);
+      MarkdownService.renderMarkdown(
+        defaultCell,
+        mdRelations,
+        containerCellRef.current,
+        5
+      );
     }
   }, [relationRow, dirtyCell]);
 

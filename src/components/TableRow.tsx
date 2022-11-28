@@ -3,12 +3,10 @@ import { TableCellProps } from "cdm/CellModel";
 import { RowDataType } from "cdm/FolderModel";
 import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
-import ro from "lang/locale/ro";
-import { MarkdownRenderer } from "obsidian";
 import { Literal } from "obsidian-dataview";
 import React, { useEffect, useRef } from "react";
 import { VaultManagerDB } from "services/FileManagerService";
-import { renderStringAsMarkdown } from "./obsidianArq/MarkdownRenderer";
+import { MarkdownService } from "services/MarkdownRenderService";
 
 export default function TableRow(headerProps: TableCellProps) {
   const { row, table } = headerProps;
@@ -75,7 +73,12 @@ const MdFileComponent = ({
       const content = await VaultManagerDB.obtainContentFromTfile(
         row.original.__note__.getFile()
       );
-      renderStringAsMarkdown(table, content, containerCellRef.current, 5);
+      MarkdownService.renderStringAsMarkdown(
+        table,
+        content,
+        containerCellRef.current,
+        5
+      );
     };
 
     effectCallback();

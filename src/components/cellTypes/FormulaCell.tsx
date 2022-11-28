@@ -1,9 +1,9 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, { useEffect, useRef } from "react";
+import { MarkdownService } from "services/MarkdownRenderService";
 import { ParseService } from "services/ParseService";
 
 const FormulaCell = (mdProps: CellComponentProps) => {
@@ -40,7 +40,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
           )
           .toString();
 
-        await renderMarkdown(
+        await MarkdownService.renderMarkdown(
           defaultCell,
           formulaResponse,
           formulaRef.current,

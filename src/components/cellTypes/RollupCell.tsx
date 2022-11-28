@@ -1,10 +1,10 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
-import { Link, Literal } from "obsidian-dataview";
+import { Literal } from "obsidian-dataview";
 import React, { useEffect, useRef } from "react";
+import { MarkdownService } from "services/MarkdownRenderService";
 import { ParseService } from "services/ParseService";
 
 const RollupCell = (mdProps: CellComponentProps) => {
@@ -43,7 +43,12 @@ const RollupCell = (mdProps: CellComponentProps) => {
         )
         .toString();
 
-      renderMarkdown(defaultCell, rollupResponse, formulaRef.current, 5);
+      MarkdownService.renderMarkdown(
+        defaultCell,
+        rollupResponse,
+        formulaRef.current,
+        5
+      );
 
       // Save formula response on disk
       if (tableColumn.config.persist_rollup && rollupCell !== rollupResponse) {
