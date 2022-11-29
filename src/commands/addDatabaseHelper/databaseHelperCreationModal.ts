@@ -3,6 +3,7 @@ import { generateDbConfiguration, generateNewDatabase } from "helpers/CommandsHe
 import { InputType, SourceDataTypes, StyleClasses } from "helpers/Constants";
 import { resolve_tfolder } from "helpers/FileManagement";
 import { generateDataviewTableQuery } from "helpers/QueryHelper";
+import { t } from "lang/helpers";
 import { Modal, Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
@@ -60,25 +61,23 @@ export class DatabaseHelperCreationModalManager {
                         this.databaseName = this.parseValueToThuthyYaml(value);
                     });
             });
+        const sourceOptions: Record<string, string> = {};
+        Object.entries(SourceDataTypes).forEach(([key, value]) => {
+            sourceOptions[value] = t(value);
+        });
 
         add_dropdown(
             bodyElement,
             'Select source',
             'Select from which source you want to create your custom database.',
             this.databaseHelperCreationModal.local_settings.source_data,
-            {
-                current_folder: SourceDataTypes.CURRENT_FOLDER,
-                current_folder_without_subfolders: SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS,
-                tag: SourceDataTypes.TAG,
-                outgoing_link: SourceDataTypes.OUTGOING_LINK,
-                incoming_link: SourceDataTypes.INCOMING_LINK,
-                query: SourceDataTypes.QUERY,
-            },
+            sourceOptions,
             async (value: string) => {
                 this.databaseHelperCreationModal.local_settings.source_data = value;
                 this.reset();
             }
         );
+
         switch (this.databaseHelperCreationModal.local_settings.source_data) {
             case SourceDataTypes.TAG:
                 this.tagHandler(bodyElement);

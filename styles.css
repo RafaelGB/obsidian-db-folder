@@ -698,6 +698,10 @@ div.database-plugin__checkbox {
   margin: 0;
 }
 
+.database-plugin__cell-context-button {
+  display: inherit;
+}
+
 /**
 * AUTOCOMPLETE STYLES
 */

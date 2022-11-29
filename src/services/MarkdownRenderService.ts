@@ -1,4 +1,4 @@
-import { CellContext, Table } from "@tanstack/react-table";
+import { CellContext } from "@tanstack/react-table";
 import { NormalizedPath, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { MediaExtensions } from "helpers/Constants";
@@ -19,6 +19,7 @@ class MarkdownRenderService {
     ) {
         try {
             const { table } = defaultCell;
+            const view = table.options.meta.view;
             const column = defaultCell.column.columnDef as TableColumn;
             const { media_height, media_width, enable_media_view } = column.config;
             if (this.isValidHttpUrl(markdownString)) {
@@ -35,7 +36,7 @@ class MarkdownRenderService {
             }
 
             await this.renderStringAsMarkdown(
-                table,
+                view,
                 markdownString,
                 domElement,
                 depth,
@@ -54,17 +55,15 @@ class MarkdownRenderService {
  * @param mdMode 
  */
     public async renderStringAsMarkdown(
-        table: Table<RowDataType>,
+        view: DatabaseView,
         markdownString: string,
         domElement: HTMLDivElement,
-        depth: number,
-        mdMode = "markdown-preview-view") {
-        const view: DatabaseView = table.options.meta.view;
+        depth: number) {
 
         domElement.empty();
         const dom = domElement.createDiv();
 
-        dom.addClasses([mdMode, c(mdMode)]);
+        dom.addClasses(["markdown-preview-view", c("markdown-preview-view")]);
         dom.createDiv(c("embed-link-wrapper"), (wrapper) => {
             wrapper.createEl(
                 "a",
@@ -84,6 +83,9 @@ class MarkdownRenderService {
             view.file.path,
             view
         );
+
+        this.applyCheckboxIndexes(dom);
+        this.findUnresolvedLinks(dom, view);
 
         domElement.addClass("is-loaded");
         if (depth > 0) {
@@ -244,7 +246,7 @@ class MarkdownRenderService {
      * @param depth 
      * @returns 
      */
-    private async handleMarkdown(
+    public async handleMarkdown(
         el: HTMLElement,
         file: TFile,
         normalizedPath: NormalizedPath,
@@ -286,33 +288,26 @@ class MarkdownRenderService {
 
         el.addClass('is-loaded');
 
-        if (
-            markdown.startsWith('Unable to find') &&
-            normalizedPath.subpath &&
-            normalizedPath.subpath !== '#'
-        ) {
-        } else {
-            const listItems = el.findAll('.task-list-item-checkbox');
+        const listItems = el.findAll('.task-list-item-checkbox');
 
-            if (listItems?.length) {
-                const fileCache = app.metadataCache.getFileCache(file);
+        if (listItems?.length) {
+            const fileCache = app.metadataCache.getFileCache(file);
 
-                fileCache.listItems
-                    ?.filter((li) => {
-                        if (!boundary) return true;
-                        return (
-                            li.position.start.line >= boundary.startLine &&
-                            li.position.end.line <= boundary.endLine
-                        );
-                    })
-                    .forEach((li, i) => {
-                        if (listItems[i]) {
-                            listItems[i].dataset.oStart = li.position.start.offset.toString();
-                            listItems[i].dataset.oEnd = li.position.end.offset.toString();
-                            listItems[i].dataset.src = file.path;
-                        }
-                    });
-            }
+            fileCache.listItems
+                ?.filter((li) => {
+                    if (!boundary) return true;
+                    return (
+                        li.position.start.line >= boundary.startLine &&
+                        li.position.end.line <= boundary.endLine
+                    );
+                })
+                .forEach((li, i) => {
+                    if (listItems[i]) {
+                        listItems[i].dataset.oStart = li.position.start.offset.toString();
+                        listItems[i].dataset.oEnd = li.position.end.offset.toString();
+                        listItems[i].dataset.src = file.path;
+                    }
+                });
         }
 
         if (depth > 0) {
@@ -459,6 +454,40 @@ class MarkdownRenderService {
     private sanitize(e: string) {
         return e.replace(ILLIGAL_CHARS, ' ').replace(/\s+/g, ' ').trim();
     }
+
+    /**
+     * Asocciate link and index to checkboxes
+     * @param dom 
+     */
+    private applyCheckboxIndexes(dom: HTMLElement) {
+        const checkboxes = dom.querySelectorAll('.task-list-item-checkbox');
+
+        checkboxes.forEach((el, i) => {
+            (el as HTMLElement).dataset.checkboxIndex = i.toString();
+        });
+    }
+
+    /**
+     * Manage unresolved links adding a class
+     * @param dom 
+     * @param view 
+     */
+    private findUnresolvedLinks(dom: HTMLDivElement, view: DatabaseView) {
+        const links = dom.querySelectorAll('.internal-link');
+
+        links.forEach((link) => {
+            const path = getNormalizedPath(link.getAttr('href'));
+            const dest = view.app.metadataCache.getFirstLinkpathDest(
+                path.root,
+                view.file.path
+            );
+
+            if (!dest) {
+                link.addClass('is-unresolved');
+            }
+        });
+    }
+
     /**
      * Singleton instance
      * @returns { MarkdownRenderService}

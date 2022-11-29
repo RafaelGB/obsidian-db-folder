@@ -1,9 +1,10 @@
 import { Cell, flexRender, Row, Table } from "@tanstack/react-table";
 import { TableCellProps } from "cdm/CellModel";
 import { RowDataType } from "cdm/FolderModel";
-import { StyleVariables } from "helpers/Constants";
+import { MetadataColumns, StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
-import { Literal } from "obsidian-dataview";
+import { getNormalizedPath } from "helpers/VaultManagement";
+import { Link, Literal } from "obsidian-dataview";
 import React, { useEffect, useRef } from "react";
 import { VaultManagerDB } from "services/FileManagerService";
 import { MarkdownService } from "services/MarkdownRenderService";
@@ -67,16 +68,15 @@ const MdFileComponent = ({
   table: Table<RowDataType>;
 }) => {
   const containerCellRef = useRef<HTMLDivElement>();
-
+  const view = table.options.meta.view;
   useEffect(() => {
     const effectCallback = async () => {
-      const content = await VaultManagerDB.obtainContentFromTfile(
-        row.original.__note__.getFile()
-      );
-      MarkdownService.renderStringAsMarkdown(
-        table,
-        content,
+      const normalizedPath = getNormalizedPath(row.original.__note__.filepath);
+      MarkdownService.handleMarkdown(
         containerCellRef.current,
+        row.original.__note__.getFile(),
+        normalizedPath,
+        view,
         5
       );
     };
@@ -84,5 +84,5 @@ const MdFileComponent = ({
     effectCallback();
   }, []);
 
-  return <span ref={containerCellRef} key={`expanded-md-file-${row.index}`} />;
+  return <div ref={containerCellRef} key={`expanded-md-file-${row.index}`} />;
 };
