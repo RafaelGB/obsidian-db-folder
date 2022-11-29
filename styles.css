@@ -576,8 +576,7 @@ div.database-plugin__checkbox {
 
 .database-plugin__row-extend-decorator {
   padding: 5px;
-  box-shadow: var(--input-shadow) 0px 14px 28px,
-    var(--input-shadow-hover) 0px 10px 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 /************************************************************
