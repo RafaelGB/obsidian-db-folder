@@ -47,13 +47,13 @@ class MarkdownRenderService {
     }
 
     /**
- * Generic function to render a string as markdown
- * @param table 
- * @param markdownString 
- * @param domElement 
- * @param depth 
- * @param mdMode 
- */
+     * Generic function to render a string as markdown
+     * @param table 
+     * @param markdownString 
+     * @param domElement 
+     * @param depth 
+     * @param mdMode 
+     */
     public async renderStringAsMarkdown(
         view: DatabaseView,
         markdownString: string,
