@@ -12,7 +12,7 @@ class DataviewProxy {
      * @throws Error if plugin is not installed
      */
     getDataviewAPI(): DataviewApi {
-        if (!isPluginEnabled(app)) {
+        if (!this.isDataviewEnabled()) {
             new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
             throw new Error('Dataview plugin is not installed');
         }
@@ -30,6 +30,14 @@ class DataviewProxy {
 
     isTruthy(literal: Literal): boolean {
         return this.getDataviewAPI().value.isTruthy(literal?.toString());
+    }
+
+    isDataviewEnabled(): boolean {
+        return isPluginEnabled(app);
+    }
+
+    isIndexLoaded(): boolean {
+        return this.indexIsLoaded;
     }
 
     setIndexIsLoaded(value: boolean) {

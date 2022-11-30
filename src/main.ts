@@ -402,7 +402,6 @@ export default class DBFolderPlugin extends Plugin {
 		this.registerEvent(
 			// @ts-ignore
 			this.app.metadataCache.on("dataview:index-ready", () => {
-				console.log("dataview:index-ready");
 				DataviewService.setIndexIsLoaded(true);
 			})
 		);
