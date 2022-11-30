@@ -1,17 +1,22 @@
 import { InputType, StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
-import React, { FocusEventHandler, useEffect, useState } from "react";
-import { usePopper } from "react-popper";
+import React, { FocusEventHandler, useState } from "react";
+import Popper from "@mui/material/Popper";
 import header_action_button_section from "components/headerActions/HeaderActionButtonSection";
 import header_action_types_section from "components/headerActions/HeaderActiontypesSection";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
+import { PopperTypesStyleModifiers } from "components/styles/PopperStyles";
 import { TableColumn } from "cdm/FolderModel";
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { HeaderMenuProps } from "cdm/HeaderModel";
+import Box from "@mui/material/Box";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { Platform } from "obsidian";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
+
   const [columnsInfo, columnActions] = table.options.meta.tableState.columns(
     (state) => [state.info, state.actions]
   );
@@ -23,40 +28,27 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   );
 
   /** Header props */
-  const {
-    propertyIcon,
-    expanded,
-    setExpanded,
-    created,
-    referenceElement,
-    labelState,
-    setLabelState,
-  } = headerMenuProps;
+  const { propertyIcon, menuEl, setMenuEl, labelState, setLabelState } =
+    headerMenuProps;
 
   const { key, isMetadata, input } = column.columnDef as TableColumn;
   /** Column values */
   const [keyState, setkeyState] = useState(dbTrim(key));
-  const [popperElement, setPopperElement] = useState(null);
   const [inputRef, setInputRef] = useState(null);
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: "bottom",
-    strategy: "absolute",
-  });
-  // Manage type of data
-  const [typeReferenceElement, setTypeReferenceElement] = useState(null);
-  const [typePopperElement, setTypePopperElement] = useState(null);
-  const [showType, setShowType] = useState(false);
+
+  // Manage menu Popper
+  const openMenu = Boolean(menuEl);
+  const idMenu = openMenu ? `header-menu-popper` : undefined;
+
+  // Manage type Popper
+  const [typesEl, setTypesEl] = useState<null | HTMLElement>(null);
+  const [typesTimeout, setTypesTimeout] = useState(null);
+
+  const isTypesShown = Boolean(typesEl);
+  const idTypes = isTypesShown ? `types-menu-popper` : undefined;
 
   // Manage errors
   const [labelStateInvalid, setLabelStateInvalid] = useState(false);
-
-  /** Event driven actions */
-  useEffect(() => {
-    // Throw event if created changed to expand or collapse the menu
-    if (created) {
-      setExpanded(true);
-    }
-  }, [created]);
 
   /**
    * Array of action buttons asociated to the header
@@ -65,26 +57,21 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     buttons: [],
     headerMenuProps: headerMenuProps,
     hooks: {
-      setExpanded: setExpanded,
+      setMenuEl: setMenuEl,
+      setTypesEl: setTypesEl,
       keyState: keyState,
       setKeyState: setkeyState,
-      setShowType: setShowType,
     },
   };
   const headerButtons =
     header_action_button_section.run(headerActionResponse).buttons;
 
-  /**
-   * Array of type headers available to change the data type of the column
-   */
+  // /**
+  //  * Array of type headers available to change the data type of the column
+  //  */
   headerActionResponse.buttons = [];
   const typesButtons =
     header_action_types_section.run(headerActionResponse).buttons;
-
-  const typePopper = usePopper(typeReferenceElement, typePopperElement, {
-    placement: "right",
-    strategy: "fixed",
-  });
 
   function persistLabelChange() {
     // Update state of altered column
@@ -118,21 +105,20 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
     persistLabelChange();
   };
 
+  const handleClickAway = () => {
+    setMenuEl(null);
+    setTypesEl(null);
+    setTypesTimeout(null);
+  };
+
   return (
-    <div>
-      {expanded && (
-        <div className="overlay" onClick={() => setExpanded(false)} />
-      )}
-      {expanded && (
-        <div
-          ref={setPopperElement}
-          style={{ ...styles.popper, zIndex: 3 }}
-          {...attributes.popper}
-        >
+    <Popper id={idMenu} open={openMenu} anchorEl={menuEl} key={idMenu}>
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <Box>
           <div
             className={`menu ${c("popper")}`}
             style={{
-              width: 240,
+              width: Platform.isMobile ? "240px" : "auto",
             }}
           >
             {/** Edit header label section */}
@@ -177,9 +163,17 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                 <div style={{ padding: "4px 0px" }}>
                   <div
                     className="menu-item sort-button"
-                    onMouseEnter={() => setShowType(true)}
-                    onMouseLeave={() => setShowType(false)}
-                    ref={setTypeReferenceElement}
+                    onMouseOver={async (event) => {
+                      setTypesEl(event.currentTarget);
+                    }}
+                    onMouseLeave={() => {
+                      const timeoutId = setTimeout(() => {
+                        setTypesEl(null);
+                        setTypesTimeout(null);
+                        // timeout until event is triggered after user has stopped typing
+                      }, 250);
+                      setTypesTimeout(timeoutId);
+                    }}
                   >
                     <span className="svg-icon svg-text icon-margin">
                       {propertyIcon}
@@ -188,24 +182,29 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                       {getLabelHeader(input)}
                     </span>
                   </div>
-                  {showType && (
-                    <div
-                      className={`menu ${c("popper")}`}
-                      ref={setTypePopperElement}
-                      onMouseEnter={() => setShowType(true)}
-                      onMouseLeave={() => setShowType(false)}
-                      {...typePopper.attributes.popper}
-                      style={{
-                        ...typePopper.styles.popper,
-                        width: 200,
-                        zIndex: 4,
-                        padding: "4px 0px",
-                      }}
-                    >
+                  <Popper
+                    id={idTypes}
+                    open={isTypesShown}
+                    anchorEl={typesEl}
+                    placement="right"
+                    disablePortal={false}
+                    key={idTypes}
+                    modifiers={PopperTypesStyleModifiers()}
+                    onMouseOver={() => {
+                      if (typesTimeout) {
+                        clearTimeout(typesTimeout);
+                        setTypesTimeout(null);
+                      }
+                    }}
+                    onMouseLeave={async () => {
+                      setTypesEl(null);
+                    }}
+                  >
+                    <Box className={`menu ${c("popper")}`}>
                       {/** Childs of typesButtons */}
                       {typesButtons}
-                    </div>
-                  )}
+                    </Box>
+                  </Popper>
                 </div>
               </>
             )}
@@ -241,7 +240,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                         view: table.options.meta.view,
                         headerMenuProps: headerMenuProps,
                       }).open();
-                      setExpanded(false);
+                      setMenuEl(null);
                     }}
                   >
                     <span className="svg-icon svg-text icon-margin">
@@ -253,9 +252,9 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
               </div>
             )}
           </div>
-        </div>
-      )}
-    </div>
+        </Box>
+      </ClickAwayListener>
+    </Popper>
   );
 };
 

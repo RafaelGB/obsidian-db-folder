@@ -1,5 +1,4 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
-import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
@@ -7,6 +6,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
+import { MarkdownService } from "services/MarkdownRenderService";
 
 const TextCell = (props: CellComponentProps) => {
   const { defaultCell } = props;
@@ -46,7 +46,12 @@ const TextCell = (props: CellComponentProps) => {
     if (containerCellRef.current !== undefined) {
       containerCellRef.current.innerHTML = "";
 
-      renderMarkdown(defaultCell, textCell, containerCellRef.current, 5);
+      MarkdownService.renderMarkdown(
+        defaultCell,
+        textCell,
+        containerCellRef.current,
+        5
+      );
     }
   }, [dirtyCell, textCell]);
 

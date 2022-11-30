@@ -16,8 +16,9 @@ import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { DatabaseView } from "DatabaseView";
 import { obtainAllPossibleRows } from "helpers/VaultManagement";
-import rowContextMenuColumn from "components/RowContextMenu";
+import rowContextMenuColumn from "components/contextMenu/RowContextMenu";
 import { containsUpper } from "helpers/WindowElement";
+import { getFilterKeyInFunctionOfInputType } from "helpers/TableFiltersHelper";
 
 /**
  * Add mandatory and configured metadata columns of the table
@@ -88,7 +89,6 @@ export async function obtainMetadataColumns(
     ...MetadataDatabaseColumns.ADD_COLUMN,
     position: DatabaseLimits.MAX_COLUMNS + 1,
   };
-
   return yamlColumns;
 }
 
@@ -210,7 +210,7 @@ export async function obtainColumnsFromRows(
 
 function getInputInFuctionOfLiteral(literal: Literal) {
   const wrappedLiteral = DataviewService.wrapLiteral(literal);
-  let input = InputType.TEXT;
+  let input: string = InputType.TEXT;
   switch (wrappedLiteral.type) {
     case InputType.NUMBER:
       input = InputType.NUMBER;
@@ -235,8 +235,7 @@ function columnOptions(
   LOGGER.debug(`=> columnOptions. column: ${JSON.stringify(column)}`);
   const options: RowSelectOption[] = column.options ?? [];
   if ((Object.values(InputType) as Array<string>).includes(column.input)) {
-    LOGGER.debug(`<= columnOptions`, `return ${column.input} column`);
-    return {
+    const columnOption = {
       ...(column as Partial<TableColumn>),
       position: column.position ?? index,
       key: column.key ?? columnKey,
@@ -248,6 +247,10 @@ function columnOptions(
       options: options,
       config: column.config,
     };
+    // Custom react-table attributes
+    columnOption["filterFn"] = getFilterKeyInFunctionOfInputType(column.input);
+    LOGGER.debug(`<= columnOptions`, `return ${column.input} column`);
+    return columnOption;
   } else {
     throw `Error: option ${column.input} not supported yet`;
   }

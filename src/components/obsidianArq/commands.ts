@@ -1,3 +1,6 @@
+import { Row } from "@tanstack/react-table";
+import { RowDataType } from "cdm/FolderModel";
+import { DataState } from "cdm/TableStateInterface";
 import { Menu, TFile } from "obsidian";
 
 /**
@@ -14,16 +17,33 @@ import { Menu, TFile } from "obsidian";
  * @param file
  * @param position
  */
-export function showFileMenu(file: TFile, event: MouseEvent, removeRow: () => void, rewriteFileOfRow: () => void) {
+export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataType>, dataActions: DataState["actions"]) {
     const fileMenu = new Menu();
+
+    const handleDeleteRow = async () => {
+        dataActions.removeRow(row.original);
+    };
+
+    const handleRenameRow = async () => {
+        dataActions.renameFile(row.index);
+    };
+
+    const handleOpenFile = async () => {
+        await app.workspace.getLeaf().openFile(row.original.__note__.getFile());
+    };
+
+    fileMenu.addItem((item) => item
+        .setTitle("Open")
+        .setIcon("link")
+        .onClick(handleOpenFile));
     fileMenu.addItem((item) => item
         .setTitle("Rename")
         .setIcon("pencil")
-        .onClick(rewriteFileOfRow));
+        .onClick(handleRenameRow));
     fileMenu.addItem((item) => item
         .setTitle("Delete")
         .setIcon("trash")
-        .onClick(removeRow));
+        .onClick(handleDeleteRow));
     fileMenu.addSeparator();
     app.workspace.trigger("file-menu", fileMenu, file, null, app.workspace.getMostRecentLeaf());
     fileMenu.showAtMouseEvent(event);

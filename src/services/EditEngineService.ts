@@ -12,9 +12,13 @@ import { inlineRegexInFunctionOf } from "helpers/QueryHelper";
 import { EditionError, showDBError } from "errors/ErrorTypes";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import obtainRowDatabaseFields from "parsers/FileToRowDatabaseFields";
+import { EditArguments } from "cdm/ServicesModel";
+
 class EditEngine {
     private static instance: EditEngine;
 
+    private onFlyEditions: EditArguments[] = [];
+    private currentTimeout: NodeJS.Timeout = null;
     /**
      * Modify all the files asociated to the rows using lambaUpdate per every row filtered by the lambdaFilter
      * @param lambdaUpdate 
@@ -75,12 +79,32 @@ class EditEngine {
      * @param newColumnValue 
      * @param option 
      */
-    public async updateRowFileProxy(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
-        queueMicrotask(async () => {
-            await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option).catch((err) => {
-                showDBError(EditionError.YamlRead, err);
-            });
+    public async updateRowFileProxy(p_file: TFile, p_columnId: string, p_newValue: Literal, p_columns: TableColumn[], p_ddbbConfig: LocalSettings, p_option: string): Promise<void> {
+        await this.onFlyEditions.push({
+            file: p_file,
+            columnId: p_columnId,
+            newValue: p_newValue,
+            columns: p_columns,
+            ddbbConfig: p_ddbbConfig,
+            option: p_option
         });
+        if (this.currentTimeout) {
+            clearTimeout(this.currentTimeout);
+        }
+        this.currentTimeout = setTimeout(async () => {
+            // Call all onFlyEditions
+            while (this.onFlyEditions.length > 0) {
+
+                const { file, columnId, newValue, columns, ddbbConfig, option } = this.onFlyEditions.shift();
+                await this.updateRowFile(file, columnId, newValue, columns, ddbbConfig, option)
+                    .catch((err) => {
+                        showDBError(EditionError.YamlRead, err);
+                    });
+                // Delay to avoid overloading the system
+                await new Promise((resolve) => setTimeout(resolve, 25));
+            }
+            this.currentTimeout = null;
+        }, 250);
     }
 
     private async updateRowFile(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {

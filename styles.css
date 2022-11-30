@@ -354,7 +354,7 @@ div.database-plugin__checkbox {
 .database-plugin__th-content {
   overflow-x: hidden;
   text-overflow: ellipsis;
-  padding: 0.5rem;
+  padding: 0.1rem;
   display: flex;
   align-items: center;
 }
@@ -368,6 +368,15 @@ div.database-plugin__checkbox {
   display: table-cell;
   padding: 0.5rem;
   flex-direction: column;
+}
+
+.database-plugin__expanded-td {
+  overflow: hidden;
+  display: table-caption;
+  left: 0;
+  position: sticky;
+  padding: 0;
+  justify-content: center;
 }
 
 .database-plugin__td-content {
@@ -442,12 +451,12 @@ div.database-plugin__checkbox {
   background-color: var(--background-secondary);
 }
 
-.database-plugin__sticky-level-2 {
+.database-plugin__sticky-top {
   position: -webkit-sticky;
   position: sticky;
   left: 0;
-  top: 2.65rem;
-  z-index: 3;
+  top: 0;
+  z-index: 2;
 }
 
 .database-plugin__table-header-group {
@@ -462,6 +471,59 @@ div.database-plugin__checkbox {
   left: 0;
   top: 0;
   z-index: 2;
+}
+.database-plugin__toolbar-navbar {
+  min-height: 40px !important;
+  padding: 0;
+  padding-left: 2px !important;
+  max-height: 40px !important;
+}
+
+.database-plugin__nabvar-button {
+  min-width: 30px;
+  min-height: 30px;
+  padding: 2px;
+  border-radius: 0;
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.database-plugin__nabvar-button:disabled {
+  background-color: var(--background-secondary);
+  opacity: 0.5;
+}
+
+.database-plugin__pagination {
+  width: 100%;
+  height: 40px;
+  justify-content: flex-end;
+  list-style: none;
+  bottom: 1em;
+  position: sticky;
+  margin: 0;
+  padding: 0 10px 0 0;
+  display: flex;
+  column-gap: 2px;
+}
+
+.database-plugin__pagination-button {
+  background-color: var(--text-accent);
+  max-width: 30px;
+  max-height: 30px;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.database-plugin__pagination-button:hover {
+  background-color: var(--background-text-accent-hover);
+}
+
+.database-plugin__pagination-button:disabled {
+  opacity: 0.5;
+  cursor: "not-allowed";
+  background-color: var(--background-secondary);
+  box-shadow: var(--input-shadow);
+  color: var(--text-normal);
 }
 
 .database-plugin__padding-left-05 {
@@ -511,6 +573,12 @@ div.database-plugin__checkbox {
 .database-plugin__tags-container {
   gap: 0.3rem;
 }
+
+.database-plugin__row-extend-decorator {
+  padding: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
 /************************************************************
  *  CELL CONTENT STYLES
  ************************************************************/
@@ -566,12 +634,15 @@ div.database-plugin__checkbox {
 /**
 *  Database Styles
 */
-.dbfolder-table-container {
+.database-plugin__container {
   contain: content;
   height: 100%;
   width: 100%;
   position: relative;
-  display: flex;
+}
+
+.database-plugin__container tr input {
+  background: var(--background-modifier-box-shadow);
 }
 
 .database-plugin__scroll-horizontal {
@@ -581,10 +652,16 @@ div.database-plugin__checkbox {
 
 .database-plugin__scroll-container {
   will-change: transform;
+  width: 100%;
+  height: 92%;
 }
 
-.dbfolder-table-container tr input {
-  background: var(--background-modifier-box-shadow);
+@media only screen and (max-width: 768px) {
+  .database-plugin__scroll-container {
+    will-change: transform;
+    width: 100%;
+    height: 85%;
+  }
 }
 
 .draggable {
@@ -609,6 +686,19 @@ div.database-plugin__checkbox {
 .database-plugin__row-context-menu {
   padding: 0;
   background-color: var(--background-primary);
+}
+
+.database-plugin__cell-context-menu {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.database-plugin__cell-context-button {
+  display: inherit;
 }
 
 /**
@@ -803,7 +893,6 @@ div.database-plugin__checkbox {
   font-size: 1rem;
   resize: none;
   box-sizing: border-box;
-  height: 100%;
   width: inherit;
   align-self: center;
   top: 0;

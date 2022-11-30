@@ -1,6 +1,7 @@
 import { DatabaseColumn, MetadataColumnsModel } from "cdm/DatabaseModel";
 import { ConfigColumn, TableColumn } from "cdm/FolderModel";
 import { DatabaseSettings } from "cdm/SettingsModel";
+import { EphimeralSettings } from "cdm/TableStateInterface";
 
 /** Table Actions */
 export const ActionTypes = Object.freeze({
@@ -72,6 +73,13 @@ export const MetadataLabels = Object.freeze({
   OUTLINKS: 'Outlinks',
   INLINKS: 'Inlinks',
 });
+
+export const PaginationRenderOptions = Object.freeze({
+  INITIAL: 'initial',
+  FINAL: 'final',
+  BASIC: 'basic',
+});
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
@@ -224,17 +232,17 @@ export const UpdateRowOptions = Object.freeze({
 });
 
 export const StyleClasses = Object.freeze({
-  TABLE_CONTAINER: 'dbfolder-table-container',
   SETTINGS_MODAL: 'database-settings-modal',
   SETTINGS_MODAL_BODY: 'database-settings-body',
   COLUMN_MODAL: 'database-column-modal',
   COLUMN_MODAL_BODY: 'database-column-body',
+  ADD_ROW_MODAL: 'add-row-modal',
+  ADD_ROW_MODAL_BODY: 'add-row-body',
   ADD_COLUMN_MODAL: 'database-add-column-modal',
   ADD_COLUMN_MODAL_BODY: 'database-add-column-body',
   FILTERS_MODAL: 'database-filters-modal',
   FILTERS_MODAL_BODY: 'database-filters-body',
 });
-
 
 export const StyleVariables = Object.freeze({
   BACKGROUND_MODIFIER_ERROR: 'var(--background-modifier-error)',
@@ -242,6 +250,7 @@ export const StyleVariables = Object.freeze({
   BACKGROUND_PRIMARY: 'var(--background-primary)',
   BACKGROUND_SECONDARY: 'var(--background-secondary)',
   BACKGROUND_DIVIDER: 'var(--background-divider)',
+  BACKGROUND_MODIFIER_FORM_FIELD: "var(--background-modifier-form-field)",
   TEXT_FAINT: 'var(--text-faint)',
   TEXT_MUTED: 'var(--text-muted)',
   TEXT_NORMAL: 'var(--text-normal)',
@@ -261,7 +270,6 @@ export const SourceDataTypes = Object.freeze({
   QUERY: 'query',
 });
 
-
 export const CellSizeOptions = Object.freeze({
   COMPACT: 'compact',
   NORMAL: 'normal',
@@ -274,6 +282,11 @@ export const DnDConfiguration = Object.freeze({
 
 export const ResizeConfiguration = Object.freeze({
   RESIZE_MODE: "onChange",
+});
+
+export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
+  enable_columns_filter: false,
+  enable_navbar: false,
 });
 
 /******************************************************************************
@@ -339,6 +352,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
     enable_show_state: false,
     enable_row_shadow: true,
+    enable_ribbon_icon: true,
     logger_level_info: 'error',
     csv_file_header_key: 'File',
     media_settings: {
@@ -440,7 +454,7 @@ export const SUGGESTER_REGEX = Object.freeze({
  ******************************************************************************/
 export const DB_ICONS = Object.freeze({
   NAME: 'database-folder-icon',
-  ICON: `<g transform="matrix(0.06 0 0 0.05 52 52)"><path stroke="currentColor" fill="#fff" vector-effect="non-scaling-stroke"  transform=" translate(-896, -896)" d="M 896 768 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 768 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 -384 q 237 0 443 -43 t 325 -127 v 170 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -170 q 119 84 325 127 t 443 43 z m 0 -1152 q 208 0 385 34.5 t 280 93.5 t 103 128 v 128 q 0 69 -103 128 t -280 93.5 t -385 34.5 t -385 -34.5 t -280 -93.5 t -103 -128 v -128 q 0 -69 103 -128 t 280 -93.5 t 385 -34.5 z" stroke-linecap="round" /></g>`
+  ICON: `<g transform="translate(0,95) scale(0.03,-0.0275)" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M83 3413 c-12 -2 -36 -17 -53 -33 -26 -25 -30 -35 -30 -83 0 -50 3 -58 35 -86 l36 -31 1499 0 1499 0 28 -24 c27 -23 28 -28 28 -120 0 -86 -2 -98 -23 -118 l-23 -23 -1504 -5 -1504 -5 -35 -34 c-33 -32 -36 -40 -36 -93 0 -56 1 -59 42 -88 l41 -30 1502 0 c1280 0 1504 -2 1521 -14 17 -13 19 -27 19 -120 0 -96 -2 -107 -22 -128 l-23 -22 -1472 2 c-810 1 -1490 -1 -1510 -4 -22 -3 -51 -18 -68 -34 -27 -25 -30 -34 -30 -89 0 -57 2 -61 37 -88 l36 -28 1503 -3 1502 -2 27 -32 c25 -30 27 -37 23 -119 -2 -68 -7 -91 -22 -108 l-19 -21 -1488 0 c-1027 0 -1496 -3 -1516 -11 -15 -5 -40 -22 -55 -37 -23 -21 -28 -34 -28 -75 0 -63 13 -85 63 -108 41 -18 92 -19 1528 -19 1449 0 1487 0 1510 -19 22 -18 24 -26 24 -121 0 -95 -2 -103 -24 -121 -23 -19 -61 -19 -1511 -19 -958 0 -1498 -4 -1515 -10 -50 -19 -75 -58 -75 -116 0 -49 3 -55 37 -83 l38 -31 1475 0 c811 0 1492 -3 1513 -6 56 -10 70 -44 65 -156 -3 -66 -8 -93 -21 -106 -16 -16 -88 -17 -1018 -22 l-1001 -5 -34 -37 c-27 -30 -34 -46 -34 -79 0 -51 11 -72 54 -98 33 -21 37 -21 1029 -21 892 0 997 -2 1011 -16 13 -12 16 -38 16 -120 0 -163 175 -144 -1300 -144 -1247 0 -1260 0 -1280 20 -19 19 -20 33 -20 214 l0 194 -26 32 c-47 56 -66 60 -258 60 l-175 0 -36 -31 c-31 -28 -35 -36 -35 -81 0 -43 4 -54 31 -79 30 -28 36 -29 121 -29 60 0 99 -5 118 -15 17 -9 31 -17 32 -18 0 -1 4 -90 7 -197 7 -226 12 -239 103 -284 l52 -26 1358 0 c1500 0 1396 -4 1466 63 67 64 62 -66 62 1631 0 932 -4 1554 -9 1569 -15 38 -70 96 -115 120 l-41 22 -1540 1 c-847 1 -1550 0 -1562 -3z"/> </g> `
 });
 
 export const ROLLUP_EMBED_ACTIONS = {
@@ -461,4 +475,24 @@ export const ROLLUP_ACTIONS = Object.freeze({
   PERCENT_FILLED: 'Percent Filled',
   // Key is not needed for the action to be executed
   ...ROLLUP_EMBED_ACTIONS
+});
+
+/******************************************************************************
+ *                                EMITTERS
+ ******************************************************************************/
+export const EMITTERS_GROUPS = Object.freeze({
+  HOTKEY: 'hotkey',
+  SHORTCUT: 'shortcut',
+});
+
+export const EMITTERS_HOTKEY = Object.freeze({
+  OPEN_SEARCH: "editor:open-search"
+});
+
+export const EMITTERS_SHORTCUT = Object.freeze({
+  GO_NEXT_PAGE: "pagination:next",
+  GO_PREVIOUS_PAGE: "pagination:previous",
+  ADD_NEW_ROW: "table:add-new-row",
+  TOGGLE_FILTERS: "table:toggle-filters",
+  OPEN_FILTERS: "table:open-filters",
 });

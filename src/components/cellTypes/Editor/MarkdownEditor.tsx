@@ -15,6 +15,7 @@ import {
   unpairBrackets,
   unpairMarkdown,
 } from "components/cellTypes/Editor/commands";
+import { EMITTERS_GROUPS } from "helpers/Constants";
 
 interface MarkdownEditorProps
   extends DetailedHTMLProps<AllHTMLAttributes<HTMLInputElement>, any> {
@@ -102,10 +103,10 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
       }
     };
 
-    view.emitter.on("hotkey", onHotkey);
+    view.emitter.on(EMITTERS_GROUPS.HOTKEY, onHotkey);
 
     return () => {
-      view.emitter.off("hotkey", onHotkey);
+      view.emitter.off(EMITTERS_GROUPS.HOTKEY, onHotkey);
     };
   }, [view]);
 

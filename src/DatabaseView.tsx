@@ -16,11 +16,13 @@ import { DbFolderException } from "errors/AbstractException";
 import {
   DatabaseCore,
   DB_ICONS,
+  EMITTERS_GROUPS,
+  EMITTERS_SHORTCUT,
   InputType,
-  StyleClasses,
 } from "helpers/Constants";
 import { createEmitter, Emitter } from "helpers/Emitter";
 import obtainInitialType from "helpers/InitialType";
+import { c } from "helpers/StylesHelper";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
 import { getParentWindow } from "helpers/WindowElement";
 import { t } from "lang/helpers";
@@ -52,6 +54,8 @@ export class DatabaseView extends TextFileView implements HoverParent {
   shadowColumns: Array<TableColumn>;
   initial: InitialType;
   formulas: Record<string, unknown>;
+  actionButtons: Record<string, HTMLElement> = {};
+  statusBarItems: Record<string, HTMLElement> = {};
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
     super(leaf);
@@ -123,30 +127,13 @@ export class DatabaseView extends TextFileView implements HoverParent {
         item
           .setTitle(t("menu_pane_open_as_md_action"))
           .setIcon("document")
-          .onClick(() => {
-            this.plugin.databaseFileModes[
-              (this.leaf as any).id || this.file.path
-            ] = InputType.MARKDOWN;
-            this.plugin.setMarkdownView(this.leaf);
-          });
+          .onClick(this.markdownAction.bind(this));
       })
       .addItem((item) => {
         item
           .setTitle(t("menu_pane_open_db_settings_action"))
           .setIcon(DB_ICONS.NAME)
-          .onClick(() => {
-            new SettingsModal(
-              this,
-              {
-                onSettingsChange: (settings) => {
-                  /**
-                   * Settings are saved into the database file, so we don't need to do anything here.
-                   */
-                },
-              },
-              this.plugin.settings
-            ).open();
-          });
+          .onClick(this.settingsAction.bind(this));
       })
       .addSeparator();
 
@@ -178,7 +165,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
         this.diskConfig.yaml.config,
         this.diskConfig.yaml.filters
       );
-
       this.initial = obtainInitialType(this.columns);
 
       this.formulas = await obtainFormulasFromFolder(
@@ -199,11 +185,33 @@ export class DatabaseView extends TextFileView implements HoverParent {
     } catch (e: unknown) {
       LOGGER.error(`initDatabase ${this.file.path}`, e);
       if (e instanceof DbFolderException) {
-        e.render(this.tableContainer);
+        e.render(this.rootContainer);
       } else {
         throw e;
       }
     }
+  }
+
+  private initActions(): void {
+    // Settings action
+    this.addAction(
+      DB_ICONS.NAME,
+      `${t("menu_pane_open_db_settings_action")}`,
+      this.settingsAction.bind(this)
+    );
+    // Open as markdown action
+    this.addAction(
+      "document",
+      `${t("menu_pane_open_as_md_action")}`,
+      this.markdownAction.bind(this)
+    );
+  }
+
+  postRenderActions(): void {}
+
+  onload(): void {
+    super.onload();
+    this.initActions();
   }
 
   destroy() {
@@ -212,6 +220,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     this.getStateManager().unregisterView(this);
     this.plugin.removeView(this);
     this.tableContainer.remove();
+    this.detachViewComponents();
     LOGGER.info(`<=destroy ${this.file.path}`);
   }
 
@@ -225,9 +234,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   }
 
   initRootContainer(file: TFile) {
-    this.tableContainer = this.contentEl.createDiv(
-      StyleClasses.TABLE_CONTAINER
-    );
+    this.tableContainer = this.contentEl.createDiv(c("container"));
     this.tableContainer.setAttribute("id", file.path);
     this.rootContainer = createRoot(this.tableContainer);
   }
@@ -245,6 +252,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   async reloadDatabase() {
     this.rootContainer.unmount();
     this.rootContainer = createRoot(this.tableContainer);
+    this.detachViewComponents();
     this.initDatabase();
   }
 
@@ -266,5 +274,77 @@ export class DatabaseView extends TextFileView implements HoverParent {
         there's nothing to do in this method.  (We can't omit it, since it's
         abstract.)
         */
+  }
+
+  /**
+   * Remove all action buttons from the view
+   */
+  detachViewComponents(): void {
+    Object.values(this.actionButtons).forEach((button) => {
+      button.detach();
+    });
+
+    Object.values(this.statusBarItems).forEach((item) => {
+      item.detach();
+    });
+
+    this.statusBarItems = {};
+    this.actionButtons = {};
+  }
+  /****************************************************************
+   *                         BAR ACTIONS
+   ****************************************************************/
+
+  /**
+   *
+   * @param evt
+   */
+  settingsAction(evt?: MouseEvent): void {
+    new SettingsModal(
+      this,
+      {
+        onSettingsChange: (settings) => {
+          /**
+           * Settings are saved into the database file, so we don't need to do anything here.
+           */
+        },
+      },
+      this.plugin.settings
+    ).open();
+  }
+
+  markdownAction(evt: MouseEvent): void {
+    this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
+      InputType.MARKDOWN;
+    this.plugin.setMarkdownView(this.leaf);
+  }
+  /****************************************************************
+   *                     KEYBOARD SHORTCUTS
+   ****************************************************************/
+
+  goNextPage() {
+    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.GO_NEXT_PAGE);
+  }
+
+  goPreviousPage() {
+    this.emitter.emit(
+      EMITTERS_GROUPS.SHORTCUT,
+      EMITTERS_SHORTCUT.GO_PREVIOUS_PAGE
+    );
+  }
+
+  addNewRow() {
+    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.ADD_NEW_ROW);
+  }
+
+  toggleFilters() {
+    this.emitter.emit(
+      EMITTERS_GROUPS.SHORTCUT,
+      EMITTERS_SHORTCUT.TOGGLE_FILTERS
+    );
+  }
+
+  openFilters() {
+    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
   }
 }

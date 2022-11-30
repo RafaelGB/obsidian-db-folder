@@ -26,14 +26,6 @@ class VaultManager {
     );
     let content = databasefields ? parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields)) : "";
 
-    // Custom content by source
-    switch (localSettings.source_data) {
-      case SourceDataTypes.TAG:
-        content = content.concat(`#${localSettings.source_form_result}\n`);
-        break;
-      default:
-    }
-
     // Obtain content from current row template
     try {
       if (DataviewService.isTruthy(localSettings.current_row_template) && localSettings.current_row_template.endsWith(".md")) {
@@ -44,6 +36,15 @@ class VaultManager {
     } catch (err) {
       new Notice(`Error while inserting ${localSettings.current_row_template}: ${err}`);
     }
+
+    // Custom content by source
+    switch (localSettings.source_data) {
+      case SourceDataTypes.TAG:
+        content = content.concat(`#${localSettings.source_form_result}\n`);
+        break;
+      default:
+    }
+
     await app.vault.modify(created_note, content ?? "");
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;

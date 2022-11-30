@@ -17,6 +17,8 @@ export default {
   'toolbar_menu_aria_label': 'Open table options',
   'toolbar_menu_export_csv': 'Export CSV',
   'toolbar_menu_import_csv': 'Import CSV',
+  'toolbar_menu_search_bar': 'Global search',
+  'toolbar_menu_add_row': 'Add row',
   /** SOURCE OPTIONS */
   'current_folder': "Current folder",
   'current_folder_without_subfolders': "Current folder without subfolders",
@@ -24,4 +26,11 @@ export default {
   "outgoing_link": "Outgoing link",
   "incoming_link": "Incoming link",
   "query": "Dataview query",
+  /** COMMAND OPTIONS */
+  "active_go_next_page": "Go to next page",
+  "active_go_previous_page": "Go to previous page",
+  "active_add_new_row": "Add new row",
+  "active_open_settings": "Open Database settings",
+  "active_toggle_filters": "Toggle filters",
+  "active_open_filters": "Open filters",
 };

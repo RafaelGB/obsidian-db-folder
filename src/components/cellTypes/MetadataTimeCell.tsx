@@ -1,8 +1,8 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
-import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { c } from "helpers/StylesHelper";
 import { DateTime } from "luxon";
 import React, { useEffect, useRef } from "react";
+import { MarkdownService } from "services/MarkdownRenderService";
 
 const MetadataTimeCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
@@ -20,7 +20,12 @@ const MetadataTimeCell = (mdProps: CellComponentProps) => {
         "yyyy-MM-dd"
       )}|${metadataValue}]]`;
 
-      renderMarkdown(defaultCell, metadataValue, mdRef.current, 5);
+      MarkdownService.renderMarkdown(
+        defaultCell,
+        metadataValue,
+        mdRef.current,
+        5
+      );
     }
   });
   return (

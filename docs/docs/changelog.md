@@ -1,3 +1,27 @@
+## 2.9.2
+- Hotfix sorting and selects [ISSUE#620](https://github.com/RafaelGB/obsidian-db-folder/issues/620) [ISSUE#622](https://github.com/RafaelGB/obsidian-db-folder/issues/622)
+## 2.9.1
+- hotfix for 2.9.0. Not string editions typo fixed
+## 2.9.0
+### Shiny new things
+- New search filters customize per type of content. You can enable/disable them in the header context menu.
+  - Date range filter
+  - Checkboxes filter
+  - Links filter
+  - Number range filter
+  - Text filter with unique values suggestions
+  - Select filter with unique values suggestions
+  - Tags filter
+  - Tasks filter
+### Improved
+- Improvements on Obsidnan-projects integration [ISSUE#592](https://github.com/RafaelGB/obsidian-db-folder/issues/592)
+- new Icon design! [ISSUE#599](https://github.com/RafaelGB/obsidian-db-folder/issues/599)
+- You can hide/show the icon in the bar context menu on global settings.
+- Current folder without subfolders is avaliable for root too [ISSUE#606](https://github.com/RafaelGB/obsidian-db-folder/issues/606)
+### No longer broken
+- Edit engine improved to support multiple formula editions with the same trigger [ISSUE#616](https://github.com/RafaelGB/obsidian-db-folder/issues/616)
+- Tags source include the tag with new files at the end of the file if a template is applied [ISSUE#618](https://github.com/RafaelGB/obsidian-db-folder/issues/618)
+- CSV imports will include the file path correctly [ISSUE#593](https://github.com/RafaelGB/obsidian-db-folder/issues/593)
 ## 2.8.4
 ### Shiny new things
 - New rollup. All task count [ISSUE#602](https://github.com/RafaelGB/obsidian-db-folder/issues/602)

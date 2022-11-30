@@ -1,9 +1,9 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { renderMarkdown } from "components/obsidianArq/MarkdownRenderer";
 import { c } from "helpers/StylesHelper";
 import { Link } from "obsidian-dataview";
 import React, { useEffect, useRef } from "react";
+import { MarkdownService } from "services/MarkdownRenderService";
 
 const MarkdownCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
@@ -15,7 +15,7 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
   useEffect(() => {
     if (mdRef.current !== null) {
       mdRef.current.innerHTML = "";
-      renderMarkdown(
+      MarkdownService.renderMarkdown(
         defaultCell,
         (markdownRow[tableColumn.key] as Link).markdown(),
         mdRef.current,

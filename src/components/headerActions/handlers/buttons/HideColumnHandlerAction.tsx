@@ -33,7 +33,7 @@ function hideButton(headerActionResponse: HeaderActionResponse) {
     const currentCol = column.columnDef as TableColumn;
     column.getToggleVisibilityHandler()({ target: { checked: false } });
     columnActions.alterIsHidden(currentCol, true);
-    hooks.setExpanded(false);
+    hooks.setMenuEl(null);
   };
 
   return headerButtonComponent({

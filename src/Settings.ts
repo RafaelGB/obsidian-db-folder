@@ -15,6 +15,7 @@ import editing_engine_settings_section from "settings/EditingEngineSection";
 import rows_settings_section from "settings/RowsSection";
 import csv_settings_section from "settings/CSVSection";
 import automation_settings_section from "settings/AutomationSection";
+import helpers_settings_section from "settings/HelpersSection";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -99,6 +100,8 @@ export class SettingsManager {
       media_settings_section(settingHandlerResponse);
       /** CSV section */
       csv_settings_section.run(settingHandlerResponse);
+      /** Helpers/Commands section */
+      helpers_settings_section.run(settingHandlerResponse);
       /** Developer section */
       developer_settings_section.run(settingHandlerResponse);
     }
@@ -129,7 +132,7 @@ export class SettingsModal extends Modal {
     config: SettingsManagerConfig,
     settings: DatabaseSettings
   ) {
-    super(view.app);
+    super(app);
 
     this.view = view;
     this.settingsManager = new SettingsManager(view.plugin, config, settings);
@@ -155,7 +158,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
   plugin: DBFolderPlugin;
   settingsManager: SettingsManager;
   constructor(plugin: DBFolderPlugin, config: SettingsManagerConfig) {
-    super(plugin.app, plugin);
+    super(app, plugin);
     this.plugin = plugin;
     this.settingsManager = new SettingsManager(plugin, config, plugin.settings);
   }

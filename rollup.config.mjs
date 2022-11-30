@@ -2,7 +2,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript2 from "rollup-plugin-typescript2";
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import replace from '@rollup/plugin-replace';
 
 const isProd = (process.env.BUILD === 'production');
@@ -43,7 +43,7 @@ const PROD_PLUGIN_CONFIG = {
     plugins: [
         ...getRollupPlugins()
         ,terser({
-            ecma: 2018,
+            ecma: 2021,
             mangle: { toplevel: true },
             compress: {
                 module: true,

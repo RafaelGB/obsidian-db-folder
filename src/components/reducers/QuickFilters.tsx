@@ -40,11 +40,12 @@ const QuickFilters = (props: DataviewFiltersProps) => {
           return (
             <div
               onClick={toggleFilterGroupOnClickHandler(filterIndex)}
-              key={`quickFilter-chip-${label}`}
+              key={`quickFilter-div-chip-${filterIndex}`}
             >
               <Chip
                 size="small"
                 label={label ?? `filter-${filterIndex}`}
+                key={`quickFilter-chip-${filterIndex}`}
                 sx={{
                   backgroundColor: disabled
                     ? StyleVariables.INTERACTIVE_NORMAL

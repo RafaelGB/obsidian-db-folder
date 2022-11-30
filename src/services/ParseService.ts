@@ -246,7 +246,7 @@ class Parse {
         let auxMarkdown = '';
         switch (wrapped.type) {
             case 'link':
-                auxMarkdown = `${wrapped.value.fileName()}|${wrapped.value.path}`;
+                auxMarkdown = wrapped.value.fileName();
                 break;
             case 'object':
             case 'date':
@@ -319,6 +319,7 @@ class Parse {
         // Remove a possible already existing quote wrapper
         if (value.startsWith('"') && value.endsWith('"')) {
             value = value.substring(1, value.length - 1);
+            return this.wrapWithQuotes(value);
         }
 
         // Wrap in quotes if is configured to do so
