@@ -19,7 +19,6 @@ import {
   EMITTERS_GROUPS,
   EMITTERS_SHORTCUT,
   InputType,
-  StyleClasses,
 } from "helpers/Constants";
 import { createEmitter, Emitter } from "helpers/Emitter";
 import obtainInitialType from "helpers/InitialType";
@@ -186,7 +185,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
     } catch (e: unknown) {
       LOGGER.error(`initDatabase ${this.file.path}`, e);
       if (e instanceof DbFolderException) {
-        e.render(this.tableContainer);
+        e.render(this.rootContainer);
       } else {
         throw e;
       }

@@ -1,6 +1,6 @@
 import { Notice } from "obsidian";
-import { generateErrorComponent } from "components/ErrorComponents"
-import ReactDOM from 'react-dom';
+import { boundaryPreRendererComponent } from "components/ErrorComponents"
+import { Root } from "react-dom/client";
 
 export abstract class DbFolderException extends Error {
     protected messageErrors: Record<string, string[]> = {};
@@ -20,11 +20,9 @@ export abstract class DbFolderException extends Error {
         return this.message + '\n' + Object.keys(this.messageErrors).map(e => e + ': ' + this.messageErrors[e].join('\n')).join('\n')
     }
 
-    public render(container: HTMLElement): void {
+    public render(boundary: Root): void {
         new Notice(this.getMessage());
-
-        const errorContainer = container.createDiv("dbfolder-error-container");
-        const errorComponent = generateErrorComponent(this.messageErrors);
-        ReactDOM.render(errorComponent, errorContainer);
+        const errorComponent = boundaryPreRendererComponent(this.messageErrors);
+        boundary.render(errorComponent);
     }
 }
