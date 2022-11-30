@@ -37,6 +37,7 @@ import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/database
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
+import { DataviewService } from 'services/DataviewService';
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -397,7 +398,16 @@ export default class DBFolderPlugin extends Plugin {
 				}
 			})
 		);
+
+		this.registerEvent(
+			// @ts-ignore
+			this.app.metadataCache.on("dataview:index-ready", () => {
+				console.log("dataview:index-ready");
+				DataviewService.setIndexIsLoaded(true);
+			})
+		);
 	}
+
 	registerCommands() {
 		// Creator Helper Command
 		this.addCommand({
