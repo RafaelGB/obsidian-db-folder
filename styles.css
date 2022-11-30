@@ -312,7 +312,7 @@ div.database-plugin__checkbox {
   color: var(--text-accent);
   align-items: center;
   cursor: pointer;
-  z-index: 3;
+  z-index: 100;
   position: sticky;
   left: 0;
   bottom: 0;
@@ -445,6 +445,14 @@ div.database-plugin__checkbox {
   position: relative;
 }
 
+.database-plugin__tbody {
+  display: table-row-group;
+}
+
+.database-plugin__tfoot {
+  display: table-footer-group;
+}
+
 .database-plugin__header-group,
 .database-plugin__header {
   justify-content: flex-start;
@@ -459,7 +467,7 @@ div.database-plugin__checkbox {
   z-index: 2;
 }
 
-.database-plugin__table-header-group {
+.database-plugin__thead {
   border-top: 1px solid var(--background-modifier-border);
   display: table-header-group;
 }
@@ -907,7 +915,7 @@ div.database-plugin__checkbox {
   border-radius: 0.3rem;
   display: inline-block;
   position: relative;
-  z-index: 4;
+  z-index: 100;
 }
 
 .react-datepicker--time-only .react-datepicker__triangle {

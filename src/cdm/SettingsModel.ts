@@ -57,6 +57,7 @@ export interface LocalSettings {
     inline_new_position: string;
     date_format: string;
     datetime_format: string;
+    enable_footer: boolean;
 }
 
 export interface FilterSettings {

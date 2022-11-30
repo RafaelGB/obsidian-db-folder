@@ -4,6 +4,7 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { TemplateFolderNewRowsHandler } from "settings/handlers/rows/TemplateFolderNewRowsHandler";
 import { PaginationSizeHandler } from "settings/handlers/rows/PaginationSizeHandler";
 import { RowShadowToggleHandler } from "settings/handlers/rows/RowShadowToggleHandler";
+import { FooterToggleHandler } from "settings/handlers/rows/FooterToggleHandler";
 import { AbstractHandler } from "patterns/AbstractHandler";
 
 class RowsSection extends AbstractChain<SettingHandlerResponse> {
@@ -18,7 +19,8 @@ class RowsSection extends AbstractChain<SettingHandlerResponse> {
         return [
             new TemplateFolderNewRowsHandler(),
             new PaginationSizeHandler(),
-            new RowShadowToggleHandler()
+            new RowShadowToggleHandler(),
+            new FooterToggleHandler()
         ]
     }
 }

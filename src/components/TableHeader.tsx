@@ -3,8 +3,8 @@ import { flexRender } from "@tanstack/react-table";
 import { c } from "helpers/StylesHelper";
 import { TableHeaderProps } from "cdm/HeaderModel";
 
-export default function TableHeader(headerProps: TableHeaderProps) {
-  const { table, header, reorderColumn, headerIndex } = headerProps;
+export default function TableHeader(tableHeaderProps: TableHeaderProps) {
+  const { table, header, reorderColumn, headerIndex } = tableHeaderProps;
   const { view } = table.options.meta;
   const { columnOrder } = table.options.state;
   const [isDragging, setIsDragging] = React.useState(false);
