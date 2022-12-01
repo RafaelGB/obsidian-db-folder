@@ -95,6 +95,18 @@ div.database-plugin__td.data-input:hover {
 }
 
 /******************************************************
+*                   Table Structure
+ ******************************************************/
+/*** FOOTER ***/
+.database-plugin__tfoot {
+  display: table-footer-group;
+}
+
+.database-plugin__footer {
+  border: 2px solid var(--background-modifier-accent);
+  border-radius: 5px;
+}
+/******************************************************
  *                  Inputs of cells
  ******************************************************/
 .data-input {
@@ -344,6 +356,7 @@ div.database-plugin__checkbox {
   cursor: pointer;
   background-color: var(--background-primary);
   display: table-cell;
+  z-index: 1;
 }
 
 .database-plugin__th:hover {
@@ -447,10 +460,6 @@ div.database-plugin__checkbox {
 
 .database-plugin__tbody {
   display: table-row-group;
-}
-
-.database-plugin__tfoot {
-  display: table-footer-group;
 }
 
 .database-plugin__header-group,
