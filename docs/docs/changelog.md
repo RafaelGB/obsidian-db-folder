@@ -1,3 +1,16 @@
+## 3.0.0
+### Shiny new things
+- A new design for the plugin [ISSUE#577](https://github.com/RafaelGB/obsidian-db-folder/issues/577)
+- Row header menu now displays the entire file content below the row. Open option is now another right click option. [ISSUE#633](https://github.com/RafaelGB/obsidian-db-folder/issues/633)
+- Configurable shortcuts for some actions. [ISSUE#154](https://github.com/RafaelGB/obsidian-db-folder/issues/154)
+- Global search and filters now are avaliable with ctrl+F or with the search icon in the top bar. Leaving more space for the table.
+- (Experimental) enable/disable a footer. Currently only support summatory of number columns [ISSUE#637](https://github.com/RafaelGB/obsidian-db-folder/issues/637)
+### Improved
+- (Experimental) a custom view for errors.
+- At startup, the plugin will check if dataview loads the indexes. If not, it will show a warning to the user.
+### No longer broken
+- Mobile now support pagination
+- Mobile calendar view was fixed [ISSUE#561](https://github.com/RafaelGB/obsidian-db-folder/issues/561)
 ## 2.9.2
 - Hotfix sorting and selects [ISSUE#620](https://github.com/RafaelGB/obsidian-db-folder/issues/620) [ISSUE#622](https://github.com/RafaelGB/obsidian-db-folder/issues/622)
 ## 2.9.1
