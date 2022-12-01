@@ -6,6 +6,7 @@
 - Global search and filters now are avaliable with ctrl+F or with the search icon in the top bar. Leaving more space for the table.
 - (Experimental) enable/disable a footer. Currently only support summatory of number columns [ISSUE#637](https://github.com/RafaelGB/obsidian-db-folder/issues/637)
 ### Improved
+- Number of total rows with the number displayed is shown in the status bar.
 - (Experimental) a custom view for errors.
 - At startup, the plugin will check if dataview loads the indexes. If not, it will show a warning to the user.
 ### No longer broken
