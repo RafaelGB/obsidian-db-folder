@@ -1,11 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-/*****************
-* Plugin variables
-******************/
-body {
-  --react-datepicker-navigation-height: 24px;
-  --react-datepicker-navigation-width: 24px;
-}
 /*****************
 *      Base
 ******************/
@@ -798,6 +790,16 @@ div.database-plugin__checkbox {
 /*************************
 *  React-datepicker styles
 **************************/
+.react-datepicker {
+  --react-datepicker-navigation-height: 24px;
+  --react-datepicker-navigation-width: 24px;
+}
+
+.react-datepicker button {
+  max-width: var(--react-datepicker-navigation-width);
+  max-height: var(--react-datepicker-navigation-height);
+}
+
 .react-datepicker__year-read-view--down-arrow,
 .react-datepicker__month-read-view--down-arrow,
 .react-datepicker__month-year-read-view--down-arrow,
@@ -990,6 +992,8 @@ div.database-plugin__checkbox {
   border-top-left-radius: 0.3rem;
   padding: 8px 0;
   position: relative;
+  height: auto;
+  width: auto;
 }
 
 .react-datepicker__header--time {
