@@ -1,14 +1,14 @@
 import { Cell, flexRender } from "@tanstack/react-table";
-import { TableCellProps } from "cdm/CellModel";
 import { RowDataType } from "cdm/FolderModel";
 import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
 import React from "react";
 import { MdFileComponent } from "components/obsidianArq/embedMdInteractive";
+import { TableRowProps } from "cdm/RowTypeModel";
 
-export default function TableRow(headerProps: TableCellProps) {
-  const { row, table } = headerProps;
+export default function TableRow(tableRowProps: TableRowProps) {
+  const { row, table } = tableRowProps;
   const { view } = table.options.meta;
   const backgroundColor = view.plugin.settings.global_settings.enable_row_shadow
     ? (table.getRowModel().flatRows.indexOf(row) + 1) % 2
