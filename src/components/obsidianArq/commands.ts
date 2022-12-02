@@ -1,5 +1,5 @@
 import { Row } from "@tanstack/react-table";
-import { RowDataType } from "cdm/FolderModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { DataState } from "cdm/TableStateInterface";
 import { Menu, TFile } from "obsidian";
 
@@ -47,4 +47,25 @@ export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataTyp
     fileMenu.addSeparator();
     app.workspace.trigger("file-menu", fileMenu, file, null, app.workspace.getMostRecentLeaf());
     fileMenu.showAtMouseEvent(event);
+}
+
+
+export function showFooterMenu(event: MouseEvent, tableColumn: TableColumn) {
+    const footerMenu = new Menu();
+    // TODO: translate , icon & callback
+    footerMenu.addItem((item) => item
+        .setTitle("None")
+        .setIcon("pencil")
+        .onClick(() => { }));
+    // TODO: translate , icon & callback
+    footerMenu.addItem((item) => item
+        .setTitle("Sum")
+        .setIcon("pencil")
+        .onClick(() => { }));
+    // TODO: translate , icon & callback
+    footerMenu.addItem((item) => item
+        .setTitle("Average")
+        .setIcon("trash")
+        .onClick(() => { }));
+    footerMenu.showAtMouseEvent(event);
 }
