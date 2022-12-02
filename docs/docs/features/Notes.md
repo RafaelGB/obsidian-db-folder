@@ -1,6 +1,6 @@
 ## Creating Blank Notes
 
-You can create blank notes by typing the name in the bottom bar while leaving the template field empty.
+You can create blank notes by clicking on the "+" icon the obsidian page header or by using the command `DB Folder: Add new row` which brings up the creation modal. Make sure you leave the template filed empty.
 
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197633841-2e54a360-ce90-4b95-8032-34409fe4a1bc.mov" type="video/mp4">
@@ -8,7 +8,7 @@ You can create blank notes by typing the name in the bottom bar while leaving th
 
 ## Creating Notes with a Template
 
-You have to choose a template in the bottom bar before creating the note. You can filter the files suggested in the bottom bar by adding a folder in the settings under `rows template file folder location`.
+You have to choose a template in the creation modal. You can filter the files suggested by adding a folder in the database or global plugin settings under `Rows section`.
 
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197634718-98463157-f7d7-4323-87ab-e280211eeed7.mov" type="video/mp4">
@@ -20,13 +20,25 @@ You have to choose a template in the bottom bar before creating the note. You ca
   <source src="https://user-images.githubusercontent.com/38974541/197634584-7420f211-bec2-4e0e-a031-dab809cbc1ab.mov" type="video/mp4">
 </video>
 
+## Creating Notes via Importing
+
+You can upload a **CSV** file and turn it into a database using the obsidian page header. The **CSV** file has to have a header row and before importing you need to define the column used to create the files in the plugin global settings under `CSV section > mandatory header key`.
+
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197636176-44eeaeb3-a753-4afc-b96b-4072b2e87fca.mov" type="video/mp4">
+</video>
+
 ## Deleting & Renaming Notes
 
-You can click on the numbers to the right of every row, to bring up a menu where you can delete and rename the note associated with the row.
+You can right-click on the numbers to the right of every row, to bring up a menu where you can delete or rename the note associated with the row.
 
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197634302-a1081f6b-12da-40a5-a476-b222d4686b98.mov" type="video/mp4">
 </video>
+
+## Opening Note
+
+You can either display a preview of the note inside the database by clicking on the numbers to the right. In this preview, you can't edit the file but you can check the tasks. You can also click on the link symbol to open the note in its own pane.
 
 ## Moving Notes Based on Metadata
 

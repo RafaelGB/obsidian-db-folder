@@ -71,3 +71,11 @@ You can rename columns by clicking on the column header and changing the selecte
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197635177-6a7992e4-69df-42f2-b011-941b347122f1.mov" type="video/mp4">
 </video>
+
+## Sticky First Column
+
+You can make the first column sticky in the database settings to make it always visible even when scrolling horizontally.
+
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197636568-e5a50f5e-0e31-42ce-8067-d810d9643129.mov" type="video/mp4">
+</video>
