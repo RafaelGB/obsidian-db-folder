@@ -6,9 +6,10 @@ nav:
   - Features:
       - Sources: "features/Sources.md"
       - Columns: "features/Columns.md"
+      - Rows: "features/Rows.md"
       - Properties: "features/Properties.md"
       - Notes: "features/Notes.md"
-      - Viewing data: "features/Viewing data.md"
+      - Displaying data: "features/Displaying data.md"
       - Relations: "features/Relations.md"
       - Formulas: "features/Formulas.md"
   - About: "about.md"

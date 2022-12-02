@@ -1,6 +1,6 @@
 ## Types
 
-- **Text**: this property support markdown, links, and tags. If you're using links you can enable alias in the column settings or in the plugin global settings ;
+- **Text**: this property support markdown, internal links, external links, and tags. If you're using links you can enable alias in the column settings or in the plugin global settings ;
 - **Number**: this property only accepts numbers ;
 - **Checkbox**: this property is represented by `true/false` in the underlying markdown ;
 - **Date**: this property accepts dates. The default format is `yyyy-MM-dd`, but it can be changed in the plugin or database settings under `editing engine section > Date format` ;
