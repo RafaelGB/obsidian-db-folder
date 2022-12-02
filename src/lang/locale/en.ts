@@ -40,4 +40,6 @@ export default {
   "footer_menu_count_filled": "Count filled values",
   "footer_menu_average": "Average",
   "footer_menu_sum": "Sum",
+  "footer_menu_min": "Min",
+  "footer_menu_max": "Max",
 };

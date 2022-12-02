@@ -16,26 +16,11 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   const tableColumn = header.column.columnDef as TableColumn;
   const [footerType, setFooterValue] = useState(tableColumn.config.footer_type);
   const { config } = tableColumn;
-  let footerInfo: string = "";
 
-  const footerRule = new Footer(table.getRowModel().rows);
-  switch (footerType) {
-    case FooterType.COUNT_UNIQUE:
-      footerInfo = footerRule.countUnique(header.id);
-      break;
-    case FooterType.COUNT_EMPTY:
-      footerInfo = footerRule.percentEmpty(header.id);
-      break;
-    case FooterType.COUNT_FILLED:
-      footerInfo = footerRule.percentFilled(header.id);
-      break;
-    case FooterType.SUM:
-      footerInfo = footerRule.sum(header.id);
-      break;
-    case FooterType.NONE:
-    default:
-      footerInfo = "";
-  }
+  const footerInfo = new Footer(table.getRowModel().rows).dispatch(
+    footerType,
+    header.id
+  );
 
   const handlerFooterOptions: MouseEventHandler<HTMLDivElement> = async (
     event: React.MouseEvent

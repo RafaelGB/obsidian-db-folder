@@ -70,34 +70,23 @@ export function showFooterMenu(
             setFooterType(type);
         }
     };
-    // TODO: icon 
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_none"))
-        .setIcon("pencil")
         .onClick(handleFooterOption(FooterType.NONE)));
-    // TODO:  icon 
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_count_unique"))
-        .setIcon("pencil")
         .onClick(handleFooterOption(FooterType.COUNT_UNIQUE)));
-
+    footerMenu.addItem((item) => item
+        .setTitle(t("footer_menu_count_empty"))
+        .onClick(handleFooterOption(FooterType.COUNT_EMPTY)));
+    footerMenu.addItem((item) => item
+        .setTitle(t("footer_menu_count_filled"))
+        .onClick(handleFooterOption(FooterType.COUNT_FILLED)));
     // Custom footer menu
     switch (tableColumn.input) {
         case InputType.NUMBER:
-            // TODO:  icon 
-            footerMenu.addItem((item) => item
-                .setTitle(t("footer_menu_count_empty"))
-                .setIcon("pencil")
-                .onClick(handleFooterOption(FooterType.COUNT_EMPTY)));
-            // TODO:  icon
-            footerMenu.addItem((item) => item
-                .setTitle(t("footer_menu_count_filled"))
-                .setIcon("pencil")
-                .onClick(handleFooterOption(FooterType.COUNT_FILLED)));
-            // TODO:  icon 
             footerMenu.addItem((item) => item
                 .setTitle(t("footer_menu_sum"))
-                .setIcon("pencil")
                 .onClick(handleFooterOption(FooterType.SUM)));
             break;
         default:
