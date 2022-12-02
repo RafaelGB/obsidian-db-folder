@@ -1,7 +1,10 @@
 import { Row } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { DataState } from "cdm/TableStateInterface";
+import { ColumnsState, DataState } from "cdm/TableStateInterface";
+import { FooterType, InputType } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { Menu, TFile } from "obsidian";
+import { Dispatch, SetStateAction } from "react";
 
 /**
  * entry arguments for the command <br/>
@@ -50,22 +53,56 @@ export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataTyp
 }
 
 
-export function showFooterMenu(event: MouseEvent, tableColumn: TableColumn) {
+export function showFooterMenu(
+    event: MouseEvent,
+    tableColumn: TableColumn,
+    columnActions: ColumnsState["actions"],
+    footerType: string,
+    setFooterType: Dispatch<SetStateAction<string>>) {
     const footerMenu = new Menu();
-    // TODO: translate , icon & callback
+
+    const handleFooterOption = (type: string, formula?: string) => () => {
+        if (footerType !== type) {
+            columnActions.alterColumnConfig(tableColumn, {
+                footer_type: type,
+                footer_formula: formula || ""
+            })
+            setFooterType(type);
+        }
+    };
+    // TODO: icon 
     footerMenu.addItem((item) => item
-        .setTitle("None")
+        .setTitle(t("footer_menu_none"))
         .setIcon("pencil")
-        .onClick(() => { }));
-    // TODO: translate , icon & callback
+        .onClick(handleFooterOption(FooterType.NONE)));
+    // TODO:  icon 
     footerMenu.addItem((item) => item
-        .setTitle("Sum")
+        .setTitle(t("footer_menu_count_unique"))
         .setIcon("pencil")
-        .onClick(() => { }));
-    // TODO: translate , icon & callback
-    footerMenu.addItem((item) => item
-        .setTitle("Average")
-        .setIcon("trash")
-        .onClick(() => { }));
+        .onClick(handleFooterOption(FooterType.COUNT_UNIQUE)));
+
+    // Custom footer menu
+    switch (tableColumn.input) {
+        case InputType.NUMBER:
+            // TODO:  icon 
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_count_empty"))
+                .setIcon("pencil")
+                .onClick(handleFooterOption(FooterType.COUNT_EMPTY)));
+            // TODO:  icon
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_count_filled"))
+                .setIcon("pencil")
+                .onClick(handleFooterOption(FooterType.COUNT_FILLED)));
+            // TODO:  icon 
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_sum"))
+                .setIcon("pencil")
+                .onClick(handleFooterOption(FooterType.SUM)));
+            break;
+        default:
+        // Do nothing
+    }
+
     footerMenu.showAtMouseEvent(event);
 }

@@ -74,6 +74,7 @@ export interface ColumnsState {
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
         alterColumnSize: (id: string, width: number) => void;
         alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
+        alterColumnConfig: (column: TableColumn, config: Partial<ConfigColumn>) => void;
     }
     info: {
         getAllColumns: () => TableColumn[];

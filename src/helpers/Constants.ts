@@ -80,6 +80,14 @@ export const PaginationRenderOptions = Object.freeze({
   BASIC: 'basic',
 });
 
+export const FooterType = Object.freeze({
+  NONE: 'none',
+  COUNT_UNIQUE: 'count_unique',
+  COUNT_EMPTY: 'count_empty',
+  COUNT_FILLED: 'count_filled',
+  SUM: 'sum',
+});
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
@@ -98,7 +106,8 @@ export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   media_width: 100,
   media_height: 100,
   isInline: false,
-  task_hide_completed: true
+  task_hide_completed: true,
+  footer_type: FooterType.NONE,
 });
 
 export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
