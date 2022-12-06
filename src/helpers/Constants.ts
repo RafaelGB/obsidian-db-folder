@@ -84,10 +84,13 @@ export const FooterType = Object.freeze({
   NONE: 'none',
   COUNT_UNIQUE: 'count_unique',
   COUNT_EMPTY: 'count_empty',
+  PERCENT_EMPTY: 'percent_empty',
   COUNT_FILLED: 'count_filled',
+  PERCENT_FILLED: 'percent_filled',
   SUM: 'sum',
   MIN: 'min',
   MAX: 'max',
+  FORMULA: 'formula',
 });
 
 /******************************************************************************

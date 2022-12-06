@@ -1,9 +1,10 @@
 import { Row } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, DataState } from "cdm/TableStateInterface";
+import { PromptModal } from "components/modals/PromptModal";
 import { FooterType, InputType } from "helpers/Constants";
 import { t } from "lang/helpers";
-import { Menu, TFile } from "obsidian";
+import { Menu, Notice, TFile } from "obsidian";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -53,7 +54,7 @@ export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataTyp
 }
 
 
-export function showFooterMenu(
+export async function showFooterMenu(
     event: MouseEvent,
     tableColumn: TableColumn,
     columnActions: ColumnsState["actions"],
@@ -70,6 +71,16 @@ export function showFooterMenu(
             setFooterType(type);
         }
     };
+
+    const handleFOrmulaOption = async () => {
+
+        const prompt_filename = new PromptModal("Footer formula", tableColumn.config.footer_formula);
+        await prompt_filename.openAndGetValue(
+            (value) => {
+                handleFooterOption(FooterType.FORMULA, value)();
+            },
+            () => { new Notice("Formula edition cancelled") });
+    };
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_none"))
         .onClick(handleFooterOption(FooterType.NONE)));
@@ -80,8 +91,17 @@ export function showFooterMenu(
         .setTitle(t("footer_menu_count_empty"))
         .onClick(handleFooterOption(FooterType.COUNT_EMPTY)));
     footerMenu.addItem((item) => item
+        .setTitle(t("footer_menu_percent_empty"))
+        .onClick(handleFooterOption(FooterType.PERCENT_EMPTY)));
+    footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_count_filled"))
         .onClick(handleFooterOption(FooterType.COUNT_FILLED)));
+    footerMenu.addItem((item) => item
+        .setTitle(t("footer_menu_percent_empty"))
+        .onClick(handleFooterOption(FooterType.PERCENT_FILLED)));
+    footerMenu.addItem((item) => item
+        .setTitle(t("footer_menu_formula"))
+        .onClick(handleFOrmulaOption));
     // Custom footer menu
     switch (tableColumn.input) {
         case InputType.NUMBER:
