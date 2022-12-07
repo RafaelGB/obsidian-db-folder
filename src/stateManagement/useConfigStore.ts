@@ -1,4 +1,4 @@
-import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
+import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ConfigState, EphimeralSettings } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { EphimeralConfiguration } from "helpers/Constants";
@@ -12,7 +12,7 @@ const useConfigStore = (view: DatabaseView) => {
             ddbbConfig: config,
             filters: filters,
             global: global_settings,
-            ephimeral: EphimeralConfiguration,
+            ephimeral: constructEphimeralSettings(global_settings),
             actions: {
                 alterFilters: async (partialFilters: Partial<FilterSettings>) => {
                     await view.diskConfig.updateFilters(partialFilters);
@@ -38,5 +38,12 @@ const useConfigStore = (view: DatabaseView) => {
             },
         })
     );
+}
+const constructEphimeralSettings = (global_settings: GlobalSettings
+): EphimeralSettings => {
+    return {
+        ...EphimeralConfiguration,
+        enable_navbar: global_settings.show_search_bar_by_default,
+    }
 }
 export default useConfigStore;
