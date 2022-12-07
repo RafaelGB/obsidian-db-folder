@@ -29,6 +29,7 @@ export interface GlobalSettings {
     enable_show_state: boolean;
     csv_file_header_key: string;
     enable_row_shadow: boolean;
+    show_search_bar_by_default: boolean;
 }
 
 export interface LocalSettings {

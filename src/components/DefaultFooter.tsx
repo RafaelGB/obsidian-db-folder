@@ -1,7 +1,6 @@
 import Footer from "automations/Footer";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
-import { COLUMN_ALIGNMENT_OPTIONS, FooterType } from "helpers/Constants";
-import { c } from "helpers/StylesHelper";
+import { FooterType } from "helpers/Constants";
 import React, { MouseEventHandler, useState } from "react";
 import { showFooterMenu } from "components/obsidianArq/commands";
 import { Literal } from "obsidian-dataview";
@@ -10,7 +9,6 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   /** Properties of footer */
   const { header, table } = headerProps;
   const { tableState } = table.options.meta;
-  const configInfo = tableState.configState((state) => state.info);
   const columnActions = tableState.columns((state) => state.actions);
 
   /** Column values */
@@ -20,12 +18,12 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   const { config } = tableColumn;
   let footerInfo: Literal = "";
   if (config.footer_type === FooterType.FORMULA) {
-    footerInfo = formulaInfo.dispatchFooter(
-      tableColumn,
-      table.getRowModel().rows
-    );
+    const colValues = table.getCoreRowModel().rows.map((row) => {
+      return row.getValue<Literal>(header.id);
+    });
+    footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);
   } else {
-    footerInfo = new Footer(table.getRowModel().rows).dispatch(
+    footerInfo = new Footer(table.getCoreRowModel().rows).dispatch(
       footerType,
       header.id
     );

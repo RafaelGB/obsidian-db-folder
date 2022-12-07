@@ -3,6 +3,7 @@ import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler
 import { AbstractChain } from 'patterns/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/AbstractHandler';
 import { RibbonIconToggleHandler } from 'settings/handlers/helpersCommands/RibbonIconToggleHandler';
+import { ShowSearchBarByDefaultToggleHandler } from 'settings/handlers/helpersCommands/ShowSearchBarByDefaultToggleHandler';
 
 class HelpersSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
@@ -14,7 +15,8 @@ class HelpersSection extends AbstractChain<SettingHandlerResponse> {
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
         return [
-            new RibbonIconToggleHandler()
+            new RibbonIconToggleHandler(),
+            new ShowSearchBarByDefaultToggleHandler()
         ];
     }
 }

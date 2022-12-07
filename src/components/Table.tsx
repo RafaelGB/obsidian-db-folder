@@ -240,7 +240,6 @@ export function Table(tableData: TableDataType) {
                   headerGroup: HeaderGroup<RowDataType>,
                   headerGroupIndex: number
                 ) => {
-                  //headerGroup.headers.find((h) => h.id === "expander");
                   const headerContext = headerGroup.headers.find(
                     (h) => h.id === MetadataColumns.ROW_CONTEXT_MENU
                   );
