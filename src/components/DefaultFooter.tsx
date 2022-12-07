@@ -28,6 +28,7 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
       header.id
     );
   }
+
   const handlerFooterOptions: MouseEventHandler<HTMLDivElement> = async (
     event: React.MouseEvent
   ) => {
