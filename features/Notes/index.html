@@ -271,6 +271,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../Rows/" class="md-nav__link">
+        Rows
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../Properties/" class="md-nav__link">
         Properties
       </a>
@@ -329,8 +343,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#creating-notes-via-importing" class="md-nav__link">
+    Creating Notes via Importing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#deleting-renaming-notes" class="md-nav__link">
     Deleting &amp; Renaming Notes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opening-note" class="md-nav__link">
+    Opening Note
   </a>
   
 </li>
@@ -357,8 +385,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../Viewing%20data/" class="md-nav__link">
-        Viewing data
+      <a href="../Displaying%20data/" class="md-nav__link">
+        Displaying data
       </a>
     </li>
   
@@ -593,8 +621,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#creating-notes-via-importing" class="md-nav__link">
+    Creating Notes via Importing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#deleting-renaming-notes" class="md-nav__link">
     Deleting &amp; Renaming Notes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opening-note" class="md-nav__link">
+    Opening Note
   </a>
   
 </li>
@@ -627,13 +669,13 @@
   <h1>Notes</h1>
 
 <h2 id="creating-blank-notes">Creating Blank Notes</h2>
-<p>You can create blank notes by typing the name in the bottom bar while leaving the template field empty.</p>
+<p>You can create blank notes by clicking on the "+" icon the obsidian page header or by using the command <code>DB Folder: Add new row</code> which brings up the creation modal. Make sure you leave the template filed empty.</p>
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197633841-2e54a360-ce90-4b95-8032-34409fe4a1bc.mov" type="video/mp4">
 </video>
 
 <h2 id="creating-notes-with-a-template">Creating Notes with a Template</h2>
-<p>You have to choose a template in the bottom bar before creating the note. You can filter the files suggested in the bottom bar by adding a folder in the settings under <code>rows template file folder location</code>.</p>
+<p>You have to choose a template in the creation modal. You can filter the files suggested by adding a folder in the database or global plugin settings under <code>Rows section</code>.</p>
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197634718-98463157-f7d7-4323-87ab-e280211eeed7.mov" type="video/mp4">
 </video>
@@ -645,12 +687,20 @@
   <source src="https://user-images.githubusercontent.com/38974541/197634584-7420f211-bec2-4e0e-a031-dab809cbc1ab.mov" type="video/mp4">
 </video>
 
+<h2 id="creating-notes-via-importing">Creating Notes via Importing</h2>
+<p>You can upload a <strong>CSV</strong> file and turn it into a database using the obsidian page header. The <strong>CSV</strong> file has to have a header row and before importing you need to define the column used to create the files in the plugin global settings under <code>CSV section &gt; mandatory header key</code>.</p>
+<video  width="670" controls>
+  <source src="https://user-images.githubusercontent.com/38974541/197636176-44eeaeb3-a753-4afc-b96b-4072b2e87fca.mov" type="video/mp4">
+</video>
+
 <h2 id="deleting-renaming-notes">Deleting &amp; Renaming Notes</h2>
-<p>You can click on the numbers to the right of every row, to bring up a menu where you can delete and rename the note associated with the row.</p>
+<p>You can right-click on the numbers to the right of every row, to bring up a menu where you can delete or rename the note associated with the row.</p>
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197634302-a1081f6b-12da-40a5-a476-b222d4686b98.mov" type="video/mp4">
 </video>
 
+<h2 id="opening-note">Opening Note</h2>
+<p>You can either display a preview of the note inside the database by clicking on the numbers to the right. In this preview, you can't edit the file but you can check the tasks. You can also click on the link symbol to open the note in its own pane.</p>
 <h2 id="moving-notes-based-on-metadata">Moving Notes Based on Metadata</h2>
 <p>The database will watch for changes in the select property column and create folders for each option present. The notes will be placed under the corresponding folder based on the option chosen. </p>
 <p>You can choose one or many select properties by which this rule will run. If you choose more than one, the folders will be nested and the nesting order will follow the order by which the select properties are added in the database settings. For example <em>"select1/select2/select3"</em>. This setting can be found under <code>configuration about columns &gt; Columns to group by</code>.</p>
@@ -695,13 +745,13 @@
       
       
         
-        <a href="../Viewing%20data/" class="md-footer__link md-footer__link--next" aria-label="Next: Viewing data" rel="next">
+        <a href="../Displaying%20data/" class="md-footer__link md-footer__link--next" aria-label="Next: Displaying data" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Viewing data
+              Displaying data
             </div>
           </div>
           <div class="md-footer__button md-icon">
