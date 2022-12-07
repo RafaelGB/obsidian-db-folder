@@ -63,7 +63,7 @@ export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataTyp
  * @param footerType 
  * @param setFooterType 
  */
-export async function showFooterMenu(
+export function showFooterMenu(
     event: MouseEvent,
     tableColumn: TableColumn,
     columnActions: ColumnsState["actions"],
