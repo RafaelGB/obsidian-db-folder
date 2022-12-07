@@ -18,12 +18,12 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   const { config } = tableColumn;
   let footerInfo: Literal = "";
   if (config.footer_type === FooterType.FORMULA) {
-    footerInfo = formulaInfo.dispatchFooter(
-      tableColumn,
-      table.getRowModel().rows
-    );
+    const colValues = table.getCoreRowModel().rows.map((row) => {
+      return row.getValue<Literal>(header.id);
+    });
+    footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);
   } else {
-    footerInfo = new Footer(table.getRowModel().rows).dispatch(
+    footerInfo = new Footer(table.getCoreRowModel().rows).dispatch(
       footerType,
       header.id
     );

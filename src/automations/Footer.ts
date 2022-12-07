@@ -1,6 +1,7 @@
 import { Row } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
 import { FooterType } from "helpers/Constants";
+import { Literal } from "obsidian-dataview";
 
 export default class Footer {
     constructor(public readonly rows: Row<RowDataType>[]) { }
@@ -45,7 +46,9 @@ export default class Footer {
     }
 
     public sum(key: string): string {
-        const total = this.rows.reduce((acc, row) => acc + Number(row.getValue<number>(key)), 0);
+        const total = this.rows
+            .filter((row) => !Number.isNaN(Number(row.getValue<Literal>(key))))
+            .reduce((acc, row) => acc + row.getValue<number>(key), 0);
         return `Total: ${total}`;
     }
 

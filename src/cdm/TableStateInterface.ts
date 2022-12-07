@@ -101,7 +101,7 @@ export interface AutomationState {
     info: {
         getFormula: (name: string) => unknown;
         runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
-        dispatchFooter: (column: TableColumn, rows: Row<RowDataType>[]) => Literal;
+        dispatchFooter: (column: TableColumn, colValues: Literal[]) => Literal;
         dispatchRollup: (configColumn: ConfigColumn, relation: Literal, ddbbConfig: LocalSettings) => Literal;
     },
     actions: {
