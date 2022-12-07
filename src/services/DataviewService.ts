@@ -17,11 +17,6 @@ class DataviewProxy {
             new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
             throw new Error('Dataview plugin is not installed');
         }
-        if (!this.indexIsLoaded) {
-            new Notice(`Dataview plugin is not loaded yet. Please wait a few seconds and refresh the page.`);
-            this.indexIsLoaded = true;
-        }
-
         return getAPI(app);
     }
 

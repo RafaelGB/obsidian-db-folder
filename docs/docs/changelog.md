@@ -1,3 +1,16 @@
+## 3.0.1
+### Shiny new things
+- (experimental) new options for the footer including a menu to select those options:
+  - Percentage of empty cells
+  - Percentage of cells with a value
+  - Count of empty cells
+  - Count of cells with a value
+  - Count of unique values
+  - Formula
+  - Sum of number columns
+### No longer broken
+- message when dv is not loaded not spammed anymore [ISSUE#642](https://github.com/RafaelGB/obsidian-db-folder/issues/642)
+- Correct tooltrip for export button [ISSUE#641](https://github.com/RafaelGB/obsidian-db-folder/issues/641)
 ## 3.0.0
 ### Shiny new things
 - A new design for the plugin [ISSUE#577](https://github.com/RafaelGB/obsidian-db-folder/issues/577)
