@@ -1,4 +1,4 @@
-import { SortingState } from "@tanstack/react-table";
+import { Row, SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
@@ -74,6 +74,7 @@ export interface ColumnsState {
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
         alterColumnSize: (id: string, width: number) => void;
         alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
+        alterColumnConfig: (column: TableColumn, config: Partial<ConfigColumn>) => void;
     }
     info: {
         getAllColumns: () => TableColumn[];
@@ -100,7 +101,8 @@ export interface AutomationState {
     info: {
         getFormula: (name: string) => unknown;
         runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
-        dispatchRollup: (configColumn: ConfigColumn, relation: Literal, dbbConfig: LocalSettings) => Literal;
+        dispatchFooter: (column: TableColumn, rows: Row<RowDataType>[]) => Literal;
+        dispatchRollup: (configColumn: ConfigColumn, relation: Literal, ddbbConfig: LocalSettings) => Literal;
     },
     actions: {
         loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;

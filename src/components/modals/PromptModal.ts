@@ -1,3 +1,4 @@
+import { c } from "helpers/StylesHelper";
 import {
     Modal,
     TextComponent,
@@ -30,11 +31,11 @@ export class PromptModal extends Modal {
 
     createForm(): void {
         const div = this.contentEl.createDiv();
-        div.addClass("templater-prompt-div");
+        div.addClass(c("prompt-modal"));
         let textInput;
         textInput = new TextComponent(div);
         this.value = this.default_value ?? "";
-        textInput.inputEl.addClass("templater-prompt-input");
+        textInput.inputEl.addClass(c("prompt-input"));
         textInput.setPlaceholder("Type text here");
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));

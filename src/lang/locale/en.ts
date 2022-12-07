@@ -33,4 +33,16 @@ export default {
   "active_open_settings": "Open Database settings",
   "active_toggle_filters": "Toggle filters",
   "active_open_filters": "Open filters",
+  /** FOOTER MENU OPTIONS */
+  "footer_menu_none": "None",
+  "footer_menu_count_unique": "Count unique values",
+  "footer_menu_count_empty": "Count empty values",
+  "footer_menu_percent_empty": "Percent empty values",
+  "footer_menu_count_filled": "Count filled values",
+  "footer_menu_percent_filled": "Percent filled values",
+  "footer_menu_average": "Average",
+  "footer_menu_sum": "Sum",
+  "footer_menu_min": "Min",
+  "footer_menu_max": "Max",
+  "footer_menu_formula": "Formula",
 };

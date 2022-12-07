@@ -37,6 +37,7 @@ function mockColumnsState(): ColumnsState {
       alterColumnLabel: null,
       alterColumnSize: null,
       alterIsHidden: null,
+      alterColumnConfig: null,
     },
     info: {
       getValueOfAllColumnsAsociatedWith: null,
