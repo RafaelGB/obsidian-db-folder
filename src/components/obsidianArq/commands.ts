@@ -48,7 +48,9 @@ export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataTyp
         .setTitle("Delete")
         .setIcon("trash")
         .onClick(handleDeleteRow));
+
     fileMenu.addSeparator();
+
     app.workspace.trigger("file-menu", fileMenu, file, null, app.workspace.getMostRecentLeaf());
     fileMenu.showAtMouseEvent(event);
 }
@@ -67,13 +69,12 @@ export async function showFooterMenu(
             columnActions.alterColumnConfig(tableColumn, {
                 footer_type: type,
                 footer_formula: formula || ""
-            })
+            });
             setFooterType(type);
         }
     };
 
     const handleFOrmulaOption = async () => {
-
         const prompt_filename = new PromptModal("Footer formula", tableColumn.config.footer_formula);
         await prompt_filename.openAndGetValue(
             (value) => {
@@ -81,6 +82,7 @@ export async function showFooterMenu(
             },
             () => { new Notice("Formula edition cancelled") });
     };
+
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_none"))
         .onClick(handleFooterOption(FooterType.NONE)));
@@ -97,7 +99,7 @@ export async function showFooterMenu(
         .setTitle(t("footer_menu_count_filled"))
         .onClick(handleFooterOption(FooterType.COUNT_FILLED)));
     footerMenu.addItem((item) => item
-        .setTitle(t("footer_menu_percent_empty"))
+        .setTitle(t("footer_menu_percent_filled"))
         .onClick(handleFooterOption(FooterType.PERCENT_FILLED)));
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_formula"))

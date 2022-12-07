@@ -1,10 +1,7 @@
 import { Row } from "@tanstack/react-table";
-import Rollup from "automations/Rollup";
-import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
-import { LocalSettings } from "cdm/SettingsModel";
+import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
-import { Link, Literal } from "obsidian-dataview";
-import { DataviewService } from "services/DataviewService";
+import { Literal } from "obsidian-dataview";
 import { LOGGER } from "services/Logger";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 

@@ -1,7 +1,7 @@
 import Footer from "automations/Footer";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
-import { FooterType } from "helpers/Constants";
-import { c, getAlignmentClassname } from "helpers/StylesHelper";
+import { COLUMN_ALIGNMENT_OPTIONS, FooterType } from "helpers/Constants";
+import { c } from "helpers/StylesHelper";
 import React, { MouseEventHandler, useState } from "react";
 import { showFooterMenu } from "components/obsidianArq/commands";
 import { Literal } from "obsidian-dataview";
@@ -44,10 +44,7 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
 
   return (
     <div
-      key={`foot-th-cell-${header.id}`}
-      className={`${c(
-        getAlignmentClassname(config, configInfo.getLocalSettings())
-      )}`}
+      key={`default-footer-${header.id}`}
       onClick={handlerFooterOptions}
       style={{
         minHeight: "20px",

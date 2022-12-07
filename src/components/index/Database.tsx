@@ -12,7 +12,7 @@ export function Database(tableProps: TableDataType) {
   return (
     <StrictMode>
       {/** TRY CATCH REACT ERROR */}
-      <DbErrorBoundary>
+      <DbErrorBoundary key={"db-error-boundary"}>
         <Table {...tableProps} tableStore={tableStore} />
       </DbErrorBoundary>
     </StrictMode>
