@@ -359,6 +359,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
         `Dataview plugin is not loaded yet. Please wait a few seconds and refresh the page.`,
         1000
       );
+      DataviewService.indexIsLoaded = true;
     }
   }
 }

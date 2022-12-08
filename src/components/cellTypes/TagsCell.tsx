@@ -9,7 +9,7 @@ import CreatableSelect from "react-select/creatable";
 import { randomColor } from "helpers/Colors";
 import React, { useMemo, useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
@@ -141,7 +141,12 @@ const TagsCell = (tagsProps: CellComponentProps) => {
         TagsForm()
       ) : (
         <div
-          className={c("tags-container text-align-center")}
+          className={c(
+            getAlignmentClassname(
+              tableColumn.config,
+              configInfo.getLocalSettings()
+            ).concat(" tags-container")
+          )}
           onClick={() => setShowSelectTags(true)}
           style={{ width: column.getSize() }}
           key={`tags-${row.index}-${tableColumn.key}`}
