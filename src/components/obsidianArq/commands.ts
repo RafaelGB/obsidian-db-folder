@@ -55,8 +55,15 @@ export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataTyp
     fileMenu.showAtMouseEvent(event);
 }
 
-
-export async function showFooterMenu(
+/**
+ * Generates a menu for the footer options
+ * @param event 
+ * @param tableColumn 
+ * @param columnActions 
+ * @param footerType 
+ * @param setFooterType 
+ */
+export function showFooterMenu(
     event: MouseEvent,
     tableColumn: TableColumn,
     columnActions: ColumnsState["actions"],
@@ -65,7 +72,7 @@ export async function showFooterMenu(
     const footerMenu = new Menu();
 
     const handleFooterOption = (type: string, formula?: string) => () => {
-        if (footerType !== type) {
+        if (footerType !== type || formula) {
             columnActions.alterColumnConfig(tableColumn, {
                 footer_type: type,
                 footer_formula: formula || ""
@@ -74,7 +81,7 @@ export async function showFooterMenu(
         }
     };
 
-    const handleFOrmulaOption = async () => {
+    const handleFormulaOption = async () => {
         const prompt_filename = new PromptModal("Footer formula", tableColumn.config.footer_formula);
         await prompt_filename.openAndGetValue(
             (value) => {
@@ -103,7 +110,7 @@ export async function showFooterMenu(
         .onClick(handleFooterOption(FooterType.PERCENT_FILLED)));
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_formula"))
-        .onClick(handleFOrmulaOption));
+        .onClick(handleFormulaOption));
     // Custom footer menu
     switch (tableColumn.input) {
         case InputType.NUMBER:

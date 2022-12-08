@@ -11,10 +11,11 @@ const COLS_WITHOUT_FOOTER: string[] = [
 
 export default function TableFooter(tableFooterProps: TableFooterProps) {
   const { header, headerIndex } = tableFooterProps;
-  if (COLS_WITHOUT_FOOTER.contains(header.id))
+  if (COLS_WITHOUT_FOOTER.contains(header.id)) {
     return (
       <div key={`table-footer-${headerIndex}`} className={c("th footer")} />
     );
+  }
 
   return (
     <div key={`table-footer-${headerIndex}`} className={c("th footer")}>
