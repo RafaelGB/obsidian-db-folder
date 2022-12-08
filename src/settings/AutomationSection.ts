@@ -9,7 +9,7 @@ class AutomationSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const automation_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-automations");
         // title of the section
-        add_setting_header(automation_section, "Automations related the table", 'h3');
+        add_setting_header(automation_section, "Automations related to the table", 'h3');
         settingHandlerResponse.containerEl = automation_section;
         return settingHandlerResponse;
     }
