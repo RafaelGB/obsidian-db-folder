@@ -120,9 +120,13 @@ export function add_button(
         });
     return button;
 }
+
 /**
  * Add a header to the settings tab
  */
-export function add_setting_header(containerEl: HTMLElement, tittle: string, level: keyof HTMLElementTagNameMap = 'h2'): void {
+export function add_setting_header(
+    containerEl: HTMLElement,
+    tittle: string,
+    level: keyof HTMLElementTagNameMap = 'h2'): void {
     containerEl.createEl(level, { text: tittle });
 }

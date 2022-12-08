@@ -26,32 +26,41 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
                     this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${value}`);
                 });
 
-            this.localDisk.push(...unmarshallParticularInputInfo(column));
+            this.localDisk.push(...this.unmarshallParticularInputInfo(column));
             this.localDisk.push(`${YAML_INDENT.repeat(2)}config:`);
 
             // Lvl4: column config
             Object.keys(column.config).forEach(key => {
-                const confValue = parseValuetoSanitizeYamlValue(column.config[key]?.toString(), config);
+                let quoteConfig = config;
+                if (column.config[key] && typeof column.config[key] === 'string') {
+                    quoteConfig = { ...config, frontmatter_quote_wrap: true };
+                }
+                const confValue = parseValuetoSanitizeYamlValue(column.config[key]?.toString(), quoteConfig);
                 this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${confValue}`);
             });
         };
         return this.goNext(handlerResponse);
     }
-}
 
-function unmarshallParticularInputInfo(column: DatabaseColumn): string[] {
-    const particularInputString: string[] = [];
-    switch (column.input) {
-        case InputType.SELECT:
-        case InputType.TAGS:
-            // Lvl3: select column properties
-            if (column.options && Array.isArray(column.options)) {
-                particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);
-                column.options.forEach(option => {
-                    particularInputString.push(`${YAML_INDENT.repeat(3)}- { label: "${option.label}", backgroundColor: "${option
-                        .backgroundColor}"}`);
-                });
-            }
+    /**
+     * 
+     * @param column 
+     * @returns 
+     */
+    unmarshallParticularInputInfo(column: DatabaseColumn): string[] {
+        const particularInputString: string[] = [];
+        switch (column.input) {
+            case InputType.SELECT:
+            case InputType.TAGS:
+                // Lvl3: select column properties
+                if (column.options && Array.isArray(column.options)) {
+                    particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);
+                    column.options.forEach(option => {
+                        particularInputString.push(`${YAML_INDENT.repeat(3)}- { label: "${option.label}", backgroundColor: "${option
+                            .backgroundColor}"}`);
+                    });
+                }
+        }
+        return particularInputString;
     }
-    return particularInputString;
 }

@@ -39,6 +39,7 @@ const useConfigStore = (view: DatabaseView) => {
         })
     );
 }
+
 const constructEphimeralSettings = (global_settings: GlobalSettings
 ): EphimeralSettings => {
     return {
