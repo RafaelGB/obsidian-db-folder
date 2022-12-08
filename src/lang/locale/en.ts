@@ -45,4 +45,7 @@ export default {
   "footer_menu_min": "Min",
   "footer_menu_max": "Max",
   "footer_menu_formula": "Formula",
+  "footer_menu_earliest_date": "Earliest",
+  "footer_menu_latest_date": "Latest",
+  "footer_menu_count_range_date": "Range of dates",
 };

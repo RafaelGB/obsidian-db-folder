@@ -121,6 +121,18 @@ export function showFooterMenu(
                 .setTitle(t("footer_menu_max"))
                 .onClick(handleFooterOption(FooterType.MAX)));
             break;
+        case InputType.CALENDAR:
+        case InputType.CALENDAR_TIME:
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_earliest_date"))
+                .onClick(handleFooterOption(FooterType.EARLIEST_DATE)));
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_latest_date"))
+                .onClick(handleFooterOption(FooterType.LATEST_DATE)));
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_count_range_date"))
+                .onClick(handleFooterOption(FooterType.RANGE_DATE)));
+            break;
         default:
         // Do nothing
     }
