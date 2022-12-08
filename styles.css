@@ -618,10 +618,12 @@ div.database-plugin__checkbox {
 
 .database-plugin__text-wrap {
   white-space: normal;
+  flex-wrap: wrap;
 }
 
 .database-plugin__text-nowrap {
   white-space: nowrap;
+  overflow-x: auto;
 }
 
 .menu.database-plugin__popper {

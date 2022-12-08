@@ -9,7 +9,7 @@ import {
 import { TableColumn } from "cdm/FolderModel";
 import CreatableSelect from "react-select/creatable";
 import CustomTagsStyles from "components/styles/TagsStyles";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
@@ -147,7 +147,12 @@ const SelectCell = (popperProps: CellComponentProps) => {
       ) : (
         /* Current value of the select */
         <div
-          className={`${c("text-align-center")}`}
+          className={c(
+            getAlignmentClassname(
+              tableColumn.config,
+              configInfo.getLocalSettings()
+            )
+          )}
           onClick={() => setShowSelect(true)}
           style={{ width: column.getSize() }}
         >

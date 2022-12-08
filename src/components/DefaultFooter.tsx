@@ -19,6 +19,10 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   const [footerType, setFooterValue] = useState(tableColumn.config.footer_type);
   const footerRef = React.useRef<HTMLDivElement>(null);
 
+  const colValues = table.getCoreRowModel().rows.map((row) => {
+    return row.getValue<Literal>(header.id);
+  });
+
   const handlerFooterOptions: MouseEventHandler<HTMLDivElement> = (
     event: React.MouseEvent
   ) => {
@@ -34,15 +38,9 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   useEffect(() => {
     let footerInfo: Literal = "";
     if (footerType === FooterType.FORMULA) {
-      const colValues = table.getCoreRowModel().rows.map((row) => {
-        return row.getValue<Literal>(header.id);
-      });
       footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);
     } else {
-      footerInfo = new Footer(table.getCoreRowModel().rows).dispatch(
-        footerType,
-        header.id
-      );
+      footerInfo = new Footer(colValues).dispatch(footerType);
     }
 
     if (footerRef.current !== null) {
@@ -54,7 +52,7 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
         3
       );
     }
-  }, [footerType]);
+  }, [footerType, colValues]);
 
   return (
     <div

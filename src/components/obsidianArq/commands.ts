@@ -108,19 +108,27 @@ export function showFooterMenu(
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_percent_filled"))
         .onClick(handleFooterOption(FooterType.PERCENT_FILLED)));
-    footerMenu.addItem((item) => item
-        .setTitle(t("footer_menu_formula"))
-        .onClick(handleFormulaOption));
-    // Custom footer menu
+    // Custom footer menu im function of the input type
     switch (tableColumn.input) {
         case InputType.NUMBER:
             footerMenu.addItem((item) => item
                 .setTitle(t("footer_menu_sum"))
                 .onClick(handleFooterOption(FooterType.SUM)));
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_min"))
+                .onClick(handleFooterOption(FooterType.MIN)));
+            footerMenu.addItem((item) => item
+                .setTitle(t("footer_menu_max"))
+                .onClick(handleFooterOption(FooterType.MAX)));
             break;
         default:
         // Do nothing
     }
+    // Create your own footer function
+    footerMenu.addItem((item) => item
+        .setTitle(t("footer_menu_formula"))
+        .onClick(handleFormulaOption));
 
+    // Show the menu
     footerMenu.showAtMouseEvent(event);
 }
