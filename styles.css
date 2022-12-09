@@ -789,6 +789,19 @@ div.database-plugin__checkbox {
   .database-plugin__file-suggestion-subtitle {
   color: var(--text-on-accent);
 }
+/*************************
+*  Headers DnD styles
+**************************/
+.database-plugin__dnd-over {
+  background-color: var(--background-secondary);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.database-plugin__dnd-dragging {
+  opacity: 0.5;
+  background-color: var(--background-modifier-box-shadow);
+}
 
 /*************************
 *  React-datepicker styles
