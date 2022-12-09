@@ -507,12 +507,12 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__pagination {
-  width: 100%;
+  width: fit-content;
   height: 40px;
-  justify-content: flex-end;
   list-style: none;
   bottom: 1em;
-  position: sticky;
+  position: absolute;
+  right: 0;
   margin: 0;
   padding: 0 10px 0 0;
   display: flex;
@@ -532,11 +532,11 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__pagination-button:disabled {
-  opacity: 0.5;
-  cursor: "not-allowed";
+  cursor: not-allowed;
   background-color: var(--background-secondary);
-  box-shadow: var(--input-shadow);
   color: var(--text-normal);
+  border: thick double var(--text-accent);
+  opacity: 1;
 }
 
 .database-plugin__padding-left-05 {
