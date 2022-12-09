@@ -1,7 +1,7 @@
 import { Row } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, DataState } from "cdm/TableStateInterface";
-import { PromptModal } from "components/modals/PromptModal";
+import { TextAreaModal } from "components/modals/TextAreaModal";
 import { FooterType, InputType } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Menu, Notice, TFile } from "obsidian";
@@ -82,7 +82,8 @@ export function showFooterMenu(
     };
 
     const handleFormulaOption = async () => {
-        const prompt_filename = new PromptModal("Footer formula", tableColumn.config.footer_formula);
+        const prompt_filename = new TextAreaModal("Footer formula", tableColumn.config.footer_formula)
+            .setPlaceholder("Enter a formula...");
         await prompt_filename.openAndGetValue(
             (value) => {
                 handleFooterOption(FooterType.FORMULA, value)();

@@ -304,32 +304,20 @@ export function Table(tableData: TableDataType) {
             <div key={`div-tfoot`} className={c(`tfoot`)}>
               {table
                 .getFooterGroups()
-                .map(
-                  (
-                    footerGroup: HeaderGroup<RowDataType>,
-                    footerGroupIndex: number
-                  ) => {
-                    return (
-                      <div
-                        key={`footer-group-${footerGroup.id}-${footerGroupIndex}`}
-                        className={`${c("tr footer-group")}`}
-                      >
-                        {footerGroup.headers.map(
-                          (
-                            header: Header<RowDataType, TableColumn>,
-                            headerIndex: number
-                          ) => (
-                            <TableFooter
-                              table={table}
-                              header={header}
-                              headerIndex={headerIndex + 1}
-                            />
-                          )
-                        )}
-                      </div>
-                    );
-                  }
-                )}
+                .map((footerGroup: HeaderGroup<RowDataType>) => {
+                  return (
+                    <div
+                      key={`footer-group-${footerGroup.id}`}
+                      className={`${c("tr footer-group")}`}
+                    >
+                      {footerGroup.headers.map(
+                        (header: Header<RowDataType, TableColumn>) => (
+                          <TableFooter table={table} header={header} />
+                        )
+                      )}
+                    </div>
+                  );
+                })}
               {/* ENDS FOOTER */}
             </div>
           ) : null}

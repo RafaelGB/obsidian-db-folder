@@ -1,20 +1,28 @@
 import { c } from "helpers/StylesHelper";
 import {
     Modal,
-    TextComponent,
+    TextAreaComponent,
 } from "obsidian";
 
-export class PromptModal extends Modal {
+/**
+ * A modal that prompts the user for text input using a builder pattern.
+ */
+export class TextAreaModal extends Modal {
     private resolve: (value: string) => void;
     private reject: () => void;
     private submitted = false;
     private value: string;
-
+    private placeholder = "Type text here";
     constructor(
         private prompt_text: string,
         private default_value: string
     ) {
         super(app);
+    }
+
+    setPlaceholder(placeholder: string): TextAreaModal {
+        this.placeholder = placeholder;
+        return this;
     }
 
     onOpen(): void {
@@ -33,10 +41,10 @@ export class PromptModal extends Modal {
         const div = this.contentEl.createDiv();
         div.addClass(c("prompt-modal"));
         let textInput;
-        textInput = new TextComponent(div);
+        textInput = new TextAreaComponent(div);
         this.value = this.default_value ?? "";
-        textInput.inputEl.addClass(c("prompt-input"));
-        textInput.setPlaceholder("Type text here");
+        textInput.inputEl.addClass(c("textarea-modal"));
+        textInput.setPlaceholder(this.placeholder);
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));
         textInput.inputEl.addEventListener("keydown", (evt: KeyboardEvent) =>

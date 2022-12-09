@@ -1,5 +1,5 @@
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { PromptModal } from "components/modals/PromptModal";
+import { TextModal } from "components/modals/TextModal";
 import { MetadataColumns } from "helpers/Constants";
 import { resolve_tfile } from "helpers/FileManagement";
 import { Notice } from "obsidian";
@@ -15,7 +15,7 @@ export default class RenameFileHandlerAction extends AbstractTableAction<DataSta
                 const rowToRename = get().rows[rowIndex];
                 const fileLink = rowToRename[MetadataColumns.FILE] as Link;
                 const oldFile = fileLink.fileName();
-                const prompt_filename = new PromptModal(oldFile, "");
+                const prompt_filename = new TextModal(oldFile, "").setPlaceholder("Type new filename here...");
 
                 const renameFilePromise = (newFilename: string) => {
                     const oldTfile = resolve_tfile(fileLink.path);

@@ -52,7 +52,7 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
         3
       );
     }
-  }, [footerType, colValues]);
+  });
 
   return (
     <div

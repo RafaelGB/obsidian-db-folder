@@ -794,9 +794,9 @@ div.database-plugin__checkbox {
   .database-plugin__file-suggestion-subtitle {
   color: var(--text-on-accent);
 }
-/*************************
-*  Headers DnD styles
-**************************/
+/************************************************************
+*                 Headers DnD styles
+************************************************************/
 .database-plugin__dnd-over {
   background-color: var(--background-secondary);
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
@@ -807,10 +807,22 @@ div.database-plugin__checkbox {
   opacity: 0.5;
   background-color: var(--background-modifier-box-shadow);
 }
+/************************************************************
+ *                    MODAL STYLES
+ ************************************************************/
+.database-plugin__text-modal {
+  width: 100%;
+  margin: 10px;
+}
 
-/*************************
-*  React-datepicker styles
-**************************/
+.database-plugin__textarea-modal {
+  width: 100%;
+  height: 100%;
+  margin: 10px;
+}
+/************************************************************
+*               React-datepicker styles
+************************************************************/
 .react-datepicker {
   --react-datepicker-navigation-height: 24px;
   --react-datepicker-navigation-width: 24px;

@@ -10,10 +10,10 @@ const COLS_WITHOUT_FOOTER: string[] = [
 ];
 
 export default function TableFooter(tableFooterProps: TableFooterProps) {
-  const { header, headerIndex } = tableFooterProps;
+  const { header } = tableFooterProps;
 
   return (
-    <div key={`table-footer-${headerIndex}`} className={c("th footer")}>
+    <div key={`table-footer-${header.id}`} className={c("th footer")}>
       {header.isPlaceholder
         ? null
         : flexRender(
