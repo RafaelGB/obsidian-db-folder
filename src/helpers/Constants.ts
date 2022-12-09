@@ -81,15 +81,22 @@ export const PaginationRenderOptions = Object.freeze({
 });
 
 export const FooterType = Object.freeze({
+  // CROSS
   NONE: 'none',
   COUNT_UNIQUE: 'count_unique',
   COUNT_EMPTY: 'count_empty',
   PERCENT_EMPTY: 'percent_empty',
   COUNT_FILLED: 'count_filled',
   PERCENT_FILLED: 'percent_filled',
+  // NUMERIC
   SUM: 'sum',
   MIN: 'min',
   MAX: 'max',
+  // DATE
+  EARLIEST_DATE: 'earliest_date',
+  LATEST_DATE: 'latest_date',
+  RANGE_DATE: 'range_date',
+  // CUSTOM
   FORMULA: 'formula',
 });
 
