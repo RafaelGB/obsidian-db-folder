@@ -300,7 +300,7 @@ export function Table(tableData: TableDataType) {
             {/* ENDS BODY */}
           </div>
           {/* INIT FOOTER */}
-          {configInfo.getLocalSettings().enable_footer && (
+          {configInfo.getLocalSettings().enable_footer ? (
             <div key={`div-tfoot`} className={c(`tfoot`)}>
               {table
                 .getFooterGroups()
@@ -332,7 +332,7 @@ export function Table(tableData: TableDataType) {
                 )}
               {/* ENDS FOOTER */}
             </div>
-          )}
+          ) : null}
           {/* ENDS TABLE */}
         </div>
         {/* ENDS SCROLL PANE */}

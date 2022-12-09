@@ -94,6 +94,10 @@ div.database-plugin__td.data-input:hover {
   display: table-footer-group;
 }
 
+.database-plugin__footer-group {
+  background-color: var(--background-primary);
+}
+
 .database-plugin__footer {
   border: 2px solid var(--background-modifier-accent);
   border-radius: 5px;
