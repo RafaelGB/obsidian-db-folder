@@ -6,7 +6,7 @@ import {
   FilterGroupCondition,
 } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
-import React, { ChangeEventHandler, useState } from "react";
+import React, { ChangeEventHandler, useEffect, useState } from "react";
 import AtomicFilterComponent from "components/modals/filters/handlers/AtomicFilterComponent";
 import { Table } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
@@ -21,6 +21,8 @@ import modifyRecursiveFilterGroups, {
 import ConditionSelectorComponent from "components/modals/filters/handlers/ConditionSelectorComponent";
 import IconButton from "@mui/material/IconButton";
 import LabelComponent from "components/modals/filters/handlers/LabelComponent";
+import { Setting } from "obsidian";
+import { castHslToString, castStringtoHsl, randomColor } from "helpers/Colors";
 type GroupFilterComponentProps = {
   group: FilterGroup;
   recursiveIndex: number[];
@@ -38,6 +40,16 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
 
   const [labelTimeout, setLabelTimeout] = useState(null);
 
+  const colorPickerRef = React.useRef(null);
+
+  const onChangeColorHandler = (color: string) => {
+    commonModifyFilter(
+      recursiveIndex,
+      level,
+      ModifyFilterOptionsEnum.COLOR,
+      color
+    );
+  };
   const onChangeLabelHandler: ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
@@ -92,6 +104,23 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
     );
   };
 
+  useEffect(() => {
+    if (colorPickerRef.current) {
+      let currentColor = (group as FilterGroupCondition).color;
+      if (!currentColor) {
+        currentColor = randomColor();
+      }
+      new Setting(colorPickerRef.current).addColorPicker((colorPicker) => {
+        colorPicker
+          .setValueHsl(castStringtoHsl(currentColor))
+          .onChange(async () => {
+            const newColor = castHslToString(colorPicker.getValueHsl());
+            onChangeColorHandler(newColor);
+          });
+      });
+    }
+  }, [group]);
+
   if ((group as FilterGroupCondition).condition) {
     const filtersOfGroup = (group as FilterGroupCondition).filters;
     const conditionOfGroup = (group as FilterGroupCondition).condition;
@@ -114,11 +143,23 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
           columnSpacing={{ xs: 0.25, sm: 0.5, md: 0.75 }}
           key={`Grid-AtomicFilter-${level}-${recursiveIndex[level]}`}
         >
-          {level === 0 && (
+          {level === 0 ? (
             <Grid
               item
-              xs={3}
-              key={`Grid-level-${level}-${recursiveIndex[level]}`}
+              xs="auto"
+              key={`Grid-group-options-color-level-${level}-${recursiveIndex[level]}`}
+            >
+              <span
+                key={`Colorpicker-level-${level}-${recursiveIndex[level]}`}
+                ref={colorPickerRef}
+              />
+            </Grid>
+          ) : null}
+          {level === 0 ? (
+            <Grid
+              item
+              xs="auto"
+              key={`Grid-group-options-label-level-${level}-${recursiveIndex[level]}`}
             >
               <LabelComponent
                 onChangeLabelHandler={onChangeLabelHandler}
@@ -126,7 +167,7 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
                 index={recursiveIndex[level]}
               />
             </Grid>
-          )}
+          ) : null}
           <Box sx={{ flexGrow: 1 }} />
           <Grid
             item

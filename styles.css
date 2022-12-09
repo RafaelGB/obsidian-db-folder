@@ -111,7 +111,6 @@ div.database-plugin__td.data-input:hover {
   border: none;
   padding: 0.5rem;
   color: var(--text-normal);
-  font-size: 1rem;
   resize: none;
   box-sizing: border-box;
   flex: 1 1 auto;
