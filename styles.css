@@ -600,6 +600,7 @@ div.database-plugin__checkbox {
   display: flex;
   justify-content: flex-end;
   text-align: right;
+  align-items: center;
 }
 
 .database-plugin__text-align-center {
@@ -613,6 +614,7 @@ div.database-plugin__checkbox {
   display: flex;
   justify-content: flex-start;
   text-align: left;
+  align-items: center;
 }
 
 .database-plugin__text-align-justify {
