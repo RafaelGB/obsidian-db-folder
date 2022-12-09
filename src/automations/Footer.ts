@@ -121,7 +121,8 @@ export default class Footer {
      */
     public sum(): string {
         const total = this.colValues
-            .filter((value) => !Number.isNaN(Number(value)))
+            .map((value) => Number(value))
+            .filter((value) => !isNaN(value))
             .reduce((acc: number, value: number) => acc + value, 0);
         return `Total: ${total}`;
     }
@@ -132,7 +133,8 @@ export default class Footer {
      */
     public min(): string {
         const min = this.colValues
-            .filter((value) => !Number.isNaN(Number(value)))
+            .map((value) => Number(value))
+            .filter((value) => !isNaN(value))
             .reduce((acc: number, value: number) => Math.min(acc, value), Number.MAX_SAFE_INTEGER);
         return `Min: ${min}`;
     }
@@ -143,7 +145,8 @@ export default class Footer {
      */
     public max(): string {
         const max = this.colValues
-            .filter((value) => !Number.isNaN(Number(value)))
+            .map((value) => Number(value))
+            .filter((value) => !isNaN(value))
             .reduce((acc: number, value: number) => Math.max(acc, value), Number.MIN_SAFE_INTEGER);
         return `Max: ${max}`;
     }

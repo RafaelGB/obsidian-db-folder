@@ -12,6 +12,7 @@ export type FilterGroupCondition = {
     disabled: boolean;
     filters: FilterGroup[];
     label?: string;
+    color?: string;
 }
 export type AtomicFilter = {
     field: string;
@@ -41,6 +42,7 @@ export interface LocalSettings {
     automatically_group_files: boolean;
     frontmatter_quote_wrap: boolean;
     pagination_size: number;
+    font_size: number;
     remove_field_when_delete_column: boolean;
     show_metadata_created: boolean;
     show_metadata_modified: boolean;

@@ -94,6 +94,10 @@ div.database-plugin__td.data-input:hover {
   display: table-footer-group;
 }
 
+.database-plugin__footer-group {
+  background-color: var(--background-primary);
+}
+
 .database-plugin__footer {
   border: 2px solid var(--background-modifier-accent);
   border-radius: 5px;
@@ -107,7 +111,6 @@ div.database-plugin__td.data-input:hover {
   border: none;
   padding: 0.5rem;
   color: var(--text-normal);
-  font-size: 1rem;
   resize: none;
   box-sizing: border-box;
   flex: 1 1 auto;
@@ -596,6 +599,7 @@ div.database-plugin__checkbox {
   display: flex;
   justify-content: flex-end;
   text-align: right;
+  align-items: center;
 }
 
 .database-plugin__text-align-center {
@@ -609,6 +613,7 @@ div.database-plugin__checkbox {
   display: flex;
   justify-content: flex-start;
   text-align: left;
+  align-items: center;
 }
 
 .database-plugin__text-align-justify {
@@ -788,6 +793,19 @@ div.database-plugin__checkbox {
 .database-plugin__autocomplete-item-active
   .database-plugin__file-suggestion-subtitle {
   color: var(--text-on-accent);
+}
+/*************************
+*  Headers DnD styles
+**************************/
+.database-plugin__dnd-over {
+  background-color: var(--background-secondary);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.database-plugin__dnd-dragging {
+  opacity: 0.5;
+  background-color: var(--background-modifier-box-shadow);
 }
 
 /*************************

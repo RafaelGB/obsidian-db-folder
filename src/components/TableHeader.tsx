@@ -52,15 +52,18 @@ export default function TableHeader(tableHeaderProps: TableHeaderProps) {
           setIsDragging(true);
           e.dataTransfer.effectAllowed = "move";
           e.dataTransfer.setData("dbfolderDragId", header.column.id);
+          e.currentTarget.classList.add(c("dnd-dragging"));
         }}
         onDragEnter={(e) => {
-          dndRef.current.classList.add(c("over"));
+          e.currentTarget.classList.add(c("dnd-over"));
         }}
         onDragLeave={(e) => {
-          dndRef.current.classList.remove(c("over"));
+          e.currentTarget.classList.remove(c("dnd-over"));
         }}
         onDragEnd={(e) => {
           setIsDragging(false);
+          e.currentTarget.classList.remove(c("dnd-dragging"));
+          e.currentTarget.classList.remove(c("dnd-over"));
         }}
         onDragOver={(e) => {
           if (e.preventDefault) {
