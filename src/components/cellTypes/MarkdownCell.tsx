@@ -1,6 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Link } from "obsidian-dataview";
 import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
@@ -11,6 +11,8 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
   const tableColumn = column.columnDef as TableColumn;
   const { tableState } = table.options.meta;
   const markdownRow = tableState.data((state) => state.rows[row.index]);
+  const configInfo = tableState.configState((state) => state.info);
+
   const mdRef = useRef<HTMLDivElement>();
   useEffect(() => {
     if (mdRef.current !== null) {
@@ -26,7 +28,13 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
   return (
     <span
       ref={mdRef}
-      className={`${c("md_cell")}`}
+      className={`${c(
+        "md_cell " +
+          getAlignmentClassname(
+            tableColumn.config,
+            configInfo.getLocalSettings()
+          )
+      )}`}
       key={`markdown_${cell.id}`}
     />
   );

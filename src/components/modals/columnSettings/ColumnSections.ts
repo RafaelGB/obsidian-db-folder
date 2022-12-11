@@ -42,6 +42,7 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
             case InputType.ROLLUP:
             case InputType.SELECT:
             case InputType.TAGS:
+            case InputType.MARKDOWN:
                 particularHandlers.push(new AlignmentSelectorHandler());
                 particularHandlers.push(new ToggleWrapContentHandler());
                 break;
@@ -68,14 +69,21 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
     protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
         const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         // Mandatory
-        particularHandlers.push(new ColumnIdInputHandler());
+
         // Particular
         switch (this.input) {
             case InputType.TASK:
             case InputType.RELATION:
+                particularHandlers.push(new ColumnIdInputHandler());
+                break;
+            case InputType.MARKDOWN:
+            case InputType.METATADA_TIME:
+            case InputType.INLINKS:
+            case InputType.OUTLINKS:
                 // do nothing
                 break;
             default:
+                particularHandlers.push(new ColumnIdInputHandler());
                 particularHandlers.push(new InlineToggleHandler());
         }
         return particularHandlers;

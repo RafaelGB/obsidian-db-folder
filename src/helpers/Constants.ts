@@ -10,25 +10,30 @@ export const ActionTypes = Object.freeze({
 });
 
 /** Flavours of data types */
-export const InputType = Object.freeze({
+export const DynamicInputType = Object.freeze({
   NUMBER: 'number',
   TEXT: 'text',
   SELECT: 'select',
   TAGS: 'tags',
-  MARKDOWN: 'markdown',
-  SORTING: 'sorting',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
-  METATADA_TIME: 'metadata_time',
-  TASK: 'task',
-  INLINKS: 'inlinks',
-  OUTLINKS: 'outlinks',
   CHECKBOX: 'checkbox',
-  NEW_COLUMN: 'new_column',
   FORMULA: 'formula',
   RELATION: 'relation',
   ROLLUP: 'rollup',
 });
+
+export const StaticInputType = Object.freeze({
+  MARKDOWN: 'markdown',
+  SORTING: 'sorting',
+  METATADA_TIME: 'metadata_time',
+  TASK: 'task',
+  INLINKS: 'inlinks',
+  OUTLINKS: 'outlinks',
+  NEW_COLUMN: 'new_column',
+});
+
+export const InputType = Object.assign({}, DynamicInputType, StaticInputType);
 
 export const InputLabel = Object.freeze({
   NUMBER: 'Number',
