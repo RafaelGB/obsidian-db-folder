@@ -10,17 +10,21 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
     settingTitle: string = 'Add existing column';
     handle(response: AddColumnModalHandlerResponse): AddColumnModalHandlerResponse {
         const { containerEl, addColumnModalManager } = response;
-        const { filters, ddbbConfig } = addColumnModalManager.props;
-        const { actions, info } = addColumnModalManager.props.columnsState;
-        const columns = info.getAllColumns();
+        const { configState, columnState } = addColumnModalManager.props;
+        const columns = columnState.info.getAllColumns();
         let selectedColumn: string = "";
         const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve) => {
-            resolve(obtainColumnsFromRows(addColumnModalManager.addColumnModal.view, ddbbConfig, filters, columns));
+            resolve(obtainColumnsFromRows(
+                addColumnModalManager.addColumnModal.view,
+                configState.info.getLocalSettings(),
+                configState.info.getFilters(),
+                columns
+            ));
         });
 
         promiseOfObtainColumnsFromRows.then((columnsRaw: Record<string, DatabaseColumn>) => {
             // Filter out the columns that are already in the table
-            const currentColumns = (info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id);
+            const currentColumns = (columnState.info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id);
             const filteredColumns: Record<string, string> = {};
             Object.keys(columnsRaw)
                 .sort((a, b) => a.localeCompare(b))
@@ -50,7 +54,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                                 new Notice("You need to select a column to add", 1500);
                                 return;
                             }
-                            actions.addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN), selectedColumn);
+                            columnState.actions.addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN), selectedColumn);
                             addColumnModalManager.addColumnModal.enableReset = true;
                             // Refresh the modal to remove the selected column from the dropdown
                             addColumnModalManager.reset(response);

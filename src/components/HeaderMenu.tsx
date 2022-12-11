@@ -238,7 +238,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                         },
                         configState: { info: configInfo },
                         view: table.options.meta.view,
-                        headerMenuProps: headerMenuProps,
+                        tableColumn: column.columnDef as TableColumn,
                       }).open();
                       setMenuEl(null);
                     }}

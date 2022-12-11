@@ -2,13 +2,13 @@ import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 
-export class HideColumnsHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
+export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
   settingTitle: string = "Shown/Hide columns";
   handle(
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { info, actions } = addColumnModalManager.props.columnsState;
+    const { info, actions } = addColumnModalManager.props.columnState;
 
     /******************
      * SHOW COLUMN MENU
@@ -24,11 +24,16 @@ export class HideColumnsHandler extends AbstractHandlerClass<AddColumnModalHandl
 
         new Setting(containerEl)
           .setName(column.label)
-          .setDesc(`Show or hide ${column.label}`)
+          .setDesc(`Quick options of ${column.label}`)
           .addToggle(toggle =>
             toggle
               .setValue(!column.isHidden)
               .onChange(toggleHandler)
+              .setTooltip(`Show or hide ${column.label}`)
+          )
+          .addButton(button => {
+            // TODO: Access to the column's settings
+          }
           );
       });
     return this.goNext(response);

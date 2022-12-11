@@ -10,7 +10,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { info, actions } = addColumnModalManager.props.columnsState;
+    const { info, actions } = addColumnModalManager.props.columnState;
     let newColumnName = "";
     const addNewColumnPromise = (): void => {
       const isEmpty = newColumnName.length === 0;

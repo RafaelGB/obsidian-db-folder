@@ -1,4 +1,4 @@
-import { AddColumnModalHandlerResponse, AddColumnModalProps } from "cdm/ModalsModel";
+import { AddColumnModalHandlerResponse, AddColumnModalProps, ColumnSettingsModalProps } from "cdm/ModalsModel";
 import { DatabaseView } from "DatabaseView";
 import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";

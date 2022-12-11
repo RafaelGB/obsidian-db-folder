@@ -119,7 +119,7 @@ div.database-plugin__td.data-input:hover {
 }
 
 .database-plugin__td.data-input p {
-  margin: 6px 0px;
+  margin: 0;
 }
 /** children of data-input fills parent div*/
 .data-input > * {
@@ -628,7 +628,6 @@ div.database-plugin__checkbox {
 
 .database-plugin__text-nowrap {
   white-space: nowrap;
-  overflow-x: auto;
 }
 
 .menu.database-plugin__popper {
