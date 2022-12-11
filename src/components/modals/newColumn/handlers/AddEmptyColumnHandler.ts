@@ -1,7 +1,8 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
-import { MetadataColumns } from "helpers/Constants";
+import { DynamicInputType, MetadataColumns } from "helpers/Constants";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
   settingTitle: string = "Add empty column";
@@ -10,16 +11,27 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { info, actions } = addColumnModalManager.props.columnState;
+    const { columnState } = addColumnModalManager.props;
     let newColumnName = "";
+    let typeOfNewColumn: string = DynamicInputType.TEXT;
+    const typesRecord: Record<string, string> = {};
+    Object.values(DynamicInputType).forEach((value) => {
+      typesRecord[value] = value;
+    });
     const addNewColumnPromise = (): void => {
       const isEmpty = newColumnName.length === 0;
-      actions.addToLeft(
-        info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
-        isEmpty ? undefined : newColumnName
+      columnState.actions.addToLeft(
+        columnState.info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
+        isEmpty ? undefined : newColumnName,
+        typeOfNewColumn
       );
       new Notice(isEmpty ? "New column added" : `"${newColumnName}" added to the table`, 1500);
       (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";
+    }
+
+    const selectTypeHandler = (value: string): void => {
+      if (!value) return;
+      typeOfNewColumn = value;
     }
 
     /**************
@@ -42,6 +54,15 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
           .onChange(async (value: string): Promise<void> => {
             newColumnName = value;
           });
+      })
+      .addSearch(cb => {
+        new StringSuggest(
+          cb.inputEl,
+          typesRecord
+        );
+        cb.setPlaceholder("Select type...")
+          .setValue(DynamicInputType.TEXT)
+          .onChange(selectTypeHandler);
       })
       .addButton((button) => {
         button

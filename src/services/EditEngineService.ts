@@ -2,7 +2,6 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { inline_regex_target_in_function_of } from "helpers/FileManagement";
 import { TFile } from "obsidian";
-import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
 import { InputType, UpdateRowOptions } from "helpers/Constants";

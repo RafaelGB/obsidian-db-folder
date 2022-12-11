@@ -2,7 +2,7 @@ import { DatabaseColumn } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
-import { DEFAULT_COLUMN_CONFIG, InputType, TableColumnsTemplate } from "helpers/Constants";
+import { DEFAULT_COLUMN_CONFIG, DynamicInputType, TableColumnsTemplate } from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
@@ -11,21 +11,21 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
         const { view, set, implementation } = tableActionResponse;
 
-        implementation.actions.addToLeft = (column: TableColumn, customName?: string) =>
+        implementation.actions.addToLeft = (column: TableColumn, customName?: string, customType: string = DynamicInputType.TEXT) =>
             set((updater) => {
                 const index = updater.columns.findIndex(
                     (col) => col.key === column.key
                 );
-                const alteredColumns = this.generateNewColumn(view, updater, index, column.position - 1, customName);
+                const alteredColumns = this.generateNewColumn(view, updater, index, column.position - 1, customName, customType);
                 return { columns: alteredColumns };
             });
 
-        implementation.actions.addToRight = (column: TableColumn, customName?: string) =>
+        implementation.actions.addToRight = (column: TableColumn, customName?: string, customType: string = DynamicInputType.TEXT) =>
             set((updater) => {
                 const index = updater.columns.findIndex(
                     (col) => col.key === column.key
                 );
-                const alteredColumns = this.generateNewColumn(view, updater, index + 1, column.position + 1, customName);
+                const alteredColumns = this.generateNewColumn(view, updater, index + 1, column.position + 1, customName, customType);
                 return { columns: alteredColumns };
             });
 
@@ -41,7 +41,7 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
      * @param desiredPosition 
      * @returns 
      */
-    private generateNewColumn(view: DatabaseView, updater: ColumnsState, index: number, desiredPosition: number, customName?: string): TableColumn[] {
+    private generateNewColumn(view: DatabaseView, updater: ColumnsState, index: number, desiredPosition: number, customName?: string, customType?: string): TableColumn[] {
         const columnInfo = this.generateNewColumnInfo(
             desiredPosition,
             updater.columns,
@@ -50,7 +50,7 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
         );
 
         const newColumn: DatabaseColumn = {
-            input: InputType.TEXT,
+            input: customType,
             accessorKey: columnInfo.name,
             key: columnInfo.name,
             id: columnInfo.name,

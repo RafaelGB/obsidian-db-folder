@@ -48,7 +48,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
         // Cross column settings
         const columnSetting = new Setting(containerEl)
           .setName(column.label)
-          .setDesc(`Quick options of ${column.label}`)
+          .setDesc(`Quick options of ${column.label}${column.isMetadata ? " (metadata)" : ""}`)
           .addToggle(toggle =>
             toggle
               .setValue(!column.isHidden)

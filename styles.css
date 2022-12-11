@@ -1,4 +1,10 @@
 /*****************
+*   VARIABLES
+******************/
+.database-plugin__container {
+  --dbfolder-line-height: 1rem;
+}
+/*****************
 *      Base
 ******************/
 .database-plugin__html {
@@ -116,6 +122,7 @@ div.database-plugin__td.data-input:hover {
   flex: 1 1 auto;
   text-align: -webkit-center;
   vertical-align: middle;
+  line-height: var(--dbfolder-line-height);
 }
 
 .database-plugin__td.data-input p {
@@ -410,7 +417,7 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__cell_size_wide .database-plugin__td {
-  padding: 0.6rem;
+  padding: 0.3rem;
 }
 
 .database-plugin__table .database-plugin__td:first-child,
@@ -822,6 +829,7 @@ div.database-plugin__checkbox {
 /************************************************************
 *               React-datepicker styles
 ************************************************************/
+/** VARIABLES */
 .react-datepicker {
   --react-datepicker-navigation-height: 24px;
   --react-datepicker-navigation-width: 24px;
