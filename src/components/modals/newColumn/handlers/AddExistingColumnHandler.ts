@@ -14,7 +14,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
         const { configState, columnState } = addColumnModalManager.props;
         const columns = columnState.info.getAllColumns();
         let selectedColumn: string = "";
-        let typeOfNewColumn: string = DynamicInputType.TEXT;
+        let typeOfNewColumn: string = "";
         const typesRecord: Record<string, string> = {};
         Object.values(DynamicInputType).forEach((value) => {
             typesRecord[value] = t(value);
@@ -29,7 +29,6 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
             ));
         });
         const selectTypeHandler = (value: string): void => {
-            if (!value) return;
             typeOfNewColumn = value;
         }
 
@@ -65,7 +64,6 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                         typesRecord
                     );
                     cb.setPlaceholder("Select type...")
-                        .setValue(DynamicInputType.TEXT)
                         .onChange(selectTypeHandler);
                 })
                 .addExtraButton((cb) => {
@@ -76,7 +74,11 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                                 new Notice("You need to select a column to add", 1500);
                                 return;
                             }
-                            columnState.actions.addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN), selectedColumn, typeOfNewColumn);
+                            columnState.actions.addToLeft(
+                                columns.find((o) => o.id === MetadataColumns.ADD_COLUMN),
+                                selectedColumn,
+                                typeOfNewColumn ? typeOfNewColumn : DynamicInputType.TEXT
+                            );
                             addColumnModalManager.addColumnModal.enableReset = true;
                             // Refresh the modal to remove the selected column from the dropdown
                             addColumnModalManager.reset(response);

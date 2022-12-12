@@ -8,7 +8,7 @@ import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
-  settingTitle: string = "Shown/Hide columns";
+  settingTitle: string = "Column quick options";
   handle(
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
@@ -18,6 +18,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
     /******************
      * SHOW COLUMN MENU
      ******************/
+    containerEl.createEl("h3", { text: this.settingTitle });
     const typesRecord: Record<string, string> = {};
     Object.values(DynamicInputType).forEach((value) => {
       typesRecord[value] = t(value);

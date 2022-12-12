@@ -14,7 +14,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
     const { containerEl, addColumnModalManager } = response;
     const { columnState } = addColumnModalManager.props;
     let newColumnName = "";
-    let typeOfNewColumn: string = DynamicInputType.TEXT;
+    let typeOfNewColumn = "";
     const typesRecord: Record<string, string> = {};
     Object.values(DynamicInputType).forEach((value) => {
       typesRecord[value] = t(value);
@@ -24,14 +24,13 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
       columnState.actions.addToLeft(
         columnState.info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
         isEmpty ? undefined : newColumnName,
-        typeOfNewColumn
+        typeOfNewColumn ? typeOfNewColumn : DynamicInputType.TEXT
       );
       new Notice(isEmpty ? "New column added" : `"${newColumnName}" added to the table`, 1500);
       (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";
     }
 
     const selectTypeHandler = (value: string): void => {
-      if (!value) return;
       typeOfNewColumn = value;
     }
 
@@ -62,7 +61,6 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
           typesRecord
         );
         cb.setPlaceholder("Select type...")
-          .setValue(DynamicInputType.TEXT)
           .onChange(selectTypeHandler);
       })
       .addExtraButton((button) => {
