@@ -50,9 +50,8 @@ export default class Footer {
             }
         } catch (e) {
             footerInfo = `Error: ${e.message}`;
-        } finally {
-            return footerInfo;
         }
+        return footerInfo;
     }
     /************************************************************************
      *                          Cross functions

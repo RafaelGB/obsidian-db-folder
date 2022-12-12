@@ -2,8 +2,6 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, ConfigState, DataState, RowTemplateState } from "cdm/TableStateInterface";
 import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
-import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
-import { HeaderMenuProps } from "cdm/HeaderModel";
 import { DatabaseView } from "DatabaseView";
 import { FiltersModalManager } from "components/modals/filters/FiltersModal";
 import { Table } from "@tanstack/react-table";
@@ -52,8 +50,7 @@ export type AddColumnModalHandlerResponse = {
     addColumnModalManager: AddColumnModalManager,
 } & BaseModalHandlerResponse;
 
-export type AddColumnModalProps = {
-} & BaseColumnModalProps;
+export type AddColumnModalProps = BaseColumnModalProps;
 
 /***************************************
  *         ADD ROW MODAL

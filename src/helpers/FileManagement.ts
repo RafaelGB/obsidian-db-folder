@@ -6,7 +6,7 @@ import { INLINE_POSITION, SourceDataTypes } from "helpers/Constants";
 import { RowDataType } from "cdm/FolderModel";
 import { VaultManagerDB } from "services/FileManagerService";
 
-export function resolve_tfile(file_str: string, restrict: boolean = true): TFile {
+export function resolve_tfile(file_str: string, restrict = true): TFile {
   file_str = normalizePath(file_str);
 
   const file = app.vault.getAbstractFileByPath(file_str);
