@@ -10,40 +10,30 @@ export const ActionTypes = Object.freeze({
 });
 
 /** Flavours of data types */
-export const InputType = Object.freeze({
+export const DynamicInputType = Object.freeze({
   NUMBER: 'number',
   TEXT: 'text',
   SELECT: 'select',
   TAGS: 'tags',
-  MARKDOWN: 'markdown',
-  SORTING: 'sorting',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
-  METATADA_TIME: 'metadata_time',
-  TASK: 'task',
-  INLINKS: 'inlinks',
-  OUTLINKS: 'outlinks',
   CHECKBOX: 'checkbox',
-  NEW_COLUMN: 'new_column',
   FORMULA: 'formula',
   RELATION: 'relation',
   ROLLUP: 'rollup',
 });
 
-export const InputLabel = Object.freeze({
-  NUMBER: 'Number',
-  TEXT: 'Text',
-  SELECT: 'Select',
-  TAGS: 'Tags',
-  MARKDOWN: 'Markdown',
-  CALENDAR: 'Date',
-  CALENDAR_TIME: 'Datetime',
-  TASK: 'Task',
-  CHECKBOX: 'Checkbox',
-  FORMULA: 'Formula',
-  RELATION: 'Relation',
-  ROLLUP: 'Rollup',
+export const StaticInputType = Object.freeze({
+  MARKDOWN: 'markdown',
+  SORTING: 'sorting',
+  METATADA_TIME: 'metadata_time',
+  TASK: 'task',
+  INLINKS: 'inlinks',
+  OUTLINKS: 'outlinks',
+  NEW_COLUMN: 'new_column',
 });
+
+export const InputType = Object.assign({}, DynamicInputType, StaticInputType);
 
 export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
@@ -259,7 +249,7 @@ export const StyleClasses = Object.freeze({
   COLUMN_MODAL_BODY: 'database-column-body',
   ADD_ROW_MODAL: 'add-row-modal',
   ADD_ROW_MODAL_BODY: 'add-row-body',
-  ADD_COLUMN_MODAL: 'database-add-column-modal',
+  ADD_COLUMN_MODAL: 'add-column-modal',
   ADD_COLUMN_MODAL_BODY: 'database-add-column-body',
   FILTERS_MODAL: 'database-filters-modal',
   FILTERS_MODAL_BODY: 'database-filters-body',

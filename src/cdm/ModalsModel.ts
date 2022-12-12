@@ -16,6 +16,13 @@ type BaseModalHandlerResponse = {
     containerEl: HTMLElement;
 };
 
+export type BaseColumnModalProps = {
+    dataState: Pick<DataState, "actions">,
+    columnState: Pick<ColumnsState, "info" | "actions">,
+    configState: Pick<ConfigState, "info">,
+    view: DatabaseView,
+    //headerMenuProps: HeaderMenuProps
+}
 /***************************************
  *      COLUMN SETTINGS MODAL
  ***************************************/
@@ -30,12 +37,8 @@ export type ColumnSettingsHandlerResponse = {
 } & BaseModalHandlerResponse
 
 export type ColumnSettingsModalProps = {
-    dataState: Pick<DataState, "actions">,
-    columnState: Pick<ColumnsState, "info" | "actions">,
-    configState: Pick<ConfigState, "info">,
-    view: DatabaseView,
-    headerMenuProps: HeaderMenuProps
-}
+    tableColumn: TableColumn
+} & BaseColumnModalProps;
 
 /***************************************
  *         ADD COLUMN MODAL
@@ -50,10 +53,7 @@ export type AddColumnModalHandlerResponse = {
 } & BaseModalHandlerResponse;
 
 export type AddColumnModalProps = {
-    columnsState: Partial<ColumnsState>;
-    ddbbConfig: LocalSettings,
-    filters: FilterSettings
-}
+} & BaseColumnModalProps;
 
 /***************************************
  *         ADD ROW MODAL

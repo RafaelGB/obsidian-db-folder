@@ -1,4 +1,10 @@
 /*****************
+*   VARIABLES
+******************/
+.database-plugin__container {
+  --dbfolder-line-height: 1rem;
+}
+/*****************
 *      Base
 ******************/
 .database-plugin__html {
@@ -116,10 +122,11 @@ div.database-plugin__td.data-input:hover {
   flex: 1 1 auto;
   text-align: -webkit-center;
   vertical-align: middle;
+  line-height: var(--dbfolder-line-height);
 }
 
 .database-plugin__td.data-input p {
-  margin: 6px 0px;
+  margin: 0;
 }
 /** children of data-input fills parent div*/
 .data-input > * {
@@ -410,7 +417,7 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__cell_size_wide .database-plugin__td {
-  padding: 0.6rem;
+  padding: 0.3rem;
 }
 
 .database-plugin__table .database-plugin__td:first-child,
@@ -628,7 +635,6 @@ div.database-plugin__checkbox {
 
 .database-plugin__text-nowrap {
   white-space: nowrap;
-  overflow-x: auto;
 }
 
 .menu.database-plugin__popper {
@@ -820,9 +826,15 @@ div.database-plugin__checkbox {
   height: 100%;
   margin: 10px;
 }
+
+.database-plugin__confirm-modal-controls {
+  display: flex;
+  justify-content: center;
+}
 /************************************************************
 *               React-datepicker styles
 ************************************************************/
+/** VARIABLES */
 .react-datepicker {
   --react-datepicker-navigation-height: 24px;
   --react-datepicker-navigation-width: 24px;

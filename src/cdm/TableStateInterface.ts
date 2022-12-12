@@ -64,8 +64,8 @@ export interface ColumnsState {
     columns: TableColumn[];
     shadowColumns: TableColumn[];
     actions: {
-        addToLeft: (column: TableColumn, customName?: string) => void;
-        addToRight: (column: TableColumn, customName?: string) => void;
+        addToLeft: (column: TableColumn, customName?: string, customType?: string) => void;
+        addToRight: (column: TableColumn, customName?: string, customType?: string) => void;
         remove: (column: TableColumn) => void;
         alterSorting: (column: TableColumn) => void;
         addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;

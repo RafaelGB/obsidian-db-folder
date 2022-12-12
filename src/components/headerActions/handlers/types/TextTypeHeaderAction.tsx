@@ -2,9 +2,10 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import TextIcon from "components/img/Text";
 import React from "react";
-import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
+import { t } from "lang/helpers";
 
 export default class TextTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -50,6 +51,6 @@ function textTypeComponent(headerActionResponse: HeaderActionResponse) {
   return headerTypeComponent({
     onClick: tagsOnClick,
     icon: <TextIcon />,
-    label: InputLabel.TEXT,
+    label: t(InputType.TEXT),
   });
 }

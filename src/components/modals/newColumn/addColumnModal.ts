@@ -4,6 +4,8 @@ import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { select_new_column_section } from "components/modals/newColumn/SelectNewColumnSection";
+import { c } from "helpers/StylesHelper";
+import { applyPluginModalStyle } from "components/styles/ModalStyles";
 
 export class AddColumnModal extends Modal {
     view: DatabaseView;
@@ -45,11 +47,11 @@ export class AddColumnModalManager {
     }
     constructUI(containerEl: HTMLElement) {
         /** Common modal headings */
-        containerEl.addClass(StyleClasses.ADD_COLUMN_MODAL);
+        containerEl.addClass(c(StyleClasses.ADD_COLUMN_MODAL));
+        applyPluginModalStyle(containerEl);
         add_setting_header(containerEl, `Columns menu`, 'h2');
 
         const addColumnBody = containerEl.createDiv();
-        addColumnBody.addClass(StyleClasses.ADD_COLUMN_MODAL_BODY);
         addColumnBody.setAttribute("id", StyleClasses.ADD_COLUMN_MODAL_BODY);
         const initialResponse: AddColumnModalHandlerResponse = {
             containerEl: addColumnBody,
