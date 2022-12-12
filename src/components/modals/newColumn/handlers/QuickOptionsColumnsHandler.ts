@@ -1,5 +1,6 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
+import { ConfirmModal } from "components/modals/ConfirmModal";
 import { DynamicInputType } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Setting } from "obsidian";
@@ -81,10 +82,15 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
               button
                 .setIcon("trash")
                 .setTooltip(`Delete ${column.label}`)
-                .onClick(() => {
-                  columnState.actions.remove(column);
-                  // Refresh the modal to remove the selected column from the dropdown
-                  addColumnModalManager.reset(response);
+                .onClick(async () => {
+                  const confirmation = await new ConfirmModal()
+                    .setMessage(`Are you sure you want to delete ${column.label}?`)
+                    .isConfirmed();
+                  if (confirmation) {
+                    columnState.actions.remove(column);
+                    // Refresh the modal to remove the selected column from the dropdown
+                    addColumnModalManager.reset(response);
+                  }
                 })
             });
         }

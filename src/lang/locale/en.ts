@@ -66,4 +66,7 @@ export default {
   "inlinks": "Inlinks",
   "outlinks": "Outlinks",
   "new_column": "New column",
+  /** MODALS */
+  "confirm_modal_ok": "Yes",
+  "confirm_modal_ko": "No",
 };

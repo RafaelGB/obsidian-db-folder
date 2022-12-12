@@ -52,7 +52,6 @@ export class AddColumnModalManager {
         add_setting_header(containerEl, `Columns menu`, 'h2');
 
         const addColumnBody = containerEl.createDiv();
-        addColumnBody.addClass(StyleClasses.ADD_COLUMN_MODAL_BODY);
         addColumnBody.setAttribute("id", StyleClasses.ADD_COLUMN_MODAL_BODY);
         const initialResponse: AddColumnModalHandlerResponse = {
             containerEl: addColumnBody,

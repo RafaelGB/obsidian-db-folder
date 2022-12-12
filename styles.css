@@ -826,6 +826,11 @@ div.database-plugin__checkbox {
   height: 100%;
   margin: 10px;
 }
+
+.database-plugin__confirm-modal-controls {
+  display: flex;
+  justify-content: center;
+}
 /************************************************************
 *               React-datepicker styles
 ************************************************************/

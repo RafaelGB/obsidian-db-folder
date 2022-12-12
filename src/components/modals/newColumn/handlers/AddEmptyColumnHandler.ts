@@ -65,7 +65,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
           .setValue(DynamicInputType.TEXT)
           .onChange(selectTypeHandler);
       })
-      .addButton((button) => {
+      .addExtraButton((button) => {
         button
           .setIcon("create-new")
           .setTooltip("Add new column")

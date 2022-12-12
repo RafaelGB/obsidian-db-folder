@@ -1,6 +1,7 @@
 import { Row } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, DataState } from "cdm/TableStateInterface";
+import { ConfirmModal } from "components/modals/ConfirmModal";
 import { TextAreaModal } from "components/modals/TextAreaModal";
 import { FooterType, InputType } from "helpers/Constants";
 import { t } from "lang/helpers";
@@ -25,7 +26,12 @@ export function showFileMenu(file: TFile, event: MouseEvent, row: Row<RowDataTyp
     const fileMenu = new Menu();
 
     const handleDeleteRow = async () => {
-        dataActions.removeRow(row.original);
+        const confirmation = await new ConfirmModal()
+            .setMessage(`Are you sure you want to delete this file?`)
+            .isConfirmed();
+        if (confirmation) {
+            dataActions.removeRow(row.original);
+        }
     };
 
     const handleRenameRow = async () => {
