@@ -7,6 +7,7 @@ import { ColumnSettingsHandlerResponse, ColumnSettingsModalProps } from "cdm/Mod
 import { particular_settings_section, behavior_settings_section, style_settings_section } from "components/modals/columnSettings/ColumnSections";
 import { HeaderMenuProps } from "cdm/HeaderModel";
 import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
+import { applyPluginModalStyle } from "components/styles/ModalStyles";
 
 export class ColumnSettingsModal extends Modal {
     view: DatabaseView;
@@ -51,6 +52,7 @@ export class ColumnSettingsManager {
         this.modal = modal;
     }
     constructUI(containerEl: HTMLElement) {
+        applyPluginModalStyle(containerEl);
         const column = this.modal.tableColumn;
         /** Common modal headings */
         containerEl.addClass(StyleClasses.COLUMN_MODAL);

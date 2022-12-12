@@ -1,7 +1,8 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { obtainColumnsFromRows } from "components/Columns";
-import { MetadataColumns } from "helpers/Constants";
+import { DynamicInputType, MetadataColumns } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
@@ -13,6 +14,12 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
         const { configState, columnState } = addColumnModalManager.props;
         const columns = columnState.info.getAllColumns();
         let selectedColumn: string = "";
+        let typeOfNewColumn: string = DynamicInputType.TEXT;
+        const typesRecord: Record<string, string> = {};
+        Object.values(DynamicInputType).forEach((value) => {
+            typesRecord[value] = t(value);
+        });
+
         const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve) => {
             resolve(obtainColumnsFromRows(
                 addColumnModalManager.addColumnModal.view,
@@ -21,6 +28,10 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                 columns
             ));
         });
+        const selectTypeHandler = (value: string): void => {
+            if (!value) return;
+            typeOfNewColumn = value;
+        }
 
         promiseOfObtainColumnsFromRows.then((columnsRaw: Record<string, DatabaseColumn>) => {
             // Filter out the columns that are already in the table
@@ -46,7 +57,18 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                         .onChange((value: string) => {
                             selectedColumn = value;
                         });
-                }).addExtraButton((cb) => {
+
+                })
+                .addSearch(cb => {
+                    new StringSuggest(
+                        cb.inputEl,
+                        typesRecord
+                    );
+                    cb.setPlaceholder("Select type...")
+                        .setValue(DynamicInputType.TEXT)
+                        .onChange(selectTypeHandler);
+                })
+                .addExtraButton((cb) => {
                     cb.setIcon("create-new")
                         .setTooltip("Create the selected column and refresh the table")
                         .onClick(async (): Promise<void> => {
@@ -54,7 +76,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                                 new Notice("You need to select a column to add", 1500);
                                 return;
                             }
-                            columnState.actions.addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN), selectedColumn);
+                            columnState.actions.addToLeft(columns.find((o) => o.id === MetadataColumns.ADD_COLUMN), selectedColumn, typeOfNewColumn);
                             addColumnModalManager.addColumnModal.enableReset = true;
                             // Refresh the modal to remove the selected column from the dropdown
                             addColumnModalManager.reset(response);

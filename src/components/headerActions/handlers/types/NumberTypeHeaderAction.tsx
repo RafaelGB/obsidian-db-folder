@@ -2,9 +2,10 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import HashIcon from "components/img/Hash";
 import React from "react";
-import { InputLabel, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
+import { t } from "lang/helpers";
 
 export default class NumberTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -44,6 +45,6 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   return headerTypeComponent({
     onClick: numberOnClick,
     icon: <HashIcon />,
-    label: InputLabel.NUMBER,
+    label: t(InputType.NUMBER),
   });
 }

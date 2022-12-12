@@ -35,21 +35,6 @@ export const StaticInputType = Object.freeze({
 
 export const InputType = Object.assign({}, DynamicInputType, StaticInputType);
 
-export const InputLabel = Object.freeze({
-  NUMBER: 'Number',
-  TEXT: 'Text',
-  SELECT: 'Select',
-  TAGS: 'Tags',
-  MARKDOWN: 'Markdown',
-  CALENDAR: 'Date',
-  CALENDAR_TIME: 'Datetime',
-  TASK: 'Task',
-  CHECKBOX: 'Checkbox',
-  FORMULA: 'Formula',
-  RELATION: 'Relation',
-  ROLLUP: 'Rollup',
-});
-
 export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
   MAX_ROWS: 99999,

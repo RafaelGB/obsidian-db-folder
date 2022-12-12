@@ -1,6 +1,7 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
 import { DynamicInputType } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
@@ -18,7 +19,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
      ******************/
     const typesRecord: Record<string, string> = {};
     Object.values(DynamicInputType).forEach((value) => {
-      typesRecord[value] = value;
+      typesRecord[value] = t(value);
     });
     // List of columns to show/hide
     columnState.info.getAllColumns()

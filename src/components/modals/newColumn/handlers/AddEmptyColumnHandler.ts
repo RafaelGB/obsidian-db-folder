@@ -1,5 +1,6 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { DynamicInputType, MetadataColumns } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
@@ -16,7 +17,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
     let typeOfNewColumn: string = DynamicInputType.TEXT;
     const typesRecord: Record<string, string> = {};
     Object.values(DynamicInputType).forEach((value) => {
-      typesRecord[value] = value;
+      typesRecord[value] = t(value);
     });
     const addNewColumnPromise = (): void => {
       const isEmpty = newColumnName.length === 0;
