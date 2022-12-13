@@ -7,7 +7,6 @@ import { ParseService } from "services/ParseService";
 import { InputType, UpdateRowOptions } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { VaultManagerDB } from "services/FileManagerService";
-import { inlineRegexInFunctionOf } from "helpers/QueryHelper";
 import { EditionError, showDBError } from "errors/ErrorTypes";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import obtainRowDatabaseFields from "parsers/FileToRowDatabaseFields";
