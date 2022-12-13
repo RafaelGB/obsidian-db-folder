@@ -1,5 +1,5 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
-import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import CheckboxTypeHandlerAction from "components/headerActions/handlers/types/CheckboxTypeHeaderAction";
 import TextTypeHeaderAction from "components/headerActions/handlers/types/TextTypeHeaderAction";
 import SelectTypeHeaderAction from "components/headerActions/handlers/types/SelectTypeHeaderAction";
@@ -10,7 +10,7 @@ import DatetimeTypeHeaderAction from "components/headerActions/handlers/types/Da
 import FormulaTypeHeaderAction from "components/headerActions/handlers/types/FormulaTypeHeaderAction";
 import RelationTypeHeaderAction from "components/headerActions/handlers/types/RelationTypeHeaderAction";
 import RollupTypeHeaderAction from "components/headerActions/handlers/types/RollupTypeHeaderAction";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 
 class HeaderActionTypesSection extends AbstractChain<HeaderActionResponse> {
     protected getHandlers(): AbstractHandler<HeaderActionResponse>[] {

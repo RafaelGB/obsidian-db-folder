@@ -1,7 +1,7 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import TextAlignmentSelector from "components/styles/TextAlignmentSelector";
 import { Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
 

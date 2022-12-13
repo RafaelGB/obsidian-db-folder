@@ -16,8 +16,8 @@ import { RollupActionHandler } from "components/modals/columnSettings/handlers/r
 import { RollupKeyHandler } from "components/modals/columnSettings/handlers/rollups/RollupKeyHandler";
 import { RollupPersistToggleHandler } from "components/modals/columnSettings/handlers/rollups/RollupPersistToggleHandler";
 import { InputType } from "helpers/Constants";
-import { AbstractChain } from "patterns/AbstractFactoryChain";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 
 
 class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {

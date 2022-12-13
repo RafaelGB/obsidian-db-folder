@@ -1,6 +1,6 @@
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
-import { AbstractChain } from "patterns/AbstractFactoryChain";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 import GetFormulaHandlerAction from "stateManagement/automations/handlers/GetFormulaHandlerAction";
 import LoadFormulasHandlerAction from "stateManagement/automations/handlers/LoadFormulasHandlerAction";
 import RunFormulaHandlerAction from "stateManagement/automations/handlers/RunFormulaHandlerAction";

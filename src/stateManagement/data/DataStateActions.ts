@@ -1,5 +1,5 @@
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import AddRowlHandlerAction from "stateManagement/data/handlers/AddRowHandlerAction";
 import UpdateCellHandlerAction from "stateManagement/data/handlers/UpdateCellHandlerAction";
 import UpdateDataAfterLabelChangeHandlerAction from "stateManagement/data/handlers/UpdateDataAfterLabelChangeHandlerAction";
@@ -12,7 +12,7 @@ import RenameFileHandlerAction from "stateManagement/data/handlers/RenameFileHan
 import SaveDataFromFileHandlerAction from "stateManagement/data/handlers/SaveDataFromFileHandlerAction";
 import GroupFilesHandlerAction from "stateManagement/data/handlers/GroupFilesHandlerAction";
 import EditOptionForAllRowsHandlerAction from "stateManagement/data/handlers/EditOptionForAllRowsHandlerAction";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 
 class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
   protected getHandlers(): AbstractHandler<TableActionResponse<DataState>>[] {

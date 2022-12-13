@@ -3,8 +3,8 @@ import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler
 import { LoggerToggleHandler } from 'settings/handlers/developer/LoggerToggleHandler';
 import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateToggleHandler';
 import { LoggerLevelInfoDropDownHandler } from 'settings/handlers/developer/LoggerLevelInfoDropDownHandler';
-import { AbstractChain } from 'patterns/AbstractFactoryChain';
-import { AbstractHandler } from 'patterns/AbstractHandler';
+import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
+import { AbstractHandler } from 'patterns/chain/AbstractHandler';
 
 /**
  * developer settings section

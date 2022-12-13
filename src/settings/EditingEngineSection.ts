@@ -1,8 +1,8 @@
-import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 import { FrontmatterQuotesToggleHandler } from "settings/handlers/editingEngine/FrontmatterQuotesToggleHandler";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 import { DateFormatHandler } from "settings/handlers/editingEngine/DateFormatHandler";
 
 class EditingEngineSetttingsSection extends AbstractChain<SettingHandlerResponse> {

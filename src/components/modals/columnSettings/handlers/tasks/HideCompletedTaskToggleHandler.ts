@@ -1,6 +1,6 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 export class HideCompletedTaskToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
     settingTitle: string = 'Hide completed tasks';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
