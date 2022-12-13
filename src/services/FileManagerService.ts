@@ -69,13 +69,15 @@ class VaultManager {
       if (releasedContent === undefined) {
         releasedContent = await this.obtainContentFromTfile(note.file);
       }
+
       const line_string = new FileContent(releasedContent);
+
       switch (note.action) {
         case 'remove':
-          releasedContent = line_string.remove(note.regexp).value;
+          releasedContent = line_string.remove(note).value;
           break;
         case 'replace':
-          releasedContent = line_string.replaceAll(note.regexp, note.newValue).value;
+          releasedContent = line_string.replaceAll(note).value;
           break;
         default:
           throw "Error: Option " + note.action + " is not supported";
@@ -106,7 +108,6 @@ class VaultManager {
       const yaml = parseYaml(frontmatterRaw);
       const frontmatter: Record<string, Literal> = {};
       Object.keys(yaml)
-
         .forEach(key => {
           // add frontmatter fields that are not specified as database fields
           frontmatter[key] = yaml[key];
