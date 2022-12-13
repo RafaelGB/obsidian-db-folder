@@ -7,7 +7,7 @@ import { Notice, parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
-import { SourceDataTypes } from "helpers/Constants";
+import { FileManagerEditOptions, SourceDataTypes } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 class VaultManager {
   private static instance: VaultManager;
@@ -73,10 +73,10 @@ class VaultManager {
       const line_string = new FileContent(releasedContent);
 
       switch (note.action) {
-        case 'remove':
+        case FileManagerEditOptions.REMOVE:
           releasedContent = line_string.remove(note).value;
           break;
-        case 'replace':
+        case FileManagerEditOptions.REPLACE:
           releasedContent = line_string.replaceAll(note).value;
           break;
         default:

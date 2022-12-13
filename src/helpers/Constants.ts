@@ -90,6 +90,11 @@ export const FooterType = Object.freeze({
   FORMULA: 'formula',
 });
 
+export const FileManagerEditOptions = Object.freeze({
+  REMOVE: 'remove',
+  REPLACE: 'replace',
+});
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/

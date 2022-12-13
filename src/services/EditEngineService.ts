@@ -209,6 +209,8 @@ class EditEngine {
                 .addRegExpNewValue(`${newValue}:: $2`)
                 .addInlineRegexParenthesis(columnId)
                 .addRegExpNewValue(`$1$2${newValue}:: $4$5$6`)
+                .addInlineRegexListOrCallout(columnId)
+                .addRegExpNewValue(`$1$2${newValue}:: $4`)
                 .build();
 
             await VaultManagerDB.editNoteContent(noteObject);
@@ -241,6 +243,8 @@ class EditEngine {
                 .addRegExpNewValue(``)
                 .addInlineRegexParenthesis(columnId)
                 .addRegExpNewValue(`$1$2$5$6`)
+                .addInlineRegexListOrCallout(columnId)
+                .addRegExpNewValue(``)
                 .build();
 
             await VaultManagerDB.editNoteContent(noteObject);

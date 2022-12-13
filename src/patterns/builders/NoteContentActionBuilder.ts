@@ -1,4 +1,5 @@
 import { NoteContentAction } from "cdm/FolderModel";
+import { FileManagerEditOptions } from "helpers/Constants";
 import { TFile } from "obsidian";
 
 export default class NoteContentActionBuilder {
@@ -7,7 +8,7 @@ export default class NoteContentActionBuilder {
     private regExpList: RegExp[] = [];
     private regExpNewValue: string[] = [];
 
-    constructor(private action = "replace") {
+    constructor(private action: string = FileManagerEditOptions.REPLACE) {
     }
 
     public setFile(file: TFile): NoteContentActionBuilder {
