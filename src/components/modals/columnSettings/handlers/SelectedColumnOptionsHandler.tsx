@@ -1,7 +1,7 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { randomColor, castStringtoHsl, castHslToString } from "helpers/Colors";
 import { ButtonComponent, Notice, Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { LOGGER } from "services/Logger";
 
 export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {

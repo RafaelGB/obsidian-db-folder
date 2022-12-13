@@ -1,7 +1,7 @@
 import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
-import { AbstractChain } from 'patterns/AbstractFactoryChain';
-import { AbstractHandler } from 'patterns/AbstractHandler';
+import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
+import { AbstractHandler } from 'patterns/chain/AbstractHandler';
 import { RibbonIconToggleHandler } from 'settings/handlers/helpersCommands/RibbonIconToggleHandler';
 import { ShowSearchBarByDefaultToggleHandler } from 'settings/handlers/helpersCommands/ShowSearchBarByDefaultToggleHandler';
 

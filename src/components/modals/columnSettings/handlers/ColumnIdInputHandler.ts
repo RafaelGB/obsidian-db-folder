@@ -1,6 +1,6 @@
 import { Notice, Setting } from "obsidian";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { dbTrim } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 

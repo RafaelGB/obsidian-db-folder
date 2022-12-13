@@ -1,6 +1,6 @@
 import { FiltersModalHandlerResponse } from "cdm/ModalsModel";
 import DataviewFiltersComponent from "components/modals/filters/handlers/DataviewFiltersComponent";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
 

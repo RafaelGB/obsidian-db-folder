@@ -12,6 +12,7 @@ import { EditionError, showDBError } from "errors/ErrorTypes";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import obtainRowDatabaseFields from "parsers/FileToRowDatabaseFields";
 import { EditArguments } from "cdm/ServicesModel";
+import NoteContentActionBuilder from "patterns/builders/NoteContentActionBuilder";
 
 class EditEngine {
     private static instance: EditEngine;
@@ -173,22 +174,27 @@ class EditEngine {
          *                              INLINE GROUP FUNCTIONS
          *******************************************************************************************/
         async function inlineColumnEdit(): Promise<void> {
-            const inlineFieldRegex = inlineRegexInFunctionOf(columnId);
-            if (!inlineFieldRegex.test(content)) {
+            const mdProperty = ParseService.parseLiteral(
+                newValue,
+                InputType.MARKDOWN,
+                ddbbConfig,
+                true
+            )
+            const builder = new NoteContentActionBuilder()
+                .setContent(content)
+                .setFile(file)
+                .addInlineRegexStandard(columnId)
+                .addRegExpNewValue(`$1 ${mdProperty}`)
+                .addInlineRegexParenthesis(columnId)
+                .addRegExpNewValue(`$1$2$3 ${mdProperty}$5$6`)
+                .addInlineRegexListOrCallout(columnId)
+                .addRegExpNewValue(`$1$2$3 ${mdProperty}`)
+
+            if (!builder.isContentEditable()) {
                 await inlineAddColumn();
                 return;
             }
-            /* Regex explanation
-            * group 1 is inline field checking that starts in new line
-            * group 2 is the current value of inline field
-            */
-            const noteObject = {
-                action: 'replace',
-                file: file,
-                regexp: inlineFieldRegex,
-                newValue: `$3$6$7$8 ${ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true)}$10$11`
-            };
-            await VaultManagerDB.editNoteContent(noteObject);
+            await VaultManagerDB.editNoteContent(builder.build());
             await persistFrontmatter(columnId);
         }
 
@@ -196,50 +202,47 @@ class EditEngine {
             if (!Object.keys(rowFields.inline).contains(columnId)) {
                 return;
             }
-            /* Regex explanation
-            * group 1 is inline field checking that starts in new line
-            * group 2 is the current value of inline field
-            */
-            const inlineFieldRegex = inlineRegexInFunctionOf(columnId);
-            const noteObject = {
-                action: 'replace',
-                file: file,
-                regexp: inlineFieldRegex,
-                newValue: `$6$7${newValue}:: $4$9$10$11`
-            };
+            const noteObject = new NoteContentActionBuilder()
+                .setContent(content)
+                .setFile(file)
+                .addInlineRegexStandard(columnId)
+                .addRegExpNewValue(`${newValue}:: $2`)
+                .addInlineRegexParenthesis(columnId)
+                .addRegExpNewValue(`$1$2${newValue}:: $4$5$6`)
+                .build();
+
             await VaultManagerDB.editNoteContent(noteObject);
             await persistFrontmatter();
         }
 
         async function inlineAddColumn(): Promise<void> {
             const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
-            const noteObject = {
-                action: 'replace',
-                file: file,
-                regexp: inlineAddRegex,
-                newValue: inline_regex_target_in_function_of(
-                    ddbbConfig.inline_new_position,
-                    columnId,
-                    ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true).toString(),
-                    contentHasFrontmatter
-                )
-            };
+            const newContent = inline_regex_target_in_function_of(
+                ddbbConfig.inline_new_position,
+                columnId,
+                ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true).toString(),
+                contentHasFrontmatter
+            )
+            const noteObject = new NoteContentActionBuilder()
+                .setContent(content)
+                .setFile(file)
+                .addRegExp(inlineAddRegex)
+                .addRegExpNewValue(newContent)
+                .build();
+
             await VaultManagerDB.editNoteContent(noteObject);
             await persistFrontmatter(columnId);
         }
 
         async function inlineRemoveColumn(): Promise<void> {
-            /* Regex explanation
-            * group 1 is inline field checking that starts in new line
-            * group 2 is the current value of inline field
-            */
-            const inlineFieldRegex = inlineRegexInFunctionOf(columnId);
-            const noteObject = {
-                action: 'replace',
-                file: file,
-                regexp: inlineFieldRegex,
-                newValue: `$6$11`
-            };
+            const noteObject = new NoteContentActionBuilder()
+                .setFile(file)
+                .addInlineRegexStandard(columnId)
+                .addRegExpNewValue(``)
+                .addInlineRegexParenthesis(columnId)
+                .addRegExpNewValue(`$1$2$5$6`)
+                .build();
+
             await VaultManagerDB.editNoteContent(noteObject);
         }
 

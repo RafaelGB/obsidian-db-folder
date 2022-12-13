@@ -123,7 +123,7 @@ export type RowTemplateOption = {
 export type NoteContentAction = {
     file: TFile,
     action: string,
-    regexp: RegExp,
-    content?: string,
-    newValue?: string
+    regexp: RegExp[],
+    content: string,
+    newValue: string[]
 }

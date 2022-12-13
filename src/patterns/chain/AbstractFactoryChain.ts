@@ -1,4 +1,4 @@
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 
 export abstract class AbstractChain<T> {
     /**

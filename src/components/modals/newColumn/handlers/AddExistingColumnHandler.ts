@@ -4,7 +4,7 @@ import { obtainColumnsFromRows } from "components/Columns";
 import { DynamicInputType, MetadataColumns } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {

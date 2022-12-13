@@ -1,6 +1,6 @@
 import { AddRowModalHandlerResponse } from "cdm/ModalsModel";
 import { Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 
 export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandlerResponse> {
     settingTitle: string = "Filename";

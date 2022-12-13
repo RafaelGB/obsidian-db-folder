@@ -1,4 +1,4 @@
-import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 import { TemplateFolderNewRowsHandler } from "settings/handlers/rows/TemplateFolderNewRowsHandler";
@@ -6,7 +6,7 @@ import { PaginationSizeHandler } from "settings/handlers/rows/PaginationSizeHand
 import { RowShadowToggleHandler } from "settings/handlers/rows/RowShadowToggleHandler";
 import { FooterToggleHandler } from "settings/handlers/rows/FooterToggleHandler";
 import { FontSizeHandler } from "settings/handlers/rows/FontSizeHandler";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 
 class RowsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {

@@ -1,4 +1,4 @@
-import Obsidian, { Workspace, Vault, MetadataCache, FileManager, UserEvent } from "obsidian";
+import { Workspace, Vault, MetadataCache, FileManager, UserEvent, Modal } from "obsidian";
 
 export class App {
 
@@ -19,4 +19,7 @@ export class App {
      * @public
      */
     lastEvent: UserEvent | null;
+
+    /** @public */
+    Modal: Modal;
 }

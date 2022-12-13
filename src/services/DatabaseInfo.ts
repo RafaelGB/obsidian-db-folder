@@ -11,6 +11,7 @@ import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
 import { DATABASE_CONFIG } from 'helpers/Constants';
+import NoteContentActionBuilder from 'patterns/builders/NoteContentActionBuilder';
 
 export default class DatabaseInfo {
     private file: TFile;
@@ -59,12 +60,11 @@ export default class DatabaseInfo {
         LOGGER.debug(`=>setDatabaseconfigYaml`, `file:${this.file.path}`);
         const databaseFilePath = this.file.path;
         const databaseConfigUpdated = DatabaseYamlToStringParser(this.yaml).join("\n");
-        const noteObject: NoteContentAction = {
-            action: 'replace',
-            file: this.file,
-            regexp: DATABASE_CONFIG.REPLACE_YAML_REGEX,
-            newValue: `${DATABASE_CONFIG.START_CENTINEL}\n${databaseConfigUpdated}\n${DATABASE_CONFIG.END_CENTINEL}`
-        };
+        const noteObject = new NoteContentActionBuilder()
+            .setFile(this.file)
+            .addRegExp(DATABASE_CONFIG.REPLACE_YAML_REGEX)
+            .addRegExpNewValue(`${DATABASE_CONFIG.START_CENTINEL}\n${databaseConfigUpdated}\n${DATABASE_CONFIG.END_CENTINEL}`)
+            .build();
         // Update configuration file
         await VaultManagerDB.editNoteContent(noteObject);
         LOGGER.debug(`<=setDatabaseconfigYaml`, `set file ${databaseFilePath} with ${databaseConfigUpdated}`);

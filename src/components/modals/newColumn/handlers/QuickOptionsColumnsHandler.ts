@@ -4,7 +4,7 @@ import { ConfirmModal } from "components/modals/ConfirmModal";
 import { DynamicInputType } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
