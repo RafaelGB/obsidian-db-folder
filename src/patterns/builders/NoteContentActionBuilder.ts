@@ -30,13 +30,57 @@ export default class NoteContentActionBuilder {
         return this;
     }
 
+    /**
+     * Regex for inline content standard. Explanation:
+     * 
+     * Group 1: From the beginning of the line to the end of the column id
+     * 
+     * Group 2: The content of the column}
+     * @param columnId 
+     * @returns 
+     */
     public addInlineRegexStandard(columnId: string): NoteContentActionBuilder {
         return this.addRegExp(RegExp(`^(${this.baseInlineRegex(columnId)})(.*$)`, 'gm'));
     }
 
+    /**
+     * Regex for inline content with parenthesis. Explanation:
+     * 
+     * Group 1: From the beginning of the line until before the parenthesis
+     * 
+     * Group 2: The start parenthesis
+     * 
+     * Group 3: From the beginning of the column id until the end of the column id
+     * 
+     * Group 4: The content of the column
+     * 
+     * Group 5: The end parenthesis
+     * 
+     * Group 6: From the end of the parenthesis until the end of the line
+     * @param columnId 
+     * @returns 
+     */
     public addInlineRegexParenthesis(columnId: string): NoteContentActionBuilder {
         const parenthesisInlineContent = `^(.*)([\\[(]{1})(${this.baseInlineRegex(columnId)})(.*)([)\\]]{1})(.*$)`
         return this.addRegExp(new RegExp(parenthesisInlineContent, 'gm'));
+    }
+
+    /**
+     * Regex for inline content with parenthesis. Explanation:
+     * 
+     * Group 1: From the beginning of the line until before the list or callout
+     * 
+     * Group 2: The list or callout marker
+     * 
+     * Group 3: From the beginning of the column id until the end of the column id
+     * 
+     * Group 4: The content of the column
+     * @param columnId 
+     * @returns 
+     */
+    public addInlineRegexListOrCallout(columnId: string): NoteContentActionBuilder {
+        const listAndCalloutInlineContent = `^([\\s\\>]*)([\\-\\>]{1}[\\s]{1})(${this.baseInlineRegex(columnId)})(.*$)`
+        return this.addRegExp(new RegExp(listAndCalloutInlineContent, 'gm'));
     }
 
     public addRegExpNewValue(regExpNewValue: string): NoteContentActionBuilder {

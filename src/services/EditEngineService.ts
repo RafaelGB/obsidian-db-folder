@@ -184,7 +184,11 @@ class EditEngine {
                 .setContent(content)
                 .setFile(file)
                 .addInlineRegexStandard(columnId)
-                .addRegExpNewValue(`$1 ${mdProperty}`);
+                .addRegExpNewValue(`$1 ${mdProperty}`)
+                .addInlineRegexParenthesis(columnId)
+                .addRegExpNewValue(`$1$2$3 ${mdProperty}$5$6`)
+                .addInlineRegexListOrCallout(columnId)
+                .addRegExpNewValue(`$1$2$3 ${mdProperty}`)
 
             if (!builder.isContentEditable()) {
                 await inlineAddColumn();
@@ -202,7 +206,9 @@ class EditEngine {
                 .setContent(content)
                 .setFile(file)
                 .addInlineRegexStandard(columnId)
-                .addRegExpNewValue(`${newValue}:: $4`)
+                .addRegExpNewValue(`${newValue}:: $2`)
+                .addInlineRegexParenthesis(columnId)
+                .addRegExpNewValue(`$1$2${newValue}:: $4$5$6`)
                 .build();
 
             await VaultManagerDB.editNoteContent(noteObject);
@@ -233,6 +239,8 @@ class EditEngine {
                 .setFile(file)
                 .addInlineRegexStandard(columnId)
                 .addRegExpNewValue(``)
+                .addInlineRegexParenthesis(columnId)
+                .addRegExpNewValue(`$1$2$5$6`)
                 .build();
 
             await VaultManagerDB.editNoteContent(noteObject);
