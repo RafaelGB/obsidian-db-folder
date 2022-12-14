@@ -423,10 +423,12 @@ export const DATABASE_CONFIG = Object.freeze({
   END_CENTINEL_LEGACY: '%%',
 });
 
+export const WRAPPERER_KEY = `_\\*~\``;
+
 export const INLINE_REGEX = Object.freeze({
   INLINE_WITHOUT_FRONTMATTER: /(^[\s\S]*$)/g,
   INLINE_WITH_FRONTMATTER: /(^---[\s\S]+?---)+([\s\S]*$)/g,
-  INLINE_LAST_FIELD: /^([\s\S]*)([a-zA-Z1-9]+::.*\s)([\s\S]*)$/g
+  INLINE_LAST_FIELD: /^([\s\S]*)([_\\*~\`]{0,2}[a-zA-Z1-9]+[_\\*~\`]{0,2}[:]{2}.*\s)([\s\S]*)$/g
 });
 
 /******************************************************************************

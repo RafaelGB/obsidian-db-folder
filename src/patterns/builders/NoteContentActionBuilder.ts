@@ -1,5 +1,5 @@
 import { NoteContentAction } from "cdm/FolderModel";
-import { FileManagerEditOptions, INLINE_POSITION, INLINE_REGEX } from "helpers/Constants";
+import { FileManagerEditOptions, INLINE_POSITION, INLINE_REGEX, WRAPPERER_KEY } from "helpers/Constants";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import { TFile } from "obsidian";
 
@@ -166,8 +166,7 @@ export default class NoteContentActionBuilder {
     }
 
     private baseInlineRegex(columnId: string) {
-        const wrappererKey = `_\\*~\``;
-        const baseInlineContent = `[${wrappererKey}]{0,2}${columnId}[${wrappererKey}]{0,2}[:]{2}`;
+        const baseInlineContent = `[${WRAPPERER_KEY}]{0,2}${columnId}[${WRAPPERER_KEY}]{0,2}[:]{2}`;
         return baseInlineContent;
     }
 }
