@@ -1,6 +1,5 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { inline_regex_target_in_function_of } from "helpers/FileManagement";
 import { TFile } from "obsidian";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
@@ -109,7 +108,6 @@ class EditEngine {
     private async updateRowFile(file: TFile, columnId: string, newValue: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, option: string): Promise<void> {
         LOGGER.info(`=>updateRowFile. file: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option}`);
         const content = await VaultManagerDB.obtainContentFromTfile(file);
-        const contentHasFrontmatter = hasFrontmatter(content);
         const frontmatterKeys = VaultManagerDB.obtainFrontmatterKeys(content);
         const rowFields = obtainRowDatabaseFields(file, columns, frontmatterKeys);
         const column = columns.find(
@@ -217,18 +215,17 @@ class EditEngine {
         }
 
         async function inlineAddColumn(): Promise<void> {
-            const inlineAddRegex = contentHasFrontmatter ? new RegExp(`(^---[\\s\\S]+?---)+([\\s\\S]*$)`, 'g') : new RegExp(`(^[\\s\\S]*$)`, 'g');
-            const newContent = inline_regex_target_in_function_of(
-                ddbbConfig.inline_new_position,
-                columnId,
-                ParseService.parseLiteral(newValue, InputType.MARKDOWN, ddbbConfig, true).toString(),
-                contentHasFrontmatter
-            )
+            const mdProperty = ParseService.parseLiteral(
+                newValue,
+                InputType.MARKDOWN,
+                ddbbConfig,
+                true
+            ).toString();
+
             const noteObject = new NoteContentActionBuilder()
                 .setContent(content)
                 .setFile(file)
-                .addRegExp(inlineAddRegex)
-                .addRegExpNewValue(newContent)
+                .addInlineFieldRegExpPair(ddbbConfig.inline_new_position, columnId, mdProperty)
                 .build();
 
             await VaultManagerDB.editNoteContent(noteObject);

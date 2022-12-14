@@ -69,4 +69,8 @@ export default {
   /** MODALS */
   "confirm_modal_ok": "Yes",
   "confirm_modal_ko": "No",
+  /** NEW INLINE PROPERTIES POSITION */
+  "top": "Top",
+  "bottom": "Bottom",
+  "last_field": "Last field",
 };

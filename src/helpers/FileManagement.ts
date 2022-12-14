@@ -77,18 +77,6 @@ export function destination_folder(view: DatabaseView, ddbbConfig: LocalSettings
   return destination_folder;
 }
 
-export function inline_regex_target_in_function_of(position: string, columnId: string, newValue: string, contentHasFrontmatter: boolean) {
-  let regex_target = "";
-  switch (position) {
-    case INLINE_POSITION.BOTTOM:
-      regex_target = contentHasFrontmatter ? `$1$2\n${columnId}:: ${newValue}` : `$1\n${columnId}:: ${newValue}`;
-      break;
-    default:
-      regex_target = contentHasFrontmatter ? `$1\n${columnId}:: ${newValue}$2` : `${columnId}:: ${newValue}\n$1`;
-  }
-  return regex_target;
-}
-
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-control-regex */
 export function sanitize_path(path: string, replacement = '') {
