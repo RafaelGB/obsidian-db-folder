@@ -404,7 +404,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_js_formulas: false,
     formula_folder_path: '/',
     inline_default: false,
-    inline_new_position: INLINE_POSITION.TOP,
+    inline_new_position: INLINE_POSITION.LAST_FIELD,
     date_format: 'yyyy-MM-dd',
     datetime_format: 'yyyy-MM-dd HH:mm:ss',
     enable_footer: false,
