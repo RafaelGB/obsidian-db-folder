@@ -101,7 +101,6 @@ export default class NoteContentActionBuilder {
         const contentHasFrontmatter = hasFrontmatter(this.content);
         const inlineProperty = `${columnId}:: ${newValue}`;
         let inlineAddRegex: RegExp = undefined;
-
         let regex_target = ``;
         switch (position) {
             case INLINE_POSITION.BOTTOM:
@@ -112,7 +111,7 @@ export default class NoteContentActionBuilder {
             case INLINE_POSITION.LAST_FIELD:
                 if (INLINE_REGEX.INLINE_LAST_FIELD.test(this.content)) {
                     inlineAddRegex = INLINE_REGEX.INLINE_LAST_FIELD;
-                    regex_target = `$1$2${inlineProperty}$3`;
+                    regex_target = `$1$2$3$4$5$6$7$2$3${columnId}$5:: ${newValue}\n$8`;
                     break;
                 }
             // Else, fall through to default
