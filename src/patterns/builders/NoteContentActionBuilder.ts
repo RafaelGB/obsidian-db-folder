@@ -1,5 +1,6 @@
 import { NoteContentAction } from "cdm/FolderModel";
-import { FileManagerEditOptions } from "helpers/Constants";
+import { FileManagerEditOptions, INLINE_POSITION, INLINE_REGEX, WRAPPERER_KEY } from "helpers/Constants";
+import { hasFrontmatter } from "helpers/VaultManagement";
 import { TFile } from "obsidian";
 
 export default class NoteContentActionBuilder {
@@ -84,9 +85,52 @@ export default class NoteContentActionBuilder {
         return this.addRegExp(new RegExp(listAndCalloutInlineContent, 'gm'));
     }
 
+    /**
+     * Add a custom new value for the regex. 
+     * 
+     * The index of the new value must match the index of the regex.
+     * @param regExpNewValue 
+     * @returns 
+     */
     public addRegExpNewValue(regExpNewValue: string): NoteContentActionBuilder {
         this.regExpNewValue.push(regExpNewValue);
         return this;
+    }
+
+    public addInlineFieldRegExpPair(position: string, columnId: string, newValue: string): NoteContentActionBuilder {
+        const contentHasFrontmatter = hasFrontmatter(this.content);
+        const inlineProperty = `${columnId}:: ${newValue}`;
+        let inlineAddRegex: RegExp = undefined;
+        let regex_target = ``;
+        switch (position) {
+            case INLINE_POSITION.BOTTOM:
+                regex_target = contentHasFrontmatter ?
+                    `$1$2\n${inlineProperty}` :
+                    `$1\n${inlineProperty}`;
+                break;
+            case INLINE_POSITION.LAST_FIELD:
+                if (INLINE_REGEX.INLINE_LAST_FIELD.test(this.content)) {
+                    inlineAddRegex = INLINE_REGEX.INLINE_LAST_FIELD;
+                    regex_target = `$1$2$3$4$5$6$7$2$3${columnId}$5:: ${newValue}\n$8`;
+                    break;
+                }
+            // Else, fall through to default
+            default:
+                regex_target = contentHasFrontmatter ?
+                    `$1\n${inlineProperty}$2` :
+                    `${inlineProperty}\n$1`;
+        }
+
+        this.addRegExp(inlineAddRegex ?
+            inlineAddRegex :
+            (
+                contentHasFrontmatter ?
+                    INLINE_REGEX.INLINE_WITH_FRONTMATTER :
+                    INLINE_REGEX.INLINE_WITHOUT_FRONTMATTER
+            )
+        );
+
+        return this.addRegExpNewValue(regex_target);
     }
 
     public build(): NoteContentAction {
@@ -121,8 +165,7 @@ export default class NoteContentActionBuilder {
     }
 
     private baseInlineRegex(columnId: string) {
-        const wrappererKey = `_\\*~\``;
-        const baseInlineContent = `[${wrappererKey}]{0,2}${columnId}[${wrappererKey}]{0,2}[:]{2}`;
+        const baseInlineContent = `[${WRAPPERER_KEY}]{0,2}${columnId}[${WRAPPERER_KEY}]{0,2}[:]{2}`;
         return baseInlineContent;
     }
 }

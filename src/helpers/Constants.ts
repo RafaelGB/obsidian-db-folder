@@ -361,6 +361,7 @@ export const YAML_INDENT = Object.freeze("  ");
 export const INLINE_POSITION = Object.freeze({
   TOP: 'top',
   BOTTOM: 'bottom',
+  LAST_FIELD: 'last_field',
 });
 
 export const DEFAULT_SETTINGS: DatabaseSettings = {
@@ -420,6 +421,14 @@ export const DATABASE_CONFIG = Object.freeze({
   END_CENTINEL: '```',
   START_CENTINEL_LEGACY: '%% dbfolder:yaml',
   END_CENTINEL_LEGACY: '%%',
+});
+
+export const WRAPPERER_KEY = `_\\*~\``;
+
+export const INLINE_REGEX = Object.freeze({
+  INLINE_WITHOUT_FRONTMATTER: /(^[\s\S]*$)/g,
+  INLINE_WITH_FRONTMATTER: /(^---[\s\S]+?---)+([\s\S]*$)/g,
+  INLINE_LAST_FIELD: /([\s\S]*)(^[^_*~`]*)([_*~`]{0,2})([A-Za-z0-9]+)([_*~`]{0,2})([:]{2})(.+\n{0,1})$([\s\S]*)/gm
 });
 
 /******************************************************************************

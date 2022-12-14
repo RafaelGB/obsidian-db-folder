@@ -1,6 +1,7 @@
 import { add_dropdown, add_setting_header, add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { INLINE_POSITION } from "helpers/Constants";
+import { t } from "lang/helpers";
 export class InlineFieldsOptionsHandler extends AbstractSettingsHandler {
     settingTitle: string = 'Inline fields options';
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
@@ -51,7 +52,7 @@ export class InlineFieldsOptionsHandler extends AbstractSettingsHandler {
         // render dropdown inside container
         const options: Record<string, string> = {};
         Object.entries(INLINE_POSITION).forEach(([key, value]) => {
-            options[value] = value;
+            options[value] = t(value);
         });
         add_dropdown(
             containerEl,
