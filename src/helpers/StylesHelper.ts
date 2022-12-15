@@ -47,7 +47,7 @@ export function getAlignmentClassname(configColumn: ConfigColumn, localSettings:
     const classes: string[] = [];
     classes.push(
         configColumn.content_alignment === undefined ?
-            COLUMN_ALIGNMENT_OPTIONS.LEFT :
+            COLUMN_ALIGNMENT_OPTIONS.CENTER :
             configColumn.content_alignment
     );
     classes.push(

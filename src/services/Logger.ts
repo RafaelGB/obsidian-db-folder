@@ -1,8 +1,8 @@
 export interface LogInterface {
-    debug(primaryMessage: string, ...supportingData: any[]): void;
-    info(primaryMessage: string, ...supportingData: any[]): void;
-    warn(primaryMessage: string, ...supportingData: any[]): void;
-    error(primaryMessage: string, ...supportingData: any[]): void;
+    debug(primaryMessage: string, ...supportingData: unknown[]): void;
+    info(primaryMessage: string, ...supportingData: unknown[]): void;
+    warn(primaryMessage: string, ...supportingData: unknown[]): void;
+    error(primaryMessage: string, ...supportingData: unknown[]): void;
     setDebugMode(isDebugModeEnabled: boolean): void;
     setLevelInfo(value: string): void;
 }
@@ -22,22 +22,22 @@ class Log implements LogInterface {
         this.levelInfo = 0;
     }
 
-    public debug(primaryMessage: string, ...supportingData: any[]) {
+    public debug(primaryMessage: string, ...supportingData: unknown[]) {
         if (this.levelInfo >= LevelInfoRecord.debug) {
             this.emitLogMessage("debug", primaryMessage, ...supportingData);
         }
     }
-    public info(primaryMessage: string, ...supportingData: any[]) {
+    public info(primaryMessage: string, ...supportingData: unknown[]) {
         if (this.levelInfo >= LevelInfoRecord.info) {
             this.emitLogMessage("info", primaryMessage, ...supportingData);
         }
     }
-    public warn(primaryMessage: string, ...supportingData: any[]) {
+    public warn(primaryMessage: string, ...supportingData: unknown[]) {
         if (this.levelInfo >= LevelInfoRecord.warn) {
             this.emitLogMessage("warn", primaryMessage, ...supportingData);
         }
     }
-    public error(primaryMessage: string, ...supportingData: any[]) {
+    public error(primaryMessage: string, ...supportingData: unknown[]) {
         if (this.levelInfo >= LevelInfoRecord.error) {
             this.emitLogMessage("error", primaryMessage, ...supportingData);
         }
@@ -59,7 +59,7 @@ class Log implements LogInterface {
         return Log.instance;
     }
 
-    private emitLogMessage(level: "debug" | "info" | "warn" | "error", message: string, ...supportingData: any[]): void {
+    private emitLogMessage(level: "debug" | "info" | "warn" | "error", message: string, ...supportingData: unknown[]): void {
         // Do not log if debug mode is disabled
         if (!this.isDebugModeEnabled) {
             return;

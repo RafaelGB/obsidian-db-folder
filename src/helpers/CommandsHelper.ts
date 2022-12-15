@@ -10,9 +10,11 @@ export async function generateNewDatabase(ddbbConfig: string, folder?: TFolder, 
         );
 
     try {
-        const database: TFile = await (
-            app.fileManager as any
-        ).createNewMarkdownFile(targetFolder, ddbbName ?? 'Untitled database');
+        const database: TFile = await
+            app.fileManager.createNewMarkdownFile(
+                targetFolder,
+                ddbbName ?? 'Untitled database'
+            );
 
         await app.vault.modify(
             database,

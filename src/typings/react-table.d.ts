@@ -6,7 +6,8 @@ import { TableStateInterface } from "cdm/TableStateInterface";
 import { DatabaseView } from 'DatabaseView';
 
 declare module '@tanstack/react-table' {
-    interface TableMeta<TData extends RowDataType> {
+    // @ts-ignore
+    interface TableMeta {
         tableState: TableStateInterface;
         view: DatabaseView;
     }

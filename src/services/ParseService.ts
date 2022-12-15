@@ -83,9 +83,8 @@ class Parse {
             return literal;
         }
 
-        if (typeof literal === 'object' &&
-            (literal as any).values !== undefined && (literal as any).settings !== undefined) {
-            literal = (literal as any).values
+        if (DataviewService.getDataviewAPI().isDataArray(literal)) {
+            literal = literal.values
         }
 
         return literal;

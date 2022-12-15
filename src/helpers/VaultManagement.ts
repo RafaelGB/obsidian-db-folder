@@ -79,13 +79,13 @@ export async function adapterTFilesToRows(dbFile: TFile, columns: TableColumn[],
   const rows: Array<RowDataType> = [];
 
   let folderFiles = await sourceDataviewPages(ddbbConfig, folderPath, columns);
-  folderFiles = folderFiles.where(p => (p.file as any).path !== dbFile.path);
+  folderFiles = folderFiles.where((p: NoteInfoPage) => p.file.path !== dbFile.path);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
     folderFiles = folderFiles.where(p => tableFilter(filters.conditions, p, ddbbConfig));
   }
-  folderFiles.map((page) => {
-    const noteInfo = new NoteInfo(page as NoteInfoPage);
+  folderFiles.map((page: NoteInfoPage) => {
+    const noteInfo = new NoteInfo(page);
     rows.push(noteInfo.getRowDataType(columns));
   });
 
@@ -102,8 +102,8 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
   if (filters.enabled && filters.conditions.length > 0) {
     folderFiles = folderFiles.where(p => tableFilter(filters.conditions, p, ddbbConfig));
   }
-  folderFiles.map((page) => {
-    const noteInfo = new NoteInfo(page as NoteInfoPage);
+  folderFiles.map((page: NoteInfoPage) => {
+    const noteInfo = new NoteInfo(page);
     rows.push(noteInfo.getAllRowDataType());
   });
 
@@ -134,10 +134,10 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
     case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
       if (!folderPath || folderPath === '/') {
         pagesResult = DataviewService.getDataviewAPI().pages()
-          .where(p => !(p.file as any).folder);
+          .where((p: NoteInfoPage) => !p.file.folder);
       } else {
         pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
-          .where(p => (p.file as any).folder === folderPath);
+          .where((p: NoteInfoPage) => p.file.folder === folderPath);
       }
       break;
     default:

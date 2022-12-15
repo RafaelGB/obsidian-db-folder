@@ -1,4 +1,5 @@
 import { sanitize_path } from "helpers/FileManagement";
+jest.mock("obsidian");
 
 const samples = [
   { input: "some text", output: "some text" },

@@ -40,8 +40,7 @@ export class TextAreaModal extends Modal {
     createForm(): void {
         const div = this.contentEl.createDiv();
         div.addClass(c("prompt-modal"));
-        let textInput;
-        textInput = new TextAreaComponent(div);
+        const textInput = new TextAreaComponent(div);
         this.value = this.default_value ?? "";
         textInput.inputEl.addClass(c("textarea-modal"));
         textInput.setPlaceholder(this.placeholder);

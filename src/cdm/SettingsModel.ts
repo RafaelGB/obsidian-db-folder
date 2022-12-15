@@ -17,7 +17,7 @@ export type FilterGroupCondition = {
 export type AtomicFilter = {
     field: string;
     operator: string;
-    value?: any;
+    value?: string;
 }
 /**
  * Options that affects the behavior of the plugin and defines default values with some fields
