@@ -1,11 +1,11 @@
 import { LOGGER } from "services/Logger";
 
 interface EventsMap {
-    [event: string]: any;
+    [event: string]: any; // eslint-disable-line
 }
 
 export interface DefaultEvents extends EventsMap {
-    [event: string]: (args: any) => void;
+    [event: string]: (args: any) => void; // eslint-disable-line
 }
 
 export interface Unsubscribe {
