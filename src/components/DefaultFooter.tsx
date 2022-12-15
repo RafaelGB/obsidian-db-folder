@@ -1,7 +1,7 @@
 import Footer from "automations/Footer";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { FooterType } from "helpers/Constants";
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { MouseEventHandler, useLayoutEffect, useState } from "react";
 import { showFooterMenu } from "components/obsidianArq/commands";
 import { Literal } from "obsidian-dataview";
 import { MarkdownService } from "services/MarkdownRenderService";
@@ -35,7 +35,7 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
     );
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let footerInfo: Literal = "";
     if (footerType === FooterType.FORMULA) {
       footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);

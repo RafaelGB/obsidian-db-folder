@@ -2,7 +2,7 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 import { ParseService } from "services/ParseService";
 
@@ -27,7 +27,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
       ) as string
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (formulaRef.current !== null) {
       const effectCallback = async () => {
         formulaRef.current.innerHTML = "";
