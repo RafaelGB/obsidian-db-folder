@@ -2,7 +2,7 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Link } from "obsidian-dataview";
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 
 const MarkdownCell = (mdProps: CellComponentProps) => {
@@ -14,7 +14,7 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
   const configInfo = tableState.configState((state) => state.info);
 
   const mdRef = useRef<HTMLDivElement>();
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (mdRef.current !== null) {
       mdRef.current.innerHTML = "";
       MarkdownService.renderMarkdown(

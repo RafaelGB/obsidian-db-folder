@@ -98,6 +98,9 @@ div.database-plugin__td.data-input:hover {
 /*** FOOTER ***/
 .database-plugin__tfoot {
   display: table-footer-group;
+  bottom: 0;
+  position: sticky;
+  z-index: 5;
 }
 
 .database-plugin__footer-group {

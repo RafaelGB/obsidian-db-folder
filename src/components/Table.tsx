@@ -312,7 +312,11 @@ export function Table(tableData: TableDataType) {
                     >
                       {footerGroup.headers.map(
                         (header: Header<RowDataType, TableColumn>) => (
-                          <TableFooter table={table} header={header} />
+                          <TableFooter
+                            key={`table-footer-${header.index}`}
+                            table={table}
+                            header={header}
+                          />
                         )
                       )}
                     </div>

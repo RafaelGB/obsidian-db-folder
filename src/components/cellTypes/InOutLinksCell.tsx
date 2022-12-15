@@ -1,7 +1,7 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { c } from "helpers/StylesHelper";
 import { Link } from "obsidian-dataview";
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 
 const InOutLinksCell = (mdProps: CellComponentProps) => {
@@ -10,7 +10,7 @@ const InOutLinksCell = (mdProps: CellComponentProps) => {
   const { tableState } = table.options.meta;
   const markdownRow = tableState.data((state) => state.rows[row.index]);
   const mdRef = useRef<HTMLDivElement>();
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (mdRef.current !== null) {
       mdRef.current.innerHTML = "";
       const links = markdownRow[column.id] as Link[];

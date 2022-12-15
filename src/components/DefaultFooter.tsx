@@ -1,7 +1,7 @@
 import Footer from "automations/Footer";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { FooterType } from "helpers/Constants";
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { MouseEventHandler, useLayoutEffect, useState } from "react";
 import { showFooterMenu } from "components/obsidianArq/commands";
 import { Literal } from "obsidian-dataview";
 import { MarkdownService } from "services/MarkdownRenderService";
@@ -35,15 +35,15 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
     );
   };
 
-  useEffect(() => {
-    let footerInfo: Literal = "";
-    if (footerType === FooterType.FORMULA) {
-      footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);
-    } else {
-      footerInfo = new Footer(colValues).dispatch(footerType);
-    }
-
+  useLayoutEffect(() => {
     if (footerRef.current !== null) {
+      let footerInfo: Literal = "";
+      if (footerType === FooterType.FORMULA) {
+        footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);
+      } else {
+        footerInfo = new Footer(colValues).dispatch(footerType);
+      }
+
       footerRef.current.innerHTML = "";
       MarkdownService.renderStringAsMarkdown(
         view,
@@ -57,7 +57,7 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   return (
     <div
       ref={footerRef}
-      key={`default-footer-${header.id}`}
+      key={`default-footer-${header.id}-${header.index}`}
       onClick={handlerFooterOptions}
       className={`${c("md_cell")}`}
       style={{
