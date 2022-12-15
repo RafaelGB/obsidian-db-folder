@@ -57,8 +57,13 @@ export default function TableRow(tableRowProps: TableRowProps) {
           <td
             colSpan={row.getVisibleCells().length}
             className={c("row-extend-decorator")}
+            key={`expanded-cell-td-${row.id}`}
           >
-            <MdFileComponent row={row} view={view} />
+            <MdFileComponent
+              row={row}
+              view={view}
+              key={`expanded-file-component-${row.id}`}
+            />
           </td>
           {/** EDNS MD FILE COMPONENT */}
         </tr>

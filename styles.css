@@ -479,7 +479,7 @@ div.database-plugin__checkbox {
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 10;
 }
 
 .database-plugin__thead {
@@ -679,22 +679,33 @@ div.database-plugin__checkbox {
 .database-plugin__scroll-container {
   will-change: transform;
   width: 100%;
-  height: 92%;
+  height: 98%;
+  scroll-margin-bottom: 1rem;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-height: 1440px) {
+  .database-plugin__scroll-container {
+    will-change: transform;
+    width: 100%;
+    height: 95%;
+  }
+}
+
+@media only screen and (max-height: 1024px) {
+  .database-plugin__scroll-container {
+    will-change: transform;
+    width: 100%;
+    height: 92%;
+  }
+}
+
+@media only screen and (max-height: 768px) {
   .database-plugin__scroll-container {
     will-change: transform;
     width: 100%;
     height: 85%;
   }
 }
-
-.draggable {
-  top: auto !important;
-  left: auto !important;
-}
-
 /*
 *  Settings styles
 */
@@ -833,6 +844,10 @@ div.database-plugin__checkbox {
 .database-plugin__confirm-modal-controls {
   display: flex;
   justify-content: center;
+}
+
+.database-plugin__container div.dataview-error-box {
+  display: none;
 }
 /************************************************************
 *               React-datepicker styles

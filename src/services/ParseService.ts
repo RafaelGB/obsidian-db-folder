@@ -107,6 +107,11 @@ class Parse {
                 // Check if is a valid JSON
                 if (newValue.startsWith("{") && newValue.endsWith("}")) {
                     newValue = JSON.parse(newValue);
+                } else if (newValue.startsWith("[") && newValue.endsWith("]")) {
+                    // Remove brackets
+                    newValue = newValue.substring(1, newValue.length - 1);
+                    // Split by comma
+                    newValue = newValue.split(",");
                 }
             } catch (e) {
                 // Do nothing
@@ -205,16 +210,26 @@ class Parse {
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
                     return parseLuxonDatetimeToString(wrapped.value, localSettings.datetime_format);
-                } else {
-                    try {
-                        // Try to parse to JSON
-                        return JSON.stringify(wrapped.value);
-                    } catch (e) {
-                        // Do nothing
-                    }
-                    // nested metadata exposed as DataObject
-                    return wrapped.value;
                 }
+
+                if (DataviewService.getDataviewAPI().isDataArray(wrapped.value)) {
+                    return this.parseArrayToText(
+                        (wrapped.value.values as Literal[]),
+                        localSettings
+                    );
+                }
+                try {
+                    // Try to parse to JSON
+                    return JSON.stringify(wrapped.value);
+                } catch (e) {
+                    // Do nothing
+                }
+                // nested metadata exposed as DataObject
+                return wrapped.value;
+
+            case 'array':
+                return this.parseArrayToText(wrapped.value, localSettings);
+
             case 'link':
                 return wrapped.value.markdown()
             // Else go to default
@@ -305,6 +320,19 @@ class Parse {
         }
         // Check possible markdown breakers
         return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);
+    }
+
+    private parseArrayToText(array: Literal[], localSettings: LocalSettings): string {
+        const stringArray = array.reduce((acc, curr) => {
+            return acc.toString()
+                .concat(",")
+                .concat(
+                    this.parseToText(
+                        DataviewService.wrapLiteral(curr),
+                        localSettings).toString()
+                );
+        });
+        return `[${stringArray}]`;
     }
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {

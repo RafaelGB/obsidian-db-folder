@@ -22,11 +22,9 @@ const useAutomationStore = (view: DatabaseView) => {
     });
 }
 
-// TODO - find a better way to mock this
-function mockAutomationState(): AutomationState {
+function mockAutomationState(): Omit<AutomationState, "formula"> {
 
     return {
-        formula: {},
         info: {
             getFormula: null,
             runFormula: null,

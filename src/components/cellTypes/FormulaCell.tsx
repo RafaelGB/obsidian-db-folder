@@ -1,8 +1,7 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 import { ParseService } from "services/ParseService";
 
@@ -17,59 +16,56 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
   const formulaInfo = tableState.automations((state) => state.info);
-  const formulaCell = tableState.data(
-    (state) =>
-      ParseService.parseRowToCell(
-        state.rows[row.index],
+
+  useEffect(() => {
+    setTimeout(async () => {
+      // If formula cell is empty, do nothing
+      if (formulaRef.current === null) return;
+
+      const formulaResponse = formulaInfo
+        .runFormula(
+          tableColumn.config.formula_query,
+          formulaRow,
+          configInfo.getLocalSettings()
+        )
+        .toString();
+
+      // If the formula cell is the same as the rendered formula, do nothing
+      if (cell.getValue() === formulaRef.current.innerHTML) return;
+
+      await MarkdownService.renderMarkdown(
+        defaultCell,
+        formulaResponse,
+        formulaRef.current,
+        5
+      );
+
+      console.log(`formulaResponse: ${formulaResponse}`);
+
+      // If formula cell is not configured to persist, exit
+      if (
+        !tableColumn.config.persist_formula ||
+        cell.getValue() === formulaResponse
+      )
+        return;
+
+      // Save formula response on disk
+      const newCell = ParseService.parseRowToLiteral(
+        formulaRow,
         tableColumn,
-        InputType.FORMULA,
+        formulaResponse
+      );
+
+      await dataActions.updateCell(
+        row.index,
+        tableColumn,
+        newCell,
+        columnsInfo.getAllColumns(),
         configInfo.getLocalSettings()
-      ) as string
-  );
-
-  useLayoutEffect(() => {
-    if (formulaRef.current !== null) {
-      const effectCallback = async () => {
-        formulaRef.current.innerHTML = "";
-
-        const formulaResponse = formulaInfo
-          .runFormula(
-            tableColumn.config.formula_query,
-            formulaRow,
-            configInfo.getLocalSettings()
-          )
-          .toString();
-
-        await MarkdownService.renderMarkdown(
-          defaultCell,
-          formulaResponse,
-          formulaRef.current,
-          5
-        );
-
-        // Save formula response on disk
-        if (
-          tableColumn.config.persist_formula &&
-          formulaCell !== formulaResponse
-        ) {
-          const newCell = ParseService.parseRowToLiteral(
-            formulaRow,
-            tableColumn,
-            formulaResponse
-          );
-
-          await dataActions.updateCell(
-            row.index,
-            tableColumn,
-            newCell,
-            columnsInfo.getAllColumns(),
-            configInfo.getLocalSettings()
-          );
-        }
-      };
-      effectCallback();
-    }
+      );
+    }, 0);
   }, [row]);
+
   return (
     <span
       ref={formulaRef}
