@@ -7,6 +7,7 @@
 		"dev": "rollup --config rollup.config.mjs -w",
 		"build": "rollup --config rollup.config.mjs",
 		"test": "jest --colors --coverage test",
+		"sonar": "npx eslint --ignore-path .gitignore src/**/*.ts",
 		"pretest": "eslint --ignore-path .gitignore src/**/*.ts"
 	},
 	"keywords": [

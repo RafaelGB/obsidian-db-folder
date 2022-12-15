@@ -39,7 +39,7 @@ export class SettingsManager {
   config: SettingsManagerConfig;
   settings: DatabaseSettings;
   cleanupFns: Array<() => void> = [];
-  applyDebounceTimer: number = 0;
+  applyDebounceTimer = 0;
 
   constructor(
     plugin: DBFolderPlugin,

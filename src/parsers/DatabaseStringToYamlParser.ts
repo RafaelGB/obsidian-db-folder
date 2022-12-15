@@ -21,7 +21,7 @@ const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
     try {
         const yaml = parseYaml(yamlText);
         return validateYaml(yaml);
-    } catch (e: any) {
+    } catch (e) {
         throw new ParserException("Error parsing yaml",
             { exception: [e] });
     }

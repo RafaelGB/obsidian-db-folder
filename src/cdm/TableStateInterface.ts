@@ -1,4 +1,4 @@
-import { Row, SortingState } from "@tanstack/react-table";
+import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";

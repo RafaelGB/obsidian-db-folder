@@ -1,4 +1,3 @@
-import { RowSelectOption } from "cdm/ComponentsModel";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
 
 type BaseStyleProps = {

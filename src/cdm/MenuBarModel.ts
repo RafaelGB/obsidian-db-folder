@@ -1,7 +1,5 @@
 import { Row, Table } from "@tanstack/react-table";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { PaginationRenderOptions } from "helpers/Constants";
-import { ValueOf } from "typings/base";
 
 export type NavBarProps = {
     table: Table<RowDataType>,
@@ -23,7 +21,7 @@ export type CsvButtonProps = {
 };
 
 export type GlobalFilterProps = {
-    setGlobalFilter: (updater: any) => void;
+    setGlobalFilter: (updater: unknown) => void;
     globalFilter: string;
 };
 
