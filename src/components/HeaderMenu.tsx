@@ -217,40 +217,39 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
             >
               {headerButtons}
             </div>
-            {(!isMetadata || input === InputType.TASK) && (
-              <div
-                style={{
-                  borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
-                  padding: "4px 0px",
-                }}
-              >
-                {/** Column settings section */}
 
-                <div style={{ padding: "4px 0px" }}>
-                  <div
-                    className="menu-item sort-button"
-                    onClick={() => {
-                      new ColumnSettingsModal({
-                        dataState: { actions: dataActions },
-                        columnState: {
-                          info: columnsInfo,
-                          actions: columnActions,
-                        },
-                        configState: { info: configInfo },
-                        view: table.options.meta.view,
-                        tableColumn: column.columnDef as TableColumn,
-                      }).open();
-                      setMenuEl(null);
-                    }}
-                  >
-                    <span className="svg-icon svg-text icon-margin">
-                      <AdjustmentsIcon />
-                    </span>
-                    <span>Settings</span>
-                  </div>
+            <div
+              style={{
+                borderTop: `1px solid ${StyleVariables.BACKGROUND_DIVIDER}`,
+                padding: "4px 0px",
+              }}
+            >
+              {/** Column settings section */}
+
+              <div style={{ padding: "4px 0px" }}>
+                <div
+                  className="menu-item sort-button"
+                  onClick={() => {
+                    new ColumnSettingsModal({
+                      dataState: { actions: dataActions },
+                      columnState: {
+                        info: columnsInfo,
+                        actions: columnActions,
+                      },
+                      configState: { info: configInfo },
+                      view: table.options.meta.view,
+                      tableColumn: column.columnDef as TableColumn,
+                    }).open();
+                    setMenuEl(null);
+                  }}
+                >
+                  <span className="svg-icon svg-text icon-margin">
+                    <AdjustmentsIcon />
+                  </span>
+                  <span>Settings</span>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </Box>
       </ClickAwayListener>

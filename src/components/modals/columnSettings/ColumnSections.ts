@@ -72,14 +72,15 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
 
         // Particular
         switch (this.input) {
-            case InputType.TASK:
             case InputType.RELATION:
                 particularHandlers.push(new ColumnIdInputHandler());
                 break;
+            case InputType.TASK:
             case InputType.MARKDOWN:
             case InputType.METATADA_TIME:
             case InputType.INLINKS:
             case InputType.OUTLINKS:
+
                 // do nothing
                 break;
             default:

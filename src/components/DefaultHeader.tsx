@@ -28,11 +28,7 @@ import { InputType, MetadataColumns } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
-import {
-  AddColumnModalProps,
-  BaseColumnModalProps,
-  ColumnSettingsModalProps,
-} from "cdm/ModalsModel";
+import { AddColumnModalProps } from "cdm/ModalsModel";
 
 /**
  * Default headers of the table

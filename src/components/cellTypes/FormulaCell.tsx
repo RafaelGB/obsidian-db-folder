@@ -30,8 +30,8 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         )
         .toString();
 
-      // If formula response is the same as the formula cell, do nothing
-      if (cell.getValue() === formulaResponse) return;
+      // If the formula cell is the same as the rendered formula, do nothing
+      if (cell.getValue() === formulaRef.current.innerHTML) return;
 
       await MarkdownService.renderMarkdown(
         defaultCell,
@@ -43,7 +43,11 @@ const FormulaCell = (mdProps: CellComponentProps) => {
       console.log(`formulaResponse: ${formulaResponse}`);
 
       // If formula cell is not configured to persist, exit
-      if (!tableColumn.config.persist_formula) return;
+      if (
+        !tableColumn.config.persist_formula ||
+        cell.getValue() === formulaResponse
+      )
+        return;
 
       // Save formula response on disk
       const newCell = ParseService.parseRowToLiteral(
