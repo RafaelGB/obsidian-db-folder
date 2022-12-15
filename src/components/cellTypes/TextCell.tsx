@@ -1,5 +1,5 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
-import React, { MouseEventHandler, useLayoutEffect, useRef } from "react";
+import React, { MouseEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
 import { TableColumn } from "cdm/FolderModel";
@@ -38,21 +38,18 @@ const TextCell = (props: CellComponentProps) => {
   /**
    * Render markdown content of Obsidian on load
    */
-  useLayoutEffect(() => {
-    if (dirtyCell) {
+  useEffect(() => {
+    if (dirtyCell && !containerCellRef.current && !textCell) {
       // End useEffect
       return;
     }
-    if (containerCellRef.current !== undefined) {
-      containerCellRef.current.innerHTML = "";
 
-      MarkdownService.renderMarkdown(
-        defaultCell,
-        textCell,
-        containerCellRef.current,
-        5
-      );
-    }
+    MarkdownService.renderMarkdown(
+      defaultCell,
+      textCell,
+      containerCellRef.current,
+      5
+    );
   }, [dirtyCell, textCell]);
 
   const handleEditableOnclick: MouseEventHandler<HTMLSpanElement> = () => {

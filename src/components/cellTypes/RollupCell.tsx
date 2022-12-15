@@ -3,7 +3,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 import { ParseService } from "services/ParseService";
 
@@ -28,7 +28,7 @@ const RollupCell = (mdProps: CellComponentProps) => {
       ) as string
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (formulaRef.current !== null) {
       formulaRef.current.innerHTML = "";
       const relation = formulaRow[tableColumn.config.asociated_relation_id];

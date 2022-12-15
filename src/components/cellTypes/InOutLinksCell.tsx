@@ -1,7 +1,7 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { c } from "helpers/StylesHelper";
 import { Link } from "obsidian-dataview";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 
 const InOutLinksCell = (mdProps: CellComponentProps) => {
@@ -10,21 +10,20 @@ const InOutLinksCell = (mdProps: CellComponentProps) => {
   const { tableState } = table.options.meta;
   const markdownRow = tableState.data((state) => state.rows[row.index]);
   const mdRef = useRef<HTMLDivElement>();
-  useLayoutEffect(() => {
-    if (mdRef.current !== null) {
-      mdRef.current.innerHTML = "";
-      const links = markdownRow[column.id] as Link[];
-      const markdownLinks: string[] = [];
-      links.forEach((link) => {
-        markdownLinks.push(`- ${link.markdown()}`);
-      });
-      MarkdownService.renderMarkdown(
-        defaultCell,
-        markdownLinks.join("\n"),
-        mdRef.current,
-        5
-      );
-    }
+  useEffect(() => {
+    if (mdRef.current === null) return;
+
+    const links = markdownRow[column.id] as Link[];
+    const markdownLinks: string[] = [];
+    links.forEach((link) => {
+      markdownLinks.push(`- ${link.markdown()}`);
+    });
+    MarkdownService.renderMarkdown(
+      defaultCell,
+      markdownLinks.join("\n"),
+      mdRef.current,
+      5
+    );
   });
   return <span ref={mdRef} className={c("md_cell text-align-left")}></span>;
 };

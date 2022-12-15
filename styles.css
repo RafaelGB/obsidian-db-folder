@@ -479,7 +479,7 @@ div.database-plugin__checkbox {
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 10;
 }
 
 .database-plugin__thead {
@@ -833,6 +833,10 @@ div.database-plugin__checkbox {
 .database-plugin__confirm-modal-controls {
   display: flex;
   justify-content: center;
+}
+
+.database-plugin__container div.dataview-error-box {
+  display: none;
 }
 /************************************************************
 *               React-datepicker styles

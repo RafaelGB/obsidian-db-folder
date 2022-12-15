@@ -1,14 +1,14 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { c } from "helpers/StylesHelper";
 import { DateTime } from "luxon";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 
 const MetadataTimeCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
   const { cell } = defaultCell;
   const mdRef = useRef<HTMLDivElement>();
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (mdRef.current !== null) {
       mdRef.current.innerHTML = "";
       const cellValue = cell.getValue();
