@@ -479,7 +479,7 @@ div.database-plugin__checkbox {
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 10;
 }
 
 .database-plugin__thead {

@@ -3,8 +3,8 @@ import { RowDataType } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { TFile } from "obsidian";
-import React from "react";
-import { PointerEventHandler, useEffect, useRef } from "react";
+import React, { useLayoutEffect } from "react";
+import { PointerEventHandler, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 
 /**
@@ -48,20 +48,24 @@ export const MdFileComponent = ({
   view: DatabaseView;
 }) => {
   const containerCellRef = useRef<HTMLDivElement>();
-  useEffect(() => {
-    const effectCallback = async () => {
-      const normalizedPath = getNormalizedPath(row.original.__note__.filepath);
-      MarkdownService.handleMarkdown(
-        containerCellRef.current,
-        row.original.__note__.getFile(),
-        normalizedPath,
-        view,
-        5
-      );
-    };
-
-    effectCallback();
-  }, []);
+  useLayoutEffect(() => {
+    if (containerCellRef.current === null) return;
+    setTimeout(
+      async () => {
+        const normalizedPath = getNormalizedPath(
+          row.original.__note__.filepath
+        );
+        await MarkdownService.handleMarkdown(
+          containerCellRef.current,
+          row.original.__note__.getFile(),
+          normalizedPath,
+          view,
+          5
+        );
+      },
+      containerCellRef.current.innerHTML ? 500 : 0
+    );
+  }, [row]);
 
   const onCheckboxContainerClick: PointerEventHandler<HTMLDivElement> = (e) => {
     const target = e.target as HTMLElement;
