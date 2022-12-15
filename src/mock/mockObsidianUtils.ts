@@ -6,12 +6,12 @@ import { TFile } from "obsidian";
 const { faker } = require("@faker-js/faker");
 
 /** Mock parseYaml returning YamlHandlerResponse object */
-export const parseYamlMock = (numOfColumns: number) => {
+export const parseYamlMock = (numOfColumns: number): Object => {
     return {
         name: "Test",
         description: "Test",
         columns: generateYamlColumns(numOfColumns),
-        config: DEFAULT_SETTINGS.local_settings,
+        config: { ...DEFAULT_SETTINGS.local_settings },
         filters: [
             {
                 field: "test",

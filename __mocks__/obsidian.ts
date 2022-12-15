@@ -1,4 +1,5 @@
-import { Workspace, Vault, MetadataCache, FileManager, UserEvent, Modal } from "obsidian";
+import { Workspace, Vault, MetadataCache, FileManager, UserEvent } from "obsidian";
+import { parseYamlMock } from "../src/mock/mockObsidianUtils"
 
 export class App {
 
@@ -19,7 +20,22 @@ export class App {
      * @public
      */
     lastEvent: UserEvent | null;
+}
 
-    /** @public */
-    Modal: Modal;
+/**
+ * @public
+ */
+export class Modal {
+    /**
+     * @public
+     */
+    constructor(app: App) { }
+}
+
+export class Notice {
+    constructor() { }
+}
+
+export function parseYaml(yaml: string): any {
+    return parseYamlMock(1);
 }

@@ -2,7 +2,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
 import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
-import { INLINE_POSITION, SourceDataTypes } from "helpers/Constants";
+import { SourceDataTypes } from "helpers/Constants";
 import { RowDataType } from "cdm/FolderModel";
 import { VaultManagerDB } from "services/FileManagerService";
 

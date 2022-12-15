@@ -9,6 +9,7 @@ import { MarshallDatabaseInfoHandler } from 'parsers/handlers/marshall/MarshallD
 import { MarshallColumnsHandler } from "parsers/handlers/marshall/MarshallColumnsHandler";
 import { MarshallConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
 import { MarshallFiltersHandler } from "parsers/handlers/marshall/MarshallFiltersHandler";
+import { DatabaseYaml } from "cdm/DatabaseModel";
 
 /**
  * EXPOSED METHOD
@@ -33,7 +34,7 @@ const DatabaseStringToYamlParser = (yamlText: string): YamlHandlerResponse => {
 /**
  * Validate yaml received from input using handlers of function getHandlers
  */
-function validateYaml(yaml: any): YamlHandlerResponse {
+function validateYaml(yaml: DatabaseYaml): YamlHandlerResponse {
     const handlers = getHandlers();
     let i = 1;
     while (i < handlers.length) {

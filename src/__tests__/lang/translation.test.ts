@@ -1,7 +1,6 @@
 import { t } from "lang/helpers";
 import { mockLocalStorage } from "mock/mockWindowUtils";
 describe("LANG.t", () => {
-    /** Metadata columns */
     test('t function call', () => {
         const { setItemMock } = mockLocalStorage();
         setItemMock('language', 'en');
