@@ -36,14 +36,14 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   };
 
   useLayoutEffect(() => {
-    let footerInfo: Literal = "";
-    if (footerType === FooterType.FORMULA) {
-      footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);
-    } else {
-      footerInfo = new Footer(colValues).dispatch(footerType);
-    }
-
     if (footerRef.current !== null) {
+      let footerInfo: Literal = "";
+      if (footerType === FooterType.FORMULA) {
+        footerInfo = formulaInfo.dispatchFooter(tableColumn, colValues);
+      } else {
+        footerInfo = new Footer(colValues).dispatch(footerType);
+      }
+
       footerRef.current.innerHTML = "";
       MarkdownService.renderStringAsMarkdown(
         view,
@@ -57,7 +57,7 @@ export default function DefaultFooter(headerProps: DatabaseHeaderProps) {
   return (
     <div
       ref={footerRef}
-      key={`default-footer-${header.id}`}
+      key={`default-footer-${header.id}-${header.index}`}
       onClick={handlerFooterOptions}
       className={`${c("md_cell")}`}
       style={{

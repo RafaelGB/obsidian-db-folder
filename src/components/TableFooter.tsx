@@ -13,7 +13,10 @@ export default function TableFooter(tableFooterProps: TableFooterProps) {
   const { header } = tableFooterProps;
 
   return (
-    <div key={`table-footer-${header.id}`} className={c("th footer")}>
+    <div
+      key={`table-footer-${header.id}-${header.index}`}
+      className={c("th footer")}
+    >
       {header.isPlaceholder
         ? null
         : flexRender(
