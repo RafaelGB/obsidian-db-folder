@@ -1,7 +1,6 @@
 import { DatabaseView } from "DatabaseView";
 import StateManager from "StateManager";
 
-// TODO
 export const generateStateManager = (): StateManager => {
     const initialView: DatabaseView = new DatabaseView(
         app.workspace.getMostRecentLeaf(),

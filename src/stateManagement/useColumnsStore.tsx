@@ -10,7 +10,7 @@ const useColumnsStore = (view: DatabaseView) => {
       set: set,
       get: get,
       implementation: {
-        ...mockColumnsState(),
+        ...emptyColumnsState(),
         columns: view.columns,
         shadowColumns: view.shadowColumns,
       },
@@ -21,11 +21,8 @@ const useColumnsStore = (view: DatabaseView) => {
   });
 };
 
-// TODO - find a better way to mock this
-function mockColumnsState(): ColumnsState {
+function emptyColumnsState(): Omit<ColumnsState, "columns" | "shadowColumns"> {
   return {
-    columns: [],
-    shadowColumns: [],
     actions: {
       addToLeft: null,
       addToRight: null,

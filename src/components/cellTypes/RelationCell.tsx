@@ -4,12 +4,7 @@ import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
 import { Link } from "obsidian-dataview";
-import React, {
-  MouseEventHandler,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "components/cellTypes/Editor/RelationEditor";
@@ -40,7 +35,7 @@ const RelationCell = (mdProps: CellComponentProps) => {
   /**
    * Render markdown content of Obsidian on load
    */
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (relationCell.length === 0 || dirtyCell) {
       // End useEffect
       return;

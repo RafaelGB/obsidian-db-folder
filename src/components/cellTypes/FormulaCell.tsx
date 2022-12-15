@@ -2,7 +2,7 @@ import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 import { ParseService } from "services/ParseService";
 
@@ -27,9 +27,9 @@ const FormulaCell = (mdProps: CellComponentProps) => {
       ) as string
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (formulaRef.current !== null) {
-      const effectCallback = async () => {
+      setTimeout(async () => {
         formulaRef.current.innerHTML = "";
 
         const formulaResponse = formulaInfo
@@ -66,8 +66,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
             configInfo.getLocalSettings()
           );
         }
-      };
-      effectCallback();
+      }, 0);
     }
   }, [row]);
   return (

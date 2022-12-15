@@ -834,6 +834,10 @@ div.database-plugin__checkbox {
   display: flex;
   justify-content: center;
 }
+
+.database-plugin__container div.dataview-error-box {
+  display: none;
+}
 /************************************************************
 *               React-datepicker styles
 ************************************************************/

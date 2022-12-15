@@ -32,7 +32,7 @@ const TaskCell = (taskProps: CellComponentProps) => {
       );
       view.addChild(taskComponent);
     }
-  }, []);
+  }, [row]);
   const taskRef = useRef<HTMLDivElement>();
 
   return <div ref={taskRef} className={c("md_cell text-align-left")}></div>;
