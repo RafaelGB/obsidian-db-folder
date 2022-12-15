@@ -1,16 +1,16 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
-import { AbstractChain } from "patterns/AbstractFactoryChain";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 import { AddEmptyColumnHandler } from "components/modals/newColumn/handlers/AddEmptyColumnHandler";
 import { AddExistingColumnHandler } from "components/modals/newColumn/handlers/AddExistingColumnHandler";
-import { HideColumnsHandler } from "components/modals/newColumn/handlers/HideColumnsHandler";
+import { QuickOptionsColumnsHandler } from "components/modals/newColumn/handlers/QuickOptionsColumnsHandler";
 
 class SelectNewColumnSection extends AbstractChain<AddColumnModalHandlerResponse> {
     protected getHandlers(): AbstractHandler<AddColumnModalHandlerResponse>[] {
         return [
             new AddEmptyColumnHandler(),
             new AddExistingColumnHandler(),
-            new HideColumnsHandler()
+            new QuickOptionsColumnsHandler()
         ];
     }
 }

@@ -4,8 +4,9 @@ import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value"
 class DataviewProxy {
 
     private static instance: DataviewProxy;
-    private indexIsLoaded: boolean = false;
 
+    constructor(public indexIsLoaded: boolean = false) {
+    }
     /**
      * Check if dataview plugin is installed
      * @returns true if installed, false otherwise
@@ -16,11 +17,6 @@ class DataviewProxy {
             new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
             throw new Error('Dataview plugin is not installed');
         }
-        if (!this.indexIsLoaded) {
-            new Notice(`Dataview plugin is not loaded yet. Please wait a few seconds and try again.`);
-            throw new Error("Dataview index is not loaded");
-        }
-
         return getAPI(app);
     }
 
@@ -36,13 +32,6 @@ class DataviewProxy {
         return isPluginEnabled(app);
     }
 
-    isIndexLoaded(): boolean {
-        return this.indexIsLoaded;
-    }
-
-    setIndexIsLoaded(value: boolean) {
-        this.indexIsLoaded = value;
-    }
     /**
      * Singleton instance
      * @returns {VaultManager}

@@ -1,10 +1,11 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { InputLabel, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
 import RollupIcon from "components/img/RollupIcon";
+import { t } from "lang/helpers";
 
 export default class RollupTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -50,6 +51,6 @@ function rollupTypeComponent(headerActionResponse: HeaderActionResponse) {
   return headerTypeComponent({
     onClick: rollupOnClick,
     icon: <RollupIcon />,
-    label: InputLabel.ROLLUP,
+    label: t(InputType.ROLLUP),
   });
 }

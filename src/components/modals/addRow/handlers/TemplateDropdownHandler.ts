@@ -1,6 +1,6 @@
 import { AddRowModalHandlerResponse } from "cdm/ModalsModel";
 import { Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class TemplateDropdownHandler extends AbstractHandlerClass<AddRowModalHandlerResponse> {

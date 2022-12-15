@@ -57,6 +57,9 @@ export interface ConfigColumn {
     rollup_action?: string;
     rollup_key?: string;
     persist_rollup?: boolean;
+    // Footer
+    footer_type: string;
+    footer_formula?: string;
     /** Extras from yaml */
     [key: string]: Literal;
 }
@@ -120,7 +123,7 @@ export type RowTemplateOption = {
 export type NoteContentAction = {
     file: TFile,
     action: string,
-    regexp: RegExp,
-    content?: string,
-    newValue?: string
+    regexp: RegExp[],
+    content: string,
+    newValue: string[]
 }

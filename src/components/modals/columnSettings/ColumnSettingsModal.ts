@@ -5,27 +5,26 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
 import { ColumnSettingsHandlerResponse, ColumnSettingsModalProps } from "cdm/ModalsModel";
 import { particular_settings_section, behavior_settings_section, style_settings_section } from "components/modals/columnSettings/ColumnSections";
-import { HeaderMenuProps } from "cdm/HeaderModel";
 import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
 
 export class ColumnSettingsModal extends Modal {
     view: DatabaseView;
-    headerMenuProps: HeaderMenuProps;
     columnSettingsManager: ColumnSettingsManager;
     dataState: Partial<DataState>;
     configState: Partial<ConfigState>;
     columnsState: Partial<ColumnsState>;
+    tableColumn: TableColumn;
     enableReset: boolean = false;
     constructor(
         props: ColumnSettingsModalProps
     ) {
-        const { view, headerMenuProps, dataState, configState, columnState } = props;
+        const { view, dataState, configState, columnState, tableColumn } = props;
         super(view.app);
         this.view = view;
         this.dataState = dataState;
         this.configState = configState;
         this.columnsState = columnState;
-        this.headerMenuProps = headerMenuProps;
+        this.tableColumn = tableColumn;
         this.columnSettingsManager = new ColumnSettingsManager(this);
     }
 
@@ -51,7 +50,7 @@ export class ColumnSettingsManager {
         this.modal = modal;
     }
     constructUI(containerEl: HTMLElement) {
-        const column = this.modal.headerMenuProps.headerProps.column.columnDef as TableColumn
+        const column = this.modal.tableColumn;
         /** Common modal headings */
         containerEl.addClass(StyleClasses.COLUMN_MODAL);
         add_setting_header(containerEl, `Settings of ${column.label} column`, 'h2');

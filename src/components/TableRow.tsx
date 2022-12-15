@@ -1,21 +1,24 @@
 import { Cell, flexRender } from "@tanstack/react-table";
-import { TableCellProps } from "cdm/CellModel";
 import { RowDataType } from "cdm/FolderModel";
 import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
 import React from "react";
 import { MdFileComponent } from "components/obsidianArq/embedMdInteractive";
+import { TableRowProps } from "cdm/RowTypeModel";
 
-export default function TableRow(headerProps: TableCellProps) {
-  const { row, table } = headerProps;
-  const { view } = table.options.meta;
+export default function TableRow(tableRowProps: TableRowProps) {
+  const { row, table } = tableRowProps;
+  const { view, tableState } = table.options.meta;
   const backgroundColor = view.plugin.settings.global_settings.enable_row_shadow
     ? (table.getRowModel().flatRows.indexOf(row) + 1) % 2
       ? StyleVariables.BACKGROUND_PRIMARY
       : StyleVariables.BACKGROUND_SECONDARY
     : StyleVariables.BACKGROUND_PRIMARY;
 
+  const fontSize: number = tableState.configState(
+    (state) => state.ddbbConfig.font_size
+  );
   return (
     <>
       {/** INIT TABLE ROW */}
@@ -35,6 +38,9 @@ export default function TableRow(headerProps: TableCellProps) {
                 className={`${c(
                   "td" + (cellIndex === 0 ? " row-context-menu" : "")
                 )} data-input`}
+                style={{
+                  fontSize: `${fontSize}px`,
+                }}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </div>

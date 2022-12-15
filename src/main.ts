@@ -399,10 +399,13 @@ export default class DBFolderPlugin extends Plugin {
 			})
 		);
 
+		/**
+		 * When the Dataview index is ready, trigger the index ready event.
+		 */
 		this.registerEvent(
 			// @ts-ignore
 			this.app.metadataCache.on("dataview:index-ready", () => {
-				DataviewService.setIndexIsLoaded(true);
+				DataviewService.indexIsLoaded = true;
 			})
 		);
 	}

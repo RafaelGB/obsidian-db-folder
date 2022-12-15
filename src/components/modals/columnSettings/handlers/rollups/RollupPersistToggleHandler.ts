@@ -1,5 +1,5 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { add_toggle } from "settings/SettingsComponents";
 
 export class RollupPersistToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {

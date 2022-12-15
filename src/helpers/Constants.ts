@@ -10,40 +10,30 @@ export const ActionTypes = Object.freeze({
 });
 
 /** Flavours of data types */
-export const InputType = Object.freeze({
+export const DynamicInputType = Object.freeze({
   NUMBER: 'number',
   TEXT: 'text',
   SELECT: 'select',
   TAGS: 'tags',
-  MARKDOWN: 'markdown',
-  SORTING: 'sorting',
   CALENDAR: 'calendar',
   CALENDAR_TIME: 'calendar_time',
-  METATADA_TIME: 'metadata_time',
-  TASK: 'task',
-  INLINKS: 'inlinks',
-  OUTLINKS: 'outlinks',
   CHECKBOX: 'checkbox',
-  NEW_COLUMN: 'new_column',
   FORMULA: 'formula',
   RELATION: 'relation',
   ROLLUP: 'rollup',
 });
 
-export const InputLabel = Object.freeze({
-  NUMBER: 'Number',
-  TEXT: 'Text',
-  SELECT: 'Select',
-  TAGS: 'Tags',
-  MARKDOWN: 'Markdown',
-  CALENDAR: 'Date',
-  CALENDAR_TIME: 'Datetime',
-  TASK: 'Task',
-  CHECKBOX: 'Checkbox',
-  FORMULA: 'Formula',
-  RELATION: 'Relation',
-  ROLLUP: 'Rollup',
+export const StaticInputType = Object.freeze({
+  MARKDOWN: 'markdown',
+  SORTING: 'sorting',
+  METATADA_TIME: 'metadata_time',
+  TASK: 'task',
+  INLINKS: 'inlinks',
+  OUTLINKS: 'outlinks',
+  NEW_COLUMN: 'new_column',
 });
+
+export const InputType = Object.assign({}, DynamicInputType, StaticInputType);
 
 export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
@@ -80,6 +70,31 @@ export const PaginationRenderOptions = Object.freeze({
   BASIC: 'basic',
 });
 
+export const FooterType = Object.freeze({
+  // CROSS
+  NONE: 'none',
+  COUNT_UNIQUE: 'count_unique',
+  COUNT_EMPTY: 'count_empty',
+  PERCENT_EMPTY: 'percent_empty',
+  COUNT_FILLED: 'count_filled',
+  PERCENT_FILLED: 'percent_filled',
+  // NUMERIC
+  SUM: 'sum',
+  MIN: 'min',
+  MAX: 'max',
+  // DATE
+  EARLIEST_DATE: 'earliest_date',
+  LATEST_DATE: 'latest_date',
+  RANGE_DATE: 'range_date',
+  // CUSTOM
+  FORMULA: 'formula',
+});
+
+export const FileManagerEditOptions = Object.freeze({
+  REMOVE: 'remove',
+  REPLACE: 'replace',
+});
+
 /******************************************************************************
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
@@ -98,7 +113,8 @@ export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   media_width: 100,
   media_height: 100,
   isInline: false,
-  task_hide_completed: true
+  task_hide_completed: true,
+  footer_type: FooterType.NONE,
 });
 
 export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
@@ -238,7 +254,7 @@ export const StyleClasses = Object.freeze({
   COLUMN_MODAL_BODY: 'database-column-body',
   ADD_ROW_MODAL: 'add-row-modal',
   ADD_ROW_MODAL_BODY: 'add-row-body',
-  ADD_COLUMN_MODAL: 'database-add-column-modal',
+  ADD_COLUMN_MODAL: 'add-column-modal',
   ADD_COLUMN_MODAL_BODY: 'database-add-column-body',
   FILTERS_MODAL: 'database-filters-modal',
   FILTERS_MODAL_BODY: 'database-filters-body',
@@ -345,6 +361,7 @@ export const YAML_INDENT = Object.freeze("  ");
 export const INLINE_POSITION = Object.freeze({
   TOP: 'top',
   BOTTOM: 'bottom',
+  LAST_FIELD: 'last_field',
 });
 
 export const DEFAULT_SETTINGS: DatabaseSettings = {
@@ -353,6 +370,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_show_state: false,
     enable_row_shadow: true,
     enable_ribbon_icon: true,
+    show_search_bar_by_default: false,
     logger_level_info: 'error',
     csv_file_header_key: 'File',
     media_settings: {
@@ -382,12 +400,14 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     row_templates_folder: '/',
     current_row_template: '',
     pagination_size: 10,
+    font_size: 16,
     enable_js_formulas: false,
     formula_folder_path: '/',
     inline_default: false,
-    inline_new_position: INLINE_POSITION.TOP,
+    inline_new_position: INLINE_POSITION.LAST_FIELD,
     date_format: 'yyyy-MM-dd',
     datetime_format: 'yyyy-MM-dd HH:mm:ss',
+    enable_footer: false,
   }
 };
 
@@ -401,6 +421,14 @@ export const DATABASE_CONFIG = Object.freeze({
   END_CENTINEL: '```',
   START_CENTINEL_LEGACY: '%% dbfolder:yaml',
   END_CENTINEL_LEGACY: '%%',
+});
+
+export const WRAPPERER_KEY = `_\\*~\``;
+
+export const INLINE_REGEX = Object.freeze({
+  INLINE_WITHOUT_FRONTMATTER: /(^[\s\S]*$)/g,
+  INLINE_WITH_FRONTMATTER: /(^---[\s\S]+?---)+([\s\S]*$)/g,
+  INLINE_LAST_FIELD: /([\s\S]*)(^[^_*~`a-zA-Z1-9]*)([_*~`]{0,2})([A-Za-z0-9]+)([_*~`]{0,2})([:]{2})(.+\n{0,1})$([\s\S]*)/gm
 });
 
 /******************************************************************************

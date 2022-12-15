@@ -91,7 +91,7 @@ class ProjectAPI extends ProjectView {
     async onOpen(projectView: ProjectViewProps) {
         const { contentEl, config, saveConfig, project, viewId } = projectView;
         const { path } = project;
-        let filePath = config.filepath;
+        const filePath = config.filepath;
         if (!filePath) {
             const folder = resolve_tfolder(path);
             const customLocalSettings = this.generateLocalSettings(projectView);

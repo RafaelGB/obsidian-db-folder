@@ -19,6 +19,7 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
                     path: filepath,
                     ctime: DateTime.now(),
                     mtime: DateTime.now(),
+                    folder: folderPath,
                     link: {
                         path: filepath,
                         fileName: () => filename,

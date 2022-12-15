@@ -2,11 +2,11 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { DatabaseView } from "DatabaseView";
 import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
-import { INLINE_POSITION, SourceDataTypes } from "helpers/Constants";
+import { SourceDataTypes } from "helpers/Constants";
 import { RowDataType } from "cdm/FolderModel";
 import { VaultManagerDB } from "services/FileManagerService";
 
-export function resolve_tfile(file_str: string, restrict: boolean = true): TFile {
+export function resolve_tfile(file_str: string, restrict = true): TFile {
   file_str = normalizePath(file_str);
 
   const file = app.vault.getAbstractFileByPath(file_str);
@@ -75,18 +75,6 @@ export function destination_folder(view: DatabaseView, ddbbConfig: LocalSettings
     //Current folder
   }
   return destination_folder;
-}
-
-export function inline_regex_target_in_function_of(position: string, columnId: string, newValue: string, contentHasFrontmatter: boolean) {
-  let regex_target = "";
-  switch (position) {
-    case INLINE_POSITION.BOTTOM:
-      regex_target = contentHasFrontmatter ? `$1$2\n${columnId}:: ${newValue}` : `$1\n${columnId}:: ${newValue}`;
-      break;
-    default:
-      regex_target = contentHasFrontmatter ? `$1\n${columnId}:: ${newValue}$2` : `${columnId}:: ${newValue}\n$1`;
-  }
-  return regex_target;
 }
 
 /* eslint-disable no-useless-escape */

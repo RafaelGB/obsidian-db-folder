@@ -13,12 +13,17 @@ The code can be written in the column settings. The generated values can be adde
 </video>
 
 ### Exposed Variables
-
-- `row` : the row object
+Common variables that you can use in your formula are:
 - `db` : the database object with predefined functions that can be used in the formula
 - `config` : the table's config information
 
-To use an exposed variable, use the `${}` syntax. For example, to get the value of the `Name` column, you can use `${row.Name}`.
+To use an exposed variable, use the `${}` syntax. For example, to get a value of the `config`, you can use `${config.pagination_size}`.
+#### Column Formula
+If you are using a column formula, you can also use the following variables:
+- `row` : the row object
+#### Footer Formula
+In case you are using a footer formula, you can also use the following variables:
+- `values` : An Array of cell values in the column
 
 ### Exposed Functions
 
@@ -48,8 +53,15 @@ function myFunction(arg1, arg2) {
 module.exports = myFunction;
 ```
 
-## Examples
+## Examples library
+We will continue adding examples under this [Link](https://github.com/RafaelGB/obsidian-db-folder/tree/master/docs/examples) where you can find some examples of column and footer formulas.
 
+If you consider that you have a good example, please feel free to add it to the repository via a pull request.
+
+## Luxon
+Our date library is [Luxon](https://moment.github.io/luxon/#/). So you can use all the functions of the library in your formulas.
+
+### Luxon Examples
 If you have a column ID named "Date" you can add time:
 
 - `${row.Date.plus({years: 1}).toFormat("DD")}` adds 1 year
@@ -78,5 +90,3 @@ Change the date format using 1st January 2000 1pm British Standard time as an ex
 - `${row.Date.toFormat("ffff")}` shows day(name), day/month(full name)/year/ 24 hour time, full timezone eg: **Saturday, 01 January 2000, 13:00, British Summer Time** 
 
 If you replace f with F then seconds will be included.
-
-For further information go to the [Luxon Documentation](https://moment.github.io/luxon/#/).

@@ -1,10 +1,11 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { InputLabel, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
 import CodeIcon from "components/img/CodeIcon";
+import { t } from "lang/helpers";
 
 export default class FormulaTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -50,6 +51,6 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   return headerTypeComponent({
     onClick: formulaOnClick,
     icon: <CodeIcon />,
-    label: InputLabel.FORMULA,
+    label: t(InputType.FORMULA),
   });
 }

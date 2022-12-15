@@ -23,7 +23,6 @@ import {
   DatabaseLimits,
   MetadataColumns,
   ResizeConfiguration,
-  StyleVariables,
 } from "helpers/Constants";
 import { LOGGER } from "services/Logger";
 import DefaultCell from "components/DefaultCell";
@@ -32,6 +31,8 @@ import { c } from "helpers/StylesHelper";
 import { HeaderNavBar } from "components/NavBar";
 import TableHeader from "components/TableHeader";
 import TableRow from "components/TableRow";
+import TableFooter from "components/TableFooter";
+import DefaultFooter from "components/DefaultFooter";
 import getInitialColumnSizing from "components/behavior/InitialColumnSizeRecord";
 import customSortingfns, {
   globalDatabaseFilterFn,
@@ -44,7 +45,7 @@ import {
 } from "components/obsidianArq/markdownLinks";
 import HeaderContextMenuWrapper from "components/contextMenu/HeaderContextMenuWrapper";
 import TableActions from "components/tableActions/TableActions";
-import PaginationTable from "./navbar/PaginationTable";
+import PaginationTable from "components/navbar/PaginationTable";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
@@ -52,6 +53,7 @@ const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   cell: DefaultCell,
   header: DefaultHeader,
   enableResizing: true,
+  footer: DefaultFooter,
 };
 
 /**
@@ -229,10 +231,7 @@ export function Table(tableData: TableDataType) {
             width: table.getCenterTotalSize(),
           }}
         >
-          <div
-            key={`div-table-header-group-sticky`}
-            className={c(`table-header-group ${"sticky-top"}`)}
-          >
+          <div key={`div-thead-sticky`} className={c(`thead sticky-top`)}>
             {/* INIT HEADERS */}
             {table
               .getHeaderGroups()
@@ -241,7 +240,6 @@ export function Table(tableData: TableDataType) {
                   headerGroup: HeaderGroup<RowDataType>,
                   headerGroupIndex: number
                 ) => {
-                  //headerGroup.headers.find((h) => h.id === "expander");
                   const headerContext = headerGroup.headers.find(
                     (h) => h.id === MetadataColumns.ROW_CONTEXT_MENU
                   );
@@ -250,7 +248,7 @@ export function Table(tableData: TableDataType) {
                   );
                   return (
                     <div
-                      key={`${headerGroup.id}-${headerGroupIndex}`}
+                      key={`header-group-${headerGroup.id}-${headerGroupIndex}`}
                       className={`${c("tr header-group")}`}
                     >
                       {/** HEADER CONTEXT */}
@@ -282,7 +280,7 @@ export function Table(tableData: TableDataType) {
                             />
                           )
                         )}
-                      {/** ADD COLUMN HEADER*/}
+                      {/** ADD COLUMN HEADER */}
                       <HeaderContextMenuWrapper header={addColumnHeader} />
                     </div>
                   );
@@ -291,13 +289,7 @@ export function Table(tableData: TableDataType) {
             {/* ENDS HEADERS */}
           </div>
           {/* INIT BODY */}
-
-          <div
-            key={`div-tbody`}
-            style={{
-              display: "table-row-group",
-            }}
-          >
+          <div key={`div-tbody`} className={c(`tbody`)}>
             {table.getRowModel().rows.map((row: Row<RowDataType>) => (
               <TableRow
                 key={`table-cell-${row.index}`}
@@ -307,6 +299,32 @@ export function Table(tableData: TableDataType) {
             ))}
             {/* ENDS BODY */}
           </div>
+          {/* INIT FOOTER */}
+          {configInfo.getLocalSettings().enable_footer ? (
+            <div key={`div-tfoot`} className={c(`tfoot`)}>
+              {table
+                .getFooterGroups()
+                .map((footerGroup: HeaderGroup<RowDataType>) => {
+                  return (
+                    <div
+                      key={`footer-group-${footerGroup.id}`}
+                      className={`${c("tr footer-group")}`}
+                    >
+                      {footerGroup.headers.map(
+                        (header: Header<RowDataType, TableColumn>) => (
+                          <TableFooter
+                            key={`table-footer-${header.index}`}
+                            table={table}
+                            header={header}
+                          />
+                        )
+                      )}
+                    </div>
+                  );
+                })}
+              {/* ENDS FOOTER */}
+            </div>
+          ) : null}
           {/* ENDS TABLE */}
         </div>
         {/* ENDS SCROLL PANE */}

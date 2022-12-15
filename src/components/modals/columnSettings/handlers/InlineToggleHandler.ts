@@ -1,6 +1,6 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 export class InlineToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
     settingTitle: string = 'Inline field';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {

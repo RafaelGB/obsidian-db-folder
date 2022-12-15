@@ -1,7 +1,9 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
-import { MetadataColumns } from "helpers/Constants";
+import { DynamicInputType, MetadataColumns } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
   settingTitle: string = "Add empty column";
@@ -10,16 +12,26 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { info, actions } = addColumnModalManager.props.columnsState;
+    const { columnState } = addColumnModalManager.props;
     let newColumnName = "";
+    let typeOfNewColumn = "";
+    const typesRecord: Record<string, string> = {};
+    Object.values(DynamicInputType).forEach((value) => {
+      typesRecord[value] = t(value);
+    });
     const addNewColumnPromise = (): void => {
       const isEmpty = newColumnName.length === 0;
-      actions.addToLeft(
-        info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
-        isEmpty ? undefined : newColumnName
+      columnState.actions.addToLeft(
+        columnState.info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
+        isEmpty ? undefined : newColumnName,
+        typeOfNewColumn ? typeOfNewColumn : DynamicInputType.TEXT
       );
       new Notice(isEmpty ? "New column added" : `"${newColumnName}" added to the table`, 1500);
       (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";
+    }
+
+    const selectTypeHandler = (value: string): void => {
+      typeOfNewColumn = value;
     }
 
     /**************
@@ -43,7 +55,15 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
             newColumnName = value;
           });
       })
-      .addButton((button) => {
+      .addSearch(cb => {
+        new StringSuggest(
+          cb.inputEl,
+          typesRecord
+        );
+        cb.setPlaceholder("Select type...")
+          .onChange(selectTypeHandler);
+      })
+      .addExtraButton((button) => {
         button
           .setIcon("create-new")
           .setTooltip("Add new column")

@@ -8,12 +8,23 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     container: () => ({
         position: "static",
         boxSizing: "border-box",
+        backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+        color: StyleVariables.TEXT_NORMAL,
     }),
     menuPortal: (styles) => ({
         ...styles,
         zIndex: 9999
     }),
-    control: (styles) => ({ ...styles, border: "none", boxShadow: "none", minWidth: "100%", }),
+    control: (styles) => ({
+        ...styles, border: "none", boxShadow: "none", minWidth: "100%",
+        backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+        color: StyleVariables.TEXT_NORMAL,
+    }),
+    input: (styles) => ({
+        ...styles,
+        backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+        color: StyleVariables.TEXT_NORMAL,
+    }),
     option: (styles, { data, isFocused }) => ({
         ...styles,
         backgroundColor: isFocused ? StyleVariables.TEXT_ACCENT_HOVER : data.color,

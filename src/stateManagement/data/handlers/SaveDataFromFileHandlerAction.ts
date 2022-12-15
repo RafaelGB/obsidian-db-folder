@@ -93,6 +93,7 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
                     ...lineRecord,
                     file: {
                         path: filepath,
+                        folder: destination_folder,
                         ctime: DateTime.now(),
                         mtime: DateTime.now(),
                         link: {

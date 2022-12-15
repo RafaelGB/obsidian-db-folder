@@ -1,6 +1,6 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = 'Enable media links';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {

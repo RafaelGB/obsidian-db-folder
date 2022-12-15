@@ -1,6 +1,6 @@
 import { add_text, add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 export class LinkAliasToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = 'Enable link alias';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {

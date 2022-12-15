@@ -16,8 +16,8 @@ import { RollupActionHandler } from "components/modals/columnSettings/handlers/r
 import { RollupKeyHandler } from "components/modals/columnSettings/handlers/rollups/RollupKeyHandler";
 import { RollupPersistToggleHandler } from "components/modals/columnSettings/handlers/rollups/RollupPersistToggleHandler";
 import { InputType } from "helpers/Constants";
-import { AbstractChain } from "patterns/AbstractFactoryChain";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 
 
 class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
@@ -40,6 +40,9 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
             case InputType.FORMULA:
             case InputType.RELATION:
             case InputType.ROLLUP:
+            case InputType.SELECT:
+            case InputType.TAGS:
+            case InputType.MARKDOWN:
                 particularHandlers.push(new AlignmentSelectorHandler());
                 particularHandlers.push(new ToggleWrapContentHandler());
                 break;
@@ -66,14 +69,21 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
     protected getHandlers(): AbstractHandler<ColumnSettingsHandlerResponse>[] {
         const particularHandlers: AbstractHandler<ColumnSettingsHandlerResponse>[] = [];
         // Mandatory
-        particularHandlers.push(new ColumnIdInputHandler());
+
         // Particular
         switch (this.input) {
             case InputType.TASK:
             case InputType.RELATION:
+                particularHandlers.push(new ColumnIdInputHandler());
+                break;
+            case InputType.MARKDOWN:
+            case InputType.METATADA_TIME:
+            case InputType.INLINKS:
+            case InputType.OUTLINKS:
                 // do nothing
                 break;
             default:
+                particularHandlers.push(new ColumnIdInputHandler());
                 particularHandlers.push(new InlineToggleHandler());
         }
         return particularHandlers;

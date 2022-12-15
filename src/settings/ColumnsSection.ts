@@ -5,8 +5,8 @@ import { RemoveFieldsWhenDeleteToggleHandler } from 'settings/handlers/columns/R
 import { MetadataToggleGroupHandler } from 'settings/handlers/columns/MetadataToggleGroupHandler';
 import { TemplateColumnsHandler } from 'settings/handlers/columns/TemplateColumnsHandler';
 import { InlineFieldsOptionsHandler } from 'settings/handlers/columns/InlineFieldsOptionsHandler';
-import { AbstractChain } from 'patterns/AbstractFactoryChain';
-import { AbstractHandler } from 'patterns/AbstractHandler';
+import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
+import { AbstractHandler } from 'patterns/chain/AbstractHandler';
 
 class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {

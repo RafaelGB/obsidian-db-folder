@@ -16,7 +16,7 @@ export class FormulaGenerator implements IGenerateObject {
     }
 
     async generate_object(): Promise<Record<string, unknown>> {
-        const final_object: Record<string, any> = {};
+        const final_object: Record<string, unknown> = {};
         Object.assign(final_object, {
             js: await this.generate_js_functions(),
             dataview: DataviewService.getDataviewAPI(),

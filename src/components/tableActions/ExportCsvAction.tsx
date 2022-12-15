@@ -36,7 +36,7 @@ const ExportCsvAction = (actionProps: TableActionProps) => {
     if (!view.actionButtons.export) {
       const exportElement = view.addAction(
         "download",
-        t("toolbar_menu_add_row"),
+        t("toolbar_menu_export_csv"),
         handleCsvDownload
       );
       view.actionButtons.export = exportElement;

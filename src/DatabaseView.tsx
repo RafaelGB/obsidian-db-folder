@@ -35,9 +35,11 @@ import {
   WorkspaceLeaf,
   TFile,
   Menu,
+  Notice,
 } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
+import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
@@ -145,6 +147,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   async initDatabase(): Promise<void> {
     try {
       LOGGER.info(`=>initDatabase ${this.file.path}`);
+      this.checkRequiredLibraries();
       // Load the database file
       this.diskConfig = new DatabaseInfo(this.file);
       await this.diskConfig.initDatabaseconfigYaml(
@@ -346,5 +349,17 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
   openFilters() {
     this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
+  }
+  /****************************************************************
+   *                        VIEW VALIDATIONS
+   * **************************************************************/
+  private checkRequiredLibraries(): void {
+    if (!DataviewService.indexIsLoaded) {
+      new Notice(
+        `Dataview plugin is not loaded yet. Please wait a few seconds and refresh the page.`,
+        1000
+      );
+      DataviewService.indexIsLoaded = true;
+    }
   }
 }
