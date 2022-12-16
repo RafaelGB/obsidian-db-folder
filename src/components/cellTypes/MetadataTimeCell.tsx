@@ -6,14 +6,18 @@ import { MarkdownService } from "services/MarkdownRenderService";
 
 const MetadataTimeCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
-  const { cell } = defaultCell;
+  const { cell, table } = defaultCell;
+  const { tableState } = table.options.meta;
+  const configInfo = tableState.configState((state) => state.info);
   const mdRef = useRef<HTMLDivElement>();
   useEffect(() => {
     if (mdRef.current !== null) {
       mdRef.current.innerHTML = "";
       const cellValue = cell.getValue();
       // Apply config formatting
-      let metadataValue = (cellValue as DateTime).toFormat("yyyy-MM-dd h:mm a");
+      let metadataValue = (cellValue as DateTime).toFormat(
+        configInfo.getLocalSettings().metadata_date_format
+      );
       // Render the markdown with daily notes link
       // TODO obtain daily format from dailies plugin if its enabled
       metadataValue = `[[${(cellValue as DateTime).toFormat(
@@ -28,6 +32,7 @@ const MetadataTimeCell = (mdProps: CellComponentProps) => {
       );
     }
   });
+
   return (
     <span
       ref={mdRef}

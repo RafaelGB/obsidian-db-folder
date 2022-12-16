@@ -26,8 +26,8 @@ export class DateFormatHandler extends AbstractSettingsHandler {
             containerEl,
             "Date format",
             "The format of the date.",
-            "yyyy-mm-dd",
-            current_date_format(
+            DEFAULT_SETTINGS.local_settings.date_format,
+            this.current_date_format(
                 local,
                 view,
                 settingsManager.plugin.settings.local_settings.date_format
@@ -53,26 +53,59 @@ export class DateFormatHandler extends AbstractSettingsHandler {
             containerEl,
             "Datetime format",
             "The format of the datetime.",
-            "yyyy-mm-dd hh:mm:ss",
-            current_datetime_format(
+            DEFAULT_SETTINGS.local_settings.datetime_format,
+            this.current_datetime_format(
                 local,
                 view,
                 settingsManager.plugin.settings.local_settings.datetime_format
             ),
             datetime_promise
         );
+        /**********************
+         * METADATA DATE FORMAT
+         **********************/
+        const metadata_date_promise = async (value: string): Promise<void> => {
+            if (local) {
+                // update settings
+                view.diskConfig.updateConfig({ metadata_date_format: value });
+            } else {
+                // set dropdown value
+                const update_local_settings = settingsManager.plugin.settings.local_settings;
+                update_local_settings.metadata_date_format = value;
+                // update settings
+                settingsManager.plugin.updateSettings({ local_settings: update_local_settings });
+            }
+        }
+        add_text(
+            containerEl,
+            "Metadata date format",
+            "The format of the metadata date.",
+            DEFAULT_SETTINGS.local_settings.metadata_date_format,
+            this.current_medatada_date_format(
+                local,
+                view,
+                settingsManager.plugin.settings.local_settings.metadata_date_format
+            ),
+            metadata_date_promise
+        );
         return this.goNext(settingHandlerResponse);
     }
-}
 
-function current_date_format(local: boolean, view: DatabaseView, default_value: string) {
-    return local ?
-        (view.diskConfig.yaml.config.date_format ?? DEFAULT_SETTINGS.local_settings.date_format) :
-        (default_value ?? DEFAULT_SETTINGS.local_settings.date_format);
-}
+    private current_date_format(local: boolean, view: DatabaseView, default_value: string) {
+        return local ?
+            (view.diskConfig.yaml.config.date_format ?? DEFAULT_SETTINGS.local_settings.date_format) :
+            (default_value ?? DEFAULT_SETTINGS.local_settings.date_format);
+    }
 
-function current_datetime_format(local: boolean, view: DatabaseView, default_value: string) {
-    return local ?
-        (view.diskConfig.yaml.config.datetime_format ?? DEFAULT_SETTINGS.local_settings.datetime_format) :
-        (default_value ?? DEFAULT_SETTINGS.local_settings.datetime_format);
+    private current_datetime_format(local: boolean, view: DatabaseView, default_value: string) {
+        return local ?
+            (view.diskConfig.yaml.config.datetime_format ?? DEFAULT_SETTINGS.local_settings.datetime_format) :
+            (default_value ?? DEFAULT_SETTINGS.local_settings.datetime_format);
+    }
+
+    private current_medatada_date_format(local: boolean, view: DatabaseView, default_value: string) {
+        return local ?
+            (view.diskConfig.yaml.config.metadata_date_format ?? DEFAULT_SETTINGS.local_settings.metadata_date_format) :
+            (default_value ?? DEFAULT_SETTINGS.local_settings.metadata_date_format);
+    }
 }
