@@ -27,15 +27,15 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     }),
     option: (styles, { data, isFocused }) => ({
         ...styles,
-        backgroundColor: isFocused ? StyleVariables.TEXT_ACCENT_HOVER : data.color,
-        color: "rgb(66, 66, 66)",
+        backgroundColor: data.color,
+        color: StyleVariables.TEXT_NORMAL,
+        border: isFocused ? 1 + "px solid " + StyleVariables.TEXT_ACCENT : 0,
         padding: 0,
         width: "100%",
         textAlign: "center",
         ":hover": {
-            backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
+            boxShadow: "1.5px 1.5px 1.5px 1.5px " + StyleVariables.TEXT_ACCENT_HOVER,
         },
-
     }),
     singleValue: (styles, { data }) => ({
         ...styles,
