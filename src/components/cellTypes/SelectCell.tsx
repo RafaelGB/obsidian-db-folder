@@ -122,6 +122,10 @@ const SelectCell = (popperProps: CellComponentProps) => {
           isClearable
           openMenuOnFocus
           menuPosition="fixed"
+          components={{
+            DropdownIndicator: () => null,
+            IndicatorSeparator: () => null,
+          }}
           styles={CustomTagsStyles}
           options={multiOptions}
           onBlur={() => setShowSelect(false)}

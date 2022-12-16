@@ -114,6 +114,10 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       <div className={c("tags")}>
         <CreatableSelect
           defaultValue={defaultValue}
+          components={{
+            DropdownIndicator: () => null,
+            IndicatorSeparator: () => null,
+          }}
           closeMenuOnSelect={false}
           isSearchable
           isMulti
