@@ -58,6 +58,6 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
             backgroundColor: data.color + " !important",
             color: "white",
         },
-    }),
+    })
 };
 export default CustomTagsStyles;
