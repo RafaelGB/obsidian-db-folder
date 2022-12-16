@@ -3,7 +3,6 @@ import { DynamicInputType, MetadataColumns } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
-import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
   settingTitle: string = "Add empty column";
@@ -55,13 +54,10 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
             newColumnName = value;
           });
       })
-      .addSearch(cb => {
-        new StringSuggest(
-          cb.inputEl,
-          typesRecord
-        );
-        cb.setPlaceholder("Select type...")
-          .onChange(selectTypeHandler);
+      .addDropdown((dropdown) => {
+        dropdown.addOptions(typesRecord);
+        dropdown.setValue(DynamicInputType.TEXT);
+        dropdown.onChange(selectTypeHandler);
       })
       .addExtraButton((button) => {
         button
