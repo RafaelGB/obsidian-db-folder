@@ -38,12 +38,13 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
 
+  const columnOptions = columnsInfo.getColumnOptions(column.id);
   function getColor(tag: string) {
-    const match = tableColumn.options.find(
+    const match = columnOptions.find(
       (option: { label: string }) => option.label === tag
     );
     if (match) {
-      return match.backgroundColor;
+      return match.color;
     } else {
       // In case of new tag, generate random color
       const color = randomColor();
@@ -61,22 +62,6 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       color: getColor(tag),
     }));
   }, [tagsCell]);
-
-  const multiOptions = useMemo(
-    () =>
-      tableColumn.options
-        .filter(
-          (option: RowSelectOption) =>
-            option && option.label !== undefined && option.label !== null
-        )
-        .sort((a, b) => a.label.localeCompare(b.label))
-        .map((option: RowSelectOption) => ({
-          value: option.label,
-          label: option.label,
-          color: option.backgroundColor,
-        })),
-    [tagsCell]
-  );
 
   const handleOnChange = async (
     newValue: OnChangeValue<SelectValue, true>,
@@ -125,7 +110,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           openMenuOnFocus
           menuPosition="fixed"
           styles={CustomTagsStyles}
-          options={multiOptions}
+          options={columnOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
           menuPortalTarget={activeDocument.body}
