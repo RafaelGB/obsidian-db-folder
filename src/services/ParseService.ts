@@ -39,7 +39,7 @@ class Parse {
                 parsedLiteral = this.parseToEnableSorting(wrapped, localSettings, isInline);
                 break;
             case InputType.TAGS:
-                parsedLiteral = this.parseToOptionsArray(wrapped, localSettings);
+                parsedLiteral = this.parseToOptionsArray(wrapped);
                 break;
             case InputType.CALENDAR:
                 parsedLiteral = this.parseToCalendar(wrapped, localSettings.date_format);
@@ -345,7 +345,7 @@ class Parse {
         return `[${stringArray}]`;
     }
 
-    private parseToOptionsArray(wrapped: WrappedLiteral, localSettings: LocalSettings): Literal {
+    private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
         if (wrapped.type !== 'array') {
             return wrapped.value.toString().split(",").map(s => satinizedColumnOption(s.toString().trim()));
         }
