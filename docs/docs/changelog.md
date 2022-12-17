@@ -1,3 +1,32 @@
+## 3.1.0-beta.1
+### Shiny new things
+- New option for inline fields addition. Add a new field behind the last one. [ISSUE#419](https://github.com/RafaelGB/obsidian-db-folder/issues/419)
+- Inline edit engine improved. Edit you inline fields inside a callout or a list [ISSUE#556](https://github.com/RafaelGB/obsidian-db-folder/issues/556)
+- Add column Modal was refactored. Now you can interact with quick settings like type of column or remove button [ISSUE#483](https://github.com/RafaelGB/obsidian-db-folder/issues/483)
+- Larger input textarea (text column type) [ISSUE#200](https://github.com/RafaelGB/obsidian-db-folder/issues/200)
+- Text columns now support lists as `[a,b,c,1,2,3]`[ISSUE#441](https://github.com/RafaelGB/obsidian-db-folder/issues/441)
+- New option to select the font size of the rows [ISSUE#498](https://github.com/RafaelGB/obsidian-db-folder/issues/498)
+- You can customize the color of your group filters now [ISSUE#492](https://github.com/RafaelGB/obsidian-db-folder/issues/492)
+- Metadata columns now can access to some columns settings too [ISSUE#589](https://github.com/RafaelGB/obsidian-db-folder/issues/589) [ISSUE#464](https://github.com/RafaelGB/obsidian-db-folder/issues/464)
+- Global configuration to make search bar sticky by default [ISSUE#643](https://github.com/RafaelGB/obsidian-db-folder/issues/643)
+
+### Improved
+- New configuration to format the metadata date [ISSUE#436](https://github.com/RafaelGB/obsidian-db-folder/issues/436)
+- Tasks column is refreshed with filters changes [ISSUE#487](https://github.com/RafaelGB/obsidian-db-folder/issues/487)
+- Improved responsiveness with the space between bottom and the table [ISSUE#654](https://github.com/RafaelGB/obsidian-db-folder/issues/654)
+- The cursor is kept in the same position when you add a new column option (select & tags) [ISSUE#670](https://github.com/RafaelGB/obsidian-db-folder/issues/670)
+### Visual
+- DnD new css classes to improve the visual feedback [ISSUE#519](https://github.com/RafaelGB/obsidian-db-folder/issues/519)
+- Dark mode support for select & tags [ISSUE#656](https://github.com/RafaelGB/obsidian-db-folder/issues/656)
+- Settings modal is now bigger on desktops
+- Footer formula modal is now bigger
+### No longer broken
+- Control illegal characters on new options (tags & select) [ISSUE#668](https://github.com/RafaelGB/obsidian-db-folder/issues/668)
+- Tags and select selector dropdown does not have the icon anymore (more space) [ISSUE#671](https://github.com/RafaelGB/obsidian-db-folder/issues/671)
+- Row context menu was overflown [ISSUE#655](https://github.com/RafaelGB/obsidian-db-folder/issues/655)
+- Context columns does not have access to the footer now [ISSUE#653](https://github.com/RafaelGB/obsidian-db-folder/issues/653)
+- DnD did not move the footer [ISSUE#658](https://github.com/RafaelGB/obsidian-db-folder/issues/658)
+- Last row could not be edited with pagination and search bar enabled [ISSUE#652](https://github.com/RafaelGB/obsidian-db-folder/issues/652)
 ## 3.0.1
 ### Shiny new things
 - (experimental) new options for the footer including a menu to select those options:
