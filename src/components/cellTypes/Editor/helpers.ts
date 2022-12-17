@@ -167,7 +167,7 @@ export function getBreaksNeededForEmptyLineAfter(
   return isInLastLine ? 0 : neededBreaks;
 }
 
-export function getStateFromInput(input: HTMLInputElement): TextState {
+export function getStateFromInput(input: HTMLTextAreaElement): TextState {
   return {
     selection: {
       start: input.selectionStart,
@@ -181,13 +181,13 @@ export function getStateFromInput(input: HTMLInputElement): TextState {
   };
 }
 
-export function replaceSelection(input: HTMLInputElement, text: string) {
+export function replaceSelection(input: HTMLTextAreaElement, text: string) {
   insertTextAtCursor(input, text);
   return getStateFromInput(input);
 }
 
 export function setSelectionRange(
-  input: HTMLInputElement,
+  input: HTMLTextAreaElement,
   selection: TextRange
 ): TextState {
   input.focus();
@@ -197,7 +197,7 @@ export function setSelectionRange(
 }
 
 export function toggleWrappingFormattingCommand(
-  input: HTMLInputElement,
+  input: HTMLTextAreaElement,
   isApplied: RegExp,
   unApply: (s: string) => string,
   formatting: string
@@ -238,7 +238,7 @@ export function toggleWrappingFormattingCommand(
 }
 
 export function applyWrappingFormatting(
-  input: HTMLInputElement,
+  input: HTMLTextAreaElement,
   before: string,
   after: string,
   requireSelection?: boolean,
@@ -283,7 +283,7 @@ export function applyWrappingFormatting(
 }
 
 export function toggleLineFormatting(
-  input: HTMLInputElement,
+  input: HTMLTextAreaElement,
   isApplied: RegExp,
   apply: (s: string) => string,
   remove: (s: string) => string

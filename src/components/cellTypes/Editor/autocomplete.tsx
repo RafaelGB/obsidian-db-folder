@@ -19,7 +19,7 @@ import {
 import { InputEditor } from "components/cellTypes/Editor/textcomplete/textcomplete-input";
 
 export interface ConstructAutocompleteParams {
-  inputRef: RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLTextAreaElement>;
   isAutocompleteVisibleRef: RefObject<boolean>;
   view: DatabaseView;
 }
@@ -126,7 +126,7 @@ export function useAutocompleteInputProps({
   view,
 }: UseAutocompleteInputPropsParams) {
   const isAutocompleteVisibleRef = useRef<boolean>(false);
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLTextAreaElement>();
   const { onCompositionStart, onCompositionEnd, getShouldIMEBlockAction } =
     useIMEInputProps();
 
