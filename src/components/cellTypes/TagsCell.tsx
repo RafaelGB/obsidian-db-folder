@@ -13,6 +13,7 @@ import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
+import { satinizedColumnOption } from "helpers/FileManagement";
 
 const TagsCell = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
@@ -67,7 +68,9 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     newValue: OnChangeValue<SelectValue, true>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const arrayTags = newValue.map((tag) => `${tag.value}`);
+    const arrayTags = newValue.map(
+      (tag) => `${satinizedColumnOption(tag.value)}`
+    );
     const newCell = ParseService.parseRowToLiteral(
       tagsRow,
       tableColumn,
@@ -84,14 +87,20 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     );
 
     // Add new option to column options
-    newValue
-      .filter(
-        (tag) =>
-          !tableColumn.options.find((option) => option.label === tag.value)
-      )
-      .forEach((tag) => {
-        columnActions.addOptionToColumn(tableColumn, tag.value, randomColor());
-      });
+    if (actionMeta.action === "create-option") {
+      newValue
+        .filter(
+          (tag) =>
+            !tableColumn.options.find((option) => option.label === tag.value)
+        )
+        .forEach((tag) => {
+          columnActions.addOptionToColumn(
+            tableColumn,
+            tag.value,
+            randomColor()
+          );
+        });
+    }
   };
 
   function TagsForm() {

@@ -1,6 +1,7 @@
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { randomColor, castStringtoHsl, castHslToString } from "helpers/Colors";
+import { satinizedColumnOption } from "helpers/FileManagement";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { LOGGER } from "services/Logger";
@@ -53,7 +54,8 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
           .setPlaceholder("label of option")
           .setValue(newLabel)
           .onChange(async (value: string): Promise<void> => {
-            newLabel = value;
+            newLabel = satinizedColumnOption(value);
+            text.setValue(newLabel);
           });
         text.inputEl.onkeydown = (e: KeyboardEvent) => {
           switch (e.key) {

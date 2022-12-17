@@ -10,6 +10,7 @@ import { TableColumn } from "cdm/FolderModel";
 import CreatableSelect from "react-select/creatable";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
+import { satinizedColumnOption } from "helpers/FileManagement";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
@@ -65,11 +66,14 @@ const SelectCell = (popperProps: CellComponentProps) => {
     newValue: OnChangeValue<SelectValue, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const selectValue = newValue ? newValue.value.toString() : "";
+    const sanitized = satinizedColumnOption(
+      newValue ? newValue.value.toString() : ""
+    );
+
     const newCell = ParseService.parseRowToLiteral(
       selectRow,
       tableColumn,
-      selectValue
+      sanitized
     );
 
     // Update on disk & memory
@@ -86,7 +90,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
     if (actionMeta.action === "create-option") {
       await columnActions.addOptionToColumn(
         tableColumn,
-        selectValue,
+        sanitized,
         randomColor()
       );
     }

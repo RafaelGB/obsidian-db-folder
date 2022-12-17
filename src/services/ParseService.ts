@@ -7,6 +7,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { deepMerge, generateLiteral, obtainAnidatedLiteral } from "helpers/DataObjectHelper";
 import { parseLuxonDatetimeToString, parseLuxonDateToString, parseStringToLuxonDate, parseStringToLuxonDatetime } from "helpers/LuxonHelper";
+import { satinizedColumnOption } from "helpers/FileManagement";
 
 class Parse {
 
@@ -57,6 +58,9 @@ class Parse {
                 break;
             case InputType.RELATION:
                 parsedLiteral = this.parseToLink(wrapped);
+                break;
+            case InputType.SELECT:
+                parsedLiteral = this.parseToSelect(wrapped, localSettings);
                 break;
             case InputType.TASK:
             case InputType.FORMULA:
@@ -205,6 +209,12 @@ class Parse {
         }
     }
 
+    private parseToSelect(wrapped: WrappedLiteral, localSettings: LocalSettings): string {
+        return satinizedColumnOption(
+            this.parseToText(wrapped, localSettings).toString(),
+        );
+    }
+
     private parseToText(wrapped: WrappedLiteral, localSettings: LocalSettings): string | DataObject {
         switch (wrapped.type) {
             case 'object':
@@ -337,9 +347,9 @@ class Parse {
 
     private parseToOptionsArray(wrapped: WrappedLiteral): Literal {
         if (wrapped.type !== 'array') {
-            return wrapped.value.toString().split(",").map(s => s.toString().trim());
+            return wrapped.value.toString().split(",").map(s => satinizedColumnOption(s.toString().trim()));
         }
-        return wrapped.value.map(v => DataviewService.getDataviewAPI().value.toString(v));
+        return wrapped.value.map(v => satinizedColumnOption(DataviewService.getDataviewAPI().value.toString(v)));
     }
 
     private handleYamlBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {

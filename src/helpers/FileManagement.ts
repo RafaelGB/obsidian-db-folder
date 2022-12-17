@@ -180,3 +180,18 @@ export async function create_row_file(
   );
   return filepath;
 }
+
+/**
+   * Remove all not readable characters of yaml and trim the string
+   * 
+   * Example:
+   * input: "\- some text"
+   * output: "some text"
+   * @param option 
+   * @returns 
+   */
+export function satinizedColumnOption(option: string): string {
+  return option
+    .replace("\\", "")
+    .trim();
+}
