@@ -407,6 +407,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     inline_new_position: INLINE_POSITION.LAST_FIELD,
     date_format: 'yyyy-MM-dd',
     datetime_format: 'yyyy-MM-dd HH:mm:ss',
+    metadata_date_format: 'yyyy-MM-dd HH:mm:ss',
     enable_footer: false,
   }
 };

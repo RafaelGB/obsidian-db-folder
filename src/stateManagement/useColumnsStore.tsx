@@ -40,6 +40,7 @@ function emptyColumnsState(): Omit<ColumnsState, "columns" | "shadowColumns"> {
       getValueOfAllColumnsAsociatedWith: null,
       getVisibilityRecord: null,
       getAllColumns: null,
+      getColumnOptions: null,
     },
   };
 }

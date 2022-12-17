@@ -40,8 +40,6 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         5
       );
 
-      console.log(`formulaResponse: ${formulaResponse}`);
-
       // If formula cell is not configured to persist, exit
       if (
         !tableColumn.config.persist_formula ||

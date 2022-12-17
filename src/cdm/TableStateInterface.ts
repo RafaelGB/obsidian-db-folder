@@ -1,6 +1,7 @@
 import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
@@ -80,6 +81,7 @@ export interface ColumnsState {
         getAllColumns: () => TableColumn[];
         getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
         getVisibilityRecord: () => Record<string, boolean>;
+        getColumnOptions: (id: string) => ColumnOption[];
     }
 }
 export interface ColumnSortingState {

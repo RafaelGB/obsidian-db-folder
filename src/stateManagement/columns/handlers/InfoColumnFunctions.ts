@@ -1,3 +1,4 @@
+import { ColumnOption, RowSelectOption } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
@@ -20,6 +21,24 @@ export default class InfoColumnFunctions extends AbstractTableAction<ColumnsStat
         implementation.info.getAllColumns = () => {
             return get().columns;
         }
+
+        implementation.info.getColumnOptions = (id: string): ColumnOption[] => {
+            const opColumn = get().columns.find((c) => c.id === id);
+            if (!opColumn) {
+                return [];
+            }
+            return opColumn.options
+                .filter(
+                    (option: RowSelectOption) =>
+                        option && option.label !== undefined && option.label !== null
+                )
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((option: RowSelectOption) => ({
+                    value: option.label,
+                    label: option.label,
+                    color: option.backgroundColor,
+                }))
+        };
 
         response.implementation = implementation;
         return this.goNext(response);

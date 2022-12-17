@@ -1,5 +1,7 @@
+import { RowSelectOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { randomColor, castStringtoHsl, castHslToString } from "helpers/Colors";
+import { satinizedColumnOption } from "helpers/FileManagement";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { LOGGER } from "services/Logger";
@@ -11,8 +13,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
   ): ColumnSettingsHandlerResponse {
     const { column, containerEl, columnSettingsManager } =
       columnHandlerResponse;
-    const { view, dataState, configState, columnsState } =
-      columnSettingsManager.modal;
+    const { view } = columnSettingsManager.modal;
     let newLabel = "";
     const options = column.options;
     const addLabelPromise = async (): Promise<void> => {
@@ -26,17 +27,23 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         return;
       }
       // Add new label
-      options.push({
+      const newOption: RowSelectOption = {
         label: newLabel,
         backgroundColor: randomColor(),
-      });
+      };
+      options.push(newOption);
       // Persist changes
       view.diskConfig.updateColumnProperties(column.id, {
         options: options,
       });
-      // Force refresh of settings
-      columnSettingsManager.reset(columnHandlerResponse);
-      columnSettingsManager.modal.enableReset = true;
+
+      this.addOptionSetting(
+        containerEl,
+        newOption,
+        options,
+        options.length - 1,
+        columnHandlerResponse
+      );
     };
 
     new Setting(containerEl)
@@ -47,11 +54,13 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
           .setPlaceholder("label of option")
           .setValue(newLabel)
           .onChange(async (value: string): Promise<void> => {
-            newLabel = value;
+            newLabel = satinizedColumnOption(value);
+            text.setValue(newLabel);
           });
         text.inputEl.onkeydown = (e: KeyboardEvent) => {
           switch (e.key) {
             case "Enter":
+              text.setValue("");
               addLabelPromise();
               break;
           }
@@ -66,111 +75,136 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       });
 
     options.forEach((option, index) => {
-      let currentLabel = option.label;
-      new Setting(containerEl)
-        // Show current label
-        .addText((text) => {
-          text
-            .setValue(currentLabel)
-            .onChange(async (value: string): Promise<void> => {
-              currentLabel = value;
-            });
-        })
-        // Edit label button
-        .addExtraButton((cb) => {
-          cb.setIcon("pencil")
-            .setTooltip("Save new label")
-            .onClick(async (): Promise<void> => {
-              const oldLabel = option.label;
-              if (currentLabel === oldLabel) {
-                new Notice(
-                  `Option label "${currentLabel}" was not changed!`,
-                  1500
-                );
-                return;
-              }
-              // Persist on disk
-              options[index].label = currentLabel;
-              await view.diskConfig.updateColumnProperties(column.id, {
-                options: options,
-              });
-              // Update in memory
-              dataState.actions
-                .editOptionForAllRows(
-                  column,
-                  oldLabel,
-                  currentLabel,
-                  columnsState.info.getAllColumns(),
-                  configState.info.getLocalSettings()
-                )
-                .then(() => {
-                  new Notice(
-                    `Option was updated for all rows. Please refresh the view to see the changes.`,
-                    1500
-                  );
-                })
-                .catch((err) => {
-                  const errMsg = `Error editing ${currentLabel}`;
-                  LOGGER.error(errMsg, err);
-                  new Notice(errMsg, 3000);
-                });
-              columnHandlerResponse.columnSettingsManager.modal.enableReset =
-                true;
-            });
-        })
-        // Color picker for background color
-        .addColorPicker((colorPicker) => {
-          colorPicker
-            .setValueHsl(castStringtoHsl(option.backgroundColor))
-            .onChange(async () => {
-              options[index].backgroundColor = castHslToString(
-                colorPicker.getValueHsl()
-              );
-              await view.diskConfig.updateColumnProperties(column.id, {
-                options: options,
-              });
-              columnHandlerResponse.columnSettingsManager.modal.enableReset =
-                true;
-            });
-        })
-        // Delete button
-        .addExtraButton((cb) => {
-          cb.setIcon("cross")
-            .setTooltip("Delete")
-            .onClick(async (): Promise<void> => {
-              const removedOption = options[index];
-              options.splice(index, 1);
-              // Persist changes
-              await view.diskConfig.updateColumnProperties(column.id, {
-                options: options,
-              });
-
-              dataState.actions
-                .removeOptionForAllRows(
-                  column,
-                  removedOption.label,
-                  columnsState.info.getAllColumns(),
-                  configState.info.getLocalSettings()
-                )
-                .then(() => {
-                  new Notice(
-                    `Option ${removedOption.label} was removed from all rows`,
-                    1500
-                  );
-                })
-                .catch((err) => {
-                  const errMsg = `Error removing ${removedOption.label}`;
-                  LOGGER.error(errMsg, err);
-                  new Notice(errMsg, 3000);
-                });
-              columnHandlerResponse.columnSettingsManager.modal.enableReset =
-                true;
-              // Force refresh of settings
-              columnSettingsManager.reset(columnHandlerResponse);
-            });
-        });
+      this.addOptionSetting(
+        containerEl,
+        option,
+        options,
+        index,
+        columnHandlerResponse
+      );
     });
 
     return this.goNext(columnHandlerResponse);
+  }
+
+  /**
+   * Adds a setting for a single option of a selected column
+   * @param containerEl
+   * @param option
+   * @param options
+   * @param index
+   * @param columnHandlerResponse
+   */
+  private addOptionSetting(
+    containerEl: HTMLElement,
+    option: RowSelectOption,
+    options: RowSelectOption[],
+    index: number,
+    columnHandlerResponse: ColumnSettingsHandlerResponse
+  ) {
+    const { column } = columnHandlerResponse;
+    const { columnSettingsManager } = columnHandlerResponse;
+    const { view, dataState, configState, columnsState } =
+      columnSettingsManager.modal;
+    let currentLabel = option.label;
+    new Setting(containerEl)
+      // Show current label
+      .addText((text) => {
+        text
+          .setValue(currentLabel)
+          .onChange(async (value: string): Promise<void> => {
+            currentLabel = value;
+          });
+      })
+      // Edit label button
+      .addExtraButton((cb) => {
+        cb.setIcon("pencil")
+          .setTooltip("Save new label")
+          .onClick(async (): Promise<void> => {
+            const oldLabel = option.label;
+            if (currentLabel === oldLabel) {
+              new Notice(
+                `Option label "${currentLabel}" was not changed!`,
+                1500
+              );
+              return;
+            }
+            // Persist on disk
+            options[index].label = currentLabel;
+            await view.diskConfig.updateColumnProperties(column.id, {
+              options: options,
+            });
+            // Update in memory
+            dataState.actions
+              .editOptionForAllRows(
+                column,
+                oldLabel,
+                currentLabel,
+                columnsState.info.getAllColumns(),
+                configState.info.getLocalSettings()
+              )
+              .then(() => {
+                new Notice(
+                  `Option was updated for all rows. Please refresh the view to see the changes.`,
+                  1500
+                );
+              })
+              .catch((err) => {
+                const errMsg = `Error editing ${currentLabel}`;
+                LOGGER.error(errMsg, err);
+                new Notice(errMsg, 3000);
+              });
+            columnSettingsManager.modal.enableReset = true;
+          });
+      })
+      // Color picker for background color
+      .addColorPicker((colorPicker) => {
+        colorPicker
+          .setValueHsl(castStringtoHsl(option.backgroundColor))
+          .onChange(async () => {
+            options[index].backgroundColor = castHslToString(
+              colorPicker.getValueHsl()
+            );
+            await view.diskConfig.updateColumnProperties(column.id, {
+              options: options,
+            });
+            columnSettingsManager.modal.enableReset = true;
+          });
+      })
+      // Delete button
+      .addExtraButton((cb) => {
+        cb.setIcon("cross")
+          .setTooltip("Delete")
+          .onClick(async (): Promise<void> => {
+            const removedOption = options[index];
+            options.splice(index, 1);
+            // Persist changes
+            await view.diskConfig.updateColumnProperties(column.id, {
+              options: options,
+            });
+
+            dataState.actions
+              .removeOptionForAllRows(
+                column,
+                removedOption.label,
+                columnsState.info.getAllColumns(),
+                configState.info.getLocalSettings()
+              )
+              .then(() => {
+                new Notice(
+                  `Option ${removedOption.label} was removed from all rows`,
+                  1500
+                );
+              })
+              .catch((err) => {
+                const errMsg = `Error removing ${removedOption.label}`;
+                LOGGER.error(errMsg, err);
+                new Notice(errMsg, 3000);
+              });
+            columnSettingsManager.modal.enableReset = true;
+            // Force refresh of settings
+            columnSettingsManager.reset(columnHandlerResponse);
+          });
+      });
   }
 }

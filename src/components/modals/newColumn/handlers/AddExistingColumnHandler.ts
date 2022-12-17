@@ -58,13 +58,10 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                         });
 
                 })
-                .addSearch(cb => {
-                    new StringSuggest(
-                        cb.inputEl,
-                        typesRecord
-                    );
-                    cb.setPlaceholder("Select type...")
-                        .onChange(selectTypeHandler);
+                .addDropdown((dropdown) => {
+                    dropdown.addOptions(typesRecord);
+                    dropdown.setValue(DynamicInputType.TEXT);
+                    dropdown.onChange(selectTypeHandler);
                 })
                 .addExtraButton((cb) => {
                     cb.setIcon("create-new")

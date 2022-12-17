@@ -1,7 +1,7 @@
 import { update } from 'components/cellTypes/Editor/textcomplete/undate/update';
 
 export function wrapCursor(
-  el: HTMLInputElement,
+  el: HTMLTextAreaElement,
   before: string,
   after?: string
 ) {

@@ -1,5 +1,5 @@
 export function update(
-  el: HTMLInputElement,
+  el: HTMLTextAreaElement,
   headToCursor: string,
   cursorToTail?: string
 ) {

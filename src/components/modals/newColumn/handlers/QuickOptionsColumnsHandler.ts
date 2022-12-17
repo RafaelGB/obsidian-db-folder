@@ -5,7 +5,6 @@ import { DynamicInputType } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
-import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
   settingTitle: string = "Column quick options";
@@ -68,14 +67,10 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
         if (!column.isMetadata) {
           // Select type
           columnSetting
-            .addSearch(cb => {
-              new StringSuggest(
-                cb.inputEl,
-                typesRecord
-              );
-              cb.setPlaceholder("Select type...")
-                .setValue(column.input)
-                .onChange(selectTypeHandler);
+            .addDropdown((dropdown) => {
+              dropdown.addOptions(typesRecord);
+              dropdown.setValue(DynamicInputType.TEXT);
+              dropdown.onChange(selectTypeHandler);
             });
           // Delete column
           columnSetting

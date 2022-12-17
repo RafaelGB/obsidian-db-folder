@@ -150,6 +150,15 @@ div.database-plugin__td.data-input:hover {
   background-color: var(--background-secondary);
 }
 
+/******************************************************
+ *                  Editor cells
+ ******************************************************/
+.database-plugin__editor-cell {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 .database-plugin__td span.is-loaded,
 span.database-plugin__calendar,
 div.database-plugin__checkbox {

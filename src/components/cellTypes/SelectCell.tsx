@@ -10,6 +10,7 @@ import { TableColumn } from "cdm/FolderModel";
 import CreatableSelect from "react-select/creatable";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
+import { satinizedColumnOption } from "helpers/FileManagement";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
@@ -24,7 +25,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
   const selectRow = tableState.data((state) => state.rows[row.index]);
   const columnsInfo = tableState.columns((state) => state.info);
   const configInfo = tableState.configState((state) => state.info);
-  const selectCell = tableState.data(
+  const cellValue = tableState.data(
     (state) =>
       ParseService.parseRowToCell(
         state.rows[row.index],
@@ -37,59 +38,46 @@ const SelectCell = (popperProps: CellComponentProps) => {
   const [showSelect, setShowSelect] = useState(false);
 
   const columnActions = tableState.columns((state) => state.actions);
-
+  const columnOptions = columnsInfo.getColumnOptions(column.id);
   function getColor() {
-    const match = tableColumn.options.find(
-      (option: { label: string }) => option.label === selectCell
+    const match = columnOptions.find(
+      (option: { label: string }) => option.label === cellValue
     );
     if (match) {
-      return match.backgroundColor;
+      return match.color;
     } else {
       // In case of new select, generate random color
       const color = randomColor();
-      columnActions.addOptionToColumn(tableColumn, selectCell, color);
+      columnActions.addOptionToColumn(tableColumn, cellValue, color);
       return color;
     }
   }
 
   const defaultValue = useMemo(
     () => ({
-      label: selectCell?.toString(),
-      value: selectCell?.toString(),
-      color: selectCell ? getColor() : grey(200),
+      label: cellValue?.toString(),
+      value: cellValue?.toString(),
+      color: cellValue ? getColor() : grey(200),
     }),
-    [selectCell]
-  );
-
-  const multiOptions = useMemo(
-    () =>
-      tableColumn.options
-        .filter(
-          (option: RowSelectOption) =>
-            option && option.label !== undefined && option.label !== null
-        )
-        .sort((a, b) => a.label.localeCompare(b.label))
-        .map((option: RowSelectOption) => ({
-          value: option.label,
-          label: option.label,
-          color: option.backgroundColor,
-        })),
-    [selectRow]
+    [cellValue]
   );
 
   const handleOnChange = async (
     newValue: OnChangeValue<SelectValue, false>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const selectValue = newValue ? newValue.value.toString() : "";
+    const sanitized = satinizedColumnOption(
+      newValue ? newValue.value.toString() : ""
+    );
+
     const newCell = ParseService.parseRowToLiteral(
       selectRow,
       tableColumn,
-      selectValue
+      sanitized
     );
 
     // Update on disk & memory
-    dataActions.updateCell(
+    await dataActions.updateCell(
       row.index,
       tableColumn,
       newCell,
@@ -97,19 +85,15 @@ const SelectCell = (popperProps: CellComponentProps) => {
       configInfo.getLocalSettings(),
       true
     );
-    // Add new option to column options
 
-    if (
-      selectValue &&
-      !tableColumn.options.find((option) => option.label === selectValue)
-    ) {
+    // Add new option to column options
+    if (actionMeta.action === "create-option") {
       await columnActions.addOptionToColumn(
         tableColumn,
-        selectValue,
+        sanitized,
         randomColor()
       );
     }
-    setShowSelect(false);
   };
 
   function SelectComponent() {
@@ -127,8 +111,8 @@ const SelectCell = (popperProps: CellComponentProps) => {
             IndicatorSeparator: () => null,
           }}
           styles={CustomTagsStyles}
-          options={multiOptions}
-          onBlur={() => setShowSelect(false)}
+          options={columnsInfo.getColumnOptions(column.id)}
+          onMenuClose={() => setShowSelect(false)}
           onChange={handleOnChange}
           isMulti={false}
           menuPortalTarget={activeDocument.body}
@@ -160,9 +144,9 @@ const SelectCell = (popperProps: CellComponentProps) => {
           onClick={() => setShowSelect(true)}
           style={{ width: column.getSize() }}
         >
-          {selectCell && (
-            <Relationship value={selectCell} backgroundColor={getColor()} />
-          )}
+          {cellValue ? (
+            <Relationship value={cellValue} backgroundColor={getColor()} />
+          ) : null}
         </div>
       )}
     </>
