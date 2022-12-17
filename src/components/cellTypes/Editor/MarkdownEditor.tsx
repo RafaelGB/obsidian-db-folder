@@ -1,11 +1,4 @@
-import { DatabaseView } from "DatabaseView";
-import React, {
-  AllHTMLAttributes,
-  DetailedHTMLProps,
-  forwardRef,
-  Ref,
-  useEffect,
-} from "react";
+import React, { forwardRef, Ref, useEffect } from "react";
 import { useAutocompleteInputProps } from "components/cellTypes/Editor/autocomplete";
 import {
   autoPairBracketsCommands,
@@ -16,17 +9,11 @@ import {
   unpairMarkdown,
 } from "components/cellTypes/Editor/commands";
 import { EMITTERS_GROUPS } from "helpers/Constants";
-
-interface MarkdownEditorProps
-  extends DetailedHTMLProps<AllHTMLAttributes<HTMLInputElement>, any> {
-  onEnter: (e: KeyboardEvent) => void;
-  onEscape: (e: KeyboardEvent) => void;
-  view: DatabaseView;
-}
+import { MarkdownEditorProps } from "cdm/EditorModel";
 
 export const MarkdownEditor = forwardRef(function MarkdownEditor(
   { onEnter, onEscape, view, ...inputProps }: MarkdownEditorProps,
-  ref: Ref<HTMLInputElement>
+  ref: Ref<HTMLTextAreaElement>
 ) {
   const shouldAutoPairMarkdown = (app.vault as any).getConfig(
     "autoPairMarkdown"
@@ -46,17 +33,17 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
     onEscape,
     onKeyDown: (e) => {
       if (e.key === "Backspace") {
-        const handledBrackets = unpairBrackets(e.target as HTMLInputElement);
+        const handledBrackets = unpairBrackets(e.target as HTMLTextAreaElement);
         if (handledBrackets) return handledBrackets;
 
-        return unpairMarkdown(e.target as HTMLInputElement);
+        return unpairMarkdown(e.target as HTMLTextAreaElement);
       }
 
       if (e.key === "Tab") {
         e.preventDefault();
 
         return handleTab(
-          e.target as HTMLInputElement,
+          e.target as HTMLTextAreaElement,
           e.shiftKey,
           shouldUseTab,
           tabWidth
@@ -66,7 +53,7 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
       if (shouldAutoPairMarkdown) {
         const command = autoPairMarkdownCommands[e.key];
         if (command) {
-          const handled = command(e.target as HTMLInputElement);
+          const handled = command(e.target as HTMLTextAreaElement);
           if (handled) {
             e.preventDefault();
             return true;
@@ -81,7 +68,7 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
 
         const command = autoPairBracketsCommands[e.key];
         if (command) {
-          const handled = command(e.target as HTMLInputElement);
+          const handled = command(e.target as HTMLTextAreaElement);
           if (handled) {
             e.preventDefault();
             return true;
@@ -111,11 +98,10 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
   }, [view]);
 
   return (
-    <input
-      rows={1}
+    <textarea
       {...inputProps}
       {...autocompleteProps}
-      ref={(c: HTMLInputElement) => {
+      ref={(c: HTMLTextAreaElement) => {
         autocompleteProps.ref.current = c;
 
         if (ref && typeof ref === "function") {

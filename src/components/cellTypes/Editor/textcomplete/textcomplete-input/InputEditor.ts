@@ -10,7 +10,7 @@ import {
 import { calculateElementOffset, getLineHeightPx } from 'components/cellTypes/Editor/textcomplete/textcomplete-utils';
 
 export class InputEditor extends Editor {
-  constructor(private readonly el: HTMLInputElement) {
+  constructor(private readonly el: HTMLTextAreaElement) {
     super();
     this.startListening();
   }
