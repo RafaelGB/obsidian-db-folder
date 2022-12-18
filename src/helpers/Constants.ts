@@ -418,9 +418,7 @@ export const DATABASE_CONFIG = Object.freeze({
   YAML: /```yaml:dbfolder\s+([\w\W]+?)\s+```/,
   REPLACE_YAML_REGEX: new RegExp('```yaml:dbfolder\\s+([\\w\\W]+?)\\s+```', "g"),
   START_CENTINEL: '```yaml:dbfolder',
-  END_CENTINEL: '```',
-  START_CENTINEL_LEGACY: '%% dbfolder:yaml',
-  END_CENTINEL_LEGACY: '%%',
+  END_CENTINEL: '```'
 });
 
 export const WRAPPERER_KEY = `_\\*~\``;
@@ -511,6 +509,7 @@ export const ROLLUP_ACTIONS = Object.freeze({
 export const EMITTERS_GROUPS = Object.freeze({
   HOTKEY: 'hotkey',
   SHORTCUT: 'shortcut',
+  UPDATER: 'updater',
 });
 
 export const EMITTERS_HOTKEY = Object.freeze({

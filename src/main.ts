@@ -37,7 +37,6 @@ import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/database
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
-import { DataviewService } from 'services/DataviewService';
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -403,7 +402,6 @@ export default class DBFolderPlugin extends Plugin {
 		 * When the Dataview index is ready, trigger the index ready event.
 		 */
 		this.registerEvent(
-			// @ts-ignore
 			this.app.metadataCache.on("dataview:index-ready", async () => {
 				// Refresh all database views
 				this.viewMap.forEach(async (view) => {
@@ -411,6 +409,19 @@ export default class DBFolderPlugin extends Plugin {
 				});
 			})
 		);
+
+		/**
+		 * When dataview registers any changes, trigger the index ready event.
+		 */
+		this.registerEvent(app.metadataCache.on("dataview:metadata-change",
+			(type, file, oldPath?) => {
+				//const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+				// Iterate through all the views and reload the database if the file is the same
+				this.viewMap.forEach(async (view) => {
+					view.handleExternalMetadataChange(type, file, oldPath);
+				});
+			}));
+
 	}
 
 	registerCommands() {

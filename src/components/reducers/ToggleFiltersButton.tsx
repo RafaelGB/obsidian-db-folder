@@ -3,7 +3,8 @@ import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
 import { EMITTERS_GROUPS, EMITTERS_SHORTCUT } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { LOGGER } from "services/Logger";
 
 export default function ToggleFiltersButton(props: DataviewFiltersProps) {
   const { table } = props;
@@ -15,6 +16,8 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
   );
   const columns = tableState.columns((state) => state.columns);
   const dataActions = tableState.data((state) => state.actions);
+
+  const [refreshTimeout, setRefreshTimeout] = useState<any>(null);
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const enableFilterHandler = async () => {
@@ -42,6 +45,31 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
     view.emitter.on(EMITTERS_GROUPS.SHORTCUT, toggleFilterShortcutHandler);
     return () => {
       view.emitter.off(EMITTERS_GROUPS.SHORTCUT, toggleFilterShortcutHandler);
+    };
+  }, []);
+
+  /**
+   * Refresh effect
+   */
+  useEffect(() => {
+    const refreshHandler = (updaterData: any) => {
+      if (refreshTimeout) {
+        clearTimeout(refreshTimeout);
+      }
+      setRefreshTimeout(
+        setTimeout(async () => {
+          LOGGER.debug(`Refreshing view ${view.file.path}`);
+          await dataActions.dataviewRefresh(
+            columns,
+            configInfo.getLocalSettings(),
+            configInfo.getFilters()
+          );
+        }, 150)
+      );
+    };
+    view.emitter.on(EMITTERS_GROUPS.UPDATER, refreshHandler);
+    return () => {
+      view.emitter.off(EMITTERS_GROUPS.UPDATER, refreshHandler);
     };
   }, []);
 

@@ -29,11 +29,6 @@ export default class DatabaseInfo {
         LOGGER.info(`=>initDatabaseconfigYaml`, `file:${this.file.path}`);
         let databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
         if (!databaseRaw || !isDatabaseNote(databaseRaw)) throw new Error('No frontmatter found');
-        // Temporal migration centinels code
-        databaseRaw = databaseRaw.replaceAll(DATABASE_CONFIG.START_CENTINEL_LEGACY, DATABASE_CONFIG.START_CENTINEL);
-        databaseRaw = databaseRaw.replaceAll(DATABASE_CONFIG.END_CENTINEL_LEGACY, DATABASE_CONFIG.END_CENTINEL);
-        await app.vault.modify(this.file, databaseRaw);
-
 
         const match = databaseRaw.match(DATABASE_CONFIG.YAML);
 

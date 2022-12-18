@@ -35,11 +35,9 @@ import {
   WorkspaceLeaf,
   TFile,
   Menu,
-  Notice,
 } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
-import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
@@ -349,5 +347,19 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
   openFilters() {
     this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
+  }
+
+  /****************************************************************
+   *                     REACTIVE ACTIONS
+   ****************************************************************/
+
+  handleExternalMetadataChange(op: string, file: TFile, oldPath?: string) {
+    const updaterData = {
+      op,
+      file,
+      oldPath,
+    };
+
+    this.emitter.emit(EMITTERS_GROUPS.UPDATER, updaterData);
   }
 }
