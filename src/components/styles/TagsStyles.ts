@@ -49,14 +49,14 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     },
     multiValueLabel: (styles) => ({
         ...styles,
-        color: "black",
+        color: StyleVariables.TEXT_NORMAL,
     }),
     multiValueRemove: (styles, { data }) => ({
         ...styles,
-        color: "black",
+        color: StyleVariables.TEXT_NORMAL,
         ":hover": {
             backgroundColor: data.color + " !important",
-            color: "white",
+            color: StyleVariables.TEXT_ACCENT,
         },
     })
 };

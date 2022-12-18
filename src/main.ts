@@ -404,8 +404,11 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			// @ts-ignore
-			this.app.metadataCache.on("dataview:index-ready", () => {
-				DataviewService.indexIsLoaded = true;
+			this.app.metadataCache.on("dataview:index-ready", async () => {
+				// Refresh all database views
+				this.viewMap.forEach(async (view) => {
+					await view.reloadDatabase();
+				});
 			})
 		);
 	}

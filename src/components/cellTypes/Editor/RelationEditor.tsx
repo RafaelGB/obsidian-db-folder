@@ -45,29 +45,31 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
     persistChange(relationValue.map((link) => link.value));
   };
 
-  const relationRowsCallBack = useCallback(async () => {
-    const relationRows = await recordRowsFromRelation(
-      tableColumn.config.related_note_path,
-      DEFAULT_SETTINGS.local_settings,
-      columnsInfo.getAllColumns()
-    );
-    const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
-      label: value,
-      value: key,
-      color: StyleVariables.TEXT_NORMAL,
-    }));
-
-    setRelationOptions(multiOptions);
-  }, []);
-
   useEffect(() => {
-    relationRowsCallBack();
+    setTimeout(async () => {
+      const relationRows = await recordRowsFromRelation(
+        tableColumn.config.related_note_path,
+        DEFAULT_SETTINGS.local_settings,
+        columnsInfo.getAllColumns()
+      );
+      const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
+        label: value,
+        value: key,
+        color: StyleVariables.BACKGROUND_SECONDARY,
+      }));
+
+      setRelationOptions(multiOptions);
+    }, 0);
   }, []);
 
   return (
     <div className={c("relation")}>
       <Select
         defaultValue={relationValue}
+        components={{
+          DropdownIndicator: () => null,
+          IndicatorSeparator: () => null,
+        }}
         closeMenuOnSelect={false}
         isSearchable
         isMulti

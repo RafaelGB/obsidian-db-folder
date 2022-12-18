@@ -69,7 +69,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
           columnSetting
             .addDropdown((dropdown) => {
               dropdown.addOptions(typesRecord);
-              dropdown.setValue(DynamicInputType.TEXT);
+              dropdown.setValue(column.input);
               dropdown.onChange(selectTypeHandler);
             });
           // Delete column
