@@ -159,16 +159,12 @@ div.database-plugin__td.data-input:hover {
   box-sizing: border-box;
 }
 
-.database-plugin__td span.is-loaded,
-span.database-plugin__calendar,
-div.database-plugin__checkbox {
+.database-plugin__checkbox {
+  place-self: center;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.database-plugin__checkbox {
-  place-self: center;
+  flex-wrap: wrap;
 }
 
 .database-plugin__checkbox input[type="checkbox"] {
@@ -563,7 +559,11 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__calendar {
-  align-self: center;
+  place-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .database-plugin__relationship,
