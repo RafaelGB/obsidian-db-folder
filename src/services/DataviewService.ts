@@ -5,7 +5,7 @@ class DataviewProxy {
 
     private static instance: DataviewProxy;
 
-    constructor(public indexIsLoaded: boolean = false) {
+    constructor() {
     }
     /**
      * Check if dataview plugin is installed
