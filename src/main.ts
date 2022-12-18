@@ -500,9 +500,8 @@ export default class DBFolderPlugin extends Plugin {
 		});
 
 		// Ribbon Icon
-		if (this.settings.global_settings.enable_ribbon_icon) {
-			this.showRibbonIcon();
-		}
+		this.showRibbonIcon();
+
 	}
 
 	showRibbonIcon() {

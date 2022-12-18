@@ -5,7 +5,7 @@ import { RowDataType } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { resolveNewFilePath } from "helpers/FileManagement";
 import { MetadataColumns } from "helpers/Constants";
-import { DataviewService } from "./DataviewService";
+import { DataviewService } from "services/DataviewService";
 
 const limitMovingFiles = pLimit(1);
 const limitCreatingFolders = pLimit(1);
