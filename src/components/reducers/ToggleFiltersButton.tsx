@@ -1,4 +1,5 @@
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
+import { UpdaterData } from "cdm/EmitterModel";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
 import { EMITTERS_GROUPS, EMITTERS_SHORTCUT } from "helpers/Constants";
@@ -52,7 +53,7 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
    * Refresh effect
    */
   useEffect(() => {
-    const refreshHandler = (updaterData: any) => {
+    const refreshHandler = (updaterData: UpdaterData) => {
       if (refreshTimeout) {
         clearTimeout(refreshTimeout);
       }

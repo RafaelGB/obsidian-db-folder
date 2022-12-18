@@ -1,6 +1,6 @@
 import { obtainFormulasFromFolder } from "automations/AutomationsHelper";
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { ViewEvents } from "cdm/EmitterModel";
+import { UpdaterData, ViewEvents } from "cdm/EmitterModel";
 import {
   InitialType,
   RowDataType,
@@ -352,14 +352,17 @@ export class DatabaseView extends TextFileView implements HoverParent {
   /****************************************************************
    *                     REACTIVE ACTIONS
    ****************************************************************/
-
+  /**
+   * Dataview API router triggered by any file change
+   * @param op
+   * @param file
+   * @param oldPath
+   */
   handleExternalMetadataChange(op: string, file: TFile, oldPath?: string) {
-    const updaterData = {
+    this.emitter.emit(EMITTERS_GROUPS.UPDATER, {
       op,
       file,
       oldPath,
-    };
-
-    this.emitter.emit(EMITTERS_GROUPS.UPDATER, updaterData);
+    } as UpdaterData);
   }
 }
