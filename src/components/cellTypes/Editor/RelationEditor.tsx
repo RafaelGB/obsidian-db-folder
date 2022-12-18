@@ -47,22 +47,18 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
 
   useEffect(() => {
     setTimeout(async () => {
-      async () => {
-        const relationRows = await recordRowsFromRelation(
-          tableColumn.config.related_note_path,
-          DEFAULT_SETTINGS.local_settings,
-          columnsInfo.getAllColumns()
-        );
-        const multiOptions = Object.entries(relationRows).map(
-          ([key, value]) => ({
-            label: value,
-            value: key,
-            color: StyleVariables.BACKGROUND_SECONDARY,
-          })
-        );
+      const relationRows = await recordRowsFromRelation(
+        tableColumn.config.related_note_path,
+        DEFAULT_SETTINGS.local_settings,
+        columnsInfo.getAllColumns()
+      );
+      const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
+        label: value,
+        value: key,
+        color: StyleVariables.BACKGROUND_SECONDARY,
+      }));
 
-        setRelationOptions(multiOptions);
-      };
+      setRelationOptions(multiOptions);
     }, 0);
   }, []);
 

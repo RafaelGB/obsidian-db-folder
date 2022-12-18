@@ -18,7 +18,7 @@ export class DatabaseSelectorHandler extends AbstractHandlerClass<ColumnSettings
             });
             columnSettingsManager.modal.enableReset = true;
         }
-        const avaliableDDBB = recordAllDatabases(view.file.path);
+        const avaliableDDBB = recordAllDatabases();
 
         new Setting(containerEl)
             .setName(this.settingTitle)
