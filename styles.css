@@ -859,6 +859,13 @@ div.database-plugin__td.data-input:hover {
   display: none;
 }
 /************************************************************
+ *                    EXTERNAL APIs STYLES
+ ************************************************************/
+.database-plugin__project-view-container {
+  width: 100%;
+  height: 100%;
+}
+/************************************************************
 *               React-datepicker styles
 ************************************************************/
 /** VARIABLES */

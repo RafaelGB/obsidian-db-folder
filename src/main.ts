@@ -422,7 +422,6 @@ export default class DBFolderPlugin extends Plugin {
 				);
 			})
 		);
-
 	}
 
 	registerCommands() {
