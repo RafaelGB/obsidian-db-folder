@@ -1,3 +1,9 @@
+## 3.1.0
+### Shiny new things
+- Auto refresh when any external change is detected. You can disable it on global settings for performance purposes [ISSUE#482](https://github.com/RafaelGB/obsidian-db-folder/issues/482)
+- A database can be related with itselves [ISSUE#605](https://github.com/RafaelGB/obsidian-db-folder/issues/605)
+### Visual
+- no wrap multiple images avaliable [ISSUE#476](https://github.com/RafaelGB/obsidian-db-folder/issues/476)
 ## 3.1.0-beta.1
 ### Shiny new things
 - New option for inline fields addition. Add a new field behind the last one. [ISSUE#419](https://github.com/RafaelGB/obsidian-db-folder/issues/419)
