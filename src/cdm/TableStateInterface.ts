@@ -5,6 +5,7 @@ import { ColumnOption } from "cdm/ComponentsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
+import { UpdaterData } from "cdm/EmitterModel";
 
 export type TableActionResponse<T> = {
     view: DatabaseView,
@@ -54,7 +55,8 @@ export interface DataState {
         editOptionForAllRows: (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => Promise<void>;
-        dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
+        dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
+        dataviewUpdater: (updaterData: UpdaterData, columns: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
         renameFile: (rowIndex: number) => Promise<void>;
         saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
         groupFiles: () => Promise<void>;

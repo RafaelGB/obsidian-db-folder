@@ -1,6 +1,6 @@
 import { EMITTERS_GROUPS } from "helpers/Constants";
 import { TFile } from "obsidian";
-export type UpdaterData = { op: string, file: TFile, oldPath?: string };
+export type UpdaterData = { op: string, file: TFile, isActive: boolean, oldPath?: string };
 
 export interface ViewEvents {
     showLaneForm: () => void;

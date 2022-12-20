@@ -512,6 +512,12 @@ export const EMITTERS_GROUPS = Object.freeze({
   UPDATER: 'updater',
 });
 
+export const DATAVIEW_UPDATER_OPERATIONS = Object.freeze({
+  UPDATE: 'update',
+  DELETE: 'delete',
+  RENAME: 'rename',
+});
+
 export const EMITTERS_HOTKEY = Object.freeze({
   OPEN_SEARCH: "editor:open-search"
 });

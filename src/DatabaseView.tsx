@@ -358,10 +358,16 @@ export class DatabaseView extends TextFileView implements HoverParent {
    * @param file
    * @param oldPath
    */
-  handleExternalMetadataChange(op: string, file: TFile, oldPath?: string) {
+  handleExternalMetadataChange(
+    op: string,
+    file: TFile,
+    isActive: boolean,
+    oldPath?: string
+  ) {
     this.emitter.emit(EMITTERS_GROUPS.UPDATER, {
       op,
       file,
+      isActive,
       oldPath,
     } as UpdaterData);
   }

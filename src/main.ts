@@ -407,20 +407,21 @@ export default class DBFolderPlugin extends Plugin {
 				this.viewMap.forEach(async (view) => {
 					await view.reloadDatabase();
 				});
+				/**
+				 * Once the index is ready, we can start listening for metadata changes.
+				 */
+				this.registerEvent(app.metadataCache.on("dataview:metadata-change",
+					(type, file, oldPath?) => {
+						const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+						// Iterate through all the views and reload the database if the file is the same
+						this.viewMap.forEach(async (view) => {
+							const isActive = activeView && (view.file.path === activeView.file.path);
+							view.handleExternalMetadataChange(type, file, isActive, oldPath);
+						});
+					})
+				);
 			})
 		);
-
-		/**
-		 * When dataview registers any changes, trigger the index ready event.
-		 */
-		this.registerEvent(app.metadataCache.on("dataview:metadata-change",
-			(type, file, oldPath?) => {
-				//const activeView = app.workspace.getActiveViewOfType(DatabaseView);
-				// Iterate through all the views and reload the database if the file is the same
-				this.viewMap.forEach(async (view) => {
-					view.handleExternalMetadataChange(type, file, oldPath);
-				});
-			}));
 
 	}
 
