@@ -406,16 +406,18 @@ export default class DBFolderPlugin extends Plugin {
 				/**
 				 * Once the index is ready, we can start listening for metadata changes.
 				 */
-				this.registerEvent(app.metadataCache.on("dataview:metadata-change",
-					(type, file, oldPath?) => {
-						const activeView = app.workspace.getActiveViewOfType(DatabaseView);
-						// Iterate through all the views and reload the database if the file is the same
-						this.viewMap.forEach(async (view) => {
-							const isActive = activeView && (view.file.path === activeView.file.path);
-							view.handleExternalMetadataChange(type, file, isActive, oldPath);
-						});
-					})
-				);
+				if (this.settings.global_settings.enable_auto_update) {
+					this.registerEvent(app.metadataCache.on("dataview:metadata-change",
+						(type, file, oldPath?) => {
+							const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+							// Iterate through all the views and reload the database if the file is the same
+							this.viewMap.forEach(async (view) => {
+								const isActive = activeView && (view.file.path === activeView.file.path);
+								view.handleExternalMetadataChange(type, file, isActive, oldPath);
+							});
+						})
+					);
+				}
 			})
 		);
 	}
