@@ -390,6 +390,26 @@
     Exposed Variables
   </a>
   
+    <nav class="md-nav" aria-label="Exposed Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#column-formula" class="md-nav__link">
+    Column Formula
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#footer-formula" class="md-nav__link">
+    Footer Formula
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -418,9 +438,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    Examples
+  <a href="#examples-library" class="md-nav__link">
+    Examples library
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#luxon" class="md-nav__link">
+    Luxon
+  </a>
+  
+    <nav class="md-nav" aria-label="Luxon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#luxon-examples" class="md-nav__link">
+    Luxon Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -638,6 +678,26 @@
     Exposed Variables
   </a>
   
+    <nav class="md-nav" aria-label="Exposed Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#column-formula" class="md-nav__link">
+    Column Formula
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#footer-formula" class="md-nav__link">
+    Footer Formula
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -666,9 +726,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    Examples
+  <a href="#examples-library" class="md-nav__link">
+    Examples library
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#luxon" class="md-nav__link">
+    Luxon
+  </a>
+  
+    <nav class="md-nav" aria-label="Luxon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#luxon-examples" class="md-nav__link">
+    Luxon Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -702,12 +782,16 @@
 </video>
 
 <h3 id="exposed-variables">Exposed Variables</h3>
-<ul>
-<li><code>row</code> : the row object</li>
-<li><code>db</code> : the database object with predefined functions that can be used in the formula</li>
-<li><code>config</code> : the table's config information</li>
-</ul>
-<p>To use an exposed variable, use the <code>${}</code> syntax. For example, to get the value of the <code>Name</code> column, you can use <code>${row.Name}</code>.</p>
+<p>Common variables that you can use in your formula are:
+- <code>db</code> : the database object with predefined functions that can be used in the formula
+- <code>config</code> : the table's config information</p>
+<p>To use an exposed variable, use the <code>${}</code> syntax. For example, to get a value of the <code>config</code>, you can use <code>${config.pagination_size}</code>.</p>
+<h4 id="column-formula">Column Formula</h4>
+<p>If you are using a column formula, you can also use the following variables:
+- <code>row</code> : the row object</p>
+<h4 id="footer-formula">Footer Formula</h4>
+<p>In case you are using a footer formula, you can also use the following variables:
+- <code>values</code> : An Array of cell values in the column</p>
 <h3 id="exposed-functions">Exposed Functions</h3>
 <p>The root object <code>db</code> has the following functions:</p>
 <ul>
@@ -732,7 +816,12 @@ function myFunction(arg1, arg2) {
 // expose the main function to the formula
 module.exports = myFunction;
 </code></pre>
-<h2 id="examples">Examples</h2>
+<h2 id="examples-library">Examples library</h2>
+<p>We will continue adding examples under this <a href="https://github.com/RafaelGB/obsidian-db-folder/tree/master/docs/examples">Link</a> where you can find some examples of column and footer formulas.</p>
+<p>If you consider that you have a good example, please feel free to add it to the repository via a pull request.</p>
+<h2 id="luxon">Luxon</h2>
+<p>Our date library is <a href="https://moment.github.io/luxon/#/">Luxon</a>. So you can use all the functions of the library in your formulas.</p>
+<h3 id="luxon-examples">Luxon Examples</h3>
 <p>If you have a column ID named "Date" you can add time:</p>
 <ul>
 <li><code>${row.Date.plus({years: 1}).toFormat("DD")}</code> adds 1 year</li>
@@ -761,7 +850,6 @@ module.exports = myFunction;
 <li><code>${row.Date.toFormat("ffff")}</code> shows day(name), day/month(full name)/year/ 24 hour time, full timezone eg: <strong>Saturday, 01 January 2000, 13:00, British Summer Time</strong> </li>
 </ul>
 <p>If you replace f with F then seconds will be included.</p>
-<p>For further information go to the <a href="https://moment.github.io/luxon/#/">Luxon Documentation</a>.</p>
 
               
             </article>
