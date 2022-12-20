@@ -5,8 +5,6 @@ class DataviewProxy {
 
     private static instance: DataviewProxy;
 
-    constructor() {
-    }
     /**
      * Check if dataview plugin is installed
      * @returns true if installed, false otherwise

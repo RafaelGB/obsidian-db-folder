@@ -39,8 +39,8 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                     case DATAVIEW_UPDATER_OPERATIONS.RENAME:
                         if (isFileInDDBB) {
                             const rowToRename = rows[indexToOperate];
-                            rowToRename.__note__.filepath = pathToOperate;
-                            rowToRename[MetadataColumns.FILE] = DataviewService.getDataviewAPI().fileLink(pathToOperate);
+                            rowToRename.__note__.filepath = file.path;
+                            rowToRename[MetadataColumns.FILE] = DataviewService.getDataviewAPI().fileLink(file.path);
                             updatedRows = [...updater.rows.slice(0, indexToOperate), rowToRename, ...updater.rows.slice(indexToOperate + 1)];
                         }
                         break;

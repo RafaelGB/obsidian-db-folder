@@ -64,7 +64,7 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
         (updaterData.isActive &&
           updaterData.op === DATAVIEW_UPDATER_OPERATIONS.UPDATE)
       ) {
-        LOGGER.debug("Refresh skipped - redundant");
+        LOGGER.debug(`Refresh "${view.file.path}" skipped - redundant`);
         return;
       }
 
