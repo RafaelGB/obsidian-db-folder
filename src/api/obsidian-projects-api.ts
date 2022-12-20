@@ -10,7 +10,7 @@ import { resolve_tfile, resolve_tfolder } from "helpers/FileManagement";
 import { generateDbConfiguration, generateNewDatabase } from "helpers/CommandsHelper";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { dbTrim } from "helpers/StylesHelper";
+import { c, dbTrim } from "helpers/StylesHelper";
 
 const projectsMetadataColumns = ["File", "name", "path"];
 class ProjectAPI extends ProjectView {
@@ -105,7 +105,9 @@ class ProjectAPI extends ProjectView {
         this.view = new DatabaseView(leaf, this.plugin, file);
         this.view.initRootContainer(file);
         await this.view.initDatabase();
-        this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
+        this.dataEl = contentEl
+            .createDiv(c("project-view-container"))
+            .appendChild(this.view.containerEl);
         this.view.onload();
         this.enableAutoReload = true;
         LOGGER.debug("Database initialized successfully from project view");

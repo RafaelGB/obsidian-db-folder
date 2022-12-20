@@ -2,8 +2,8 @@ import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/chain/AbstractHandler';
-import { RibbonIconToggleHandler } from 'settings/handlers/helpersCommands/RibbonIconToggleHandler';
 import { ShowSearchBarByDefaultToggleHandler } from 'settings/handlers/helpersCommands/ShowSearchBarByDefaultToggleHandler';
+import { EnableAutoUpdateToggleHandler } from 'settings/handlers/helpersCommands/EnableAutoUpdateTOggleHandler';
 
 class HelpersSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
@@ -15,8 +15,8 @@ class HelpersSection extends AbstractChain<SettingHandlerResponse> {
     }
     protected getHandlers(): AbstractHandler<SettingHandlerResponse>[] {
         return [
-            new RibbonIconToggleHandler(),
-            new ShowSearchBarByDefaultToggleHandler()
+            new ShowSearchBarByDefaultToggleHandler(),
+            new EnableAutoUpdateToggleHandler()
         ];
     }
 }

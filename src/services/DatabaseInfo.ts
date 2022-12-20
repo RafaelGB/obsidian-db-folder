@@ -26,14 +26,9 @@ export default class DatabaseInfo {
      * @returns 
      */
     async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
-        LOGGER.info(`=>initDatabaseconfigYaml`, `file:${this.file.path}`);
-        let databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
+        LOGGER.info(`Load DDBB yaml - "${this.file.path}"`);
+        const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
         if (!databaseRaw || !isDatabaseNote(databaseRaw)) throw new Error('No frontmatter found');
-        // Temporal migration centinels code
-        databaseRaw = databaseRaw.replaceAll(DATABASE_CONFIG.START_CENTINEL_LEGACY, DATABASE_CONFIG.START_CENTINEL);
-        databaseRaw = databaseRaw.replaceAll(DATABASE_CONFIG.END_CENTINEL_LEGACY, DATABASE_CONFIG.END_CENTINEL);
-        await app.vault.modify(this.file, databaseRaw);
-
 
         const match = databaseRaw.match(DATABASE_CONFIG.YAML);
 
@@ -50,15 +45,13 @@ export default class DatabaseInfo {
         }
 
         this.yaml = response.yaml;
-        LOGGER.info(`<=initDatabaseconfigYaml`);
     }
 
     /**
      * Save database configuration on disk
      */
     async saveOnDisk(): Promise<void> {
-        LOGGER.debug(`=>setDatabaseconfigYaml`, `file:${this.file.path}`);
-        const databaseFilePath = this.file.path;
+        LOGGER.info(`Update BBDD yaml - "${this.file.path}"`);
         const databaseConfigUpdated = DatabaseYamlToStringParser(this.yaml).join("\n");
         const noteObject = new NoteContentActionBuilder()
             .setFile(this.file)
@@ -67,7 +60,6 @@ export default class DatabaseInfo {
             .build();
         // Update configuration file
         await VaultManagerDB.editNoteContent(noteObject);
-        LOGGER.debug(`<=setDatabaseconfigYaml`, `set file ${databaseFilePath} with ${databaseConfigUpdated}`);
     }
 
     /**

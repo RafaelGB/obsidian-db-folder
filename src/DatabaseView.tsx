@@ -1,6 +1,6 @@
 import { obtainFormulasFromFolder } from "automations/AutomationsHelper";
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { ViewEvents } from "cdm/EmitterModel";
+import { UpdaterData, ViewEvents } from "cdm/EmitterModel";
 import {
   InitialType,
   RowDataType,
@@ -35,11 +35,9 @@ import {
   WorkspaceLeaf,
   TFile,
   Menu,
-  Notice,
 } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
 import DatabaseInfo from "services/DatabaseInfo";
-import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
@@ -349,5 +347,28 @@ export class DatabaseView extends TextFileView implements HoverParent {
 
   openFilters() {
     this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
+  }
+
+  /****************************************************************
+   *                     REACTIVE ACTIONS
+   ****************************************************************/
+  /**
+   * Dataview API router triggered by any file change
+   * @param op
+   * @param file
+   * @param oldPath
+   */
+  handleExternalMetadataChange(
+    op: string,
+    file: TFile,
+    isActive: boolean,
+    oldPath?: string
+  ) {
+    this.emitter.emit(EMITTERS_GROUPS.UPDATER, {
+      op,
+      file,
+      isActive,
+      oldPath,
+    } as UpdaterData);
   }
 }

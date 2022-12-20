@@ -28,8 +28,6 @@ class Parse {
         }
         literal = this.parseDataArray(literal);
         const wrapped = DataviewService.wrapLiteral(literal);
-        LOGGER.debug(`=>parseLiteral: type ${wrapped
-            .type} to ${dataTypeDst}`);
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case InputType.MARKDOWN:
@@ -73,7 +71,6 @@ class Parse {
                 parsedLiteral = this.parseToText(wrapped, localSettings);
 
         }
-        LOGGER.debug(`<=parseLiteral`);
         return parsedLiteral;
     }
 

@@ -24,8 +24,7 @@ export default function ImportCsvAction(actionProps: TableActionProps) {
       const importElement = view.addAction(
         "import",
         t("toolbar_menu_import_csv"),
-        handleFileUpload,
-        3
+        handleFileUpload
       );
       view.actionButtons.import = importElement;
     }

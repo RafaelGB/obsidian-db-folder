@@ -39,8 +39,8 @@ export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
   MAX_ROWS: 99999,
   MAX_OPTIONS: 100,
-  MIN_COLUMN_HEIGHT: 30,
-  MAX_COLUMN_HEIGHT: 350,
+  MIN_COLUMN_WIDTH: 30,
+  MAX_COLUMN_WIDTH: 350,
 });
 
 export const MetadataColumns = Object.freeze({
@@ -369,7 +369,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
     enable_show_state: false,
     enable_row_shadow: true,
-    enable_ribbon_icon: true,
+    enable_auto_update: true,
     show_search_bar_by_default: false,
     logger_level_info: 'error',
     csv_file_header_key: 'File',
@@ -419,9 +419,7 @@ export const DATABASE_CONFIG = Object.freeze({
   YAML: /```yaml:dbfolder\s+([\w\W]+?)\s+```/,
   REPLACE_YAML_REGEX: new RegExp('```yaml:dbfolder\\s+([\\w\\W]+?)\\s+```', "g"),
   START_CENTINEL: '```yaml:dbfolder',
-  END_CENTINEL: '```',
-  START_CENTINEL_LEGACY: '%% dbfolder:yaml',
-  END_CENTINEL_LEGACY: '%%',
+  END_CENTINEL: '```'
 });
 
 export const WRAPPERER_KEY = `_\\*~\``;
@@ -512,6 +510,13 @@ export const ROLLUP_ACTIONS = Object.freeze({
 export const EMITTERS_GROUPS = Object.freeze({
   HOTKEY: 'hotkey',
   SHORTCUT: 'shortcut',
+  UPDATER: 'updater',
+});
+
+export const DATAVIEW_UPDATER_OPERATIONS = Object.freeze({
+  UPDATE: 'update',
+  DELETE: 'delete',
+  RENAME: 'rename',
 });
 
 export const EMITTERS_HOTKEY = Object.freeze({

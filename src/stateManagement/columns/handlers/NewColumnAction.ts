@@ -48,6 +48,9 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
             updater.shadowColumns,
             customName
         );
+        // If the custom type is one of special types, we need to set the inline config to true
+        const isSpecialType = customType === DynamicInputType.RELATION;
+        const isInline = isSpecialType || view.diskConfig.yaml.config.inline_default;
 
         const newColumn: DatabaseColumn = {
             input: customType,
@@ -58,9 +61,11 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
             position: columnInfo.position,
             config: {
                 ...DEFAULT_COLUMN_CONFIG,
-                isInline: view.diskConfig.yaml.config.inline_default
+                isInline: isInline
             },
         };
+
+
         view.diskConfig.addColumn(columnInfo.name, newColumn);
 
         const newColumns = [
