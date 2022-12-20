@@ -16,15 +16,5 @@ declare module "obsidian" {
      * @public
      */
     processFrontMatter(file: TFile, fn: (frontMatter: Record<string, Literal>) => void): Promise<void>
-
-    /**
-     * Not Exposed in Obsidian API function to create a new markdown file
-     * @warning May not work in future versions of Obsidian
-     * 
-     * @param folder 
-     * @param name 
-     * @returns 
-     */
-    createNewMarkdownFile: (folder: TFolder, name: string) => Promise<TFile>
   }
 }

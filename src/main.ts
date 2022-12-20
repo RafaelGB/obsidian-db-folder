@@ -104,10 +104,6 @@ export default class DBFolderPlugin extends Plugin {
 		this.addMarkdownPostProcessor();
 		// Mount an empty component to start; views will be added as we go
 		this.mount(window);
-
-		(app.workspace as any).floatingSplit?.children?.forEach((c: any) => {
-			this.mount(c.win);
-		});
 	}
 
 	unload(): void {

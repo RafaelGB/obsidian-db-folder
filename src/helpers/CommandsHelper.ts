@@ -1,5 +1,5 @@
 import { LocalSettings } from "cdm/SettingsModel";
-import { Notice, TFile, TFolder } from "obsidian";
+import { Notice, TFolder } from "obsidian";
 import { LOGGER } from "services/Logger";
 import { DatabaseCore, DatabaseFrontmatterOptions, DATABASE_CONFIG, DEFAULT_SETTINGS, YAML_INDENT } from "helpers/Constants";
 
@@ -10,20 +10,18 @@ export async function generateNewDatabase(ddbbConfig: string, folder?: TFolder, 
         );
 
     try {
-        const database: TFile = await
-            app.fileManager.createNewMarkdownFile(
-                targetFolder,
-                ddbbName ?? 'Untitled database'
-            );
+        const ddbbContent = DatabaseFrontmatterOptions.BASIC
+            .concat('\n')
+            .concat(ddbbConfig)
+            .concat('\n')
+            .concat(DATABASE_CONFIG.END_CENTINEL);
 
-        await app.vault.modify(
-            database,
-            DatabaseFrontmatterOptions.BASIC
-                .concat('\n')
-                .concat(ddbbConfig)
-                .concat('\n')
-                .concat(DATABASE_CONFIG.END_CENTINEL)
-        );
+        const database = await app.vault.create(
+            targetFolder.path
+                .concat("/")
+                .concat(ddbbName ?? 'Untitled database')
+                .concat(".md"),
+            ddbbContent);
         // Open the new database file
         if (autoOpen) {
             await app.workspace.getMostRecentLeaf().setViewState({

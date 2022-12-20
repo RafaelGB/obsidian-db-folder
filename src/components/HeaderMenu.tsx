@@ -1,4 +1,4 @@
-import { InputType, StyleVariables } from "helpers/Constants";
+import { StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { FocusEventHandler, useState } from "react";

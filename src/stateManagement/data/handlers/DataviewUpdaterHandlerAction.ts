@@ -26,7 +26,7 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                 const pathToOperate = oldPath ? oldPath : file.path;
                 const indexToOperate = updater.rows.findIndex((row) => row.__note__.filepath === pathToOperate);
                 const isFileInDDBB = indexToOperate !== -1;
-                LOGGER.debug(`DDBB "${view.file.basename}" Updater: ${op} ${pathToOperate} at index ${indexToOperate}`);
+                LOGGER.info(`DDBB "${view.file.basename}" Updater: ${op} ${pathToOperate} at index ${indexToOperate}`);
                 let updatedRows = rows;
                 switch (op) {
                     case DATAVIEW_UPDATER_OPERATIONS.DELETE:
