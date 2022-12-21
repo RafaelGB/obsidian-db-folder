@@ -48,7 +48,7 @@ import PaginationTable from "components/navbar/PaginationTable";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_WIDTH,
-  maxSize: DatabaseLimits.MAX_COLUMN_WIDTH,
+  size: DatabaseLimits.DEFAULT_COLUMN_WIDTH,
   cell: DefaultCell,
   header: DefaultHeader,
   enableResizing: true,
