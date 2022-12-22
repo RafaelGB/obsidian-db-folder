@@ -40,7 +40,7 @@ export const DatabaseLimits = Object.freeze({
   MAX_ROWS: 99999,
   MAX_OPTIONS: 100,
   MIN_COLUMN_WIDTH: 30,
-  MAX_COLUMN_WIDTH: 350,
+  DEFAULT_COLUMN_WIDTH: 100,
 });
 
 export const MetadataColumns = Object.freeze({

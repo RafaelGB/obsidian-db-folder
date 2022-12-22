@@ -47,3 +47,16 @@ export function castStringtoHsl(str: string): HSL {
 export function castHslToString(hsl: HSL): string {
   return `hsl(${hsl.h},${hsl.s}%,${hsl.l}%)`;
 }
+
+/**
+ * Get the contrast color for a given HSL color based on the luminosity of the color
+ * @param hslStringified 
+ * @returns 
+ */
+export function contrastColor(hslStringified: string): string {
+  const hsl = castStringtoHsl(hslStringified);
+  if (hsl.l > 50) {
+    return 'black';
+  }
+  return 'white';
+}
