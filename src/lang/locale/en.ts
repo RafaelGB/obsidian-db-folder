@@ -66,11 +66,36 @@ export default {
   "inlinks": "Inlinks",
   "outlinks": "Outlinks",
   "new_column": "New column",
-  /** MODALS */
-  "confirm_modal_ok": "Yes",
-  "confirm_modal_ko": "No",
   /** NEW INLINE PROPERTIES POSITION */
   "top": "Top",
   "bottom": "Bottom",
   "last_field": "Last field",
+  /****************************************** 
+   *              MODALS
+   ******************************************/
+  /** CONFIRM MODAL */
+  "confirm_modal_ok": "Yes",
+  "confirm_modal_ko": "No",
+  /** ADD ROW MODAL */
+  "add_row_modal_filename_text_title": "Filename",
+  "add_row_modal_filename_text_desc": "Filename associated with the new row",
+  "add_row_modal_filename_text_placeholder": "Enter filename",
+  "add_row_modal_filename_text_button_tooltip": "Add new row",
+  "add_row_modal_template_dropdown_title": "Row Template",
+  "add_row_modal_template_dropdown_desc": "Select from the existing templates to create a new row. The list is related with template folder setting. Leave empty to create an empty file.",
+  "add_row_modal_template_dropdown_placeholder": "Select a template...",
+  /** ADD COLUMN MODAL */
+  "add_row_modal_section_title": "Columns menu",
+  "add_row_modal_add_empty_column_title": "Add empty column",
+  "add_row_modal_add_empty_column_desc": "Add a new column which do not exist yet in any row",
+  "add_row_modal_add_empty_column_placeholder": "Column name",
+  "add_row_modal_add_empty_column_button_tooltip": "Add new column",
+  "add_row_modal_add_empty_notice_empty": "New column added",
+  "add_row_modal_add_empty_notice_informed": "{0} added to the table",
+  "add_row_modal_add_existing_column_title": "Select an existing column to add",
+  "add_row_modal_add_existing_column_desc": "Select an existing column to add not included yet in the table",
+  "add_row_modal_add_existing_column_placeholder": "Search column...",
+  "add_row_modal_add_existing_column_button_tooltip": "Create the selected column and refresh the table",
+  "add_row_modal_add_existing_notice_error_empty": "You need to select a column to add",
+  "add_row_modal_add_existing_notice_correct": "{0} added to the table",
 };
