@@ -107,4 +107,11 @@ export default {
   "add_row_modal_quick_options_desc_button_delete_notice_confirm": "Are you sure you want to delete {0}?",
   /** FILTERS MODAL */
   "filters_modal_title": "Table filters",
+  "filters_modal_add_single_filter": "Add Filter",
+  "filters_modal_add_group_filter": "Add Group",
+  "filters_modal_add_group_filter_error_no_columns": "You need to add at least one column to the table to create a filter",
+  "filters_modal_add_group_filter_button_atomic_filter_tooltip": "Add atomic filter",
+  "filters_modal_add_group_filter_button_group_filter_tooltip": "Add group filter",
+  "filters_modal_add_group_filter_button_delete_tooltip": "Delete group filter",
+  "filters_modal_add_group_filter_button_enable_tooltip": "Enable/Disable group filter",
 };
