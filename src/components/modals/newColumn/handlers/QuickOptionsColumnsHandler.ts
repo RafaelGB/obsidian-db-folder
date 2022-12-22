@@ -7,7 +7,7 @@ import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 
 export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
-  settingTitle: string = "Column quick options";
+  settingTitle: string = t("add_row_modal_quick_options_title");
   handle(
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
@@ -50,17 +50,17 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
         // Cross column settings
         const columnSetting = new Setting(containerEl)
           .setName(column.label)
-          .setDesc(`Quick options of ${column.label}${column.isMetadata ? " (metadata)" : ""}`)
+          .setDesc(`${t("add_row_modal_quick_options_desc", column.label)}${column.isMetadata ? t("add_row_modal_quick_options_desc_metadata") : ""}`)
           .addToggle(toggle =>
             toggle
               .setValue(!column.isHidden)
               .onChange(toggleHandler)
-              .setTooltip(`Show or hide ${column.label}`)
+              .setTooltip(t("add_row_modal_quick_options_desc_tooltip", column.label))
           )
           .addButton(button => {
             button
               .setIcon("gear")
-              .setTooltip(`Open settings of ${column.label}`)
+              .setTooltip(t("add_row_modal_quick_options_desc_button_add_tooltip"))
               .onClick(openSettingsHandler)
           });
         // Add extra options for non-metadata columns
@@ -77,10 +77,13 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
             .addButton(button => {
               button
                 .setIcon("trash")
-                .setTooltip(`Delete ${column.label}`)
+                .setTooltip(t("add_row_modal_quick_options_desc_button_delete_tooltip", column.label))
                 .onClick(async () => {
                   const confirmation = await new ConfirmModal()
-                    .setMessage(`Are you sure you want to delete ${column.label}?`)
+                    .setMessage(t(
+                      "add_row_modal_quick_options_desc_button_delete_notice_confirm",
+                      column.label
+                    ))
                     .isConfirmed();
                   if (confirmation) {
                     columnState.actions.remove(column);

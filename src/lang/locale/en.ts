@@ -98,4 +98,13 @@ export default {
   "add_row_modal_add_existing_column_button_tooltip": "Create the selected column and refresh the table",
   "add_row_modal_add_existing_notice_error_empty": "You need to select a column to add",
   "add_row_modal_add_existing_notice_correct": "{0} added to the table",
+  "add_row_modal_quick_options_title": "Column quick options",
+  "add_row_modal_quick_options_desc": "Quick options of {0}",
+  "add_row_modal_quick_options_desc_metadata": " (Metadata)",
+  "add_row_modal_quick_options_desc_tooltip": "Show or hide {0}",
+  "add_row_modal_quick_options_desc_button_add_tooltip": "Open settings of {0}",
+  "add_row_modal_quick_options_desc_button_delete_tooltip": "Delete {0}",
+  "add_row_modal_quick_options_desc_button_delete_notice_confirm": "Are you sure you want to delete {0}?",
+  /** FILTERS MODAL */
+  "filters_modal_title": "Table filters",
 };
