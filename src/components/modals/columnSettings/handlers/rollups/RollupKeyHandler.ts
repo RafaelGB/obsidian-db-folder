@@ -4,8 +4,9 @@ import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 import { recordFieldsFromRelation } from "helpers/RelationHelper";
 import { ROLLUP_EMBED_ACTIONS } from "helpers/Constants";
+import { t } from "lang/helpers";
 export class RollupKeyHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Select property of relation';
+    settingTitle: string = t("column_settings_modal_rollup_key_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view, columnsState, configState } = columnSettingsManager.modal;
@@ -32,13 +33,13 @@ export class RollupKeyHandler extends AbstractHandlerClass<ColumnSettingsHandler
             ).then((fields) => {
                 new Setting(containerEl)
                     .setName(this.settingTitle)
-                    .setDesc('Select the property to rollup from the relation')
+                    .setDesc(t("column_settings_modal_rollup_key_desc"))
                     .addSearch((cb) => {
                         new StringSuggest(
                             cb.inputEl,
                             fields
                         );
-                        cb.setPlaceholder("Select property...")
+                        cb.setPlaceholder(t("column_settings_modal_rollup_key_placeholder"))
                             .setValue(column.config.rollup_key)
                             .onChange(rollup_key_promise);
                     });

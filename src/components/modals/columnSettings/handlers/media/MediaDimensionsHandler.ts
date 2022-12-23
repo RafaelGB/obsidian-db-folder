@@ -1,9 +1,10 @@
 import { Setting } from "obsidian";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 
 export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-    settingTitle: string = 'Dimensions of embeded media';
+    settingTitle: string = t("column_settings_modal_media_dimension_title");
     handle(response: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = response;
         const { view } = columnSettingsManager.modal;
@@ -13,9 +14,9 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
             // Check if media_settings is enabled
             new Setting(containerEl)
                 .setName(this.settingTitle)
-                .setDesc("Choose dimensions of embeded media (heigthxwidth)")
+                .setDesc(t("column_settings_modal_media_dimension_desc"))
                 .addText(text => {
-                    text.setPlaceholder("Height")
+                    text.setPlaceholder(t("column_settings_modal_media_dimension_placeholder_height"))
                         .setValue(config.media_height.toString())
                         .onChange(async (value: string): Promise<void> => {
                             // Common modifications of value
@@ -29,7 +30,7 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
                             columnSettingsManager.modal.enableReset = true;
                         })
                 }).addText(text => {
-                    text.setPlaceholder("Width")
+                    text.setPlaceholder(t("column_settings_modal_media_dimension_placeholder_width"))
                         .setValue(config.media_width.toString())
                         .onChange(async (value: string): Promise<void> => {
                             // Common modifications of value
@@ -42,7 +43,7 @@ export class MediaDimensionsHandler extends AbstractHandlerClass<ColumnSettingsH
                         })
                 }).addExtraButton((cb) => {
                     cb.setIcon("reset")
-                        .setTooltip("Restart default values")
+                        .setTooltip(t("column_settings_modal_media_dimension_button_tooltip"))
                         .onClick(async (): Promise<void> => {
                             // Persist change
                             view.diskConfig.updateColumnConfig(column.id, {

@@ -1,8 +1,9 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 export class InlineToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-    settingTitle: string = 'Inline field';
+    settingTitle = t("column_settings_modal_inline_toggle_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -18,7 +19,7 @@ export class InlineToggleHandler extends AbstractHandlerClass<ColumnSettingsHand
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Convert field to inline (field:: value) or leave it as frontmatter (---field: value---)",
+            t("column_settings_modal_inline_toggle_desc"),
             column.config.isInline,
             inline_togle_promise
         );

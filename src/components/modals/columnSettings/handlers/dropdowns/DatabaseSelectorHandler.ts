@@ -3,9 +3,10 @@ import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 import { recordAllDatabases } from "helpers/RelationHelper";
+import { t } from "lang/helpers";
 
 export class DatabaseSelectorHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Select another table to relate with';
+    settingTitle: string = t("column_settings_modal_database_selector_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -22,13 +23,13 @@ export class DatabaseSelectorHandler extends AbstractHandlerClass<ColumnSettings
 
         new Setting(containerEl)
             .setName(this.settingTitle)
-            .setDesc('Select from the existing tables to relate with the current column')
+            .setDesc(t("column_settings_modal_database_selector_desc"))
             .addSearch((cb) => {
                 new StringSuggest(
                     cb.inputEl,
                     avaliableDDBB
                 );
-                cb.setPlaceholder("Search Relation...")
+                cb.setPlaceholder(t("column_settings_modal_database_selector_placeholder"))
                     .setValue(column.config.related_note_path)
                     .onChange(database_selector_promise);
             });
