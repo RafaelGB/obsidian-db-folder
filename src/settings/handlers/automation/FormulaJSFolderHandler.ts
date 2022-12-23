@@ -1,9 +1,10 @@
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";
 
 export class FormulaJSFolderHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Select the source of your formula JS files';
+    settingTitle = t("settings_formula_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view, local } = settingHandlerResponse;
         const isJSFormulasEnabled = local ?
@@ -27,13 +28,13 @@ export class FormulaJSFolderHandler extends AbstractSettingsHandler {
             };
             // render dropdown inside container
             new Setting(containerEl)
-                .setName('Select the formula JS folder')
-                .setDesc('Select the destination of the formula JS files.')
+                .setName(this.settingTitle)
+                .setDesc(t("settings_formula_desc"))
                 .addSearch((cb) => {
                     new FolderSuggest(
                         cb.inputEl
                     );
-                    cb.setPlaceholder("Example: path/to/folder")
+                    cb.setPlaceholder(t("settings_formula_placeholder"))
                         .setValue(local ? view.diskConfig.yaml.config.formula_folder_path : settingsManager.plugin.settings.local_settings.formula_folder_path)
                         .onChange(formula_folder_promise);
                 });

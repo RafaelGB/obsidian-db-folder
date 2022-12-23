@@ -184,4 +184,16 @@ export default {
   "column_settings_modal_selected_column_options_notice_update_error": "Error editing {0}",
   "column_settings_modal_selected_column_options_notice_delete_success": "Label {0} was deleted successfully for all the notes!",
   "column_settings_modal_selected_column_options_notice_delete_error": "Error deleting {0}",
+  /** TEXT MODAL */
+  "text_modal_default_placeholder": "Insert text...",
+  /******************************************
+   *                SETTINGS
+   ******************************************/
+  /** FORMULA SETTINGS */
+  "settings_formula_title": "Formula Settings",
+  "settings_formula_desc": "Select the destination of the formula JS files.",
+  "settings_formula_placeholder": "Select destination...",
+  "settings_formula_toggle_title": "Enable JavaScript formulas",
+  "settings_formula_toggle_desc": "Enable/disable to use JavaScript formulas",
+  /** COLUMN SETTINGS */
 };
