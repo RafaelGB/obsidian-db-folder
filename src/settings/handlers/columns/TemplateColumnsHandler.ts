@@ -1,12 +1,13 @@
 import { RowDataType } from "cdm/FolderModel";
 import { obtainColumnsFromFile, obtainColumnsFromRows } from "components/Columns";
 import { resolve_tfile } from "helpers/FileManagement";
+import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 
 export class TemplateColumnsHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Header templates';
+    settingTitle = t("settings_template_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { local, containerEl, view, columns } = settingHandlerResponse;
         const template_section = containerEl.createDiv("configuration-section-container-columns-template");
@@ -25,8 +26,8 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                 }
             });
             new Setting(template_section)
-                .setName('Select file as columns template')
-                .setDesc('Select file to use as template for database columns. Click the button to apply the template.')
+                .setName(t("settings_template_file_title"))
+                .setDesc(t("settings_template_file_desc"))
                 .addDropdown((dropdown) => {
                     dropdown
                     dropdown.addOptions(filePaths);
@@ -36,7 +37,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                     });
                 }).addExtraButton((cb) => {
                     cb.setIcon("save")
-                        .setTooltip("Save columns from file")
+                        .setTooltip(t("settings_template_file_button_tooltip"))
                         .onClick(async (): Promise<void> => {
                             const tfile = resolve_tfile(selected_file);
                             const templateYamlColumns = await obtainColumnsFromFile(tfile);
@@ -54,7 +55,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                             });
                             view.diskConfig.yaml.columns = new_columns;
                             view.diskConfig.saveOnDisk();
-                            new Notice(`${colsAdded} Columns were loaded from file "${tfile.basename}". Total: ${currentSize}\nClose settings modal to show the database changes`);
+                            new Notice(t("settings_template_file_notice_success_on_save", colsAdded.toString(), tfile.basename, currentSize.toString()), 1500);
                         });
                 });
 
@@ -62,11 +63,11 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
              * TEMPLATE OF ALL POSSIBLE FIELDS
              *********************************/
             new Setting(template_section)
-                .setName('Use all fields')
-                .setDesc('WARNING! This will override any previous columns')
+                .setName(t("settings_template_all_title"))
+                .setDesc(t("settings_template_all_desc"))
                 .addButton((button) => {
                     button.setIcon("save")
-                        .setTooltip("Save all possible columns")
+                        .setTooltip(t("settings_template_all_button_tooltip"))
                         .onClick(async (): Promise<void> => {
                             const allColumns = await obtainColumnsFromRows(
                                 view,
@@ -75,7 +76,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                                 columns);
                             view.diskConfig.yaml.columns = allColumns;
                             view.diskConfig.saveOnDisk();
-                            new Notice(`${Object.keys(columns).length} Columns were loaded from all fields avaliable in the current source! Close this dialog to show the database changes`);
+                            new Notice(t("settings_template_all_notice_success_on_save", Object.keys(columns).length.toString()), 1500);
                         });
                 });
         }

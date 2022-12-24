@@ -60,7 +60,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
           .addButton(button => {
             button
               .setIcon("gear")
-              .setTooltip(t("add_row_modal_quick_options_desc_button_add_tooltip"))
+              .setTooltip(t("add_row_modal_quick_options_desc_button_add_tooltip", column.label))
               .onClick(openSettingsHandler)
           });
         // Add extra options for non-metadata columns
