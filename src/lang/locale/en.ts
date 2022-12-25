@@ -48,6 +48,18 @@ export default {
   "footer_menu_earliest_date": "Earliest",
   "footer_menu_latest_date": "Latest",
   "footer_menu_count_range_date": "Range of dates",
+  /******************************************
+   *            COLUMN HEADER MENU
+   ******************************************/
+  /** HEADER BUTTONS */
+  "header_menu_sort_ascending_remove": "Remove sort ascending",
+  "header_menu_sort_ascending": "Sort ascending",
+  "header_menu_sort_descending_remove": "Remove sort descending",
+  "header_menu_sort_descending": "Sort descending",
+  "header_menu_delete_column": "Delete",
+  "header_menu_hide_column": "Hide",
+  "header_menu_insert_column_left": "Insert left",
+  "header_menu_insert_column_right": "Insert right",
   /** INPUT LABELS */
   "number": "Number",
   "text": "Text",
@@ -190,6 +202,7 @@ export default {
    *                SETTINGS
    ******************************************/
   /** BASE */
+  "settings_title": "Database Folder Plugin",
   "settings_default_values": "Restore default values",
   "settings_automation_section": "Automations related to the table",
   "settings_column_section": "Configuration about columns",

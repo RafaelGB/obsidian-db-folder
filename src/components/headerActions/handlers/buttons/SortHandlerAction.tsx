@@ -7,6 +7,7 @@ import React from "react";
 import { InputType } from "helpers/Constants";
 import { TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
+import { t } from "lang/helpers";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -80,7 +81,9 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
   return headerButtonComponent({
     onClick: sortingUpOnClick,
     icon: isAscSorted ? <CrossIcon /> : <ArrowUpIcon />,
-    label: isAscSorted ? "Remove ascending sort" : "Sort ascending",
+    label: isAscSorted
+      ? t("header_menu_sort_ascending_remove")
+      : t("header_menu_sort_ascending"),
   });
 }
 
@@ -133,7 +136,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
       ),
     label:
       header.column.getIsSorted() === "desc"
-        ? "Remove descending sort"
-        : "Sort descending",
+        ? t("header_menu_sort_descending_remove")
+        : t("header_menu_sort_descending"),
   });
 }

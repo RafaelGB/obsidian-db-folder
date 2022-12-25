@@ -5,6 +5,7 @@ import ArrowRightIcon from "components/img/ArrowRight";
 import React from "react";
 import { TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
+import { t } from "lang/helpers";
 
 export default class AddColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -42,7 +43,7 @@ function addColumnToRightButton(headerActionResponse: HeaderActionResponse) {
   return headerButtonComponent({
     onClick: addColumnToRightOnClick,
     icon: <ArrowRightIcon />,
-    label: "Insert right",
+    label: t("header_menu_insert_column_right"),
   });
 }
 
@@ -63,6 +64,6 @@ function addColumnToLeftButton(headerActionResponse: HeaderActionResponse) {
   return headerButtonComponent({
     onClick: addColumnToLeftOnClick,
     icon: <ArrowLeftIcon />,
-    label: "Insert left",
+    label: t("header_menu_insert_column_left"),
   });
 }

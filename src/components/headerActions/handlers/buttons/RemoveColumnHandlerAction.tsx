@@ -6,6 +6,7 @@ import { UpdateRowOptions } from "helpers/Constants";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
 import { EditEngineService } from "services/EditEngineService";
+import { t } from "lang/helpers";
 
 export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -80,6 +81,6 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
   return headerButtonComponent({
     onClick: onClick,
     icon: <TrashIcon />,
-    label: "Delete",
+    label: t("header_menu_delete_column"),
   });
 }
