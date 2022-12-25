@@ -18,6 +18,7 @@ import { RollupPersistToggleHandler } from "components/modals/columnSettings/han
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 
 
 class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
@@ -28,7 +29,13 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
     }
     protected customHandle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const style_section = columnHandlerResponse.containerEl.createDiv("column-section-container-style");
-        add_setting_header(style_section, "Style", "h3");
+        add_setting_header(
+            style_section,
+            t("column_settings_modal_section_style_title"),
+            "h3"
+        );
+
+
         columnHandlerResponse.containerEl = style_section;
         return columnHandlerResponse;
     }
@@ -62,7 +69,7 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
     }
     protected customHandle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const behavior_section = columnHandlerResponse.containerEl.createDiv("column-section-container-behavior");
-        add_setting_header(behavior_section, "Behavior", "h3");
+        add_setting_header(behavior_section, t("column_settings_modal_section_behaviour_title"), "h3");
         columnHandlerResponse.containerEl = behavior_section;
         return columnHandlerResponse;
     }
@@ -105,7 +112,11 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
     protected customHandle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const particular_section = columnHandlerResponse.containerEl.createDiv("column-section-container-particular");
         // title of the section
-        add_setting_header(particular_section, `Particular properties of "${columnHandlerResponse.column.input}" column type`, 'h3');
+        add_setting_header(
+            particular_section,
+            t("column_settings_modal_section_type_title", columnHandlerResponse.column.input),
+            'h3'
+        );
         columnHandlerResponse.containerEl = particular_section;
         return columnHandlerResponse;
     }

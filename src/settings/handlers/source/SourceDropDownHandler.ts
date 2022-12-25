@@ -4,7 +4,7 @@ import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handle
 import { add_dropdown } from "settings/SettingsComponents";
 
 export class SourceDropDownHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Select the source of database data';
+    settingTitle = t("settings_source_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view } = settingHandlerResponse;
         const sourceOptions: Record<string, string> = {};
@@ -21,7 +21,7 @@ export class SourceDropDownHandler extends AbstractSettingsHandler {
         add_dropdown(
             containerEl,
             this.settingTitle,
-            'Select from which source you want to get the data to be displayed in the table.',
+            t("settings_source_desc"),
             view.diskConfig.yaml.config.source_data,
             sourceOptions,
             source_dropdown_promise

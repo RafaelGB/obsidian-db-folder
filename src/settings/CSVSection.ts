@@ -3,6 +3,7 @@ import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler
 import { CSVHeaderFileKeyHandler } from 'settings/handlers/csv/CSVHeaderFileKeyHandler';
 import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/chain/AbstractHandler';
+import { t } from 'lang/helpers';
 
 
 /**
@@ -12,7 +13,7 @@ class CSVSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const developer_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-csv");
         // title of the section
-        add_setting_header(developer_section, "CSV section", 'h3');
+        add_setting_header(developer_section, t("settings_csv_section"), 'h3');
         settingHandlerResponse.containerEl = developer_section;
         return settingHandlerResponse;
     }

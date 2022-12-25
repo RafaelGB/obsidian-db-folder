@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class RowShadowToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable row shadow';
+    settingTitle = t("settings_row_shadow_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local } = settingHandlerResponse;
         // pass if modal opened from local settings
@@ -18,7 +19,7 @@ export class RowShadowToggleHandler extends AbstractSettingsHandler {
             add_toggle(
                 containerEl,
                 this.settingTitle,
-                "This will enable row shadow to make it easier to distinguish between rows",
+                t("settings_row_shadow_toggle_desc"),
                 settingsManager.plugin.settings.global_settings.enable_row_shadow,
                 shadow_toggle_promise
             );

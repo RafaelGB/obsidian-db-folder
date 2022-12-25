@@ -2,12 +2,14 @@ import { RowSelectOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { randomColor, castStringtoHsl, castHslToString } from "helpers/Colors";
 import { satinizedColumnOption } from "helpers/FileManagement";
+import { t } from "lang/helpers";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { LOGGER } from "services/Logger";
+import { add_setting_header } from "settings/SettingsComponents";
 
 export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-  settingTitle: string = "Column Options";
+  settingTitle = t("column_settings_modal_selected_column_options_title");
   handle(
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ): ColumnSettingsHandlerResponse {
@@ -19,11 +21,21 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
     const addLabelPromise = async (): Promise<void> => {
       // Error handling
       if (newLabel === "") {
-        new Notice("Empty label could not be added!");
+        new Notice(
+          t(
+            "column_settings_modal_selected_column_options_notice_error_empty_label"
+          ),
+          1500
+        );
         return;
       }
       if (options.find((option) => option.label === newLabel)) {
-        new Notice("Duplicate labels could not be added!");
+        new Notice(
+          t(
+            "column_settings_modal_selected_column_options_notice_error_duplicate_label"
+          ),
+          1500
+        );
         return;
       }
       // Add new label
@@ -45,13 +57,19 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         columnHandlerResponse
       );
     };
-
+    add_setting_header(containerEl, this.settingTitle, "h4");
     new Setting(containerEl)
-      .setName("Add new label")
-      .setDesc("Add new label to the list of options available for this column")
+      .setName(t("column_settings_modal_selected_column_options_new_option"))
+      .setDesc(
+        t("column_settings_modal_selected_column_options_new_option_desc")
+      )
       .addText((text) => {
         text
-          .setPlaceholder("label of option")
+          .setPlaceholder(
+            t(
+              "column_settings_modal_selected_column_options_new_option_placeholder"
+            )
+          )
           .setValue(newLabel)
           .onChange(async (value: string): Promise<void> => {
             newLabel = satinizedColumnOption(value);
@@ -68,7 +86,11 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       })
       .addButton((button: ButtonComponent) => {
         button
-          .setTooltip("Adds new option of Selected column")
+          .setTooltip(
+            t(
+              "column_settings_modal_selected_column_options_new_option_button_tooltip"
+            )
+          )
           .setButtonText("+")
           .setCta()
           .onClick(addLabelPromise);
@@ -119,7 +141,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       // Edit label button
       .addExtraButton((cb) => {
         cb.setIcon("pencil")
-          .setTooltip("Save new label")
+          .setTooltip(t("column_settings_modal_selected_column_options_edit"))
           .onClick(async (): Promise<void> => {
             const oldLabel = option.label;
             if (currentLabel === oldLabel) {
@@ -145,12 +167,17 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
               )
               .then(() => {
                 new Notice(
-                  `Option was updated for all rows. Please refresh the view to see the changes.`,
+                  t(
+                    "column_settings_modal_selected_column_options_notice_update_success"
+                  ),
                   1500
                 );
               })
               .catch((err) => {
-                const errMsg = `Error editing ${currentLabel}`;
+                const errMsg = t(
+                  "column_settings_modal_selected_column_options_notice_update_error",
+                  currentLabel
+                );
                 LOGGER.error(errMsg, err);
                 new Notice(errMsg, 3000);
               });
@@ -192,12 +219,18 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
               )
               .then(() => {
                 new Notice(
-                  `Option ${removedOption.label} was removed from all rows`,
+                  t(
+                    "column_settings_modal_selected_column_options_notice_delete_success",
+                    removedOption.label
+                  ),
                   1500
                 );
               })
               .catch((err) => {
-                const errMsg = `Error removing ${removedOption.label}`;
+                const errMsg = t(
+                  "column_settings_modal_selected_column_options_notice_delete_error",
+                  removedOption.label
+                );
                 LOGGER.error(errMsg, err);
                 new Notice(errMsg, 3000);
               });

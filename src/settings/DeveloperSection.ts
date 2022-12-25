@@ -5,6 +5,7 @@ import { TableStateToggleHandler } from 'settings/handlers/developer/TableStateT
 import { LoggerLevelInfoDropDownHandler } from 'settings/handlers/developer/LoggerLevelInfoDropDownHandler';
 import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/chain/AbstractHandler';
+import { t } from 'lang/helpers';
 
 /**
  * developer settings section
@@ -13,7 +14,7 @@ class DeveloperSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const developer_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-developer");
         // title of the section
-        add_setting_header(developer_section, "Developer section", 'h3');
+        add_setting_header(developer_section, t("settings_developer_section"), 'h3');
         settingHandlerResponse.containerEl = developer_section;
         return settingHandlerResponse;
     }

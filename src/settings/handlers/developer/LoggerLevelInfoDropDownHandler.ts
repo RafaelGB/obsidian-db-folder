@@ -1,9 +1,10 @@
+import { t } from "lang/helpers";
 import { LOGGER } from "services/Logger";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown } from "settings/SettingsComponents";
 
 export class LoggerLevelInfoDropDownHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable debug mode';
+    settingTitle = t('settings_developer_log_level_title');
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local } = settingHandlerResponse;
         if (!local && settingsManager.plugin.settings.global_settings.enable_debug_mode) {
@@ -18,8 +19,8 @@ export class LoggerLevelInfoDropDownHandler extends AbstractSettingsHandler {
             // render dropdown inside container
             add_dropdown(
                 containerEl,
-                'Select level info of logs',
-                'This setting assigns the level of logs that will be shown in the console',
+                this.settingTitle,
+                t('settings_developer_log_level_desc'),
                 settingsManager.plugin.settings.global_settings.logger_level_info,
                 {
                     debug: 'debug',

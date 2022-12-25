@@ -1,10 +1,11 @@
 import { DatabaseView } from "DatabaseView";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_text } from "settings/SettingsComponents";
 
 export class DateFormatHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Date format';
+    settingTitle = t("settings_editing_engine_date_format_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local, view } = settingHandlerResponse;
         /*************
@@ -24,8 +25,8 @@ export class DateFormatHandler extends AbstractSettingsHandler {
         }
         add_text(
             containerEl,
-            "Date format",
-            "The format of the date.",
+            this.settingTitle,
+            t("settings_editing_engine_date_format_desc"),
             DEFAULT_SETTINGS.local_settings.date_format,
             this.current_date_format(
                 local,
@@ -51,8 +52,8 @@ export class DateFormatHandler extends AbstractSettingsHandler {
         }
         add_text(
             containerEl,
-            "Datetime format",
-            "The format of the datetime.",
+            t("settings_editing_engine_datetime_format_title"),
+            t("settings_editing_engine_datetime_format_desc"),
             DEFAULT_SETTINGS.local_settings.datetime_format,
             this.current_datetime_format(
                 local,
@@ -78,8 +79,8 @@ export class DateFormatHandler extends AbstractSettingsHandler {
         }
         add_text(
             containerEl,
-            "Metadata date format",
-            "The format of the metadata date.",
+            t("settings_editing_engine_metadata_datetime_format_title"),
+            t("settings_editing_engine_metadata_datetime_format_desc"),
             DEFAULT_SETTINGS.local_settings.metadata_date_format,
             this.current_medatada_date_format(
                 local,

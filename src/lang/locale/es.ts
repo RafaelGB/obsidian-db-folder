@@ -14,11 +14,14 @@ export default {
     'operator_is_empty': 'Está vacío',
     'operator_is_not_empty': 'No está vacío',
     /** NAVBAR */
-    'toolbar_menu_aria_label': 'Abrir opciones de tabla',
+    'toolbar_menu_aria_label': 'Abrir menú',
     'toolbar_menu_export_csv': 'Exportar CSV',
     'toolbar_menu_import_csv': 'Importar CSV',
+    'toolbar_menu_search_bar': 'Barra de búsqueda',
+    'toolbar_menu_add_row': 'Añadir fila',
     /** SOURCE OPTIONS */
     'current_folder': "Carpeta actual",
+    'current_folder_without_subfolders': "Carpeta actual (sin subcarpetas)",
     "tag": "Etiqueta",
     "outgoing_link": "Enlace saliente",
     "incoming_link": "Enlace entrante",

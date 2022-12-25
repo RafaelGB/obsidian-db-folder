@@ -8,6 +8,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { TextAlignmentProps } from "cdm/StyleModel";
 import { COLUMN_ALIGNMENT_OPTIONS, StyleVariables } from "helpers/Constants";
+import { t } from "lang/helpers";
 
 export default function TextAlignmentSelector(props: TextAlignmentProps) {
   const { modal, columnId, currentAlignment } = props;
@@ -34,11 +35,11 @@ export default function TextAlignmentSelector(props: TextAlignmentProps) {
         value={alignment}
         exclusive
         onChange={handleAlignment}
-        aria-label="text alignment"
+        aria-label={t("column_settings_modal_text_alignment_select_title")}
       >
         <ToggleButton
           value={COLUMN_ALIGNMENT_OPTIONS.LEFT}
-          aria-label="left aligned"
+          aria-label={t("column_settings_modal_text_alignment_select_left")}
           sx={{
             color: StyleVariables.TEXT_NORMAL,
             "&.Mui-selected, &.Mui-selected:hover": {
@@ -50,7 +51,7 @@ export default function TextAlignmentSelector(props: TextAlignmentProps) {
         </ToggleButton>
         <ToggleButton
           value={COLUMN_ALIGNMENT_OPTIONS.CENTER}
-          aria-label="centered"
+          aria-label={t("column_settings_modal_text_alignment_select_center")}
           sx={{
             color: StyleVariables.TEXT_NORMAL,
             "&.Mui-selected, &.Mui-selected:hover": {
@@ -62,7 +63,7 @@ export default function TextAlignmentSelector(props: TextAlignmentProps) {
         </ToggleButton>
         <ToggleButton
           value={COLUMN_ALIGNMENT_OPTIONS.RIGHT}
-          aria-label="right aligned"
+          aria-label={t("column_settings_modal_text_alignment_select_right")}
           sx={{
             color: StyleVariables.TEXT_NORMAL,
             "&.Mui-selected, &.Mui-selected:hover": {
@@ -74,7 +75,7 @@ export default function TextAlignmentSelector(props: TextAlignmentProps) {
         </ToggleButton>
         <ToggleButton
           value={COLUMN_ALIGNMENT_OPTIONS.JUSTIFY}
-          aria-label="justified"
+          aria-label={t("column_settings_modal_text_alignment_select_justify")}
           sx={{
             color: StyleVariables.TEXT_NORMAL,
             "&.Mui-selected, &.Mui-selected:hover": {

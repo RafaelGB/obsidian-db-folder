@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class LinkAliasToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Default link alias state (on/off)';
+    settingTitle = t("settings_link_alias_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl } = settingHandlerResponse;
         // pass if modal opened from local settings
@@ -25,7 +26,7 @@ export class LinkAliasToggleHandler extends AbstractSettingsHandler {
             add_toggle(
                 containerEl,
                 this.settingTitle,
-                "Use column label as link alias of your URLs",
+                t("settings_link_alias_toggle_desc"),
                 media_settings.link_alias_enabled,
                 media_togle_promise
             );

@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class ShowSearchBarByDefaultToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Show Search Bar By Default';
+    settingTitle: string = t("settings_helper_default_search_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local } = settingHandlerResponse;
         // pass if modal opened from local settings
@@ -20,7 +21,7 @@ export class ShowSearchBarByDefaultToggleHandler extends AbstractSettingsHandler
             add_toggle(
                 containerEl,
                 this.settingTitle,
-                "The search bar will be shown by default when you open a database",
+                t("settings_helper_default_search_desc"),
                 settingsManager.plugin.settings.global_settings.show_search_bar_by_default,
                 searchbar_toggle_promise
             );

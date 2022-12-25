@@ -6,6 +6,7 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { select_new_column_section } from "components/modals/newColumn/SelectNewColumnSection";
 import { c } from "helpers/StylesHelper";
 import { applyPluginModalStyle } from "components/styles/ModalStyles";
+import { t } from "lang/helpers";
 
 export class AddColumnModal extends Modal {
     view: DatabaseView;
@@ -49,7 +50,7 @@ export class AddColumnModalManager {
         /** Common modal headings */
         containerEl.addClass(c(StyleClasses.ADD_COLUMN_MODAL));
         applyPluginModalStyle(containerEl);
-        add_setting_header(containerEl, `Columns menu`, 'h2');
+        add_setting_header(containerEl, t("add_row_modal_section_title"), 'h2');
 
         const addColumnBody = containerEl.createDiv();
         addColumnBody.setAttribute("id", StyleClasses.ADD_COLUMN_MODAL_BODY);

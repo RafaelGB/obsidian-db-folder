@@ -7,12 +7,13 @@ import { RowShadowToggleHandler } from "settings/handlers/rows/RowShadowToggleHa
 import { FooterToggleHandler } from "settings/handlers/rows/FooterToggleHandler";
 import { FontSizeHandler } from "settings/handlers/rows/FontSizeHandler";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 
 class RowsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const developer_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-rows");
         // title of the section
-        add_setting_header(developer_section, "Rows section", 'h3');
+        add_setting_header(developer_section, t("settings_row_section"), 'h3');
         settingHandlerResponse.containerEl = developer_section;
         return settingHandlerResponse;
     }

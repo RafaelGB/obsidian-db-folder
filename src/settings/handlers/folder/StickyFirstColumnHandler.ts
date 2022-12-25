@@ -1,8 +1,9 @@
+import { t } from "lang/helpers";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_toggle } from "settings/SettingsComponents";
 
 export class StickyFirstColumnHandler extends AbstractSettingsHandler {
-    settingTitle = 'Sticky first column';
+    settingTitle = t("settings_sticky_first_column_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { containerEl, view, local, settingsManager } = settingHandlerResponse;
         const sticky_first_column_toggle_promise = async (value: boolean): Promise<void> => {
@@ -25,7 +26,7 @@ export class StickyFirstColumnHandler extends AbstractSettingsHandler {
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Whether to make the first column sticky, so that it remains visible when scrolling horizontally.",
+            t("settings_sticky_first_column_toggle_desc"),
             current_sticky_first_column,
             sticky_first_column_toggle_promise
         );

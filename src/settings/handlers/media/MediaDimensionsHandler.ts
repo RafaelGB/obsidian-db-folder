@@ -1,19 +1,20 @@
 import { DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
 export class MediaDimensionsHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Choose dimensions of embeded media';
+    settingTitle = t("settings_media_dimension_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl } = settingHandlerResponse;
         const media_settings = settingsManager.plugin.settings.global_settings.media_settings;
         if (media_settings.enable_media_view) {
             // Check if media_settings is enabled
             const dimensionSettings = new Setting(containerEl)
-                .setName('Media Dimensions')
-                .setDesc('Choose default value of media dimensions (heightxwidth)')
+                .setName(this.settingTitle)
+                .setDesc(t("settings_media_dimension_desc"))
                 .addText(text => {
-                    text.setPlaceholder("Height")
+                    text.setPlaceholder(t("settings_media_dimension_height"))
                         .setValue(media_settings.height.toString())
                         .onChange(async (value: string): Promise<void> => {
                             // Common modifications of value
@@ -30,7 +31,7 @@ export class MediaDimensionsHandler extends AbstractSettingsHandler {
 
                         });
                 }).addText(text => {
-                    text.setPlaceholder("Width")
+                    text.setPlaceholder(t("settings_media_dimension_width"))
                         .setValue(media_settings.width.toString())
                         .onChange(async (value: string): Promise<void> => {
                             // Common modifications of value
@@ -48,7 +49,7 @@ export class MediaDimensionsHandler extends AbstractSettingsHandler {
                 })
             dimensionSettings.addExtraButton((cb) => {
                 cb.setIcon("reset")
-                    .setTooltip("Restart default values")
+                    .setTooltip(t("settings_default_values"))
                     .onClick(async (): Promise<void> => {
                         const update_global_settings = settingsManager.plugin.settings.global_settings;
                         // Persist changes

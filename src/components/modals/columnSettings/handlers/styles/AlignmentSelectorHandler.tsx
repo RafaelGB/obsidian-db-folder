@@ -1,12 +1,13 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import TextAlignmentSelector from "components/styles/TextAlignmentSelector";
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
 export class AlignmentSelectorHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-  settingTitle: string = "Content alignment selector";
+  settingTitle = t("column_settings_modal_aligment_select_title");
   handle(
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ): ColumnSettingsHandlerResponse {
@@ -15,7 +16,7 @@ export class AlignmentSelectorHandler extends AbstractHandlerClass<ColumnSetting
 
     const alignmentSetting = new Setting(containerEl)
       .setName(this.settingTitle)
-      .setDesc("Change content alignment of the column");
+      .setDesc(t("column_settings_modal_aligment_select_desc"));
 
     createRoot(alignmentSetting.controlEl.createDiv()).render(
       <TextAlignmentSelector

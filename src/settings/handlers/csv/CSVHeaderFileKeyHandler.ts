@@ -1,9 +1,10 @@
 import { DEFAULT_SETTINGS } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_text } from "settings/SettingsComponents";
 
 export class CSVHeaderFileKeyHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Mandatory header key';
+    settingTitle = t("settings_csv__header_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl } = settingHandlerResponse;
         const details_edit_desciption_promise = async (value: string): Promise<void> => {
@@ -16,8 +17,8 @@ export class CSVHeaderFileKeyHandler extends AbstractSettingsHandler {
         add_text(
             containerEl,
             this.settingTitle,
-            "This setting defines the mandatory header key that must be present in the csv file",
-            "file key...",
+            t("settings_csv__header_desc"),
+            t("settings_csv__header_placeholder"),
             settingsManager.plugin.settings.global_settings.csv_file_header_key ?? DEFAULT_SETTINGS.global_settings.csv_file_header_key,
             details_edit_desciption_promise
         );

@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, InputType, MarkdownBreakerRules } from "helpers/Constants";
+import { DEFAULT_SETTINGS, InputType, MarkdownBreakerRules, SUGGESTER_REGEX } from "helpers/Constants";
 import { DataObject, Link, Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 import { DateTime } from "luxon";
 import { LOGGER } from "services/Logger";
@@ -108,9 +108,9 @@ class Parse {
                 // Check if is a valid JSON
                 if (newValue.startsWith("{") && newValue.endsWith("}")) {
                     newValue = JSON.parse(newValue);
-                } else if (newValue.startsWith("[") && newValue.endsWith("]")) {
+                } else if (SUGGESTER_REGEX.TEXT_ARRAY.test(newValue)) {
                     // Remove brackets
-                    newValue = newValue.substring(1, newValue.length - 1);
+                    newValue = newValue.replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2");
                     // Split by comma
                     newValue = newValue.split(",");
                 }
@@ -238,7 +238,7 @@ class Parse {
                 return this.parseArrayToText(wrapped.value, localSettings);
 
             case 'link':
-                return wrapped.value.markdown()
+                return wrapped.value.markdown();
             // Else go to default
             default:
                 return DataviewService.getDataviewAPI().value.toString(wrapped.value);

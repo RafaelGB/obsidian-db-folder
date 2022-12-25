@@ -1,9 +1,10 @@
 import { AddRowModalHandlerResponse } from "cdm/ModalsModel";
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 
 export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandlerResponse> {
-    settingTitle: string = "Filename";
+    settingTitle: string = t("add_row_modal_filename_text_title");
     textElId: string = "AddRowModalManager-addRow-input";
     handle(
         response: AddRowModalHandlerResponse
@@ -29,7 +30,7 @@ export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandler
          **************/
         new Setting(containerEl)
             .setName(this.settingTitle)
-            .setDesc("Filename associated with the new row")
+            .setDesc(t("add_row_modal_filename_text_desc"))
             .addText(text => {
                 text.inputEl.setAttribute("id", this.textElId);
                 text.inputEl.onkeydown = (e: KeyboardEvent) => {
@@ -39,7 +40,7 @@ export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandler
                             break;
                     }
                 };
-                text.setPlaceholder("Enter filename")
+                text.setPlaceholder(t("add_row_modal_filename_text_placeholder"))
                     .setValue(newFilename)
                     .onChange(async (value: string): Promise<void> => {
                         newFilename = value;
@@ -48,7 +49,7 @@ export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandler
             .addButton((button) => {
                 button
                     .setIcon("create-new")
-                    .setTooltip("Add new row")
+                    .setTooltip(t("add_row_modal_filename_text_button_tooltip"))
                     .onClick(addNewRowPromise);
             });
         return this.goNext(response);

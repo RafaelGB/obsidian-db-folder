@@ -1,8 +1,9 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 export class HideCompletedTaskToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-    settingTitle: string = 'Hide completed tasks';
+    settingTitle = t("column_settings_modal_hide_completed_tasks_toggle_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -17,7 +18,7 @@ export class HideCompletedTaskToggleHandler extends AbstractHandlerClass<ColumnS
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Hide the completed tasks shown in the task column",
+            t("column_settings_modal_hide_completed_tasks_toggle_desc"),
             column.config.task_hide_completed,
             inline_togle_promise
         );

@@ -54,10 +54,25 @@ const localeMap: { [k: string]: Partial<typeof en> } = {
 const lang = localStorage.getItem('language');
 const locale = localeMap[lang || 'en'];
 
-export function t(str: keyof typeof en): string {
+/**
+ * Translate a string to the current language or English if not found.
+ * 
+ * You can pass in arguments to replace in the string using {0}, {1}, etc.
+ * @param str 
+ * @param args 
+ * @returns 
+ */
+export function t(str: keyof typeof en, ...args: string[]): string {
   if (!locale) {
     LOGGER.error('Error: database locale not found', lang);
   }
+  const translated = (locale && locale[str]) || en[str];
 
-  return (locale && locale[str]) || en[str] || str;
+  if (!translated) {
+    LOGGER.warn('String key not found in locale', str);
+    return str;
+  }
+
+  // Replace any arguments in the string
+  return args.reduce((acc, arg, i) => acc.replace(`{${i}}`, arg), translated);
 }

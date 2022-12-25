@@ -1,7 +1,7 @@
 import { CellContext } from "@tanstack/react-table";
 import { NormalizedPath, RowDataType, TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
-import { MediaExtensions } from "helpers/Constants";
+import { MediaExtensions, SUGGESTER_REGEX } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { CachedMetadata, MarkdownRenderer, setIcon, TFile } from "obsidian";
@@ -22,6 +22,7 @@ class MarkdownRenderService {
             const view = table.options.meta.view;
             const column = defaultCell.column.columnDef as TableColumn;
             const { media_height, media_width, enable_media_view } = column.config;
+            // URL modifiers
             if (this.isValidHttpUrl(markdownString)) {
                 const media_inclusion = enable_media_view ? `|${media_height}x${media_width}` : "";
 
@@ -34,7 +35,18 @@ class MarkdownRenderService {
                     markdownString = `!${markdownString}`;
                 }
             }
-
+            // Array modifiers
+            if (SUGGESTER_REGEX.TEXT_ARRAY.test(markdownString)) {
+                console.log("Array detected");
+                let alternativeString = "";
+                markdownString
+                    .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2")
+                    .split(",")
+                    .forEach((item) => {
+                        alternativeString = alternativeString.concat(`- ${item}\n`);
+                    });
+                markdownString = alternativeString;
+            }
             await this.renderStringAsMarkdown(
                 view,
                 markdownString,

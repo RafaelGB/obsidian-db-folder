@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class FormulaJSToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable JavaScript formulas';
+    settingTitle = t("settings_formula_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view, local } = settingHandlerResponse;
         // pass if modal opened from local settings
@@ -23,7 +24,7 @@ export class FormulaJSToggleHandler extends AbstractSettingsHandler {
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Enable JavaScript formulas to be used in your database.",
+            t("settings_formula_toggle_desc"),
             local ? view.diskConfig.yaml.config.enable_js_formulas : settingsManager.plugin.settings.local_settings.enable_js_formulas,
             formulas_togle_promise
         );

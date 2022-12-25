@@ -1,8 +1,9 @@
 import { add_text, add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 export class LinkAliasToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Enable link alias';
+    settingTitle: string = t("column_settings_modal_link_alias_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -29,16 +30,16 @@ export class LinkAliasToggleHandler extends AbstractHandlerClass<ColumnSettingsH
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Enable/disable alias for media links using column label",
+            t("column_settings_modal_link_alias_desc"),
             column.config.link_alias_enabled,
             link_alias_togle_promise
         );
         if (column.config.link_alias_enabled) {
             add_text(
                 containerEl,
-                'Custom link alias',
-                'Custom alias for media links (leave blank to use column label)',
-                'insert alias...',
+                t("column_settings_modal_link_alias_text_title"),
+                t("column_settings_modal_link_alias_text_desc"),
+                t("column_settings_modal_link_alias_text_placeholder"),
                 column.config.custom_link_alias,
                 custom_link_alias_promise,
             )

@@ -6,6 +6,7 @@ import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { filter_group_section } from "components/modals/filters/FilterGroupSection";
+import { t } from "lang/helpers";
 
 export class FiltersModal extends Modal {
   addColumnManager: FiltersModalManager;
@@ -37,7 +38,7 @@ export class FiltersModalManager {
   constructUI(containerEl: HTMLElement) {
     /** Common modal headings */
     containerEl.addClass(StyleClasses.FILTERS_MODAL);
-    add_setting_header(containerEl, `Table Filters`, "h2");
+    add_setting_header(containerEl, t("filters_modal_title"), "h2");
 
     const addColumnBody = containerEl.createDiv();
     addColumnBody.addClass(StyleClasses.FILTERS_MODAL_BODY);

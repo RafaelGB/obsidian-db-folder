@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class FooterToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable footer';
+    settingTitle = t("settings_footer_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local, view } = settingHandlerResponse;
         const currentValue = local ?
@@ -23,7 +24,7 @@ export class FooterToggleHandler extends AbstractSettingsHandler {
         add_toggle(
             containerEl,
             this.settingTitle,
-            "This will enable footer of the table",
+            t("settings_footer_toggle_desc"),
             currentValue,
             shadow_toggle_promise
         );

@@ -1,3 +1,4 @@
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
@@ -8,7 +9,7 @@ const LIMITS = Object.freeze({
 });
 
 export class PaginationSizeHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Select the number of rows to show per page';
+    settingTitle = t("settings_pagination_size_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { local, containerEl, view } = settingHandlerResponse;
         if (local) {
@@ -19,7 +20,7 @@ export class PaginationSizeHandler extends AbstractSettingsHandler {
             // Local settings support
             new Setting(containerEl)
                 .setName(this.settingTitle)
-                .setDesc("Use the slider to select the number of rows to show per page")
+                .setDesc(t("settings_pagination_size_desc"))
                 .addSlider((slider) => {
                     slider.setDynamicTooltip()
                         .setValue(view.diskConfig.yaml.config.pagination_size)
