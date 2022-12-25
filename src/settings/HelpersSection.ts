@@ -4,12 +4,13 @@ import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/chain/AbstractHandler';
 import { ShowSearchBarByDefaultToggleHandler } from 'settings/handlers/helpersCommands/ShowSearchBarByDefaultToggleHandler';
 import { EnableAutoUpdateToggleHandler } from 'settings/handlers/helpersCommands/EnableAutoUpdateTOggleHandler';
+import { t } from 'lang/helpers';
 
 class HelpersSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const automation_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-automations");
         // title of the section
-        add_setting_header(automation_section, "Helpers/Commands Section", 'h3');
+        add_setting_header(automation_section, t("settings_helper_section"), 'h3');
         settingHandlerResponse.containerEl = automation_section;
         return settingHandlerResponse;
     }

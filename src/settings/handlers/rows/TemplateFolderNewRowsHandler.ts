@@ -1,17 +1,18 @@
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";
 
 export class TemplateFolderNewRowsHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Select Folder with templates for new rows';
+    settingTitle = t("settings_template_folder_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { local, settingsManager, containerEl, view } = settingHandlerResponse;
         new Setting(containerEl)
-            .setName("Rows template files folder location")
-            .setDesc("Select folder with template files for new rows")
+            .setName(this.settingTitle)
+            .setDesc(t("settings_template_folder_desc"))
             .addSearch((cb) => {
                 new FolderSuggest(cb.inputEl);
-                cb.setPlaceholder("Example: folder1/folder2")
+                cb.setPlaceholder(t("settings_template_folder_placeholder"))
                     .setValue(local ? view.diskConfig.yaml.config.row_templates_folder : settingsManager.plugin.settings.local_settings.row_templates_folder)
                     .onChange((new_folder) => {
                         if (local) {

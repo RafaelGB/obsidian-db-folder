@@ -3,6 +3,7 @@ import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/Abstra
 import { CellSizeDropDownHandler } from 'settings/handlers/folder/CellSizeDropDownHandler';
 import { StickyFirstColumnHandler } from 'settings/handlers/folder/StickyFirstColumnHandler';
 import { DetailsFormHandler } from 'settings/handlers/folder/DetailsFormHandler';
+import { t } from 'lang/helpers';
 
 /**
  * developer settings section
@@ -10,7 +11,7 @@ import { DetailsFormHandler } from 'settings/handlers/folder/DetailsFormHandler'
 export function folder_settings_section(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
     const folder_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-folder");
     // title of the section
-    add_setting_header(folder_section, "Folder adjustments", 'h3');
+    add_setting_header(folder_section, t("settings_folder_section"), 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;

@@ -57,7 +57,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         columnHandlerResponse
       );
     };
-    add_setting_header(containerEl, this.settingTitle, "h3");
+    add_setting_header(containerEl, this.settingTitle, "h4");
     new Setting(containerEl)
       .setName(t("column_settings_modal_selected_column_options_new_option"))
       .setDesc(

@@ -4,12 +4,13 @@ import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/chain/AbstractHandler';
 import { FormulaJSFolderHandler } from 'settings/handlers/automation/FormulaJSFolderHandler';
 import { FormulaJSToggleHandler } from 'settings/handlers/automation/FormulaJSToggleHandler';
+import { t } from 'lang/helpers';
 
 class AutomationSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const automation_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-automations");
         // title of the section
-        add_setting_header(automation_section, "Automations related to the table", 'h3');
+        add_setting_header(automation_section, t("settings_automation_section"), 'h3');
         settingHandlerResponse.containerEl = automation_section;
         return settingHandlerResponse;
     }
