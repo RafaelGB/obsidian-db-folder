@@ -1,3 +1,4 @@
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 
@@ -8,7 +9,7 @@ const LIMITS = Object.freeze({
 });
 
 export class FontSizeHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Select the size of the font';
+    settingTitle = t("settings_font_size_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { local, containerEl, view } = settingHandlerResponse;
         if (local) {
@@ -19,7 +20,7 @@ export class FontSizeHandler extends AbstractSettingsHandler {
             // Local settings support
             new Setting(containerEl)
                 .setName(this.settingTitle)
-                .setDesc("Use the slider to select the size of the font (in pixels)")
+                .setDesc(t("settings_font_size_desc"))
                 .addSlider((slider) => {
                     slider.setDynamicTooltip()
                         .setValue(view.diskConfig.yaml.config.font_size)

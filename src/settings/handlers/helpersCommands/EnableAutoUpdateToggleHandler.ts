@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class EnableAutoUpdateToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable Auto Update';
+    settingTitle = t("settings_helper_autoupdate_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local } = settingHandlerResponse;
         // pass if modal opened from local settings
@@ -20,7 +21,7 @@ export class EnableAutoUpdateToggleHandler extends AbstractSettingsHandler {
             add_toggle(
                 containerEl,
                 this.settingTitle,
-                "Enable auto update listener from other files. WARNING: requires restart to take effect.",
+                t("settings_helper_autoupdate_toggle_desc"),
                 settingsManager.plugin.settings.global_settings.enable_auto_update,
                 searchbar_toggle_promise
             );

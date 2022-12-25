@@ -189,6 +189,8 @@ export default {
   /******************************************
    *                SETTINGS
    ******************************************/
+  /** BASE */
+  "settings_default_values": "Restore default values",
   /** FORMULA SETTINGS */
   "settings_formula_title": "Formula Settings",
   "settings_formula_desc": "Select the destination of the formula JS files.",
@@ -253,4 +255,31 @@ export default {
   "settings_editing_engine_frontmatter_quotes_toggle_title": "Frontmatter quotes",
   "settings_editing_engine_frontmatter_quotes_toggle_desc": "Enable/disable quotes in frontmatter",
   /** FOLDER */
+  "settings_cell_size_title": "Cell size",
+  "settings_cell_size_desc": "Choose how compact or wide cells are.",
+  "settings_details_name_title": "Database name",
+  "settings_details_name_desc": "The name of the database",
+  "settings_details_name_placeholder": "Database name...",
+  "settings_details_description_title": "Database description",
+  "settings_details_description_desc": "The description of the database",
+  "settings_details_description_placeholder": "Database description...",
+  "settings_sticky_first_column_toggle_title": "Sticky first column",
+  "settings_sticky_first_column_toggle_desc": "Whether to make the first column sticky, so that it remains visible when scrolling horizontally.",
+  /** HELPPER COMMANDS */
+  "settings_helper_autoupdate_toggle_title": "Auto update",
+  "settings_helper_autoupdate_toggle_desc": "Enable auto update listener from other files. WARNING: requires restart to take effect.",
+  "settings_helper_default_search_title": "Show Search Bar By Default",
+  "settings_helper_default_search_desc": "The search bar will be shown by default when you open a database",
+  /** MEDIA */
+  "settings_link_alias_toggle_title": "Default link alias state (on/off)",
+  "settings_link_alias_toggle_desc": "Use column label as link alias of your URLs",
+  "settings_media_dimension_title": "Media dimensions",
+  "settings_media_dimension_desc": "Choose default value of media dimensions (heightxwidth)",
+  "settings_media_dimension_height": "Height",
+  "settings_media_dimension_width": "Width",
+  "settings_default_media_link_toggle_title": "Default media link state (on/off)",
+  "settings_default_media_link_toggle_desc": "Default value of wrap media links with embedding content",
+  /** ROWS */
+  "settings_font_size_title": "Select the size of the font",
+  "settings_font_size_desc": "Use the slider to select the size of the font (in pixels)",
 };
