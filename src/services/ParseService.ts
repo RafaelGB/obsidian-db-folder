@@ -21,7 +21,7 @@ class Parse {
      * @param isInline 
      * @returns 
      */
-    public parseLiteral(literal: Literal, dataTypeDst: string, localSettings: LocalSettings, isInline?: boolean): Literal {
+    public parseLiteral(literal: Literal, dataTypeDst: string, localSettings: LocalSettings, isInline?: boolean, wrapQuotes = false): Literal {
         let parsedLiteral: Literal = literal;
         if (!DataviewService.isTruthy(literal?.toString())) {
             return "";
@@ -31,7 +31,7 @@ class Parse {
         // Check empty or undefined literals
         switch (dataTypeDst) {
             case InputType.MARKDOWN:
-                parsedLiteral = this.parseToMarkdown(wrapped, localSettings, isInline);
+                parsedLiteral = this.parseToMarkdown(wrapped, localSettings, isInline, wrapQuotes);
                 break;
             case InputType.SORTING:
                 parsedLiteral = this.parseToEnableSorting(wrapped, localSettings, isInline);
@@ -284,7 +284,7 @@ class Parse {
         return auxMarkdown;
     }
 
-    private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean): string {
+    private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean, wrapQuotes = false): string {
         let auxMarkdown = '';
         switch (wrapped.type) {
             case 'boolean':
@@ -325,8 +325,7 @@ class Parse {
             default:
                 auxMarkdown = wrapped.value?.toString().trim();
         }
-        // Check possible markdown breakers
-        return this.handleYamlBreaker(auxMarkdown, localSettings, isInline);
+        return wrapQuotes ? this.handleYamlBreaker(auxMarkdown) : auxMarkdown;
     }
 
     private parseArrayToText(array: Literal[], localSettings: LocalSettings): string {
@@ -349,21 +348,11 @@ class Parse {
         return wrapped.value.map(v => satinizedColumnOption(DataviewService.getDataviewAPI().value.toString(v)));
     }
 
-    private handleYamlBreaker(value: string, localSettings: LocalSettings, isInline?: boolean): string {
+    private handleYamlBreaker(value: string): string {
         // Remove a possible already existing quote wrapper
         if (value.startsWith('"') && value.endsWith('"')) {
             value = value.substring(1, value.length - 1);
             return this.wrapWithQuotes(value);
-        }
-
-        // Wrap in quotes if is configured to do so
-        if (localSettings.frontmatter_quote_wrap) {
-            return this.wrapWithQuotes(value);
-        }
-
-        // Do nothing if is inline
-        if (isInline) {
-            return value;
         }
 
         // Check possible markdown breakers of the yaml

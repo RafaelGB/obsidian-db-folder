@@ -396,7 +396,6 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
     source_destination_path: '/',
-    frontmatter_quote_wrap: false,
     row_templates_folder: '/',
     current_row_template: '',
     pagination_size: 10,

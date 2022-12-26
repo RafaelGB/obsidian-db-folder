@@ -2,6 +2,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { SourceDataTypes } from "helpers/Constants";
 import { generateDataviewTableQuery } from "helpers/QueryHelper";
+import { c } from "helpers/StylesHelper";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
@@ -12,6 +13,7 @@ import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class SourceFormHandler extends AbstractSettingsHandler {
     settingTitle = t("settings_source_form_title");
+    private sourceFormResultTimeout: NodeJS.Timeout;
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { containerEl, view, columns } = settingHandlerResponse;
         switch (view.diskConfig.yaml.config.source_data) {
@@ -83,14 +85,21 @@ export class SourceFormHandler extends AbstractSettingsHandler {
 
     private queryHandler(view: DatabaseView, containerEl: HTMLElement, columns: TableColumn[]) {
         const query_promise = async (value: string): Promise<void> => {
-            // update settings
-            view.diskConfig.yaml.config.source_form_result = value;
-            view.diskConfig.updateConfig({ source_form_result: value });
+            if (this.sourceFormResultTimeout) {
+                clearTimeout(this.sourceFormResultTimeout);
+            }
+            this.sourceFormResultTimeout = setTimeout(() => {
+                // update settings
+                view.diskConfig.yaml.config.source_form_result = value;
+                view.diskConfig.updateConfig({ source_form_result: value });
+            }, 1500);
+
         };
         new Setting(containerEl)
             .setName(t("settings_source_form_query_title"))
             .setDesc(t("settings_source_form_query_desc"))
             .addTextArea((textArea) => {
+                textArea.inputEl.addClass(c("textarea-setting"));
                 textArea.setValue(view.diskConfig.yaml.config.source_form_result);
                 textArea.setPlaceholder(t("settings_source_form_query_placeholder"));
                 textArea.onChange(query_promise);

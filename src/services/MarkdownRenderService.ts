@@ -37,7 +37,6 @@ class MarkdownRenderService {
             }
             // Array modifiers
             if (SUGGESTER_REGEX.TEXT_ARRAY.test(markdownString)) {
-                console.log("Array detected");
                 let alternativeString = "";
                 markdownString
                     .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2")
