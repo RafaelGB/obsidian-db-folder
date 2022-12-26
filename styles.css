@@ -858,6 +858,12 @@ div.database-plugin__td.data-input:hover {
 .database-plugin__container div.dataview-error-box {
   display: none;
 }
+
+.database-plugin__textarea-setting {
+  min-width: 350px;
+  min-height: 80px;
+  margin: 10px;
+}
 /************************************************************
  *                    EXTERNAL APIs STYLES
  ************************************************************/

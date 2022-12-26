@@ -26,4 +26,15 @@ export default {
     "outgoing_link": "Enlace saliente",
     "incoming_link": "Enlace entrante",
     "query": "Consulta de Dataview",
+    /** COMMAND OPTIONS */
+    "active_go_next_page": "Ir a la página siguiente",
+    "active_go_previous_page": "Ir a la página anterior",
+    "active_add_new_row": "Añadir nueva fila",
+    "active_open_settings": "Abrir configuración",
+    "active_toggle_filters": "Mostrar/Ocultar filtros",
+    "active_open_filters": "Abrir filtros",
+    /** FOOTER MENU OPTIONS */
+    "footer_menu_none": "Nada",
+    "footer_menu_count_unique": "Contar valores únicos",
+    "footer_menu_count_empty": "Contar valores vacíos",
 };

@@ -332,5 +332,4 @@ export default {
   "settings_source_form_destination_title": "Select destination folder",
   "settings_source_form_destination_desc": "Select the destination of new entries for this source",
   "settings_source_form_destination_placeholder": "Example: folder1/folder2",
-
 };

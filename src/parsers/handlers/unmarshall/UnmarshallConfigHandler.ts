@@ -19,7 +19,7 @@ export class UnmarshallConfigHandler extends AbstractDiskHandler {
                     this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${parseValuetoSanitizeYamlValue(valueInternal as string, config)}`);
                 });
             } else if (typeof valueConfig === "string") {
-                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${parseValuetoSanitizeYamlValue(escapeSpecialCharacters(valueConfig), config)}`);
+                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${parseValuetoSanitizeYamlValue(escapeSpecialCharacters(valueConfig), config, true)}`);
             } else {
                 // Lvl2: config properties
                 this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${parseValuetoSanitizeYamlValue(valueConfig, config)}`);
