@@ -24,8 +24,6 @@ import {
 } from 'typings/api';
 
 import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
-import { registerLocale } from "react-datepicker";
-
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
@@ -36,9 +34,8 @@ import { isDatabaseNote } from 'helpers/VaultManagement';
 import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
-import { OBSIDIAN_LOCALE, registerDynamicLocale, t } from 'lang/helpers';
+import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
-import { lazy } from 'react';
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -612,7 +609,10 @@ export default class DBFolderPlugin extends Plugin {
 			})
 		);
 	}
+	/**
+	 * Register language used in the plugin
+	 */
 	async registerLocale() {
-		registerDynamicLocale();
+		registerDateFnLocale();
 	}
 }

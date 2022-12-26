@@ -96,7 +96,7 @@ export function dynamic_t(str: string, ...args: string[]): string {
  * @param localization Expo Localization object containing the locale and region.
  * @returns date-fns locale.
  */
-export function registerDynamicLocale() {
+export function registerDateFnLocale() {
   const dynamicLocale =
     Locales[OBSIDIAN_LOCALE as keyof typeof Locales] || Locales.enUS;
 
