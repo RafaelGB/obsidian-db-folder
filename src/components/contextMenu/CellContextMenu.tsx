@@ -36,7 +36,7 @@ export default function CellContextMenu(
     );
   };
 
-  const index = Number(row.index) + 1;
+  const index = Number(table.getRowModel().flatRows.indexOf(row)) + 1;
 
   return (
     <>
