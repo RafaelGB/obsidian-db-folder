@@ -60,6 +60,8 @@ export default {
   "header_menu_hide_column": "Hide",
   "header_menu_insert_column_left": "Insert left",
   "header_menu_insert_column_right": "Insert right",
+  "header_menu_settings": "Settings",
+  "header_menu_property_type": "Property Type",
   /** INPUT LABELS */
   "number": "Number",
   "text": "Text",

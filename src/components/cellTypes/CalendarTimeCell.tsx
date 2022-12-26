@@ -14,6 +14,7 @@ import { DEFAULT_SETTINGS, InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Platform } from "obsidian";
 import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
+import { OBSIDIAN_LOCALE } from "lang/helpers";
 
 const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
@@ -96,6 +97,8 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       isClearable
       ariaLabelClose="Clear"
       placeholderText="Pick a moment..."
+      locale={OBSIDIAN_LOCALE}
+      calendarStartDay={1}
     />
   ) : (
     <span

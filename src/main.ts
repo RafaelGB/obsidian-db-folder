@@ -24,7 +24,6 @@ import {
 } from 'typings/api';
 
 import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
-
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
@@ -35,7 +34,7 @@ import { isDatabaseNote } from 'helpers/VaultManagement';
 import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
-import { t } from 'lang/helpers';
+import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
@@ -102,6 +101,7 @@ export default class DBFolderPlugin extends Plugin {
 		this.registerCommands();
 		this.registerMonkeyPatches();
 		this.addMarkdownPostProcessor();
+		this.registerLocale();
 		// Mount an empty component to start; views will be added as we go
 		this.mount(window);
 	}
@@ -608,5 +608,11 @@ export default class DBFolderPlugin extends Plugin {
 				},
 			})
 		);
+	}
+	/**
+	 * Register language used in the plugin
+	 */
+	async registerLocale() {
+		registerDateFnLocale();
 	}
 }
