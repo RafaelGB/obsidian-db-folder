@@ -160,26 +160,20 @@ class ProjectAPI extends ProjectView {
      */
     private projectsTypeToPluginTypeMapper(type: string): string {
         let inputType = "";
-        switch (type) {
-            case DataFieldType.Number:
-                inputType = InputType.NUMBER;
-                break;
-            case DataFieldType.Boolean:
-                inputType = InputType.CHECKBOX;
-                break;
-            case DataFieldType.Date:
-                inputType = InputType.CALENDAR;
-                break;
-            case DataFieldType.List:
-                inputType = InputType.TAGS;
-                break;
-            // Default to text
-            case DataFieldType.String:
-            case DataFieldType.Link:
-            case DataFieldType.Unknown:
-            default:
-                inputType = InputType.TEXT;
+        const mapper = new Map<string, string>(
+            [
+                [DataFieldType.Number, InputType.NUMBER],
+                [DataFieldType.Boolean, InputType.CHECKBOX],
+                [DataFieldType.Date, InputType.CALENDAR],
+                [DataFieldType.List, InputType.TAGS],
+            ]
+        );
+        if (mapper.has(type)) {
+            inputType = mapper.get(type);
+        } else {
+            inputType = InputType.TEXT;
         }
+
         return inputType;
     }
 }
