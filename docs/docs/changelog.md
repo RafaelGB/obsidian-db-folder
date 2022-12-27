@@ -1,3 +1,5 @@
+## 3.1.2
+Hotfix of select & tags contrast (empty values) and save as md array
 ## 3.1.1
 ### Shiny new things
 - Full i18n support. You can now create a PR to support your language. [#679](https://github.com/RafaelGB/obsidian-db-folder/issues/679)
