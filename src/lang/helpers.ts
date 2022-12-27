@@ -35,7 +35,7 @@ const localeMap: { [k: string]: Partial<typeof en> } = {
   de,
   en,
   es,
-  fr,
+  fr : fr,
   hi,
   id,
   it,
