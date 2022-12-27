@@ -1,3 +1,17 @@
+## 3.1.1
+### Shiny new things
+- Full i18n support. You can now create a PR to support your language. [#679](https://github.com/RafaelGB/obsidian-db-folder/issues/679)
+  - ES (Spanish) included
+  - CH (Chinese) partially included. Thanks to (https://github.com/hedonihilist)
+### Improved
+- DateFn included as Locale of the calendar types (week start, translations...) [#501](https://github.com/RafaelGB/obsidian-db-folder/issues/501)
+- Width column does not have a minimum width anymore [#676](https://github.com/RafaelGB/obsidian-db-folder/issues/676)
+### Visual
+- Select and tags font color are contrasted with the background [#684](https://github.com/RafaelGB/obsidian-db-folder/issues/684)
+### No longer broken
+- Text column area will scale with the size of the text [#694](https://github.com/RafaelGB/obsidian-db-folder/issues/694)
+- Save data on file with the new API respect date format [#683](https://github.com/RafaelGB/obsidian-db-folder/issues/683)
+- List with the new edit API is not broken anymore [#686](https://github.com/RafaelGB/obsidian-db-folder/issues/686)
 ## 3.1.0
 ### Shiny new things
 - Auto refresh when any external change is detected. You can disable it on global settings for performance purposes [ISSUE#482](https://github.com/RafaelGB/obsidian-db-folder/issues/482)
