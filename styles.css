@@ -529,7 +529,7 @@ div.database-plugin__td.data-input:hover {
   width: fit-content;
   height: 40px;
   list-style: none;
-  bottom: 1em;
+  bottom: 1.15em;
   position: absolute;
   right: 0;
   margin: 0;

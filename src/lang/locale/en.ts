@@ -276,8 +276,6 @@ export default {
   "settings_editing_engine_datetime_format_desc": "The format of the datetime with Luxon standard",
   "settings_editing_engine_metadata_datetime_format_title": "Metadata datetime format",
   "settings_editing_engine_metadata_datetime_format_desc": "The format of the datetime with Luxon standard",
-  "settings_editing_engine_frontmatter_quotes_toggle_title": "Frontmatter quotes",
-  "settings_editing_engine_frontmatter_quotes_toggle_desc": "Enable/disable quotes in frontmatter",
   /** FOLDER */
   "settings_cell_size_title": "Cell size",
   "settings_cell_size_desc": "Choose how compact or wide cells are.",

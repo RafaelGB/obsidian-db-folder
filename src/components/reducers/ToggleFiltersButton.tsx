@@ -59,16 +59,15 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
    */
   useEffect(() => {
     const refreshHandler = (updaterData: UpdaterData) => {
-      if (
-        updaterData.file.path === view.file.path ||
-        (updaterData.isActive &&
-          updaterData.op === DATAVIEW_UPDATER_OPERATIONS.UPDATE)
-      ) {
-        LOGGER.info(`Refresh "${view.file.path}" skipped - redundant`);
+      if (updaterData.file.path === view.file.path) {
+        LOGGER.info(
+          `Refresh of database file ${updaterData.file.path} skipped`
+        );
         return;
       }
+      const timeoutIdentifier = updaterData.file.path.concat(updaterData.op);
+      const potentialTimeout = refreshTimeoutMap.get(timeoutIdentifier);
 
-      const potentialTimeout = refreshTimeoutMap.get(updaterData.file.path);
       if (potentialTimeout) {
         clearTimeout(potentialTimeout);
       }
@@ -83,10 +82,7 @@ export default function ToggleFiltersButton(props: DataviewFiltersProps) {
       }, 150);
 
       setRefreshTimeoutMap(
-        refreshTimeoutMap.set(
-          updaterData.file.path.concat(updaterData.op),
-          timeoutIndex
-        )
+        refreshTimeoutMap.set(timeoutIdentifier, timeoutIndex)
       );
     };
     view.emitter.on(EMITTERS_GROUPS.UPDATER, refreshHandler);

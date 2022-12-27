@@ -45,9 +45,15 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                         }
                         break;
                     case DATAVIEW_UPDATER_OPERATIONS.UPDATE:
+                        if (updaterData.isActive) {
+                            LOGGER.info(`Refreshing File "${updaterData.file}" due to active file update. Ignore`);
+                            return updater;
+                        }
+
                         const updatedPage = DataviewService.getDataviewAPI().page(pathToOperate);
                         const isValid = !filterConfig.enabled ? true : tableFilter(filterConfig.conditions, updatedPage, ddbbConfig);
                         if (!isValid) {
+                            LOGGER.info(`Refreshing File "${updaterData.file}" does not match filter. Ignore`);
                             return updater;
                         }
                         const noteInfo = new NoteInfo(updatedPage as NoteInfoPage);
