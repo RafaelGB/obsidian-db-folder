@@ -20,7 +20,7 @@ class MarkdownParser extends TypeParser<Literal> {
         switch (wrapped.type) {
             case 'boolean':
             case 'number':
-                auxMarkdown = wrapped.value.toString();
+                auxMarkdown = wrapped.value;
                 break;
             case 'array':
                 auxMarkdown = wrapped.value
