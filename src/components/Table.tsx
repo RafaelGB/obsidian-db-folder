@@ -24,7 +24,6 @@ import {
   MetadataColumns,
   ResizeConfiguration,
 } from "helpers/Constants";
-import { LOGGER } from "services/Logger";
 import DefaultCell from "components/DefaultCell";
 import DefaultHeader from "components/DefaultHeader";
 import { c } from "helpers/StylesHelper";
@@ -48,8 +47,8 @@ import TableActions from "components/tableActions/TableActions";
 import PaginationTable from "components/navbar/PaginationTable";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
-  minSize: DatabaseLimits.MIN_COLUMN_HEIGHT,
-  maxSize: DatabaseLimits.MAX_COLUMN_HEIGHT,
+  minSize: DatabaseLimits.MIN_COLUMN_WIDTH,
+  size: DatabaseLimits.DEFAULT_COLUMN_WIDTH,
   cell: DefaultCell,
   header: DefaultHeader,
   enableResizing: true,
@@ -68,10 +67,6 @@ export function Table(tableData: TableDataType) {
   const columnActions = tableStore.columns((state) => state.actions);
   const columnsInfo = tableStore.columns((state) => state.info);
   const rows = tableStore.data((state) => state.rows);
-
-  LOGGER.debug(
-    `=> Table. number of columns: ${columns.length}. number of rows: ${rows.length}`
-  );
 
   const cell_size_config = tableStore.configState(
     (store) => store.ddbbConfig.cell_size
@@ -202,7 +197,6 @@ export function Table(tableData: TableDataType) {
     autoResetPageIndex: false,
   });
 
-  LOGGER.debug(`<= Table`);
   return (
     <>
       <HeaderNavBar

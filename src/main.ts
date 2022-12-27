@@ -24,7 +24,6 @@ import {
 } from 'typings/api';
 
 import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
-
 import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
@@ -35,9 +34,8 @@ import { isDatabaseNote } from 'helpers/VaultManagement';
 import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
-import { t } from 'lang/helpers';
+import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
-import { DataviewService } from 'services/DataviewService';
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -103,12 +101,9 @@ export default class DBFolderPlugin extends Plugin {
 		this.registerCommands();
 		this.registerMonkeyPatches();
 		this.addMarkdownPostProcessor();
+		this.registerLocale();
 		// Mount an empty component to start; views will be added as we go
 		this.mount(window);
-
-		(app.workspace as any).floatingSplit?.children?.forEach((c: any) => {
-			this.mount(c.win);
-		});
 	}
 
 	unload(): void {
@@ -403,9 +398,26 @@ export default class DBFolderPlugin extends Plugin {
 		 * When the Dataview index is ready, trigger the index ready event.
 		 */
 		this.registerEvent(
-			// @ts-ignore
-			this.app.metadataCache.on("dataview:index-ready", () => {
-				DataviewService.indexIsLoaded = true;
+			this.app.metadataCache.on("dataview:index-ready", async () => {
+				// Refresh all database views
+				this.viewMap.forEach(async (view) => {
+					await view.reloadDatabase();
+				});
+				/**
+				 * Once the index is ready, we can start listening for metadata changes.
+				 */
+				if (this.settings.global_settings.enable_auto_update) {
+					this.registerEvent(app.metadataCache.on("dataview:metadata-change",
+						(type, file, oldPath?) => {
+							const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+							// Iterate through all the views and reload the database if the file is the same
+							this.viewMap.forEach(async (view) => {
+								const isActive = activeView && (view.file.path === activeView.file.path);
+								view.handleExternalMetadataChange(type, file, isActive, oldPath);
+							});
+						})
+					);
+				}
 			})
 		);
 	}
@@ -497,9 +509,8 @@ export default class DBFolderPlugin extends Plugin {
 		});
 
 		// Ribbon Icon
-		if (this.settings.global_settings.enable_ribbon_icon) {
-			this.showRibbonIcon();
-		}
+		this.showRibbonIcon();
+
 	}
 
 	showRibbonIcon() {
@@ -597,5 +608,11 @@ export default class DBFolderPlugin extends Plugin {
 				},
 			})
 		);
+	}
+	/**
+	 * Register language used in the plugin
+	 */
+	async registerLocale() {
+		registerDateFnLocale();
 	}
 }

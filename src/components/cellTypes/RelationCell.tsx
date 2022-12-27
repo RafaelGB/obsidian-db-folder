@@ -55,7 +55,7 @@ const RelationCell = (mdProps: CellComponentProps) => {
         5
       );
     }
-  }, [relationRow, dirtyCell]);
+  }, [row, column, dirtyCell]);
 
   const persistChange = (newPaths: string[]) => {
     const oldPaths = relationCell

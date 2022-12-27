@@ -158,7 +158,12 @@ class EditEngine {
 
         async function persistFrontmatter(deletedColumn?: string): Promise<void> {
             await app.fileManager.processFrontMatter(file, (frontmatter) => {
-                Object.assign(frontmatter, rowFields.frontmatter);
+                frontmatter[columnId] = ParseService.parseLiteral(
+                    rowFields.frontmatter[columnId],
+                    InputType.MARKDOWN,
+                    ddbbConfig
+                );
+
                 if (deletedColumn) {
                     delete frontmatter[deletedColumn];
                 }

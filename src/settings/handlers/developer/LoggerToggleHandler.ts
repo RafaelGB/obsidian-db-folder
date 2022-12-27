@@ -1,8 +1,9 @@
 import { LOGGER } from "services/Logger";
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class LoggerToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Enable developer settings. Logger will be enabled';
+    settingTitle = t("settings_developer_enable_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local } = settingHandlerResponse;
         // pass if modal opened from local settings
@@ -23,7 +24,7 @@ export class LoggerToggleHandler extends AbstractSettingsHandler {
             add_toggle(
                 containerEl,
                 this.settingTitle,
-                "This will log all the errors and warnings in the console",
+                t("settings_developer_enable_toggle_desc"),
                 settingsManager.plugin.settings.global_settings.enable_debug_mode,
                 logger_togle_promise
             );

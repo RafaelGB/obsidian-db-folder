@@ -1,4 +1,4 @@
-import { InputType, StyleVariables } from "helpers/Constants";
+import { StyleVariables } from "helpers/Constants";
 import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { FocusEventHandler, useState } from "react";
@@ -13,6 +13,7 @@ import { HeaderMenuProps } from "cdm/HeaderModel";
 import Box from "@mui/material/Box";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { Platform } from "obsidian";
+import { dynamic_t, t } from "lang/helpers";
 
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
@@ -156,7 +157,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                       color: StyleVariables.TEXT_FAINT,
                     }}
                   >
-                    Property Type
+                    {t("header_menu_property_type")}
                   </span>
                 </div>
                 {/** Type of column section */}
@@ -179,7 +180,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                       {propertyIcon}
                     </span>
                     <span style={{ textTransform: "capitalize" }}>
-                      {getLabelHeader(input)}
+                      {dynamic_t(input)}
                     </span>
                   </div>
                   <Popper
@@ -246,7 +247,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                   <span className="svg-icon svg-text icon-margin">
                     <AdjustmentsIcon />
                   </span>
-                  <span>Settings</span>
+                  <span>{t("header_menu_settings")}</span>
                 </div>
               </div>
             </div>

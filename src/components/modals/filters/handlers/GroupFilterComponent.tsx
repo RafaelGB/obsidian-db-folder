@@ -23,6 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import LabelComponent from "components/modals/filters/handlers/LabelComponent";
 import { Setting } from "obsidian";
 import { castHslToString, castStringtoHsl, randomColor } from "helpers/Colors";
+import { t } from "lang/helpers";
 type GroupFilterComponentProps = {
   group: FilterGroup;
   recursiveIndex: number[];
@@ -175,7 +176,9 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
             key={`Grid-disabled-${level}-${recursiveIndex[level]}`}
           >
             <IconButton
-              aria-label="enable/disable filter"
+              aria-label={t(
+                "filters_modal_add_group_filter_button_enable_tooltip"
+              )}
               size="small"
               onClick={() =>
                 commonModifyFilter(
@@ -194,7 +197,9 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
             key={`Grid-remove-group-${level}-${recursiveIndex[level]}`}
           >
             <IconButton
-              aria-label="delete"
+              aria-label={t(
+                "filters_modal_add_group_filter_button_delete_tooltip"
+              )}
               size="small"
               onClick={() =>
                 commonModifyFilter(
@@ -213,7 +218,9 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
             key={`Grid-add-atomic-filter-${level}-${recursiveIndex[level]}`}
           >
             <IconButton
-              aria-label="add atomic filter"
+              aria-label={t(
+                "filters_modal_add_group_filter_button_atomic_filter_tooltip"
+              )}
               size="small"
               onClick={() =>
                 commonModifyFilter(
@@ -232,7 +239,9 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
             key={`Grid-add-group-filter-${level}-${recursiveIndex[level]}`}
           >
             <IconButton
-              aria-label="add group filter"
+              aria-label={t(
+                "filters_modal_add_group_filter_button_group_filter_tooltip"
+              )}
               size="small"
               onClick={() =>
                 commonModifyFilter(

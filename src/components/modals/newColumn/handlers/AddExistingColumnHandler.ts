@@ -8,7 +8,7 @@ import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
-    settingTitle: string = 'Add existing column';
+    settingTitle: string = t("add_row_modal_add_existing_column_title");
     handle(response: AddColumnModalHandlerResponse): AddColumnModalHandlerResponse {
         const { containerEl, addColumnModalManager } = response;
         const { configState, columnState } = addColumnModalManager.props;
@@ -44,14 +44,14 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                     filteredColumns[columnName] = columnName;
                 });
             new Setting(containerEl)
-                .setName('Select an existing column to add')
-                .setDesc('Select an existing column to add not included yet in the table')
+                .setName(this.settingTitle)
+                .setDesc(t("add_row_modal_add_existing_column_desc"))
                 .addSearch((cb) => {
                     new StringSuggest(
                         cb.inputEl,
                         filteredColumns
                     );
-                    cb.setPlaceholder("Search column...")
+                    cb.setPlaceholder(t("add_row_modal_add_existing_column_placeholder"))
                         .setValue(selectedColumn)
                         .onChange((value: string) => {
                             selectedColumn = value;
@@ -65,10 +65,10 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                 })
                 .addExtraButton((cb) => {
                     cb.setIcon("create-new")
-                        .setTooltip("Create the selected column and refresh the table")
+                        .setTooltip(t("add_row_modal_add_existing_column_button_tooltip"))
                         .onClick(async (): Promise<void> => {
                             if (!selectedColumn || filteredColumns[selectedColumn] === undefined) {
-                                new Notice("You need to select a column to add", 1500);
+                                new Notice(t("add_row_modal_add_existing_notice_error_empty"), 1500);
                                 return;
                             }
                             columnState.actions.addToLeft(
@@ -79,7 +79,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
                             addColumnModalManager.addColumnModal.enableReset = true;
                             // Refresh the modal to remove the selected column from the dropdown
                             addColumnModalManager.reset(response);
-                            new Notice(`"${selectedColumn}" added to the table`, 1500);
+                            new Notice(t("add_row_modal_add_existing_notice_correct", selectedColumn), 1500);
 
                         });
                 });

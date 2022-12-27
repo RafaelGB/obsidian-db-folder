@@ -2,7 +2,6 @@ import { EventEmitter } from 'eventemitter3';
 
 import { SearchResult } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/SearchResult';
 import { createCustomEvent } from 'components/cellTypes/Editor/textcomplete/textcomplete-core/utils';
-import { LOGGER } from 'services/Logger';
 
 export interface CursorOffset {
   lineHeight: number;
@@ -115,7 +114,6 @@ export abstract class Editor extends EventEmitter {
    * @see {@link Textarea} for live example.
    */
   protected getCode(e: KeyboardEvent): KeyCode {
-    LOGGER.debug(`Editor onKeyDown event: ${e.key}`);
     let code: KeyCode = 'OTHER';
     switch (e.key) {
       case 'Enter':

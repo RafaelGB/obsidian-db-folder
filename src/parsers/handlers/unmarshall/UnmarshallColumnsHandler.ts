@@ -31,11 +31,13 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
 
             // Lvl4: column config
             Object.keys(column.config).forEach(key => {
-                let quoteConfig = config;
-                if (column.config[key] && typeof column.config[key] === 'string') {
-                    quoteConfig = { ...config, frontmatter_quote_wrap: true };
-                }
-                const confValue = parseValuetoSanitizeYamlValue(column.config[key]?.toString(), quoteConfig);
+                // Wrap quotes if it is a string
+                const requiredWrap = column.config[key] && typeof column.config[key] === 'string';
+                const confValue = parseValuetoSanitizeYamlValue(
+                    column.config[key]?.toString(),
+                    config,
+                    requiredWrap
+                );
                 this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${confValue}`);
             });
         };

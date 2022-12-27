@@ -4,9 +4,10 @@ import { FileGroupingService } from "services/FileGroupingService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_toggle } from "settings/SettingsComponents";
 import { FileGroupingColumnsSetting } from "settings/handlers/columns/FileGroupingColumnsSetting";
+import { t } from "lang/helpers";
 
 export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
-  settingTitle: string = 'Define a schema to group files into folders';
+  settingTitle = t("settings_group_folder_column_title");
   handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
     const { containerEl, local, view, settingsManager } = settingHandlerResponse;
     if (local) {
@@ -31,8 +32,8 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
 
       add_toggle(
         containerEl,
-        "Group all files into folders automatically",
-        "By default, files are groupped individually, after a value is updated",
+        this.settingTitle,
+        t("settings_group_folder_column_desc"),
         view.diskConfig.yaml.config.automatically_group_files,
         async (value) => {
           view.diskConfig.updateConfig({ automatically_group_files: value });
@@ -40,8 +41,8 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
       )
       add_toggle(
         containerEl,
-        "Remove empty folders",
-        "Automatically remove empty folders after grouping files.",
+        t("settings_group_folder_column_delete_toggle_title"),
+        t("settings_group_folder_column_delete_toggle_desc"),
         view.diskConfig.yaml.config.remove_empty_folders,
         async (value) => {
           view.diskConfig.updateConfig({ remove_empty_folders: value });
@@ -50,8 +51,8 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
 
       add_toggle(
         containerEl,
-        "Hoist files with missing attributes to root folder",
-        "By default, files with missing attributes are hoisted to the lowest possible folder",
+        t("settings_group_folder_column_hoist_toggle_title"),
+        t("settings_group_folder_column_hoist_toggle_desc"),
         view.diskConfig.yaml.config.hoist_files_with_empty_attributes,
         async (value) => {
           view.diskConfig.updateConfig({ hoist_files_with_empty_attributes: value });

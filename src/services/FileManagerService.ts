@@ -20,10 +20,6 @@ class VaultManager {
    */
   async create_markdown_file(targetFolder: TFolder, filename: string, localSettings: LocalSettings, databasefields?: RowDatabaseFields): Promise<TFile> {
     LOGGER.debug(`=> create_markdown_file. name:${targetFolder.path}/${filename})`);
-    const created_note = await app.fileManager.createNewMarkdownFile(
-      targetFolder,
-      filename ?? "Untitled"
-    );
     let content = databasefields ? parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields)) : "";
 
     // Obtain content from current row template
@@ -45,7 +41,13 @@ class VaultManager {
       default:
     }
 
-    await app.vault.modify(created_note, content ?? "");
+    const created_note = await app.vault.create(
+      targetFolder.path
+        .concat("/")
+        .concat(filename ?? "Untitled")
+        .concat(".md"),
+      content ?? ""
+    );
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;
   }

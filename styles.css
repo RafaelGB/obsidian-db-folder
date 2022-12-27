@@ -3,6 +3,7 @@
 ******************/
 .database-plugin__container {
   --dbfolder-line-height: 1rem;
+  --dbfolder-font-size: 16px;
 }
 /*****************
 *      Base
@@ -126,11 +127,14 @@ div.database-plugin__td.data-input:hover {
   text-align: -webkit-center;
   vertical-align: middle;
   line-height: var(--dbfolder-line-height);
+  font-size: var(--dbfolder-font-size);
 }
 
 .database-plugin__td.data-input p {
   margin: 0;
+  font-size: var(--dbfolder-font-size);
 }
+
 /** children of data-input fills parent div*/
 .data-input > * {
   border: none;
@@ -159,16 +163,12 @@ div.database-plugin__td.data-input:hover {
   box-sizing: border-box;
 }
 
-.database-plugin__td span.is-loaded,
-span.database-plugin__calendar,
-div.database-plugin__checkbox {
+.database-plugin__checkbox {
+  place-self: center;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.database-plugin__checkbox {
-  place-self: center;
+  flex-wrap: wrap;
 }
 
 .database-plugin__checkbox input[type="checkbox"] {
@@ -529,7 +529,7 @@ div.database-plugin__checkbox {
   width: fit-content;
   height: 40px;
   list-style: none;
-  bottom: 1em;
+  bottom: 1.15em;
   position: absolute;
   right: 0;
   margin: 0;
@@ -563,7 +563,11 @@ div.database-plugin__checkbox {
 }
 
 .database-plugin__calendar {
-  align-self: center;
+  place-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .database-plugin__relationship,
@@ -857,6 +861,19 @@ div.database-plugin__checkbox {
 
 .database-plugin__container div.dataview-error-box {
   display: none;
+}
+
+.database-plugin__textarea-setting {
+  min-width: 350px;
+  min-height: 80px;
+  margin: 10px;
+}
+/************************************************************
+ *                    EXTERNAL APIs STYLES
+ ************************************************************/
+.database-plugin__project-view-container {
+  width: 100%;
+  height: 100%;
 }
 /************************************************************
 *               React-datepicker styles

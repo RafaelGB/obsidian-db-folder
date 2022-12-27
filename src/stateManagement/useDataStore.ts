@@ -31,6 +31,7 @@ function emptyDataState(): Omit<DataState, "rows"> {
             removeOptionForAllRows: null,
             parseDataOfColumn: null,
             dataviewRefresh: null,
+            dataviewUpdater: null,
             renameFile: null,
             saveDataFromFile: null,
             groupFiles: null,

@@ -1,3 +1,4 @@
+import { contrastColor } from "helpers/Colors";
 import { StyleVariables } from "helpers/Constants";
 import {
     StylesConfig,
@@ -28,7 +29,7 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     option: (styles, { data, isFocused }) => ({
         ...styles,
         backgroundColor: data.color,
-        color: StyleVariables.TEXT_NORMAL,
+        color: contrastColor(data.color),
         border: isFocused ? 1 + "px solid " + StyleVariables.TEXT_ACCENT : 0,
         padding: 0,
         width: "100%",
@@ -44,19 +45,20 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     multiValue: (styles, { data }) => {
         return {
             ...styles,
-            backgroundColor: data.color + " !important",
+            backgroundColor: data.color
         };
     },
-    multiValueLabel: (styles) => ({
+    multiValueLabel: (styles, { data }) => ({
         ...styles,
-        color: "black",
+        backgroundColor: data.color,
+        color: contrastColor(data.color),
     }),
     multiValueRemove: (styles, { data }) => ({
         ...styles,
-        color: "black",
+        color: contrastColor(data.color),
         ":hover": {
-            backgroundColor: data.color + " !important",
-            color: "white",
+            backgroundColor: data.color,
+            color: StyleVariables.TEXT_ACCENT,
         },
     })
 };

@@ -3,7 +3,7 @@ import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handle
 import { INLINE_POSITION } from "helpers/Constants";
 import { t } from "lang/helpers";
 export class InlineFieldsOptionsHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Inline fields options';
+    settingTitle: string = t("settings_inline_options_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local, view } = settingHandlerResponse;
         const inline_section = containerEl.createDiv("configuration-section-container-columns-inline");
@@ -28,8 +28,8 @@ export class InlineFieldsOptionsHandler extends AbstractSettingsHandler {
         }
         add_toggle(
             containerEl,
-            "Enable inline fields as default",
-            "New columns will be created as inline fields by default",
+            t("settings_inline_options_default_toggle_title"),
+            t("settings_inline_options_default_toggle_desc"),
             local ? view.diskConfig.yaml.config.inline_default : settingsManager.plugin.settings.local_settings.inline_default,
             logger_togle_promise
         );
@@ -56,8 +56,8 @@ export class InlineFieldsOptionsHandler extends AbstractSettingsHandler {
         });
         add_dropdown(
             containerEl,
-            'Select position of new inline fields',
-            'New inline fields will be created in the selected position on your notes',
+            t("settings_inline_options_position_title"),
+            t("settings_inline_options_position_desc"),
             local ? view.diskConfig.yaml.config.inline_new_position : settingsManager.plugin.settings.local_settings.inline_new_position,
             options,
             inline_position_dropdown_promise

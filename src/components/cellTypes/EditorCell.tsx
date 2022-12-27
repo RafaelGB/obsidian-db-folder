@@ -4,6 +4,7 @@ import React, { ChangeEventHandler, useCallback, useRef } from "react";
 import { useState } from "react";
 import { MarkdownEditor } from "components/cellTypes/Editor/MarkdownEditor";
 import { c } from "helpers/StylesHelper";
+import useAutosizeTextArea from "components/styles/hooks/useAutosizeTextArea";
 
 const EditorCell = (props: EditorCellComponentProps) => {
   const { defaultCell, persistChange, textCell } = props;
@@ -35,7 +36,6 @@ const EditorCell = (props: EditorCellComponentProps) => {
       editableMdRef.current.blur();
     }
   };
-
   /**
    * Close editor undoing any changes realised
    */
@@ -50,6 +50,7 @@ const EditorCell = (props: EditorCellComponentProps) => {
     persistChange(editorValue?.toString());
   };
 
+  useAutosizeTextArea(editableMdRef.current, editorValue);
   return (
     <>
       <MarkdownEditor

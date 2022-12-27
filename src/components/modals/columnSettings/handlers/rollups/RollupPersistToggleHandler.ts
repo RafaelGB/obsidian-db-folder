@@ -1,9 +1,10 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
+import { t } from "lang/helpers";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { add_toggle } from "settings/SettingsComponents";
 
 export class RollupPersistToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Persist rollup output';
+    settingTitle: string = t("column_settings_modal_rollup_persist_toggle_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -18,7 +19,7 @@ export class RollupPersistToggleHandler extends AbstractHandlerClass<ColumnSetti
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Enable/disable to persist rollup output on your notes (Only persisted rollups could be searchable and sortable)",
+            t("column_settings_modal_rollup_persist_toggle_desc"),
             config.persist_rollup,
             persist_rollup_toggle_promise
         );

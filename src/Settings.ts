@@ -17,6 +17,7 @@ import csv_settings_section from "settings/CSVSection";
 import automation_settings_section from "settings/AutomationSection";
 import helpers_settings_section from "settings/HelpersSection";
 import { applyPluginModalStyle } from "components/styles/ModalStyles";
+import { t } from "lang/helpers";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -168,7 +169,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    this.settingsManager.constructUI(containerEl, 'Database Folder Plugin', false);
+    this.settingsManager.constructUI(containerEl, t("settings_title"), false);
   }
 }
 

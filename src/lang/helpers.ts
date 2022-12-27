@@ -22,7 +22,11 @@ import tr from 'lang/locale/tr';
 import uk from 'lang/locale/tr';
 import zhCN from 'lang/locale/zh-cn';
 import zhTW from 'lang/locale/zh-tw';
+
+import * as Locales from 'date-fns/locale';
+
 import { LOGGER } from 'services/Logger';
+import { registerLocale } from 'react-datepicker';
 
 const localeMap: { [k: string]: Partial<typeof en> } = {
   ar,
@@ -31,7 +35,7 @@ const localeMap: { [k: string]: Partial<typeof en> } = {
   de,
   en,
   es,
-  fr,
+  fr : fr,
   hi,
   id,
   it,
@@ -51,13 +55,50 @@ const localeMap: { [k: string]: Partial<typeof en> } = {
   zh: zhCN,
 };
 
-const lang = localStorage.getItem('language');
-const locale = localeMap[lang || 'en'];
+export const OBSIDIAN_LOCALE = localStorage.getItem('language');
+const locale = localeMap[OBSIDIAN_LOCALE || 'en'];
 
-export function t(str: keyof typeof en): string {
+/**
+ * Translate a string to the current language or English if not found.
+ * 
+ * You can pass in arguments to replace in the string using {0}, {1}, etc.
+ * @param str 
+ * @param args 
+ * @returns 
+ */
+export function t(str: keyof typeof en, ...args: string[]): string {
   if (!locale) {
-    LOGGER.error('Error: database locale not found', lang);
+    LOGGER.error('Error: database locale not found', OBSIDIAN_LOCALE);
+  }
+  const translated = (locale && locale[str]) || en[str];
+
+  if (!translated) {
+    LOGGER.warn('String key not found in locale', str);
+    return str;
   }
 
-  return (locale && locale[str]) || en[str] || str;
+  // Replace any arguments in the string
+  return args.reduce((acc, arg, i) => acc.replace(`{${i}}`, arg), translated);
+}
+
+/**
+ * If you trust the string to be in the current language (e.g. variable names) then use this.
+ * @param str 
+ * @param args 
+ * @returns 
+ */
+export function dynamic_t(str: string, ...args: string[]): string {
+  return t(str as keyof typeof en, ...args);
+}
+
+/**
+ * Looks up a date-fns locale from the Expo localization object.  This falls back to `en-US`
+ * @param localization Expo Localization object containing the locale and region.
+ * @returns date-fns locale.
+ */
+export function registerDateFnLocale() {
+  const dynamicLocale =
+    Locales[OBSIDIAN_LOCALE as keyof typeof Locales] || Locales.enUS;
+
+  registerLocale(OBSIDIAN_LOCALE, dynamicLocale);
 }

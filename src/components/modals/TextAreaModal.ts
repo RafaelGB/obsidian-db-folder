@@ -1,4 +1,5 @@
 import { c } from "helpers/StylesHelper";
+import { t } from "lang/helpers";
 import {
     Modal,
     TextAreaComponent,
@@ -12,7 +13,7 @@ export class TextAreaModal extends Modal {
     private reject: () => void;
     private submitted = false;
     private value: string;
-    private placeholder = "Type text here";
+    private placeholder = t("text_modal_default_placeholder");
     constructor(
         private prompt_text: string,
         private default_value: string

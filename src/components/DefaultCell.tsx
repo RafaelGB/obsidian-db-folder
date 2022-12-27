@@ -27,8 +27,6 @@ export default function DefaultCell(
   const input = (column.columnDef as TableColumn).input;
 
   /** states for selector option  */
-  LOGGER.debug(`<=> Cell.rendering input: ${input}`);
-
   function getCellElement() {
     switch (input) {
       /** Plain text option */

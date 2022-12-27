@@ -2,6 +2,8 @@ import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
 import { add_toggle } from "settings/SettingsComponents";
+import { t } from "lang/helpers";
+import { c } from "helpers/StylesHelper";
 export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = 'Formula properties';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
@@ -27,37 +29,30 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
         }
         add_toggle(
             containerEl,
-            "Persist formula output",
-            "Enable/disable to persist formula output on your notes (Only persisted formulas could be searchable and sortable)",
+            t("column_settings_modal_formula_input_persist_toggle_title"),
+            t("column_settings_modal_formula_input_persist_toggle_desc"),
             column.config.persist_formula,
             persist_Formula_toggle_promise
         );
 
         new Setting(containerEl)
-            .setName('Formula input')
-            .setDesc('Enter your formula here using your js function names')
+            .setName(t("column_settings_modal_formula_input_textarea_title"))
+            .setDesc(t("column_settings_modal_formula_input_textarea_desc"))
             .addTextArea((textArea) => {
                 textArea.setValue(config.formula_query);
-                textArea.setPlaceholder('Write here your formula');
+                textArea.setPlaceholder(t("column_settings_modal_formula_input_textarea_placeholder"));
                 textArea.onChange(formula_promise);
-                // style textarea size in function of formula length
-                const formula_length = config.formula_query ? config.formula_query.length : 0;
-                textArea.inputEl.rows = Math.max(4, formula_length / 30);
-                textArea.inputEl.cols = Math.min(Math.max(10, formula_length * 2), 45);
-                textArea.inputEl.style.width = 'auto';
+                textArea.inputEl.addClass(c("textarea-setting"));
 
             });
         const mainDesc = containerEl.createEl('p');
 
-        mainDesc.appendText('Check our ');
         mainDesc.appendChild(
             createEl('a', {
-                text: "documentation",
+                text: t("column_settings_modal_formula_input_textarea_docu_link_text"),
                 href: "https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/",
             })
         );
-
-        mainDesc.appendText(' for more information about how to use formulas');
         return this.goNext(columnHandlerResponse);
     }
 }

@@ -3,7 +3,7 @@ import { RowDataType } from "cdm/FolderModel";
 import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
-import React from "react";
+import React, { CSSProperties } from "react";
 import { MdFileComponent } from "components/obsidianArq/embedMdInteractive";
 import { TableRowProps } from "cdm/RowTypeModel";
 
@@ -38,9 +38,11 @@ export default function TableRow(tableRowProps: TableRowProps) {
                 className={`${c(
                   "td" + (cellIndex === 0 ? " row-context-menu" : "")
                 )} data-input`}
-                style={{
-                  fontSize: `${fontSize}px`,
-                }}
+                style={
+                  {
+                    "--dbfolder-font-size": `${fontSize}px`,
+                  } as CSSProperties
+                }
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </div>

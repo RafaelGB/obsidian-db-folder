@@ -25,7 +25,6 @@ import {
   TextFilter,
 } from "components/reducers/ColumnFilters";
 import { InputType, MetadataColumns } from "helpers/Constants";
-import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 import { AddColumnModalProps } from "cdm/ModalsModel";
@@ -36,7 +35,6 @@ import { AddColumnModalProps } from "cdm/ModalsModel";
  * @returns
  */
 export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
-  LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
   /** Properties of header */
   const { header, table } = headerProps;
   const { tableState } = table.options.meta;
@@ -134,8 +132,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const openMenuHandler: MouseEventHandler<HTMLDivElement> = (event) => {
     setMenuEl(menuEl ? null : event.currentTarget);
   };
-
-  LOGGER.debug(`<=Header ${label}`);
   return id !== MetadataColumns.ADD_COLUMN ? (
     <>
       <div

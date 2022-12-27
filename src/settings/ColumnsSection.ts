@@ -7,12 +7,13 @@ import { TemplateColumnsHandler } from 'settings/handlers/columns/TemplateColumn
 import { InlineFieldsOptionsHandler } from 'settings/handlers/columns/InlineFieldsOptionsHandler';
 import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/chain/AbstractHandler';
+import { t } from 'lang/helpers';
 
 class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const columns_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-columns");
         // title of the section
-        add_setting_header(columns_section, "Configuration about columns", 'h3');
+        add_setting_header(columns_section, t("settings_column_section"), 'h3');
         settingHandlerResponse.containerEl = columns_section;
         return settingHandlerResponse;
     }

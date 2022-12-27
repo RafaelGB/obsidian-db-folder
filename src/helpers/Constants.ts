@@ -39,8 +39,8 @@ export const DatabaseLimits = Object.freeze({
   MAX_COLUMNS: 100,
   MAX_ROWS: 99999,
   MAX_OPTIONS: 100,
-  MIN_COLUMN_HEIGHT: 30,
-  MAX_COLUMN_HEIGHT: 350,
+  MIN_COLUMN_WIDTH: 30,
+  DEFAULT_COLUMN_WIDTH: 100,
 });
 
 export const MetadataColumns = Object.freeze({
@@ -369,7 +369,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     enable_debug_mode: false,
     enable_show_state: false,
     enable_row_shadow: true,
-    enable_ribbon_icon: true,
+    enable_auto_update: true,
     show_search_bar_by_default: false,
     logger_level_info: 'error',
     csv_file_header_key: 'File',
@@ -396,7 +396,6 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: 'root',
     source_destination_path: '/',
-    frontmatter_quote_wrap: false,
     row_templates_folder: '/',
     current_row_template: '',
     pagination_size: 10,
@@ -419,9 +418,7 @@ export const DATABASE_CONFIG = Object.freeze({
   YAML: /```yaml:dbfolder\s+([\w\W]+?)\s+```/,
   REPLACE_YAML_REGEX: new RegExp('```yaml:dbfolder\\s+([\\w\\W]+?)\\s+```', "g"),
   START_CENTINEL: '```yaml:dbfolder',
-  END_CENTINEL: '```',
-  START_CENTINEL_LEGACY: '%% dbfolder:yaml',
-  END_CENTINEL_LEGACY: '%%',
+  END_CENTINEL: '```'
 });
 
 export const WRAPPERER_KEY = `_\\*~\``;
@@ -475,7 +472,9 @@ export const SUGGESTER_REGEX = Object.freeze({
   EMBED_HEADING: /\B!\[\[([^#\]]+)#([^\]]*)$/,
 
   LINK_BLOCK: /\B\[\[([^#\]]+)#?\^([^\]]*)$/,
-  EMBED_BLOCK: /\B!\[\[([^#\]]+)#?\^([^\]]*)$/
+  EMBED_BLOCK: /\B!\[\[([^#\]]+)#?\^([^\]]*)$/,
+
+  TEXT_ARRAY: /(^\[{1})([^\[]{1}.*)(\]{1})$/g
 });
 
 /******************************************************************************
@@ -512,6 +511,13 @@ export const ROLLUP_ACTIONS = Object.freeze({
 export const EMITTERS_GROUPS = Object.freeze({
   HOTKEY: 'hotkey',
   SHORTCUT: 'shortcut',
+  UPDATER: 'updater',
+});
+
+export const DATAVIEW_UPDATER_OPERATIONS = Object.freeze({
+  UPDATE: 'update',
+  DELETE: 'delete',
+  RENAME: 'rename',
 });
 
 export const EMITTERS_HOTKEY = Object.freeze({
