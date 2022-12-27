@@ -279,13 +279,13 @@ class Parse {
                 break;
             // By default. Use markdown parser
             default:
-                auxMarkdown = this.parseToMarkdown(wrapped, localSettings, isInline);
+                auxMarkdown = this.parseToMarkdown(wrapped, localSettings, isInline).toString();
         }
         return auxMarkdown;
     }
 
-    private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean, wrapQuotes = false): string {
-        let auxMarkdown = '';
+    private parseToMarkdown(wrapped: WrappedLiteral, localSettings: LocalSettings, isInline: boolean, wrapQuotes = false): Literal {
+        let auxMarkdown: Literal;
         switch (wrapped.type) {
             case 'boolean':
             case 'number':
@@ -299,8 +299,10 @@ class Parse {
                             localSettings,
                             isInline
                         )
-                    )
-                    .join(', ');
+                    );
+                if (isInline) {
+                    auxMarkdown = auxMarkdown.join(', ');
+                }
                 break;
             case 'link':
                 auxMarkdown = wrapped.value.markdown();
@@ -325,7 +327,13 @@ class Parse {
             default:
                 auxMarkdown = wrapped.value?.toString().trim();
         }
-        return wrapQuotes ? this.handleYamlBreaker(auxMarkdown) : auxMarkdown;
+
+        const wrappedResponse = DataviewService.wrapLiteral(auxMarkdown);
+        if (wrappedResponse.type === 'string') {
+            return wrapQuotes ? this.handleYamlBreaker(wrappedResponse.value) : wrappedResponse.value;
+        } else {
+            return wrappedResponse.value;
+        }
     }
 
     private parseArrayToText(array: Literal[], localSettings: LocalSettings): string {

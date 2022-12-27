@@ -30,6 +30,10 @@ export function grey(value: number) {
  * @returns @type {HSL} object
  */
 export function castStringtoHsl(str: string): HSL {
+  if (!str) {
+    return { h: 0, s: 0, l: 0 };
+  }
+
   const hslRegex = /^hsl\((\d{1,15}),\s*(\d{1,15})%,\s*(\d{1,15})%\)$/;
   const match = str.match(hslRegex);
   if (match) {
