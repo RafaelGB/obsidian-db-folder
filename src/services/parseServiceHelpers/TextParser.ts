@@ -3,6 +3,7 @@ import { DataviewService } from "services/DataviewService";
 import { DateTime } from "luxon";
 import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
 import { TypeParser } from "cdm/ServicesModel";
+import stringifyReplacer from "./StringifyReplacer";
 
 class TextParser extends TypeParser<string | DataObject> {
     /**
@@ -24,7 +25,7 @@ class TextParser extends TypeParser<string | DataObject> {
                 }
                 try {
                     // Try to parse to JSON
-                    return JSON.stringify(wrapped.value);
+                    return JSON.stringify(wrapped.value, stringifyReplacer);
                 } catch (e) {
                     // Do nothing
                 }
