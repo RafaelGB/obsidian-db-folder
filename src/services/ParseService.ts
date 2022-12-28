@@ -4,7 +4,7 @@ import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
 import { LocalSettings } from "cdm/SettingsModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { deepMerge, generateLiteral, obtainAnidatedLiteral } from "helpers/DataObjectHelper";
+import { deepMerge, generateLiteral } from "helpers/DataObjectHelper";
 import ParseBuilder from "./parseServiceHelpers/ParseBuilder";
 
 class Parse {
@@ -101,9 +101,45 @@ class Parse {
     public parseRowToCell(row: RowDataType, column: TableColumn, type: string, config: LocalSettings): Literal {
         let literal = row[column.key] as Literal;
         if (column.nestedKey && literal !== undefined) {
-            literal = obtainAnidatedLiteral(column.nestedKey, literal, type, config);
+            literal = this.obtainAnidatedLiteral(column.nestedKey, literal, type, config);
         }
         return this.parseLiteral(literal, type, config);
+    }
+
+    /**
+     * Obtain the value of a nested object in function of the nested key (a.b.c) using recursion
+     * I.E.:
+     * nestedKey = "a.b.c"
+     * object = {a: {b: {c: "test"}}}
+     * expected result = "test"
+     * @param nestedKey
+     * @param original
+     */
+    private obtainAnidatedLiteral(nestedKey: string, original: Literal, type: string, config: LocalSettings): Literal {
+        const keys = nestedKey.split(".");
+        const key = keys.shift();
+        const wrapped = DataviewService.wrapLiteral(original);
+        if (wrapped.value === undefined) {
+            LOGGER.debug(
+                `nested key ${nestedKey} not found in object ${original}`
+            );
+            return null;
+        }
+
+        if (keys.length === 0) {
+            if (wrapped.type === "object") {
+                return ParseService.parseLiteral((original as DataObject)[key], type, config);
+            } else {
+                return original;
+            }
+        } else if (wrapped.type !== "object") {
+            LOGGER.debug(
+                `nested key ${nestedKey} not found in object ${original}`
+            );
+            return null;
+        } else {
+            return this.obtainAnidatedLiteral(keys.join("."), (original as DataObject)[key], type, config);
+        }
     }
 
     /**

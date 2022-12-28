@@ -2,7 +2,7 @@ import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { NoteContentAction } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { FileContent } from "helpers/FileContent";
-import { resolve_tfile } from "helpers/FileManagement";
+import { resolve_tfile, resolve_tfolder } from "helpers/FileManagement";
 import { Notice, parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
@@ -129,6 +129,40 @@ class VaultManager {
     else {
       return [];
     }
+  }
+
+  /**
+ * Generate a new file with the structure of a database view
+ * @param folderPath 
+ * @param filename 
+ * @param ddbbConfig 
+ * @returns 
+ */
+  async create_row_file(
+    folderPath: string,
+    filename: string,
+    ddbbConfig: LocalSettings
+  ): Promise<string> {
+    let trimedFilename = filename.replace(/\.[^/.]+$/, "").trim();
+    let filepath = `${folderPath}/${trimedFilename}.md`;
+    // Validate possible duplicates
+    let sufixOfDuplicate = 0;
+    while (resolve_tfile(filepath, false)) {
+      sufixOfDuplicate++;
+      filepath = `${folderPath}/${trimedFilename}-${sufixOfDuplicate}.md`;
+    }
+
+    if (sufixOfDuplicate > 0) {
+      trimedFilename = `${trimedFilename}-${sufixOfDuplicate}`;
+      filename = `${trimedFilename} copy(${sufixOfDuplicate})`;
+    }
+    // Add note to persist row
+    await this.create_markdown_file(
+      resolve_tfolder(folderPath),
+      trimedFilename,
+      ddbbConfig
+    );
+    return filepath;
   }
 
   /**
