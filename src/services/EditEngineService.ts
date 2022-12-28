@@ -98,7 +98,7 @@ class EditEngine {
                         showDBError(EditionError.YamlRead, err);
                     });
                 // Delay to avoid overloading the system
-                await new Promise((resolve) => setTimeout(resolve, 25));
+                await sleep(25);
             }
             this.currentTimeout = null;
         }, 250);

@@ -512,22 +512,31 @@ export const EMITTERS_GROUPS = Object.freeze({
   HOTKEY: 'hotkey',
   SHORTCUT: 'shortcut',
   UPDATER: 'updater',
+  BAR_STATUS: 'bar-status',
 });
 
-export const DATAVIEW_UPDATER_OPERATIONS = Object.freeze({
-  UPDATE: 'update',
-  DELETE: 'delete',
-  RENAME: 'rename',
-});
-
+/* Hotkeys actions */
 export const EMITTERS_HOTKEY = Object.freeze({
   OPEN_SEARCH: "editor:open-search"
 });
 
+/* Shortcuts actions */
 export const EMITTERS_SHORTCUT = Object.freeze({
   GO_NEXT_PAGE: "pagination:next",
   GO_PREVIOUS_PAGE: "pagination:previous",
   ADD_NEW_ROW: "table:add-new-row",
   TOGGLE_FILTERS: "table:toggle-filters",
   OPEN_FILTERS: "table:open-filters",
+});
+
+/* Updater actions */
+export const DATAVIEW_UPDATER_OPERATIONS = Object.freeze({
+  UPDATE: 'update',
+  DELETE: 'delete',
+  RENAME: 'rename',
+});
+
+/* Bar status actions */
+export const EMITTERS_BAR_STATUS = Object.freeze({
+  UPDATE: "bar-status:update",
 });
