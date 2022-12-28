@@ -16,6 +16,7 @@ import { DbFolderException } from "errors/AbstractException";
 import {
   DatabaseCore,
   DB_ICONS,
+  EMITTERS_BAR_STATUS,
   EMITTERS_GROUPS,
   EMITTERS_SHORTCUT,
   InputType,
@@ -55,7 +56,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
   initial: InitialType;
   formulas: Record<string, unknown>;
   actionButtons: Record<string, HTMLElement> = {};
-  statusBarItems: Record<string, HTMLElement> = {};
 
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
     super(leaf);
@@ -284,13 +284,12 @@ export class DatabaseView extends TextFileView implements HoverParent {
     Object.values(this.actionButtons).forEach((button) => {
       button.detach();
     });
-
-    Object.values(this.statusBarItems).forEach((item) => {
-      item.detach();
-    });
-
-    this.statusBarItems = {};
     this.actionButtons = {};
+
+    if (this.plugin.statusBarItem) {
+      this.plugin.statusBarItem.detach();
+      this.plugin.statusBarItem = null;
+    }
   }
   /****************************************************************
    *                         BAR ACTIONS
@@ -370,5 +369,9 @@ export class DatabaseView extends TextFileView implements HoverParent {
       isActive,
       oldPath,
     } as UpdaterData);
+  }
+
+  handleUpdateStatusBar() {
+    this.emitter.emit(EMITTERS_GROUPS.BAR_STATUS, EMITTERS_BAR_STATUS.UPDATE);
   }
 }

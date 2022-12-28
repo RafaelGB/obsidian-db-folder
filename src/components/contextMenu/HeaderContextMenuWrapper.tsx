@@ -1,7 +1,7 @@
 import { flexRender, Header } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
-import React, { HTMLAttributes, HTMLProps } from "react";
+import React from "react";
 interface HeaderWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   header: Header<RowDataType, unknown>;
 }

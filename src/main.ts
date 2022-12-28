@@ -67,6 +67,8 @@ export default class DBFolderPlugin extends Plugin {
 
 	ribbonIcon: HTMLElement;
 
+	statusBarItem: HTMLElement;
+
 	async onload(): Promise<void> {
 		await this.load_settings();
 		addIcon(DB_ICONS.NAME, DB_ICONS.ICON);
@@ -325,7 +327,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	registerEvents() {
 		this.registerEvent(
-			this.app.workspace.on('file-menu', (menu, file: TFile, source, leaf) => {
+			app.workspace.on('file-menu', (menu, file: TFile, source, leaf) => {
 				// Add a menu item to the folder context menu to create a database
 				if (file instanceof TFolder) {
 					menu.addItem((item) => {
@@ -398,7 +400,7 @@ export default class DBFolderPlugin extends Plugin {
 		 * When the Dataview index is ready, trigger the index ready event.
 		 */
 		this.registerEvent(
-			this.app.metadataCache.on("dataview:index-ready", async () => {
+			app.metadataCache.on("dataview:index-ready", async () => {
 				// Refresh all database views
 				this.viewMap.forEach(async (view) => {
 					await view.reloadDatabase();
@@ -420,6 +422,22 @@ export default class DBFolderPlugin extends Plugin {
 				}
 			})
 		);
+
+		/**
+		 * Check when the active view focus changes and update bar status
+		 */
+		this.registerEvent(app.workspace.on("active-leaf-change", () => {
+			const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+			if (!activeView) {
+				this.statusBarItem.detach();
+				this.statusBarItem = null;
+			}
+			else if (this.statusBarItem) {
+				activeView.handleUpdateStatusBar();
+			} else {
+				this.statusBarItem = this.addStatusBarItem();
+			}
+		}));
 	}
 
 	registerCommands() {
