@@ -320,6 +320,8 @@ export default {
   "settings_source_form_tag_title": "Sélectionner un tag",
   "settings_source_form_tag_desc": "Sélectionner un tag à utiliser comme source de données.",
   "settings_source_form_tag_placeholder": "Sélectionner un tag...",
+  "settings_source_form_tag_clear_button_tooltip": "Effacer le tag sélectionné",
+  "settings_source_form_tags_selected": "Tags sélectionnés :",
   "settings_source_form_file_title": "Sélectionner un fichier",
   "settings_source_form_file_desc": "Sélectionner un fichier à utiliser comme source de données.",
   "settings_source_form_file_placeholder": "Exemple : fichier1/fichier_modèle",
