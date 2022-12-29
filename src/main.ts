@@ -36,6 +36,7 @@ import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/database
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
+
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -545,10 +546,6 @@ export default class DBFolderPlugin extends Plugin {
 
 		// internal-link quick preview
 		this.registerEvent(app.workspace.on("quick-preview", previewMode.hoverEvent));
-
-		//monitoring for div.popover.hover-popover.file-embed.is-loaded to be added to the DOM tree
-		// this.observer = observer;
-		// this.observer.observe(document, { childList: true, subtree: true });
 	}
 
 	/**

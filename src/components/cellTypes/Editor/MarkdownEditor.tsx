@@ -1,4 +1,4 @@
-import React, { forwardRef, Ref, useEffect } from "react";
+import React, { forwardRef, MutableRefObject, useEffect } from "react";
 import { useAutocompleteInputProps } from "components/cellTypes/Editor/autocomplete";
 import {
   autoPairBracketsCommands,
@@ -10,22 +10,17 @@ import {
 } from "components/cellTypes/Editor/commands";
 import { EMITTERS_GROUPS } from "helpers/Constants";
 import { MarkdownEditorProps } from "cdm/EditorModel";
+import useAutosizeTextArea from "components/styles/hooks/useAutosizeTextArea";
 
 export const MarkdownEditor = forwardRef(function MarkdownEditor(
   { onEnter, onEscape, view, ...inputProps }: MarkdownEditorProps,
-  ref: Ref<HTMLTextAreaElement>
+  ref: MutableRefObject<HTMLTextAreaElement>
 ) {
-  const shouldAutoPairMarkdown = (app.vault as any).getConfig(
-    "autoPairMarkdown"
-  );
-  const shouldAutoPairBrackets = (app.vault as any).getConfig(
-    "autoPairBrackets"
-  );
-  const shouldUseTab = (app.vault as any).getConfig("useTab");
-  const tabWidth = (app.vault as any).getConfig("tabSize");
-  const shouldUseMarkdownLinks = !!(app.vault as any).getConfig(
-    "useMarkdownLinks"
-  );
+  const shouldAutoPairMarkdown = app.vault.getConfig("autoPairMarkdown");
+  const shouldAutoPairBrackets = app.vault.getConfig("autoPairBrackets");
+  const shouldUseTab = app.vault.getConfig("useTab");
+  const tabWidth = app.vault.getConfig("tabSize");
+  const shouldUseMarkdownLinks = !!app.vault.getConfig("useMarkdownLinks");
 
   const autocompleteProps = useAutocompleteInputProps({
     isInputVisible: true,
@@ -97,19 +92,17 @@ export const MarkdownEditor = forwardRef(function MarkdownEditor(
     };
   }, [view]);
 
+  useAutosizeTextArea(ref.current, inputProps.value.toString());
+
   return (
     <textarea
       {...inputProps}
       {...autocompleteProps}
       ref={(c: HTMLTextAreaElement) => {
         autocompleteProps.ref.current = c;
-
-        if (ref && typeof ref === "function") {
-          ref(c);
-        } else if (ref) {
-          (ref as any).current = c;
-        }
+        ref.current = c;
       }}
+      rows={inputProps.value.toString()?.split("\n").length || 1}
     />
   );
 });

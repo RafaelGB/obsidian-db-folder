@@ -17,4 +17,12 @@ declare module "obsidian" {
      */
     processFrontMatter(file: TFile, fn: (frontMatter: Record<string, Literal>) => void): Promise<void>
   }
+
+  interface Vault {
+    /**
+     * TODO: This is a temporary solution. Obsidian not expose official API to get the config.
+     * @param param 
+     */
+    getConfig(param: string): any;
+  }
 }

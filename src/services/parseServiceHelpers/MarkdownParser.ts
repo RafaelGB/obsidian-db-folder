@@ -3,7 +3,8 @@ import { parseLuxonDatetimeToString, parseLuxonDateToString } from "helpers/Luxo
 import { Literal, WrappedLiteral } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { DateTime } from "luxon";
-import { MarkdownBreakerRules } from "helpers/Constants";
+import { InputType, MarkdownBreakerRules } from "helpers/Constants";
+import stringifyReplacer from "./StringifyReplacer";
 
 class MarkdownParser extends TypeParser<Literal> {
     private isInline = false;
@@ -50,7 +51,7 @@ class MarkdownParser extends TypeParser<Literal> {
                 if (DateTime.isDateTime(wrapped.value)) {
                     auxMarkdown = this.parse({ type: 'date', value: wrapped.value });
                 } else {
-                    auxMarkdown = JSON.stringify(wrapped.value);
+                    auxMarkdown = JSON.stringify(wrapped.value, stringifyReplacer);
                 }
                 break;
             default:
