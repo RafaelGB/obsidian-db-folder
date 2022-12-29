@@ -116,6 +116,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           isSearchable
           isMulti
           autoFocus
+          openMenuOnFocus
           menuPosition="fixed"
           styles={CustomTagsStyles}
           options={columnOptions}
