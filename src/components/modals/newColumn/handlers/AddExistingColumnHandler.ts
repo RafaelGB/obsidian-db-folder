@@ -1,4 +1,3 @@
-import { DatabaseColumn } from "cdm/DatabaseModel";
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import { DynamicInputType, MetadataColumns } from "helpers/Constants";
@@ -20,7 +19,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
             typesRecord[value] = t(value);
         });
 
-        const promiseOfObtainColumnsFromRows = new Promise<Record<string, DatabaseColumn>>((resolve) => {
+        const promiseOfObtainColumnsFromRows = new Promise<string[]>((resolve) => {
             resolve(obtainColumnsFromRows(
                 addColumnModalManager.addColumnModal.view,
                 configState.info.getLocalSettings(),
@@ -32,11 +31,11 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
             typeOfNewColumn = value;
         }
 
-        promiseOfObtainColumnsFromRows.then((columnsRaw: Record<string, DatabaseColumn>) => {
+        promiseOfObtainColumnsFromRows.then((columnsRaw: string[]) => {
             // Filter out the columns that are already in the table
-            const currentColumns = (columnState.info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id);
+            const currentColumns = (columnState.info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id.toLowerCase());
             const filteredColumns: Record<string, string> = {};
-            Object.keys(columnsRaw)
+            columnsRaw
                 .sort((a, b) => a.localeCompare(b))
                 .filter((columnName: string) => {
                     return !currentColumns.includes(columnName.toLowerCase())

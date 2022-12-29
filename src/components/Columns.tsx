@@ -153,8 +153,8 @@ export async function obtainColumnsFromRows(
   ddbbConfig: LocalSettings,
   filters: FilterSettings,
   tableColumns: TableColumn[]
-): Promise<Record<string, DatabaseColumn>> {
-  const columns: Record<string, DatabaseColumn> = {};
+): Promise<string[]> {
+  const columns: string[] = [];
   const rows = await obtainAllPossibleRows(
     view.file.parent.path,
     ddbbConfig,
@@ -190,15 +190,7 @@ export async function obtainColumnsFromRows(
     // Check metadata columns to not be added
     .filter((key) => validateColumnKey(key))
     .forEach((key, index) => {
-      columns[key] = {
-        input: InputType.TEXT,
-        accessorKey: key,
-        label: key,
-        key: key,
-        id: key,
-        position: index,
-        config: DEFAULT_COLUMN_CONFIG,
-      };
+      columns.push(key);
     });
 
   return columns;
