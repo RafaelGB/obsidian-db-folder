@@ -1,6 +1,7 @@
 import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
+import { obtainCellFromFile } from "helpers/VaultManagement";
 import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
@@ -10,6 +11,9 @@ export default class ParseDataOfColumnHandlerAction extends AbstractTableAction<
         implementation.actions.parseDataOfColumn = (column: TableColumn, input: string, ddbbConfig: LocalSettings) =>
             set((updater) => {
                 const parsedRows = updater.rows.map((row) => {
+                    // Recover original value
+                    const dvCell = obtainCellFromFile(row.__note__.filepath, column);
+                    row[column.key] = dvCell;
                     // Transform the input into the target type
                     const parsedValue = ParseService.parseRowToCell(
                         row,
