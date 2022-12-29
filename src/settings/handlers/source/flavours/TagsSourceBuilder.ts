@@ -23,14 +23,14 @@ export class TagSourceBuilder {
         let suggester: StringSuggest;
 
         new Setting(this.containerEl)
-            .setName("Data Source Tags")
-            .setDesc("Select the tags you want as data source. You can add multiple tags.")
+            .setName(t("settings_source_form_tag_title"))
+            .setDesc(t("settings_source_form_tag_desc"))
             .addSearch((cb) => {
                 suggester = new StringSuggest(
                     cb.inputEl,
                     this.tagRecords
                 );
-                cb.setPlaceholder("Select a tag")
+                cb.setPlaceholder(t("settings_source_form_tag_placeholder"))
                     .onChange(async (value: string): Promise<void> => {
                         if (value && this.tagRecords[value]) {
                             // update settings
@@ -47,7 +47,7 @@ export class TagSourceBuilder {
                 cb.inputEl.style.width = "auto";
             }).addExtraButton((button) => {
                 button.setIcon("cross")
-                    .setTooltip("Clear all tags")
+                    .setTooltip(t("settings_source_form_tag_clear_button_tooltip"))
                     .onClick(async () => {
                         // Clear all tags
                         this.selectedTags = [];
@@ -67,7 +67,7 @@ export class TagSourceBuilder {
     private configureTagDisplay = () => {
         this.tagsContainer = this.containerEl.createEl("div");
         const label = this.containerEl.createEl("span", {
-            text: "Selected Tags: ",
+            text: t("settings_source_form_tag_selected"),
         });
         label.style.color = "#666";
         this.tagsContainer.appendChild(label);
