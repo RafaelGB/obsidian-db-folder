@@ -23,6 +23,9 @@ export function NavBar(navBarProps: NavBarProps) {
   );
 
   const updateBar = () => {
+    if (!view.plugin.statusBarItem) {
+      view.plugin.statusBarItem = view.plugin.addStatusBarItem();
+    }
     view.plugin.statusBarItem.replaceChildren();
     view.plugin.statusBarItem.createEl("span", {
       text: `${table.getFilteredRowModel().rows.length}/${view.rows.length} '${
@@ -30,11 +33,9 @@ export function NavBar(navBarProps: NavBarProps) {
       }'`,
     });
   };
-  // Control
+
+  // Bar status control
   useEffect(() => {
-    if (!view.plugin.statusBarItem) {
-      view.plugin.statusBarItem = view.plugin.addStatusBarItem();
-    }
     updateBar();
   }, [table.getFilteredRowModel().rows.length]);
 

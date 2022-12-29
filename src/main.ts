@@ -429,14 +429,12 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(app.workspace.on("active-leaf-change", () => {
 			const activeView = app.workspace.getActiveViewOfType(DatabaseView);
-			if (!activeView) {
+			if (!activeView && this.statusBarItem) {
 				this.statusBarItem.detach();
 				this.statusBarItem = null;
 			}
-			else if (this.statusBarItem) {
+			else if (activeView && this.statusBarItem) {
 				activeView.handleUpdateStatusBar();
-			} else {
-				this.statusBarItem = this.addStatusBarItem();
 			}
 		}));
 	}
@@ -529,7 +527,6 @@ export default class DBFolderPlugin extends Plugin {
 
 		// Ribbon Icon
 		this.showRibbonIcon();
-
 	}
 
 	showRibbonIcon() {
