@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
 import { TypeParser } from "cdm/ServicesModel";
 import stringifyReplacer from "./StringifyReplacer";
+import * as YAML from 'yaml';
 
 class TextParser extends TypeParser<string | DataObject> {
     /**
@@ -25,7 +26,8 @@ class TextParser extends TypeParser<string | DataObject> {
                 }
                 try {
                     // Try to parse to JSON
-                    return JSON.stringify(wrapped.value, stringifyReplacer);
+                    const jsonReplaced = JSON.stringify(wrapped.value, stringifyReplacer);
+                    return YAML.stringify(JSON.parse(jsonReplaced));
                 } catch (e) {
                     // Do nothing
                 }

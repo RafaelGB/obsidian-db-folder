@@ -133,9 +133,7 @@ export function getFileSearchConfig(
         );
       }
 
-      const shouldUseMarkdownLinks = !!(
-        app.vault as any
-      ).getConfig('useMarkdownLinks');
+      const shouldUseMarkdownLinks = !!app.vault.getConfig('useMarkdownLinks');
 
       if (willAutoPairBrackets && !shouldUseMarkdownLinks) {
         output[output.length - 1] = output[output.length - 1].slice(0, -2);
@@ -233,9 +231,7 @@ export function getHeadingSearchConfig(
         )
       );
 
-      const shouldUseMarkdownLinks = !!(
-        app.vault as any
-      ).getConfig('useMarkdownLinks');
+      const shouldUseMarkdownLinks = !!app.vault.getConfig('useMarkdownLinks');
 
       if (willAutoPairBrackets && !shouldUseMarkdownLinks) {
         output[output.length - 1] = output[output.length - 1].slice(0, -2);
@@ -435,9 +431,7 @@ export function getBlockSearchConfig(
         )
       );
 
-      const shouldUseMarkdownLinks = !!(
-        app.vault as any
-      ).getConfig('useMarkdownLinks');
+      const shouldUseMarkdownLinks = !!app.vault.getConfig('useMarkdownLinks');
 
       if (willAutoPairBrackets && !shouldUseMarkdownLinks) {
         output[output.length - 1] = output[output.length - 1].slice(0, -2);
