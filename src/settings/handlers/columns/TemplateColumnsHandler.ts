@@ -1,5 +1,7 @@
+import { DatabaseColumn } from "cdm/DatabaseModel";
 import { RowDataType } from "cdm/FolderModel";
 import { obtainColumnsFromFile, obtainColumnsFromRows } from "components/Columns";
+import { DEFAULT_COLUMN_CONFIG, InputType } from "helpers/Constants";
 import { resolve_tfile } from "helpers/FileManagement";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
@@ -69,12 +71,25 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                     button.setIcon("save")
                         .setTooltip(t("settings_template_all_button_tooltip"))
                         .onClick(async (): Promise<void> => {
+                            const recordColumns: Record<string, DatabaseColumn> = {};
                             const allColumns = await obtainColumnsFromRows(
                                 view,
                                 view.diskConfig.yaml.config,
                                 view.diskConfig.yaml.filters,
                                 columns);
-                            view.diskConfig.yaml.columns = allColumns;
+
+                            allColumns.forEach((key, index) => {
+                                recordColumns[key] = {
+                                    input: InputType.TEXT,
+                                    accessorKey: key,
+                                    label: key,
+                                    key: key,
+                                    id: key,
+                                    position: index,
+                                    config: DEFAULT_COLUMN_CONFIG,
+                                }
+                            })
+                            view.diskConfig.yaml.columns = recordColumns;
                             view.diskConfig.saveOnDisk();
                             new Notice(t("settings_template_all_notice_success_on_save", Object.keys(columns).length.toString()), 1500);
                         });

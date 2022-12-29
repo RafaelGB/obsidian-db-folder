@@ -28,7 +28,7 @@ export const parseInlineFieldsToString = (inlineFields: RowDatabaseFields): stri
 }
 
 export function parseValuetoSanitizeYamlValue(value: string, localSettings: LocalSettings, wrapQuote = false): string {
-    return ParseService.parseLiteral(value, InputType.MARKDOWN, localSettings, undefined, wrapQuote).toString();
+    return ParseService.parseLiteral(value, InputType.MARKDOWN, localSettings, false, wrapQuote).toString();
 }
 
 function stringifyDbYaml(literal: Literal, level: number, localSettings: LocalSettings, key?: string): string[] {

@@ -1,5 +1,4 @@
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
-import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import { FiltersModal } from "components/modals/filters/FiltersModal";
@@ -18,7 +17,7 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
   const columns = tableState.columns((state) => state.columns);
 
   const openFiltersGroupHandler = async () => {
-    new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
+    new Promise<string[]>((resolve, reject) => {
       // Empty conditions to refresh the dataview
       const emptyFilterConditions = { ...filters };
       emptyFilterConditions.conditions = [];
@@ -33,9 +32,7 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
     }).then((columns) => {
       new FiltersModal({
         table,
-        possibleColumns: Object.keys(columns).sort((a, b) =>
-          a.localeCompare(b)
-        ),
+        possibleColumns: columns.sort((a, b) => a.localeCompare(b)),
       }).open();
     });
   };
