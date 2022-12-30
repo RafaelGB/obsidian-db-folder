@@ -148,6 +148,13 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           onClick={() => setShowSelectTags(true)}
           style={{ width: column.getSize() }}
           key={`tags-${row.index}-${tableColumn.key}`}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              setShowSelectTags(true);
+            }
+          }}
+          tabIndex={0}
         >
           {tagsCell ? (
             tagsCell

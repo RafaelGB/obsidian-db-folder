@@ -39,8 +39,7 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  function handleSpanOnClick(event: any) {
-    event.preventDefault();
+  function handleSpanOnClick() {
     setShowDatePicker(true);
   }
 
@@ -105,6 +104,13 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       className={`${c("calendar")}`}
       style={{ width: column.getSize() }}
       onClick={handleSpanOnClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleSpanOnClick();
+        }
+      }}
+      tabIndex={0}
     >
       {parseLuxonDatetimeToString(
         calendarCell,

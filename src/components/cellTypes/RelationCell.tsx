@@ -4,7 +4,7 @@ import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
 import { Link } from "obsidian-dataview";
-import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "components/cellTypes/Editor/RelationEditor";
@@ -87,8 +87,7 @@ const RelationCell = (mdProps: CellComponentProps) => {
     setDirtyCell(false);
   };
 
-  const handleOnClick: MouseEventHandler<HTMLSpanElement> = (event) => {
-    event.stopPropagation();
+  const handleOnClick = () => {
     // Check if the column has a relation asotiated
     if (tableColumn.config.related_note_path) {
       setDirtyCell(true);
@@ -114,6 +113,13 @@ const RelationCell = (mdProps: CellComponentProps) => {
       className={c(
         getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
       )}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleOnClick();
+        }
+      }}
+      tabIndex={0}
     />
   );
 };
