@@ -54,7 +54,7 @@ class TextParser extends TypeParser<string | DataObject> {
                         .parse(DataviewService.wrapLiteral(curr))
                         .toString()
                 );
-        });
+        }, "");
         return `[${stringArray}]`;
     }
 }
