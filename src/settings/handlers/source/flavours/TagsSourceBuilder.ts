@@ -37,6 +37,7 @@ export class TagSourceBuilder {
                             this.selectedTags.push(value);
                             suggester.removeSuggestion(value);
                             cb.setValue("");
+                            cb.inputEl.blur();
                             await this.view.diskConfig.updateConfig(
                                 { source_form_result: this.selectedTags.join(",") }
                             );
