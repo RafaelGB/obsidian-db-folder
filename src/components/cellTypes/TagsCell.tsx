@@ -142,8 +142,9 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           className={c(
             getAlignmentClassname(
               tableColumn.config,
-              configInfo.getLocalSettings()
-            ).concat(" tags-container")
+              configInfo.getLocalSettings(),
+              ["tabIndex", "tags-container"]
+            )
           )}
           onClick={() => setShowSelectTags(true)}
           style={{ width: column.getSize() }}

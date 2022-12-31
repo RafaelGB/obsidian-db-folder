@@ -101,7 +101,7 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
     />
   ) : (
     <span
-      className={`${c("calendar")}`}
+      className={`${c("calendar tabIndex")}`}
       style={{ width: column.getSize() }}
       onClick={handleSpanOnClick}
       onKeyDown={(e) => {

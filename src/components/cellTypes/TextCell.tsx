@@ -97,7 +97,11 @@ const TextCell = (props: CellComponentProps) => {
       }}
       style={{ width: column.getSize() }}
       className={c(
-        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+        getAlignmentClassname(
+          tableColumn.config,
+          configInfo.getLocalSettings(),
+          ["tabIndex"]
+        )
       )}
       tabIndex={0}
     />

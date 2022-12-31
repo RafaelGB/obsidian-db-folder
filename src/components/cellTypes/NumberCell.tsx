@@ -93,7 +93,11 @@ const NumberCell = (props: CellComponentProps) => {
   ) : (
     <span
       className={c(
-        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+        getAlignmentClassname(
+          tableColumn.config,
+          configInfo.getLocalSettings(),
+          ["tabIndex"]
+        )
       )}
       onDoubleClick={handleEditableOnclick}
       style={{ width: column.getSize() }}

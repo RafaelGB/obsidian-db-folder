@@ -138,7 +138,8 @@ const SelectCell = (popperProps: CellComponentProps) => {
           className={c(
             getAlignmentClassname(
               tableColumn.config,
-              configInfo.getLocalSettings()
+              configInfo.getLocalSettings(),
+              ["tabIndex"]
             )
           )}
           onClick={() => setShowSelect(true)}

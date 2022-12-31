@@ -111,7 +111,11 @@ const RelationCell = (mdProps: CellComponentProps) => {
       onClick={handleOnClick}
       style={{ width: column.getSize() }}
       className={c(
-        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+        getAlignmentClassname(
+          tableColumn.config,
+          configInfo.getLocalSettings(),
+          ["tabIndex"]
+        )
       )}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
