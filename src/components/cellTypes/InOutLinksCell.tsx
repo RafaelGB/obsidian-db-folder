@@ -25,7 +25,7 @@ const InOutLinksCell = (mdProps: CellComponentProps) => {
       5
     );
   });
-  return <span ref={mdRef} className={c("md_cell text-align-left")}></span>;
+  return <span ref={mdRef} className={c("md_cell text-align-left")} />;
 };
 
 export default InOutLinksCell;

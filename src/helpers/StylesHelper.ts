@@ -43,8 +43,8 @@ export function getLabelHeader(input: string) {
     return labelCandidate === undefined ? input : labelCandidate[1];
 }
 
-export function getAlignmentClassname(configColumn: ConfigColumn, localSettings: LocalSettings) {
-    const classes: string[] = [];
+export function getAlignmentClassname(configColumn: ConfigColumn, localSettings: LocalSettings, inittial: string[] = []) {
+    const classes: string[] = inittial;
     classes.push(
         configColumn.content_alignment === undefined ?
             COLUMN_ALIGNMENT_OPTIONS.CENTER :

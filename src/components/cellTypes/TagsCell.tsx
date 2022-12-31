@@ -142,12 +142,20 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           className={c(
             getAlignmentClassname(
               tableColumn.config,
-              configInfo.getLocalSettings()
-            ).concat(" tags-container")
+              configInfo.getLocalSettings(),
+              ["tabIndex", "tags-container"]
+            )
           )}
           onClick={() => setShowSelectTags(true)}
           style={{ width: column.getSize() }}
           key={`tags-${row.index}-${tableColumn.key}`}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              setShowSelectTags(true);
+            }
+          }}
+          tabIndex={0}
         >
           {tagsCell ? (
             tagsCell

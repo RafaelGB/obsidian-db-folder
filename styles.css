@@ -92,6 +92,10 @@
 div.database-plugin__td.data-input:hover {
   box-shadow: 0 0 1px 2px var(--text-accent-hover);
 }
+div.database-plugin__td.data-input div:focus,
+div.database-plugin__td.data-input span:focus {
+  box-shadow: 0 0 1px 2px var(--text-accent);
+}
 
 /******************************************************
 *                   Table Structure
@@ -685,8 +689,8 @@ div.database-plugin__td.data-input:hover {
 }
 
 .database-plugin__scroll-horizontal {
-  overflow-y: auto;
-  overflow-x: auto;
+  overflow-y: overlay;
+  overflow-x: overlay;
 }
 
 .database-plugin__scroll-container {

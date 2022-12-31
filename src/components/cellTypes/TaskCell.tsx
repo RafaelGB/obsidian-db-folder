@@ -39,7 +39,7 @@ const TaskCell = (taskProps: CellComponentProps) => {
   }, [cell.getValue()]);
   const taskRef = useRef<HTMLDivElement>();
 
-  return <div ref={taskRef} className={c("md_cell text-align-left")}></div>;
+  return <div ref={taskRef} className={c("md_cell text-align-left")} />;
 };
 
 export default TaskCell;

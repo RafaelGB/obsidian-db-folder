@@ -44,7 +44,10 @@ function CheckboxCell(props: CellComponentProps) {
   };
 
   return (
-    <div key={`checkbox-div-${row.index}`} className={`${c("checkbox")}`}>
+    <div
+      key={`checkbox-div-${row.index}`}
+      className={`${c("checkbox tabIndex")}`}
+    >
       <input
         type="checkbox"
         checked={checkboxCell}
