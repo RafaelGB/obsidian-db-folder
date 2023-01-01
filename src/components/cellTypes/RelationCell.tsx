@@ -108,7 +108,7 @@ const RelationCell = (mdProps: CellComponentProps) => {
   ) : (
     <span
       ref={containerCellRef}
-      onClick={handleOnClick}
+      onDoubleClick={handleOnClick}
       style={{ width: column.getSize() }}
       className={c(
         getAlignmentClassname(

@@ -142,7 +142,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
               ["tabIndex"]
             )
           )}
-          onClick={() => setShowSelect(true)}
+          onDoubleClick={() => setShowSelect(true)}
           style={{ width: column.getSize() }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
