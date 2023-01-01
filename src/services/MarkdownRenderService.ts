@@ -7,7 +7,6 @@ import { getNormalizedPath } from "helpers/VaultManagement";
 import { CachedMetadata, MarkdownRenderer, setIcon, TFile } from "obsidian";
 import { Literal } from "obsidian-dataview";
 import { LOGGER } from "services/Logger";
-import * as YAML from 'yaml';
 
 const ILLIGAL_CHARS = /[!"#$%&()*+,.:;<=>?@^`{|}~/[\]\\]/g;
 class MarkdownRenderService {

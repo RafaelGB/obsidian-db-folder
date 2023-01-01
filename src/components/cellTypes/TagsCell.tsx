@@ -146,7 +146,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
               ["tabIndex", "tags-container"]
             )
           )}
-          onClick={() => setShowSelectTags(true)}
+          onDoubleClick={() => setShowSelectTags(true)}
           style={{ width: column.getSize() }}
           key={`tags-${row.index}-${tableColumn.key}`}
           onKeyDown={(e) => {

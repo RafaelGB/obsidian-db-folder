@@ -17,7 +17,6 @@ class ParseBuilder {
         switch (type) {
             case InputType.MARKDOWN:
                 return new MarkdownParser()
-                    .setConfig(config)
                     .beforeParse(wrapQuotes, isInline);
             case InputType.SORTING:
                 return new SortingParser();

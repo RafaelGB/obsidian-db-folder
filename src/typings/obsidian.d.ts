@@ -25,7 +25,7 @@ declare module "obsidian" {
      *  WARNING! not exposed by Obsidian, may break in future.
      * @param param 
      */
-    getConfig(param: string): any;
+    getConfig(param: string): unknown;
   }
 
   interface MetadataCache {

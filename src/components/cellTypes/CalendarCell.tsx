@@ -101,7 +101,7 @@ const CalendarCell = (calendarProps: CellComponentProps) => {
   ) : (
     <span
       className={`${c("calendar tabIndex")}`}
-      onClick={handleSpanOnClick}
+      onDoubleClick={handleSpanOnClick}
       style={{ width: column.getSize() }}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
