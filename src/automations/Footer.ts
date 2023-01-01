@@ -2,6 +2,7 @@ import { DEFAULT_SETTINGS, FooterType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { DateTime } from "luxon";
+import { DbAutomationService } from "services/AutomationService";
 
 export default class Footer {
     constructor(public readonly colValues: Literal[]) { }
@@ -119,10 +120,7 @@ export default class Footer {
      * @returns 
      */
     public sum(): string {
-        const total = this.colValues
-            .map((value) => Number(value))
-            .filter((value) => !isNaN(value))
-            .reduce((acc: number, value: number) => acc + value, 0);
+        const total = DbAutomationService.coreFns.numbers.sum(this.colValues);
         return `Total: ${total}`;
     }
 
@@ -131,10 +129,7 @@ export default class Footer {
      * @returns 
      */
     public min(): string {
-        const min = this.colValues
-            .map((value) => Number(value))
-            .filter((value) => !isNaN(value))
-            .reduce((acc: number, value: number) => Math.min(acc, value), Number.MAX_SAFE_INTEGER);
+        const min = DbAutomationService.coreFns.numbers.min(this.colValues);
         return `Min: ${min}`;
     }
 
@@ -143,10 +138,7 @@ export default class Footer {
      * @returns 
      */
     public max(): string {
-        const max = this.colValues
-            .map((value) => Number(value))
-            .filter((value) => !isNaN(value))
-            .reduce((acc: number, value: number) => Math.max(acc, value), Number.MIN_SAFE_INTEGER);
+        const max = DbAutomationService.coreFns.numbers.max(this.colValues);
         return `Max: ${max}`;
     }
 

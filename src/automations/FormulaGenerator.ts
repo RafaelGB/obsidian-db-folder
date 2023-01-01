@@ -1,9 +1,6 @@
 import { FormulaFunctions } from "automations/formula_functions/FormulaFunctions";
-import { IGenerateObject } from "automations/IGenerateObject";
+import { IGenerateObject } from "automations/core/IGenerateObject";
 import { LocalSettings } from "cdm/SettingsModel";
-import { Link } from "obsidian-dataview";
-import { DataviewService } from "services/DataviewService";
-import Rollup from "automations/Rollup";
 export class FormulaGenerator implements IGenerateObject {
     public js_functions: FormulaFunctions;
 
@@ -16,13 +13,8 @@ export class FormulaGenerator implements IGenerateObject {
     }
 
     async generate_object(): Promise<Record<string, unknown>> {
-        const final_object: Record<string, unknown> = {};
-        Object.assign(final_object, {
+        return {
             js: await this.generate_js_functions(),
-            dataview: DataviewService.getDataviewAPI(),
-            rollup: (relation: Link[]) => new Rollup(relation)
-        }
-        );
-        return final_object;
+        };
     }
 }

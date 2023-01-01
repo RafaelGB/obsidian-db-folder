@@ -1,4 +1,3 @@
-import { obtainFormulasFromFolder } from "automations/AutomationsHelper";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { UpdaterData, ViewEvents } from "cdm/EmitterModel";
 import {
@@ -38,6 +37,7 @@ import {
   Menu,
 } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
+import { DbAutomationService } from "services/AutomationService";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
@@ -168,7 +168,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       this.initial = obtainInitialType(this.columns);
 
-      this.formulas = await obtainFormulasFromFolder(
+      this.formulas = await DbAutomationService.buildFns(
         this.diskConfig.yaml.config
       );
       // Define table properties
