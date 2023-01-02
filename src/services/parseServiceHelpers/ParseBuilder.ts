@@ -1,5 +1,5 @@
 import { LocalSettings } from "cdm/SettingsModel"
-import { InputType } from "helpers/Constants"
+import { DEFAULT_SETTINGS, InputType } from "helpers/Constants"
 import ArrayParser from "./ArrayParser"
 import BooleanParser from "./BooleanParser"
 import CalendarParser from "./CalendarParser"
@@ -16,15 +16,16 @@ class ParseBuilder {
     static setType = (type: string, config: LocalSettings, isInline: boolean, wrapQuotes: boolean) => {
         switch (type) {
             case InputType.MARKDOWN:
-                return new MarkdownParser().beforeParse(wrapQuotes, isInline);
+                return new MarkdownParser()
+                    .beforeParse(wrapQuotes, isInline);
             case InputType.SORTING:
                 return new SortingParser();
             case InputType.TAGS:
                 return new ArrayParser();
             case InputType.CALENDAR:
-                return new CalendarParser().beforeParse(config.date_format);
+                return new CalendarParser().beforeParse(config.date_format ?? DEFAULT_SETTINGS.local_settings.date_format);
             case InputType.CALENDAR_TIME:
-                return new CalendarParser().beforeParse(config.datetime_format);
+                return new CalendarParser().beforeParse(config.datetime_format ?? DEFAULT_SETTINGS.local_settings.datetime_format);
             case InputType.METATADA_TIME:
                 return new DatetimeISOParser()
             case InputType.NUMBER:

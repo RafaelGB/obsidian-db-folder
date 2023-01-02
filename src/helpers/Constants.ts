@@ -474,7 +474,10 @@ export const SUGGESTER_REGEX = Object.freeze({
   LINK_BLOCK: /\B\[\[([^#\]]+)#?\^([^\]]*)$/,
   EMBED_BLOCK: /\B!\[\[([^#\]]+)#?\^([^\]]*)$/,
 
-  TEXT_ARRAY: /(^\[{1})([^\[]{1}.*)(\]{1})$/g
+  TEXT_ARRAY: /(^\[{1})([^[]{1}.*)(\]{1})$/g,
+  TEXT_OBJECT: /(^\{{1})(.*)(\}{1})$/g,
+
+  CELL_VALID_KEYDOWN: /^[a-zA-Z0-9_-]{1}$/g,
 });
 
 /******************************************************************************
@@ -512,22 +515,31 @@ export const EMITTERS_GROUPS = Object.freeze({
   HOTKEY: 'hotkey',
   SHORTCUT: 'shortcut',
   UPDATER: 'updater',
+  BAR_STATUS: 'bar-status',
 });
 
-export const DATAVIEW_UPDATER_OPERATIONS = Object.freeze({
-  UPDATE: 'update',
-  DELETE: 'delete',
-  RENAME: 'rename',
-});
-
+/* Hotkeys actions */
 export const EMITTERS_HOTKEY = Object.freeze({
   OPEN_SEARCH: "editor:open-search"
 });
 
+/* Shortcuts actions */
 export const EMITTERS_SHORTCUT = Object.freeze({
   GO_NEXT_PAGE: "pagination:next",
   GO_PREVIOUS_PAGE: "pagination:previous",
   ADD_NEW_ROW: "table:add-new-row",
   TOGGLE_FILTERS: "table:toggle-filters",
   OPEN_FILTERS: "table:open-filters",
+});
+
+/* Updater actions */
+export const DATAVIEW_UPDATER_OPERATIONS = Object.freeze({
+  UPDATE: 'update',
+  DELETE: 'delete',
+  RENAME: 'rename',
+});
+
+/* Bar status actions */
+export const EMITTERS_BAR_STATUS = Object.freeze({
+  UPDATE: "bar-status:update",
 });

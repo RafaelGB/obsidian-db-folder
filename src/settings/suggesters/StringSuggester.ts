@@ -33,4 +33,14 @@ export class StringSuggest extends TextInputSuggest<String> {
         this.inputEl.trigger("input");
         this.close();
     }
+
+    setSuggestions(suggestions: Record<string, string>): StringSuggest {
+        this.rawARecord = suggestions;
+        return this;
+    }
+
+    removeSuggestion(string: string): StringSuggest {
+        delete this.rawARecord[string];
+        return this;
+    }
 }

@@ -17,4 +17,23 @@ declare module "obsidian" {
      */
     processFrontMatter(file: TFile, fn: (frontMatter: Record<string, Literal>) => void): Promise<void>
   }
+
+  interface Vault {
+    /**
+     * Returns internal config of Obsidian using the associated key.
+     * 
+     *  WARNING! not exposed by Obsidian, may break in future.
+     * @param param 
+     */
+    getConfig(param: string): any;
+  }
+
+  interface MetadataCache {
+    /**
+     * Obtain the tags of all the vault with their count.
+     * 
+     * WARNING! not exposed by Obsidian, may break in future.
+     */
+    getTags(): Record<string, number>;
+  }
 }

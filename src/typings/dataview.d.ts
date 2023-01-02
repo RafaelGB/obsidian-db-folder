@@ -7,7 +7,7 @@ declare module 'obsidian' {
         plugins: {
             enabledPlugins: Set<string>;
             plugins: {
-                [id: string]: any;
+                [id: string]: unknown;
                 dataview?: {
                     api?: DataviewApi;
                 };
@@ -18,14 +18,14 @@ declare module 'obsidian' {
     interface MetadataCache {
         on(
             name: 'dataview:index-ready',
-            callback: (api: DataviewApi) => any,
-            ctx?: any
+            callback: (api: DataviewApi) => unknown,
+            ctx?: unknown
         ): EventRef;
 
         on(
             name: 'dataview:metadata-change',
-            callback: (op: string, file: TFile, oldPath?: string) => any,
-            ctx?: any
+            callback: (op: string, file: TFile, oldPath?: string) => unknown,
+            ctx?: unknown
         ): EventRef;
     }
 }

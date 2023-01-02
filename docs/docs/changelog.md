@@ -1,3 +1,17 @@
+## 3.1.3
+### Shiny new things
+- Multi tag support (without dv query) [ISSUE#706](https://github.com/RafaelGB/obsidian-db-folder/issues/706)
+- Change the type of a column read the raw data from the file improving the results and avoiding errors
+### Visual
+- Improved expanded note style
+### Improved
+- Fr translation added [703](https://github.com/RafaelGB/obsidian-db-folder/pull/703) Thanks to [@julien-maurel](https://github.com/Lisandra-dev)
+- Tasks, Inlinks and Outlinks columns now can be sorted [ISSUE#536](https://github.com/RafaelGB/obsidian-db-folder/issues/536)
+- `active-leaf-change` listener added to refresh bar status
+### No longer broken
+- Dataview datasource now allows to select existing columns on modal [377](https://github.com/RafaelGB/obsidian-db-folder/issues/377)
+### Developer
+- Refactor of parser Service with a better performance.
 ## 3.1.2
 Hotfix of select & tags contrast (empty values) and save as md array
 ## 3.1.1

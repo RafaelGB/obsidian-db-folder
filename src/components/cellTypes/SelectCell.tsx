@@ -138,11 +138,19 @@ const SelectCell = (popperProps: CellComponentProps) => {
           className={c(
             getAlignmentClassname(
               tableColumn.config,
-              configInfo.getLocalSettings()
+              configInfo.getLocalSettings(),
+              ["tabIndex"]
             )
           )}
-          onClick={() => setShowSelect(true)}
+          onDoubleClick={() => setShowSelect(true)}
           style={{ width: column.getSize() }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              setShowSelect(true);
+            }
+          }}
+          tabIndex={0}
         >
           {cellValue ? (
             <Relationship value={cellValue} backgroundColor={getColor()} />

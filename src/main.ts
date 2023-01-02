@@ -36,6 +36,7 @@ import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/database
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
+
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
 	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
@@ -66,6 +67,8 @@ export default class DBFolderPlugin extends Plugin {
 	windowRegistry: Map<Window, WindowRegistry> = new Map();
 
 	ribbonIcon: HTMLElement;
+
+	statusBarItem: HTMLElement;
 
 	async onload(): Promise<void> {
 		await this.load_settings();
@@ -325,7 +328,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	registerEvents() {
 		this.registerEvent(
-			this.app.workspace.on('file-menu', (menu, file: TFile, source, leaf) => {
+			app.workspace.on('file-menu', (menu, file: TFile, source, leaf) => {
 				// Add a menu item to the folder context menu to create a database
 				if (file instanceof TFolder) {
 					menu.addItem((item) => {
@@ -398,7 +401,7 @@ export default class DBFolderPlugin extends Plugin {
 		 * When the Dataview index is ready, trigger the index ready event.
 		 */
 		this.registerEvent(
-			this.app.metadataCache.on("dataview:index-ready", async () => {
+			app.metadataCache.on("dataview:index-ready", async () => {
 				// Refresh all database views
 				this.viewMap.forEach(async (view) => {
 					await view.reloadDatabase();
@@ -420,6 +423,20 @@ export default class DBFolderPlugin extends Plugin {
 				}
 			})
 		);
+
+		/**
+		 * Check when the active view focus changes and update bar status
+		 */
+		this.registerEvent(app.workspace.on("active-leaf-change", () => {
+			const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+			if (!activeView && this.statusBarItem) {
+				this.statusBarItem.detach();
+				this.statusBarItem = null;
+			}
+			else if (activeView && this.statusBarItem) {
+				activeView.handleUpdateStatusBar();
+			}
+		}));
 	}
 
 	registerCommands() {
@@ -510,7 +527,6 @@ export default class DBFolderPlugin extends Plugin {
 
 		// Ribbon Icon
 		this.showRibbonIcon();
-
 	}
 
 	showRibbonIcon() {
@@ -527,10 +543,6 @@ export default class DBFolderPlugin extends Plugin {
 
 		// internal-link quick preview
 		this.registerEvent(app.workspace.on("quick-preview", previewMode.hoverEvent));
-
-		//monitoring for div.popover.hover-popover.file-embed.is-loaded to be added to the DOM tree
-		// this.observer = observer;
-		// this.observer.observe(document, { childList: true, subtree: true });
 	}
 
 	/**

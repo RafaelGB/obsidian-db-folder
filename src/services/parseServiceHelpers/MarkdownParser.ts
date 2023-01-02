@@ -1,9 +1,9 @@
 import { TypeParser } from "cdm/ServicesModel";
-import { parseLuxonDatetimeToString, parseLuxonDateToString } from "helpers/LuxonHelper";
 import { Literal, WrappedLiteral } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { DateTime } from "luxon";
 import { MarkdownBreakerRules } from "helpers/Constants";
+import stringifyReplacer from "./StringifyReplacer";
 
 class MarkdownParser extends TypeParser<Literal> {
     private isInline = false;
@@ -20,7 +20,7 @@ class MarkdownParser extends TypeParser<Literal> {
         switch (wrapped.type) {
             case 'boolean':
             case 'number':
-                auxMarkdown = wrapped.value.toString();
+                auxMarkdown = wrapped.value;
                 break;
             case 'array':
                 auxMarkdown = wrapped.value
@@ -37,20 +37,13 @@ class MarkdownParser extends TypeParser<Literal> {
                 auxMarkdown = wrapped.value.markdown();
                 break;
             case 'date':
-                if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
-                    // Parse date
-
-                    auxMarkdown = parseLuxonDatetimeToString(wrapped.value, this.config.date_format);
-                } else {
-                    // Parse datetime
-                    auxMarkdown = parseLuxonDateToString(wrapped.value, this.config.datetime_format);
-                }
+                auxMarkdown = wrapped.value.toISO();
                 break;
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
                     auxMarkdown = this.parse({ type: 'date', value: wrapped.value });
                 } else {
-                    auxMarkdown = JSON.stringify(wrapped.value);
+                    auxMarkdown = JSON.stringify(wrapped.value, stringifyReplacer);
                 }
                 break;
             default:

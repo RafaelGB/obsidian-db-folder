@@ -13,7 +13,10 @@ export class SourceDropDownHandler extends AbstractSettingsHandler {
         });
         const source_dropdown_promise = async (value: string): Promise<void> => {
             // update settings
-            view.diskConfig.updateConfig({ source_data: value });
+            view.diskConfig.updateConfig({
+                source_data: value,
+                source_form_result: ""
+            });
             // Force refresh of settings
             settingsManager.reset(settingHandlerResponse);
         };

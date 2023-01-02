@@ -115,7 +115,7 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
   let pagesResult: DataArray<Record<string, Literal>>;
   switch (ddbbConfig.source_data) {
     case SourceDataTypes.TAG:
-      pagesResult = DataviewService.getDataviewAPI().pages(`#${ddbbConfig.source_form_result}`);
+      pagesResult = DataviewService.getDataviewAPI().pages(`${ddbbConfig.source_form_result.split(',').join(' OR ')}`);
       break;
     case SourceDataTypes.INCOMING_LINK:
       pagesResult = DataviewService.getDataviewAPI().pages(`[[${ddbbConfig.source_form_result}]]`);
@@ -170,5 +170,9 @@ async function obtainQueryResult(query: string, folderPath: string): Promise<Dat
   }
 }
 
-
-
+export function obtainCellFromFile(path: string, column: TableColumn): Literal {
+  const page = DataviewService.getDataviewAPI().page(path) as NoteInfoPage;
+  const noteInfo = new NoteInfo(page);
+  const uniqueRowValue = noteInfo.getRowDataType([column]);
+  return uniqueRowValue[column.id] as Literal;
+}

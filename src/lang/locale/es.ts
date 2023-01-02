@@ -320,6 +320,8 @@ export default {
     "settings_source_form_tag_title": "Seleccionar una etiqueta",
     "settings_source_form_tag_desc": "Seleccionar una etiqueta para usar como fuente de datos",
     "settings_source_form_tag_placeholder": "Ejemplo: #tag",
+    "settings_source_form_tag_clear_button_tooltip": "Limpiar todas las etiquetas",
+    "settings_source_form_tag_selected": "Etiquetas seleccionadas",
     "settings_source_form_file_title": "Seleccionar un archivo",
     "settings_source_form_file_desc": "Seleccionar un archivo para usar como fuente de datos",
     "settings_source_form_file_placeholder": "Buscar archivo...",

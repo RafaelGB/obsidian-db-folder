@@ -7,4 +7,5 @@ export interface ViewEvents {
     [EMITTERS_GROUPS.HOTKEY]: (commandId: string) => void;
     [EMITTERS_GROUPS.SHORTCUT]: (commandId: string) => void;
     [EMITTERS_GROUPS.UPDATER]: (updater: UpdaterData) => void;
+    [EMITTERS_GROUPS.BAR_STATUS]: (commandId: string) => void;
 }

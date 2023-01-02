@@ -5,7 +5,7 @@ import EditorCell from "components/cellTypes/EditorCell";
 import { TableColumn } from "cdm/FolderModel";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { ParseService } from "services/ParseService";
-import { InputType } from "helpers/Constants";
+import { InputType, SUGGESTER_REGEX } from "helpers/Constants";
 import { MarkdownService } from "services/MarkdownRenderService";
 
 const TextCell = (props: CellComponentProps) => {
@@ -39,7 +39,7 @@ const TextCell = (props: CellComponentProps) => {
    * Render markdown content of Obsidian on load
    */
   useEffect(() => {
-    if (dirtyCell && !containerCellRef.current && !textCell) {
+    if (dirtyCell || (!containerCellRef.current && !textCell)) {
       // End useEffect
       return;
     }
@@ -52,7 +52,7 @@ const TextCell = (props: CellComponentProps) => {
     );
   }, [dirtyCell, textCell]);
 
-  const handleEditableOnclick: MouseEventHandler<HTMLSpanElement> = () => {
+  const handleEditableOnclick = () => {
     setDirtyCell(true);
   };
 
@@ -85,11 +85,25 @@ const TextCell = (props: CellComponentProps) => {
   ) : (
     <span
       ref={containerCellRef}
-      onClick={handleEditableOnclick}
+      onDoubleClick={handleEditableOnclick}
+      // On enter key press
+      onKeyDown={(e) => {
+        if (SUGGESTER_REGEX.CELL_VALID_KEYDOWN.test(e.key)) {
+          handleEditableOnclick();
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          handleEditableOnclick();
+        }
+      }}
       style={{ width: column.getSize() }}
       className={c(
-        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+        getAlignmentClassname(
+          tableColumn.config,
+          configInfo.getLocalSettings(),
+          ["tabIndex"]
+        )
       )}
+      tabIndex={0}
     />
   );
 };

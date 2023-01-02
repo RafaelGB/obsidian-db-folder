@@ -1,6 +1,7 @@
 import { LocalSettings } from "cdm/SettingsModel";
 import { DEFAULT_SETTINGS, InputType, ROLLUP_ACTIONS } from "helpers/Constants";
 import { Link, Literal, SMarkdownPage } from "obsidian-dataview";
+import { DbAutomationService } from "services/AutomationService";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
@@ -8,6 +9,11 @@ import { ParseService } from "services/ParseService";
 class Rollup {
     private pages: Record<string, Literal>[];
 
+    /**
+     * Obtains the metadata associated to a list of links
+     * @param relation 
+     * @returns 
+     */
     static generatePages(relation: Link[]): Record<string, Literal>[] {
         return relation.map((link) =>
             DataviewService.getDataviewAPI().page(link.path)
@@ -27,15 +33,15 @@ class Rollup {
         let result = "";
         switch (action) {
             case ROLLUP_ACTIONS.SUM:
-                result = this.sum(key);
+                result = this.sum(key).toString();
                 break;
 
             case ROLLUP_ACTIONS.COUNT_ALL:
-                result = this.countAll(key);
+                result = this.countAll(key).toString();
                 break;
 
             case ROLLUP_ACTIONS.COUNT_UNIQUE:
-                result = this.countUnique(key);
+                result = this.countUnique(key).toString();
                 break;
 
             case ROLLUP_ACTIONS.ORIGINAL_VALUE:
@@ -43,11 +49,11 @@ class Rollup {
                 break;
 
             case ROLLUP_ACTIONS.TRUTHY_COUNT:
-                result = this.truthyCount(key);
+                result = this.truthyCount(key).toString();
                 break;
 
             case ROLLUP_ACTIONS.FALSY_COUNT:
-                result = this.falsyCount(key);
+                result = this.falsyCount(key).toString();
                 break;
 
             case ROLLUP_ACTIONS.PERCENT_EMPTY:
@@ -59,15 +65,15 @@ class Rollup {
                 break;
 
             case ROLLUP_ACTIONS.ALL_TASKS:
-                result = this.allTasks();
+                result = this.allTasks().toString();
                 break;
 
             case ROLLUP_ACTIONS.TASK_COMPLETED:
-                result = this.taskCompleted();
+                result = this.taskCompleted().toString();
                 break;
 
             case ROLLUP_ACTIONS.TASK_TODO:
-                result = this.taskTodo();
+                result = this.taskTodo().toString();
                 break;
 
             default:
@@ -85,44 +91,35 @@ class Rollup {
      * Iters over the pages and sums the values of the key
      * @returns 
      */
-    public sum(key: string): string {
+    public sum(key: string): number {
         // Check if key is not truthy, return empty string
         if (!key) {
-            return "";
+            return NaN;
         }
-        let sum = 0;
-        this.pages.forEach((page) => {
-            if (page[key]) {
-                sum += Number(page[key]);
-            }
-        });
-        return sum.toString();
+        const rawValues = this.rawValues(key);
+        return DbAutomationService.coreFns.numbers.sum(rawValues)
     }
 
     /**
      * Obtains the number of pages of the relation with the key informed
      * @returns 
      */
-    public countAll(key: string): string {
+    public countAll(key: string): number {
         // Check if key is not truthy, return empty string
         if (!key) {
-            return "";
+            return 0;
         }
-        return this.pages.filter((page) => page[key] !== undefined).length.toString();
+        return this.rawValues(key).length;
     }
 
-    public countUnique(key: string): string {
+    public countUnique(key: string): number {
         // Check if key is not truthy, return empty string
         if (!key) {
-            return "";
+            return 0;
         }
         const uniqueValues = new Set();
-        this.pages
-            .filter((page) => page[key] !== undefined)
-            .forEach((page) => {
-                uniqueValues.add(page[key]);
-            });
-        return uniqueValues.size.toString();
+        this.rawValues(key).forEach((value) => uniqueValues.add(value));
+        return uniqueValues.size;
     }
 
     /**
@@ -135,25 +132,28 @@ class Rollup {
             return "";
         }
         const settings = config || DEFAULT_SETTINGS.local_settings;
-        return this.pages
-            .filter((page) => page[key])
-            .map((page) => ParseService.parseLiteral(page[key], InputType.MARKDOWN, settings)).join(", ");
+        return this.rawValues(key)
+            .map((value) => ParseService.parseLiteral(
+                value,
+                InputType.MARKDOWN,
+                settings))
+            .join(", ");
     }
 
-    public falsyCount(key: string): string {
+    public falsyCount(key: string): number {
         // Check if key is not truthy, return empty string
         if (!key) {
-            return "";
+            return 0;
         }
-        return this.pages.filter((page) => page[key] !== undefined && !page[key]).length.toString();
+        return this.pages.filter((page) => page[key] !== undefined && !page[key]).length;
     }
 
-    public truthyCount(key: string): string {
+    public truthyCount(key: string): number {
         // Check if key is not truthy, return empty string
         if (!key) {
-            return "";
+            return 0;
         }
-        return this.pages.filter((page) => page[key] !== undefined && page[key]).length.toString();
+        return this.pages.filter((page) => page[key] !== undefined && page[key]).length;
     }
 
     public percentEmpty(key: string): string {
@@ -176,25 +176,29 @@ class Rollup {
         return `${((filled / total) * 100).toFixed(2)}%`;
     }
 
-    public allTasks(): string {
+    public allTasks(): number {
         return this.pages.map((page: SMarkdownPage) => {
             const file_tasks = page.file.tasks;
             return file_tasks.length
-        }).reduce((a, b) => a + b, 0).toString();
+        }).reduce((a, b) => a + b, 0);
     }
 
-    public taskCompleted(): string {
+    public taskCompleted(): number {
         return this.pages.map((page: SMarkdownPage) => {
             const file_tasks = page.file.tasks;
             return file_tasks.filter(task => task.checked).length
-        }).reduce((a, b) => a + b, 0).toString();
+        }).reduce((a, b) => a + b, 0);
     }
 
-    public taskTodo(): string {
+    public taskTodo(): number {
         return this.pages.map((page: SMarkdownPage) => {
             const file_tasks = page.file.tasks;
             return file_tasks.filter(task => !task.checked).length
-        }).reduce((a, b) => a + b, 0).toString();
+        }).reduce((a, b) => a + b, 0);
+    }
+
+    private rawValues(key: string): Literal[] {
+        return this.pages.filter((page) => page[key] !== undefined).map((page) => page[key]);
     }
 }
 

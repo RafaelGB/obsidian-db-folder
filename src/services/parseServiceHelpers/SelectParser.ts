@@ -52,7 +52,7 @@ class SelectParser extends TypeParser<string> {
                         .parse(DataviewService.wrapLiteral(curr))
                         .toString()
                 );
-        });
+        }, "");
         return `[${stringArray}]`;
     }
 }

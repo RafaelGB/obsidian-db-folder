@@ -27,6 +27,10 @@ function CheckboxCell(props: CellComponentProps) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked;
+    editCheckbox(newValue);
+  };
+
+  const editCheckbox = (newValue: boolean) => {
     const newCell = ParseService.parseRowToLiteral(
       checkboxRow,
       tableColumn,
@@ -44,7 +48,17 @@ function CheckboxCell(props: CellComponentProps) {
   };
 
   return (
-    <div key={`checkbox-div-${row.index}`} className={`${c("checkbox")}`}>
+    <div
+      key={`checkbox-div-${row.index}`}
+      className={`${c("checkbox tabIndex")}`}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          editCheckbox(!checkboxCell);
+        }
+      }}
+    >
       <input
         type="checkbox"
         checked={checkboxCell}

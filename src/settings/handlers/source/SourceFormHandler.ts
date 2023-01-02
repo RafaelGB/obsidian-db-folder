@@ -8,17 +8,19 @@ import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { FileSuggest } from "settings/suggesters/FileSuggester";
-import { FolderSuggest } from "settings/suggesters/FolderSuggester";
-import { StringSuggest } from "settings/suggesters/StringSuggester";
+import { destinationFolderSetting } from "./flavours/Helpers";
+import { TagSourceBuilder } from "./flavours/TagsSourceBuilder";
 
 export class SourceFormHandler extends AbstractSettingsHandler {
     settingTitle = t("settings_source_form_title");
     private sourceFormResultTimeout: NodeJS.Timeout;
+    tagsLabel: HTMLSpanElement;
+    tagsContainer: HTMLParagraphElement;
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { containerEl, view, columns } = settingHandlerResponse;
         switch (view.diskConfig.yaml.config.source_data) {
             case SourceDataTypes.TAG:
-                this.tagHandler(view, containerEl);
+                new TagSourceBuilder(view, containerEl).build();
                 break;
             case SourceDataTypes.OUTGOING_LINK:
             case SourceDataTypes.INCOMING_LINK:
@@ -29,39 +31,9 @@ export class SourceFormHandler extends AbstractSettingsHandler {
             default:
             //Current folder
         }
-
         return this.goNext(settingHandlerResponse);
     }
 
-    private tagHandler(view: DatabaseView, containerEl: HTMLElement) {
-        const tagArray: Record<string, number> = (app.metadataCache as unknown as any).getTags();
-        if (tagArray) {
-            const tagRecords: Record<string, string> = {};
-            // Order tagRecord by key (tag name)
-            Object.entries(tagArray)
-                .sort((a, b) => a[0].localeCompare(b[0]))
-                .forEach(([key, value]) => {
-                    tagRecords[key] = `${key}(${value})`;
-                });
-            const source_form_promise = async (value: string): Promise<void> => {
-                // update settings
-                view.diskConfig.updateConfig({ source_form_result: value.slice(1) });
-            };
-            new Setting(containerEl)
-                .setName(t("settings_source_form_tag_title"))
-                .setDesc(t("settings_source_form_tag_desc"))
-                .addSearch((cb) => {
-                    new StringSuggest(
-                        cb.inputEl,
-                        tagRecords
-                    );
-                    cb.setPlaceholder(t("settings_source_form_tag_placeholder"))
-                        .setValue(`#${view.diskConfig.yaml.config.source_form_result}`)
-                        .onChange(source_form_promise);
-                });
-            this.destinationFolderHandler(view, containerEl);
-        }
-    }
 
     private outgoingAndIncomingHandler(view: DatabaseView, containerEl: HTMLElement) {
         const source_form_promise = async (value: string): Promise<void> => {
@@ -80,7 +52,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                     .setValue(view.diskConfig.yaml.config.source_form_result)
                     .onChange(source_form_promise);
             });
-        this.destinationFolderHandler(view, containerEl);
+        destinationFolderSetting(view, containerEl);
     }
 
     private queryHandler(view: DatabaseView, containerEl: HTMLElement, columns: TableColumn[]) {
@@ -95,6 +67,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
             }, 1500);
 
         };
+
         new Setting(containerEl)
             .setName(t("settings_source_form_query_title"))
             .setDesc(t("settings_source_form_query_desc"))
@@ -121,25 +94,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                         }
                     });
             });
-        this.destinationFolderHandler(view, containerEl);
-    }
-
-    private destinationFolderHandler(view: DatabaseView, containerEl: HTMLElement) {
-        const source_form_promise = async (value: string): Promise<void> => {
-            // update settings
-            view.diskConfig.updateConfig({ source_destination_path: value });
-        };
-        new Setting(containerEl)
-            .setName(t("settings_source_form_destination_title"))
-            .setDesc(t("settings_source_form_destination_desc"))
-            .addSearch((cb) => {
-                new FolderSuggest(
-                    cb.inputEl
-                );
-                cb.setPlaceholder(t("settings_source_form_destination_placeholder"))
-                    .setValue(view.diskConfig.yaml.config.source_destination_path)
-                    .onChange(source_form_promise);
-            });
+        destinationFolderSetting(view, containerEl);
     }
 }
 

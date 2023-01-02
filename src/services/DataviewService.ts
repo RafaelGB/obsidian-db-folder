@@ -1,5 +1,5 @@
 import { Notice } from "obsidian";
-import { DataviewApi, getAPI, isPluginEnabled } from "obsidian-dataview";
+import { DataviewApi, getAPI, isPluginEnabled, STask } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 class DataviewProxy {
 
@@ -28,6 +28,14 @@ class DataviewProxy {
 
     isDataviewEnabled(): boolean {
         return isPluginEnabled(app);
+    }
+
+    isStasks(value: Literal): value is STask {
+        return (value as STask).task;
+    }
+
+    isSTaskArray(value: Literal): value is STask[] {
+        return (value as STask[]).every(v => this.isStasks(v));
     }
 
     /**

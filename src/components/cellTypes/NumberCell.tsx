@@ -1,6 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { InputType } from "helpers/Constants";
+import { InputType, SUGGESTER_REGEX } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, {
   ChangeEventHandler,
@@ -93,10 +93,23 @@ const NumberCell = (props: CellComponentProps) => {
   ) : (
     <span
       className={c(
-        getAlignmentClassname(tableColumn.config, configInfo.getLocalSettings())
+        getAlignmentClassname(
+          tableColumn.config,
+          configInfo.getLocalSettings(),
+          ["tabIndex"]
+        )
       )}
-      onClick={handleEditableOnclick}
+      onDoubleClick={handleEditableOnclick}
       style={{ width: column.getSize() }}
+      onKeyDown={(e) => {
+        if (SUGGESTER_REGEX.CELL_VALID_KEYDOWN.test(e.key)) {
+          handleEditableOnclick();
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          handleEditableOnclick();
+        }
+      }}
+      tabIndex={0}
     >
       {(numberCell !== undefined && numberCell.toString()) || ""}
     </span>

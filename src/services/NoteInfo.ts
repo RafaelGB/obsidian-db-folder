@@ -3,6 +3,7 @@ import { MetadataColumns } from "helpers/Constants";
 import { TFile } from "obsidian";
 import { resolve_tfile } from "helpers/FileManagement";
 import { NoteInfoPage } from "cdm/DatabaseModel";
+import { DataviewService } from "./DataviewService";
 /**
  * Keep info about a note and offer methods to manipulate it
  */
@@ -52,11 +53,12 @@ export default class NoteInfo {
             __note__: this
         }
         /** Optional fields */
+        const record = DataviewService.getDataviewAPI().page(this.filepath);
         /** Parse data with the type of column */
-        Object.keys(this.page)
+        Object.keys(record)
             .filter(key => !["file"].includes(key))
             .forEach(property => {
-                aFile[property] = this.page[property];
+                aFile[property] = record[property];
             });
         return aFile;
     }

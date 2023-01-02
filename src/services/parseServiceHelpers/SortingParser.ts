@@ -27,46 +27,51 @@ class SortingParser extends TypeParser<Literal> {
     }
 
     private parseToPlainText(wrapped: WrappedLiteral) {
-        let plainText: string;
         switch (wrapped.type) {
             case 'boolean':
             case 'number':
-                plainText = wrapped.value.toString();
-                break;
+                return wrapped.value.toString();
             case 'array':
-                plainText = wrapped.value
+                if (DataviewService.isSTaskArray(wrapped.value)) {
+                    return wrapped.value.reduce((acc, curr) => {
+                        if (!curr.completed) {
+                            acc += 1;
+                        }
+                        return acc
+                    }, 0);
+                }
+                return wrapped.value
                     .map(
                         v => this.parse(
                             DataviewService.wrapLiteral(v),
                         )
                     ).join(', ');
-                break;
             case 'link':
-                plainText = wrapped.value.markdown();
-                break;
+                return wrapped.value.markdown();
             case 'date':
                 if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
                     // Parse date
-
-                    plainText = parseLuxonDatetimeToString(wrapped.value, this.config.date_format);
+                    return parseLuxonDatetimeToString(wrapped.value, this.config.date_format);
                 } else {
                     // Parse datetime
-                    plainText = parseLuxonDateToString(wrapped.value, this.config.datetime_format);
+                    return parseLuxonDateToString(wrapped.value, this.config.datetime_format);
                 }
-                break;
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
-                    plainText = this.parse({ type: 'date', value: wrapped.value });
-                } else {
-                    plainText = JSON.stringify(wrapped.value);
+                    return this.parse({ type: 'date', value: wrapped.value });
                 }
-                break;
-            default:
-                plainText = wrapped.value?.toString().trim();
-        }
 
-        return plainText;
+                if (DataviewService.isStasks(wrapped.value)) {
+                    return wrapped.value.completed ? '0' : '1';
+                }
+
+                return JSON.stringify(wrapped.value);
+            default:
+                return wrapped.value?.toString().trim();
+        }
     }
+
+
 }
 
 export default SortingParser;

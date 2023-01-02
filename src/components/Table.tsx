@@ -45,6 +45,7 @@ import {
 import HeaderContextMenuWrapper from "components/contextMenu/HeaderContextMenuWrapper";
 import TableActions from "components/tableActions/TableActions";
 import PaginationTable from "components/navbar/PaginationTable";
+import onKeyDownArrowKeys from "./behavior/ArrowKeysNavigation";
 
 const defaultColumn: Partial<ColumnDef<RowDataType>> = {
   minSize: DatabaseLimits.MIN_COLUMN_WIDTH,
@@ -221,6 +222,7 @@ export function Table(tableData: TableDataType) {
           onMouseOver={obsidianMdLinksOnMouseOverMenuCallback(view)}
           /** Obsidian to open an internal link in a new pane */
           onClick={obsidianMdLinksOnClickCallback(stateManager, view, filePath)}
+          onKeyDown={onKeyDownArrowKeys}
           style={{
             width: table.getCenterTotalSize(),
           }}

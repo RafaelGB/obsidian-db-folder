@@ -8,7 +8,7 @@ class NumberParser extends TypeParser<number> {
             return wrapped.value;
         } else {
             const adjustedValue = DataviewService.getDataviewAPI().value.toString(wrapped.value);
-            return Number(adjustedValue);
+            return parseFloat(adjustedValue);
         }
     }
 }

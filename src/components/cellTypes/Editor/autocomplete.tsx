@@ -44,9 +44,7 @@ export function constructAutocomplete({
     keys: ["file.basename", "alias"],
   });
 
-  const willAutoPairBrackets = (view.app.vault as any).getConfig(
-    "autoPairBrackets"
-  );
+  const willAutoPairBrackets = view.app.vault.getConfig("autoPairBrackets");
 
   const configs: StrategyProps[] = [
     getTagSearchConfig(tags, tagSearch),
