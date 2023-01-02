@@ -118,6 +118,7 @@ export function showFooterMenu(
     // Custom footer menu im function of the input type
     switch (tableColumn.input) {
         case InputType.NUMBER:
+            footerMenu.addSeparator();
             footerMenu.addItem((item) => item
                 .setTitle(t("footer_menu_sum"))
                 .onClick(handleFooterOption(FooterType.SUM)));
@@ -130,6 +131,7 @@ export function showFooterMenu(
             break;
         case InputType.CALENDAR:
         case InputType.CALENDAR_TIME:
+            footerMenu.addSeparator();
             footerMenu.addItem((item) => item
                 .setTitle(t("footer_menu_earliest_date"))
                 .onClick(handleFooterOption(FooterType.EARLIEST_DATE)));
@@ -143,6 +145,7 @@ export function showFooterMenu(
         default:
         // Do nothing
     }
+    footerMenu.addSeparator();
     // Create your own footer function
     footerMenu.addItem((item) => item
         .setTitle(t("footer_menu_formula"))
