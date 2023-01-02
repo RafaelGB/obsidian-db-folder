@@ -1,7 +1,6 @@
 import { DEFAULT_SETTINGS, FooterType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
-import { DateTime } from "luxon";
 import { DbAutomationService } from "services/AutomationService";
 
 export default class Footer {

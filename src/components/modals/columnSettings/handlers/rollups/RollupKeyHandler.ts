@@ -26,6 +26,7 @@ export class RollupKeyHandler extends AbstractHandlerClass<ColumnSettingsHandler
                 });
                 columnSettingsManager.modal.enableReset = true;
             };
+
             recordFieldsFromRelation(
                 relationColumn.config.related_note_path,
                 configState.info.getLocalSettings(),

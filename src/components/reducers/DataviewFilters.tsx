@@ -23,7 +23,7 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
       emptyFilterConditions.conditions = [];
       resolve(
         obtainColumnsFromRows(
-          view,
+          view.file.parent.path,
           configInfo.getLocalSettings(),
           emptyFilterConditions,
           columns
