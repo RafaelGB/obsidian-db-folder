@@ -36,6 +36,7 @@ import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/database
 import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHelper';
 import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
+import { Db } from "services/CoreService";
 
 interface WindowRegistry {
 	viewMap: Map<string, DatabaseView>;
@@ -72,6 +73,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	async onload(): Promise<void> {
 		await this.load_settings();
+		await this.loadServices();
 		addIcon(DB_ICONS.NAME, DB_ICONS.ICON);
 		this.registerEvent(
 			app.workspace.on('window-open', (_: any, win: Window) => {
@@ -154,6 +156,10 @@ export default class DBFolderPlugin extends Plugin {
 			await this.loadData()
 		);
 		loadServicesThatRequireSettings(this.settings);
+	}
+
+	async loadServices() {
+		await Db.init();
 	}
 
 	public registerPriorityCodeblockPostProcessor(

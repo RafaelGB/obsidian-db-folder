@@ -37,7 +37,7 @@ import {
   Menu,
 } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
-import { DbAutomationService } from "services/AutomationService";
+import { Db } from "services/CoreService";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
@@ -172,9 +172,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       this.initial = obtainInitialType(this.columns);
 
-      this.formulas = await DbAutomationService.buildFns(
-        this.diskConfig.yaml.config
-      );
+      this.formulas = await Db.buildFns(this.diskConfig.yaml.config);
       // Define table properties
       this.shadowColumns = this.columns.filter((col) => col.skipPersist);
       const tableProps: TableDataType = {
