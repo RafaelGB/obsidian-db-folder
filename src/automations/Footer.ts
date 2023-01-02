@@ -150,10 +150,8 @@ export default class Footer {
      * @returns 
      */
     public earliestDate(): string {
-        const earliest = this.colValues
-            .filter((value) => DateTime.isDateTime(value))
-            .reduce((acc: DateTime, value: DateTime) => acc < value ? acc : value, DateTime.max);
-        return DateTime.isDateTime(earliest) ?
+        const earliest = DbAutomationService.coreFns.luxon.earliest(this.colValues);
+        return earliest.isValid ?
             `Earliest: ${earliest.toFormat(DEFAULT_SETTINGS.local_settings.datetime_format)}` :
             null;
     }
@@ -163,10 +161,8 @@ export default class Footer {
      * @returns 
      */
     public latestDate(): string {
-        const latest = this.colValues
-            .filter((value) => DateTime.isDateTime(value))
-            .reduce((acc: DateTime, value: DateTime) => acc > value ? acc : value, DateTime.min);
-        return DateTime.isDateTime(latest) ?
+        const latest = DbAutomationService.coreFns.luxon.latest(this.colValues);
+        return latest.isValid ?
             `Latest: ${latest.toFormat(DEFAULT_SETTINGS.local_settings.datetime_format)}` :
             null;
     }
@@ -176,15 +172,8 @@ export default class Footer {
      * @returns 
      */
     public rangeDate(): string {
-        const earliest = this.colValues
-            .filter((value) => DateTime.isDateTime(value))
-            .reduce((acc: DateTime, value: DateTime) => acc < value ? acc : value, DateTime.max);
-        const latest = this.colValues
-            .filter((value) => DateTime.isDateTime(value))
-            .reduce((acc: DateTime, value: DateTime) => acc > value ? acc : value, DateTime.min);
-        return DateTime.isDateTime(earliest) && DateTime.isDateTime(latest) ?
-            `Range: ${earliest.toFormat(DEFAULT_SETTINGS.local_settings.datetime_format)} - ${latest.toFormat(DEFAULT_SETTINGS.local_settings.datetime_format)}` :
-            null;
+        const range = DbAutomationService.coreFns.luxon.range(this.colValues);
+        return `Range: ${range} days`
     }
 
 }

@@ -30,7 +30,6 @@ class DataviewProxy {
         return isPluginEnabled(app);
     }
 
-
     isStasks(value: Literal): value is STask {
         return (value as STask).task;
     }

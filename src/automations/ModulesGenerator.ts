@@ -1,12 +1,14 @@
 import { IGenerateObject } from "automations/core/IGenerateObject";
 import { DatabaseFnType } from "cdm/ModulesFnModel";
 import { DbModule } from "./core/DbModule";
+import { LuxonFn } from "./core/modules/LuxonFn";
 import { NumbersFn } from "./core/modules/NumbersFn";
 export class ModulesGenerator implements IGenerateObject {
     private modules_array: Array<DbModule> = [];
 
     constructor() {
         this.modules_array.push(new NumbersFn());
+        this.modules_array.push(new LuxonFn());
     }
 
     async init(): Promise<void> {

@@ -3,7 +3,6 @@ import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { RowSelectOption } from 'cdm/ComponentsModel';
 import { InputType, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
-import { RowType } from 'cdm/RowTypeModel';
 import { Literal } from 'obsidian-dataview';
 
 export class MarshallColumnsHandler extends AbstractYamlHandler {
