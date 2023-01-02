@@ -14,6 +14,7 @@ export class ScriptFunctions implements IGenerateObject {
         const files =
             get_tfiles_from_folder(
                 this.config.formula_folder_path,
+                ["js"]
             );
 
         if (!files) {

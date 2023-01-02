@@ -96,6 +96,10 @@ export class DatabaseView extends TextFileView implements HoverParent {
     this.plugin.addView(this, data);
   }
 
+  getIcon() {
+    return DB_ICONS.NAME;
+  }
+
   getViewType(): string {
     return DatabaseCore.FRONTMATTER_KEY;
   }
@@ -132,7 +136,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       .addItem((item) => {
         item
           .setTitle(t("menu_pane_open_db_settings_action"))
-          .setIcon(DB_ICONS.NAME)
+          .setIcon("gear")
           .onClick(this.settingsAction.bind(this));
       })
       .addSeparator();
@@ -196,7 +200,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
   private initActions(): void {
     // Settings action
     this.addAction(
-      DB_ICONS.NAME,
+      "gear",
       `${t("menu_pane_open_db_settings_action")}`,
       this.settingsAction.bind(this)
     );
