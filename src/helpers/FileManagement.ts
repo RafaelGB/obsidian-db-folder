@@ -38,7 +38,8 @@ export function resolve_tfolder(folder_str: string): TFolder {
 }
 
 export function get_tfiles_from_folder(
-  folder_str: string
+  folder_str: string,
+  fileExtensions: string[] = ["md", "canvas"]
 ): Array<TFile> {
   let folder;
   try {
@@ -47,12 +48,18 @@ export function get_tfiles_from_folder(
     // Split the string into '/' and remove the last element
     folder = resolve_tfolder(folder_str.split("/").slice(0, -1).join("/"));
   }
-  const files: Array<TFile> = [];
+  let files: Array<TFile> = [];
   Vault.recurseChildren(folder, (file: TAbstractFile) => {
     if (file instanceof TFile) {
       files.push(file);
     }
   });
+
+  if (fileExtensions.length > 0) {
+    files = files.filter((file) => {
+      return fileExtensions.includes(file.extension);
+    });
+  }
 
   files.sort((a, b) => {
     return a.basename.localeCompare(b.basename);
