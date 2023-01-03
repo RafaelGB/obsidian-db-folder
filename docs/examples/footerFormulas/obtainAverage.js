@@ -1,5 +1,7 @@
 /**
  * Obtains the average of the values in the column
+ * 
+ * Formula: ${db.js.obtainAverage(colValues)}
  * @param {*} obtainAverage 
  * @returns 
  */
