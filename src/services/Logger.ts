@@ -41,25 +41,25 @@ class Log implements LogInterface {
 
     private configureLogger() {
         if (this.levelInfo >= LevelInfoRecord.debug && this.isDebugModeEnabled) {
-            this.debug = console.log.bind(window.console, `[debug] ${new Date().toISOString()}`);
+            this.debug = console.log.bind(window.console, `[DEBUG]`);
         } else {
             this.debug = () => { };
         }
 
         if (this.levelInfo >= LevelInfoRecord.info && this.isDebugModeEnabled) {
-            this.info = console.log.bind(window.console, `[info] ${new Date().toISOString()}`);
+            this.info = console.log.bind(window.console, `[INFO]`);
         } else {
             this.info = () => { };
         }
 
         if (this.levelInfo >= LevelInfoRecord.warn && this.isDebugModeEnabled) {
-            this.warn = console.log.bind(window.console, `[warn] ${new Date().toISOString()}`);
+            this.warn = console.log.bind(window.console, `[WARN]`);
         } else {
             this.warn = () => { };
         }
 
         if (this.levelInfo >= LevelInfoRecord.error && this.isDebugModeEnabled) {
-            this.error = console.log.bind(window.console, `[error] ${new Date().toISOString()}`);
+            this.error = console.log.bind(window.console, `[ERROR]`);
         } else {
             this.error = () => { };
         }
@@ -69,21 +69,7 @@ class Log implements LogInterface {
         if (!Log.instance) {
             Log.instance = new Log();
         }
-
         return Log.instance;
-    }
-
-    private emitLogMessage(level: "debug" | "info" | "warn" | "error", message: string, ...supportingData: unknown[]): void {
-        // Do not log if debug mode is disabled
-        if (!this.isDebugModeEnabled) {
-            return;
-        }
-        const moment: string = new Date().toISOString();
-        if (supportingData.length > 0) {
-            console.log(`[${moment}] [${level}] ${message}`, supportingData);
-        } else {
-            console.log(`[${moment}] [${level}] ${message}`);
-        }
     }
 }
 

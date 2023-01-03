@@ -59,8 +59,6 @@ export default class DBFolderPlugin extends Plugin {
 
 	databaseFileModes: Record<string, string> = {};
 
-	viewMap: Map<string, DatabaseView> = new Map();
-
 	_loaded = false;
 
 	stateManagers: Map<TFile, StateManager> = new Map();
@@ -189,8 +187,8 @@ export default class DBFolderPlugin extends Plugin {
 			return;
 		}
 
-		if (!this.viewMap.has(view.id)) {
-			this.viewMap.set(view.id, view);
+		if (!reg.viewMap.has(view.id)) {
+			reg.viewMap.set(view.id, view);
 		}
 
 		const file = view.file;
@@ -408,10 +406,12 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			app.metadataCache.on("dataview:index-ready", async () => {
-				// Refresh all database views
-				this.viewMap.forEach(async (view) => {
-					await view.reloadDatabase();
-				});
+				for (const [win, { viewMap }] of Array.from(this.windowRegistry.entries())) {
+					// Refresh all database views
+					for (const view of viewMap.values()) {
+						await view.reloadDatabase();
+					}
+				}
 				/**
 				 * Once the index is ready, we can start listening for metadata changes.
 				 */
@@ -419,16 +419,17 @@ export default class DBFolderPlugin extends Plugin {
 					this.registerEvent(app.metadataCache.on("dataview:metadata-change",
 						(type, file, oldPath?) => {
 							const activeView = app.workspace.getActiveViewOfType(DatabaseView);
-							// Iterate through all the views and reload the database if the file is the same
-							this.viewMap.forEach(async (view) => {
-								const isActive = activeView && (view.file.path === activeView.file.path);
-								view.handleExternalMetadataChange(type, file, isActive, oldPath);
+							Array.from(this.windowRegistry.entries()).forEach(async ([, { viewMap }]) => {
+								// Iterate through all the views and reload the database if the file is the same
+								viewMap.forEach(async (view) => {
+									const isActive = activeView && (view.file.path === activeView?.file.path);
+									view.handleExternalMetadataChange(type, file, isActive, oldPath);
+								});
 							});
 						})
 					);
 				}
-			})
-		);
+			}));
 
 		/**
 		 * Check when the active view focus changes and update bar status

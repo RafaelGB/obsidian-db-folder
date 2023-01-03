@@ -14,11 +14,15 @@ export class NumbersFn extends DbModule {
     async create_dynamic_functions(): Promise<void> { }
 
     private parseRaw(rawValues: Literal[]): number[] {
-        return rawValues.map((value) => {
-            return parseFloat(value.toString());
-        }).filter((value) => {
-            return !isNaN(value);
-        });
+        return rawValues
+            .filter((value) => value &&
+                typeof value === "string" ||
+                typeof value === "number")
+            .map((value) => {
+                return parseFloat(value.toString());
+            }).filter((value) => {
+                return !isNaN(value);
+            });
     }
 
     /**

@@ -47,7 +47,7 @@ export interface DataState {
     rows: RowDataType[];
     actions: {
         addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-        updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => Promise<void>;
+        updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean, saveOnDisk?: boolean) => Promise<void>;
         parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
         updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         removeRow: (row: RowDataType) => Promise<void>;
