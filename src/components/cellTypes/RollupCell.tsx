@@ -36,11 +36,7 @@ const RollupCell = (mdProps: CellComponentProps) => {
         return;
       }
       const rollupResponse = formulaInfo
-        .dispatchRollup(
-          tableColumn.config,
-          relation as Literal,
-          configInfo.getLocalSettings()
-        )
+        .dispatchRollup(tableColumn.config, relation as Literal)
         .toString();
 
       MarkdownService.renderMarkdown(

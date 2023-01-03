@@ -8,7 +8,7 @@ export class SourceDropDownHandler extends AbstractSettingsHandler {
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, view } = settingHandlerResponse;
         const sourceOptions: Record<string, string> = {};
-        Object.entries(SourceDataTypes).forEach(([key, value]) => {
+        Object.entries(SourceDataTypes).forEach(([, value]) => {
             sourceOptions[value] = t(value);
         });
         const source_dropdown_promise = async (value: string): Promise<void> => {

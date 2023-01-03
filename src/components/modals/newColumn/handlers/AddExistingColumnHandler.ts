@@ -7,7 +7,7 @@ import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
-    settingTitle: string = t("add_row_modal_add_existing_column_title");
+    settingTitle = t("add_row_modal_add_existing_column_title");
     handle(response: AddColumnModalHandlerResponse): AddColumnModalHandlerResponse {
         const { containerEl, addColumnModalManager } = response;
         const { configState, columnState } = addColumnModalManager.props;

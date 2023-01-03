@@ -10,7 +10,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class DispatchRollupHandlerAction extends AbstractTableAction<AutomationState> {
     handle(tableActionResponse: TableActionResponse<AutomationState>): TableActionResponse<AutomationState> {
         const { implementation } = tableActionResponse;
-        implementation.info.dispatchRollup = (configColumn: ConfigColumn, relation: Literal, ddbbConfig: LocalSettings) => {
+        implementation.info.dispatchRollup = (configColumn: ConfigColumn, relation: Literal) => {
             let validatedRelation: Link[] = [];
             try {
                 const wrappedRelation = DataviewService.wrapLiteral(relation);
