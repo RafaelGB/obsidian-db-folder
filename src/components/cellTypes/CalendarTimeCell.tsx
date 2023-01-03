@@ -13,8 +13,8 @@ import { ParseService } from "services/ParseService";
 import { DEFAULT_SETTINGS, InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Platform } from "obsidian";
-import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
 import { OBSIDIAN_LOCALE } from "lang/helpers";
+import { Db } from "services/CoreService";
 
 const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
@@ -112,7 +112,7 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       }}
       tabIndex={0}
     >
-      {parseLuxonDatetimeToString(
+      {Db.coreFns.luxon.dateToString(
         calendarCell,
         configInfo.getLocalSettings().datetime_format
       )}

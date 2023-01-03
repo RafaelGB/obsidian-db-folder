@@ -1,8 +1,9 @@
+import { NumbersInterface } from "cdm/ModulesFnModel";
 import { DbModule } from "lib/core/DbModule";
 import { Literal } from "obsidian-dataview";
 
 
-export class NumbersFn extends DbModule {
+export class NumbersFn extends DbModule implements NumbersInterface {
     public name: string = "numbers";
 
     async create_static_functions(): Promise<void> {
@@ -12,6 +13,26 @@ export class NumbersFn extends DbModule {
     }
 
     async create_dynamic_functions(): Promise<void> { }
+
+    sum(rawValues: Literal[]): number {
+        // Check if key is not truthy, return empty string
+        return this
+            .parseRaw(rawValues)
+            .reduce((a, b) => a + b, 0);
+    }
+
+    min(rawValues: Literal[]): number {
+        return this
+            .parseRaw(rawValues)
+            .reduce((acc: number, value: number) => Math.min(acc, value), Number.MAX_SAFE_INTEGER);
+    }
+
+    max(rawValues: Literal[]): number {
+        return this
+            .parseRaw(rawValues)
+            .reduce((acc: number, value: number) => Math.max(acc, value), Number.MIN_SAFE_INTEGER);
+    }
+
 
     private parseRaw(rawValues: Literal[]): number[] {
         return rawValues
@@ -23,36 +44,5 @@ export class NumbersFn extends DbModule {
             }).filter((value) => {
                 return !isNaN(value);
             });
-    }
-
-    /**
-     * Obtains the sum of all values
-     * @returns 
-     */
-    private sum(rawValues: Literal[]): number {
-        // Check if key is not truthy, return empty string
-        return this
-            .parseRaw(rawValues)
-            .reduce((a, b) => a + b, 0);
-    }
-
-    /**
-     * Obtains the minimum value of the column (only for numbers)
-     * @returns 
-     */
-    private min(rawValues: Literal[]): number {
-        return this
-            .parseRaw(rawValues)
-            .reduce((acc: number, value: number) => Math.min(acc, value), Number.MAX_SAFE_INTEGER);
-    }
-
-    /**
-     * Obtains the maximum value of the column (only for numbers)
-     * @returns
-     */
-    private max(rawValues: Literal[]): number {
-        return this
-            .parseRaw(rawValues)
-            .reduce((acc: number, value: number) => Math.max(acc, value), Number.MIN_SAFE_INTEGER);
     }
 }

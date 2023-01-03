@@ -2,7 +2,7 @@ import { TypeParser } from "cdm/ServicesModel";
 import { Literal, WrappedLiteral } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { DataviewService } from "services/DataviewService";
-import { parseLuxonDatetimeToString, parseLuxonDateToString } from "helpers/LuxonHelper";
+import { Db } from "services/CoreService";
 
 class SortingParser extends TypeParser<Literal> {
     parse(wrapped: WrappedLiteral) {
@@ -51,10 +51,10 @@ class SortingParser extends TypeParser<Literal> {
             case 'date':
                 if (wrapped.value.hour === 0 && wrapped.value.minute === 0 && wrapped.value.second === 0) {
                     // Parse date
-                    return parseLuxonDatetimeToString(wrapped.value, this.config.date_format);
+                    return Db.coreFns.luxon.dateToString(wrapped.value, this.config.date_format);
                 } else {
                     // Parse datetime
-                    return parseLuxonDateToString(wrapped.value, this.config.datetime_format);
+                    return Db.coreFns.luxon.dateToString(wrapped.value, this.config.datetime_format);
                 }
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
