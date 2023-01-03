@@ -73,7 +73,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                         .onClick(async (): Promise<void> => {
                             const recordColumns: Record<string, DatabaseColumn> = {};
                             const allColumns = await obtainColumnsFromRows(
-                                view,
+                                view.file.parent.path,
                                 view.diskConfig.yaml.config,
                                 view.diskConfig.yaml.filters,
                                 columns);

@@ -1,8 +1,8 @@
 export interface LogInterface {
-    debug(primaryMessage: string, ...supportingData: unknown[]): void;
-    info(primaryMessage: string, ...supportingData: unknown[]): void;
-    warn(primaryMessage: string, ...supportingData: unknown[]): void;
-    error(primaryMessage: string, ...supportingData: unknown[]): void;
+    debug(...args: unknown[]): void;
+    info(...args: unknown[]): void;
+    warn(...args: unknown[]): void;
+    error(...args: unknown[]): void;
     setDebugMode(isDebugModeEnabled: boolean): void;
     setLevelInfo(value: string): void;
 }
@@ -13,63 +13,63 @@ const LevelInfoRecord: Record<string, number> = {
     warn: 1,
     error: 0
 };
+
 class Log implements LogInterface {
     private static instance: LogInterface;
     private isDebugModeEnabled: boolean;
     private levelInfo: number;
+    public debug: (...args: unknown[]) => void;
+    public info: (...args: unknown[]) => void;
+    public warn: (...args: unknown[]) => void;
+    public error: (...args: unknown[]) => void;
+
     private constructor() {
         this.isDebugModeEnabled = false;
         this.levelInfo = 0;
     }
 
-    public debug(primaryMessage: string, ...supportingData: unknown[]) {
-        if (this.levelInfo >= LevelInfoRecord.debug) {
-            this.emitLogMessage("debug", primaryMessage, ...supportingData);
-        }
-    }
-    public info(primaryMessage: string, ...supportingData: unknown[]) {
-        if (this.levelInfo >= LevelInfoRecord.info) {
-            this.emitLogMessage("info", primaryMessage, ...supportingData);
-        }
-    }
-    public warn(primaryMessage: string, ...supportingData: unknown[]) {
-        if (this.levelInfo >= LevelInfoRecord.warn) {
-            this.emitLogMessage("warn", primaryMessage, ...supportingData);
-        }
-    }
-    public error(primaryMessage: string, ...supportingData: unknown[]) {
-        if (this.levelInfo >= LevelInfoRecord.error) {
-            this.emitLogMessage("error", primaryMessage, ...supportingData);
-        }
-    }
-
     public setDebugMode(isDebugModeEnabled: boolean) {
         this.isDebugModeEnabled = isDebugModeEnabled;
+        this.configureLogger();
     }
 
     public setLevelInfo(value: string) {
         this.levelInfo = LevelInfoRecord[value];
+        this.configureLogger();
+
+    }
+
+    private configureLogger() {
+        if (this.levelInfo >= LevelInfoRecord.debug && this.isDebugModeEnabled) {
+            this.debug = console.log.bind(window.console, `[DEBUG]`);
+        } else {
+            this.debug = () => { };
+        }
+
+        if (this.levelInfo >= LevelInfoRecord.info && this.isDebugModeEnabled) {
+            this.info = console.log.bind(window.console, `[INFO]`);
+        } else {
+            this.info = () => { };
+        }
+
+        if (this.levelInfo >= LevelInfoRecord.warn && this.isDebugModeEnabled) {
+            this.warn = console.log.bind(window.console, `[WARN]`);
+        } else {
+            this.warn = () => { };
+        }
+
+        if (this.levelInfo >= LevelInfoRecord.error && this.isDebugModeEnabled) {
+            this.error = console.log.bind(window.console, `[ERROR]`);
+        } else {
+            this.error = () => { };
+        }
     }
 
     public static getInstance(): LogInterface {
         if (!Log.instance) {
             Log.instance = new Log();
         }
-
         return Log.instance;
-    }
-
-    private emitLogMessage(level: "debug" | "info" | "warn" | "error", message: string, ...supportingData: unknown[]): void {
-        // Do not log if debug mode is disabled
-        if (!this.isDebugModeEnabled) {
-            return;
-        }
-        const moment: string = new Date().toISOString();
-        if (supportingData.length > 0) {
-            console.log(`[${moment}] [${level}] ${message}`, supportingData);
-        } else {
-            console.log(`[${moment}] [${level}] ${message}`);
-        }
     }
 }
 

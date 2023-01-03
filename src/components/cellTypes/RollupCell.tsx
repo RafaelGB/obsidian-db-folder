@@ -27,11 +27,11 @@ const RollupCell = (mdProps: CellComponentProps) => {
         configInfo.getLocalSettings()
       ) as string
   );
+  const relation = formulaRow[tableColumn.config.asociated_relation_id];
 
   useEffect(() => {
     if (formulaRef.current !== null) {
       formulaRef.current.innerHTML = "";
-      const relation = formulaRow[tableColumn.config.asociated_relation_id];
       if (!relation) {
         return;
       }
@@ -67,7 +67,7 @@ const RollupCell = (mdProps: CellComponentProps) => {
         );
       }
     }
-  }, [cell, row, column]);
+  }, [relation]);
   return (
     <span
       ref={formulaRef}

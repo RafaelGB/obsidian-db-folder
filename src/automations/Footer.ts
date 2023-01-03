@@ -1,8 +1,7 @@
 import { DEFAULT_SETTINGS, FooterType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
-import { DateTime } from "luxon";
-import { DbAutomationService } from "services/AutomationService";
+import { Db } from "services/CoreService";
 
 export default class Footer {
     constructor(public readonly colValues: Literal[]) { }
@@ -120,7 +119,7 @@ export default class Footer {
      * @returns 
      */
     public sum(): string {
-        const total = DbAutomationService.coreFns.numbers.sum(this.colValues);
+        const total = Db.coreFns.numbers.sum(this.colValues);
         return `Total: ${total}`;
     }
 
@@ -129,7 +128,7 @@ export default class Footer {
      * @returns 
      */
     public min(): string {
-        const min = DbAutomationService.coreFns.numbers.min(this.colValues);
+        const min = Db.coreFns.numbers.min(this.colValues);
         return `Min: ${min}`;
     }
 
@@ -138,7 +137,7 @@ export default class Footer {
      * @returns 
      */
     public max(): string {
-        const max = DbAutomationService.coreFns.numbers.max(this.colValues);
+        const max = Db.coreFns.numbers.max(this.colValues);
         return `Max: ${max}`;
     }
 
@@ -150,7 +149,7 @@ export default class Footer {
      * @returns 
      */
     public earliestDate(): string {
-        const earliest = DbAutomationService.coreFns.luxon.earliest(this.colValues);
+        const earliest = Db.coreFns.luxon.earliest(this.colValues);
         return earliest.isValid ?
             `Earliest: ${earliest.toFormat(DEFAULT_SETTINGS.local_settings.datetime_format)}` :
             null;
@@ -161,7 +160,7 @@ export default class Footer {
      * @returns 
      */
     public latestDate(): string {
-        const latest = DbAutomationService.coreFns.luxon.latest(this.colValues);
+        const latest = Db.coreFns.luxon.latest(this.colValues);
         return latest.isValid ?
             `Latest: ${latest.toFormat(DEFAULT_SETTINGS.local_settings.datetime_format)}` :
             null;
@@ -172,7 +171,7 @@ export default class Footer {
      * @returns 
      */
     public rangeDate(): string {
-        const range = DbAutomationService.coreFns.luxon.range(this.colValues);
+        const range = Db.coreFns.luxon.range(this.colValues);
         return `Range: ${range} days`
     }
 

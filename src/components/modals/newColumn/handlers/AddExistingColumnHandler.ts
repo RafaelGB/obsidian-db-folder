@@ -21,7 +21,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
 
         const promiseOfObtainColumnsFromRows = new Promise<string[]>((resolve) => {
             resolve(obtainColumnsFromRows(
-                addColumnModalManager.addColumnModal.view,
+                addColumnModalManager.addColumnModal.view.file.parent.path,
                 configState.info.getLocalSettings(),
                 configState.info.getFilters(),
                 columns

@@ -149,14 +149,14 @@ export async function obtainColumnsFromFile(
 }
 
 export async function obtainColumnsFromRows(
-  view: DatabaseView,
+  folderPath: string,
   ddbbConfig: LocalSettings,
   filters: FilterSettings,
   tableColumns: TableColumn[]
 ): Promise<string[]> {
   const columns: string[] = [];
   const rows = await obtainAllPossibleRows(
-    view.file.parent.path,
+    folderPath,
     ddbbConfig,
     filters,
     tableColumns

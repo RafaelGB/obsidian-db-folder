@@ -6,6 +6,7 @@ import DatabaseInfo from "services/DatabaseInfo";
 import { sourceDataviewPages } from "helpers/VaultManagement";
 import { LocalSettings } from "cdm/SettingsModel";
 import { TableColumn } from "cdm/FolderModel";
+import { obtainColumnsFromRows } from "components/Columns";
 
 /**
  * Search for all databases in the vault returning a Record of all databases
@@ -43,17 +44,16 @@ export async function recordFieldsFromRelation(ddbbPath: string, ddbbConfig: Loc
     const relationFields: Record<string, string> = {};
     const ddbbFile = resolve_tfile(ddbbPath);
     const ddbbInfo = new DatabaseInfo(ddbbFile);
-    ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
-    const ddbbRows = await sourceDataviewPages(ddbbConfig, ddbbFile.parent.path, columns);
+    await ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
+    const fields = await obtainColumnsFromRows(
+        ddbbFile.parent.path,
+        ddbbInfo.yaml.config,
+        ddbbInfo.yaml.filters,
+        columns);
     // get unique fields from all rows
-    ddbbRows.forEach((page) => {
+    fields.forEach((field) => {
         // iterate over all fields in the row
-        Object.keys(page).forEach((key) => {
-            if (relationFields[key] === undefined) {
-                relationFields[key] = key;
-            }
-        });
-    }
-    );
+        relationFields[field] = field;
+    });
     return relationFields;
 }

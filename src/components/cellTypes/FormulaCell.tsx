@@ -1,5 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
+import { MetadataColumns } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
@@ -18,10 +19,9 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const formulaInfo = tableState.automations((state) => state.info);
 
   useEffect(() => {
-    setTimeout(async () => {
+    Promise.resolve().then(async () => {
       // If formula cell is empty, do nothing
       if (formulaRef.current === null) return;
-
       const formulaResponse = formulaInfo
         .runFormula(
           tableColumn.config.formula_query,
@@ -39,14 +39,8 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         formulaRef.current,
         5
       );
-
       // If formula cell is not configured to persist, exit
-      if (
-        !tableColumn.config.persist_formula ||
-        cell.getValue() === formulaResponse
-      )
-        return;
-
+      if (cell.getValue() === formulaResponse) return;
       // Save formula response on disk
       const newCell = ParseService.parseRowToLiteral(
         formulaRow,
@@ -59,10 +53,17 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         tableColumn,
         newCell,
         columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings()
+        configInfo.getLocalSettings(),
+        false,
+        tableColumn.config.persist_formula
       );
-    }, 0);
-  }, [row]);
+    });
+  }, [
+    Object.entries(formulaRow)
+      .filter(([key]) => key !== MetadataColumns.MODIFIED && key !== column.id)
+      .map(([, value]) => (value ? value.toString() : ""))
+      .join(""),
+  ]);
 
   return (
     <span

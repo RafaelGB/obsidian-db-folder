@@ -43,6 +43,13 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
                 textArea.setPlaceholder(t("column_settings_modal_formula_input_textarea_placeholder"));
                 textArea.onChange(formula_promise);
                 textArea.inputEl.addClass(c("textarea-setting"));
+                textArea.inputEl.onkeydown = (e: KeyboardEvent) => {
+                    switch (e.key) {
+                        case "Enter":
+                            e.preventDefault();
+                            break;
+                    }
+                };
 
             });
         const mainDesc = containerEl.createEl('p');
