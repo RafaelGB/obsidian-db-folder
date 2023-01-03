@@ -1,6 +1,6 @@
-import { FormulaGenerator } from "automations/FormulaGenerator";
-import { ModulesGenerator } from "automations/ModulesGenerator";
-import Rollup from "automations/Rollup";
+import { FormulaGenerator } from "lib/FormulaGenerator";
+import { ModulesGenerator } from "lib/ModulesGenerator";
+import Rollup from "lib/Rollup";
 import { DatabaseFnType } from "cdm/ModulesFnModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { Link } from "obsidian-dataview/lib/data-model/value";

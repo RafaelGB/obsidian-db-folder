@@ -1,4 +1,4 @@
-import { DbModule } from "automations/core/DbModule";
+import { DbModule } from "lib/core/DbModule";
 import { Literal } from "obsidian-dataview";
 import { DateTime, DurationLikeObject } from "luxon";
 

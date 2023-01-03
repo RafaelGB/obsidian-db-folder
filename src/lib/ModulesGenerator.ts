@@ -1,4 +1,4 @@
-import { IGenerateObject } from "automations/core/IGenerateObject";
+import { IGenerateObject } from "lib/core/IGenerateObject";
 import { DatabaseFnType } from "cdm/ModulesFnModel";
 import { DbModule } from "./core/DbModule";
 import { LuxonFn } from "./core/modules/LuxonFn";

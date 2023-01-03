@@ -1,4 +1,4 @@
-import Rollup from "automations/Rollup";
+import Rollup from "lib/Rollup";
 import { ConfigColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
