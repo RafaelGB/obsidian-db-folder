@@ -1,4 +1,4 @@
-import Footer from "automations/Footer";
+import Footer from "lib/Footer";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { FooterType } from "helpers/Constants";
 import React, { MouseEventHandler, useEffect, useState } from "react";

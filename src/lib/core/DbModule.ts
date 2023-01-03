@@ -26,7 +26,6 @@ export abstract class DbModule implements IGenerateObject {
 
         return {
             ...this.static_object,
-            ...this.static_object,
             ...Object.fromEntries(this.dynamic_functions),
         };
     }

@@ -1,10 +1,10 @@
 import { DataObject, Literal, WrappedLiteral } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { DateTime } from "luxon";
-import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
 import { TypeParser } from "cdm/ServicesModel";
 import stringifyReplacer from "./StringifyReplacer";
 import * as YAML from 'yaml';
+import { Db } from "services/CoreService";
 
 class TextParser extends TypeParser<string | DataObject> {
     /**
@@ -16,7 +16,7 @@ class TextParser extends TypeParser<string | DataObject> {
         switch (wrapped.type) {
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
-                    return parseLuxonDatetimeToString(wrapped.value, this.config.datetime_format);
+                    return Db.coreFns.luxon.dateToString(wrapped.value, this.config.datetime_format);
                 }
 
                 if (DataviewService.getDataviewAPI().isDataArray(wrapped.value)) {
