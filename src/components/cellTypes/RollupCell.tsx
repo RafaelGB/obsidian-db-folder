@@ -67,7 +67,7 @@ const RollupCell = (mdProps: CellComponentProps) => {
         );
       }
     }
-  }, [cell, row, column]);
+  }, [relation]);
   return (
     <span
       ref={formulaRef}

@@ -19,7 +19,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             columns: TableColumn[],
             ddbbConfig: LocalSettings,
             isMovingFile?: boolean,
-            saveOnDisk = false) => {
+            saveOnDisk = true) => {
             const modifiedRow = get().rows[rowIndex];
             let rowTFile = modifiedRow.__note__.getFile();
 
