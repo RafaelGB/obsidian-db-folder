@@ -34,7 +34,7 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
     }
 
     loadDefaultConfig<K extends keyof LocalSettings>(key: K, value: Literal, localSettings: LocalSettings): LocalSettings {
-        let wrappedLiteral = DataviewService.wrapLiteral(value)
+        const wrappedLiteral = DataviewService.wrapLiteral(value)
         let unEscapedValue = wrappedLiteral.value
         if (wrappedLiteral.type === "string") {
             unEscapedValue = unEscapeSpecialCharacters(wrappedLiteral.value)

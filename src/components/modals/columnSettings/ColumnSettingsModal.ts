@@ -14,7 +14,7 @@ export class ColumnSettingsModal extends Modal {
     configState: Partial<ConfigState>;
     columnsState: Partial<ColumnsState>;
     tableColumn: TableColumn;
-    enableReset: boolean = false;
+    enableReset = false;
     constructor(
         props: ColumnSettingsModalProps
     ) {

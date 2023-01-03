@@ -5,7 +5,7 @@ import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPrope
 import { DataviewService } from 'services/DataviewService';
 
 export class MarshallFiltersHandler extends AbstractYamlHandler {
-    handlerName: string = 'columns';
+    handlerName = 'columns';
 
     public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse {
         const { yaml } = handlerResponse;

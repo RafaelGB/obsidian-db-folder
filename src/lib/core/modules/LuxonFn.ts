@@ -6,7 +6,7 @@ import { LuxonInterface } from "cdm/ModulesFnModel";
 
 
 export class LuxonFn extends DbModule implements LuxonInterface {
-    public name: string = "luxon";
+    public name = "luxon";
 
     async create_static_functions(): Promise<void> {
         this.static_functions.set("earliest", this.earliest.bind(this));
@@ -16,7 +16,9 @@ export class LuxonFn extends DbModule implements LuxonInterface {
         this.static_functions.set("stringToDate", this.stringToDate.bind(this));
     }
 
-    async create_dynamic_functions(): Promise<void> { }
+    async create_dynamic_functions(): Promise<void> {
+        // No dynamic functions
+    }
 
     parseRaw(rawValues: Literal[]): DateTime[] {
         return rawValues

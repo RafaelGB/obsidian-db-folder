@@ -11,7 +11,7 @@ import { t } from "lang/helpers";
 export class AddColumnModal extends Modal {
     view: DatabaseView;
     addColumnManager: AddColumnModalManager;
-    enableReset: boolean = false;
+    enableReset = false;
     constructor(
         view: DatabaseView,
         props: AddColumnModalProps

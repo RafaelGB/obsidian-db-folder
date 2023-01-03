@@ -8,7 +8,7 @@ import { DataviewService } from "services/DataviewService";
  * @returns 
  */
 const stringifyReplacer = (key: string, value: Literal) => {
-    let wrappedLiteral = DataviewService.wrapLiteral(value);
+    const wrappedLiteral = DataviewService.wrapLiteral(value);
     switch (wrappedLiteral.type) {
         case 'link':
             return wrappedLiteral.value.markdown();

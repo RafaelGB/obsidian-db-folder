@@ -4,7 +4,7 @@ import { YAML_INDENT } from "helpers/Constants";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
 
 export class UnmarshallFiltersHandler extends AbstractDiskHandler {
-    handlerName: string = 'filters';
+    handlerName = 'filters';
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
         const { filters } = handlerResponse.yaml;

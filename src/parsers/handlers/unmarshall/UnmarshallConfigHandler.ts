@@ -5,7 +5,7 @@ import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPro
 import { parseValuetoSanitizeYamlValue } from "parsers/RowDatabaseFieldsToFile";
 
 export class UnmarshallConfigHandler extends AbstractDiskHandler {
-    handlerName: string = 'config';
+    handlerName = 'config';
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
         const { config } = handlerResponse.yaml;

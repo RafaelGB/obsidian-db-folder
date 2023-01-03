@@ -4,7 +4,7 @@ import { Literal } from "obsidian-dataview";
 
 
 export class NumbersFn extends DbModule implements NumbersInterface {
-    public name: string = "numbers";
+    public name = "numbers";
 
     async create_static_functions(): Promise<void> {
         this.static_functions.set("sum", this.sum.bind(this));
@@ -12,7 +12,9 @@ export class NumbersFn extends DbModule implements NumbersInterface {
         this.static_functions.set("max", this.max.bind(this));
     }
 
-    async create_dynamic_functions(): Promise<void> { }
+    async create_dynamic_functions(): Promise<void> {
+        // No dynamic functions
+    }
 
     sum(rawValues: Literal[]): number {
         // Check if key is not truthy, return empty string

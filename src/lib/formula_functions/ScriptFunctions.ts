@@ -43,11 +43,11 @@ export class ScriptFunctions implements IGenerateObject {
         file: TFile,
         script_functions: Map<string, Function>
     ): Promise<void> {
-        let req = (s: string) => {
+        const req = (s: string) => {
             return window.require && window.require(s);
         };
-        let exp: Record<string, unknown> = {};
-        let mod = {
+        const exp: Record<string, unknown> = {};
+        const mod = {
             exports: exp
         };
 

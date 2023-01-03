@@ -5,8 +5,8 @@ import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 
 export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
-  settingTitle: string = t("add_row_modal_add_empty_column_title");
-  textElId: string = "SettingsModalManager-addEmptyColumn-input";
+  settingTitle = t("add_row_modal_add_empty_column_title");
+  textElId = "SettingsModalManager-addEmptyColumn-input";
   handle(
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {

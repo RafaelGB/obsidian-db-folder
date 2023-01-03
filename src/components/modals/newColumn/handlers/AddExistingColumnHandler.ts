@@ -12,8 +12,8 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
         const { containerEl, addColumnModalManager } = response;
         const { configState, columnState } = addColumnModalManager.props;
         const columns = columnState.info.getAllColumns();
-        let selectedColumn: string = "";
-        let typeOfNewColumn: string = "";
+        let selectedColumn = "";
+        let typeOfNewColumn = "";
         const typesRecord: Record<string, string> = {};
         Object.values(DynamicInputType).forEach((value) => {
             typesRecord[value] = t(value);

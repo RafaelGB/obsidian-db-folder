@@ -4,8 +4,8 @@ import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 
 export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandlerResponse> {
-    settingTitle: string = t("add_row_modal_filename_text_title");
-    textElId: string = "AddRowModalManager-addRow-input";
+    settingTitle = t("add_row_modal_filename_text_title");
+    textElId = "AddRowModalManager-addRow-input";
     handle(
         response: AddRowModalHandlerResponse
     ): AddRowModalHandlerResponse {
