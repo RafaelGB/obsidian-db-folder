@@ -35,7 +35,7 @@ class SelectParser extends TypeParser<string> {
                 break;
             case 'link':
                 parsedValue = wrapped.value.markdown();
-
+                break;
             // Else go to default
             default:
                 parsedValue = DataviewService.getDataviewAPI().value.toString(wrapped.value);

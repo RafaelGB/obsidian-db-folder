@@ -20,7 +20,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
             /***************************
              * TEMPLATE OF SELECTED FILE
              ***************************/
-            let selected_file: string = "";
+            let selected_file = "";
             const filePaths: Record<string, string> = {};
             view.rows.forEach((row: RowDataType) => {
                 if (row.__note__) {

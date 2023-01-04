@@ -7,8 +7,6 @@ export abstract class DbModule implements IGenerateObject {
     protected dynamic_functions: Map<string, unknown> = new Map();
     protected static_object: { [x: string]: unknown };
 
-    constructor() { }
-
     getName(): string {
         return this.name;
     }

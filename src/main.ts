@@ -74,13 +74,13 @@ export default class DBFolderPlugin extends Plugin {
 		await this.loadServices();
 		addIcon(DB_ICONS.NAME, DB_ICONS.ICON);
 		this.registerEvent(
-			app.workspace.on('window-open', (_: any, win: Window) => {
+			app.workspace.on('window-open', (_: unknown, win: Window) => {
 				this.mount(win);
 			})
 		);
 
 		this.registerEvent(
-			app.workspace.on('window-close', (_: any, win: Window) => {
+			app.workspace.on('window-close', (_: unknown, win: Window) => {
 				this.unmount(win);
 			})
 		);
@@ -112,7 +112,7 @@ export default class DBFolderPlugin extends Plugin {
 	unload(): void {
 		Promise.all(
 			app.workspace.getLeavesOfType(DatabaseCore.FRONTMATTER_KEY).map((leaf) => {
-				this.databaseFileModes[(leaf as any).id] = 'markdown';
+				this.databaseFileModes[leaf.id] = 'markdown';
 				return this.setMarkdownView(leaf);
 			})
 		).then(() => {
@@ -134,7 +134,7 @@ export default class DBFolderPlugin extends Plugin {
 		this.windowRegistry.clear();
 		this.databaseFileModes = {};
 
-		(app.workspace as any).unregisterHoverLinkSource(DatabaseCore.FRONTMATTER_KEY);
+		app.workspace.unregisterHoverLinkSource(DatabaseCore.FRONTMATTER_KEY);
 	}
 
 	/** Update plugin settings. */
@@ -179,7 +179,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
 
-	addView(view: DatabaseView, data: string) {
+	addView(view: DatabaseView) {
 		const win = view.getWindow();
 		const reg = this.windowRegistry.get(win);
 
@@ -371,7 +371,7 @@ export default class DBFolderPlugin extends Plugin {
 								.setIcon(DB_ICONS.NAME)
 								.setSection('pane')
 								.onClick(() => {
-									this.databaseFileModes[(leaf as any).id || file.path] =
+									this.databaseFileModes[leaf.id || file.path] =
 										DatabaseCore.FRONTMATTER_KEY;
 									this.setDatabaseView(leaf);
 								});
@@ -392,7 +392,7 @@ export default class DBFolderPlugin extends Plugin {
 							.setIcon(DB_ICONS.NAME)
 							.setSection('pane')
 							.onClick(() => {
-								this.databaseFileModes[(leaf as any).id || file.path] =
+								this.databaseFileModes[leaf.id || file.path] =
 									DatabaseCore.FRONTMATTER_KEY;
 								this.setDatabaseView(leaf);
 							});
@@ -406,7 +406,7 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			app.metadataCache.on("dataview:index-ready", async () => {
-				for (const [win, { viewMap }] of Array.from(this.windowRegistry.entries())) {
+				for (const [, { viewMap }] of Array.from(this.windowRegistry.entries())) {
 					// Refresh all database views
 					for (const view of viewMap.values()) {
 						await view.reloadDatabase();
@@ -537,7 +537,7 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	showRibbonIcon() {
-		this.ribbonIcon = this.addRibbonIcon(DB_ICONS.NAME, t("ribbon_icon_title"), async (e) => {
+		this.ribbonIcon = this.addRibbonIcon(DB_ICONS.NAME, t("ribbon_icon_title"), async () => {
 			new DatabaseHelperCreationModal(this.settings.local_settings).open()
 		});
 	}
@@ -607,7 +607,7 @@ export default class DBFolderPlugin extends Plugin {
 							self.databaseFileModes[this.id || state.state.file] !== 'markdown'
 						) {
 							// Then check for the database frontMatterKey
-							const cache = self.app.metadataCache.getCache(state.state.file);
+							const cache = app.metadataCache.getCache(state.state.file);
 
 							if (cache?.frontmatter && cache.frontmatter[DatabaseCore.FRONTMATTER_KEY]) {
 								// If we have it, force the view type to database

@@ -34,12 +34,12 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
     }
 
     loadDefaultConfig<K extends keyof LocalSettings>(key: K, value: Literal, localSettings: LocalSettings): LocalSettings {
-        let wrappedLiteral = DataviewService.wrapLiteral(value)
+        const wrappedLiteral = DataviewService.wrapLiteral(value)
         let unEscapedValue = wrappedLiteral.value
         if (wrappedLiteral.type === "string") {
             unEscapedValue = unEscapeSpecialCharacters(wrappedLiteral.value)
         }
-        localSettings[key] = unEscapedValue as any;
+        localSettings[key] = unEscapedValue as LocalSettings[K];
         return localSettings;
     }
 
@@ -49,7 +49,7 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
 
     parseBoolean<K extends keyof LocalSettings>(key: K, localSettings: LocalSettings): LocalSettings {
         const parsedValue = localSettings[key].toString().toLowerCase() === 'true';
-        localSettings[key] = parsedValue as any;
+        localSettings[key] = parsedValue as LocalSettings[K];
         return localSettings;
     }
 }

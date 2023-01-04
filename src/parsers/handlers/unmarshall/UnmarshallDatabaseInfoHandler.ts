@@ -2,7 +2,7 @@ import { DiskHandlerResponse } from "cdm/MashallModel";
 import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
 
 export class UnmarshallDatabaseInfoHandler extends AbstractDiskHandler {
-    handlerName: string = 'databaseInfo';
+    handlerName = 'databaseInfo';
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
         const { yaml } = handlerResponse;

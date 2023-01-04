@@ -1,7 +1,7 @@
 import { StyleVariables } from "helpers/Constants";
 import { GroupBase, StylesConfig } from "react-select";
 
-const CustomTemplateSelectorStyles: StylesConfig<any, true, GroupBase<any>> = {
+const CustomTemplateSelectorStyles: StylesConfig<any, true, GroupBase<unknown>> = {
     singleValue: (styles) => ({
         ...styles,
         color: StyleVariables.TEXT_NORMAL,
@@ -10,7 +10,7 @@ const CustomTemplateSelectorStyles: StylesConfig<any, true, GroupBase<any>> = {
         border: 0
     }),
 
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    option: (styles) => {
         return {
             ...styles,
             color: StyleVariables.TEXT_NORMAL,

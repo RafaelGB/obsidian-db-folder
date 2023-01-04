@@ -64,12 +64,12 @@ export class DatabaseView extends TextFileView implements HoverParent {
     if (file) {
       this.file = file;
       this.plugin.removeView(this);
-      this.plugin.addView(this, this.data);
+      this.plugin.addView(this);
     } else {
       this.register(
         this.containerEl.onWindowMigrated(() => {
           this.plugin.removeView(this);
-          this.plugin.addView(this, this.data);
+          this.plugin.addView(this);
         })
       );
     }
@@ -93,7 +93,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       return;
     }
 
-    this.plugin.addView(this, data);
+    this.plugin.addView(this);
   }
 
   getIcon() {

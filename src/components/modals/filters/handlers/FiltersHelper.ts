@@ -74,6 +74,7 @@ const modifyRecursiveFilterGroups = (
                 break;
             case ModifyFilterOptionsEnum.DELETE:
                 filterGroups.splice(recursiveIndex[currentLvl], 1);
+                break;
             default:
             // Do nothing
         }

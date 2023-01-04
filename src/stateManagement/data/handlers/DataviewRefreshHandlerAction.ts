@@ -14,7 +14,7 @@ export default class DataviewRefreshHandlerAction extends AbstractTableAction<Da
                 ddbbConfig,
                 filterConfig
             );
-            set((updater) => {
+            set(() => {
                 return { rows: [...refreshedRows] };
             });
         }

@@ -21,7 +21,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             isMovingFile?: boolean,
             saveOnDisk = true) => {
             const modifiedRow = get().rows[rowIndex];
-            let rowTFile = modifiedRow.__note__.getFile();
+            const rowTFile = modifiedRow.__note__.getFile();
 
             // Update the row on memory
             modifiedRow[column.key] = value;

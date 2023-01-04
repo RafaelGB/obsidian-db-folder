@@ -5,7 +5,7 @@ import { add_toggle } from "settings/SettingsComponents";
 import { t } from "lang/helpers";
 import { c } from "helpers/StylesHelper";
 export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Formula properties';
+    settingTitle = 'Formula properties';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;

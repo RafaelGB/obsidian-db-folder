@@ -42,7 +42,7 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
                     }
                     break;
                 case InputType.SELECT:
-                    lambdaUpdate = (cellValue: Literal) => {
+                    lambdaUpdate = () => {
                         return newLabel;
                     };
                     break;

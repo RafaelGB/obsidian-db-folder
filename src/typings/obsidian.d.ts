@@ -36,4 +36,24 @@ declare module "obsidian" {
      */
     getTags(): Record<string, number>;
   }
+
+  interface WorkspaceLeaf {
+    /**
+     * Get the id of the leaf.
+     * 
+     * WARNING! not exposed by Obsidian, may break in future.
+     */
+    id: string;
+  }
+
+  interface Workspace {
+    /**
+     * Unregister a hover link source from the workspace in order to prevent it from being displayed.
+     *
+     * WARNING! not exposed by Obsidian, may break in future.
+     * @param id 
+     * @returns 
+     */
+    unregisterHoverLinkSource: (id: string) => void;
+  }
 }

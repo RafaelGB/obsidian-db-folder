@@ -43,25 +43,33 @@ class Log implements LogInterface {
         if (this.levelInfo >= LevelInfoRecord.debug && this.isDebugModeEnabled) {
             this.debug = console.log.bind(window.console, `[DEBUG]`);
         } else {
-            this.debug = () => { };
+            this.debug = () => {
+                // Disable debug mode
+            };
         }
 
         if (this.levelInfo >= LevelInfoRecord.info && this.isDebugModeEnabled) {
             this.info = console.log.bind(window.console, `[INFO]`);
         } else {
-            this.info = () => { };
+            this.info = () => {
+                // Disable info mode
+            };
         }
 
         if (this.levelInfo >= LevelInfoRecord.warn && this.isDebugModeEnabled) {
             this.warn = console.log.bind(window.console, `[WARN]`);
         } else {
-            this.warn = () => { };
+            this.warn = () => {
+                // Disable warn mode
+            };
         }
 
         if (this.levelInfo >= LevelInfoRecord.error && this.isDebugModeEnabled) {
             this.error = console.log.bind(window.console, `[ERROR]`);
         } else {
-            this.error = () => { };
+            this.error = () => {
+                // Disable error mode
+            };
         }
     }
 

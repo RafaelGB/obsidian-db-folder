@@ -10,7 +10,7 @@ import { t } from "lang/helpers";
 
 export class FiltersModal extends Modal {
   addColumnManager: FiltersModalManager;
-  enableReset: boolean = false;
+  enableReset = false;
   constructor(props: FiltersModalProps) {
     super(app);
     this.addColumnManager = new FiltersModalManager(this, props);

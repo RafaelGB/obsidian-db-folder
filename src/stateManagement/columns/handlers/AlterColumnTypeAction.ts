@@ -31,7 +31,7 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                     switch (targetInput) {
                         // If the new type is a select or tags, we need to obtain the possible values
                         case InputType.SELECT:
-                        case InputType.TAGS:
+                        case InputType.TAGS: {
                             const options: OptionSelect[] = [];
                             // Generate selected options
                             parsedRows.forEach((row) => {
@@ -52,6 +52,7 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                             alteredColumns[typeIndex].options =
                                 obtainUniqueOptionValues(options);
                             break;
+                        }
                         // If the new type is a relation, we need to force an inline behavior
                         case InputType.RELATION:
                             alteredColumns[typeIndex].config.isInline = true;

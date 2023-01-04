@@ -5,7 +5,7 @@ import {
     GroupBase,
 } from "react-select";
 
-const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
+const CustomTagsStyles: StylesConfig<any, true, GroupBase<unknown>> = {
     container: () => ({
         position: "static",
         boxSizing: "border-box",

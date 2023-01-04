@@ -12,7 +12,7 @@ const onKeyDownArrowKeys: KeyboardEventHandler<HTMLDivElement> = (event) => {
     const index = Array.from(currentTr.children).indexOf(currentTd);
 
     switch (event.key) {
-        case "ArrowLeft":
+        case "ArrowLeft": {
             // Left pressed
             const TdLeft = currentTd.previousElementSibling;
             if (!TdLeft) break;
@@ -20,7 +20,9 @@ const onKeyDownArrowKeys: KeyboardEventHandler<HTMLDivElement> = (event) => {
             if (!TdLeftTabIndex) break;
             TdLeftTabIndex.focus();
             break;
-        case "ArrowRight":
+        }
+
+        case "ArrowRight": {
             // Right pressed
             const TdRight = currentTd.nextElementSibling;
             if (!TdRight) break;
@@ -28,7 +30,8 @@ const onKeyDownArrowKeys: KeyboardEventHandler<HTMLDivElement> = (event) => {
             if (!TdRightTabIndex) break;
             TdRightTabIndex.focus();
             break;
-        case "ArrowUp":
+        }
+        case "ArrowUp": {
             // Up pressed
             const TrUp = currentTr
                 .previousElementSibling
@@ -41,7 +44,8 @@ const onKeyDownArrowKeys: KeyboardEventHandler<HTMLDivElement> = (event) => {
             if (!TdUp) break;
             TdUp.focus();
             break;
-        case "ArrowDown":
+        }
+        case "ArrowDown": {
             // Down pressed
             const TrDown = currentTr
                 .nextElementSibling
@@ -54,6 +58,7 @@ const onKeyDownArrowKeys: KeyboardEventHandler<HTMLDivElement> = (event) => {
             if (TdDown === undefined) break;
             TdDown.focus();
             break;
+        }
     }
 }
 
