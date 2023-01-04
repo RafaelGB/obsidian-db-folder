@@ -1,10 +1,9 @@
 import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { InputType, UpdateRowOptions } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { EditEngineService } from "services/EditEngineService";
-import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class RemoveOptionForAllRowsAction extends AbstractTableAction<DataState> {
@@ -43,7 +42,7 @@ export default class RemoveOptionForAllRowsAction extends AbstractTableAction<Da
                     }
                     break;
                 case InputType.SELECT:
-                    lambdaUpdate = (cellValue: Literal) => {
+                    lambdaUpdate = () => {
                         return "";
                     };
                     break;

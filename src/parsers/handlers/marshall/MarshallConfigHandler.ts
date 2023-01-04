@@ -39,7 +39,7 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
         if (wrappedLiteral.type === "string") {
             unEscapedValue = unEscapeSpecialCharacters(wrappedLiteral.value)
         }
-        localSettings[key] = unEscapedValue as any;
+        localSettings[key] = unEscapedValue as LocalSettings[K];
         return localSettings;
     }
 
@@ -49,7 +49,7 @@ export class MarshallConfigHandler extends AbstractYamlHandler {
 
     parseBoolean<K extends keyof LocalSettings>(key: K, localSettings: LocalSettings): LocalSettings {
         const parsedValue = localSettings[key].toString().toLowerCase() === 'true';
-        localSettings[key] = parsedValue as any;
+        localSettings[key] = parsedValue as LocalSettings[K];
         return localSettings;
     }
 }

@@ -1,6 +1,5 @@
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
-import { dbTrim } from "helpers/StylesHelper";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterColumnLabelHandlerAction extends AbstractTableAction<ColumnsState> {

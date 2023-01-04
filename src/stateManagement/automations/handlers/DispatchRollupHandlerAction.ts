@@ -1,6 +1,5 @@
 import Rollup from "lib/Rollup";
 import { ConfigColumn } from "cdm/FolderModel";
-import { LocalSettings } from "cdm/SettingsModel";
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
 import { Link, Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";

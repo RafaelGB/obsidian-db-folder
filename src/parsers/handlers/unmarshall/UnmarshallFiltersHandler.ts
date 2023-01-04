@@ -23,7 +23,7 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
 
         return this.goNext(handlerResponse);
     }
-    striginifyFilter(filter: FilterGroup, indentLevel: number, isList = false): void {
+    striginifyFilter(filter: FilterGroup, indentLevel: number): void {
         if ((filter as FilterGroupCondition).condition) {
             // Is a filter group
             const condition = (filter as FilterGroupCondition).condition;
@@ -45,7 +45,7 @@ export class UnmarshallFiltersHandler extends AbstractDiskHandler {
                 this.localDisk.push(`${YAML_INDENT.repeat(indentLevel)}  filters:`);
                 indentLevel++;
                 for (const group of (filter as FilterGroupCondition).filters) {
-                    this.striginifyFilter(group, indentLevel, true);
+                    this.striginifyFilter(group, indentLevel);
                 }
             }
         } else {
