@@ -1,6 +1,5 @@
 import { Cell, flexRender } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
-import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
 import React, { CSSProperties } from "react";
@@ -10,25 +9,23 @@ import { TableRowProps } from "cdm/RowTypeModel";
 export default function TableRow(tableRowProps: TableRowProps) {
   const { row, table } = tableRowProps;
   const { view, tableState } = table.options.meta;
-  const backgroundColor = view.plugin.settings.global_settings.enable_row_shadow
-    ? (table.getRowModel().flatRows.indexOf(row) + 1) % 2
-      ? StyleVariables.BACKGROUND_PRIMARY
-      : StyleVariables.BACKGROUND_SECONDARY
-    : StyleVariables.BACKGROUND_PRIMARY;
 
   const fontSize: number = tableState.configState(
     (state) => state.ddbbConfig.font_size
   );
+  const rowClasses = ["tr"];
+  if (row.getIsSelected()) {
+    rowClasses.push("row-selected");
+  } else if (
+    view.plugin.settings.global_settings.enable_row_shadow &&
+    (table.getRowModel().flatRows.indexOf(row) + 1) % 2
+  ) {
+    rowClasses.push("row-shadow");
+  }
   return (
     <>
       {/** INIT TABLE ROW */}
-      <div
-        key={`cell-tr-${row.id}`}
-        className={`${c("tr")}`}
-        style={{
-          backgroundColor: backgroundColor,
-        }}
-      >
+      <div key={`cell-tr-${row.id}`} className={`${c(rowClasses.join(" "))}`}>
         {row
           .getVisibleCells()
           .map((cell: Cell<RowDataType, Literal>, cellIndex: number) => {
@@ -54,7 +51,7 @@ export default function TableRow(tableRowProps: TableRowProps) {
        * TODO - div table-cell style does not support colSpan. Any other way to do this?
        * provoking a Warning: validateDOMNesting(...)
        */}
-      {row.getIsExpanded() && (
+      {row.getIsExpanded() ? (
         <tr key={`expanded-cell-tr-${row.id}`}>
           <td
             colSpan={row.getVisibleCells().length}
@@ -69,7 +66,7 @@ export default function TableRow(tableRowProps: TableRowProps) {
           </td>
           {/** EDNS MD FILE COMPONENT */}
         </tr>
-      )}
+      ) : null}
     </>
   );
 }

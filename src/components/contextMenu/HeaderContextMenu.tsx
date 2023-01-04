@@ -4,7 +4,11 @@ import { Literal } from "obsidian-dataview";
 import React from "react";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
+import Stack from "@mui/material/Stack";
+import { showHeaderContextMenu } from "components/obsidianArq/commands";
+import { c } from "helpers/StylesHelper";
 
 export default function HeaderContextMenu(
   context: HeaderContext<RowDataType, Literal>
@@ -28,7 +32,27 @@ export default function HeaderContextMenu(
       table.resetColumnFilters();
     }
   };
-  return (
+  const toggleAllRowsSelection = () => {
+    table.toggleAllPageRowsSelected(!table.getIsAllPageRowsSelected());
+  };
+  return table.getIsSomePageRowsSelected() ? (
+    <Stack direction="row" spacing={2}>
+      <input
+        type="checkbox"
+        className={`${c("checkbox")}`}
+        checked={table.getIsAllPageRowsSelected()}
+        key={`header-context-button`}
+        onChange={toggleAllRowsSelection}
+      />
+      <span
+        className="svg-icon svg-gray"
+        onClick={(event) => showHeaderContextMenu(event.nativeEvent)}
+        key={`Header-Context-Dropdown-Button`}
+      >
+        <ArrowDropDownCircleIcon {...MenuButtonStyle} fontSize="small" />
+      </span>
+    </Stack>
+  ) : (
     <span
       className="svg-icon svg-gray"
       onClick={enableColumnsFilterHandler}

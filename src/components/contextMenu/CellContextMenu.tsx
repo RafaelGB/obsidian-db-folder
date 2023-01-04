@@ -5,7 +5,7 @@ import Relationship from "components/RelationShip";
 import { StyleVariables } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import KeyboardControlKeyIcon from "@mui/icons-material/KeyboardControlKey";
 
 export default function CellContextMenu(
@@ -19,8 +19,13 @@ export default function CellContextMenu(
    * Handle left click
    * @param event
    */
-  const handleClick = async () => {
-    row.toggleExpanded(!row.getIsExpanded());
+  const handleClick: MouseEventHandler<HTMLDivElement> = async (event) => {
+    if (event.shiftKey) {
+      // SHIFT + CLICK
+      row.toggleSelected(!row.getIsSelected());
+    } else {
+      row.toggleExpanded(!row.getIsExpanded());
+    }
   };
 
   /**

@@ -154,3 +154,14 @@ export function showFooterMenu(
     // Show the menu
     footerMenu.showAtMouseEvent(event);
 }
+
+export function showHeaderContextMenu(event: MouseEvent) {
+    const contextMenu = new Menu();
+    contextMenu.addItem((item) => item
+        .setTitle("this is a test")
+        .setIcon("plus")
+        .onClick(() => {
+            console.log("test");
+        }));
+    contextMenu.showAtMouseEvent(event);
+}

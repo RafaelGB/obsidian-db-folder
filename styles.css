@@ -390,7 +390,9 @@ div.database-plugin__td.data-input span:focus {
   display: flex;
   align-items: center;
 }
-
+/******************************************************
+ *                        ROWS
+ /******************************************************/
 .database-plugin__td {
   overflow: hidden;
   color: var(--text-normal);
@@ -478,6 +480,16 @@ div.database-plugin__td.data-input span:focus {
   position: relative;
 }
 
+.database-plugin__row-selected {
+  background-color: var(--text-accent);
+}
+
+.database-plugin__row-shadow {
+  background-color: var(--background-secondary);
+}
+/******************************************************
+ *                        BODY
+ /******************************************************/
 .database-plugin__tbody {
   display: table-row-group;
 }
