@@ -50,6 +50,13 @@ export function getAlignmentClassname(configColumn: ConfigColumn, localSettings:
             COLUMN_ALIGNMENT_OPTIONS.CENTER :
             configColumn.content_alignment
     );
+
+    classes.push(
+        configColumn.content_vertical_alignment === undefined ?
+            COLUMN_ALIGNMENT_OPTIONS.MIDDLE :
+            configColumn.content_vertical_alignment
+    );
+
     classes.push(
         (configColumn.wrap_content && localSettings.cell_size !== CellSizeOptions.COMPACT) ?
             COLUMN_ALIGNMENT_OPTIONS.WRAP :

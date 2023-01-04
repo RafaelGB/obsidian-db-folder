@@ -164,6 +164,7 @@ export default {
   "column_settings_modal_rollup_key_placeholder": "Recherche de propriété...",
   "column_settings_modal_rollup_persist_toggle_title": "Persistance de la sortie du rollup",
   "column_settings_modal_rollup_persist_toggle_desc": "Activation/désactivation de la persistance de la sortie du rollup sur vos notes (seuls les rollups persistants peuvent être recherchés et triés)",
+
   "column_settings_modal_aligment_select_title": "Sélectionner l'alignement",
   "column_settings_modal_aligment_select_desc": "Modifier l'alignement du contenu de la colonne",
   "column_settings_modal_text_alignment_select_title": "Alignement du texte",
@@ -171,8 +172,17 @@ export default {
   "column_settings_modal_text_alignment_select_center": "centrer",
   "column_settings_modal_text_alignment_select_right": "aligné à droite",
   "column_settings_modal_text_alignment_select_justify": "justifier",
+
+  "column_settings_modal_aligment_vertical_select_title": "Sélectionner l'alignement vertical",
+  "column_settings_modal_aligment_vertical_select_desc": "Modifier l'alignement vertical du contenu de la colonne",
+  "column_settings_modal_text_alignment_vertical_select_title": "Alignement vertical du texte",
+  "column_settings_modal_text_alignment_vertical_select_top": "haut",
+  "column_settings_modal_text_alignment_vertical_select_middle": "milieu",
+  "column_settings_modal_text_alignment_vertical_select_bottom": "bas",
+
   "column_settings_modal_wrap_content_toggle_title": "Wrap du contenu",
   "column_settings_modal_wrap_content_toggle_desc": "Activer/désactiver le wrap du contenu de la colonne",
+
   "column_settings_modal_hide_completed_tasks_toggle_title": "Cacher les tâches terminées",
   "column_settings_modal_hide_completed_tasks_toggle_desc": "Activer/désactiver le masquage des tâches terminées",
   "column_settings_modal_column_id_title": "Colonne ID",

@@ -649,6 +649,18 @@ div.database-plugin__td.data-input span:focus {
   text-align: justify;
 }
 
+.database-plugin__align-top {
+  align-items: flex-start;
+}
+
+.database-plugin__align-middle {
+  align-items: center;
+}
+
+.database-plugin__align-bottom {
+  align-items: flex-end;
+}
+
 .database-plugin__text-wrap {
   white-space: normal;
   flex-wrap: wrap;

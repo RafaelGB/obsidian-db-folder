@@ -99,10 +99,16 @@ export const FileManagerEditOptions = Object.freeze({
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
 export const COLUMN_ALIGNMENT_OPTIONS = Object.freeze({
+  // horizontal alignment
   LEFT: 'text-align-left',
   CENTER: 'text-align-center',
   RIGHT: 'text-align-right',
   JUSTIFY: 'text-align-justify',
+  // vertical alignment
+  TOP: 'align-top',
+  MIDDLE: 'align-middle',
+  BOTTOM: 'align-bottom',
+  // text wrapping
   NOWRAP: 'text-nowrap',
   WRAP: 'text-wrap',
 });
