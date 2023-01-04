@@ -164,6 +164,7 @@ export default {
     "column_settings_modal_rollup_key_placeholder": "Buscar propiedad...",
     "column_settings_modal_rollup_persist_toggle_title": "Persistir rollup en el archivo",
     "column_settings_modal_rollup_persist_toggle_desc": "Habilitar/deshabilitar la persistencia del rollup en sus notas (solo se pueden buscar y ordenar aquellos que se persisten)",
+
     "column_settings_modal_aligment_select_title": "Alineación de contenido",
     "column_settings_modal_aligment_select_desc": "Seleccione la alineación de contenido para esta columna",
     "column_settings_modal_text_alignment_select_title": "Alineación de texto",
@@ -171,8 +172,17 @@ export default {
     "column_settings_modal_text_alignment_select_center": "centrado",
     "column_settings_modal_text_alignment_select_right": "derecha",
     "column_settings_modal_text_alignment_select_justify": "justificado",
+
+    "column_settings_modal_aligment_vertical_select_title": "Alineación vertical de contenido",
+    "column_settings_modal_aligment_vertical_select_desc": "Seleccione la alineación vertical de contenido para esta columna",
+    "column_settings_modal_text_alignment_vertical_select_title": "Alineación vertical de texto",
+    "column_settings_modal_text_alignment_vertical_select_top": "arriba",
+    "column_settings_modal_text_alignment_vertical_select_middle": "centrado",
+    "column_settings_modal_text_alignment_vertical_select_bottom": "abajo",
+
     "column_settings_modal_wrap_content_toggle_title": "Salto de línea",
     "column_settings_modal_wrap_content_toggle_desc": "Habilitar/deshabilitar el salto de línea para el contenido de esta columna",
+
     "column_settings_modal_hide_completed_tasks_toggle_title": "Ocultar tareas completadas",
     "column_settings_modal_hide_completed_tasks_toggle_desc": "Habilitar/deshabilitar la ocultación de tareas completadas para esta columna",
     "column_settings_modal_column_id_title": "ID de columna",

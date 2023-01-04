@@ -458,6 +458,7 @@ div.database-plugin__td.data-input span:focus {
   display: table;
   height: 1px; /** Hack to prevent collapsing of table cells */
   overflow: scroll;
+  margin-bottom: 1rem;
 }
 
 .database-plugin__th:last-child {
@@ -648,6 +649,18 @@ div.database-plugin__td.data-input span:focus {
   text-align: justify;
 }
 
+.database-plugin__align-top {
+  align-items: flex-start;
+}
+
+.database-plugin__align-middle {
+  align-items: center;
+}
+
+.database-plugin__align-bottom {
+  align-items: flex-end;
+}
+
 .database-plugin__text-wrap {
   white-space: normal;
   flex-wrap: wrap;
@@ -702,24 +715,18 @@ div.database-plugin__td.data-input span:focus {
 
 @media only screen and (max-height: 1440px) {
   .database-plugin__scroll-container {
-    will-change: transform;
-    width: 100%;
     height: 95%;
   }
 }
 
 @media only screen and (max-height: 1024px) {
   .database-plugin__scroll-container {
-    will-change: transform;
-    width: 100%;
     height: 92%;
   }
 }
 
 @media only screen and (max-height: 768px) {
   .database-plugin__scroll-container {
-    will-change: transform;
-    width: 100%;
     height: 85%;
   }
 }
