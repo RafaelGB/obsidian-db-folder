@@ -25,6 +25,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
     // List of columns to show/hide
     columnState.info.getAllColumns()
       .filter(c => !c.skipPersist)
+      .sort((a, b) => a.position - b.position)
       .forEach((column) => {
         const toggleHandler = (shown: boolean): void => {
           columnState.actions.alterIsHidden(column, !shown);
