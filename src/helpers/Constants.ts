@@ -306,9 +306,17 @@ export const ResizeConfiguration = Object.freeze({
   RESIZE_MODE: "onChange",
 });
 
+export const ContextMenuAction = Object.freeze({
+  DEFAULT: 'default',
+  SELECT: 'select',
+});
+
 export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
   enable_columns_filter: false,
   enable_navbar: false,
+  context_header: {
+    action: ContextMenuAction.DEFAULT
+  }
 });
 
 /******************************************************************************
@@ -522,6 +530,7 @@ export const EMITTERS_GROUPS = Object.freeze({
   SHORTCUT: 'shortcut',
   UPDATER: 'updater',
   BAR_STATUS: 'bar-status',
+  CONTEXT_HEADER: 'context-header',
 });
 
 /* Hotkeys actions */

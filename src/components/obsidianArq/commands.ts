@@ -1,9 +1,11 @@
 import { Row } from "@tanstack/react-table";
+import { ContextHeaderData, ViewEvents } from "cdm/EmitterModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, DataState } from "cdm/TableStateInterface";
 import { ConfirmModal } from "components/modals/ConfirmModal";
 import { TextAreaModal } from "components/modals/TextAreaModal";
-import { FooterType, InputType } from "helpers/Constants";
+import { EMITTERS_GROUPS, FooterType, InputType } from "helpers/Constants";
+import { Emitter } from "helpers/Emitter";
 import { t } from "lang/helpers";
 import { Menu, Notice, TFile } from "obsidian";
 import { Dispatch, SetStateAction } from "react";
@@ -155,13 +157,27 @@ export function showFooterMenu(
     footerMenu.showAtMouseEvent(event);
 }
 
-export function showHeaderContextMenu(event: MouseEvent) {
+export function showHeaderContextMenu(event: MouseEvent, currentState: ContextHeaderData, emitter: Emitter<ViewEvents>) {
     const contextMenu = new Menu();
+    // Options of current action
+    switch (currentState.action) {
+    }
+    // Actions
+    contextMenu.addSeparator();
+    const setAction = (data: ContextHeaderData) => {
+        emitter.emit(EMITTERS_GROUPS.CONTEXT_HEADER, data);
+    };
     contextMenu.addItem((item) => item
-        .setTitle("this is a test")
-        .setIcon("plus")
+        .setTitle("Column Search")
+        .setIcon("search")
         .onClick(() => {
-            console.log("test");
+            setAction({ action: "default" });
+        }));
+    contextMenu.addItem((item) => item
+        .setTitle("Select actions")
+        .setIcon("vertical-three-dots")
+        .onClick(() => {
+            setAction({ action: "select" });
         }));
     contextMenu.showAtMouseEvent(event);
 }

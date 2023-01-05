@@ -2,7 +2,11 @@ import { CellContext } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
 import { showFileMenu } from "components/obsidianArq/commands";
 import Relationship from "components/RelationShip";
-import { StyleVariables } from "helpers/Constants";
+import {
+  ContextMenuAction,
+  EMITTERS_GROUPS,
+  StyleVariables,
+} from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Literal } from "obsidian-dataview";
 import React, { MouseEventHandler } from "react";
@@ -12,7 +16,7 @@ export default function CellContextMenu(
   context: CellContext<RowDataType, Literal>
 ) {
   const { row, table } = context;
-  const { tableState } = table.options.meta;
+  const { tableState, view } = table.options.meta;
   const rowActions = tableState.data((state) => state.actions);
 
   /**
@@ -22,6 +26,18 @@ export default function CellContextMenu(
   const handleClick: MouseEventHandler<HTMLDivElement> = async (event) => {
     if (event.shiftKey) {
       // SHIFT + CLICK
+      if (
+        table.getSelectedRowModel().rows.length === 1 &&
+        row.getIsSelected()
+      ) {
+        view.emitter.emit(EMITTERS_GROUPS.CONTEXT_HEADER, {
+          action: ContextMenuAction.DEFAULT,
+        });
+      } else {
+        view.emitter.emit(EMITTERS_GROUPS.CONTEXT_HEADER, {
+          action: ContextMenuAction.SELECT,
+        });
+      }
       row.toggleSelected(!row.getIsSelected());
     } else {
       row.toggleExpanded(!row.getIsExpanded());

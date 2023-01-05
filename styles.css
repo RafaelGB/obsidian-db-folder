@@ -500,6 +500,10 @@ div.database-plugin__td.data-input span:focus {
   background-color: var(--background-secondary);
 }
 
+.database-plugin__header-menu {
+  width: 30px;
+}
+
 .database-plugin__sticky-top {
   position: -webkit-sticky;
   position: sticky;

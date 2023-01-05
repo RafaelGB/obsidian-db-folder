@@ -5,7 +5,7 @@ import { ColumnOption } from "cdm/ComponentsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
-import { UpdaterData } from "cdm/EmitterModel";
+import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";
 
 export type TableActionResponse<T> = {
     view: DatabaseView,
@@ -24,6 +24,7 @@ export type TableAction<T> = {
 export type EphimeralSettings = {
     enable_columns_filter: boolean,
     enable_navbar: boolean,
+    context_header: ContextHeaderData
 }
 
 export interface ConfigState {
