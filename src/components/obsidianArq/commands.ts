@@ -4,8 +4,7 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, DataState } from "cdm/TableStateInterface";
 import { ConfirmModal } from "components/modals/ConfirmModal";
 import { TextAreaModal } from "components/modals/TextAreaModal";
-import { EMITTERS_GROUPS, FooterType, InputType } from "helpers/Constants";
-import { Emitter } from "helpers/Emitter";
+import { FooterType, InputType } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Menu, Notice, TFile } from "obsidian";
 import { Dispatch, SetStateAction } from "react";
@@ -155,29 +154,4 @@ export function showFooterMenu(
 
     // Show the menu
     footerMenu.showAtMouseEvent(event);
-}
-
-export function showHeaderContextMenu(event: MouseEvent, currentState: ContextHeaderData, emitter: Emitter<ViewEvents>) {
-    const contextMenu = new Menu();
-    // Options of current action
-    switch (currentState.action) {
-    }
-    // Actions
-    contextMenu.addSeparator();
-    const setAction = (data: ContextHeaderData) => {
-        emitter.emit(EMITTERS_GROUPS.CONTEXT_HEADER, data);
-    };
-    contextMenu.addItem((item) => item
-        .setTitle("Column Search")
-        .setIcon("search")
-        .onClick(() => {
-            setAction({ action: "default" });
-        }));
-    contextMenu.addItem((item) => item
-        .setTitle("Select actions")
-        .setIcon("vertical-three-dots")
-        .onClick(() => {
-            setAction({ action: "select" });
-        }));
-    contextMenu.showAtMouseEvent(event);
 }

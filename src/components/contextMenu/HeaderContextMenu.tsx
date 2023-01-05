@@ -5,10 +5,10 @@ import React, { useEffect } from "react";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
 import { MenuButtonStyle } from "components/styles/NavBarStyles";
-import { showHeaderContextMenu } from "components/obsidianArq/commands";
 import { c } from "helpers/StylesHelper";
-import { EMITTERS_GROUPS } from "helpers/Constants";
+import { ContextMenuAction, EMITTERS_GROUPS } from "helpers/Constants";
 import { ContextHeaderData } from "cdm/EmitterModel";
+import showHeaderContextMenu from "components/obsidianArq/menu/headerContextMenu";
 
 export default function HeaderContextMenu(
   context: HeaderContext<RowDataType, Literal>
@@ -23,6 +23,8 @@ export default function HeaderContextMenu(
   const columnsFilterAreEnabled = tableState.configState(
     (state) => state.ephimeral.enable_columns_filter
   );
+
+  const rowActions = tableState.data((state) => state.actions);
 
   const enableColumnsFilterHandler = () => {
     // Invert the columns filter state
@@ -79,9 +81,22 @@ export default function HeaderContextMenu(
 
   useEffect(() => {
     const onHotkey = (data: ContextHeaderData) => {
+      // Update the context header state
       configActions.alterEphimeral({
         context_header: data,
       });
+      // Do nothing if the option is undefined
+      if (data.option === undefined) return;
+
+      switch (data.action) {
+        case ContextMenuAction.SELECT:
+          rowActions.bulkRowUpdate(
+            table.getSelectedRowModel().rows.map((row) => row.original),
+            data.option
+          );
+        default:
+        // Do nothing
+      }
     };
 
     view.emitter.on(EMITTERS_GROUPS.CONTEXT_HEADER, onHotkey);
