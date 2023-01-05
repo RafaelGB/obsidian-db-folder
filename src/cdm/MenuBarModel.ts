@@ -31,4 +31,3 @@ export type PageButton = {
     page: number;
     type: "basic" | "initial" | "final";
 };
-

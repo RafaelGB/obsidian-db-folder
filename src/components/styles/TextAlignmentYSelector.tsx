@@ -29,7 +29,7 @@ export default function TextAlignmentYSelector(props: TextAlignmentProps) {
   };
 
   return (
-    <Stack direction="row" spacing={4}>
+    <Stack direction="row" spacing={3}>
       <ToggleButtonGroup
         value={alignment}
         exclusive

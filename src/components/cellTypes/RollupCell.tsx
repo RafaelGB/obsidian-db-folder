@@ -71,10 +71,12 @@ const RollupCell = (mdProps: CellComponentProps) => {
         "md_cell " +
           getAlignmentClassname(
             tableColumn.config,
-            configInfo.getLocalSettings()
+            configInfo.getLocalSettings(),
+            ["tabIndex"]
           )
       )}`}
       key={`rollup_${cell.id}`}
+      tabIndex={0}
     />
   );
 };

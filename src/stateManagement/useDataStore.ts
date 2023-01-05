@@ -35,6 +35,7 @@ function emptyDataState(): Omit<DataState, "rows"> {
             renameFile: null,
             saveDataFromFile: null,
             groupFiles: null,
+            bulkRowUpdate: null,
         },
     }
 }

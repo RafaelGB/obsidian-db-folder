@@ -72,10 +72,12 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         "md_cell " +
           getAlignmentClassname(
             tableColumn.config,
-            configInfo.getLocalSettings()
+            configInfo.getLocalSettings(),
+            ["tabIndex"]
           )
       )}`}
       key={`formula_${cell.id}`}
+      tabIndex={0}
     />
   );
 };
