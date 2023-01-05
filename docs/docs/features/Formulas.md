@@ -28,7 +28,8 @@ The root object `db` has the following functions:
 - `dataview`: expose the dataview API. (see [Dataview API](https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts))
 - `rollup`: expose the rollup functions of the dbfolder plugin.  (see [Rollup documentation](/features/Relations/#rollups))
 
-#### Javascript file structure
+#### Javascript File Structure
+
 To add a javascript file to the `js` folder, it must be a `.js` file and have the following structure:
 
 ```javascript
