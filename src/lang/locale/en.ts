@@ -164,6 +164,7 @@ export default {
   "column_settings_modal_rollup_key_placeholder": "Search property...",
   "column_settings_modal_rollup_persist_toggle_title": "Persist rollup output",
   "column_settings_modal_rollup_persist_toggle_desc": "Enable/disable to persist rollup output on your notes (Only persisted rollups could be searchable and sortable)",
+
   "column_settings_modal_aligment_select_title": "Select alignment",
   "column_settings_modal_aligment_select_desc": "Change content alignment of the column",
   "column_settings_modal_text_alignment_select_title": "text alignment",
@@ -171,8 +172,17 @@ export default {
   "column_settings_modal_text_alignment_select_center": "centered",
   "column_settings_modal_text_alignment_select_right": "right aligned",
   "column_settings_modal_text_alignment_select_justify": "justified",
+
+  "column_settings_modal_aligment_vertical_select_title": "Select vertical alignment",
+  "column_settings_modal_aligment_vertical_select_desc": "Change content vertical alignment of the column",
+  "column_settings_modal_text_alignment_vertical_select_title": "text vertical alignment",
+  "column_settings_modal_text_alignment_vertical_select_top": "top aligned",
+  "column_settings_modal_text_alignment_vertical_select_middle": "middle aligned",
+  "column_settings_modal_text_alignment_vertical_select_bottom": "bottom aligned",
+
   "column_settings_modal_wrap_content_toggle_title": "Wrap content",
   "column_settings_modal_wrap_content_toggle_desc": "Enable/disable to wrap content of the column",
+
   "column_settings_modal_hide_completed_tasks_toggle_title": "Hide completed tasks",
   "column_settings_modal_hide_completed_tasks_toggle_desc": "Enable/disable to hide completed tasks",
   "column_settings_modal_column_id_title": "Column ID",

@@ -37,7 +37,7 @@ import {
   Menu,
 } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
-import { DbAutomationService } from "services/AutomationService";
+import { Db } from "services/CoreService";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
@@ -64,12 +64,12 @@ export class DatabaseView extends TextFileView implements HoverParent {
     if (file) {
       this.file = file;
       this.plugin.removeView(this);
-      this.plugin.addView(this, this.data);
+      this.plugin.addView(this);
     } else {
       this.register(
         this.containerEl.onWindowMigrated(() => {
           this.plugin.removeView(this);
-          this.plugin.addView(this, this.data);
+          this.plugin.addView(this);
         })
       );
     }
@@ -93,7 +93,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       return;
     }
 
-    this.plugin.addView(this, data);
+    this.plugin.addView(this);
   }
 
   getIcon() {
@@ -172,9 +172,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       );
       this.initial = obtainInitialType(this.columns);
 
-      this.formulas = await DbAutomationService.buildFns(
-        this.diskConfig.yaml.config
-      );
+      this.formulas = await Db.buildFns(this.diskConfig.yaml.config);
       // Define table properties
       this.shadowColumns = this.columns.filter((col) => col.skipPersist);
       const tableProps: TableDataType = {
@@ -220,13 +218,14 @@ export class DatabaseView extends TextFileView implements HoverParent {
   }
 
   destroy() {
-    LOGGER.info(`=>destroy ${this.file.path}`);
-    // Remove draggables from render, as the DOM has already detached
-    this.getStateManager().unregisterView(this);
-    this.plugin.removeView(this);
-    this.tableContainer.remove();
-    this.detachViewComponents();
-    LOGGER.info(`<=destroy ${this.file.path}`);
+    if (this.file) {
+      // Remove draggables from render, as the DOM has already detached
+      this.getStateManager().unregisterView(this);
+      this.plugin.removeView(this);
+      this.tableContainer.remove();
+      this.detachViewComponents();
+      LOGGER.info(`Closed view ${this.file.path}}`);
+    }
   }
 
   async onClose() {

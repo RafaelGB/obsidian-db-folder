@@ -62,7 +62,7 @@ export class DatabaseHelperCreationModalManager {
                     });
             });
         const sourceOptions: Record<string, string> = {};
-        Object.entries(SourceDataTypes).forEach(([key, value]) => {
+        Object.entries(SourceDataTypes).forEach(([, value]) => {
             sourceOptions[value] = t(value);
         });
 
@@ -149,7 +149,7 @@ export class DatabaseHelperCreationModalManager {
     }
 
     tagHandler(containerEl: HTMLElement) {
-        const tagArray: Record<string, number> = (app.metadataCache as unknown as any).getTags();
+        const tagArray: Record<string, number> = app.metadataCache.getTags();
         if (tagArray) {
             const tagRecords: Record<string, string> = {};
             // Order tagRecord by key (tag name)

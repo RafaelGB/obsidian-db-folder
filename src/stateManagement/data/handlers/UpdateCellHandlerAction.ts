@@ -18,50 +18,48 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             value: Literal,
             columns: TableColumn[],
             ddbbConfig: LocalSettings,
-            isMovingFile?: boolean) => {
+            isMovingFile?: boolean,
+            saveOnDisk = true) => {
             const modifiedRow = get().rows[rowIndex];
-            let rowTFile = modifiedRow.__note__.getFile();
+            const rowTFile = modifiedRow.__note__.getFile();
 
             // Update the row on memory
             modifiedRow[column.key] = value;
 
-            // Row Rules
-            if (ddbbConfig.show_metadata_modified) {
-                modifiedRow[MetadataColumns.MODIFIED] = DateTime.now();
-            }
+            if (saveOnDisk) {
+                const pathColumns: string[] =
+                    ddbbConfig.group_folder_column
+                        .split(",")
+                        .filter(Boolean);
+                // Update the row on disk
+                if (isMovingFile && pathColumns.includes(column.key)) {
+                    const folderPath = destination_folder(view, ddbbConfig);
+                    const newFilePath = resolveNewFilePath({
+                        pathColumns,
+                        row: modifiedRow,
+                        ddbbConfig,
+                        folderPath,
+                    });
+                    await FileGroupingService.moveFile(newFilePath, modifiedRow);
+                    await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
+                }
 
-            const pathColumns: string[] =
-                ddbbConfig.group_folder_column
-                    .split(",")
-                    .filter(Boolean);
-            // Update the row on disk
-            if (isMovingFile && pathColumns.includes(column.key)) {
-                const folderPath = destination_folder(view, ddbbConfig);
-                const newFilePath = resolveNewFilePath({
-                    pathColumns,
-                    row: modifiedRow,
+                await EditEngineService.updateRowFileProxy(
+                    rowTFile,
+                    column.key,
+                    value,
+                    columns,
                     ddbbConfig,
-                    folderPath,
-                });
-                await FileGroupingService.moveFile(newFilePath, modifiedRow);
-                await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
+                    UpdateRowOptions.COLUMN_VALUE
+                );
             }
-
-            await EditEngineService.updateRowFileProxy(
-                rowTFile,
-                column.key,
-                value,
-                columns,
-                ddbbConfig,
-                UpdateRowOptions.COLUMN_VALUE
-            );
 
             set((state) => {
                 // Save on memory
                 return {
                     rows: [
                         ...state.rows.slice(0, rowIndex),
-                        modifiedRow,
+                        { ...state.rows[rowIndex], [column.key]: value, [MetadataColumns.MODIFIED]: DateTime.now() },
                         ...state.rows.slice(rowIndex + 1),
                     ]
                 };

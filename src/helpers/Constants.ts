@@ -99,10 +99,16 @@ export const FileManagerEditOptions = Object.freeze({
  *                          COLUMN CONFIGURATIONS                             *
  ******************************************************************************/
 export const COLUMN_ALIGNMENT_OPTIONS = Object.freeze({
+  // horizontal alignment
   LEFT: 'text-align-left',
   CENTER: 'text-align-center',
   RIGHT: 'text-align-right',
   JUSTIFY: 'text-align-justify',
+  // vertical alignment
+  TOP: 'align-top',
+  MIDDLE: 'align-middle',
+  BOTTOM: 'align-bottom',
+  // text wrapping
   NOWRAP: 'text-nowrap',
   WRAP: 'text-wrap',
 });
@@ -300,9 +306,17 @@ export const ResizeConfiguration = Object.freeze({
   RESIZE_MODE: "onChange",
 });
 
+export const ContextMenuAction = Object.freeze({
+  DEFAULT: 'default',
+  SELECT: 'select',
+});
+
 export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
   enable_columns_filter: false,
   enable_navbar: false,
+  context_header: {
+    action: ContextMenuAction.DEFAULT
+  }
 });
 
 /******************************************************************************
@@ -516,6 +530,7 @@ export const EMITTERS_GROUPS = Object.freeze({
   SHORTCUT: 'shortcut',
   UPDATER: 'updater',
   BAR_STATUS: 'bar-status',
+  CONTEXT_HEADER: 'context-header',
 });
 
 /* Hotkeys actions */

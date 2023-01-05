@@ -41,8 +41,7 @@ export class TextModal extends Modal {
     createForm(): void {
         const div = this.contentEl.createDiv();
         div.addClass(c("prompt-modal"));
-        let textInput;
-        textInput = new TextComponent(div);
+        const textInput = new TextComponent(div);
         this.value = this.default_value ?? "";
         textInput.inputEl.addClass(c("text-modal"));
         textInput.setPlaceholder(this.placeholder);

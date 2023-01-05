@@ -5,7 +5,7 @@ import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPro
 import { parseValuetoSanitizeYamlValue } from "parsers/RowDatabaseFieldsToFile";
 
 export class UnmarshallConfigHandler extends AbstractDiskHandler {
-    handlerName: string = 'config';
+    handlerName = 'config';
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
         const { config } = handlerResponse.yaml;
@@ -19,7 +19,7 @@ export class UnmarshallConfigHandler extends AbstractDiskHandler {
                     this.localDisk.push(`${YAML_INDENT.repeat(2)}${key}: ${parseValuetoSanitizeYamlValue(valueInternal as string, config)}`);
                 });
             } else if (typeof valueConfig === "string") {
-                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: "${parseValuetoSanitizeYamlValue(escapeSpecialCharacters(valueConfig), config, true)}"`);
+                this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${parseValuetoSanitizeYamlValue(escapeSpecialCharacters(valueConfig), config, true)}`);
             } else {
                 // Lvl2: config properties
                 this.localDisk.push(`${YAML_INDENT.repeat(1)}${key}: ${parseValuetoSanitizeYamlValue(valueConfig, config)}`);

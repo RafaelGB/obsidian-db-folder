@@ -2,7 +2,7 @@ import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class MarshallDatabaseInfoHandler extends AbstractYamlHandler {
-    handlerName: string = 'baseInfo';
+    handlerName = 'baseInfo';
 
     public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse {
         const { yaml } = handlerResponse;

@@ -7,8 +7,6 @@ export abstract class DbModule implements IGenerateObject {
     protected dynamic_functions: Map<string, unknown> = new Map();
     protected static_object: { [x: string]: unknown };
 
-    constructor() { }
-
     getName(): string {
         return this.name;
     }
@@ -25,7 +23,6 @@ export abstract class DbModule implements IGenerateObject {
         await this.create_dynamic_functions();
 
         return {
-            ...this.static_object,
             ...this.static_object,
             ...Object.fromEntries(this.dynamic_functions),
         };

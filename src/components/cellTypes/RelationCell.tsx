@@ -47,10 +47,10 @@ const RelationCell = (mdProps: CellComponentProps) => {
         .map((relation) => {
           return relation.markdown();
         })
-        .join(", ");
+        .join(",");
       MarkdownService.renderMarkdown(
         defaultCell,
-        mdRelations,
+        `[ ${mdRelations} ]`,
         containerCellRef.current,
         5
       );

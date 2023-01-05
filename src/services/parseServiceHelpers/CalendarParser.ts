@@ -1,7 +1,7 @@
 import { TypeParser } from "cdm/ServicesModel";
-import { parseStringToLuxonDatetime } from "helpers/LuxonHelper";
 import { WrappedLiteral } from "obsidian-dataview";
 import { DateTime } from "luxon";
+import { Db } from "services/CoreService";
 
 class CalendarParser extends TypeParser<DateTime> {
     private dateFormat: string;
@@ -13,7 +13,7 @@ class CalendarParser extends TypeParser<DateTime> {
 
     parse(wrapped: WrappedLiteral) {
         if (wrapped.type === 'string') {
-            return parseStringToLuxonDatetime(wrapped.value, this.dateFormat);
+            return Db.coreFns.luxon.stringToDate(wrapped.value, this.dateFormat);
         }
 
         if (DateTime.isDateTime(wrapped.value)) {

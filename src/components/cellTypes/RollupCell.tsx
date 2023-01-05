@@ -27,20 +27,16 @@ const RollupCell = (mdProps: CellComponentProps) => {
         configInfo.getLocalSettings()
       ) as string
   );
+  const relation = formulaRow[tableColumn.config.asociated_relation_id];
 
   useEffect(() => {
     if (formulaRef.current !== null) {
       formulaRef.current.innerHTML = "";
-      const relation = formulaRow[tableColumn.config.asociated_relation_id];
       if (!relation) {
         return;
       }
       const rollupResponse = formulaInfo
-        .dispatchRollup(
-          tableColumn.config,
-          relation as Literal,
-          configInfo.getLocalSettings()
-        )
+        .dispatchRollup(tableColumn.config, relation as Literal)
         .toString();
 
       MarkdownService.renderMarkdown(
@@ -67,7 +63,7 @@ const RollupCell = (mdProps: CellComponentProps) => {
         );
       }
     }
-  }, [cell, row, column]);
+  }, [relation]);
   return (
     <span
       ref={formulaRef}
@@ -75,10 +71,12 @@ const RollupCell = (mdProps: CellComponentProps) => {
         "md_cell " +
           getAlignmentClassname(
             tableColumn.config,
-            configInfo.getLocalSettings()
+            configInfo.getLocalSettings(),
+            ["tabIndex"]
           )
       )}`}
       key={`rollup_${cell.id}`}
+      tabIndex={0}
     />
   );
 };

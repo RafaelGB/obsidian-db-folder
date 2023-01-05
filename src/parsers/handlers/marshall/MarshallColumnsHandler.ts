@@ -6,7 +6,7 @@ import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPrope
 import { Literal } from 'obsidian-dataview';
 
 export class MarshallColumnsHandler extends AbstractYamlHandler {
-    handlerName: string = 'columns';
+    handlerName = 'columns';
 
     public handle(handlerResponse: YamlHandlerResponse): YamlHandlerResponse {
         const { yaml } = handlerResponse;

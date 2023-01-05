@@ -5,7 +5,7 @@ import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPro
 import { parseValuetoSanitizeYamlValue } from "parsers/RowDatabaseFieldsToFile";
 
 export class UnmarshallColumnsHandler extends AbstractDiskHandler {
-    handlerName: string = 'columns';
+    handlerName = 'columns';
 
     public handle(handlerResponse: DiskHandlerResponse): DiskHandlerResponse {
         const { columns, config } = handlerResponse.yaml;
@@ -40,7 +40,7 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
                 );
                 this.localDisk.push(`${YAML_INDENT.repeat(3)}${key}: ${confValue}`);
             });
-        };
+        }
         return this.goNext(handlerResponse);
     }
 

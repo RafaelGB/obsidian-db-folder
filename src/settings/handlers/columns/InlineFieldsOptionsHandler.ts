@@ -51,7 +51,7 @@ export class InlineFieldsOptionsHandler extends AbstractSettingsHandler {
         };
         // render dropdown inside container
         const options: Record<string, string> = {};
-        Object.entries(INLINE_POSITION).forEach(([key, value]) => {
+        Object.entries(INLINE_POSITION).forEach(([, value]) => {
             options[value] = t(value);
         });
         add_dropdown(

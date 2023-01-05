@@ -1,7 +1,7 @@
 import { LocalSettings } from "cdm/SettingsModel";
 import { DEFAULT_SETTINGS, InputType, ROLLUP_ACTIONS } from "helpers/Constants";
 import { Link, Literal, SMarkdownPage } from "obsidian-dataview";
-import { DbAutomationService } from "services/AutomationService";
+import { Db } from "services/CoreService";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
@@ -97,7 +97,7 @@ class Rollup {
             return NaN;
         }
         const rawValues = this.rawValues(key);
-        return DbAutomationService.coreFns.numbers.sum(rawValues)
+        return Db.coreFns.numbers.sum(rawValues)
     }
 
     /**

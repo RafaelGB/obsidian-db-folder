@@ -1,20 +1,21 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { add_setting_header } from "settings/SettingsComponents";
-import { MediaDimensionsHandler } from "components/modals/columnSettings/handlers/media/MediaDimensionsHandler";
-import { MediaToggleHandler } from "components/modals/columnSettings/handlers/media/MediaToggleHandler";
-import { InlineToggleHandler } from "components/modals/columnSettings/handlers/InlineToggleHandler";
-import { SelectedColumnOptionsHandler } from "components/modals/columnSettings/handlers/SelectedColumnOptionsHandler";
-import { HideCompletedTaskToggleHandler } from "components/modals/columnSettings/handlers/tasks/HideCompletedTaskToggleHandler";
-import { LinkAliasToggleHandler } from "components/modals/columnSettings/handlers/media/LinkAliasToggleHandler";
-import { FormulaInputHandler } from "components/modals/columnSettings/handlers/automations/FormulaInputHandler";
-import { AlignmentSelectorHandler } from "components/modals/columnSettings/handlers/styles/AlignmentSelectorHandler";
-import { ToggleWrapContentHandler } from "components/modals/columnSettings/handlers/styles/ToggleWrapContentHandler";
-import { ColumnIdInputHandler } from "components/modals/columnSettings/handlers/ColumnIdInputHandler";
-import { DatabaseSelectorHandler } from "components/modals/columnSettings/handlers/dropdowns/DatabaseSelectorHandler";
-import { RollupAsociatedRelationHandler } from "components/modals/columnSettings/handlers/rollups/RollupAsociatedRelationHandler";
-import { RollupActionHandler } from "components/modals/columnSettings/handlers/rollups/RollupActionHandler";
-import { RollupKeyHandler } from "components/modals/columnSettings/handlers/rollups/RollupKeyHandler";
-import { RollupPersistToggleHandler } from "components/modals/columnSettings/handlers/rollups/RollupPersistToggleHandler";
+import { MediaDimensionsHandler } from "./handlers/media/MediaDimensionsHandler";
+import { MediaToggleHandler } from "./handlers/media/MediaToggleHandler";
+import { InlineToggleHandler } from "./handlers/InlineToggleHandler";
+import { SelectedColumnOptionsHandler } from "./handlers/SelectedColumnOptionsHandler";
+import { HideCompletedTaskToggleHandler } from "./handlers/tasks/HideCompletedTaskToggleHandler";
+import { LinkAliasToggleHandler } from "./handlers/media/LinkAliasToggleHandler";
+import { FormulaInputHandler } from "./handlers/automations/FormulaInputHandler";
+import { AlignmentXSelectorHandler } from "./handlers/styles/AlignmentXSelectorHandler";
+import { AlignmentYSelectorHandler } from "./handlers/styles/AlignmentYSelectorHandler";
+import { ToggleWrapContentHandler } from "./handlers/styles/ToggleWrapContentHandler";
+import { ColumnIdInputHandler } from "./handlers/ColumnIdInputHandler";
+import { DatabaseSelectorHandler } from "./handlers/dropdowns/DatabaseSelectorHandler";
+import { RollupAsociatedRelationHandler } from "./handlers/rollups/RollupAsociatedRelationHandler";
+import { RollupActionHandler } from "./handlers/rollups/RollupActionHandler";
+import { RollupKeyHandler } from "./handlers/rollups/RollupKeyHandler";
+import { RollupPersistToggleHandler } from "./handlers/rollups/RollupPersistToggleHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
@@ -50,7 +51,8 @@ class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse>
             case InputType.SELECT:
             case InputType.TAGS:
             case InputType.MARKDOWN:
-                particularHandlers.push(new AlignmentSelectorHandler());
+                particularHandlers.push(new AlignmentXSelectorHandler());
+                particularHandlers.push(new AlignmentYSelectorHandler());
                 particularHandlers.push(new ToggleWrapContentHandler());
                 break;
             default:

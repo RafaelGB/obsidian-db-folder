@@ -29,14 +29,15 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                 LOGGER.info(`DDBB "${view.file.basename}" Updater: ${op} ${pathToOperate} at index ${indexToOperate}`);
                 let updatedRows = rows;
                 switch (op) {
-                    case DATAVIEW_UPDATER_OPERATIONS.DELETE:
+                    case DATAVIEW_UPDATER_OPERATIONS.DELETE: {
                         if (isFileInDDBB) {
                             updatedRows = updatedRows.filter(
                                 (r) => r.__note__.filepath !== pathToOperate
                             );
                         }
                         break;
-                    case DATAVIEW_UPDATER_OPERATIONS.RENAME:
+                    }
+                    case DATAVIEW_UPDATER_OPERATIONS.RENAME: {
                         if (isFileInDDBB) {
                             const rowToRename = rows[indexToOperate];
                             rowToRename.__note__.filepath = file.path;
@@ -44,7 +45,8 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                             updatedRows = [...updater.rows.slice(0, indexToOperate), rowToRename, ...updater.rows.slice(indexToOperate + 1)];
                         }
                         break;
-                    case DATAVIEW_UPDATER_OPERATIONS.UPDATE:
+                    }
+                    case DATAVIEW_UPDATER_OPERATIONS.UPDATE: {
                         if (updaterData.isActive) {
                             LOGGER.info(`Refreshing File "${updaterData.file}" due to active file update. Ignore`);
                             return updater;
@@ -65,6 +67,7 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                         }
 
                         break;
+                    }
                     default:
                     // Do nothing
                 }

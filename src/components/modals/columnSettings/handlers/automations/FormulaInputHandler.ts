@@ -5,7 +5,7 @@ import { add_toggle } from "settings/SettingsComponents";
 import { t } from "lang/helpers";
 import { c } from "helpers/StylesHelper";
 export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Formula properties';
+    settingTitle = 'Formula properties';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -43,6 +43,13 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
                 textArea.setPlaceholder(t("column_settings_modal_formula_input_textarea_placeholder"));
                 textArea.onChange(formula_promise);
                 textArea.inputEl.addClass(c("textarea-setting"));
+                textArea.inputEl.onkeydown = (e: KeyboardEvent) => {
+                    switch (e.key) {
+                        case "Enter":
+                            e.preventDefault();
+                            break;
+                    }
+                };
 
             });
         const mainDesc = containerEl.createEl('p');

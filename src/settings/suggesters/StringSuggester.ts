@@ -1,6 +1,6 @@
 import { TextInputSuggest } from "settings/suggesters/suggest";
 
-export class StringSuggest extends TextInputSuggest<String> {
+export class StringSuggest extends TextInputSuggest<string> {
     constructor(
         public inputEl: HTMLInputElement,
         public rawARecord: Record<string, string>,
@@ -9,8 +9,8 @@ export class StringSuggest extends TextInputSuggest<String> {
     }
 
 
-    getSuggestions(input_str: string): String[] {
-        const array: String[] = [];
+    getSuggestions(input_str: string): string[] {
+        const array: string[] = [];
         const lower_input_str = input_str.toLowerCase();
 
         Object.keys(this.rawARecord).forEach((key) => {

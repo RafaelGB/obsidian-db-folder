@@ -43,13 +43,20 @@ export function getLabelHeader(input: string) {
     return labelCandidate === undefined ? input : labelCandidate[1];
 }
 
-export function getAlignmentClassname(configColumn: ConfigColumn, localSettings: LocalSettings, inittial: string[] = []) {
-    const classes: string[] = inittial;
+export function getAlignmentClassname(configColumn: ConfigColumn, localSettings: LocalSettings, initial: string[] = []) {
+    const classes: string[] = initial;
     classes.push(
         configColumn.content_alignment === undefined ?
             COLUMN_ALIGNMENT_OPTIONS.CENTER :
             configColumn.content_alignment
     );
+
+    classes.push(
+        configColumn.content_vertical_alignment === undefined ?
+            COLUMN_ALIGNMENT_OPTIONS.MIDDLE :
+            configColumn.content_vertical_alignment
+    );
+
     classes.push(
         (configColumn.wrap_content && localSettings.cell_size !== CellSizeOptions.COMPACT) ?
             COLUMN_ALIGNMENT_OPTIONS.WRAP :

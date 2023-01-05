@@ -310,12 +310,14 @@ async function getBlocks(
   }
 
   try {
+    const cachedMetadata = app.metadataCache.getFileCache(file);
+
     const blockCache = await (app.metadataCache as any).blockCache.getForFile(
       new MockRunnable(),
       file
     );
 
-    if (!blockCache?.blocks) {
+    if (!cachedMetadata?.blocks) {
       return callback([]);
     }
 

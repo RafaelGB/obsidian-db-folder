@@ -1,6 +1,5 @@
-import Rollup from "automations/Rollup";
+import Rollup from "lib/Rollup";
 import { ConfigColumn } from "cdm/FolderModel";
-import { LocalSettings } from "cdm/SettingsModel";
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
 import { Link, Literal } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
@@ -10,7 +9,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class DispatchRollupHandlerAction extends AbstractTableAction<AutomationState> {
     handle(tableActionResponse: TableActionResponse<AutomationState>): TableActionResponse<AutomationState> {
         const { implementation } = tableActionResponse;
-        implementation.info.dispatchRollup = (configColumn: ConfigColumn, relation: Literal, ddbbConfig: LocalSettings) => {
+        implementation.info.dispatchRollup = (configColumn: ConfigColumn, relation: Literal) => {
             let validatedRelation: Link[] = [];
             try {
                 const wrappedRelation = DataviewService.wrapLiteral(relation);

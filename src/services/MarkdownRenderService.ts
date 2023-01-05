@@ -42,7 +42,7 @@ class MarkdownRenderService {
                     .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2")
                     .split(",")
                     .forEach((item) => {
-                        alternativeString = alternativeString.concat(`- ${item}\n`);
+                        alternativeString = alternativeString.concat(`- ${item.trim()}\n`);
                     });
                 markdownString = alternativeString;
             }

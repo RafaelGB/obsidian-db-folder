@@ -41,6 +41,7 @@ export interface ConfigColumn {
     isInline: boolean;
     /** Circunstancial */
     content_alignment?: string;
+    content_vertical_alignment?: string;
     wrap_content?: boolean;
     // Text
     link_alias_enabled?: boolean;

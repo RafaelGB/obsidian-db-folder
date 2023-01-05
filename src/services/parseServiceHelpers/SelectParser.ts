@@ -2,8 +2,8 @@ import { TypeParser } from "cdm/ServicesModel";
 import { satinizedColumnOption } from "helpers/FileManagement";
 import { Literal, WrappedLiteral } from "obsidian-dataview";
 import { DateTime } from "luxon";
-import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
 import { DataviewService } from "services/DataviewService";
+import { Db } from "services/CoreService";
 
 class SelectParser extends TypeParser<string> {
     /**
@@ -16,7 +16,7 @@ class SelectParser extends TypeParser<string> {
         switch (wrapped.type) {
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
-                    parsedValue = parseLuxonDatetimeToString(wrapped.value, this.config.datetime_format);
+                    parsedValue = Db.coreFns.luxon.dateToString(wrapped.value, this.config.datetime_format);
                 } else if (DataviewService.getDataviewAPI().isDataArray(wrapped.value)) {
                     parsedValue = this.parseArrayToText(
                         (wrapped.value.values as Literal[])
@@ -35,7 +35,7 @@ class SelectParser extends TypeParser<string> {
                 break;
             case 'link':
                 parsedValue = wrapped.value.markdown();
-
+                break;
             // Else go to default
             default:
                 parsedValue = DataviewService.getDataviewAPI().value.toString(wrapped.value);

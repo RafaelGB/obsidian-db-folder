@@ -23,17 +23,11 @@ export abstract class TypeParser<T> {
         return this;
     }
 
-    public beforeParse(...args: unknown[]) {
-        // Do nothing
-    }
-
     public parse(wrapped: WrappedLiteral): T {
-        this.beforeParse();
         return wrapped.value as T;
     }
 
     public parseLiteral = (wrapped: WrappedLiteral): T => {
-        this.beforeParse();
         const parsed = this.parse(wrapped);
         return parsed;
     }

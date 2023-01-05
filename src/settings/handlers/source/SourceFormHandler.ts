@@ -28,6 +28,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                 break;
             case SourceDataTypes.QUERY:
                 this.queryHandler(view, containerEl, columns);
+                break;
             default:
             //Current folder
         }

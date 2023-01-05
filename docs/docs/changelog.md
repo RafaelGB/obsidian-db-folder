@@ -1,3 +1,15 @@
+## 3.2.0
+### Shiny new things
+- Tabs between cells & arrow keys navigation [#40](https://github.com/RafaelGB/obsidian-db-folder/issues/40)
+- Columns vertical alignment options added [#444](https://github.com/RafaelGB/obsidian-db-folder/issues/444)
+### Improved
+- Improved the performance of the plugin around 15%
+- Refactor of formula modules to expose internal functions (more info on [API model](https://github.com/RafaelGB/obsidian-db-folder/blob/master/src/cdm/ModulesFnModel.ts))
+### No longer broken
+- Dates will be saved with ISO format to avoid read errors [#713](https://github.com/RafaelGB/obsidian-db-folder/issues/713)
+- Relations fields dropdown fixed
+- A better handling of the `active-leaf-change` event and `dv-changes` event
+- Error handling of onload plugin improved [#660](https://github.com/RafaelGB/obsidian-db-folder/issues/660)
 ## 3.1.3
 ### Shiny new things
 - Multi tag support (without dv query) [ISSUE#706](https://github.com/RafaelGB/obsidian-db-folder/issues/706)
@@ -5,11 +17,11 @@
 ### Visual
 - Improved expanded note style
 ### Improved
-- Fr translation added [703](https://github.com/RafaelGB/obsidian-db-folder/pull/703) Thanks to [@julien-maurel](https://github.com/Lisandra-dev)
+- Fr translation added [#703](https://github.com/RafaelGB/obsidian-db-folder/pull/703) Thanks to [@julien-maurel](https://github.com/Lisandra-dev)
 - Tasks, Inlinks and Outlinks columns now can be sorted [ISSUE#536](https://github.com/RafaelGB/obsidian-db-folder/issues/536)
 - `active-leaf-change` listener added to refresh bar status
 ### No longer broken
-- Dataview datasource now allows to select existing columns on modal [377](https://github.com/RafaelGB/obsidian-db-folder/issues/377)
+- Dataview datasource now allows to select existing columns on modal [#377](https://github.com/RafaelGB/obsidian-db-folder/issues/377)
 ### Developer
 - Refactor of parser Service with a better performance.
 ## 3.1.2

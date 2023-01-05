@@ -7,13 +7,13 @@ import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
-    settingTitle: string = t("add_row_modal_add_existing_column_title");
+    settingTitle = t("add_row_modal_add_existing_column_title");
     handle(response: AddColumnModalHandlerResponse): AddColumnModalHandlerResponse {
         const { containerEl, addColumnModalManager } = response;
         const { configState, columnState } = addColumnModalManager.props;
         const columns = columnState.info.getAllColumns();
-        let selectedColumn: string = "";
-        let typeOfNewColumn: string = "";
+        let selectedColumn = "";
+        let typeOfNewColumn = "";
         const typesRecord: Record<string, string> = {};
         Object.values(DynamicInputType).forEach((value) => {
             typesRecord[value] = t(value);
@@ -21,7 +21,7 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
 
         const promiseOfObtainColumnsFromRows = new Promise<string[]>((resolve) => {
             resolve(obtainColumnsFromRows(
-                addColumnModalManager.addColumnModal.view,
+                addColumnModalManager.addColumnModal.view.file.parent.path,
                 configState.info.getLocalSettings(),
                 configState.info.getFilters(),
                 columns

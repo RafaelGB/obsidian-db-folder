@@ -16,7 +16,7 @@ export class AddRowModal extends Modal {
     state: AddRowModalProps;
     dataState: Partial<DataState>;
     configState: Partial<ConfigState>;
-    enableReset: boolean = false;
+    enableReset = false;
     constructor(
         props: AddRowModalProps
     ) {

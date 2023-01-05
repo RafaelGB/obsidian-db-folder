@@ -5,7 +5,7 @@ import { ColumnOption } from "cdm/ComponentsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
-import { UpdaterData } from "cdm/EmitterModel";
+import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";
 
 export type TableActionResponse<T> = {
     view: DatabaseView,
@@ -24,6 +24,7 @@ export type TableAction<T> = {
 export type EphimeralSettings = {
     enable_columns_filter: boolean,
     enable_navbar: boolean,
+    context_header: ContextHeaderData
 }
 
 export interface ConfigState {
@@ -47,7 +48,7 @@ export interface DataState {
     rows: RowDataType[];
     actions: {
         addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-        updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean) => Promise<void>;
+        updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean, saveOnDisk?: boolean) => Promise<void>;
         parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
         updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         removeRow: (row: RowDataType) => Promise<void>;
@@ -60,6 +61,7 @@ export interface DataState {
         renameFile: (rowIndex: number) => Promise<void>;
         saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
         groupFiles: () => Promise<void>;
+        bulkRowUpdate: (rows: RowDataType[], action: string) => Promise<void>;
     }
 }
 
@@ -106,7 +108,7 @@ export interface AutomationState {
         getFormula: (name: string) => unknown;
         runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
         dispatchFooter: (column: TableColumn, colValues: Literal[]) => Literal;
-        dispatchRollup: (configColumn: ConfigColumn, relation: Literal, ddbbConfig: LocalSettings) => Literal;
+        dispatchRollup: (configColumn: ConfigColumn, relation: Literal) => Literal;
     },
     actions: {
         loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;

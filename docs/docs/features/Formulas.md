@@ -32,8 +32,9 @@ The root object `db` has the following functions:
 - `js` : execute a javascript function that you previously defined in the `js` folder of your table in the database or plugin global settings. (I.E.: `db.js.myFunction( arg1, arg2)`)
 - `dataview`: expose the dataview API. (see [Dataview API](https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts))
 - `rollup`: expose the rollup functions of the dbfolder plugin.  (see [Rollup documentation](/obsidian-db-folder/features/Relations/#rollups))
+- Internal functions of the plugin (see [API DatabaseFnType](https://github.com/RafaelGB/obsidian-db-folder/blob/master/src/cdm/ModulesFnModel.ts))
 
-#### Javascript File Structure
+#### Javascript file structure
 
 To add a javascript file to the `js` folder, it must be a `.js` file and have the following structure:
 

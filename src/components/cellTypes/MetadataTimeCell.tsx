@@ -36,8 +36,9 @@ const MetadataTimeCell = (mdProps: CellComponentProps) => {
   return (
     <span
       ref={mdRef}
-      className={`${c("md_cell")}`}
+      className={`${c("md_cell tabIndex")}`}
       key={`metadata_time_${cell.id}`}
+      tabIndex={0}
     />
   );
 };

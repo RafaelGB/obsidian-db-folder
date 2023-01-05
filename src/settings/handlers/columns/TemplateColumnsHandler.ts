@@ -20,7 +20,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
             /***************************
              * TEMPLATE OF SELECTED FILE
              ***************************/
-            let selected_file: string = "";
+            let selected_file = "";
             const filePaths: Record<string, string> = {};
             view.rows.forEach((row: RowDataType) => {
                 if (row.__note__) {
@@ -73,7 +73,7 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
                         .onClick(async (): Promise<void> => {
                             const recordColumns: Record<string, DatabaseColumn> = {};
                             const allColumns = await obtainColumnsFromRows(
-                                view,
+                                view.file.parent.path,
                                 view.diskConfig.yaml.config,
                                 view.diskConfig.yaml.filters,
                                 columns);

@@ -32,10 +32,12 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
         "md_cell " +
           getAlignmentClassname(
             tableColumn.config,
-            configInfo.getLocalSettings()
+            configInfo.getLocalSettings(),
+            ["tabIndex"]
           )
       )}`}
       key={`markdown_${cell.id}`}
+      tabIndex={0}
     />
   );
 };
