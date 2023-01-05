@@ -61,7 +61,7 @@ export interface DataState {
         renameFile: (rowIndex: number) => Promise<void>;
         saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
         groupFiles: () => Promise<void>;
-        bulkRowUpdate: (rows: RowDataType[], action: string) => Promise<void>;
+        bulkRowUpdate: (rows: RowDataType[], columns: TableColumn[], action: string) => Promise<void>;
     }
 }
 

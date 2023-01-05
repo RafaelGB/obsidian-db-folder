@@ -60,6 +60,22 @@ class VaultManager {
     app.vault.delete(note);
     new Notice(`File ${note.path} removed from vault`);
   }
+
+  /**
+   * Duplicate file from vault
+   * @param note 
+   * @returns 
+   */
+  async duplicateNote(note: TFile): Promise<TFile> {
+    const duplidatedContent = await this.obtainContentFromTfile(note);
+    const duplicatePath = note.path.replace(".md", " (copy).md");
+
+    return await app.vault.create(duplicatePath,
+      duplidatedContent ?? "",
+      { ctime: note.stat.ctime, mtime: note.stat.mtime }
+    );
+  }
+
   /**
   * Edit file content
   * @param note

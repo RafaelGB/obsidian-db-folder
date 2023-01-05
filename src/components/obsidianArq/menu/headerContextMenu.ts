@@ -14,6 +14,13 @@ export default function showHeaderContextMenu(event: MouseEvent, currentState: C
                 .onClick(() => {
                     emitter.emit(EMITTERS_GROUPS.CONTEXT_HEADER, { action: ContextMenuAction.SELECT, option: "remove" });
                 }));
+
+            contextMenu.addItem((item) => item
+                .setTitle("Duplicate selected rows")
+                .setIcon("checkmark")
+                .onClick(() => {
+                    emitter.emit(EMITTERS_GROUPS.CONTEXT_HEADER, { action: ContextMenuAction.SELECT, option: "duplicate" });
+                }));
             break;
         default:
         // Do nothing
@@ -35,7 +42,7 @@ export default function showHeaderContextMenu(event: MouseEvent, currentState: C
 
     if (currentState.action !== ContextMenuAction.SELECT) {
         contextMenu.addItem((item) => item
-            .setTitle("Select actions")
+            .setTitle("Bulk actions (rows)")
             .setIcon("vertical-three-dots")
             .onClick(() => {
                 setAction({ action: ContextMenuAction.SELECT });
