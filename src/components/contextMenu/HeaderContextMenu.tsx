@@ -16,6 +16,7 @@ export default function HeaderContextMenu(
   const { table } = context;
   const { tableState, view } = table.options.meta;
 
+  const columnsInfo = tableState.columns((state) => state.info);
   const contextState = tableState.configState(
     (state) => state.ephimeral.context_header
   );
@@ -92,8 +93,10 @@ export default function HeaderContextMenu(
         case ContextMenuAction.SELECT:
           rowActions.bulkRowUpdate(
             table.getSelectedRowModel().rows.map((row) => row.original),
+            columnsInfo.getAllColumns(),
             data.option
           );
+          table.toggleAllPageRowsSelected(false);
         default:
         // Do nothing
       }
