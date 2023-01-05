@@ -481,7 +481,7 @@ div.database-plugin__td.data-input span:focus {
 }
 
 .database-plugin__row-selected {
-  background-color: var(--text-accent);
+  background-color: var(--background-modifier-error-hover);
 }
 
 .database-plugin__row-shadow {
