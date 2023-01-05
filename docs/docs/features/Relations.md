@@ -6,7 +6,7 @@ Relations are a very important part of any database. They allow you to model com
 
 ### How to Use
 
-To create a relation, you need to create a column with the `Relation` type. You can then select the table you want to relate to. You can also select the column you want to use as the relation key as `Rollup`. This is the column that will be used to match the rows. For example, if you have a `User` table with a `Name` column, and a `Post` table with an `Author` column, you can use the `Name` column as the relation key.
+To create a relation, you need to create a column with the `Relation` type. You can then select the table you want to relate to (or select same database to relate to itself). You can also select the column you want to use as the relation key as `Rollup`. This is the column that will be used to match the rows. For example, if you have a `User` table with a `Name` column, and a `Post` table with an `Author` column, you can use the `Name` column as the relation key.
 
 ## Rollups
 

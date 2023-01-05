@@ -1,6 +1,6 @@
 ## Types
 
-- **Text**: this property support markdown, internal links, external links, and tags. If you're using links you can enable alias in the column settings or in the plugin global settings ;
+- **Text**: this property support markdown, internal links, external links, tags and lists in this format `[a,b,c,1,2,3]`. If you're using links you can enable alias in the column settings or in the plugin global settings. You can also resize the cell while editing to display more text. ;
 - **Number**: this property only accepts numbers ;
 - **Checkbox**: this property is represented by `true/false` in the underlying markdown ;
 - **Date**: this property accepts dates. The default format is `yyyy-MM-dd`, but it can be changed in the plugin or database settings under `editing engine section > Date format` ;
@@ -9,8 +9,8 @@
 - **Tags**: similar to the previous property, but instead of only selecting one option, you can select multiples options per cell ;
 - **Formulas**: property that accepts js code to return dynamic values in function of your code. See the [Formulas](/obsidian-db-folder/features/Formulas/) section for more details.
 - **Image**: you can embed images in the `text` property in this format `![[image]]`. Make sure to enable `media links` in the column settings and adjust the dimensions too ;
-- **Created time**: this column can be added only once from the database settings and will display the created time of the row ;
-- **Modified time**: this column can be added only once from the database settings and will display the last modified time of the row ;
+- **Created time**: this column can be added only once from the database settings and will display the created time of the row. The date format can be changed in the global settings under `Configuration about editing engine > Metadata datetime format` ;
+- **Modified time**: this column can be added only once from the database settings and will display the last modified time of the row. The date format can be changed in the global settings under `Configuration about editing engine > Metadata datetime format` ;
 - **Tasks**: this column can be added only once from the database settings and will display the task of the given file. You can also choose to hide the completed tasks in the column settings ;
 - **Inlinks**: this column can be added only once from the database settings and will display the files that have links to the select file ;
 - **Outlinks**: this column can be added only once from the database settings and will display the files that have links from the select file ;
@@ -30,7 +30,7 @@ Where you create a column, the `column name` (name displayed in the database) is
 
 The plugin works with YAML and dataview inline fields, but looks for metadata in YAML by default. To make it work with inline fields, you have two options :
 
-- You can toggle `enable inline field as default` in database or plugin global settings, and you can choose between putting the inline fields at the top or the bottom of the file ;
+- You can toggle `enable inline field as default` in database or plugin global settings, and you can choose between putting the inline fields at the top, the bottom or after the last field  ;
 - Or you can change it in the column's settings to use it with one property only. This change will not convert the underlying YAML to an inline format until you edit one of the cells in the column.
 
 If there is no metadata in your notes, it will be created when you fill the corresponding cell in the database. 
@@ -58,7 +58,7 @@ If you want to add existing nested metadata, you'll have to abide by the format 
 
 ## Appearance
 
-You can enable text wrapping and you can change the text alignment between `right-aligned`, `centered`, `left-aligned`, and `justified` from the column settings of the **text**, **number**, and **formula** properties.
+You can enable text wrapping and you can change the text's horizontal or vertical alignment from the column settings.
 
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197635327-31c273a1-6cb5-4283-a9a5-dddbdcc6b831.mov" type="video/mp4">
