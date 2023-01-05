@@ -1,10 +1,11 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { ActionTypes, InputLabel, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import TagsIcon from "components/img/TagsIcon";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
+import { t } from "lang/helpers";
 
 export default class TagsTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -52,6 +53,6 @@ function tagsTypeComponent(headerActionResponse: HeaderActionResponse) {
   return headerTypeComponent({
     onClick: tagsOnClick,
     icon: <TagsIcon />,
-    label: InputLabel.TAGS,
+    label: t(InputType.TAGS),
   });
 }

@@ -16,6 +16,8 @@ import rows_settings_section from "settings/RowsSection";
 import csv_settings_section from "settings/CSVSection";
 import automation_settings_section from "settings/AutomationSection";
 import helpers_settings_section from "settings/HelpersSection";
+import { applyPluginModalStyle } from "components/styles/ModalStyles";
+import { t } from "lang/helpers";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -38,7 +40,7 @@ export class SettingsManager {
   config: SettingsManagerConfig;
   settings: DatabaseSettings;
   cleanupFns: Array<() => void> = [];
-  applyDebounceTimer: number = 0;
+  applyDebounceTimer = 0;
 
   constructor(
     plugin: DBFolderPlugin,
@@ -59,6 +61,7 @@ export class SettingsManager {
    * @param view optional. Used only for local settings
    */
   constructUI(containerEl: HTMLElement, heading: string, local: boolean, view?: DatabaseView) {
+    applyPluginModalStyle(containerEl);
     /** Common modal headings */
     containerEl.addClass(StyleClasses.SETTINGS_MODAL);
     add_setting_header(containerEl, heading, 'h2');
@@ -166,7 +169,7 @@ export class DBFolderSettingTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    this.settingsManager.constructUI(containerEl, 'Database Folder Plugin', false);
+    this.settingsManager.constructUI(containerEl, t("settings_title"), false);
   }
 }
 

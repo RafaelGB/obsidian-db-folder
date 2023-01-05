@@ -1,9 +1,11 @@
 import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { DatabaseView } from "DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
+import { UpdaterData } from "cdm/EmitterModel";
 
 export type TableActionResponse<T> = {
     view: DatabaseView,
@@ -53,7 +55,8 @@ export interface DataState {
         editOptionForAllRows: (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
         removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => Promise<void>;
-        dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => void;
+        dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
+        dataviewUpdater: (updaterData: UpdaterData, columns: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
         renameFile: (rowIndex: number) => Promise<void>;
         saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
         groupFiles: () => Promise<void>;
@@ -64,8 +67,8 @@ export interface ColumnsState {
     columns: TableColumn[];
     shadowColumns: TableColumn[];
     actions: {
-        addToLeft: (column: TableColumn, customName?: string) => void;
-        addToRight: (column: TableColumn, customName?: string) => void;
+        addToLeft: (column: TableColumn, customName?: string, customType?: string) => void;
+        addToRight: (column: TableColumn, customName?: string, customType?: string) => void;
         remove: (column: TableColumn) => void;
         alterSorting: (column: TableColumn) => void;
         addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
@@ -74,11 +77,13 @@ export interface ColumnsState {
         alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
         alterColumnSize: (id: string, width: number) => void;
         alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
+        alterColumnConfig: (column: TableColumn, config: Partial<ConfigColumn>) => void;
     }
     info: {
         getAllColumns: () => TableColumn[];
         getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
         getVisibilityRecord: () => Record<string, boolean>;
+        getColumnOptions: (id: string) => ColumnOption[];
     }
 }
 export interface ColumnSortingState {
@@ -100,7 +105,8 @@ export interface AutomationState {
     info: {
         getFormula: (name: string) => unknown;
         runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
-        dispatchRollup: (configColumn: ConfigColumn, relation: Literal, dbbConfig: LocalSettings) => Literal;
+        dispatchFooter: (column: TableColumn, colValues: Literal[]) => Literal;
+        dispatchRollup: (configColumn: ConfigColumn, relation: Literal, ddbbConfig: LocalSettings) => Literal;
     },
     actions: {
         loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;

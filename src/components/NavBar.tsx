@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { NavBarProps } from "cdm/MenuBarModel";
 import GlobalFilter from "components/reducers/GlobalFilter";
-import { StyleVariables } from "helpers/Constants";
+import {
+  EMITTERS_BAR_STATUS,
+  EMITTERS_GROUPS,
+  StyleVariables,
+} from "helpers/Constants";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { c } from "helpers/StylesHelper";
@@ -18,18 +22,34 @@ export function NavBar(navBarProps: NavBarProps) {
     (state) => state.ephimeral.enable_navbar
   );
 
-  // Control
-  useEffect(() => {
-    if (!view.statusBarItems.hits) {
-      view.statusBarItems.hits = view.plugin.addStatusBarItem();
+  const updateBar = () => {
+    if (!view.plugin.statusBarItem) {
+      view.plugin.statusBarItem = view.plugin.addStatusBarItem();
     }
-    view.statusBarItems.hits.replaceChildren();
-    view.statusBarItems.hits.createEl("span", {
+    view.plugin.statusBarItem.replaceChildren();
+    view.plugin.statusBarItem.createEl("span", {
       text: `${table.getFilteredRowModel().rows.length}/${view.rows.length} '${
         view.diskConfig.yaml.name
       }'`,
     });
+  };
+
+  // Bar status control
+  useEffect(() => {
+    updateBar();
   }, [table.getFilteredRowModel().rows.length]);
+
+  useEffect(() => {
+    const updateBarAfterActive = (e: string) => {
+      if (e === EMITTERS_BAR_STATUS.UPDATE) {
+        updateBar();
+      }
+    };
+    view.emitter.on(EMITTERS_GROUPS.BAR_STATUS, updateBarAfterActive);
+    return () => {
+      view.emitter.off(EMITTERS_GROUPS.BAR_STATUS, updateBarAfterActive);
+    };
+  }, []);
 
   return (
     <Box
@@ -80,6 +100,7 @@ export function NavBar(navBarProps: NavBarProps) {
     </Box>
   );
 }
+
 export function HeaderNavBar(headerNavBarProps: NavBarProps) {
   const { table } = headerNavBarProps;
   const { tableState } = table.options.meta;

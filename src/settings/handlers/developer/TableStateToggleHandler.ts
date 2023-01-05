@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class TableStateToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Show state of table';
+    settingTitle = t("settings_developer_table_state_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl } = settingHandlerResponse;
         const table_state_togle_promise = async (value: boolean): Promise<void> => {
@@ -19,7 +20,7 @@ export class TableStateToggleHandler extends AbstractSettingsHandler {
         add_toggle(
             containerEl,
             this.settingTitle,
-            "This will show/hide properties of the table on the bottom of the view",
+            t("settings_developer_table_state_toggle_desc"),
             settingsManager.plugin.settings.global_settings.enable_show_state,
             table_state_togle_promise
         );

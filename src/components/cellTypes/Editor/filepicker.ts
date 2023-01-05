@@ -31,7 +31,7 @@ function getAliasMarkup(
   let container = win.document.body.createDiv(c('file-suggestion-wrapper'));
   container.detach();
 
-  setIcon(container.createDiv(c('file-suggestion-icon')), 'forward-arrow', 12);
+  setIcon(container.createDiv(c('file-suggestion-icon')), 'forward-arrow');
 
   container.createDiv({}, (div) => {
     div.createDiv({
@@ -133,9 +133,7 @@ export function getFileSearchConfig(
         );
       }
 
-      const shouldUseMarkdownLinks = !!(
-        app.vault as any
-      ).getConfig('useMarkdownLinks');
+      const shouldUseMarkdownLinks = !!app.vault.getConfig('useMarkdownLinks');
 
       if (willAutoPairBrackets && !shouldUseMarkdownLinks) {
         output[output.length - 1] = output[output.length - 1].slice(0, -2);
@@ -233,9 +231,7 @@ export function getHeadingSearchConfig(
         )
       );
 
-      const shouldUseMarkdownLinks = !!(
-        app.vault as any
-      ).getConfig('useMarkdownLinks');
+      const shouldUseMarkdownLinks = !!app.vault.getConfig('useMarkdownLinks');
 
       if (willAutoPairBrackets && !shouldUseMarkdownLinks) {
         output[output.length - 1] = output[output.length - 1].slice(0, -2);
@@ -435,9 +431,7 @@ export function getBlockSearchConfig(
         )
       );
 
-      const shouldUseMarkdownLinks = !!(
-        app.vault as any
-      ).getConfig('useMarkdownLinks');
+      const shouldUseMarkdownLinks = !!app.vault.getConfig('useMarkdownLinks');
 
       if (willAutoPairBrackets && !shouldUseMarkdownLinks) {
         output[output.length - 1] = output[output.length - 1].slice(0, -2);

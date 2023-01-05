@@ -1,7 +1,7 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { ActionTypes, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import TaskIcon from "components/img/TaskIcon";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";

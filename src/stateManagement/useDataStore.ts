@@ -10,7 +10,7 @@ const useDataStore = (view: DatabaseView) => {
             set: set,
             get: get,
             implementation: {
-                ...mockDataState(),
+                ...emptyDataState(),
                 rows: view.rows
             },
         };
@@ -19,11 +19,8 @@ const useDataStore = (view: DatabaseView) => {
     });
 }
 
-// TODO - find a better way to mock this
-function mockDataState(): DataState {
-
+function emptyDataState(): Omit<DataState, "rows"> {
     return {
-        rows: [],
         actions: {
             addRow: null,
             updateCell: null,
@@ -34,6 +31,7 @@ function mockDataState(): DataState {
             removeOptionForAllRows: null,
             parseDataOfColumn: null,
             dataviewRefresh: null,
+            dataviewUpdater: null,
             renameFile: null,
             saveDataFromFile: null,
             groupFiles: null,

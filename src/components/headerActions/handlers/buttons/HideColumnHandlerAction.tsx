@@ -4,6 +4,7 @@ import React from "react";
 import { TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
 import HideIcon from "components/img/HideIcon";
+import { t } from "lang/helpers";
 
 export default class HideColumnHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -39,6 +40,6 @@ function hideButton(headerActionResponse: HeaderActionResponse) {
   return headerButtonComponent({
     onClick: onClick,
     icon: <HideIcon />,
-    label: "Hide",
+    label: t("header_menu_hide_column"),
   });
 }

@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AtomicFilterComponentProps } from "cdm/ComponentsModel";

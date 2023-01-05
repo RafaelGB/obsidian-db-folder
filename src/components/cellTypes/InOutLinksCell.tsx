@@ -11,22 +11,21 @@ const InOutLinksCell = (mdProps: CellComponentProps) => {
   const markdownRow = tableState.data((state) => state.rows[row.index]);
   const mdRef = useRef<HTMLDivElement>();
   useEffect(() => {
-    if (mdRef.current !== null) {
-      mdRef.current.innerHTML = "";
-      const links = markdownRow[column.id] as Link[];
-      const markdownLinks: string[] = [];
-      links.forEach((link) => {
-        markdownLinks.push(`- ${link.markdown()}`);
-      });
-      MarkdownService.renderMarkdown(
-        defaultCell,
-        markdownLinks.join("\n"),
-        mdRef.current,
-        5
-      );
-    }
+    if (mdRef.current === null) return;
+
+    const links = markdownRow[column.id] as Link[];
+    const markdownLinks: string[] = [];
+    links.forEach((link) => {
+      markdownLinks.push(`- ${link.markdown()}`);
+    });
+    MarkdownService.renderMarkdown(
+      defaultCell,
+      markdownLinks.join("\n"),
+      mdRef.current,
+      5
+    );
   });
-  return <span ref={mdRef} className={c("md_cell text-align-left")}></span>;
+  return <span ref={mdRef} className={c("md_cell text-align-left")} />;
 };
 
 export default InOutLinksCell;

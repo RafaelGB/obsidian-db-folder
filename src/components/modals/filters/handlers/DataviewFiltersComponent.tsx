@@ -1,7 +1,6 @@
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
-import { DatabaseColumn } from "cdm/DatabaseModel";
 import { obtainColumnsFromRows } from "components/Columns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FilterGroupCondition } from "cdm/SettingsModel";
 import GroupFilterComponent from "components/modals/filters/handlers/GroupFilterComponent";
 
@@ -14,8 +13,8 @@ const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
 
   const [possibleColumns, setPossibleColumns] = useState([] as string[]);
 
-  React.useEffect(() => {
-    new Promise<Record<string, DatabaseColumn>>((resolve, reject) => {
+  useEffect(() => {
+    new Promise<string[]>((resolve) => {
       // Empty conditions to refresh the dataview
       const emptyFilterConditions = { ...filters };
       emptyFilterConditions.conditions = [];
@@ -28,9 +27,7 @@ const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
         )
       );
     }).then((columns) => {
-      setPossibleColumns(
-        Object.keys(columns).sort((a, b) => a.localeCompare(b))
-      );
+      setPossibleColumns(columns.sort((a, b) => a.localeCompare(b)));
     });
   }, []);
 

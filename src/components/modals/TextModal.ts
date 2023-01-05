@@ -1,19 +1,29 @@
+import { c } from "helpers/StylesHelper";
+import { t } from "lang/helpers";
 import {
     Modal,
     TextComponent,
 } from "obsidian";
 
-export class PromptModal extends Modal {
+/**
+ * A modal that prompts the user for text input using a builder pattern.
+ */
+export class TextModal extends Modal {
     private resolve: (value: string) => void;
     private reject: () => void;
     private submitted = false;
     private value: string;
-
+    private placeholder = t("text_modal_default_placeholder");
     constructor(
         private prompt_text: string,
         private default_value: string
     ) {
         super(app);
+    }
+
+    setPlaceholder(placeholder: string): TextModal {
+        this.placeholder = placeholder;
+        return this;
     }
 
     onOpen(): void {
@@ -30,12 +40,12 @@ export class PromptModal extends Modal {
 
     createForm(): void {
         const div = this.contentEl.createDiv();
-        div.addClass("templater-prompt-div");
+        div.addClass(c("prompt-modal"));
         let textInput;
         textInput = new TextComponent(div);
         this.value = this.default_value ?? "";
-        textInput.inputEl.addClass("templater-prompt-input");
-        textInput.setPlaceholder("Type text here");
+        textInput.inputEl.addClass(c("text-modal"));
+        textInput.setPlaceholder(this.placeholder);
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));
         textInput.inputEl.addEventListener("keydown", (evt: KeyboardEvent) =>

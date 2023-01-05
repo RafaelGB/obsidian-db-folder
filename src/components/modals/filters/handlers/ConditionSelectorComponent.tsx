@@ -1,13 +1,8 @@
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { Table } from "@tanstack/react-table";
-import { RowDataType } from "cdm/FolderModel";
 import { ConditionFiltersOptions, StyleVariables } from "helpers/Constants";
 import React from "react";
-import modifyRecursiveFilterGroups, {
-  ModifyFilterOptionsEnum,
-} from "components/modals/filters/handlers/FiltersHelper";
 
 const ConditionSelectorComponent = (selectorProps: {
   currentCon: string;

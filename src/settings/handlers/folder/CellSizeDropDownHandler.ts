@@ -1,9 +1,10 @@
 import { CellSizeOptions } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_dropdown } from "settings/SettingsComponents";
 
 export class CellSizeDropDownHandler extends AbstractSettingsHandler {
-    settingTitle = 'Cell size';
+    settingTitle = t("settings_cell_size_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { containerEl, view, local, settingsManager } = settingHandlerResponse;
         const source_dropdown_promise = async (value: string): Promise<void> => {
@@ -27,7 +28,7 @@ export class CellSizeDropDownHandler extends AbstractSettingsHandler {
         add_dropdown(
             containerEl,
             this.settingTitle,
-            'Choose how compact or wide cells are.',
+            t("settings_cell_size_desc"),
             current_cell_size,
             {
                 compact: CellSizeOptions.COMPACT,

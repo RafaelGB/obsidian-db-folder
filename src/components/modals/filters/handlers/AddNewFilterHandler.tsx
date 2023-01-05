@@ -10,15 +10,17 @@ import {
 } from "helpers/Constants";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Notice } from "obsidian";
 import { AtomicFilter } from "cdm/SettingsModel";
 import Grid from "@mui/material/Grid";
+import { randomColor } from "helpers/Colors";
+import { t } from "lang/helpers";
 
 export class AddNewFilterHandler extends AbstractHandlerClass<FiltersModalHandlerResponse> {
-  settingTitle: string = "Add new filter";
+  settingTitle: string = t("filters_modal_add_single_filter");
   handle(
     columnHandlerResponse: FiltersModalHandlerResponse
   ): FiltersModalHandlerResponse {
@@ -39,10 +41,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
   const addConditionHandler = () => {
     // Check if there is a condition to add
     if (possibleColumns.length <= 0) {
-      new Notice(
-        "No columns available yet. Include a field in one of your notes before add a filter",
-        3000
-      );
+      new Notice(t("filters_modal_add_group_filter_error_no_columns"), 3000);
       return;
     }
 
@@ -58,10 +57,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
   const addGroupConditionHandler = () => {
     // Check if there is a condition to add
     if (possibleColumns.length <= 0) {
-      new Notice(
-        "No columns available yet. Include a field in one of your notes before add a filter",
-        3000
-      );
+      new Notice(t("filters_modal_add_group_filter_error_no_columns"), 3000);
       return;
     }
 
@@ -77,6 +73,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
       disabled: false,
       condition: ConditionFiltersOptions.AND,
       filters: [mockAtomicFilter],
+      color: randomColor(),
     });
     configActions.alterFilters(alteredFilterState);
   };
@@ -100,7 +97,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
           }}
           onClick={addConditionHandler}
         >
-          Add filter
+          {t("filters_modal_add_single_filter")}
         </Button>
       </Grid>
       <Grid item xs="auto" key={`Grid-add-group-filter`}>
@@ -117,7 +114,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
           }}
           onClick={addGroupConditionHandler}
         >
-          Add group
+          {t("filters_modal_add_group_filter")}
         </Button>
       </Grid>
     </Grid>

@@ -3,8 +3,8 @@ import { RowDataType } from "cdm/FolderModel";
 import { DatabaseView } from "DatabaseView";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { TFile } from "obsidian";
-import React from "react";
-import { PointerEventHandler, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
+import { PointerEventHandler, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
 
 /**
@@ -21,18 +21,20 @@ export async function checkEmbeddedCheckbox(checkbox: HTMLElement) {
   const start = parseInt(checkbox.dataset.oStart);
   const end = parseInt(checkbox.dataset.oEnd);
   const li = content.substring(start, end);
+  const updated = li.replace(
+    /^(.+?)\[(.)\](.+)(\s{0,1})$/,
+    (_, g1, g2, g3, g4) => {
+      if (g2 !== " ") {
+        checkbox.parentElement.removeClass("is-checked");
+        checkbox.parentElement.dataset.task = "";
+        return `${g1}[ ]${g3}${g4}`;
+      }
 
-  const updated = li.replace(/^(.+?)\[(.)\](.+)$/, (_, g1, g2, g3) => {
-    if (g2 !== " ") {
-      checkbox.parentElement.removeClass("is-checked");
-      checkbox.parentElement.dataset.task = "";
-      return `${g1}[ ]${g3}`;
+      checkbox.parentElement.addClass("is-checked");
+      checkbox.parentElement.dataset.task = "x";
+      return `${g1}[x]${g3}${g4}`;
     }
-
-    checkbox.parentElement.addClass("is-checked");
-    checkbox.parentElement.dataset.task = "x";
-    return `${g1}[x]${g3}`;
-  });
+  );
 
   await app.vault.modify(
     file,
@@ -49,19 +51,23 @@ export const MdFileComponent = ({
 }) => {
   const containerCellRef = useRef<HTMLDivElement>();
   useEffect(() => {
-    const effectCallback = async () => {
-      const normalizedPath = getNormalizedPath(row.original.__note__.filepath);
-      MarkdownService.handleMarkdown(
-        containerCellRef.current,
-        row.original.__note__.getFile(),
-        normalizedPath,
-        view,
-        5
-      );
-    };
-
-    effectCallback();
-  }, []);
+    if (containerCellRef.current === null) return;
+    setTimeout(
+      async () => {
+        const normalizedPath = getNormalizedPath(
+          row.original.__note__.filepath
+        );
+        await MarkdownService.handleMarkdown(
+          containerCellRef.current,
+          row.original.__note__.getFile(),
+          normalizedPath,
+          view,
+          5
+        );
+      },
+      containerCellRef.current.innerHTML ? 500 : 0
+    );
+  }, [row]);
 
   const onCheckboxContainerClick: PointerEventHandler<HTMLDivElement> = (e) => {
     const target = e.target as HTMLElement;

@@ -1,3 +1,5 @@
+import { NoteContentAction } from "cdm/FolderModel";
+
 export class FileContent {
     public value: string;
     constructor(string: string) {
@@ -8,32 +10,28 @@ export class FileContent {
         return this.value.split('\n');
     }
 
-    replaceAll(pattern_to_replace: RegExp, input: string): FileContent {
-        if (Array.isArray(pattern_to_replace)) {
-            pattern_to_replace.forEach(
-                (regex, index) => {
-                    this.value = this.value.replaceAll(
-                        regex,
-                        input[index]
-                    );
-                }
-            );
-        } else {
-            this.value = this.value.replaceAll(
-                pattern_to_replace,
-                input
-            );
-        }
+    replaceAll(note: NoteContentAction): FileContent {
+        note.regexp.forEach(
+            (regex, index) => {
+                this.value = this.value.replaceAll(
+                    regex,
+                    note.newValue[index]
+                );
+            }
+        );
 
         return this;
     }
 
-    remove(pattern_to_be_removed: RegExp): FileContent {
+    remove(note: NoteContentAction): FileContent {
         const _object = this.object();
         _object.forEach((value, index) => {
-            if (value.match(pattern_to_be_removed)) {
-                delete _object[index];
-            }
+            note.regexp.some(element => {
+                if (value.match(element)) {
+                    delete _object[index];
+                    return true;
+                }
+            });
         });
         this.value = _object.join('\n');
         return this;

@@ -1,6 +1,9 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { Grouping } from "obsidian-dataview/lib/data-model/value";
-import { SListItem } from "obsidian-dataview/lib/data-model/serialized/markdown";
+import {
+  SListItem,
+  STask,
+} from "obsidian-dataview/lib/data-model/serialized/markdown";
 import { DataviewService } from "services/DataviewService";
 import React, { useEffect, useRef } from "react";
 import { TableColumn } from "cdm/FolderModel";
@@ -14,13 +17,14 @@ const TaskCell = (taskProps: CellComponentProps) => {
   useEffect(() => {
     let taskValue = cell.getValue();
     // Check if there are tasks in the cell
-    if (taskValue !== "") {
+    if (taskValue) {
       taskRef.current.innerHTML = "";
+
       if (
         (column.columnDef as TableColumn).config.task_hide_completed &&
-        typeof (taskValue as any).where === "function"
+        DataviewService.getDataviewAPI().isDataArray(taskValue)
       ) {
-        taskValue = (taskValue as any).where((t: any) => !t.completed);
+        taskValue = taskValue.where((t: STask) => !t.completed);
       }
       const taskComponent = new MarkdownRenderChild(taskRef.current);
       DataviewService.getDataviewAPI().taskList(
@@ -32,10 +36,10 @@ const TaskCell = (taskProps: CellComponentProps) => {
       );
       view.addChild(taskComponent);
     }
-  }, []);
+  }, [cell.getValue()]);
   const taskRef = useRef<HTMLDivElement>();
 
-  return <div ref={taskRef} className={c("md_cell text-align-left")}></div>;
+  return <div ref={taskRef} className={c("md_cell text-align-left")} />;
 };
 
 export default TaskCell;

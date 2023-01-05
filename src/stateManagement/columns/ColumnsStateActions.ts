@@ -1,5 +1,5 @@
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
-import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import DeleteColumnHandlerAction from "stateManagement/columns/handlers/DeleteColumnAction";
 import InsertColumnHandlerAction from "stateManagement/columns/handlers/NewColumnAction";
 import AlterSortingColumnHandlerAction from "stateManagement/columns/handlers/AlterSortingColumnAction";
@@ -10,7 +10,8 @@ import AlterColumnSizeHandlerAction from "stateManagement/columns/handlers/Alter
 import InfoColumnFunctions from "stateManagement/columns/handlers/InfoColumnFunctions";
 import AlterIsHiddenColumnHandlerAction from "stateManagement/columns/handlers/AlterIsHiddenColumnAction";
 import AlterColumnIdHandlerAction from "stateManagement/columns/handlers/AlterColumnIdAction";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import AlterColumnConfigAction from "stateManagement/columns/handlers/AlterColumnConfigAction";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 class ColumnsStateActions extends AbstractChain<TableActionResponse<ColumnsState>> {
     protected getHandlers(): AbstractHandler<TableActionResponse<ColumnsState>>[] {
         return [
@@ -23,7 +24,8 @@ class ColumnsStateActions extends AbstractChain<TableActionResponse<ColumnsState
             new AlterColumnSizeHandlerAction(),
             new AlterIsHiddenColumnHandlerAction(),
             new InfoColumnFunctions(),
-            new AlterColumnIdHandlerAction()
+            new AlterColumnIdHandlerAction(),
+            new AlterColumnConfigAction()
 
         ];
     }

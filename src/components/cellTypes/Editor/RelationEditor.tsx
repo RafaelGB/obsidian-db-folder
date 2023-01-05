@@ -1,5 +1,5 @@
 import { RelationEditorComponentProps, SelectValue } from "cdm/ComponentsModel";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Select from "react-select";
 import CustomTagsStyles from "components/styles/TagsStyles";
@@ -22,7 +22,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
       ? relationCell.map((link: Link) => ({
           label: link.fileName(),
           value: link.path,
-          color: StyleVariables.TEXT_NORMAL,
+          color: StyleVariables.BACKGROUND_SECONDARY,
         }))
       : []
   );
@@ -31,9 +31,9 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   // onChange handler
   const handleOnChange = async (newValue: OnChangeValue<SelectValue, true>) => {
     const arrayTags = newValue.map((tag) => ({
-      label: tag.value,
+      label: tag.label,
       value: tag.value,
-      color: StyleVariables.TEXT_NORMAL,
+      color: StyleVariables.BACKGROUND_SECONDARY,
     }));
     setRelationValue(arrayTags);
   };
@@ -45,29 +45,32 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
     persistChange(relationValue.map((link) => link.value));
   };
 
-  const relationRowsCallBack = useCallback(async () => {
-    const relationRows = await recordRowsFromRelation(
-      tableColumn.config.related_note_path,
-      DEFAULT_SETTINGS.local_settings,
-      columnsInfo.getAllColumns()
-    );
-    const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
-      label: value,
-      value: key,
-      color: StyleVariables.TEXT_NORMAL,
-    }));
-
-    setRelationOptions(multiOptions);
-  }, []);
-
   useEffect(() => {
-    relationRowsCallBack();
+    setTimeout(async () => {
+      const relationRows = await recordRowsFromRelation(
+        tableColumn.config.related_note_path,
+        DEFAULT_SETTINGS.local_settings,
+        columnsInfo.getAllColumns()
+      );
+
+      const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
+        label: value,
+        value: key,
+        color: StyleVariables.BACKGROUND_SECONDARY,
+      }));
+
+      setRelationOptions(multiOptions);
+    }, 0);
   }, []);
 
   return (
     <div className={c("relation")}>
       <Select
         defaultValue={relationValue}
+        components={{
+          DropdownIndicator: () => null,
+          IndicatorSeparator: () => null,
+        }}
         closeMenuOnSelect={false}
         isSearchable
         isMulti

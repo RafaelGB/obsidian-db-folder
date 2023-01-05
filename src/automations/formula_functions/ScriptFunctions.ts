@@ -1,5 +1,5 @@
 import { TFile } from "obsidian";
-import { IGenerateObject } from "automations/IGenerateObject";
+import { IGenerateObject } from "automations/core/IGenerateObject";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
 import { LocalSettings } from "cdm/SettingsModel";
 import { LOGGER } from "services/Logger";
@@ -14,6 +14,7 @@ export class ScriptFunctions implements IGenerateObject {
         const files =
             get_tfiles_from_folder(
                 this.config.formula_folder_path,
+                ["js"]
             );
 
         if (!files) {

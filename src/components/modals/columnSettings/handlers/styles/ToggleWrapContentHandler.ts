@@ -1,8 +1,9 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 export class ToggleWrapContentHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-  settingTitle: string = "Wrap content";
+  settingTitle = t("column_settings_modal_wrap_content_toggle_title");
   handle(
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ): ColumnSettingsHandlerResponse {
@@ -19,7 +20,7 @@ export class ToggleWrapContentHandler extends AbstractHandlerClass<ColumnSetting
     add_toggle(
       containerEl,
       this.settingTitle,
-      "Wrap content of the cells in the column",
+      t("column_settings_modal_wrap_content_toggle_desc"),
       column.config.wrap_content,
       wrap_content_togle_promise
     );

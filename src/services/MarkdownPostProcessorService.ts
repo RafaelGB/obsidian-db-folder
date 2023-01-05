@@ -19,7 +19,7 @@ export class PreviewDatabaseModeService {
             PreviewDatabaseModeService.instance = this;
         }
     }
-    hoverEvent = (e: any) => {
+    hoverEvent = (e: any) => { // eslint-disable-line
         if (!e.linktext) {
             this.plugin.hover.linkText = null;
             return;
@@ -143,7 +143,7 @@ export class PreviewDatabaseModeService {
         const dataviewCols: string[] = columns
             .filter((col) => !col.skipPersist)
             .map((c) => c.key);
-        const dataviewMatrixRow: any[][] = rows.map((r) =>
+        const dataviewMatrixRow: any[][] = rows.map((r) => // eslint-disable-line
             dataviewCols.map((c) => r[c])
         );
         DataviewService.getDataviewAPI().table(

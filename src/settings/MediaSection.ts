@@ -3,6 +3,7 @@ import { SettingHandler, SettingHandlerResponse } from 'settings/handlers/Abstra
 import { MediaToggleHandler } from 'settings/handlers/media/MediaToggleHandler';
 import { MediaDimensionsHandler } from 'settings/handlers/media/MediaDimensionsHandler';
 import { LinkAliasToggleHandler } from 'settings/handlers/media/LinkAliasToggleHandler';
+import { t } from 'lang/helpers';
 
 /**
  * developer settings section
@@ -10,7 +11,7 @@ import { LinkAliasToggleHandler } from 'settings/handlers/media/LinkAliasToggleH
 export function media_settings_section(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
     const media_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-media");
     // title of the section
-    add_setting_header(media_section, "Embedded media adjustments", 'h3');
+    add_setting_header(media_section, t("settings_media_section"), 'h3');
     // section settings
     const handlers = getHandlers();
     let i = 1;

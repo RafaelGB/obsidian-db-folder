@@ -2,12 +2,12 @@ import { RowDatabaseFields } from "cdm/DatabaseModel";
 import { NoteContentAction } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { FileContent } from "helpers/FileContent";
-import { resolve_tfile } from "helpers/FileManagement";
+import { resolve_tfile, resolve_tfolder } from "helpers/FileManagement";
 import { Notice, parseYaml, TFile, TFolder } from "obsidian";
 import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
-import { SourceDataTypes } from "helpers/Constants";
+import { FileManagerEditOptions, SourceDataTypes } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 class VaultManager {
   private static instance: VaultManager;
@@ -20,10 +20,6 @@ class VaultManager {
    */
   async create_markdown_file(targetFolder: TFolder, filename: string, localSettings: LocalSettings, databasefields?: RowDatabaseFields): Promise<TFile> {
     LOGGER.debug(`=> create_markdown_file. name:${targetFolder.path}/${filename})`);
-    const created_note = await app.fileManager.createNewMarkdownFile(
-      targetFolder,
-      filename ?? "Untitled"
-    );
     let content = databasefields ? parseFrontmatterFieldsToString(databasefields, localSettings).concat("\n").concat(parseInlineFieldsToString(databasefields)) : "";
 
     // Obtain content from current row template
@@ -45,7 +41,13 @@ class VaultManager {
       default:
     }
 
-    await app.vault.modify(created_note, content ?? "");
+    const created_note = await app.vault.create(
+      targetFolder.path
+        .concat("/")
+        .concat(filename ?? "Untitled")
+        .concat(".md"),
+      content ?? ""
+    );
     LOGGER.debug(`<= create_markdown_file`);
     return created_note;
   }
@@ -69,13 +71,15 @@ class VaultManager {
       if (releasedContent === undefined) {
         releasedContent = await this.obtainContentFromTfile(note.file);
       }
+
       const line_string = new FileContent(releasedContent);
+
       switch (note.action) {
-        case 'remove':
-          releasedContent = line_string.remove(note.regexp).value;
+        case FileManagerEditOptions.REMOVE:
+          releasedContent = line_string.remove(note).value;
           break;
-        case 'replace':
-          releasedContent = line_string.replaceAll(note.regexp, note.newValue).value;
+        case FileManagerEditOptions.REPLACE:
+          releasedContent = line_string.replaceAll(note).value;
           break;
         default:
           throw "Error: Option " + note.action + " is not supported";
@@ -106,7 +110,6 @@ class VaultManager {
       const yaml = parseYaml(frontmatterRaw);
       const frontmatter: Record<string, Literal> = {};
       Object.keys(yaml)
-
         .forEach(key => {
           // add frontmatter fields that are not specified as database fields
           frontmatter[key] = yaml[key];
@@ -126,6 +129,40 @@ class VaultManager {
     else {
       return [];
     }
+  }
+
+  /**
+ * Generate a new file with the structure of a database view
+ * @param folderPath 
+ * @param filename 
+ * @param ddbbConfig 
+ * @returns 
+ */
+  async create_row_file(
+    folderPath: string,
+    filename: string,
+    ddbbConfig: LocalSettings
+  ): Promise<string> {
+    let trimedFilename = filename.replace(/\.[^/.]+$/, "").trim();
+    let filepath = `${folderPath}/${trimedFilename}.md`;
+    // Validate possible duplicates
+    let sufixOfDuplicate = 0;
+    while (resolve_tfile(filepath, false)) {
+      sufixOfDuplicate++;
+      filepath = `${folderPath}/${trimedFilename}-${sufixOfDuplicate}.md`;
+    }
+
+    if (sufixOfDuplicate > 0) {
+      trimedFilename = `${trimedFilename}-${sufixOfDuplicate}`;
+      filename = `${trimedFilename} copy(${sufixOfDuplicate})`;
+    }
+    // Add note to persist row
+    await this.create_markdown_file(
+      resolve_tfolder(folderPath),
+      trimedFilename,
+      ddbbConfig
+    );
+    return filepath;
   }
 
   /**

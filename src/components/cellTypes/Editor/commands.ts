@@ -250,14 +250,14 @@ function removeBullet(str: string) {
   return unbulleted;
 }
 
-export const commands: Record<string, (ta: HTMLInputElement) => void> = {
-  'editor:toggle-bold': (input: HTMLInputElement) => {
+export const commands: Record<string, (ta: HTMLTextAreaElement) => void> = {
+  'editor:toggle-bold': (input: HTMLTextAreaElement) => {
     toggleWrappingFormattingCommand(input, isBoldedRegEx, unBold, '**');
   },
-  'editor:toggle-code': (input: HTMLInputElement) => {
+  'editor:toggle-code': (input: HTMLTextAreaElement) => {
     toggleWrappingFormattingCommand(input, isCodeRegEx, unCode, '`');
   },
-  'editor:toggle-italics': (input: HTMLInputElement) => {
+  'editor:toggle-italics': (input: HTMLTextAreaElement) => {
     toggleWrappingFormattingCommand(
       input,
       isItalicizedRegEx,
@@ -265,7 +265,7 @@ export const commands: Record<string, (ta: HTMLInputElement) => void> = {
       '*'
     );
   },
-  'editor:toggle-highlight': (input: HTMLInputElement) => {
+  'editor:toggle-highlight': (input: HTMLTextAreaElement) => {
     toggleWrappingFormattingCommand(
       input,
       isHighlightedRegEx,
@@ -273,16 +273,16 @@ export const commands: Record<string, (ta: HTMLInputElement) => void> = {
       '=='
     );
   },
-  'editor:toggle-strikethrough': (input: HTMLInputElement) => {
+  'editor:toggle-strikethrough': (input: HTMLTextAreaElement) => {
     toggleWrappingFormattingCommand(input, isStrikedRegEx, unStrike, '~~');
   },
-  'editor:toggle-blockquote': (input: HTMLInputElement) => {
+  'editor:toggle-blockquote': (input: HTMLTextAreaElement) => {
     toggleLineFormatting(input, isQuoted, applyQuote, removeQuote);
   },
-  'editor:toggle-bullet-list': (input: HTMLInputElement) => {
+  'editor:toggle-bullet-list': (input: HTMLTextAreaElement) => {
     toggleLineFormatting(input, isBulleted, applyBullet, removeBullet);
   },
-  'editor:toggle-numbered-list': (input: HTMLInputElement) => {
+  'editor:toggle-numbered-list': (input: HTMLTextAreaElement) => {
     toggleLineFormatting(
       input,
       isOrderedList,
@@ -291,7 +291,7 @@ export const commands: Record<string, (ta: HTMLInputElement) => void> = {
     );
   },
 
-  'editor:toggle-checklist-status': (input: HTMLInputElement) => {
+  'editor:toggle-checklist-status': (input: HTMLTextAreaElement) => {
     const state = getStateFromInput(input);
     const isEmptySelection = state.selection.end === state.selection.start;
 
@@ -347,7 +347,7 @@ export const commands: Record<string, (ta: HTMLInputElement) => void> = {
 
 export const autoPairBracketsCommands: Record<
   string,
-  (ta: HTMLInputElement) => boolean
+  (ta: HTMLTextAreaElement) => boolean
 > = {
   '(': (input) => applyWrappingFormatting(input, '(', ')', false),
   '[': (input) => applyWrappingFormatting(input, '[', ']', false, true),
@@ -358,7 +358,7 @@ export const autoPairBracketsCommands: Record<
 
 export const autoPairMarkdownCommands: Record<
   string,
-  (ta: HTMLInputElement) => boolean
+  (ta: HTMLTextAreaElement) => boolean
 > = {
   '*': (input) => applyWrappingFormatting(input, '*', '*', false),
   _: (input) => applyWrappingFormatting(input, '_', '_', false),
@@ -385,8 +385,8 @@ const pairMap: Record<string, string> = {
 };
 
 export function unpair(
-  input: HTMLInputElement,
-  commandList: Record<string, (ta: HTMLInputElement) => boolean>
+  input: HTMLTextAreaElement,
+  commandList: Record<string, (ta: HTMLTextAreaElement) => boolean>
 ) {
   const state = getStateFromInput(input);
 
@@ -412,11 +412,11 @@ export function unpair(
   }
 }
 
-export function unpairBrackets(input: HTMLInputElement) {
+export function unpairBrackets(input: HTMLTextAreaElement) {
   return unpair(input, autoPairBracketsCommands);
 }
 
-export function unpairMarkdown(input: HTMLInputElement) {
+export function unpairMarkdown(input: HTMLTextAreaElement) {
   return unpair(input, autoPairMarkdownCommands);
 }
 
@@ -448,7 +448,7 @@ function removeTab(str: string, useTab: boolean, tabWidth: number) {
 }
 
 export function handleTab(
-  input: HTMLInputElement,
+  input: HTMLTextAreaElement,
   isShiftPressed: boolean,
   useTab: boolean,
   tabWidth: number
@@ -492,7 +492,7 @@ export function handleTab(
   return true;
 }
 
-export function handleNewLine(input: HTMLInputElement) {
+export function handleNewLine(input: HTMLTextAreaElement) {
   const initialState = getStateFromInput(input);
 
   if (initialState.selection.start !== initialState.selection.end) {

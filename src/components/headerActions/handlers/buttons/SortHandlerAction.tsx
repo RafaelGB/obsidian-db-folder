@@ -4,25 +4,16 @@ import CrossIcon from "components/img/CrossIcon";
 import ArrowUpIcon from "components/img/ArrowUp";
 import ArrowDownIcon from "components/img/ArrowDown";
 import React from "react";
-import { InputType } from "helpers/Constants";
 import { TableColumn } from "cdm/FolderModel";
 import headerButtonComponent from "components/headerActions/HeaderButtonComponent";
+import { t } from "lang/helpers";
 
 export default class SortHandlerAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
   handle(headerActionResponse: HeaderActionResponse): HeaderActionResponse {
     this.globalHeaderActionResponse = headerActionResponse;
-    const column = this.globalHeaderActionResponse.headerMenuProps.headerProps
-      .column.columnDef as TableColumn;
-    switch (column.input) {
-      case InputType.TASK:
-      case InputType.INLINKS:
-      case InputType.OUTLINKS:
-        // DO NOTHING
-        break;
-      default:
-        this.addSortButtons();
-    }
+    this.addSortButtons();
+
     return this.goNext(this.globalHeaderActionResponse);
   }
 
@@ -80,7 +71,9 @@ function sortingUpButton(headerActionResponse: HeaderActionResponse) {
   return headerButtonComponent({
     onClick: sortingUpOnClick,
     icon: isAscSorted ? <CrossIcon /> : <ArrowUpIcon />,
-    label: isAscSorted ? "Remove ascending sort" : "Sort ascending",
+    label: isAscSorted
+      ? t("header_menu_sort_ascending_remove")
+      : t("header_menu_sort_ascending"),
   });
 }
 
@@ -133,7 +126,7 @@ function sortingDownButton(headerActionResponse: HeaderActionResponse) {
       ),
     label:
       header.column.getIsSorted() === "desc"
-        ? "Remove descending sort"
-        : "Sort descending",
+        ? t("header_menu_sort_descending_remove")
+        : t("header_menu_sort_descending"),
   });
 }

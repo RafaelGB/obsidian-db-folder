@@ -1,7 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
+import { t } from "lang/helpers";
 export class MediaToggleHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Default media link state (on/off)';
+    settingTitle = t("settings_default_media_link_toggle_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl } = settingHandlerResponse;
         // pass if modal opened from local settings
@@ -23,7 +24,7 @@ export class MediaToggleHandler extends AbstractSettingsHandler {
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Default value of wrap media links with embedding content",
+            t("settings_default_media_link_toggle_desc"),
             media_settings.enable_media_view,
             media_togle_promise
         );

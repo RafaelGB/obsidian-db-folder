@@ -3,7 +3,7 @@ import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { RowSelectOption } from 'cdm/ComponentsModel';
 import { InputType, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
-import { RowType } from 'cdm/RowTypeModel';
+import { Literal } from 'obsidian-dataview';
 
 export class MarshallColumnsHandler extends AbstractYamlHandler {
     handlerName: string = 'columns';
@@ -55,7 +55,8 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     column.config = DEFAULT_COLUMN_CONFIG;
                 } else {
                     // General config
-                    column.config.isInline = this.parseBoolean(column.config.isInline);
+                    const parsedIsInline: boolean = this.parseBoolean(column.config.isInline);
+                    column.config.isInline = parsedIsInline;
                     column = this.marshallParticularConfigInfo(column);
                 }
                 // Update mashaller response
@@ -65,7 +66,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
         return this.goNext(handlerResponse);
     }
 
-    parseBoolean(value: RowType, defaultValue = false): boolean {
+    parseBoolean(value: Literal, defaultValue = false): boolean {
         if (value === undefined || value === null) {
             return defaultValue;
         }
@@ -82,7 +83,7 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
         return defaultValue;
     }
 
-    parseNumber(value: RowType, defaultValue = 0): number {
+    parseNumber(value: Literal, defaultValue = 0): number {
         if (value === undefined || value === null) {
             return defaultValue;
         }

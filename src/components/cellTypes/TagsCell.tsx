@@ -9,10 +9,11 @@ import CreatableSelect from "react-select/creatable";
 import { randomColor } from "helpers/Colors";
 import React, { useMemo, useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
-import { c } from "helpers/StylesHelper";
+import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
+import { satinizedColumnOption } from "helpers/FileManagement";
 
 const TagsCell = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
@@ -38,12 +39,13 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   // Tags reference state
   const [showSelectTags, setShowSelectTags] = useState(false);
 
+  const columnOptions = columnsInfo.getColumnOptions(column.id);
   function getColor(tag: string) {
-    const match = tableColumn.options.find(
+    const match = columnOptions.find(
       (option: { label: string }) => option.label === tag
     );
     if (match) {
-      return match.backgroundColor;
+      return match.color;
     } else {
       // In case of new tag, generate random color
       const color = randomColor();
@@ -62,27 +64,13 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     }));
   }, [tagsCell]);
 
-  const multiOptions = useMemo(
-    () =>
-      tableColumn.options
-        .filter(
-          (option: RowSelectOption) =>
-            option && option.label !== undefined && option.label !== null
-        )
-        .sort((a, b) => a.label.localeCompare(b.label))
-        .map((option: RowSelectOption) => ({
-          value: option.label,
-          label: option.label,
-          color: option.backgroundColor,
-        })),
-    [tagsCell]
-  );
-
   const handleOnChange = async (
     newValue: OnChangeValue<SelectValue, true>,
     actionMeta: ActionMeta<RowSelectOption>
   ) => {
-    const arrayTags = newValue.map((tag) => `${tag.value}`);
+    const arrayTags = newValue.map(
+      (tag) => `${satinizedColumnOption(tag.value)}`
+    );
     const newCell = ParseService.parseRowToLiteral(
       tagsRow,
       tableColumn,
@@ -99,14 +87,20 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     );
 
     // Add new option to column options
-    newValue
-      .filter(
-        (tag) =>
-          !tableColumn.options.find((option) => option.label === tag.value)
-      )
-      .forEach((tag) => {
-        columnActions.addOptionToColumn(tableColumn, tag.value, randomColor());
-      });
+    if (actionMeta.action === "create-option") {
+      newValue
+        .filter(
+          (tag) =>
+            !tableColumn.options.find((option) => option.label === tag.value)
+        )
+        .forEach((tag) => {
+          columnActions.addOptionToColumn(
+            tableColumn,
+            tag.value,
+            randomColor()
+          );
+        });
+    }
   };
 
   function TagsForm() {
@@ -114,6 +108,10 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       <div className={c("tags")}>
         <CreatableSelect
           defaultValue={defaultValue}
+          components={{
+            DropdownIndicator: () => null,
+            IndicatorSeparator: () => null,
+          }}
           closeMenuOnSelect={false}
           isSearchable
           isMulti
@@ -121,7 +119,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           openMenuOnFocus
           menuPosition="fixed"
           styles={CustomTagsStyles}
-          options={multiOptions}
+          options={columnOptions}
           onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
           menuPortalTarget={activeDocument.body}
@@ -141,10 +139,23 @@ const TagsCell = (tagsProps: CellComponentProps) => {
         TagsForm()
       ) : (
         <div
-          className={c("tags-container text-align-center")}
-          onClick={() => setShowSelectTags(true)}
+          className={c(
+            getAlignmentClassname(
+              tableColumn.config,
+              configInfo.getLocalSettings(),
+              ["tabIndex", "tags-container"]
+            )
+          )}
+          onDoubleClick={() => setShowSelectTags(true)}
           style={{ width: column.getSize() }}
           key={`tags-${row.index}-${tableColumn.key}`}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              setShowSelectTags(true);
+            }
+          }}
+          tabIndex={0}
         >
           {tagsCell ? (
             tagsCell

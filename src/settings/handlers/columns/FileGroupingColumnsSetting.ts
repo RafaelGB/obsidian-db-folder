@@ -1,4 +1,5 @@
 import { DatabaseView } from "DatabaseView";
+import { t } from "lang/helpers";
 import { ButtonComponent, SearchComponent, Setting } from "obsidian";
 import { FileAttributeSuggester } from "settings/suggesters/FileAttributeSuggester";
 
@@ -12,12 +13,12 @@ export class FileGroupingColumnsSetting {
   constructor(
     private view: DatabaseView,
     private allowedColumns: Set<string>,
-  ) {}
+  ) { }
 
   init = (containerEl: HTMLElement) => {
     new Setting(containerEl)
-      .setName("Columns to group files by")
-      .setDesc("The folder structure will mirror the values of these columns")
+      .setName(t("settings_file_column_title"))
+      .setDesc(t("settings_file_column_desc"))
       .addSearch((sc) => {
         sc.setPlaceholder("").setValue("").onChange(this.onSearchChange);
         this.searchComponent = sc;
@@ -71,7 +72,7 @@ export class FileGroupingColumnsSetting {
       this.labelContainer.style.display = "none";
     }
   };
-  
+
   private onClearButtonClick = (button: ButtonComponent) => {
     button.setButtonText("Reset");
     button.onClick(async () => {
@@ -84,11 +85,11 @@ export class FileGroupingColumnsSetting {
     });
   };
 
-  
+
   private configureDisplay = (containerEl: HTMLElement) => {
     this.labelContainer = containerEl.createEl("div");
     const label = containerEl.createEl("span", {
-      text: "Selected columns: ",
+      text: t("settings_file_column_conf_display"),
     });
     label.style.color = "#666";
     this.labelContainer.appendChild(label);

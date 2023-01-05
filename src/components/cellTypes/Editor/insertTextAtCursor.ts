@@ -1,6 +1,6 @@
 let browserSupportsTextareaTextNodes: undefined | boolean;
 
-function canManipulateViaTextNodes(input: HTMLInputElement) {
+function canManipulateViaTextNodes(input: HTMLTextAreaElement) {
   if (input.nodeName !== 'TEXTAREA') {
     return false;
   }
@@ -14,7 +14,7 @@ function canManipulateViaTextNodes(input: HTMLInputElement) {
   return browserSupportsTextareaTextNodes;
 }
 
-export function insertTextAtCursor(input: HTMLInputElement, text: string) {
+export function insertTextAtCursor(input: HTMLTextAreaElement, text: string) {
   // Most of the used APIs only work with the field selected
   input.focus();
 

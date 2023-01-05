@@ -1,3 +1,4 @@
+import { contrastColor } from "helpers/Colors";
 import { StyleVariables } from "helpers/Constants";
 import {
     StylesConfig,
@@ -8,23 +9,34 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     container: () => ({
         position: "static",
         boxSizing: "border-box",
+        backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+        color: StyleVariables.TEXT_NORMAL,
     }),
     menuPortal: (styles) => ({
         ...styles,
         zIndex: 9999
     }),
-    control: (styles) => ({ ...styles, border: "none", boxShadow: "none", minWidth: "100%", }),
+    control: (styles) => ({
+        ...styles, border: "none", boxShadow: "none", minWidth: "100%",
+        backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+        color: StyleVariables.TEXT_NORMAL,
+    }),
+    input: (styles) => ({
+        ...styles,
+        backgroundColor: StyleVariables.BACKGROUND_PRIMARY,
+        color: StyleVariables.TEXT_NORMAL,
+    }),
     option: (styles, { data, isFocused }) => ({
         ...styles,
-        backgroundColor: isFocused ? StyleVariables.TEXT_ACCENT_HOVER : data.color,
-        color: "rgb(66, 66, 66)",
+        backgroundColor: data.color,
+        color: contrastColor(data.color),
+        border: isFocused ? 1 + "px solid " + StyleVariables.TEXT_ACCENT : 0,
         padding: 0,
         width: "100%",
         textAlign: "center",
         ":hover": {
-            backgroundColor: StyleVariables.TEXT_ACCENT_HOVER,
+            boxShadow: "1.5px 1.5px 1.5px 1.5px " + StyleVariables.TEXT_ACCENT_HOVER,
         },
-
     }),
     singleValue: (styles, { data }) => ({
         ...styles,
@@ -33,20 +45,21 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<any>> = {
     multiValue: (styles, { data }) => {
         return {
             ...styles,
-            backgroundColor: data.color + " !important",
+            backgroundColor: data.color
         };
     },
-    multiValueLabel: (styles) => ({
+    multiValueLabel: (styles, { data }) => ({
         ...styles,
-        color: "black",
+        backgroundColor: data.color,
+        color: contrastColor(data.color),
     }),
     multiValueRemove: (styles, { data }) => ({
         ...styles,
-        color: "black",
+        color: contrastColor(data.color),
         ":hover": {
-            backgroundColor: data.color + " !important",
-            color: "white",
+            backgroundColor: data.color,
+            color: StyleVariables.TEXT_ACCENT,
         },
-    }),
+    })
 };
 export default CustomTagsStyles;

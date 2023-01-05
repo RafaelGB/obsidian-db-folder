@@ -2,9 +2,10 @@ import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import CalendarIcon from "components/img/CalendarIcon";
 import React from "react";
-import { InputLabel, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
+import { t } from "lang/helpers";
 
 export default class DateTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -51,6 +52,6 @@ function dateTypeComponent(headerActionResponse: HeaderActionResponse) {
   return headerTypeComponent({
     onClick: dateOnClick,
     icon: <CalendarIcon />,
-    label: InputLabel.CALENDAR,
+    label: t(InputType.CALENDAR),
   });
 }

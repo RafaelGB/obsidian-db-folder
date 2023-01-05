@@ -37,6 +37,7 @@ const QuickFilters = (props: DataviewFiltersProps) => {
         const { disabled } = condition as FilterGroupCondition;
         if ((condition as FilterGroupCondition).condition) {
           const label = (condition as FilterGroupCondition).label;
+          const color = (condition as FilterGroupCondition).color;
           return (
             <div
               onClick={toggleFilterGroupOnClickHandler(filterIndex)}
@@ -49,7 +50,7 @@ const QuickFilters = (props: DataviewFiltersProps) => {
                 sx={{
                   backgroundColor: disabled
                     ? StyleVariables.INTERACTIVE_NORMAL
-                    : StyleVariables.TEXT_ACCENT,
+                    : color,
                   boxShadow: disabled ? StyleVariables.INPUT_SHADOW : "none",
                   borderColor: disabled ? StyleVariables.LINK_COLOR : "none",
                   color: disabled

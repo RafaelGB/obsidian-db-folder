@@ -12,13 +12,10 @@ import { TableColumn } from "cdm/FolderModel";
  * @param currentPath 
  * @returns 
  */
-export function recordAllDatabases(currentPath?: string): Record<string, string> {
+export function recordAllDatabases(): Record<string, string> {
     const avaliableDDBB: Record<string, string> = {};
     DataviewService.getDataviewAPI().pages().where((page) => {
-        const file = (page as SMarkdownPage).file;
-        const optionalFilter = currentPath ? file.path !== currentPath : true;
-        // Check if is a ddbb and is not the current one
-        return page[DatabaseCore.FRONTMATTER_KEY] !== undefined && optionalFilter;
+        return page[DatabaseCore.FRONTMATTER_KEY] !== undefined;
     }).forEach((page) => {
         const file = (page as SMarkdownPage).file;
         avaliableDDBB[file.path] = file.name;

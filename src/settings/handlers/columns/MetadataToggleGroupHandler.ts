@@ -1,14 +1,15 @@
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 
 export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Metadata toggle group';
+    settingTitle: string = t("settings_metatata_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { settingsManager, containerEl, local, view } = settingHandlerResponse;
         const metadata_section = containerEl.createDiv("configuration-section-container-columns-metadata");
         // title of the section
-        add_setting_header(metadata_section, "Metadata", 'h4');
+        add_setting_header(metadata_section, this.settingTitle, 'h4');
         /*************************
          * METADATA CREATED COLUMN
          *************************/
@@ -29,8 +30,8 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
         }
 
         new Setting(metadata_section)
-            .setName("Created")
-            .setDesc("Enable/disable Created Metadata Column")
+            .setName(t("settings_metatata_create_toggle_title"))
+            .setDesc(t("settings_metatata_create_toggle_desc"))
             .addToggle(toggle =>
                 toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_created : settingsManager.plugin.settings.local_settings.show_metadata_created)
                     .onChange(metadata_created_toggle_promise)
@@ -56,8 +57,8 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
         }
 
         new Setting(metadata_section)
-            .setName("Modified")
-            .setDesc("Enable/disable Modified Metadata Column")
+            .setName(t("settings_metatata_modified_toggle_title"))
+            .setDesc(t("settings_metatata_modified_toggle_desc"))
             .addToggle(toggle =>
                 toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_modified : settingsManager.plugin.settings.local_settings.show_metadata_modified)
                     .onChange(metadata_modified_toggle_promise)
@@ -83,8 +84,8 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
         }
 
         new Setting(metadata_section)
-            .setName("Tasks")
-            .setDesc("Enable/disable File Tasks Column")
+            .setName(t("settings_metatata_task_toggle_title"))
+            .setDesc(t("settings_metatata_task_toggle_desc"))
             .addToggle(toggle =>
                 toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_tasks : settingsManager.plugin.settings.local_settings.show_metadata_tasks)
                     .onChange(metadata_tasks_toggle_promise)
@@ -110,8 +111,8 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
         }
 
         new Setting(metadata_section)
-            .setName("Inlinks")
-            .setDesc("Enable/disable File Inlinks Column")
+            .setName(t("settings_metatata_inlinks_toggle_title"))
+            .setDesc(t("settings_metatata_inlinks_toggle_desc"))
             .addToggle(toggle =>
                 toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_inlinks : settingsManager.plugin.settings.local_settings.show_metadata_inlinks)
                     .onChange(metadata_inlinks_toggle_promise)
@@ -137,8 +138,8 @@ export class MetadataToggleGroupHandler extends AbstractSettingsHandler {
         }
 
         new Setting(metadata_section)
-            .setName("Outlinks")
-            .setDesc("Enable/disable File Outlinks Column")
+            .setName(t("settings_metatata_outlinks_toggle_title"))
+            .setDesc(t("settings_metatata_outlinks_toggle_desc"))
             .addToggle(toggle =>
                 toggle.setValue(local ? view.diskConfig.yaml.config.show_metadata_outlinks : settingsManager.plugin.settings.local_settings.show_metadata_outlinks)
                     .onChange(metadata_outlinks_toggle_promise)

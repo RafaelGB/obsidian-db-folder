@@ -1,8 +1,9 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Enable media links';
+    settingTitle: string = t("column_settings_modal_media_toggle_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -23,7 +24,7 @@ export class MediaToggleHandler extends AbstractHandlerClass<ColumnSettingsHandl
         add_toggle(
             containerEl,
             this.settingTitle,
-            "Enable/disable wrap media links with embedding content",
+            t("column_settings_modal_media_toggle_desc"),
             column.config.enable_media_view,
             media_togle_promise
         );

@@ -14,6 +14,7 @@ import { DEFAULT_SETTINGS, InputType } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { Platform } from "obsidian";
 import { parseLuxonDatetimeToString } from "helpers/LuxonHelper";
+import { OBSIDIAN_LOCALE } from "lang/helpers";
 
 const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   const { defaultCell } = calendarTimeProps;
@@ -38,8 +39,7 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
   /** state of cell value */
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  function handleSpanOnClick(event: any) {
-    event.preventDefault();
+  function handleSpanOnClick() {
     setShowDatePicker(true);
   }
 
@@ -96,12 +96,21 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       isClearable
       ariaLabelClose="Clear"
       placeholderText="Pick a moment..."
+      locale={OBSIDIAN_LOCALE}
+      calendarStartDay={1}
     />
   ) : (
     <span
-      className={`${c("calendar")}`}
+      className={`${c("calendar tabIndex")}`}
       style={{ width: column.getSize() }}
-      onClick={handleSpanOnClick}
+      onDoubleClick={handleSpanOnClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleSpanOnClick();
+        }
+      }}
+      tabIndex={0}
     >
       {parseLuxonDatetimeToString(
         calendarCell,

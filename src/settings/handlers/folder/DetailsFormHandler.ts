@@ -1,8 +1,9 @@
+import { t } from "lang/helpers";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_text } from "settings/SettingsComponents";
 
 export class DetailsFormHandler extends AbstractSettingsHandler {
-    settingTitle: string = 'Information about your database:';
+    settingTitle = t("settings_details_name_title");
     handle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const { containerEl, view, local } = settingHandlerResponse;
         if (local) {
@@ -15,17 +16,17 @@ export class DetailsFormHandler extends AbstractSettingsHandler {
             }
             add_text(
                 containerEl,
-                this.settingTitle.concat(' (name)'),
-                "name of the database",
-                "type title...",
+                this.settingTitle,
+                t("settings_details_name_desc"),
+                t("settings_details_name_placeholder"),
                 view.diskConfig.yaml.name,
                 details_edit_name_promise
             );
             add_text(
                 containerEl,
-                this.settingTitle.concat(' (description)'),
-                "description of the database",
-                "type description...",
+                t("settings_details_description_title"),
+                t("settings_details_description_desc"),
+                t("settings_details_description_placeholder"),
                 view.diskConfig.yaml.description,
                 details_edit_desciption_promise
             );

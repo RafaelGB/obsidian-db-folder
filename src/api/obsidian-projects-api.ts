@@ -10,7 +10,7 @@ import { resolve_tfile, resolve_tfolder } from "helpers/FileManagement";
 import { generateDbConfiguration, generateNewDatabase } from "helpers/CommandsHelper";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { dbTrim } from "helpers/StylesHelper";
+import { c, dbTrim } from "helpers/StylesHelper";
 
 const projectsMetadataColumns = ["File", "name", "path"];
 class ProjectAPI extends ProjectView {
@@ -49,7 +49,7 @@ class ProjectAPI extends ProjectView {
         const actualFields = fields
             .filter((field) => !projectsMetadataColumns.contains(field.name));
 
-        if (currentColumnsLength !== actualFields.length) {
+        if (currentColumnsLength < actualFields.length) {
             const newColumns: Record<string, DatabaseColumn> = {};
             actualFields.forEach((field, index) => {
                 const { name, type } = field;
@@ -59,7 +59,7 @@ class ProjectAPI extends ProjectView {
                  * 
                  * Could we add the config to the data object? I can manage a map of views with that
                  */
-                const inputType = this.mapperTypeToInputType(type);
+                const inputType = this.projectsTypeToPluginTypeMapper(type);
                 const key = dbTrim(name);
                 const newColumn: DatabaseColumn = {
                     input: inputType,
@@ -91,7 +91,7 @@ class ProjectAPI extends ProjectView {
     async onOpen(projectView: ProjectViewProps) {
         const { contentEl, config, saveConfig, project, viewId } = projectView;
         const { path } = project;
-        let filePath = config.filepath;
+        const filePath = config.filepath;
         if (!filePath) {
             const folder = resolve_tfolder(path);
             const customLocalSettings = this.generateLocalSettings(projectView);
@@ -105,7 +105,9 @@ class ProjectAPI extends ProjectView {
         this.view = new DatabaseView(leaf, this.plugin, file);
         this.view.initRootContainer(file);
         await this.view.initDatabase();
-        this.dataEl = contentEl.createDiv().appendChild(this.view.containerEl);
+        this.dataEl = contentEl
+            .createDiv(c("project-view-container"))
+            .appendChild(this.view.containerEl);
         this.view.onload();
         this.enableAutoReload = true;
         LOGGER.debug("Database initialized successfully from project view");
@@ -114,10 +116,14 @@ class ProjectAPI extends ProjectView {
     async onClose() {
         this.view.destroy();
         this.view = null;
-        this.enableAutoReload = false;
         LOGGER.debug("Closing project view ", this.getDisplayName());
     }
 
+    /**
+     * Generate the local settings for the database
+     * @param projectView 
+     * @returns 
+     */
     private generateLocalSettings(projectView: ProjectViewProps): LocalSettings {
         const { project } = projectView;
         const localSettings: LocalSettings = {
@@ -147,29 +153,27 @@ class ProjectAPI extends ProjectView {
         return localSettings;
     }
 
-    private mapperTypeToInputType(type: string): string {
+    /**
+     * Maps the data type from the projects to the plugin data type
+     * @param type
+     * @returns 
+     */
+    private projectsTypeToPluginTypeMapper(type: string): string {
         let inputType = "";
-        switch (type) {
-            case DataFieldType.String:
-            case DataFieldType.Link:
-            case DataFieldType.Unknown:
-                inputType = InputType.TEXT;
-                break;
-            case DataFieldType.Number:
-                inputType = InputType.NUMBER;
-                break;
-            case DataFieldType.Boolean:
-                inputType = InputType.CHECKBOX;
-                break;
-            case DataFieldType.Date:
-                inputType = InputType.CALENDAR;
-                break;
-            case DataFieldType.List:
-                inputType = InputType.TAGS;
-                break;
-            default:
-                inputType = InputType.TEXT;
+        const mapper = new Map<string, string>(
+            [
+                [DataFieldType.Number, InputType.NUMBER],
+                [DataFieldType.Boolean, InputType.CHECKBOX],
+                [DataFieldType.Date, InputType.CALENDAR],
+                [DataFieldType.List, InputType.TAGS],
+            ]
+        );
+        if (mapper.has(type)) {
+            inputType = mapper.get(type);
+        } else {
+            inputType = InputType.TEXT;
         }
+
         return inputType;
     }
 }

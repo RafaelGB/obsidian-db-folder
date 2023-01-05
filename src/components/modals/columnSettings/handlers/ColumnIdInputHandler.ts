@@ -1,18 +1,19 @@
 import { Notice, Setting } from "obsidian";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { dbTrim } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
+import { t } from "lang/helpers";
 
 export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-    settingTitle: string = 'Column id';
+    settingTitle = t("column_settings_modal_column_id_title");
     handle(response: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = response;
         const { columnsState, dataState, configState } = columnSettingsManager.modal;
         let value = `${column.key}${column.nestedKey ? `.${column.nestedKey}` : ''}`;
         new Setting(containerEl)
             .setName(this.settingTitle)
-            .setDesc("Enter the column id of the column")
+            .setDesc(t("column_settings_modal_column_id_desc"))
             .addText(text => {
                 text.setPlaceholder("Write your nested key...")
                     .setValue(value)
@@ -21,13 +22,15 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
                     })
             }).addExtraButton((cb) => {
                 cb.setIcon("save")
-                    .setTooltip("Save column id")
+                    .setTooltip(t("column_settings_modal_column_id_button_tooltip"))
                     .onClick(async (): Promise<void> => {
                         const arrayKey = value.split('.');
                         const rootKey = arrayKey.shift();
                         const validateMessage = this.validateNewId(rootKey, arrayKey, columnsState.info.getAllColumns());
                         if (validateMessage) {
-                            new Notice(`Error saving id. ${validateMessage}`, 3000);
+                            new Notice(
+                                t("column_settings_modal_column_id_notice_error_on_save", validateMessage),
+                                3000);
                             return;
                         }
                         // Update state of altered column
@@ -53,7 +56,10 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
                                 await dataState.actions.groupFiles();
                             }
                         }
-                        new Notice(`new column id was saved: ${value}`, 1500);
+                        new Notice(
+                            t("column_settings_modal_column_id_notice_success_on_save", value),
+                            1500
+                        );
                         columnSettingsManager.modal.enableReset = true;
                     });
             });
@@ -65,18 +71,18 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
         const candidateId = `${rootKey}${arrayKey.length > 0 ? `-${arrayKey.join('-')}` : ''}`;
         // Check if new root key is not empty
         if (!rootKey) {
-            return "The root key is required";
+            return t("column_settings_modal_column_id_error_empty_root_key");
         }
         // Validate special characters in root key
         if (rootKey.match(/[^a-zA-Z0-9_]/)) {
-            return "The root key can only contain letters, numbers and underscores";
+            return t("column_settings_modal_column_id_error_invalid_key");
         }
         // Validate if new root key is not duplicated
         const conflictId = columns.some((column: TableColumn) =>
             column.id === candidateId
         );
         if (conflictId) {
-            return "The id already exists";
+            return t("column_settings_modal_column_id_error_already_exists");
         }
         return '';
     }

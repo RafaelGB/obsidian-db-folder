@@ -1,4 +1,4 @@
-import { IGenerateObject } from "automations/IGenerateObject";
+import { IGenerateObject } from "automations/core/IGenerateObject";
 import { ScriptFunctions } from "automations/formula_functions/ScriptFunctions";
 import { LocalSettings } from "cdm/SettingsModel";
 

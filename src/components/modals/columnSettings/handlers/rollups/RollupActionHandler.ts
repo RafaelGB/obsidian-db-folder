@@ -1,10 +1,11 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 import { ROLLUP_ACTIONS } from "helpers/Constants";
+import { t } from "lang/helpers";
 export class RollupActionHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Select action';
+    settingTitle = t("column_settings_modal_rollup_action_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
@@ -32,13 +33,13 @@ export class RollupActionHandler extends AbstractHandlerClass<ColumnSettingsHand
 
             new Setting(containerEl)
                 .setName(this.settingTitle)
-                .setDesc('Select the action to perform on the rollup')
+                .setDesc(t("column_settings_modal_rollup_action_desc"))
                 .addSearch((cb) => {
                     new StringSuggest(
                         cb.inputEl,
                         rollup_action_options
                     );
-                    cb.setPlaceholder("Select action...")
+                    cb.setPlaceholder(t("column_settings_modal_rollup_action_placeholder"))
                         .setValue(config.rollup_action)
                         .onChange(rollup_action_promise);
                 });

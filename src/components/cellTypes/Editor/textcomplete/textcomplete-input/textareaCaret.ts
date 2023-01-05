@@ -44,7 +44,7 @@ const properties = [
 ];
 
 export function getCaretCoordinates(
-  element: HTMLInputElement,
+  element: HTMLTextAreaElement,
   position: number
 ) {
   const doc = element.doc;

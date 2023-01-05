@@ -1,10 +1,11 @@
 import { AddRowModalHandlerResponse } from "cdm/ModalsModel";
+import { t } from "lang/helpers";
 import { Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 
 export class TemplateDropdownHandler extends AbstractHandlerClass<AddRowModalHandlerResponse> {
-    settingTitle: string = "Row Template";
+    settingTitle: string = t("add_row_modal_template_dropdown_title");
     handle(
         response: AddRowModalHandlerResponse
     ): AddRowModalHandlerResponse {
@@ -25,13 +26,13 @@ export class TemplateDropdownHandler extends AbstractHandlerClass<AddRowModalHan
 
         new Setting(containerEl)
             .setName(this.settingTitle)
-            .setDesc('Select from the existing templates to create a new row. The list is related with template folder setting. Leave empty to create an empty file.')
+            .setDesc(t('add_row_modal_template_dropdown_desc'))
             .addSearch((cb) => {
                 new StringSuggest(
                     cb.inputEl,
                     avaliableOptions
                 );
-                cb.setPlaceholder("Select a template...")
+                cb.setPlaceholder(t("add_row_modal_template_dropdown_placeholder"))
                     .setValue(rowTemplate.template)
                     .onChange(updateTemplatHandler);
 

@@ -1,9 +1,10 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { create_row_file, destination_folder } from "helpers/FileManagement";
+import { destination_folder } from "helpers/FileManagement";
 import { DateTime } from "luxon";
 import { Link } from "obsidian-dataview";
+import { VaultManagerDB } from "services/FileManagerService";
 import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
@@ -12,13 +13,14 @@ export default class AddRowlHandlerAction extends AbstractTableAction<DataState>
         const { view, set, implementation } = tableActionResponse;
         implementation.actions.addRow = async (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => {
             const folderPath = destination_folder(view, ddbbConfig);
-            const filepath = await create_row_file(folderPath, filename, ddbbConfig);
+            const filepath = await VaultManagerDB.create_row_file(folderPath, filename, ddbbConfig);
 
             const newNote = new NoteInfo({
                 file: {
                     path: filepath,
                     ctime: DateTime.now(),
                     mtime: DateTime.now(),
+                    folder: folderPath,
                     link: {
                         path: filepath,
                         fileName: () => filename,

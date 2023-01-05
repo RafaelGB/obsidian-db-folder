@@ -1,3 +1,0 @@
-interface ProjectView {
-    path: string;
-}

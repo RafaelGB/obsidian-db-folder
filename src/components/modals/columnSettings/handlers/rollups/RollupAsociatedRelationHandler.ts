@@ -1,10 +1,11 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 import { InputType } from "helpers/Constants";
+import { t } from "lang/helpers";
 export class RollupAsociatedRelationHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
-    settingTitle: string = 'Select relation column';
+    settingTitle: string = t("column_settings_modal_rollup_associated_relation_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view, columnsState } = columnSettingsManager.modal;
@@ -32,13 +33,13 @@ export class RollupAsociatedRelationHandler extends AbstractHandlerClass<ColumnS
 
         new Setting(containerEl)
             .setName(this.settingTitle)
-            .setDesc('Select from the existing columns to rollup')
+            .setDesc(t("column_settings_modal_rollup_associated_relation_desc"))
             .addSearch((cb) => {
                 new StringSuggest(
                     cb.inputEl,
                     avaliableRelations
                 );
-                cb.setPlaceholder("Search Relation...")
+                cb.setPlaceholder(t("column_settings_modal_rollup_associated_relation_placeholder"))
                     .setValue(config.asociated_relation_id)
                     .onChange(relation_selector_promise);
             });

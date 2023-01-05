@@ -1,16 +1,19 @@
-import { AbstractChain } from "patterns/AbstractFactoryChain";
+import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_setting_header } from "settings/SettingsComponents";
 import { TemplateFolderNewRowsHandler } from "settings/handlers/rows/TemplateFolderNewRowsHandler";
 import { PaginationSizeHandler } from "settings/handlers/rows/PaginationSizeHandler";
 import { RowShadowToggleHandler } from "settings/handlers/rows/RowShadowToggleHandler";
-import { AbstractHandler } from "patterns/AbstractHandler";
+import { FooterToggleHandler } from "settings/handlers/rows/FooterToggleHandler";
+import { FontSizeHandler } from "settings/handlers/rows/FontSizeHandler";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
+import { t } from "lang/helpers";
 
 class RowsSection extends AbstractChain<SettingHandlerResponse> {
     protected customHandle(settingHandlerResponse: SettingHandlerResponse): SettingHandlerResponse {
         const developer_section = settingHandlerResponse.containerEl.createDiv("configuration-section-container-rows");
         // title of the section
-        add_setting_header(developer_section, "Rows section", 'h3');
+        add_setting_header(developer_section, t("settings_row_section"), 'h3');
         settingHandlerResponse.containerEl = developer_section;
         return settingHandlerResponse;
     }
@@ -18,7 +21,9 @@ class RowsSection extends AbstractChain<SettingHandlerResponse> {
         return [
             new TemplateFolderNewRowsHandler(),
             new PaginationSizeHandler(),
-            new RowShadowToggleHandler()
+            new FontSizeHandler(),
+            new RowShadowToggleHandler(),
+            new FooterToggleHandler()
         ]
     }
 }

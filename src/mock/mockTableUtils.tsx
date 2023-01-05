@@ -55,7 +55,7 @@ export const generateYamlColumns = (
       isMetadata: false,
       skipPersist: true,
       csvCandidate: false,
-      config: DEFAULT_COLUMN_CONFIG,
+      config: { ...DEFAULT_COLUMN_CONFIG },
     };
   }
   return yamlColumns;

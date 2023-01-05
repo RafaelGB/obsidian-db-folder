@@ -1,10 +1,9 @@
 import { Notice } from "obsidian";
-import { DataviewApi, getAPI, isPluginEnabled } from "obsidian-dataview";
+import { DataviewApi, getAPI, isPluginEnabled, STask } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
 class DataviewProxy {
 
     private static instance: DataviewProxy;
-    private indexIsLoaded: boolean = false;
 
     /**
      * Check if dataview plugin is installed
@@ -16,11 +15,6 @@ class DataviewProxy {
             new Notice(`Dataview plugin is not installed. Please install it to load Databases.`);
             throw new Error('Dataview plugin is not installed');
         }
-        if (!this.indexIsLoaded) {
-            new Notice(`Dataview plugin is not loaded yet. Please wait a few seconds and try again.`);
-            throw new Error("Dataview index is not loaded");
-        }
-
         return getAPI(app);
     }
 
@@ -36,13 +30,14 @@ class DataviewProxy {
         return isPluginEnabled(app);
     }
 
-    isIndexLoaded(): boolean {
-        return this.indexIsLoaded;
+    isStasks(value: Literal): value is STask {
+        return (value as STask).task;
     }
 
-    setIndexIsLoaded(value: boolean) {
-        this.indexIsLoaded = value;
+    isSTaskArray(value: Literal): value is STask[] {
+        return (value as STask[]).every(v => this.isStasks(v));
     }
+
     /**
      * Singleton instance
      * @returns {VaultManager}

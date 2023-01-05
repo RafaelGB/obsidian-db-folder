@@ -1,10 +1,11 @@
 import { HeaderActionResponse } from "cdm/HeaderActionModel";
 import { AbstractHeaderAction } from "components/headerActions/handlers/AbstractHeaderAction";
 import React from "react";
-import { InputLabel, InputType } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import headerTypeComponent from "components/headerActions/HeaderTypeComponent";
 import { TableColumn } from "cdm/FolderModel";
 import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
+import { t } from "lang/helpers";
 
 export default class RelationTypeHeaderAction extends AbstractHeaderAction {
   globalHeaderActionResponse: HeaderActionResponse;
@@ -50,6 +51,6 @@ function numberTypeComponent(headerActionResponse: HeaderActionResponse) {
   return headerTypeComponent({
     onClick: relationOnClick,
     icon: <RelationBidirectionalIcon />,
-    label: InputLabel.RELATION,
+    label: t(InputType.RELATION),
   });
 }

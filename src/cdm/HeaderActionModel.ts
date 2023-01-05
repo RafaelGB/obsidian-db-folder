@@ -8,14 +8,14 @@ export type HeaderActionResponse = {
         setTypesEl: (expanded: null | HTMLElement) => void,
         setKeyState: (key: string) => void,
         keyState: string,
-        [key: string]: any | ((a: any) => void)
+        [key: string]: unknown | ((a: unknown) => void)
     }
 }
 
 export type HeaderActionModel = {
     label: string;
     icon: React.ReactNode;
-    onClick: (e: any) => Promise<void>;
+    onClick: (e: unknown) => Promise<void>;
 };
 export interface HeaderAction {
     setNext(handler: HeaderAction): HeaderAction;

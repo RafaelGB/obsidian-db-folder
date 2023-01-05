@@ -1,25 +1,40 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
-import { MetadataColumns } from "helpers/Constants";
+import { DynamicInputType, MetadataColumns } from "helpers/Constants";
+import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
-import { AbstractHandlerClass } from "patterns/AbstractHandler";
+import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 
 export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHandlerResponse> {
-  settingTitle: string = "Add empty column";
+  settingTitle: string = t("add_row_modal_add_empty_column_title");
   textElId: string = "SettingsModalManager-addEmptyColumn-input";
   handle(
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { info, actions } = addColumnModalManager.props.columnsState;
+    const { columnState } = addColumnModalManager.props;
     let newColumnName = "";
+    let typeOfNewColumn = "";
+    const typesRecord: Record<string, string> = {};
+    Object.values(DynamicInputType).forEach((value) => {
+      typesRecord[value] = t(value);
+    });
     const addNewColumnPromise = (): void => {
       const isEmpty = newColumnName.length === 0;
-      actions.addToLeft(
-        info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
-        isEmpty ? undefined : newColumnName
+      columnState.actions.addToLeft(
+        columnState.info.getAllColumns().find((o) => o.id === MetadataColumns.ADD_COLUMN),
+        isEmpty ? undefined : newColumnName,
+        typeOfNewColumn ? typeOfNewColumn : DynamicInputType.TEXT
       );
-      new Notice(isEmpty ? "New column added" : `"${newColumnName}" added to the table`, 1500);
+      new Notice(
+        isEmpty ?
+          t("add_row_modal_add_empty_notice_empty") :
+          t("add_row_modal_add_empty_notice_informed", newColumnName),
+        1500);
       (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";
+    }
+
+    const selectTypeHandler = (value: string): void => {
+      typeOfNewColumn = value;
     }
 
     /**************
@@ -27,7 +42,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
      **************/
     new Setting(containerEl)
       .setName(this.settingTitle)
-      .setDesc("Add a new column which do not exist yet in any row")
+      .setDesc(t("add_row_modal_add_empty_column_desc"))
       .addText(text => {
         text.inputEl.setAttribute("id", this.textElId);
         text.inputEl.onkeydown = (e: KeyboardEvent) => {
@@ -37,16 +52,21 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
               break;
           }
         };
-        text.setPlaceholder("Column name")
+        text.setPlaceholder(t("add_row_modal_add_empty_column_placeholder"))
           .setValue(newColumnName)
           .onChange(async (value: string): Promise<void> => {
             newColumnName = value;
           });
       })
-      .addButton((button) => {
+      .addDropdown((dropdown) => {
+        dropdown.addOptions(typesRecord);
+        dropdown.setValue(DynamicInputType.TEXT);
+        dropdown.onChange(selectTypeHandler);
+      })
+      .addExtraButton((button) => {
         button
           .setIcon("create-new")
-          .setTooltip("Add new column")
+          .setTooltip(t("add_row_modal_add_empty_column_button_tooltip"))
           .onClick(addNewColumnPromise);
       });
     return this.goNext(response);

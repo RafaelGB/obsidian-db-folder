@@ -25,7 +25,6 @@ import {
   TextFilter,
 } from "components/reducers/ColumnFilters";
 import { InputType, MetadataColumns } from "helpers/Constants";
-import { LOGGER } from "services/Logger";
 import { DatabaseHeaderProps, TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 import { AddColumnModalProps } from "cdm/ModalsModel";
@@ -36,15 +35,13 @@ import { AddColumnModalProps } from "cdm/ModalsModel";
  * @returns
  */
 export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
-  LOGGER.debug(`=>Header ${headerProps.column.columnDef}`);
   /** Properties of header */
   const { header, table } = headerProps;
   const { tableState } = table.options.meta;
 
-  const [columnInfo, columnActions] = tableState.columns((state) => [
-    state.info,
-    state.actions,
-  ]);
+  const columnsInfo = tableState.columns((state) => state.info);
+  const columnActions = tableState.columns((state) => state.actions);
+  const dataActions = tableState.data((state) => state.actions);
 
   const areColumnsFilterable = tableState.configState(
     (state) => state.ephimeral.enable_columns_filter
@@ -121,12 +118,13 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
 
   function handlerAddColumnToLeft() {
     const addColumnProps: AddColumnModalProps = {
-      columnsState: {
-        info: columnInfo,
+      dataState: { actions: dataActions },
+      columnState: {
+        info: columnsInfo,
         actions: columnActions,
       },
-      ddbbConfig: configInfo.getLocalSettings(),
-      filters: configInfo.getFilters(),
+      configState: { info: configInfo },
+      view: table.options.meta.view,
     };
     new AddColumnModal(table.options.meta.view, addColumnProps).open();
   }
@@ -134,8 +132,6 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const openMenuHandler: MouseEventHandler<HTMLDivElement> = (event) => {
     setMenuEl(menuEl ? null : event.currentTarget);
   };
-
-  LOGGER.debug(`<=Header ${label}`);
   return id !== MetadataColumns.ADD_COLUMN ? (
     <>
       <div

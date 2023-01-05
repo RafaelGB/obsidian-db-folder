@@ -3,8 +3,8 @@ import { flexRender } from "@tanstack/react-table";
 import { c } from "helpers/StylesHelper";
 import { TableHeaderProps } from "cdm/HeaderModel";
 
-export default function TableHeader(headerProps: TableHeaderProps) {
-  const { table, header, reorderColumn, headerIndex } = headerProps;
+export default function TableHeader(tableHeaderProps: TableHeaderProps) {
+  const { table, header, reorderColumn, headerIndex } = tableHeaderProps;
   const { view } = table.options.meta;
   const { columnOrder } = table.options.state;
   const [isDragging, setIsDragging] = React.useState(false);
@@ -52,15 +52,18 @@ export default function TableHeader(headerProps: TableHeaderProps) {
           setIsDragging(true);
           e.dataTransfer.effectAllowed = "move";
           e.dataTransfer.setData("dbfolderDragId", header.column.id);
+          e.currentTarget.classList.add(c("dnd-dragging"));
         }}
         onDragEnter={(e) => {
-          dndRef.current.classList.add(c("over"));
+          e.currentTarget.classList.add(c("dnd-over"));
         }}
         onDragLeave={(e) => {
-          dndRef.current.classList.remove(c("over"));
+          e.currentTarget.classList.remove(c("dnd-over"));
         }}
         onDragEnd={(e) => {
           setIsDragging(false);
+          e.currentTarget.classList.remove(c("dnd-dragging"));
+          e.currentTarget.classList.remove(c("dnd-over"));
         }}
         onDragOver={(e) => {
           if (e.preventDefault) {

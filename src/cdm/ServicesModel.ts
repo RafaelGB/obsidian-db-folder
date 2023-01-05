@@ -1,7 +1,7 @@
 import { TFile } from "obsidian"
 import { TableColumn } from "cdm/FolderModel"
 import { LocalSettings } from "cdm/SettingsModel"
-import { Literal } from "obsidian-dataview"
+import { Literal, WrappedLiteral } from "obsidian-dataview"
 
 export type EditArguments = {
     file: TFile,
@@ -10,4 +10,31 @@ export type EditArguments = {
     columns: TableColumn[],
     ddbbConfig: LocalSettings,
     option: string
+}
+
+/********************************
+ *      PARSE SERVICE MODEL
+********************************/
+export abstract class TypeParser<T> {
+    config: LocalSettings;
+
+    public setConfig = (config: LocalSettings) => {
+        this.config = config;
+        return this;
+    }
+
+    public beforeParse(...args: unknown[]) {
+        // Do nothing
+    }
+
+    public parse(wrapped: WrappedLiteral): T {
+        this.beforeParse();
+        return wrapped.value as T;
+    }
+
+    public parseLiteral = (wrapped: WrappedLiteral): T => {
+        this.beforeParse();
+        const parsed = this.parse(wrapped);
+        return parsed;
+    }
 }

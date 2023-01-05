@@ -8,6 +8,12 @@ export type RowSelectOption = {
     label: string,
 }
 
+export type ColumnOption = {
+    value: string;
+    label: string;
+    color: string;
+}
+
 export type SelectValue = {
     label: string;
     value: string;
