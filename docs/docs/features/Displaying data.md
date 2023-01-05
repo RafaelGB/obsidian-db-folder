@@ -1,6 +1,14 @@
 ## Footer
 
-You can enable a footer from the database or plugin global setting under `Rows section`. For now, it only works with the number type column and only displays the sum of the values.
+You can enable a footer from the database or plugin global setting under `Rows section`. You can choose between a number of options :
+
+-   Percentage of empty cells
+-   Percentage of cells with a value
+-   Count of empty cells
+-   Count of cells with a value
+-   Count of unique values
+-   Formula
+-   Sum of number columns
 
 ## Filtering
 
@@ -10,11 +18,12 @@ After opening the filter modal via the obsidian bar button or the command `DB Fo
 
 You can create a `group filter` within a `group filter` for more granular filtering, and you can delete or rename them. Keep in mind that deleting a `parent group filter` will delete all the `children group filters` within it.
 
-Each `group filter` will have a dedicated **named button** on the database top bar to quickly enable/disable it. It's important to note that the state of all the filters is determined by another button. So in this case, you have to enable both the **named button** and the **filter button** for `group filters` to work. You can also toggle the filter state by using the command `DB Folder: Toggle filters`.
+Each `group filter` will have a dedicated **named colored button** on the database top bar to quickly enable/disable it. It's important to note that the state of all the filters is determined by another button. So in this case, you have to enable both the **named button** and the **filter button** for `group filters` to work. You can also toggle the filter state by using the command `DB Folder: Toggle filters`.
 
 You can also filter each column separately via the search filters which can be enabled by the icon on the top left.
 
 > The database filters hold priority over the dataview query source filters.
+> You can make search/filter bar always visible in the plugin global settings under `Helpers/Commands related to the table`
 
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197636117-9268cbbe-fcb4-464e-9840-4c966e503589.mov" type="video/mp4">
@@ -22,7 +31,7 @@ You can also filter each column separately via the search filters which can be e
 
 ## Refresh Database
 
-There is no actual refresh button, but you can use the `activate/desactive filter` button to refresh the database.
+The databaes should refresh after every change, but you can use the `activate/desactive filter` button if you want to manually refresh it. On the other hand, you can disable auto-refreshing when an external change is detected in the plugin global settings.
 
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197636392-0c1c17fa-8f21-47dc-8c1f-887ca96d4bab.mov" type="video/mp4">
