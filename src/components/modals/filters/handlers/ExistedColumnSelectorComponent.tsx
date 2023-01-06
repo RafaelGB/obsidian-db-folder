@@ -1,6 +1,4 @@
 import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { StyleVariables } from "helpers/Constants";
 import React from "react";

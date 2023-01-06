@@ -97,7 +97,6 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
   LOGGER.debug(`=> obtainAllPossibleRows.  folderPath:${folderPath}`);
   const rows: Array<RowDataType> = [];
   let folderFiles = await sourceDataviewPages(ddbbConfig, folderPath, columns);
-  folderFiles = folderFiles.where(p => !p[DatabaseCore.FRONTMATTER_KEY]);
   // Config filters asociated with the database
   if (filters.enabled && filters.conditions.length > 0) {
     folderFiles = folderFiles.where(p => tableFilter(filters.conditions, p, ddbbConfig));
@@ -113,61 +112,61 @@ export async function obtainAllPossibleRows(folderPath: string, ddbbConfig: Loca
 
 export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath: string, columns?: TableColumn[]): Promise<DataArray<Record<string, Literal>>> {
   let pagesResult: DataArray<Record<string, Literal>>;
-  switch (ddbbConfig.source_data) {
-    case SourceDataTypes.TAG:
-      pagesResult = DataviewService.getDataviewAPI().pages(`${ddbbConfig.source_form_result.split(',').join(' OR ')}`);
-      break;
-    case SourceDataTypes.INCOMING_LINK:
-      pagesResult = DataviewService.getDataviewAPI().pages(`[[${ddbbConfig.source_form_result}]]`);
-      break;
-    case SourceDataTypes.OUTGOING_LINK:
-      pagesResult = DataviewService.getDataviewAPI().pages(`outgoing([[${ddbbConfig.source_form_result}]])`);
-      break;
-    case SourceDataTypes.QUERY:
-      pagesResult = await obtainQueryResult(
-        generateDataviewTableQuery(
-          columns,
-          ddbbConfig.source_form_result),
-        folderPath
-      );
-      break;
-    case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
-      if (!folderPath || folderPath === '/') {
-        pagesResult = DataviewService.getDataviewAPI().pages()
-          .where((p: NoteInfoPage) => !p.file.folder);
-      } else {
-        pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
-          .where((p: NoteInfoPage) => p.file.folder === folderPath);
-      }
-      break;
-    default:
-      pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
+  try {
+    switch (ddbbConfig.source_data) {
+      case SourceDataTypes.TAG:
+        pagesResult = DataviewService.getDataviewAPI().pages(`${ddbbConfig.source_form_result.split(',').join(' OR ')}`);
+        break;
+      case SourceDataTypes.INCOMING_LINK:
+        pagesResult = DataviewService.getDataviewAPI().pages(`[[${ddbbConfig.source_form_result}]]`);
+        break;
+      case SourceDataTypes.OUTGOING_LINK:
+        pagesResult = DataviewService.getDataviewAPI().pages(`outgoing([[${ddbbConfig.source_form_result}]])`);
+        break;
+      case SourceDataTypes.QUERY:
+        pagesResult = await obtainQueryResult(
+          generateDataviewTableQuery(
+            columns,
+            ddbbConfig.source_form_result),
+          folderPath
+        );
+        break;
+      case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
+        if (!folderPath || folderPath === '/') {
+          pagesResult = DataviewService.getDataviewAPI().pages()
+            .where((p: NoteInfoPage) => !p.file.folder);
+        } else {
+          pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`)
+            .where((p: NoteInfoPage) => p.file.folder === folderPath);
+        }
+        break;
+      default:
+        pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
+    }
+  } catch (error) {
+    const msg = `Error obtaining pages result. Current folder loaded instead`;
+    LOGGER.error(msg, error);
+    new Notice(msg, 10000);
+    pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }
   return pagesResult;
 }
 
 async function obtainQueryResult(query: string, folderPath: string): Promise<DataArray<Record<string, Literal>>> {
-  try {
-    const result = await DataviewService.getDataviewAPI().query(query);
-    if (!result.successful || result.value.type !== 'table') {
-      throw new Error(`Query ${query} failed`);
-    }
-    const arrayRecord: Record<string, Literal>[] = [];
-    const headers = result.value.headers;
-    result.value.values.forEach((row) => {
-      const recordResult: Record<string, Literal> = {};
-      headers.forEach((header, index) => {
-        recordResult[header] = row[index];
-      })
-      arrayRecord.push(recordResult);
-    });
-    return DataviewService.getDataviewAPI().array(arrayRecord);
-  } catch (error) {
-    const msg = `Error obtaining query result: "${query}", current folder loaded instead`;
-    LOGGER.error(msg, error);
-    new Notice(msg, 10000);
-    return DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
+  const result = await DataviewService.getDataviewAPI().query(query);
+  if (!result.successful || result.value.type !== 'table') {
+    throw new Error(`Query ${query} failed`);
   }
+  const arrayRecord: Record<string, Literal>[] = [];
+  const headers = result.value.headers;
+  result.value.values.forEach((row) => {
+    const recordResult: Record<string, Literal> = {};
+    headers.forEach((header, index) => {
+      recordResult[header] = row[index];
+    })
+    arrayRecord.push(recordResult);
+  });
+  return DataviewService.getDataviewAPI().array(arrayRecord);
 }
 
 export function obtainCellFromFile(path: string, column: TableColumn): Literal {
