@@ -412,6 +412,7 @@ export default class DBFolderPlugin extends Plugin {
 						await view.reloadDatabase();
 					}
 				}
+				await sleep(2000);
 				/**
 				 * Once the index is ready, we can start listening for metadata changes.
 				 */

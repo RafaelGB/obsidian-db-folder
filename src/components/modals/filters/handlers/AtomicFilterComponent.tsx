@@ -35,6 +35,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
   const onchangeExistedColumnHandler =
     (conditionIndex: number[], level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
+      console.log("onchangeExistedColumnHandler");
       commonModifyFilter(
         conditionIndex,
         level,
