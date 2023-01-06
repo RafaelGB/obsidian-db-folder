@@ -1,8 +1,8 @@
-import { MenuItem } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { OperatorFilter, StyleVariables } from "helpers/Constants";
 import { t } from "lang/helpers";
+import en from "lang/locale/en";
 import React from "react";
 
 const OperatorSelectorComponent = (selectorProps: {
@@ -19,6 +19,7 @@ const OperatorSelectorComponent = (selectorProps: {
   return (
     <FormControl fullWidth>
       <Select
+        native
         value={currentOp}
         size="small"
         onChange={onChange(recursiveIndex, level)}
@@ -37,12 +38,12 @@ const OperatorSelectorComponent = (selectorProps: {
       >
         {Object.entries(OperatorFilter).map(([key, value], index) => {
           return (
-            <MenuItem
+            <option
               value={key}
               key={`MenuItem-${index}-OperatorSelector-${value[0]}-${level}-${recursiveIndex[level]}`}
             >
-              {t(value[1] as any)}
-            </MenuItem>
+              {t(value[1] as keyof typeof en)}
+            </option>
           );
         })}
       </Select>
