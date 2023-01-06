@@ -408,7 +408,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     show_metadata_inlinks: false,
     show_metadata_outlinks: false,
     source_data: SourceDataTypes.CURRENT_FOLDER,
-    source_form_result: 'root',
+    source_form_result: '',
     source_destination_path: '/',
     row_templates_folder: '/',
     current_row_template: '',
