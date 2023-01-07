@@ -7,6 +7,12 @@ export default {
   'menu_pane_open_as_db_action': 'Open as database folder',
   'menu_pane_open_as_md_action': 'Open as Markdown',
   /** OPERATOR FILTERS */
+  'operator_equal': '=',
+  'operator_not_equal': '!=',
+  'operator_greater_than': '>',
+  'operator_less_than': '<',
+  'operator_greater_than_or_equal': '>=',
+  'operator_less_than_or_equal': '<=',
   'operator_contains': 'Contains',
   'operator_does_not_contain': 'Does not contain',
   'operator_starts_with': 'Starts with',

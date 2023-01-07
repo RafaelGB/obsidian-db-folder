@@ -53,7 +53,7 @@ const ExistedColumnSelectorComponent = (selectorProps: {
         </optgroup>
         <optgroup label="Metadata Fields">
           <option
-            value={"__filename__"}
+            value={"file.name"}
             key={`MenuItem-Metadata-filename--${level}-${recursiveIndex[level]}`}
           >
             Filename

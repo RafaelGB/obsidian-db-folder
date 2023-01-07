@@ -323,12 +323,12 @@ export const EphimeralConfiguration: EphimeralSettings = Object.freeze({
  *                            FILTERS
  ******************************************************************************/
 export const OperatorFilter = Object.freeze({
-  EQUAL: ['EQUAL', '='],
-  NOT_EQUAL: ['NOT_EQUAL', '!='],
-  GREATER_THAN: ['GREATER_THAN', '>'],
-  LESS_THAN: ['LESS_THAN', '<'],
-  GREATER_THAN_OR_EQUAL: ['GREATER_THAN_OR_EQUAL', '>='],
-  LESS_THAN_OR_EQUAL: ['LESS_THAN_OR_EQUAL', '<='],
+  EQUAL: ['EQUAL', 'operator_equal'],
+  NOT_EQUAL: ['NOT_EQUAL', 'operator_not_equal'],
+  GREATER_THAN: ['GREATER_THAN', 'operator_greater_than'],
+  LESS_THAN: ['LESS_THAN', 'operator_less_than'],
+  GREATER_THAN_OR_EQUAL: ['GREATER_THAN_OR_EQUAL', 'operator_greater_than_or_equal'],
+  LESS_THAN_OR_EQUAL: ['LESS_THAN_OR_EQUAL', 'operator_less_than_or_equal'],
   CONTAINS: ['CONTAINS', 'operator_contains'],
   NOT_CONTAINS: ['NOT_CONTAINS', 'operator_does_not_contain'],
   STARTS_WITH: ['STARTS_WITH', 'operator_starts_with'],
