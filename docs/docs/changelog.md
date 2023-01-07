@@ -1,7 +1,15 @@
+## 3.2.1
+- Bulk delete and duplicate options (Shift + Click to select a row OR right click on context header) [#548](https://github.com/RafaelGB/obsidian-db-folder/issues/548)
+### Improved
+- Filters now include filename field as option [#659](https://github.com/RafaelGB/obsidian-db-folder/issues/659)
+### No longer broken
+- Keyboard arrow navigation includes formula, rollups and metadata too [#731](https://github.com/RafaelGB/obsidian-db-folder/issues/731)
+- Filters includes information about other ddbbs [#737](https://github.com/RafaelGB/obsidian-db-folder/issues/737)
 ## 3.2.0
 ### Shiny new things
 - Tabs between cells & arrow keys navigation [#40](https://github.com/RafaelGB/obsidian-db-folder/issues/40)
 - Columns vertical alignment options added [#444](https://github.com/RafaelGB/obsidian-db-folder/issues/444)
+- A better error handler with tags [#721](https://github.com/RafaelGB/obsidian-db-folder/issues/721)
 ### Improved
 - Improved the performance of the plugin around 15%
 - Refactor of formula modules to expose internal functions (more info on [API model](https://github.com/RafaelGB/obsidian-db-folder/blob/master/src/cdm/ModulesFnModel.ts))
