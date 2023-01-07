@@ -55,8 +55,12 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     column.config = DEFAULT_COLUMN_CONFIG;
                 } else {
                     // General config
-                    const parsedIsInline: boolean = this.parseBoolean(column.config.isInline);
-                    column.config.isInline = parsedIsInline;
+                    column.config = {
+                        ...DEFAULT_COLUMN_CONFIG,
+                        ...column.config
+                    }
+
+                    column.config.isInline = this.parseBoolean(column.config.isInline);
                     column = this.marshallParticularConfigInfo(column);
                 }
                 // Update mashaller response
