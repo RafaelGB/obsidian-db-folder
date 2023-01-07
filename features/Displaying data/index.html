@@ -683,22 +683,32 @@
   <h1>Displaying data</h1>
 
 <h2 id="footer">Footer</h2>
-<p>You can enable a footer from the database or plugin global setting under <code>Rows section</code>. For now, it only works with the number type column and only displays the sum of the values.</p>
+<p>You can enable a footer from the database or plugin global setting under <code>Rows section</code>. You can choose between a number of options :</p>
+<ul>
+<li>Percentage of empty cells</li>
+<li>Percentage of cells with a value</li>
+<li>Count of empty cells</li>
+<li>Count of cells with a value</li>
+<li>Count of unique values</li>
+<li>Formula</li>
+<li>Sum of number columns</li>
+</ul>
 <h2 id="filtering">Filtering</h2>
 <p>You have to use the database top bar, which can be toggled by the search icon in the page header, or simply by using <code>CMD/CTRL+F</code>. You can create one or multiple filters or you can search (normally or with regex) for any metadata displayed in the database.</p>
 <p>After opening the filter modal via the obsidian bar button or the command <code>DB Folder: OPen filters</code>, you can either create a <code>filter</code> or a <code>group filter</code>. The difference is that a <code>group filter</code> can include many <code>filters</code> with either an <strong>AND</strong> or an <strong>OR</strong> type of relationship, whereas <code>filters</code> can only have an <strong>AND</strong> type of relationship between them.</p>
 <p>You can create a <code>group filter</code> within a <code>group filter</code> for more granular filtering, and you can delete or rename them. Keep in mind that deleting a <code>parent group filter</code> will delete all the <code>children group filters</code> within it.</p>
-<p>Each <code>group filter</code> will have a dedicated <strong>named button</strong> on the database top bar to quickly enable/disable it. It's important to note that the state of all the filters is determined by another button. So in this case, you have to enable both the <strong>named button</strong> and the <strong>filter button</strong> for <code>group filters</code> to work. You can also toggle the filter state by using the command <code>DB Folder: Toggle filters</code>.</p>
+<p>Each <code>group filter</code> will have a dedicated <strong>named colored button</strong> on the database top bar to quickly enable/disable it. It's important to note that the state of all the filters is determined by another button. So in this case, you have to enable both the <strong>named button</strong> and the <strong>filter button</strong> for <code>group filters</code> to work. You can also toggle the filter state by using the command <code>DB Folder: Toggle filters</code>.</p>
 <p>You can also filter each column separately via the search filters which can be enabled by the icon on the top left.</p>
 <blockquote>
-<p>The database filters hold priority over the dataview query source filters.</p>
+<p>The database filters hold priority over the dataview query source filters.
+You can make search/filter bar always visible in the plugin global settings under <code>Helpers/Commands related to the table</code></p>
 </blockquote>
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197636117-9268cbbe-fcb4-464e-9840-4c966e503589.mov" type="video/mp4">
 </video>
 
 <h2 id="refresh-database">Refresh Database</h2>
-<p>There is no actual refresh button, but you can use the <code>activate/desactive filter</code> button to refresh the database.</p>
+<p>The databaes should refresh after every change, but you can use the <code>activate/desactive filter</code> button if you want to manually refresh it. On the other hand, you can disable auto-refreshing when an external change is detected in the plugin global settings.</p>
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197636392-0c1c17fa-8f21-47dc-8c1f-887ca96d4bab.mov" type="video/mp4">
 </video>

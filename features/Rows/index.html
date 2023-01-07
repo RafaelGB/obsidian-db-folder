@@ -321,6 +321,27 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#row-font-size" class="md-nav__link">
+    Row Font Size
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#row-navigation" class="md-nav__link">
+    Row Navigation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-rows-from-top-to-bottom" class="md-nav__link">
+    Display Rows From Top to Bottom
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -606,6 +627,27 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#row-font-size" class="md-nav__link">
+    Row Font Size
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#row-navigation" class="md-nav__link">
+    Row Navigation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-rows-from-top-to-bottom" class="md-nav__link">
+    Display Rows From Top to Bottom
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -627,7 +669,7 @@
   <h1>Rows</h1>
 
 <h2 id="row-number">Row Number</h2>
-<p>To help with displaying a lot of data, by default the database displays only 10 rows and allows changing the pages using the numbers displayed in the bottom right or by using the commands <code>DB Folder: Go to previous/next page</code>. You can change the number of rows displayed per page in the database settings under <code>Rows section</code>.</p>
+<p>To help with displaying a lot of data, by default the database displays only 10 rows and allows changing the pages using the numbers displayed in the bottom right or by using the commands <code>DB Folder: Go to previous/next page</code>. You can change the number of rows displayed per page in the database settings under <code>Rows section</code>, or you can change the default number of rows when creating a database in the global plugin settings.</p>
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197636349-f473a874-4c6a-434e-8b90-56aa05f368f6.mov" type="video/mp4">
 </video>
@@ -639,6 +681,21 @@
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197636446-9f17f8a7-baa5-4b7e-b910-557b0c5a478c.mov" type="video/mp4">
 </video>
+
+<h2 id="row-font-size">Row Font Size</h2>
+<p>You can select the font size of the cells in the database settings, you can set a default font size in the plugin's global settings for all newly created databases.</p>
+<h2 id="row-navigation">Row Navigation</h2>
+<p>You can navigate the cells by using <code>Tab</code> or the arrow keys. You can also edit each one by using the <code>Enter</code> key.</p>
+<h2 id="display-rows-from-top-to-bottom">Display Rows From Top to Bottom</h2>
+<p>If you don't use pagination, you can enable a full pane display of the rows by creating and enabling this CSS snippet. Keep in mind, though, that when enabling the search/filter bar, the last row will not be accessible.</p>
+<pre><code class="language-css">@media {
+  .database-plugin__scroll-container {
+    will-change: transform;
+    width: 100%;
+    height: 100%;
+  }
+}
+</code></pre>
 
               
             </article>
