@@ -26,6 +26,8 @@ class Log implements LogInterface {
     private constructor() {
         this.isDebugModeEnabled = false;
         this.levelInfo = 0;
+        this.configureLogger();
+
     }
 
     public setDebugMode(isDebugModeEnabled: boolean) {
@@ -41,7 +43,7 @@ class Log implements LogInterface {
 
     private configureLogger() {
         if (this.levelInfo >= LevelInfoRecord.debug && this.isDebugModeEnabled) {
-            this.debug = console.log.bind(window.console, `[DEBUG]`);
+            this.debug = console.log.bind(console, `[DEBUG]`);
         } else {
             this.debug = () => {
                 // Disable debug mode
@@ -49,7 +51,7 @@ class Log implements LogInterface {
         }
 
         if (this.levelInfo >= LevelInfoRecord.info && this.isDebugModeEnabled) {
-            this.info = console.log.bind(window.console, `[INFO]`);
+            this.info = console.log.bind(console, `[INFO]`);
         } else {
             this.info = () => {
                 // Disable info mode
@@ -57,7 +59,7 @@ class Log implements LogInterface {
         }
 
         if (this.levelInfo >= LevelInfoRecord.warn && this.isDebugModeEnabled) {
-            this.warn = console.log.bind(window.console, `[WARN]`);
+            this.warn = console.log.bind(console, `[WARN]`);
         } else {
             this.warn = () => {
                 // Disable warn mode
@@ -65,7 +67,7 @@ class Log implements LogInterface {
         }
 
         if (this.levelInfo >= LevelInfoRecord.error && this.isDebugModeEnabled) {
-            this.error = console.log.bind(window.console, `[ERROR]`);
+            this.error = console.log.bind(console, `[ERROR]`);
         } else {
             this.error = () => {
                 // Disable error mode
