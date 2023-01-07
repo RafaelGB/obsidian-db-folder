@@ -41,7 +41,12 @@ function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbCon
         }
         return groupResult;
     }
-    const filterableValue = ParseService.parseLiteral(p[(filter as AtomicFilter).field], InputType.MARKDOWN, ddbbConfig);
+    const field = (filter as AtomicFilter).field;
+    let literalToCheck: Literal = field.split('.').reduce((acc, cur) => {
+        return acc[cur];
+    }, p);
+
+    const filterableValue = ParseService.parseLiteral(literalToCheck, InputType.MARKDOWN, ddbbConfig);
     // Atomic filter
     const operator = (filter as AtomicFilter).operator;
     const value = (filter as AtomicFilter).value;

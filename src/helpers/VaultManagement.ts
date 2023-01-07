@@ -127,8 +127,7 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
         pagesResult = await obtainQueryResult(
           generateDataviewTableQuery(
             columns,
-            ddbbConfig.source_form_result),
-          folderPath
+            ddbbConfig.source_form_result)
         );
         break;
       case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
@@ -146,13 +145,13 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
   } catch (error) {
     const msg = `Error obtaining pages result. Current folder loaded instead`;
     LOGGER.error(msg, error);
-    new Notice(msg, 10000);
+    new Notice(msg, 4000);
     pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }
   return pagesResult;
 }
 
-async function obtainQueryResult(query: string, folderPath: string): Promise<DataArray<Record<string, Literal>>> {
+async function obtainQueryResult(query: string): Promise<DataArray<Record<string, Literal>>> {
   const result = await DataviewService.getDataviewAPI().query(query);
   if (!result.successful || result.value.type !== 'table') {
     throw new Error(`Query ${query} failed`);

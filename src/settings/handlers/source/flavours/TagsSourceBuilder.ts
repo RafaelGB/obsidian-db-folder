@@ -46,17 +46,17 @@ export class TagSourceBuilder {
                     });
 
                 cb.inputEl.style.width = "auto";
-            }).addExtraButton((button) => {
-                button.setIcon("cross")
+            }).addButton((button) => {
+                button.setButtonText("Reset")
                     .setTooltip(t("settings_source_form_tag_clear_button_tooltip"))
                     .onClick(async () => {
                         // Clear all tags
                         this.selectedTags = [];
-                        this.initSuggestions();
                         suggester.setSuggestions(this.tagRecords);
                         await this.view.diskConfig.updateConfig({
                             source_form_result: ""
                         });
+                        this.initSuggestions();
                         this.tagsLabel.innerHTML = "None";
                         this.tagsContainer.style.display = "none";
                     });
