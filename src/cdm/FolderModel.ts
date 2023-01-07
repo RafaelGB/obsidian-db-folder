@@ -50,7 +50,7 @@ export interface ConfigColumn {
     task_hide_completed?: boolean;
     // Formulas
     formula_query?: string;
-    persist_formula?: boolean;
+    persist_formula: boolean;
     // Relations
     related_note_path?: string;
     // Rollups
