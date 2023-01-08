@@ -23,6 +23,7 @@ export class LoggerLevelInfoDropDownHandler extends AbstractSettingsHandler {
                 t('settings_developer_log_level_desc'),
                 settingsManager.plugin.settings.global_settings.logger_level_info,
                 {
+                    trace: 'trace',
                     debug: 'debug',
                     info: 'info',
                     warn: 'warn',

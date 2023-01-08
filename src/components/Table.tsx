@@ -192,9 +192,9 @@ export function Table(tableData: TableDataType) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    debugTable: globalConfig.enable_debug_mode,
-    debugHeaders: globalConfig.enable_debug_mode,
-    debugColumns: globalConfig.enable_debug_mode,
+    debugAll:
+      globalConfig.enable_debug_mode &&
+      globalConfig.logger_level_info === "trace",
     autoResetPageIndex: false,
   });
 

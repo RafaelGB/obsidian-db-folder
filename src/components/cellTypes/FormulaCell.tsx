@@ -31,7 +31,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         .toString();
 
       // If the formula cell is the same as the rendered formula, do nothing
-      if (cell.getValue() === formulaRef.current.innerHTML) return;
+      if (cell.getValue() === formulaResponse) return;
 
       await MarkdownService.renderMarkdown(
         defaultCell,
@@ -55,7 +55,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
         false,
-        tableColumn.config.persist_formula
+        tableColumn.config.persist_formula ?? false
       );
     });
   }, [

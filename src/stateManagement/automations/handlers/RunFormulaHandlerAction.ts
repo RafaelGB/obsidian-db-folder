@@ -18,6 +18,7 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
     private evalInput(input: string, row: RowDataType, config: LocalSettings, db: {
         [key: string]: unknown;
     }): Literal {
+        LOGGER.debug(`Evaluating formula from row ${row.__note__.filepath}: `, input);
         const dynamicJS = 'return `' + input + '`';
         const func = new Function('row', 'ddbbConfig', 'db', dynamicJS);
         const result = func(row, config, db);
