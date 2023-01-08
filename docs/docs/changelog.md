@@ -1,3 +1,8 @@
+## 3.2.2
+### No longer broken
+Hotfix about formula and rollup:
+- Not desired hahaviour of persisting [#738](https://github.com/RafaelGB/obsidian-db-folder/issues/738)
+- simple formulas do not were displayed in some cases [#743](https://github.com/RafaelGB/obsidian-db-folder/issues/743)
 ## 3.2.1
 ### Shiny new things
 - Bulk delete and duplicate options (Shift + Click to select a row OR right click on context header) [#548](https://github.com/RafaelGB/obsidian-db-folder/issues/548)
