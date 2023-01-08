@@ -46,22 +46,22 @@ const RollupCell = (mdProps: CellComponentProps) => {
         5
       );
 
+      if (rollupCell === rollupResponse) return;
       // Save formula response on disk
-      if (tableColumn.config.persist_rollup && rollupCell !== rollupResponse) {
-        const newCell = ParseService.parseRowToLiteral(
-          formulaRow,
-          tableColumn,
-          rollupResponse
-        );
+      const newCell = ParseService.parseRowToLiteral(
+        formulaRow,
+        tableColumn,
+        rollupResponse
+      );
 
-        dataActions.updateCell(
-          row.index,
-          tableColumn,
-          newCell,
-          columnsInfo.getAllColumns(),
-          configInfo.getLocalSettings()
-        );
-      }
+      dataActions.updateCell(
+        row.index,
+        tableColumn,
+        newCell,
+        columnsInfo.getAllColumns(),
+        configInfo.getLocalSettings(),
+        tableColumn.config.persist_rollup ?? false
+      );
     }
   }, [relation]);
   return (

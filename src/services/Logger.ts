@@ -1,4 +1,5 @@
 export interface LogInterface {
+    trace(...args: unknown[]): void;
     debug(...args: unknown[]): void;
     info(...args: unknown[]): void;
     warn(...args: unknown[]): void;
@@ -8,6 +9,7 @@ export interface LogInterface {
 }
 
 const LevelInfoRecord: Record<string, number> = {
+    trace: 4,
     debug: 3,
     info: 2,
     warn: 1,
@@ -18,6 +20,7 @@ class Log implements LogInterface {
     private static instance: LogInterface;
     private isDebugModeEnabled: boolean;
     private levelInfo: number;
+    public trace: (...args: unknown[]) => void;
     public debug: (...args: unknown[]) => void;
     public info: (...args: unknown[]) => void;
     public warn: (...args: unknown[]) => void;
@@ -42,6 +45,14 @@ class Log implements LogInterface {
     }
 
     private configureLogger() {
+        if (this.levelInfo >= LevelInfoRecord.trace && this.isDebugModeEnabled) {
+            this.trace = console.log.bind(console, `[TRACE]`);
+        } else {
+            this.trace = () => {
+                // Disable trace mode
+            };
+        }
+
         if (this.levelInfo >= LevelInfoRecord.debug && this.isDebugModeEnabled) {
             this.debug = console.log.bind(console, `[DEBUG]`);
         } else {
