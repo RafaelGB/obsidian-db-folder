@@ -29,8 +29,21 @@ class Log implements LogInterface {
     private constructor() {
         this.isDebugModeEnabled = false;
         this.levelInfo = 0;
-        this.configureLogger();
-
+        this.trace = () => {
+            // Disable trace mode
+        }
+        this.debug = () => {
+            // Disable debug mode
+        }
+        this.info = () => {
+            // Disable info mode
+        }
+        this.warn = () => {
+            // Disable warn mode
+        }
+        this.error = () => {
+            // Disable error mode
+        }
     }
 
     public setDebugMode(isDebugModeEnabled: boolean) {
