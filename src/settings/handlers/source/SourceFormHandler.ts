@@ -29,6 +29,9 @@ export class SourceFormHandler extends AbstractSettingsHandler {
             case SourceDataTypes.QUERY:
                 this.queryHandler(view, containerEl, columns);
                 break;
+            case SourceDataTypes.QUERY_JS:
+                this.queryJsHandler(view, containerEl);
+                break;
             default:
             //Current folder
         }
@@ -92,6 +95,42 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                                 .catch((e) => {
                                     new Notice(t("settings_source_form_query_notice_error", query, e.message), 10000);
                                 });
+                        }
+                    });
+            });
+        destinationFolderSetting(view, containerEl);
+    }
+
+    private queryJsHandler(view: DatabaseView, containerEl: HTMLElement) {
+        const query_promise = async (value: string): Promise<void> => {
+            if (this.sourceFormResultTimeout) {
+                clearTimeout(this.sourceFormResultTimeout);
+            }
+            this.sourceFormResultTimeout = setTimeout(() => {
+                // update settings
+                view.diskConfig.yaml.config.source_form_result = value;
+                view.diskConfig.updateConfig({ source_form_result: value });
+            }, 1500);
+
+        };
+
+        new Setting(containerEl)
+            .setName(t("settings_source_form_query_js_title"))
+            .setDesc(t("settings_source_form_query_js_desc"))
+            .addTextArea((textArea) => {
+                textArea.inputEl.addClass(c("textarea-setting"));
+                textArea.setValue(view.diskConfig.yaml.config.source_form_result);
+                textArea.setPlaceholder(t("settings_source_form_query_js_placeholder"));
+                textArea.onChange(query_promise);
+            }).addExtraButton((cb) => {
+                cb.setIcon("check")
+                    .setTooltip(t("settings_source_form_query_js_button_tooltip"))
+                    .onClick(async (): Promise<void> => {
+                        try {
+                            DataviewService.getDataviewAPI().pages(view.diskConfig.yaml.config.source_form_result);
+                            new Notice(t("settings_source_form_query_js_notice_validate"), 2000);
+                        } catch (e) {
+                            new Notice(t("settings_source_form_query_js_notice_error", e.message), 10000);
                         }
                     });
             });

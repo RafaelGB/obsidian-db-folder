@@ -291,6 +291,7 @@ export const SourceDataTypes = Object.freeze({
   OUTGOING_LINK: 'outgoing_link',
   INCOMING_LINK: 'incoming_link',
   QUERY: 'query',
+  QUERY_JS: 'query_js',
 });
 
 export const CellSizeOptions = Object.freeze({

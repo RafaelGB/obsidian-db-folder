@@ -115,13 +115,16 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
   try {
     switch (ddbbConfig.source_data) {
       case SourceDataTypes.TAG:
-        pagesResult = DataviewService.getDataviewAPI().pages(`${ddbbConfig.source_form_result.split(',').join(' OR ')}`);
+        pagesResult = obtainPagesResult(`${ddbbConfig.source_form_result.split(',').join(' OR ')}`);
         break;
       case SourceDataTypes.INCOMING_LINK:
-        pagesResult = DataviewService.getDataviewAPI().pages(`[[${ddbbConfig.source_form_result}]]`);
+        pagesResult = obtainPagesResult(`[[${ddbbConfig.source_form_result}]]`);
         break;
       case SourceDataTypes.OUTGOING_LINK:
-        pagesResult = DataviewService.getDataviewAPI().pages(`outgoing([[${ddbbConfig.source_form_result}]])`);
+        pagesResult = obtainPagesResult(`outgoing([[${ddbbConfig.source_form_result}]])`);
+        break;
+      case SourceDataTypes.QUERY_JS:
+        pagesResult = obtainPagesResult(ddbbConfig.source_form_result);
         break;
       case SourceDataTypes.QUERY:
         pagesResult = await obtainQueryResult(
@@ -130,6 +133,7 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
             ddbbConfig.source_form_result)
         );
         break;
+
       case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
         if (!folderPath || folderPath === '/') {
           pagesResult = DataviewService.getDataviewAPI().pages()
@@ -149,6 +153,10 @@ export async function sourceDataviewPages(ddbbConfig: LocalSettings, folderPath:
     pagesResult = DataviewService.getDataviewAPI().pages(`"${folderPath}"`);
   }
   return pagesResult;
+}
+
+function obtainPagesResult(pageQuery: string): DataArray<Record<string, Literal>> {
+  return DataviewService.getDataviewAPI().pages(pageQuery);
 }
 
 async function obtainQueryResult(query: string): Promise<DataArray<Record<string, Literal>>> {

@@ -26,6 +26,7 @@ export default {
   "outgoing_link": "Lien sortant",
   "incoming_link": "Lien entrant",
   "query": "Requête Dataview",
+  "query_js": "Requête JS Dataview (Pages)",
   /** COMMAND OPTIONS */
   "active_go_next_page": "Aller à la page suivante",
   "active_go_previous_page": "Aller à la page précédente",
