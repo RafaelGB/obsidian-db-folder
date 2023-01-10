@@ -21,6 +21,8 @@ import { TableDataType, RowDataType, TableColumn } from "cdm/FolderModel";
 import StateManager from "StateManager";
 import {
   DatabaseLimits,
+  EMITTERS_GROUPS,
+  EMITTERS_SHORTCUT,
   MetadataColumns,
   ResizeConfiguration,
 } from "helpers/Constants";
@@ -296,31 +298,53 @@ export function Table(tableData: TableDataType) {
             {/* ENDS BODY */}
           </div>
           {/* INIT FOOTER */}
-          {configInfo.getLocalSettings().enable_footer ? (
-            <div key={`div-tfoot`} className={c(`tfoot`)}>
-              {table
-                .getFooterGroups()
-                .map((footerGroup: HeaderGroup<RowDataType>) => {
-                  return (
-                    <div
-                      key={`footer-group-${footerGroup.id}`}
-                      className={`${c("tr footer-group")}`}
-                    >
-                      {footerGroup.headers.map(
-                        (header: Header<RowDataType, TableColumn>) => (
-                          <TableFooter
-                            key={`table-footer-${header.index}`}
-                            table={table}
-                            header={header}
-                          />
-                        )
-                      )}
-                    </div>
+          <div key={`div-tfoot`} className={c(`tfoot`)}>
+            <div className={c(`tr footer-group`)}>
+              <div
+                className={c(`td footer`)}
+                key={`footer-add-row-button`}
+                onClick={() => {
+                  view.emitter.emit(
+                    EMITTERS_GROUPS.SHORTCUT,
+                    EMITTERS_SHORTCUT.ADD_NEW_ROW
                   );
-                })}
-              {/* ENDS FOOTER */}
+                }}
+              >
+                +
+              </div>
+              {Array.from(
+                Array(table.getFooterGroups()[0].headers.length - 1)
+              ).map((_, index) => (
+                <div
+                  className={c(`td`)}
+                  key={`footer-add-row-mock-td-${index}`}
+                />
+              ))}
             </div>
-          ) : null}
+            {configInfo.getLocalSettings().enable_footer
+              ? table
+                  .getFooterGroups()
+                  .map((footerGroup: HeaderGroup<RowDataType>) => {
+                    return (
+                      <div
+                        key={`footer-group-${footerGroup.id}`}
+                        className={`${c("tr footer-group")}`}
+                      >
+                        {footerGroup.headers.map(
+                          (header: Header<RowDataType, TableColumn>) => (
+                            <TableFooter
+                              key={`table-footer-${header.index}`}
+                              table={table}
+                              header={header}
+                            />
+                          )
+                        )}
+                      </div>
+                    );
+                  })
+              : null}
+            {/* ENDS FOOTER */}
+          </div>
           {/* ENDS TABLE */}
         </div>
         {/* ENDS SCROLL PANE */}
