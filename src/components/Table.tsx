@@ -279,7 +279,12 @@ export function Table(tableData: TableDataType) {
                           )
                         )}
                       {/** ADD COLUMN HEADER */}
-                      <HeaderContextMenuWrapper header={addColumnHeader} />
+                      <HeaderContextMenuWrapper
+                        header={addColumnHeader}
+                        style={{
+                          width: "45px",
+                        }}
+                      />
                     </div>
                   );
                 }
