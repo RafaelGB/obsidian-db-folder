@@ -308,7 +308,8 @@ export function Table(tableData: TableDataType) {
               <div
                 className={c(`td footer`)}
                 key={`footer-add-row-button`}
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   view.emitter.emit(
                     EMITTERS_GROUPS.SHORTCUT,
                     EMITTERS_SHORTCUT.ADD_NEW_ROW
