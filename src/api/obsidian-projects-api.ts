@@ -52,14 +52,14 @@ class ProjectAPI extends ProjectView {
         if (currentColumnsLength < actualFields.length) {
             const newColumns: Record<string, DatabaseColumn> = {};
             actualFields.forEach((field, index) => {
-                const { name, type } = field;
+                const { name, type, repeated } = field;
                 /**
                  * I can not use the view object here without make it a class variable
                  * and I don't want to do that because I can not support multiple views
                  * 
                  * Could we add the config to the data object? I can manage a map of views with that
                  */
-                const inputType = this.projectsTypeToPluginTypeMapper(type);
+                const inputType = this.projectsTypeToPluginTypeMapper(type, repeated);
                 const key = dbTrim(name);
                 const newColumn: DatabaseColumn = {
                     input: inputType,
@@ -90,7 +90,9 @@ class ProjectAPI extends ProjectView {
     // `saveConfig`   Callback to save configuration changes.
     async onOpen(projectView: ProjectViewProps) {
         const { contentEl, config, saveConfig, project, viewId } = projectView;
-        const { path } = project;
+
+        const path = project.dataSource.kind === "folder" ? project.dataSource.config.path : ""
+
         const filePath = config.filepath;
         if (!filePath) {
             const folder = resolve_tfolder(path);
@@ -129,19 +131,21 @@ class ProjectAPI extends ProjectView {
         const localSettings: LocalSettings = {
             ...this.plugin.settings.local_settings,
         }
-        if (project.dataview) {
-            localSettings.source_destination_path = project.path;
+
+        if (project.dataSource.kind === "dataview") {
+            localSettings.source_destination_path = "";
             localSettings.source_data = SourceDataTypes.QUERY;
             /* 
             * Check if the query contains FROM or from
             * then Split query to only get subtring from "from" to the end
             */
+            const dataviewQuery = project.dataSource.config.query
             let query = "";
             const SOURCE_FLAG = "FROM";
-            if (project.query?.contains(SOURCE_FLAG)) {
-                query = project.query?.split(SOURCE_FLAG)[1];
-            } else if (project.query?.contains(SOURCE_FLAG.toLowerCase())) {
-                query = project.query?.split(SOURCE_FLAG.toLowerCase())[1];
+            if (dataviewQuery.contains(SOURCE_FLAG)) {
+                query = dataviewQuery.split(SOURCE_FLAG)[1];
+            } else if (dataviewQuery.contains(SOURCE_FLAG.toLowerCase())) {
+                query = dataviewQuery.split(SOURCE_FLAG.toLowerCase())[1];
             } else {
                 // Handle error with default configuation
                 localSettings.source_data = SourceDataTypes.CURRENT_FOLDER;
@@ -158,14 +162,17 @@ class ProjectAPI extends ProjectView {
      * @param type
      * @returns 
      */
-    private projectsTypeToPluginTypeMapper(type: string): string {
+    private projectsTypeToPluginTypeMapper(type: string, repeated: boolean): string {
+        if (repeated) {
+          return InputType.TAGS
+        }
+
         let inputType = "";
         const mapper = new Map<string, string>(
             [
                 [DataFieldType.Number, InputType.NUMBER],
                 [DataFieldType.Boolean, InputType.CHECKBOX],
                 [DataFieldType.Date, InputType.CALENDAR],
-                [DataFieldType.List, InputType.TAGS],
             ]
         );
         if (mapper.has(type)) {
