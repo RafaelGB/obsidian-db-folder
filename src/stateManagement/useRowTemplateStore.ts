@@ -1,7 +1,7 @@
 import { RowTemplateState } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { get_tfiles_from_folder } from "helpers/FileManagement";
-import create from "zustand";
+import { create } from "zustand";
 
 const useRowTemplateStore = (view: DatabaseView) => {
 

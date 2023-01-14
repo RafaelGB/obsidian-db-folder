@@ -2,7 +2,7 @@ import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel
 import { ConfigState, EphimeralSettings } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { EphimeralConfiguration } from "helpers/Constants";
-import create from "zustand";
+import { create } from "zustand";
 
 const useConfigStore = (view: DatabaseView) => {
     const { global_settings } = view.plugin.settings;

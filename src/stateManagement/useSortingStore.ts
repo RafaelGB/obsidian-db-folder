@@ -1,7 +1,7 @@
 import { SortingState } from "@tanstack/react-table";
 import { ColumnSortingState } from "cdm/TableStateInterface"
 import { DatabaseView } from "DatabaseView";
-import create from "zustand"
+import { create } from "zustand"
 
 const useSortingStore = (view: DatabaseView) => {
     return create<ColumnSortingState>()(

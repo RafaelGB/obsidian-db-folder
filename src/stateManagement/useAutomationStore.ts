@@ -1,6 +1,6 @@
 import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
-import create from "zustand";
+import { create } from "zustand";
 import automation_state_actions from "stateManagement/automations/AutomationStateActions";
 
 const useAutomationStore = (view: DatabaseView) => {

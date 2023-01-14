@@ -1,6 +1,6 @@
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
-import create from "zustand";
+import { create } from "zustand";
 import column_state_actions from "stateManagement/columns/ColumnsStateActions";
 
 const useColumnsStore = (view: DatabaseView) => {
