@@ -1,3 +1,11 @@
+## 3.2.4
+### Shiny new things
+- New source of data for the plugin: Dataview JS Pages. You can write your own pages queries and use them as a source of data. [#628](https://github.com/RafaelGB/obsidian-db-folder/issues/628)
+- ### Improved
+- Projects API updated. Thanks to [Marcus Olsson](https://github.com/marcusolsson) [PR#756](https://github.com/RafaelGB/obsidian-db-folder/pull/756)
+### Visual
+- Add row button is visible at the bottom of the table
+- Add Column button has a minimum width to avoid visual issues
 ## 3.2.3
 - Old engine editor will be used on mobile until the official API is released
 ## 3.2.2
