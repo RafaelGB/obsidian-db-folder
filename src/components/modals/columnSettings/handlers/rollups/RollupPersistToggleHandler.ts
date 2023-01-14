@@ -9,10 +9,10 @@ export class RollupPersistToggleHandler extends AbstractHandlerClass<ColumnSetti
         const { column, containerEl, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
         const { config } = column;
-        const persist_rollup_toggle_promise = async (value: boolean): Promise<void> => {
+        const persist_changes_toggle_promise = async (value: boolean): Promise<void> => {
             // Persist value
             await view.diskConfig.updateColumnConfig(column.id, {
-                persist_rollup: value
+                persist_changes: value
             });
             columnSettingsManager.modal.enableReset = true;
         }
@@ -20,8 +20,8 @@ export class RollupPersistToggleHandler extends AbstractHandlerClass<ColumnSetti
             containerEl,
             this.settingTitle,
             t("column_settings_modal_rollup_persist_toggle_desc"),
-            config.persist_rollup,
-            persist_rollup_toggle_promise
+            config.persist_changes,
+            persist_changes_toggle_promise
         );
         return this.goNext(columnHandlerResponse);
     }

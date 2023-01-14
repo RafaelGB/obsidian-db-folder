@@ -39,6 +39,7 @@ export interface ConfigColumn {
     media_width: number;
     media_height: number;
     isInline: boolean;
+    persist_changes: boolean;
     /** Circunstancial */
     content_alignment?: string;
     content_vertical_alignment?: string;
@@ -50,14 +51,12 @@ export interface ConfigColumn {
     task_hide_completed?: boolean;
     // Formulas
     formula_query?: string;
-    persist_formula: boolean;
     // Relations
     related_note_path?: string;
     // Rollups
     asociated_relation_id?: string;
     rollup_action?: string;
     rollup_key?: string;
-    persist_rollup?: boolean;
     // Footer
     footer_type: string;
     footer_formula?: string;

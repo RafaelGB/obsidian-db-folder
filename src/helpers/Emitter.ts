@@ -32,6 +32,7 @@ export interface Emitter<Events extends EventsMap = DefaultEvents> {
         data: Parameters<Events[K]>[0],
         id?: string
     ): void;
+    removeAllListeners(): void;
 }
 
 export function createEmitter<
@@ -83,5 +84,9 @@ export function createEmitter<
                 }
             }
         },
+
+        removeAllListeners() {
+            this.events = {};
+        }
     };
 }

@@ -55,7 +55,7 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
         false,
-        tableColumn.config.persist_formula ?? false
+        tableColumn.config.persist_changes ?? false
       );
     });
   }, [

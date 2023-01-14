@@ -293,6 +293,7 @@ export class DatabaseView extends TextFileView implements HoverParent {
       this.plugin.statusBarItem.detach();
       this.plugin.statusBarItem = null;
     }
+    this.emitter.removeAllListeners();
   }
   /****************************************************************
    *                         BAR ACTIONS
