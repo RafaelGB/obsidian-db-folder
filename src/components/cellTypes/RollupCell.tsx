@@ -12,8 +12,8 @@ const RollupCell = (mdProps: CellComponentProps) => {
   const { cell, table, row, column } = defaultCell;
   const { tableState } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
-  const formulaRef = useRef<HTMLDivElement>();
-  const formulaRow = tableState.data((state) => state.rows[row.index]);
+  const rollupRef = useRef<HTMLDivElement>();
+  const rollupRow = tableState.data((state) => state.rows[row.index]);
   const dataActions = tableState.data((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
@@ -27,11 +27,11 @@ const RollupCell = (mdProps: CellComponentProps) => {
         configInfo.getLocalSettings()
       ) as string
   );
-  const relation = formulaRow[tableColumn.config.asociated_relation_id];
+  const relation = rollupRow[tableColumn.config.asociated_relation_id];
 
   useEffect(() => {
-    if (formulaRef.current !== null) {
-      formulaRef.current.innerHTML = "";
+    if (rollupRef.current !== null) {
+      rollupRef.current.innerHTML = "";
       if (!relation) {
         return;
       }
@@ -42,14 +42,14 @@ const RollupCell = (mdProps: CellComponentProps) => {
       MarkdownService.renderMarkdown(
         defaultCell,
         rollupResponse,
-        formulaRef.current,
+        rollupRef.current,
         5
       );
 
       if (rollupCell === rollupResponse) return;
       // Save formula response on disk
       const newCell = ParseService.parseRowToLiteral(
-        formulaRow,
+        rollupRow,
         tableColumn,
         rollupResponse
       );
@@ -60,13 +60,13 @@ const RollupCell = (mdProps: CellComponentProps) => {
         newCell,
         columnsInfo.getAllColumns(),
         configInfo.getLocalSettings(),
-        tableColumn.config.persist_rollup ?? false
+        tableColumn.config.persist_changes ?? false
       );
     }
   }, [relation]);
   return (
     <span
-      ref={formulaRef}
+      ref={rollupRef}
       className={`${c(
         "md_cell " +
           getAlignmentClassname(

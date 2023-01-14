@@ -19,11 +19,11 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
             columnSettingsManager.modal.enableReset = true;
         }
 
-        const persist_Formula_toggle_promise = async (value: boolean): Promise<void> => {
+        const persist_changes_toggle_promise = async (value: boolean): Promise<void> => {
             column.config.link_alias_enabled = value;
             // Persist value
             await view.diskConfig.updateColumnConfig(column.id, {
-                persist_formula: value
+                persist_changes: value
             });
             columnSettingsManager.modal.enableReset = true;
         }
@@ -31,8 +31,8 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
             containerEl,
             t("column_settings_modal_formula_input_persist_toggle_title"),
             t("column_settings_modal_formula_input_persist_toggle_desc"),
-            column.config.persist_formula,
-            persist_Formula_toggle_promise
+            column.config.persist_changes,
+            persist_changes_toggle_promise
         );
 
         new Setting(containerEl)

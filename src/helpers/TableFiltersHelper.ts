@@ -42,7 +42,7 @@ function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbCon
         return groupResult;
     }
     const field = (filter as AtomicFilter).field;
-    let literalToCheck: Literal = field.split('.').reduce((acc, cur) => {
+    const literalToCheck: Literal = field.split('.').reduce((acc, cur) => {
         return acc[cur];
     }, p);
 

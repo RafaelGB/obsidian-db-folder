@@ -121,7 +121,7 @@ export const DEFAULT_COLUMN_CONFIG: ConfigColumn = Object.freeze({
   isInline: false,
   task_hide_completed: true,
   footer_type: FooterType.NONE,
-  persist_formula: false,
+  persist_changes: false,
 });
 
 export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
