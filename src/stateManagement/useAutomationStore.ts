@@ -1,4 +1,4 @@
-import { AutomationState, TableActionResponse } from "cdm/TableStateInterface";
+import { AutomationState, AutomationStateActions, AutomationStateInfo, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { create } from "zustand";
 import automation_state_actions from "stateManagement/automations/AutomationStateActions";
@@ -23,17 +23,20 @@ const useAutomationStore = (view: DatabaseView) => {
 }
 
 function mockAutomationState(): Omit<AutomationState, "formula"> {
+    const mockActions: AutomationStateActions = {
+        loadFormulas: null,
+    }
+
+    const mockInfo: AutomationStateInfo = {
+        getFormula: null,
+        runFormula: null,
+        dispatchRollup: null,
+        dispatchFooter: null,
+    }
 
     return {
-        info: {
-            getFormula: null,
-            runFormula: null,
-            dispatchRollup: null,
-            dispatchFooter: null,
-        },
-        actions: {
-            loadFormulas: null,
-        }
+        actions: mockActions,
+        info: mockInfo,
     }
 }
 export default useAutomationStore;
