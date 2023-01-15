@@ -16,6 +16,7 @@ import { RollupAsociatedRelationHandler } from "./handlers/rollups/RollupAsociat
 import { RollupActionHandler } from "./handlers/rollups/RollupActionHandler";
 import { RollupKeyHandler } from "./handlers/rollups/RollupKeyHandler";
 import { RollupPersistToggleHandler } from "./handlers/rollups/RollupPersistToggleHandler";
+import { RollupFormulaHandler } from "./handlers/rollups/RollupFormulaHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
@@ -147,6 +148,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 particularHandlers.push(new RollupAsociatedRelationHandler());
                 particularHandlers.push(new RollupActionHandler())
                 particularHandlers.push(new RollupKeyHandler());
+                particularHandlers.push(new RollupFormulaHandler());
                 particularHandlers.push(new RollupPersistToggleHandler());
                 break;
             default:

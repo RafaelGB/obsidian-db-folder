@@ -18,13 +18,27 @@ export type TableAction<T> = {
     setNext(handler: TableAction<T>): TableAction<T>;
     handle(settingHandlerResponse: TableActionResponse<T>): TableActionResponse<T>;
 }
-/**
- * TABLE STATE INTERFACE
- */
+/************************
+ * EPHEMERAL STATE
+ ************************/
 export type EphimeralSettings = {
     enable_columns_filter: boolean,
     enable_navbar: boolean,
     context_header: ContextHeaderData
+}
+/************************
+ * CONFIG STATE
+ ************************/
+export type ConfigStateActions = {
+    alterFilters: (filters: Partial<FilterSettings>) => Promise<void>;
+    alterConfig: (config: Partial<LocalSettings>) => void;
+    alterEphimeral: (ephimeral: Partial<EphimeralSettings>) => Promise<void>;
+}
+
+export type ConfigStateInfo = {
+    getLocalSettings: () => LocalSettings;
+    getFilters: () => FilterSettings;
+    getEphimeralSettings: () => EphimeralSettings;
 }
 
 export interface ConfigState {
@@ -32,68 +46,84 @@ export interface ConfigState {
     filters: FilterSettings;
     global: GlobalSettings;
     ephimeral: EphimeralSettings;
-    actions: {
-        alterFilters: (filters: Partial<FilterSettings>) => Promise<void>;
-        alterConfig: (config: Partial<LocalSettings>) => void;
-        alterEphimeral: (ephimeral: Partial<EphimeralSettings>) => Promise<void>;
-    }
-    info: {
-        getLocalSettings: () => LocalSettings;
-        getFilters: () => FilterSettings;
-        getEphimeralSettings: () => EphimeralSettings;
-    }
+    actions: ConfigStateActions
+    info: ConfigStateInfo
+}
+/************************
+ * DATA STATE
+ ************************/
+export type DataStateActions = {
+    addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
+    updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean, saveOnDisk?: boolean) => Promise<void>;
+    parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
+    updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
+    removeRow: (row: RowDataType) => Promise<void>;
+    removeDataOfColumn: (column: TableColumn) => void;
+    editOptionForAllRows: (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
+    removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
+        ddbbConfig: LocalSettings) => Promise<void>;
+    dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
+    dataviewUpdater: (updaterData: UpdaterData, columns: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
+    renameFile: (rowIndex: number) => Promise<void>;
+    saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
+    groupFiles: () => Promise<void>;
+    bulkRowUpdate: (rows: RowDataType[], columns: TableColumn[], action: string) => Promise<void>;
+}
+
+export type DataStateInfo = {
+    getRows: () => RowDataType[];
 }
 
 export interface DataState {
     rows: RowDataType[];
-    actions: {
-        addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-        updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean, saveOnDisk?: boolean) => Promise<void>;
-        parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
-        updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-        removeRow: (row: RowDataType) => Promise<void>;
-        removeDataOfColumn: (column: TableColumn) => void;
-        editOptionForAllRows: (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-        removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
-            ddbbConfig: LocalSettings) => Promise<void>;
-        dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
-        dataviewUpdater: (updaterData: UpdaterData, columns: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
-        renameFile: (rowIndex: number) => Promise<void>;
-        saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
-        groupFiles: () => Promise<void>;
-        bulkRowUpdate: (rows: RowDataType[], columns: TableColumn[], action: string) => Promise<void>;
-    }
+    actions: DataStateActions
+    info: DataStateInfo
+}
+
+/************************
+ * COLUMNS STATE
+ ************************/
+export type ColumnsStateActions = {
+    addToLeft: (column: TableColumn, customName?: string, customType?: string) => void;
+    addToRight: (column: TableColumn, customName?: string, customType?: string) => void;
+    remove: (column: TableColumn) => void;
+    alterSorting: (column: TableColumn) => void;
+    addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
+    alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => Promise<void>;
+    alterColumnId: (column: TableColumn, root: string, nestedIds: string[]) => Promise<void>;
+    alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
+    alterColumnSize: (id: string, width: number) => void;
+    alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
+    alterColumnConfig: (column: TableColumn, config: Partial<ConfigColumn>) => void;
+}
+
+export type ColumnsStateInfo = {
+    getAllColumns: () => TableColumn[];
+    getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
+    getVisibilityRecord: () => Record<string, boolean>;
+    getColumnOptions: (id: string) => ColumnOption[];
 }
 
 export interface ColumnsState {
     columns: TableColumn[];
     shadowColumns: TableColumn[];
-    actions: {
-        addToLeft: (column: TableColumn, customName?: string, customType?: string) => void;
-        addToRight: (column: TableColumn, customName?: string, customType?: string) => void;
-        remove: (column: TableColumn) => void;
-        alterSorting: (column: TableColumn) => void;
-        addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
-        alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => Promise<void>;
-        alterColumnId: (column: TableColumn, root: string, nestedIds: string[]) => Promise<void>;
-        alterColumnLabel: (column: TableColumn, label: string) => Promise<void>;
-        alterColumnSize: (id: string, width: number) => void;
-        alterIsHidden: (column: TableColumn, isHidden: boolean) => void;
-        alterColumnConfig: (column: TableColumn, config: Partial<ConfigColumn>) => void;
-    }
-    info: {
-        getAllColumns: () => TableColumn[];
-        getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
-        getVisibilityRecord: () => Record<string, boolean>;
-        getColumnOptions: (id: string) => ColumnOption[];
-    }
+    actions: ColumnsStateActions;
+    info: ColumnsStateInfo;
+}
+
+/************************
+ * SORTING STATE
+ ************************/
+export type SortingStateActions = {
+    alterSorting: (alternativeSorting: SortingState) => void;
 }
 export interface ColumnSortingState {
     sortBy: SortingState;
-    actions: {
-        alterSorting: (alternativeSorting: SortingState) => void;
-    }
+    actions: SortingStateActions;
 }
+/************************
+ * TEMPLATE STATE
+ ************************/
 export interface RowTemplateState {
     template: string;
     folder: string;
@@ -101,20 +131,28 @@ export interface RowTemplateState {
     clear: () => void;
     update: (template: string) => void;
 }
-
-export interface AutomationState {
-    formula: { [key: string]: unknown };
-    info: {
-        getFormula: (name: string) => unknown;
-        runFormula: (input: string, row: RowDataType, dbbConfig: LocalSettings) => Literal;
-        dispatchFooter: (column: TableColumn, colValues: Literal[]) => Literal;
-        dispatchRollup: (configColumn: ConfigColumn, relation: Literal) => Literal;
-    },
-    actions: {
-        loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;
-    }
+/************************
+ * AUTOMATION STATE
+ ************************/
+export type AutomationStateActions = {
+    loadFormulas: (ddbbConfig: LocalSettings) => Promise<void>;
 }
 
+export type AutomationStateInfo = {
+    getFormula: (name: string) => unknown;
+    runFormula: (input: string, row: RowDataType, dbInfo: DbInfo) => Literal;
+    dispatchFooter: (column: TableColumn, colValues: Literal[]) => Literal;
+    dispatchRollup: (configColumn: ConfigColumn, relation: Literal) => Literal;
+}
+export interface AutomationState {
+    formula: { [key: string]: unknown };
+    actions: AutomationStateActions;
+    info: AutomationStateInfo;
+}
+
+/************************
+ * TABLE STATE INTERFACE
+ ************************/
 export interface TableStateInterface {
     automations: UseBoundStore<StoreApi<AutomationState>>;
     configState: UseBoundStore<StoreApi<ConfigState>>;
@@ -122,4 +160,14 @@ export interface TableStateInterface {
     data: UseBoundStore<StoreApi<DataState>>;
     sorting: UseBoundStore<StoreApi<ColumnSortingState>>;
     columns: UseBoundStore<StoreApi<ColumnsState>>;
+}
+
+/************************
+ * Cross state types
+ ************************/
+export type DbInfo = {
+    data: DataStateInfo;
+    columns: ColumnsStateInfo;
+    config: ConfigStateInfo;
+    automation: AutomationStateInfo;
 }

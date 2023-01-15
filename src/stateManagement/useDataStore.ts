@@ -1,4 +1,4 @@
-import { DataState, TableActionResponse } from "cdm/TableStateInterface";
+import { DataState, DataStateActions, DataStateInfo, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "DatabaseView";
 import { create } from "zustand";
 import data_state_actions from "stateManagement/data/DataStateActions";
@@ -20,23 +20,29 @@ const useDataStore = (view: DatabaseView) => {
 }
 
 function emptyDataState(): Omit<DataState, "rows"> {
+    const mockActions: DataStateActions = {
+        addRow: null,
+        updateCell: null,
+        updateDataAfterLabelChange: null,
+        removeRow: null,
+        editOptionForAllRows: null,
+        removeDataOfColumn: null,
+        removeOptionForAllRows: null,
+        parseDataOfColumn: null,
+        dataviewRefresh: null,
+        dataviewUpdater: null,
+        renameFile: null,
+        saveDataFromFile: null,
+        groupFiles: null,
+        bulkRowUpdate: null,
+    }
+
+    const mockInfo: DataStateInfo = {
+        getRows: null
+    }
     return {
-        actions: {
-            addRow: null,
-            updateCell: null,
-            updateDataAfterLabelChange: null,
-            removeRow: null,
-            editOptionForAllRows: null,
-            removeDataOfColumn: null,
-            removeOptionForAllRows: null,
-            parseDataOfColumn: null,
-            dataviewRefresh: null,
-            dataviewUpdater: null,
-            renameFile: null,
-            saveDataFromFile: null,
-            groupFiles: null,
-            bulkRowUpdate: null,
-        },
+        actions: mockActions,
+        info: mockInfo
     }
 }
 export default useDataStore;

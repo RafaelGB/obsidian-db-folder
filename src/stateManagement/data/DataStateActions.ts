@@ -15,6 +15,7 @@ import EditOptionForAllRowsHandlerAction from "./handlers/EditOptionForAllRowsHa
 import DataviewUpdaterHandlerAction from "./handlers/DataviewUpdaterHandlerAction";
 import BulkRowUpdateHandlerAction from "./handlers/BulkRowUpdateHandlerAction";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
+import InfoDataFunctions from "./handlers/InfoDataFunctions";
 
 class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
   protected getHandlers(): AbstractHandler<TableActionResponse<DataState>>[] {
@@ -32,7 +33,8 @@ class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
       new RenameFileHandlerAction(),
       new SaveDataFromFileHandlerAction(),
       new GroupFilesHandlerAction(),
-      new BulkRowUpdateHandlerAction()
+      new BulkRowUpdateHandlerAction(),
+      new InfoDataFunctions()
     ];
   }
 }

@@ -520,6 +520,7 @@ export const ROLLUP_ACTIONS = Object.freeze({
   FALSY_COUNT: 'Falsy Count',
   PERCENT_EMPTY: 'Percent Empty',
   PERCENT_FILLED: 'Percent Filled',
+  FORMULA: 'Formula',
   // Key is not needed for the action to be executed
   ...ROLLUP_EMBED_ACTIONS
 });

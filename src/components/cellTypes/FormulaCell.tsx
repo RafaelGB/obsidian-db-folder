@@ -14,20 +14,23 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const formulaRef = useRef<HTMLDivElement>();
   const formulaRow = tableState.data((state) => state.rows[row.index]);
   const dataActions = tableState.data((state) => state.actions);
-  const configInfo = tableState.configState((state) => state.info);
-  const columnsInfo = tableState.columns((state) => state.info);
   const formulaInfo = tableState.automations((state) => state.info);
+  const configInfo = tableState.configState((state) => state.info);
+  const dataInfo = tableState.data((state) => state.info);
+  const columnsInfo = tableState.columns((state) => state.info);
+  const automationInfo = tableState.automations((state) => state.info);
 
   useEffect(() => {
     Promise.resolve().then(async () => {
       // If formula cell is empty, do nothing
       if (formulaRef.current === null) return;
       const formulaResponse = formulaInfo
-        .runFormula(
-          tableColumn.config.formula_query,
-          formulaRow,
-          configInfo.getLocalSettings()
-        )
+        .runFormula(tableColumn.config.formula_query, formulaRow, {
+          data: dataInfo,
+          columns: columnsInfo,
+          config: configInfo,
+          automation: automationInfo,
+        })
         .toString();
 
       // If the formula cell is the same as the rendered formula, do nothing
