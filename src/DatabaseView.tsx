@@ -35,6 +35,7 @@ import {
   WorkspaceLeaf,
   TFile,
   Menu,
+  Platform,
 } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
 import { Db } from "services/CoreService";
@@ -238,7 +239,9 @@ export class DatabaseView extends TextFileView implements HoverParent {
   }
 
   initRootContainer(file: TFile) {
-    this.tableContainer = this.contentEl.createDiv(c("container"));
+    this.tableContainer = this.contentEl.createDiv(
+      Platform.isDesktop ? c("container") : c("container-mobile")
+    );
     this.tableContainer.setAttribute("id", file.path);
     this.rootContainer = createRoot(this.tableContainer);
   }
