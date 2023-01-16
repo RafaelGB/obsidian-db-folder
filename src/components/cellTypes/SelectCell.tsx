@@ -18,7 +18,7 @@ import { InputType } from "helpers/Constants";
 const SelectCell = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
   const { row, column, table } = defaultCell;
-  const { tableState } = table.options.meta;
+  const { tableState, view } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
   const dataActions = tableState.data((state) => state.actions);
 
@@ -153,7 +153,11 @@ const SelectCell = (popperProps: CellComponentProps) => {
           tabIndex={0}
         >
           {cellValue ? (
-            <Relationship value={cellValue} backgroundColor={getColor()} />
+            <Relationship
+              value={cellValue}
+              backgroundColor={getColor()}
+              view={view}
+            />
           ) : null}
         </div>
       )}

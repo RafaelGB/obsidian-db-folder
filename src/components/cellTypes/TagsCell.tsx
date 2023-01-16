@@ -18,7 +18,7 @@ import { satinizedColumnOption } from "helpers/FileManagement";
 const TagsCell = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
   const { row, column, table } = defaultCell;
-  const { tableState } = table.options.meta;
+  const { tableState, view } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
   const columnsInfo = tableState.columns((state) => state.info);
   const configInfo = tableState.configState((state) => state.info);
@@ -166,6 +166,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
                     key={`tags-${row.index}-${tableColumn.key}-${tag}`}
                     value={tag.toString()}
                     backgroundColor={getColor(tag)}
+                    view={view}
                   />
                 </div>
               ))
