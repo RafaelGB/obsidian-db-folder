@@ -10,7 +10,7 @@ type DnDProps = {
   [key: string]: any;
 };
 
-const DnDComponent = (dnd: DnDProps) => {
+const DnDComponent = ({ ...dnd }: DnDProps, dataLabel = "dbfolderDragId") => {
   const ref = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -20,14 +20,14 @@ const DnDComponent = (dnd: DnDProps) => {
       key={`${dnd.id}-${dnd.index}-dnd`}
       onDrop={(e) => {
         e.preventDefault();
-        dnd.lambda(e.dataTransfer.getData("dbfolderDragId"), dnd.id);
+        dnd.lambda(e.dataTransfer.getData(dataLabel), dnd.id);
         return false;
       }}
       draggable
       onDragStart={(e) => {
         setIsDragging(true);
         e.dataTransfer.effectAllowed = "move";
-        e.dataTransfer.setData("dbfolderDragId", dnd.id);
+        e.dataTransfer.setData(dataLabel, dnd.id);
         e.currentTarget.classList.add(c("dnd-dragging"));
       }}
       onDragEnter={(e) => {
