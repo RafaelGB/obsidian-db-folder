@@ -77,6 +77,7 @@ export default function CellContextMenu(
           <Relationship
             value={index}
             backgroundColor={StyleVariables.BACKGROUND_PRIMARY}
+            view={view}
           />
         )}
       </div>

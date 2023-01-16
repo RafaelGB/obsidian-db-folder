@@ -113,6 +113,7 @@ export interface DatabaseHeaderProps {
 export type RelationshipProps = {
     value: Literal,
     backgroundColor: string
+    view: DatabaseView,
 }
 
 export type RowTemplateOption = {
