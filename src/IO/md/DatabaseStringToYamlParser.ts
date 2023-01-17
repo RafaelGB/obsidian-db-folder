@@ -5,10 +5,10 @@ import { parseYaml } from "obsidian";
 import { YamlHandler, YamlHandlerResponse } from "cdm/MashallModel";
 
 // Handlers of yaml parse
-import { MarshallDatabaseInfoHandler } from 'parsers/handlers/marshall/MarshallDatabaseInfoHandler';
-import { MarshallColumnsHandler } from "parsers/handlers/marshall/MarshallColumnsHandler";
-import { MarshallConfigHandler } from "parsers/handlers/marshall/MarshallConfigHandler";
-import { MarshallFiltersHandler } from "parsers/handlers/marshall/MarshallFiltersHandler";
+import { MarshallDatabaseInfoHandler } from 'IO/md/handlers/marshall/MarshallDatabaseInfoHandler';
+import { MarshallColumnsHandler } from "IO/md/handlers/marshall/MarshallColumnsHandler";
+import { MarshallConfigHandler } from "IO/md/handlers/marshall/MarshallConfigHandler";
+import { MarshallFiltersHandler } from "IO/md/handlers/marshall/MarshallFiltersHandler";
 import { DatabaseYaml } from "cdm/DatabaseModel";
 
 /**

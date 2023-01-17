@@ -1,5 +1,5 @@
 import { DiskHandlerResponse } from "cdm/MashallModel";
-import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
+import { AbstractDiskHandler } from "IO/md/handlers/unmarshall/AbstractDiskPropertyHandler";
 
 export class UnmarshallDatabaseInfoHandler extends AbstractDiskHandler {
     handlerName = 'databaseInfo';

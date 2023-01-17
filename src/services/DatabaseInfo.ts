@@ -5,11 +5,11 @@ import {
 } from 'obsidian';
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
-import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
+import DatabaseYamlToStringParser from 'IO/md/DatabaseYamlToStringParser';
 import { ConfigColumn, TableColumn } from 'cdm/FolderModel';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
-import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
+import DatabaseStringToYamlParser from 'IO/md/DatabaseStringToYamlParser';
 import { DATABASE_CONFIG } from 'helpers/Constants';
 import NoteContentActionBuilder from 'patterns/builders/NoteContentActionBuilder';
 

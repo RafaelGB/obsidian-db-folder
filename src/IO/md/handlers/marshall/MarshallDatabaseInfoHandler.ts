@@ -1,5 +1,5 @@
 import { YamlHandlerResponse } from 'cdm/MashallModel';
-import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
+import { AbstractYamlHandler } from 'IO/md/handlers/marshall/AbstractYamlPropertyHandler';
 
 export class MarshallDatabaseInfoHandler extends AbstractYamlHandler {
     handlerName = 'baseInfo';

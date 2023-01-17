@@ -1,9 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  StrictMode,
-  useEffect,
-  useRef,
-} from "react";
+import React, { ChangeEventHandler, useEffect, useRef } from "react";
 import { TableActionProps } from "cdm/MenuBarModel";
 import { t } from "lang/helpers";
 

@@ -1,7 +1,7 @@
 import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from 'cdm/SettingsModel';
-import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
+import { AbstractYamlHandler } from 'IO/md/handlers/marshall/AbstractYamlPropertyHandler';
 import { DataviewService } from 'services/DataviewService';
 
 export class MarshallFiltersHandler extends AbstractYamlHandler {

@@ -1,7 +1,7 @@
 import { DiskHandlerResponse } from "cdm/MashallModel";
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from "cdm/SettingsModel";
 import { YAML_INDENT } from "helpers/Constants";
-import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
+import { AbstractDiskHandler } from "IO/md/handlers/unmarshall/AbstractDiskPropertyHandler";
 
 export class UnmarshallFiltersHandler extends AbstractDiskHandler {
     handlerName = 'filters';

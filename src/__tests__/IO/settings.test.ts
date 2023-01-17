@@ -1,6 +1,6 @@
 import { YamlHandlerResponse } from "cdm/MashallModel";
 import { mockReset, mockDeep, DeepMockProxy } from "jest-mock-extended";
-import DatabaseStringToYamlParser from "parsers/DatabaseStringToYamlParser";
+import DatabaseStringToYamlParser from "IO/md/DatabaseStringToYamlParser";
 jest.mock("obsidian");
 
 describe("Settings", () => {

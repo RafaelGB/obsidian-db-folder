@@ -7,10 +7,10 @@ import { InputType, UpdateRowOptions } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { VaultManagerDB } from "services/FileManagerService";
 import { EditionError, showDBError } from "errors/ErrorTypes";
-import obtainRowDatabaseFields from "parsers/FileToRowDatabaseFields";
+import obtainRowDatabaseFields from "IO/md/FileToRowDatabaseFields";
 import { EditArguments } from "cdm/ServicesModel";
 import NoteContentActionBuilder from "patterns/builders/NoteContentActionBuilder";
-import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
+import { parseFrontmatterFieldsToString } from "IO/md/RowDatabaseFieldsToFile";
 import { hasFrontmatter } from "helpers/VaultManagement";
 
 class EditEngine {

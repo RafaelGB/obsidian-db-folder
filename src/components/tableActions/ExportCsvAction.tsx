@@ -2,7 +2,7 @@ import { TableActionProps } from "cdm/MenuBarModel";
 import {
   normalizeColumnsToCsvHeader,
   normalizeRowsToCsvData,
-} from "parsers/NormalizeRowsToCSV";
+} from "IO/csv/NormalizeRowsToCSV";
 import React, { useEffect } from "react";
 import { CSVLink } from "react-csv";
 import { t } from "lang/helpers";

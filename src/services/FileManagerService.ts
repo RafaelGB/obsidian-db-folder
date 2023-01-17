@@ -4,7 +4,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { FileContent } from "helpers/FileContent";
 import { resolve_tfile, resolve_tfolder } from "helpers/FileManagement";
 import { Notice, parseYaml, TFile, TFolder } from "obsidian";
-import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "parsers/RowDatabaseFieldsToFile";
+import { parseFrontmatterFieldsToString, parseInlineFieldsToString } from "IO/md/RowDatabaseFieldsToFile";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
 import { FileManagerEditOptions, SourceDataTypes } from "helpers/Constants";
