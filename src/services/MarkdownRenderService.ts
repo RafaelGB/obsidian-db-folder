@@ -1,6 +1,6 @@
 import { CellContext } from "@tanstack/react-table";
 import { NormalizedPath, RowDataType, TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { MediaExtensions, SUGGESTER_REGEX } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";

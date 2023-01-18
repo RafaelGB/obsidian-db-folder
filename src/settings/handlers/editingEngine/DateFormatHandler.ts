@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";

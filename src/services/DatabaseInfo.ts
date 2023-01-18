@@ -5,11 +5,11 @@ import {
 } from 'obsidian';
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
-import DatabaseYamlToStringParser from 'IO/md/DatabaseYamlToStringParser';
+import databaseYamlToStringParser from 'IO/md/DatabaseYamlToStringParser';
 import { ConfigColumn, TableColumn } from 'cdm/FolderModel';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
-import DatabaseStringToYamlParser from 'IO/md/DatabaseStringToYamlParser';
+import databaseStringToYamlParser from 'IO/md/DatabaseStringToYamlParser';
 import { DATABASE_CONFIG } from 'helpers/Constants';
 import NoteContentActionBuilder from 'patterns/builders/NoteContentActionBuilder';
 
@@ -37,7 +37,7 @@ export default class DatabaseInfo {
         }
 
         const frontmatterRaw = match[1];
-        const response = DatabaseStringToYamlParser(frontmatterRaw);
+        const response = databaseStringToYamlParser(frontmatterRaw);
         if (Object.keys(response.errors).length > 0) {
             const errors = Object.keys(response.errors).map(e => e + ': ' + response.errors[e].join('\n')).join('\n')
             new Notice(errors, 10000);
@@ -52,7 +52,7 @@ export default class DatabaseInfo {
      */
     async saveOnDisk(): Promise<void> {
         LOGGER.info(`Update BBDD yaml - "${this.file.path}"`);
-        const databaseConfigUpdated = DatabaseYamlToStringParser(this.yaml).join("\n");
+        const databaseConfigUpdated = databaseYamlToStringParser(this.yaml);
         const noteObject = new NoteContentActionBuilder()
             .setFile(this.file)
             .addRegExp(DATABASE_CONFIG.REPLACE_YAML_REGEX)

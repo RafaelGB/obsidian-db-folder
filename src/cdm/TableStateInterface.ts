@@ -2,7 +2,7 @@ import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ColumnOption } from "cdm/ComponentsModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";

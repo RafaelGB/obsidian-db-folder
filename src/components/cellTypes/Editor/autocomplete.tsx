@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import Fuse from "fuse.js";
 import { useIMEInputProps } from "helpers/Generators";
 import { c } from "helpers/StylesHelper";

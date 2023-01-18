@@ -1,5 +1,5 @@
 import { TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { SettingsManager } from "Settings";
 
 export interface SettingHandler {

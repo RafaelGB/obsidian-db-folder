@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";

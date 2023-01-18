@@ -3,7 +3,7 @@ import DBFolderPlugin from "main";
 
 import {
     DatabaseView,
-} from 'DatabaseView';
+} from 'views/DatabaseView';
 import { LOGGER } from "services/Logger";
 import { DataFieldType, DataQueryResult, ProjectView, ProjectViewProps } from "obsidian-projects-types";
 import { resolve_tfile, resolve_tfolder } from "helpers/FileManagement";
@@ -164,7 +164,7 @@ class ProjectAPI extends ProjectView {
      */
     private projectsTypeToPluginTypeMapper(type: string, repeated: boolean): string {
         if (repeated) {
-          return InputType.TAGS
+            return InputType.TAGS
         }
 
         let inputType = "";

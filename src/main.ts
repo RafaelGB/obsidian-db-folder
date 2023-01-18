@@ -12,7 +12,7 @@ import {
 
 import {
 	DatabaseView,
-} from 'DatabaseView';
+} from 'views/DatabaseView';
 
 import {
 	DBFolderSettingTab,

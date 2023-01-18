@@ -1,5 +1,5 @@
 import { LocalSettings } from "cdm/SettingsModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 import { SourceDataTypes } from "helpers/Constants";

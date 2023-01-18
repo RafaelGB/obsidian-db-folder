@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { TableStateInterface } from "cdm/TableStateInterface";

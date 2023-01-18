@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import StateManager from "StateManager";
 
 export const generateStateManager = (): StateManager => {

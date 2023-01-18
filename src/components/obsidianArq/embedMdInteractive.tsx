@@ -1,6 +1,6 @@
 import { Row } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { TFile } from "obsidian";
 import React, { useEffect } from "react";

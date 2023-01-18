@@ -3,7 +3,7 @@ import { FilterFn } from '@tanstack/react-table';
 import '@tanstack/table-table';
 import { RowDataType } from "cdm/FolderModel";
 import { TableStateInterface } from "cdm/TableStateInterface";
-import { DatabaseView } from 'DatabaseView';
+import { DatabaseView } from 'views/DatabaseView';
 
 declare module '@tanstack/react-table' {
     // @ts-ignore

@@ -1,5 +1,5 @@
 import { DataState, DataStateActions, DataStateInfo, TableActionResponse } from "cdm/TableStateInterface";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { create } from "zustand";
 import data_state_actions from "stateManagement/data/DataStateActions";
 

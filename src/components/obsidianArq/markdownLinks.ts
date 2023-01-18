@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { DatabaseCore } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { useCallback } from "react";

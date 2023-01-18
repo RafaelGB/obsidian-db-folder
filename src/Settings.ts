@@ -1,7 +1,7 @@
 import { App, Modal, PluginSettingTab } from "obsidian";
 import { add_setting_header } from 'settings/SettingsComponents';
 import DBFolderPlugin from 'main';
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { LOGGER } from "services/Logger";
 import columns_settings_section from "settings/ColumnsSection";
 import { folder_settings_section } from "settings/FolderSection";

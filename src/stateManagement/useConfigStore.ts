@@ -1,6 +1,6 @@
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ConfigState, EphimeralSettings } from "cdm/TableStateInterface";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { EphimeralConfiguration } from "helpers/Constants";
 import { create } from "zustand";
 

@@ -1,7 +1,7 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { DEFAULT_SETTINGS, SourceDataTypes } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { Link, Literal } from "obsidian-dataview";

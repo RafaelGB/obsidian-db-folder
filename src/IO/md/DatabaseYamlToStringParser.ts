@@ -12,9 +12,9 @@ import { UnmarshallFiltersHandler } from "IO/md/handlers/unmarshall/UnmarshallFi
  * Given a database config, obtain the string on yaml format
  * @param databaseConfig 
  */
-const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml): string[] => {
+const databaseYamlToStringParser = (databaseConfig: DatabaseYaml): string => {
   const response = persisDatabaseConfigOnDisk(databaseConfig);
-  return response.disk;
+  return response.disk.join('\n');
 }
 
 /**
@@ -48,4 +48,4 @@ function getHandlers(): DiskHandler[] {
     new UnmarshallFiltersHandler()
   ];
 }
-export default DatabaseYamlToStringParser;
+export default databaseYamlToStringParser;

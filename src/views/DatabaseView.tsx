@@ -1,26 +1,13 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { UpdaterData, ViewEvents } from "cdm/EmitterModel";
-import {
-  InitialType,
-  RowDataType,
-  TableColumn,
-  TableDataType,
-} from "cdm/FolderModel";
+import { TableDataType } from "cdm/FolderModel";
 import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
 } from "components/Columns";
 import { createDatabase } from "components/index/Database";
 import { DbFolderException } from "errors/AbstractException";
-import {
-  DatabaseCore,
-  DB_ICONS,
-  EMITTERS_BAR_STATUS,
-  EMITTERS_GROUPS,
-  EMITTERS_SHORTCUT,
-  InputType,
-} from "helpers/Constants";
-import { createEmitter, Emitter } from "helpers/Emitter";
+import { InputType } from "helpers/Constants";
+import { createEmitter } from "helpers/Emitter";
 import obtainInitialType from "helpers/InitialType";
 import { c } from "helpers/StylesHelper";
 import { adapterTFilesToRows, isDatabaseNote } from "helpers/VaultManagement";
@@ -28,36 +15,16 @@ import { getParentWindow } from "helpers/WindowElement";
 import { t } from "lang/helpers";
 import DBFolderPlugin from "main";
 
-import {
-  HoverParent,
-  HoverPopover,
-  TextFileView,
-  WorkspaceLeaf,
-  TFile,
-  Menu,
-  Platform,
-} from "obsidian";
-import { createRoot, Root } from "react-dom/client";
+import { WorkspaceLeaf, TFile, Menu, Platform } from "obsidian";
+import { createRoot } from "react-dom/client";
 import { Db } from "services/CoreService";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
+import { CustomView } from "./AbstractView";
 
-export class DatabaseView extends TextFileView implements HoverParent {
-  plugin: DBFolderPlugin;
-  hoverPopover: HoverPopover | null;
-  emitter: Emitter<ViewEvents>;
-  tableContainer: HTMLDivElement | null = null;
-  rootContainer: Root | null = null;
-  diskConfig: DatabaseInfo;
-  rows: Array<RowDataType>;
-  columns: Array<TableColumn>;
-  shadowColumns: Array<TableColumn>;
-  initial: InitialType;
-  formulas: Record<string, unknown>;
-  actionButtons: Record<string, HTMLElement> = {};
-
+export class DatabaseView extends CustomView {
   constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
     super(leaf);
     this.plugin = plugin;
@@ -95,14 +62,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
     }
 
     this.plugin.addView(this);
-  }
-
-  getIcon() {
-    return DB_ICONS.NAME;
-  }
-
-  getViewType(): string {
-    return DatabaseCore.FRONTMATTER_KEY;
   }
 
   getStateManager(): StateManager {
@@ -263,26 +222,6 @@ export class DatabaseView extends TextFileView implements HoverParent {
     await this.initDatabase();
   }
 
-  clear(): void {
-    /*
-        Obsidian *only* calls this after unloading a file, before loading the next.
-        Specifically, from onUnloadFile, which calls save(true), and then optionally
-        calls clear, if and only if this.file is still non-empty.  That means that
-        in this function, this.file is still the *old* file, so we should not do
-        anything here that might try to use the file (including its path), so we
-        should avoid doing anything that refreshes the display.  (Since that could
-        use the file, and would also flash an empty pane during navigation, depending
-        on how long the next file load takes.)
-        Given all that, it makes more sense to clean up our state from onLoadFile, as
-        following a clear there are only two possible states: a successful onLoadFile
-        updates our full state via setViewData(), or else it aborts with an error
-        first.  So as long as setViewData() and the error handler for onLoadFile()
-        fully reset the state (to a valid load state or a valid error state),
-        there's nothing to do in this method.  (We can't omit it, since it's
-        abstract.)
-        */
-  }
-
   /**
    * Remove all action buttons from the view
    */
@@ -324,61 +263,5 @@ export class DatabaseView extends TextFileView implements HoverParent {
     this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
       InputType.MARKDOWN;
     this.plugin.setMarkdownView(this.leaf);
-  }
-  /****************************************************************
-   *                     KEYBOARD SHORTCUTS
-   ****************************************************************/
-
-  goNextPage() {
-    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.GO_NEXT_PAGE);
-  }
-
-  goPreviousPage() {
-    this.emitter.emit(
-      EMITTERS_GROUPS.SHORTCUT,
-      EMITTERS_SHORTCUT.GO_PREVIOUS_PAGE
-    );
-  }
-
-  addNewRow() {
-    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.ADD_NEW_ROW);
-  }
-
-  toggleFilters() {
-    this.emitter.emit(
-      EMITTERS_GROUPS.SHORTCUT,
-      EMITTERS_SHORTCUT.TOGGLE_FILTERS
-    );
-  }
-
-  openFilters() {
-    this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
-  }
-
-  /****************************************************************
-   *                     REACTIVE ACTIONS
-   ****************************************************************/
-  /**
-   * Dataview API router triggered by any file change
-   * @param op
-   * @param file
-   * @param oldPath
-   */
-  handleExternalMetadataChange(
-    op: string,
-    file: TFile,
-    isActive: boolean,
-    oldPath?: string
-  ) {
-    this.emitter.emit(EMITTERS_GROUPS.UPDATER, {
-      op,
-      file,
-      isActive,
-      oldPath,
-    } as UpdaterData);
-  }
-
-  handleUpdateStatusBar() {
-    this.emitter.emit(EMITTERS_GROUPS.BAR_STATUS, EMITTERS_BAR_STATUS.UPDATE);
   }
 }

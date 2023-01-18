@@ -1,5 +1,5 @@
 import { DatabaseSettings } from "cdm/SettingsModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { TFile } from 'obsidian';
 export default class StateManager {
   private onEmpty: () => void;

@@ -4,7 +4,7 @@ import {
   ColumnsStateInfo,
   TableActionResponse,
 } from "cdm/TableStateInterface";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { create } from "zustand";
 import column_state_actions from "stateManagement/columns/ColumnsStateActions";
 
