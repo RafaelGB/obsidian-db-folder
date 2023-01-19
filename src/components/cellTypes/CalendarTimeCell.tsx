@@ -52,13 +52,13 @@ const CalendarTimeCell = (calendarTimeProps: CellComponentProps) => {
       changed
     );
 
-    await dataActions.updateCell(
-      row.index,
-      tableColumn,
-      newCell,
-      columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings()
-    );
+    await dataActions.updateCell({
+      rowIndex: row.index,
+      column: tableColumn,
+      value: newCell,
+      columns: columnsInfo.getAllColumns(),
+      ddbbConfig: configInfo.getLocalSettings(),
+    });
   }
 
   const CalendarContainer = (containerProps: any) => {

@@ -51,15 +51,14 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         formulaResponse
       );
 
-      await dataActions.updateCell(
-        row.index,
-        tableColumn,
-        newCell,
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        false,
-        tableColumn.config.persist_changes ?? false
-      );
+      await dataActions.updateCell({
+        rowIndex: row.index,
+        column: tableColumn,
+        value: newCell,
+        columns: columnsInfo.getAllColumns(),
+        ddbbConfig: configInfo.getLocalSettings(),
+        saveOnDisk: tableColumn.config.persist_changes ?? false,
+      });
     });
   }, [
     Object.entries(formulaRow)

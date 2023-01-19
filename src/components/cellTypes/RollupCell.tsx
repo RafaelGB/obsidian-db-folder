@@ -54,14 +54,14 @@ const RollupCell = (mdProps: CellComponentProps) => {
         rollupResponse
       );
 
-      dataActions.updateCell(
-        row.index,
-        tableColumn,
-        newCell,
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings(),
-        tableColumn.config.persist_changes ?? false
-      );
+      dataActions.updateCell({
+        rowIndex: row.index,
+        column: tableColumn,
+        value: newCell,
+        columns: columnsInfo.getAllColumns(),
+        ddbbConfig: configInfo.getLocalSettings(),
+        saveOnDisk: tableColumn.config.persist_changes ?? false,
+      });
     }
   }, [relation]);
   return (

@@ -65,13 +65,13 @@ const TextCell = (props: CellComponentProps) => {
         changedValue
       );
 
-      await dataActions.updateCell(
-        row.index,
-        tableColumn,
-        newCell,
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings()
-      );
+      await dataActions.updateCell({
+        rowIndex: row.index,
+        column: tableColumn,
+        value: newCell,
+        columns: columnsInfo.getAllColumns(),
+        ddbbConfig: configInfo.getLocalSettings(),
+      });
     }
     setDirtyCell(false);
   };

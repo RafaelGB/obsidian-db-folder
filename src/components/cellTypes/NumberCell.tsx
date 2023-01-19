@@ -42,19 +42,20 @@ const NumberCell = (props: CellComponentProps) => {
     setEditableValue(event.target.value);
   };
 
-  function persistChange(changedValue: number) {
+  async function persistChange(changedValue: number) {
     const newCell = ParseService.parseRowToLiteral(
       numberRow,
       tableColumn,
       changedValue
     );
-    dataActions.updateCell(
-      row.index,
-      tableColumn,
-      newCell,
-      columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings()
-    );
+
+    await dataActions.updateCell({
+      rowIndex: row.index,
+      column: tableColumn,
+      value: newCell,
+      columns: columnsInfo.getAllColumns(),
+      ddbbConfig: configInfo.getLocalSettings(),
+    });
   }
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
@@ -72,9 +73,9 @@ const NumberCell = (props: CellComponentProps) => {
     }
   };
 
-  const handleOnBlur = () => {
+  const handleOnBlur = async () => {
     if (editableValue && editableValue !== numberCell) {
-      persistChange(parseFloat(editableValue));
+      await persistChange(parseFloat(editableValue));
     }
     setDirtyCell(false);
   };

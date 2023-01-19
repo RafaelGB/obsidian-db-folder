@@ -76,13 +76,13 @@ const RelationCell = (mdProps: CellComponentProps) => {
         newRelations
       );
 
-      dataActions.updateCell(
-        row.index,
-        tableColumn,
-        newCell,
-        columnsInfo.getAllColumns(),
-        configInfo.getLocalSettings()
-      );
+      dataActions.updateCell({
+        rowIndex: row.index,
+        column: tableColumn,
+        value: newCell,
+        columns: columnsInfo.getAllColumns(),
+        ddbbConfig: configInfo.getLocalSettings(),
+      });
     }
     setDirtyCell(false);
   };

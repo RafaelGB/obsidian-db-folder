@@ -1,6 +1,6 @@
 import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { DataState, TableActionResponse } from "cdm/TableStateInterface";
+import { DataState, TableActionResponse, UpdateRowInfo } from "cdm/TableStateInterface";
 import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
@@ -13,13 +13,7 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, get, implementation } = tableActionResponse;
         implementation.actions.updateCell = async (
-            rowIndex: number,
-            column: TableColumn,
-            value: Literal,
-            columns: TableColumn[],
-            ddbbConfig: LocalSettings,
-            isMovingFile?: boolean,
-            saveOnDisk = true) => {
+            { value, rowIndex, column, columns, ddbbConfig, isMovingFile, saveOnDisk = true }: UpdateRowInfo) => {
             const modifiedRow = get().rows[rowIndex];
             const rowTFile = modifiedRow.__note__.getFile();
 

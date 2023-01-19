@@ -58,10 +58,20 @@ export type CreateRowInfo = {
     ddbbConfig: LocalSettings
 }
 
+export type UpdateRowInfo = {
+    rowIndex: number,
+    column: TableColumn,
+    value: Literal,
+    columns: TableColumn[],
+    ddbbConfig: LocalSettings,
+    isMovingFile?: boolean,
+    saveOnDisk?: boolean
+}
+
 export type DataStateActions = {
     insertRows: () => Promise<void>;
     addRow: (args: CreateRowInfo) => Promise<void>;
-    updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean, saveOnDisk?: boolean) => Promise<void>;
+    updateCell: (args: UpdateRowInfo) => Promise<void>;
     parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeRow: (row: RowDataType) => Promise<void>;
