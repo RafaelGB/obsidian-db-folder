@@ -52,9 +52,15 @@ export interface ConfigState {
 /************************
  * DATA STATE
  ************************/
+export type CreateRowInfo = {
+    filename: string,
+    columns: TableColumn[],
+    ddbbConfig: LocalSettings
+}
+
 export type DataStateActions = {
     insertRows: () => Promise<void>;
-    addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
+    addRow: (args: CreateRowInfo) => Promise<void>;
     updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean, saveOnDisk?: boolean) => Promise<void>;
     parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;

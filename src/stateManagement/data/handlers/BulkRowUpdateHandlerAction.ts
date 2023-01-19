@@ -1,20 +1,17 @@
-import { NoteInfoPage } from "cdm/DatabaseModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { TFile } from "obsidian";
-import { DataviewService } from "services/DataviewService";
 import { VaultManagerDB } from "services/FileManagerService";
-import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
+import { CustomView } from "views/AbstractView";
 
 export default class BulkRowUpdateHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
-        const { get, set, implementation } = tableActionResponse;
+        const { view, get, set, implementation } = tableActionResponse;
         implementation.actions.bulkRowUpdate = async (alteredRows: RowDataType[], columns: TableColumn[], action: string) => {
             let updatedRows: RowDataType[] = get().rows;
             switch (action) {
                 case "remove":
-                    updatedRows = await this.removeRows(get(), alteredRows);
+                    updatedRows = await this.removeRows(get(), alteredRows, view);
                     break;
                 case "duplicate":
                     updatedRows = await this.duplicateRows(get(), alteredRows);
@@ -37,10 +34,10 @@ export default class BulkRowUpdateHandlerAction extends AbstractTableAction<Data
      * @param rowsToDelete 
      * @returns 
      */
-    private async removeRows(state: DataState, rowsToDelete: RowDataType[]): Promise<RowDataType[]> {
+    private async removeRows(state: DataState, rowsToDelete: RowDataType[], view: CustomView): Promise<RowDataType[]> {
         const filePathToFilter = rowsToDelete.map((row) => row.__note__.filepath);
         rowsToDelete.forEach(async (row) => {
-            await VaultManagerDB.removeNote(row.__note__.getFile());
+            view.dataApi.delete(row);
         });
         return state.rows.filter((row) => !filePathToFilter.includes(row.__note__.filepath));
     }

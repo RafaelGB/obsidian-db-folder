@@ -43,6 +43,7 @@ export default function AddRowAction(actionProps: TableActionProps) {
       };
       new AddRowModal(props).open();
     };
+
     // Manage bar action for add row
     if (!view.actionButtons.addRow) {
       const exportElement = view.addAction(
