@@ -4,6 +4,7 @@ import { YamlHandlerResponse } from "cdm/MashallModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import databaseStringToYamlParser from "IO/md/DatabaseStringToYamlParser";
 import databaseYamlToStringParser from "IO/md/DatabaseYamlToStringParser";
+import { Link } from "obsidian-dataview";
 import { CustomView } from "views/AbstractView";
 
 /**
@@ -42,6 +43,12 @@ export abstract class DataApi {
      */
     abstract delete(rowToRemove: RowDataType): Promise<boolean>;
 
+    /**
+     * Rename an entity
+     * @param rowToRename 
+     * @param newName 
+     */
+    abstract rename(rowToRename: RowDataType, newName: string): Promise<RowDataType>;
     /**
      * Given a yaml, marshall it to the database standard format
      * @param yaml 

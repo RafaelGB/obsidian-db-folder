@@ -1,9 +1,11 @@
 import { DataApi } from "api/data-api";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { destination_folder } from "helpers/FileManagement";
+import { MetadataColumns } from "helpers/Constants";
+import { destination_folder, resolve_tfile } from "helpers/FileManagement";
 import { DateTime } from "luxon";
 import { Link } from "obsidian-dataview";
+import { DataviewService } from "services/DataviewService";
 import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
@@ -60,6 +62,16 @@ class DefaultDataImpl extends DataApi {
             return false;
         }
         return true;
+    }
+
+    async rename(rowToRename: RowDataType, newName: string): Promise<RowDataType> {
+        const fileLink = rowToRename[MetadataColumns.FILE] as Link;
+        const oldTfile = resolve_tfile(fileLink.path);
+        const newPath = `${oldTfile.parent.path}/${newName}.md`;
+        await app.vault.rename(oldTfile, newPath);
+        rowToRename.__note__.filepath = newPath;
+        rowToRename[MetadataColumns.FILE] = DataviewService.getDataviewAPI().fileLink(newPath);
+        return rowToRename;
     }
 }
 
