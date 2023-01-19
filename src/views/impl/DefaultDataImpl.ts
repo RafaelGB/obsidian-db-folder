@@ -1,11 +1,14 @@
 import { DataApi } from "api/data-api";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { MetadataColumns } from "helpers/Constants";
-import { destination_folder, resolve_tfile } from "helpers/FileManagement";
+import { UpdateRowInfo } from "cdm/TableStateInterface";
+import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
+import { destination_folder, resolveNewFilePath, resolve_tfile } from "helpers/FileManagement";
 import { DateTime } from "luxon";
 import { Link } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
+import { EditEngineService } from "services/EditEngineService";
+import { FileGroupingService } from "services/FileGroupingService";
 import { VaultManagerDB } from "services/FileManagerService";
 import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
@@ -50,8 +53,46 @@ class DefaultDataImpl extends DataApi {
         throw new Error("Method not implemented.");
     }
 
-    update(entity: RowDataType): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async update({
+        value,
+        ddbbConfig,
+        isMovingFile,
+        column,
+        columns,
+        saveOnDisk = true }: UpdateRowInfo,
+        modifiedRow: RowDataType): Promise<boolean> {
+        if (!saveOnDisk) return true;
+        try {
+            const pathColumns: string[] =
+                ddbbConfig.group_folder_column
+                    .split(",")
+                    .filter(Boolean);
+            // Update the row on disk
+            if (isMovingFile && pathColumns.includes(column.key)) {
+                const folderPath = destination_folder(this.view, ddbbConfig);
+                const newFilePath = resolveNewFilePath({
+                    pathColumns,
+                    row: modifiedRow,
+                    ddbbConfig,
+                    folderPath,
+                });
+                await FileGroupingService.moveFile(newFilePath, modifiedRow);
+                await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
+            }
+
+            await EditEngineService.updateRowFileProxy(
+                modifiedRow.__note__.getFile(),
+                column.key,
+                value,
+                columns,
+                ddbbConfig,
+                UpdateRowOptions.COLUMN_VALUE
+            );
+        } catch (e) {
+            LOGGER.error("Error updating row", e);
+            return false;
+        }
+        return true;
     }
 
     async delete(rowToRemove: RowDataType): Promise<boolean> {

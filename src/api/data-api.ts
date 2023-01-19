@@ -2,9 +2,9 @@ import { DatabaseYaml } from "cdm/DatabaseModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { YamlHandlerResponse } from "cdm/MashallModel";
 import { LocalSettings } from "cdm/SettingsModel";
+import { UpdateRowInfo } from "cdm/TableStateInterface";
 import databaseStringToYamlParser from "IO/md/DatabaseStringToYamlParser";
 import databaseYamlToStringParser from "IO/md/DatabaseYamlToStringParser";
-import { Link } from "obsidian-dataview";
 import { CustomView } from "views/AbstractView";
 
 /**
@@ -33,7 +33,7 @@ export abstract class DataApi {
      * @returns
      * @throws {Error} if the entity does not exist or the id is not valid
      */
-    abstract update(entity: RowDataType): Promise<boolean>;
+    abstract update(updateRowInfo: UpdateRowInfo, modifiedRow: RowDataType): Promise<boolean>;
 
     /**
      * Delete an entity by id

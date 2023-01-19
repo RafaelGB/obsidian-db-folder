@@ -1,52 +1,18 @@
-import { TableColumn } from "cdm/FolderModel";
-import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse, UpdateRowInfo } from "cdm/TableStateInterface";
-import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
-import { Literal } from "obsidian-dataview";
+import { MetadataColumns } from "helpers/Constants";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
-import { destination_folder, resolveNewFilePath } from "helpers/FileManagement";
-import { EditEngineService } from "services/EditEngineService";
-import { FileGroupingService } from "services/FileGroupingService";
 
 export default class UpdateCellHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, get, implementation } = tableActionResponse;
         implementation.actions.updateCell = async (
-            { value, rowIndex, column, columns, ddbbConfig, isMovingFile, saveOnDisk = true }: UpdateRowInfo) => {
+            updateRowInfo: UpdateRowInfo) => {
+            const { value, rowIndex, column } = updateRowInfo;
             const modifiedRow = get().rows[rowIndex];
-            const rowTFile = modifiedRow.__note__.getFile();
-
             // Update the row on memory
             modifiedRow[column.key] = value;
-
-            if (saveOnDisk) {
-                const pathColumns: string[] =
-                    ddbbConfig.group_folder_column
-                        .split(",")
-                        .filter(Boolean);
-                // Update the row on disk
-                if (isMovingFile && pathColumns.includes(column.key)) {
-                    const folderPath = destination_folder(view, ddbbConfig);
-                    const newFilePath = resolveNewFilePath({
-                        pathColumns,
-                        row: modifiedRow,
-                        ddbbConfig,
-                        folderPath,
-                    });
-                    await FileGroupingService.moveFile(newFilePath, modifiedRow);
-                    await FileGroupingService.removeEmptyFolders(folderPath, ddbbConfig);
-                }
-
-                await EditEngineService.updateRowFileProxy(
-                    rowTFile,
-                    column.key,
-                    value,
-                    columns,
-                    ddbbConfig,
-                    UpdateRowOptions.COLUMN_VALUE
-                );
-            }
+            await view.dataApi.update(updateRowInfo, modifiedRow);
 
             set((state) => {
                 // Save on memory
