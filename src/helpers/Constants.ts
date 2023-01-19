@@ -424,6 +424,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     datetime_format: 'yyyy-MM-dd HH:mm:ss',
     metadata_date_format: 'yyyy-MM-dd HH:mm:ss',
     enable_footer: false,
+    implementation: 'default',
   }
 };
 

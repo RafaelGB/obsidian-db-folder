@@ -78,9 +78,13 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         }
     }
 
-    setDataApi(keyImpl?: string): void {
-        if (!keyImpl) {
-            this.dataApi = new DefaultDataImpl();
+    /**
+     * Asign an implementation for interact with disk data
+     * @param keyImpl 
+     */
+    setDataApi(key?: string): void {
+        if (!key || key === "default") {
+            this.dataApi = new DefaultDataImpl(this);
         }
     }
 
@@ -93,6 +97,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
             LOGGER.info(`=>initDatabase ${this.file.path}`);
             // Load the database file
             this.diskConfig = await new DatabaseInfo(this.file, this.plugin.settings.local_settings).build();
+            this.setDataApi(this.diskConfig.yaml.config.implementation);
 
             let yamlColumns: Record<string, DatabaseColumn> =
                 this.diskConfig.yaml.columns;

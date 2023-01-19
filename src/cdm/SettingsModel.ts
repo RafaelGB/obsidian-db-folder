@@ -61,6 +61,7 @@ export interface LocalSettings {
     datetime_format: string;
     metadata_date_format: string;
     enable_footer: boolean;
+    implementation: string;
 }
 
 export interface FilterSettings {
