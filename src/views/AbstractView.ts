@@ -7,7 +7,6 @@ import { createDatabase } from "components/index/Database";
 import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, DB_ICONS, EMITTERS_BAR_STATUS, EMITTERS_GROUPS, EMITTERS_SHORTCUT, InputType } from "helpers/Constants";
 import { createEmitter, Emitter } from "helpers/Emitter";
-import obtainInitialType from "helpers/InitialType";
 import { c } from "helpers/StylesHelper";
 import { isDatabaseNote } from "helpers/VaultManagement";
 import { getParentWindow } from "helpers/WindowElement";
@@ -15,7 +14,6 @@ import { t } from "lang/helpers";
 import DBFolderPlugin from "main";
 import { HoverParent, HoverPopover, Menu, Platform, TextFileView, TFile, WorkspaceLeaf } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
-import { Db } from "services/CoreService";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
@@ -34,8 +32,12 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     formulas: Record<string, unknown>;
     actionButtons: Record<string, HTMLElement> = {};
     dataApi: DataApi;
-    rows: Array<RowDataType>;
     columns: Array<TableColumn>;
+
+    /**
+     * Get all the columns configured in the database
+     */
+    abstract getColumns(): Promise<TableColumn[]>;
 
     /**
      * Get all the entities in the database
@@ -43,9 +45,14 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     abstract getRows(): Promise<RowDataType[]>;
 
     /**
-     * Get all the columns configured in the database
+     * Initial behaviour of stateManager
      */
-    abstract getColumns(): Promise<TableColumn[]>;
+    abstract getInitialType(): InitialType;
+
+    /**
+     * Get all the formulas
+     */
+    abstract getFormulas(): Promise<Record<string, unknown>>;
 
     /**
      * Abstract 
@@ -75,7 +82,6 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         if (!keyImpl) {
             this.dataApi = new DefaultDataImpl();
         }
-
     }
 
     async build(): Promise<void> {
@@ -86,10 +92,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         try {
             LOGGER.info(`=>initDatabase ${this.file.path}`);
             // Load the database file
-            this.diskConfig = new DatabaseInfo(this.file);
-            await this.diskConfig.initDatabaseconfigYaml(
-                this.plugin.settings.local_settings
-            );
+            this.diskConfig = await new DatabaseInfo(this.file, this.plugin.settings.local_settings).build();
 
             let yamlColumns: Record<string, DatabaseColumn> =
                 this.diskConfig.yaml.columns;
@@ -98,13 +101,11 @@ export abstract class CustomView extends TextFileView implements HoverParent {
                 yamlColumns,
                 this.diskConfig.yaml.config
             );
-            // Obtain base information about columns
+
             this.columns = await this.getColumns();
+            this.initial = this.getInitialType();
+            this.formulas = await this.getFormulas();
 
-            this.rows = await this.getRows();
-            this.initial = obtainInitialType(this.columns);
-
-            this.formulas = await Db.buildFns(this.diskConfig.yaml.config);
             // Define table properties
             this.shadowColumns = this.columns.filter((col) => col.skipPersist);
             const tableProps: TableDataType = {

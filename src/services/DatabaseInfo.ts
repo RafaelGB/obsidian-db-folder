@@ -14,18 +14,20 @@ import { DATABASE_CONFIG } from 'helpers/Constants';
 import NoteContentActionBuilder from 'patterns/builders/NoteContentActionBuilder';
 
 export default class DatabaseInfo {
-    private file: TFile;
     public yaml: DatabaseYaml;
-    constructor(file: TFile) {
-        this.file = file;
-    }
 
+    constructor(private file: TFile, private default_local_settings: LocalSettings) { }
+
+    async build(): Promise<DatabaseInfo> {
+        await this.initDatabaseconfigYaml(this.default_local_settings);
+        return this;
+    }
     /**
      * Obtain database configuration from file
      * @param file 
      * @returns 
      */
-    async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
+    private async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
         LOGGER.info(`Load DDBB yaml - "${this.file.path}"`);
         const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
         if (!databaseRaw || !isDatabaseNote(databaseRaw)) throw new Error('No frontmatter found');

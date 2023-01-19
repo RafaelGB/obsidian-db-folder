@@ -12,7 +12,7 @@ export default class GroupFilesHandlerAction extends AbstractTableAction<DataSta
       const folderPath = destination_folder(view, view.diskConfig.yaml.config);
       const movedRows = await FileGroupingService.organizeNotesIntoSubfolders(
         folderPath,
-        view.rows,
+        await view.getRows(),
         view.diskConfig.yaml.config
       );
       await FileGroupingService.removeEmptyFolders(

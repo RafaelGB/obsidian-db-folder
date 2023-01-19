@@ -27,8 +27,7 @@ export function recordAllDatabases(): Record<string, string> {
 export async function recordRowsFromRelation(ddbbPath: string, ddbbConfig: LocalSettings, columns?: TableColumn[]): Promise<Record<string, string>> {
     const relationRows: Record<string, string> = {};
     const ddbbFile = resolve_tfile(ddbbPath);
-    const ddbbInfo = new DatabaseInfo(ddbbFile);
-    await ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
+    const ddbbInfo = await new DatabaseInfo(ddbbFile, ddbbConfig).build();
 
     const ddbbRows = await sourceDataviewPages(ddbbInfo.yaml.config, ddbbFile.parent.path, columns);
     ddbbRows
@@ -43,8 +42,7 @@ export async function recordRowsFromRelation(ddbbPath: string, ddbbConfig: Local
 export async function recordFieldsFromRelation(ddbbPath: string, ddbbConfig: LocalSettings, columns?: TableColumn[]): Promise<Record<string, string>> {
     const relationFields: Record<string, string> = {};
     const ddbbFile = resolve_tfile(ddbbPath);
-    const ddbbInfo = new DatabaseInfo(ddbbFile);
-    await ddbbInfo.initDatabaseconfigYaml(ddbbConfig);
+    const ddbbInfo = await new DatabaseInfo(ddbbFile, ddbbConfig).build();
     const fields = await obtainColumnsFromRows(
         ddbbFile.parent.path,
         ddbbInfo.yaml.config,

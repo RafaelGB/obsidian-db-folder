@@ -28,9 +28,9 @@ export function NavBar(navBarProps: NavBarProps) {
     }
     view.plugin.statusBarItem.replaceChildren();
     view.plugin.statusBarItem.createEl("span", {
-      text: `${table.getFilteredRowModel().rows.length}/${view.rows.length} '${
-        view.diskConfig.yaml.name
-      }'`,
+      text: `${table.getFilteredRowModel().rows.length}/${
+        table.getCoreRowModel().rows.length
+      } '${view.diskConfig.yaml.name}'`,
     });
   };
 

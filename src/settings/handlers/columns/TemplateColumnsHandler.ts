@@ -21,22 +21,28 @@ export class TemplateColumnsHandler extends AbstractSettingsHandler {
              * TEMPLATE OF SELECTED FILE
              ***************************/
             let selected_file = "";
-            const filePaths: Record<string, string> = {};
-            view.rows.forEach((row: RowDataType) => {
-                if (row.__note__) {
-                    filePaths[row.__note__.getFile().path] = row.__note__.getFile().basename;
-                }
-            });
+            let filePaths: Record<string, string>;
             new Setting(template_section)
                 .setName(t("settings_template_file_title"))
                 .setDesc(t("settings_template_file_desc"))
                 .addDropdown((dropdown) => {
-                    dropdown
-                    dropdown.addOptions(filePaths);
                     dropdown.setValue("-");
                     dropdown.onChange((value: string) => {
                         selected_file = value;
                     });
+                    dropdown.selectEl.addEventListener("focus", async () => {
+                        if (!filePaths) {
+                            filePaths = {};
+                            const rows = await view.getRows();
+                            rows.forEach((row: RowDataType) => {
+                                if (row.__note__) {
+                                    filePaths[row.__note__.getFile().path] = row.__note__.getFile().basename;
+                                }
+                            });
+                            dropdown.addOptions(filePaths);
+                        }
+                    });
+
                 }).addExtraButton((cb) => {
                     cb.setIcon("save")
                         .setTooltip(t("settings_template_file_button_tooltip"))
