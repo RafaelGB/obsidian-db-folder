@@ -1,12 +1,23 @@
 import { DataApi } from "api/data-api";
+import { DatabaseColumn } from "cdm/DatabaseModel";
 import { UpdaterData, ViewEvents } from "cdm/EmitterModel";
-import { InitialType, RowDataType, TableColumn } from "cdm/FolderModel";
-import { DatabaseCore, DB_ICONS, EMITTERS_BAR_STATUS, EMITTERS_GROUPS, EMITTERS_SHORTCUT } from "helpers/Constants";
-import { Emitter } from "helpers/Emitter";
+import { InitialType, RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
+import { obtainMetadataColumns } from "components/Columns";
+import { createDatabase } from "components/index/Database";
+import { DbFolderException } from "errors/AbstractException";
+import { DatabaseCore, DB_ICONS, EMITTERS_BAR_STATUS, EMITTERS_GROUPS, EMITTERS_SHORTCUT, InputType } from "helpers/Constants";
+import { createEmitter, Emitter } from "helpers/Emitter";
+import obtainInitialType from "helpers/InitialType";
+import { getParentWindow } from "helpers/WindowElement";
+import { t } from "lang/helpers";
 import DBFolderPlugin from "main";
-import { HoverParent, HoverPopover, TextFileView, TFile } from "obsidian";
-import { Root } from "react-dom/client";
+import { HoverParent, HoverPopover, Menu, TextFileView, TFile, WorkspaceLeaf } from "obsidian";
+import { createRoot, Root } from "react-dom/client";
+import { Db } from "services/CoreService";
 import DatabaseInfo from "services/DatabaseInfo";
+import { LOGGER } from "services/Logger";
+import { SettingsModal } from "Settings";
+import StateManager from "StateManager";
 
 export abstract class CustomView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
@@ -15,13 +26,86 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     tableContainer: HTMLDivElement | null = null;
     rootContainer: Root | null = null;
     diskConfig: DatabaseInfo;
-    rows: Array<RowDataType>;
-    columns: Array<TableColumn>;
     shadowColumns: Array<TableColumn>;
     initial: InitialType;
     formulas: Record<string, unknown>;
     actionButtons: Record<string, HTMLElement> = {};
     dataApi: DataApi;
+    rows: Array<RowDataType>;
+    columns: Array<TableColumn>;
+
+    constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
+        super(leaf);
+        this.plugin = plugin;
+        this.emitter = createEmitter();
+        if (file) {
+            this.file = file;
+            this.plugin.removeView(this);
+            this.plugin.addView(this);
+        } else {
+            this.register(
+                this.containerEl.onWindowMigrated(() => {
+                    this.plugin.removeView(this);
+                    this.plugin.addView(this);
+                })
+            );
+        }
+    }
+
+    /**
+     * Get all the entities in the database
+     */
+    abstract getRows(): Promise<RowDataType[]>;
+
+    /**
+     * Get all the columns configured in the database
+     */
+    abstract getColumns(): Promise<TableColumn[]>;
+
+    async initDatabase(): Promise<void> {
+        try {
+            LOGGER.info(`=>initDatabase ${this.file.path}`);
+            // Load the database file
+            this.diskConfig = new DatabaseInfo(this.file);
+            await this.diskConfig.initDatabaseconfigYaml(
+                this.plugin.settings.local_settings
+            );
+
+            let yamlColumns: Record<string, DatabaseColumn> =
+                this.diskConfig.yaml.columns;
+            // Complete the columns with the metadata columns
+            yamlColumns = await obtainMetadataColumns(
+                yamlColumns,
+                this.diskConfig.yaml.config
+            );
+            // Obtain base information about columns
+            this.columns = await this.getColumns();
+
+            this.rows = await this.getRows();
+            this.initial = obtainInitialType(this.columns);
+
+            this.formulas = await Db.buildFns(this.diskConfig.yaml.config);
+            // Define table properties
+            this.shadowColumns = this.columns.filter((col) => col.skipPersist);
+            const tableProps: TableDataType = {
+                skipReset: false,
+                view: this,
+                stateManager: this.plugin.getStateManager(this.file),
+            };
+            // Render database
+            const table = createDatabase(tableProps);
+            this.rootContainer.render(table);
+            this.diskConfig.saveOnDisk();
+            LOGGER.info(`<=initDatabase ${this.file.path}`);
+        } catch (e: unknown) {
+            LOGGER.error(`initDatabase ${this.file.path}`, e);
+            if (e instanceof DbFolderException) {
+                e.render(this.rootContainer);
+            } else {
+                throw e;
+            }
+        }
+    }
 
     /**
      * Define the icon associated with the view
@@ -43,6 +127,143 @@ export abstract class CustomView extends TextFileView implements HoverParent {
      * Called after unloading a file
      */
     clear(): void { }
+
+    /**
+     * id of the view
+     */
+    get id(): string {
+        // TODO define id on workfleaf
+        return `${(this.leaf as any).id}:::${this.file?.path}`;
+    }
+
+    /**
+     * Called when the view is unmounted
+     */
+    destroy() {
+        if (this.file) {
+            // Remove draggables from render, as the DOM has already detached
+            this.getStateManager().unregisterView(this);
+            this.plugin.removeView(this);
+            this.tableContainer.remove();
+            this.detachViewComponents();
+            LOGGER.info(`Closed view ${this.file.path}}`);
+        }
+    }
+
+    /**
+     * Obtain the state manager associated with the plugin
+     * @returns 
+     */
+    getStateManager(): StateManager {
+        return this.plugin.getStateManager(this.file);
+    }
+
+    /**
+     * Called when the view is closed
+     */
+    async onClose() {
+        this.destroy();
+    }
+
+    /**
+     * Called when the view is loaded
+     */
+    onload(): void {
+        super.onload();
+        this.initActions();
+    }
+
+    private initActions(): void {
+        // Settings action
+        this.addAction(
+            "gear",
+            `${t("menu_pane_open_db_settings_action")}`,
+            this.settingsAction.bind(this)
+        );
+        // Open as markdown action
+        this.addAction(
+            "document",
+            `${t("menu_pane_open_as_md_action")}`,
+            this.markdownAction.bind(this)
+        );
+    }
+
+    /**
+     * Called when the view is unloaded
+     * @param file 
+     * @returns 
+     */
+    async onUnloadFile(file: TFile) {
+        this.destroy();
+        return await super.onUnloadFile(file);
+    }
+
+    /**
+     * Obtain the window associated with the view
+     * @returns 
+     */
+    getWindow() {
+        return getParentWindow(this.containerEl) as Window & typeof globalThis;
+    }
+
+    /**
+     * Wrapper of menu options
+     * @param menu 
+     * @param source 
+     * @param callSuper 
+     * @returns 
+     */
+    onPaneMenu(menu: Menu, source: string, callSuper: boolean = true): void {
+        if (source !== "more-options") {
+            super.onPaneMenu(menu, source);
+            return;
+        }
+        // Add a menu item to force the database to markdown view
+        menu
+            .addItem((item) => {
+                item
+                    .setTitle(t("menu_pane_open_as_md_action"))
+                    .setIcon("document")
+                    .onClick(this.markdownAction.bind(this));
+            })
+            .addItem((item) => {
+                item
+                    .setTitle(t("menu_pane_open_db_settings_action"))
+                    .setIcon("gear")
+                    .onClick(this.settingsAction.bind(this));
+            })
+            .addSeparator();
+
+        if (callSuper) {
+            super.onPaneMenu(menu, source);
+        }
+    }
+
+    /**
+     * Reload the content of the view
+     */
+    async reloadDatabase() {
+        this.rootContainer.unmount();
+        this.rootContainer = createRoot(this.tableContainer);
+        this.detachViewComponents();
+        await this.initDatabase();
+    }
+
+    /**
+     * Remove all action buttons from the view
+     */
+    private detachViewComponents(): void {
+        Object.values(this.actionButtons).forEach((button) => {
+            button.detach();
+        });
+        this.actionButtons = {};
+
+        if (this.plugin.statusBarItem) {
+            this.plugin.statusBarItem.detach();
+            this.plugin.statusBarItem = null;
+        }
+        this.emitter.removeAllListeners();
+    }
 
     /****************************************************************
    *                     KEYBOARD SHORTCUTS
@@ -99,5 +320,33 @@ export abstract class CustomView extends TextFileView implements HoverParent {
 
     handleUpdateStatusBar() {
         this.emitter.emit(EMITTERS_GROUPS.BAR_STATUS, EMITTERS_BAR_STATUS.UPDATE);
+    }
+
+    /****************************************************************
+   *                         BAR ACTIONS
+   ****************************************************************/
+
+    /**
+     *
+     * @param evt
+     */
+    settingsAction(evt?: MouseEvent): void {
+        new SettingsModal(
+            this,
+            {
+                onSettingsChange: (settings) => {
+                    /**
+                     * Settings are saved into the database file, so we don't need to do anything here.
+                     */
+                },
+            },
+            this.plugin.settings
+        ).open();
+    }
+
+    markdownAction(evt: MouseEvent): void {
+        this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
+            InputType.MARKDOWN;
+        this.plugin.setMarkdownView(this.leaf);
     }
 }

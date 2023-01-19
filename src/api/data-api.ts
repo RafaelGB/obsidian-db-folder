@@ -40,16 +40,6 @@ export abstract class DataApi {
     abstract delete(id: string): Promise<boolean>;
 
     /**
-     * Get all the entities in the database
-     */
-    abstract getRows(): Promise<RowDataType[]>;
-
-    /**
-     * Get all the columns configured in the database
-     */
-    abstract getColumns(): Promise<TableColumn[]>;
-
-    /**
      * Given a yaml, marshall it to the database standard format
      * @param yaml 
      * @returns 
