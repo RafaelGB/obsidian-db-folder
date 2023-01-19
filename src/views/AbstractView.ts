@@ -8,16 +8,19 @@ import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, DB_ICONS, EMITTERS_BAR_STATUS, EMITTERS_GROUPS, EMITTERS_SHORTCUT, InputType } from "helpers/Constants";
 import { createEmitter, Emitter } from "helpers/Emitter";
 import obtainInitialType from "helpers/InitialType";
+import { c } from "helpers/StylesHelper";
+import { isDatabaseNote } from "helpers/VaultManagement";
 import { getParentWindow } from "helpers/WindowElement";
 import { t } from "lang/helpers";
 import DBFolderPlugin from "main";
-import { HoverParent, HoverPopover, Menu, TextFileView, TFile, WorkspaceLeaf } from "obsidian";
+import { HoverParent, HoverPopover, Menu, Platform, TextFileView, TFile, WorkspaceLeaf } from "obsidian";
 import { createRoot, Root } from "react-dom/client";
 import { Db } from "services/CoreService";
 import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
+import DefaultDataImpl from "./impl/DefaultDataImpl";
 
 export abstract class CustomView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
@@ -34,6 +37,22 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     rows: Array<RowDataType>;
     columns: Array<TableColumn>;
 
+    /**
+     * Get all the entities in the database
+     */
+    abstract getRows(): Promise<RowDataType[]>;
+
+    /**
+     * Get all the columns configured in the database
+     */
+    abstract getColumns(): Promise<TableColumn[]>;
+
+    /**
+     * Abstract 
+     * @param leaf 
+     * @param plugin 
+     * @param file 
+     */
     constructor(leaf: WorkspaceLeaf, plugin: DBFolderPlugin, file?: TFile) {
         super(leaf);
         this.plugin = plugin;
@@ -52,17 +71,18 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         }
     }
 
-    /**
-     * Get all the entities in the database
-     */
-    abstract getRows(): Promise<RowDataType[]>;
+    setDataApi(keyImpl?: string): void {
+        if (!keyImpl) {
+            this.dataApi = new DefaultDataImpl();
+        }
 
-    /**
-     * Get all the columns configured in the database
-     */
-    abstract getColumns(): Promise<TableColumn[]>;
+    }
 
-    async initDatabase(): Promise<void> {
+    async build(): Promise<void> {
+        await this.initDatabase();
+    }
+
+    private async initDatabase(): Promise<void> {
         try {
             LOGGER.info(`=>initDatabase ${this.file.path}`);
             // Load the database file
@@ -108,35 +128,6 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     }
 
     /**
-     * Define the icon associated with the view
-     * @returns 
-     */
-    getIcon() {
-        return DB_ICONS.NAME;
-    }
-
-    /**
-     * Define the type key associated with the view
-     * @returns 
-     */
-    getViewType(): string {
-        return DatabaseCore.FRONTMATTER_KEY;
-    }
-
-    /**
-     * Called after unloading a file
-     */
-    clear(): void { }
-
-    /**
-     * id of the view
-     */
-    get id(): string {
-        // TODO define id on workfleaf
-        return `${(this.leaf as any).id}:::${this.file?.path}`;
-    }
-
-    /**
      * Called when the view is unmounted
      */
     destroy() {
@@ -148,29 +139,6 @@ export abstract class CustomView extends TextFileView implements HoverParent {
             this.detachViewComponents();
             LOGGER.info(`Closed view ${this.file.path}}`);
         }
-    }
-
-    /**
-     * Obtain the state manager associated with the plugin
-     * @returns 
-     */
-    getStateManager(): StateManager {
-        return this.plugin.getStateManager(this.file);
-    }
-
-    /**
-     * Called when the view is closed
-     */
-    async onClose() {
-        this.destroy();
-    }
-
-    /**
-     * Called when the view is loaded
-     */
-    onload(): void {
-        super.onload();
-        this.initActions();
     }
 
     private initActions(): void {
@@ -188,26 +156,47 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         );
     }
 
-    /**
-     * Called when the view is unloaded
-     * @param file 
-     * @returns 
-     */
-    async onUnloadFile(file: TFile) {
-        this.destroy();
-        return await super.onUnloadFile(file);
+    initRootContainer(file: TFile) {
+        this.tableContainer = this.contentEl.createDiv(
+            Platform.isDesktop ? c("container") : c("container-mobile")
+        );
+        this.tableContainer.setAttribute("id", file.path);
+        this.rootContainer = createRoot(this.tableContainer);
+        return this;
     }
 
     /**
-     * Obtain the window associated with the view
-     * @returns 
+     * Reload the content of the view
      */
-    getWindow() {
-        return getParentWindow(this.containerEl) as Window & typeof globalThis;
+    async reloadDatabase() {
+        this.rootContainer.unmount();
+        this.rootContainer = createRoot(this.tableContainer);
+        this.detachViewComponents();
+        await this.build();
     }
 
     /**
-     * Wrapper of menu options
+     * Remove all action buttons from the view
+     */
+    private detachViewComponents(): void {
+        Object.values(this.actionButtons).forEach((button) => {
+            button.detach();
+        });
+        this.actionButtons = {};
+
+        if (this.plugin.statusBarItem) {
+            this.plugin.statusBarItem.detach();
+            this.plugin.statusBarItem = null;
+        }
+        this.emitter.removeAllListeners();
+    }
+
+    /****************************************************************
+     *                     Reactive Actions
+     ****************************************************************/
+
+    /**
+     * Triggered when the user clicks on the associated pane menu item
      * @param menu 
      * @param source 
      * @param callSuper 
@@ -240,35 +229,101 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     }
 
     /**
-     * Reload the content of the view
+     * Triggered when the associated file is loaded
+     * @param file 
+     * @returns 
      */
-    async reloadDatabase() {
-        this.rootContainer.unmount();
-        this.rootContainer = createRoot(this.tableContainer);
-        this.detachViewComponents();
-        await this.initDatabase();
+    async onLoadFile(file: TFile) {
+        try {
+            this.initRootContainer(file);
+            return await super.onLoadFile(file);
+        } catch (e) {
+            const stateManager = this.plugin.stateManagers.get(this.file);
+            throw e;
+        }
     }
 
     /**
-     * Remove all action buttons from the view
+     * Triggered when the associated file is unloaded
+     * @param file 
+     * @returns 
      */
-    private detachViewComponents(): void {
-        Object.values(this.actionButtons).forEach((button) => {
-            button.detach();
-        });
-        this.actionButtons = {};
+    async onUnloadFile(file: TFile) {
+        this.destroy();
+        return await super.onUnloadFile(file);
+    }
 
-        if (this.plugin.statusBarItem) {
-            this.plugin.statusBarItem.detach();
-            this.plugin.statusBarItem = null;
-        }
-        this.emitter.removeAllListeners();
+    /**
+     * Triggered when the associated view is closed
+     */
+    async onClose() {
+        this.destroy();
+    }
+
+    /**
+     * Triggered when the associated view is loaded
+     */
+    onload(): void {
+        super.onload();
+        this.initActions();
+    }
+
+    /**
+     * Called after unloading a file
+     */
+    clear(): void { }
+
+    /****************************************************************
+     *                          Getters
+     ****************************************************************/
+
+    /**
+     * Obtain the window associated with the view
+     * @returns 
+     */
+    getWindow() {
+        return getParentWindow(this.containerEl) as Window & typeof globalThis;
+    }
+
+    /**
+     * Obtain the state manager associated with the plugin
+     * @returns 
+     */
+    getStateManager(): StateManager {
+        return this.plugin.getStateManager(this.file);
+    }
+
+    /**
+     * Define the icon associated with the view
+     * @returns 
+     */
+    getIcon() {
+        return DB_ICONS.NAME;
+    }
+
+    /**
+     * Define the type key associated with the view
+     * @returns 
+     */
+    getViewType(): string {
+        return DatabaseCore.FRONTMATTER_KEY;
+    }
+
+    /**
+     * id of the view
+     */
+    get id(): string {
+        // TODO define id on workfleaf
+        return `${(this.leaf as any).id}:::${this.file?.path}`;
     }
 
     /****************************************************************
-   *                     KEYBOARD SHORTCUTS
-   ****************************************************************/
+     *                     KEYBOARD SHORTCUTS
+     ****************************************************************/
 
+    /**
+     * Shortcut to go to the next page
+     */
     goNextPage() {
         this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.GO_NEXT_PAGE);
     }
@@ -295,9 +350,35 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
     }
 
+    /**
+     * Unparse the database file, and return the resulting text.
+     * @returns
+     */
+    getViewData(): string {
+        return this.data;
+    }
+
+    setViewData(data: string): void {
+        if (!isDatabaseNote(data)) {
+            this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
+                InputType.MARKDOWN;
+            this.plugin.removeView(this);
+            this.plugin.setMarkdownView(this.leaf, false);
+
+            return;
+        }
+
+        this.plugin.addView(this);
+    }
+
+    get isPrimary(): boolean {
+        return this.plugin.getStateManager(this.file)?.getAView() === this;
+    }
+
     /****************************************************************
-     *                     REACTIVE ACTIONS
+     *                     EVENT HANDLERS
      ****************************************************************/
+
     /**
      * Dataview API router triggered by any file change
      * @param op
@@ -323,8 +404,8 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     }
 
     /****************************************************************
-   *                         BAR ACTIONS
-   ****************************************************************/
+    *                         BAR ACTIONS
+    ****************************************************************/
 
     /**
      *

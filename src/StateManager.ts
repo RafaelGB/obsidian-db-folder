@@ -22,7 +22,7 @@ export default class StateManager {
   registerView(view: CustomView) {
     if (!this.viewSet.has(view)) {
       this.viewSet.add(view);
-      view.initDatabase();
+      view.build();
     }
   }
 

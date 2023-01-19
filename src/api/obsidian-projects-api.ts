@@ -105,8 +105,9 @@ class ProjectAPI extends ProjectView {
         const leaf = app.workspace.getLeaf();
         const file = resolve_tfile(filePath);
         this.view = new DatabaseView(leaf, this.plugin, file);
-        this.view.initRootContainer(file);
-        await this.view.initDatabase();
+        await this.view
+            .initRootContainer(file)
+            .build();
         this.dataEl = contentEl
             .createDiv(c("project-view-container"))
             .appendChild(this.view.containerEl);
