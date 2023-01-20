@@ -1,5 +1,5 @@
 import { DataState, TableActionResponse, UpdateRowInfo } from "cdm/TableStateInterface";
-import { MetadataColumns } from "helpers/Constants";
+import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
 import { DateTime } from "luxon";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
@@ -12,7 +12,13 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
             const modifiedRow = get().rows[rowIndex];
             // Update the row on memory
             modifiedRow[column.key] = value;
-            await view.dataApi.update(updateRowInfo, modifiedRow);
+            if (updateRowInfo.saveOnDisk) {
+                await view.dataApi.update({
+                    ...updateRowInfo,
+                    action: UpdateRowOptions
+                        .COLUMN_VALUE
+                }, modifiedRow);
+            }
 
             set((state) => {
                 // Save on memory

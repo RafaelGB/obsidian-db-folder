@@ -75,7 +75,7 @@ export type DataStateActions = {
     parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeRow: (row: RowDataType) => Promise<void>;
-    removeDataOfColumn: (column: TableColumn) => void;
+    removeDataOfColumn: (updater: Omit<UpdateRowInfo, "rowIndex" | "value">) => void;
     editOptionForAllRows: (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
         ddbbConfig: LocalSettings) => Promise<void>;

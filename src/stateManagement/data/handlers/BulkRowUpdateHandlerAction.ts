@@ -14,7 +14,7 @@ export default class BulkRowUpdateHandlerAction extends AbstractTableAction<Data
                     updatedRows = await this.removeRows(get(), alteredRows, view);
                     break;
                 case "duplicate":
-                    updatedRows = await this.duplicateRows(get(), alteredRows);
+                    updatedRows = await this.duplicateRows(get(), alteredRows, view);
                 default:
                 // Do nothing
             }
@@ -48,11 +48,11 @@ export default class BulkRowUpdateHandlerAction extends AbstractTableAction<Data
      * @param rowsToDuplicate 
      * @returns 
      */
-    private duplicateRows(state: DataState, rowsToDuplicate: RowDataType[]) {
-        cancelAnimationFrame
+    private duplicateRows(state: DataState, rowsToDuplicate: RowDataType[], view: CustomView) {
         rowsToDuplicate.forEach(async (row) => {
-            await VaultManagerDB.duplicateNote(row.__note__.getFile());
+            await view.dataApi.duplicate(row);
         })
+        // State is not updated because the file system is watched and the state will be updated automatically
         return state.rows;
     }
 }

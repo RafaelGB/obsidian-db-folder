@@ -1,4 +1,4 @@
-import { DataApi } from "api/data-api";
+import { DataApi, UpdateApiInfo } from "api/data-api";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { UpdateRowInfo } from "cdm/TableStateInterface";
@@ -49,21 +49,16 @@ class DefaultDataImpl extends DataApi {
         return newNote.getRowDataType(columns);
     }
 
-    read(id: string): Promise<RowDataType> {
-        throw new Error("Method not implemented.");
-    }
-
     async update({
         value,
         ddbbConfig,
         isMovingFile,
         column,
         columns,
-        saveOnDisk = true }: UpdateRowInfo,
+        action }: UpdateApiInfo,
         modifiedRow: RowDataType): Promise<boolean> {
-        if (!saveOnDisk) return true;
         try {
-            const pathColumns: string[] =
+            const pathColumns =
                 ddbbConfig.group_folder_column
                     .split(",")
                     .filter(Boolean);
@@ -86,7 +81,7 @@ class DefaultDataImpl extends DataApi {
                 value,
                 columns,
                 ddbbConfig,
-                UpdateRowOptions.COLUMN_VALUE
+                action
             );
         } catch (e) {
             LOGGER.error("Error updating row", e);
@@ -113,6 +108,16 @@ class DefaultDataImpl extends DataApi {
         rowToRename.__note__.filepath = newPath;
         rowToRename[MetadataColumns.FILE] = DataviewService.getDataviewAPI().fileLink(newPath);
         return rowToRename;
+    }
+
+    async duplicate(rowToDuplicate: RowDataType): Promise<boolean> {
+        try {
+            await VaultManagerDB.duplicateNote(rowToDuplicate.__note__.getFile());
+        } catch (e) {
+            LOGGER.error("Error duplicating note", e);
+            return false;
+        }
+        return true;
     }
 }
 
