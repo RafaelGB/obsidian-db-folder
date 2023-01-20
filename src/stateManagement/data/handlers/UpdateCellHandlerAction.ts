@@ -8,11 +8,11 @@ export default class UpdateCellHandlerAction extends AbstractTableAction<DataSta
         const { view, set, get, implementation } = tableActionResponse;
         implementation.actions.updateCell = async (
             updateRowInfo: UpdateRowInfo) => {
-            const { value, rowIndex, column } = updateRowInfo;
+            const { value, rowIndex, column, saveOnDisk = true } = updateRowInfo;
             const modifiedRow = get().rows[rowIndex];
             // Update the row on memory
             modifiedRow[column.key] = value;
-            if (updateRowInfo.saveOnDisk) {
+            if (saveOnDisk) {
                 await view.dataApi.update({
                     ...updateRowInfo,
                     action: UpdateRowOptions
