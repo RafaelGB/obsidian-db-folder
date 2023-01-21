@@ -46,13 +46,3 @@ function sanitizeHeadersCSV(headers: TableColumn[]): LabelKeyObject[] {
     });
     return sanitized;
 }
-
-
-// async function readCSV(path: string): Promise<Result<DataObject[], string>> {
-//     try {
-//         let fileData = await app.vault.adapter.read(path);
-//         return Result.success(parseCsv(fileData));
-//     } catch (ex) {
-//         return Result.failure(`Failed to load data from path '${path}'.`);
-//     }
-// }

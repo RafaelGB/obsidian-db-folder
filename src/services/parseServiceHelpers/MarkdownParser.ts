@@ -42,8 +42,10 @@ class MarkdownParser extends TypeParser<Literal> {
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
                     auxMarkdown = this.parse({ type: 'date', value: wrapped.value });
-                } else {
+                } else if (this.isInline) {
                     auxMarkdown = JSON.stringify(wrapped.value, stringifyReplacer);
+                } else {
+                    auxMarkdown = wrapped.value;
                 }
                 break;
             default:

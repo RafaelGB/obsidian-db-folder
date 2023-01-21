@@ -17,6 +17,7 @@ import { RollupActionHandler } from "./handlers/rollups/RollupActionHandler";
 import { RollupKeyHandler } from "./handlers/rollups/RollupKeyHandler";
 import { RollupPersistToggleHandler } from "./handlers/rollups/RollupPersistToggleHandler";
 import { RollupFormulaHandler } from "./handlers/rollups/RollupFormulaHandler";
+import { BidirectionalRelationToggleHandler } from "./handlers/automations/BidirectionalRelationToggleHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
@@ -143,6 +144,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.RELATION:
                 particularHandlers.push(new DatabaseSelectorHandler());
+                particularHandlers.push(new BidirectionalRelationToggleHandler());
                 break;
             case InputType.ROLLUP:
                 particularHandlers.push(new RollupAsociatedRelationHandler());

@@ -18,6 +18,7 @@ export class DatabaseSelectorHandler extends AbstractHandlerClass<ColumnSettings
                 related_note_path: value
             });
             columnSettingsManager.modal.enableReset = true;
+            columnHandlerResponse.columnSettingsManager.reset(columnHandlerResponse);
         }
         const avaliableDDBB = recordAllDatabases();
 
