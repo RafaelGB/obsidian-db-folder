@@ -28,7 +28,7 @@ export default function ImportCsvAction(actionProps: TableActionProps) {
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const csvFile = e.target.files[0];
     if (csvFile) {
-      dataActions.saveDataFromFile(
+      dataActions.importRowsFromCSV(
         csvFile,
         columnsInfo.getAllColumns(),
         configInfo.getLocalSettings()

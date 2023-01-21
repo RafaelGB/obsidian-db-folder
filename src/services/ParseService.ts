@@ -1,4 +1,4 @@
-import { SUGGESTER_REGEX } from "helpers/Constants";
+import { InputType, SUGGESTER_REGEX } from "helpers/Constants";
 import { DataObject, Literal } from "obsidian-dataview/lib/data-model/value";
 import { LOGGER } from "services/Logger";
 import { DataviewService } from "services/DataviewService";
@@ -6,6 +6,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { deepMerge, generateLiteral } from "helpers/DataObjectHelper";
 import ParseBuilder from "./parseServiceHelpers/ParseBuilder";
+import { ValueOf } from "typings/base";
 
 class Parse {
 

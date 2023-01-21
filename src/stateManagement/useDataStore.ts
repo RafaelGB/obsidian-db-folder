@@ -27,7 +27,7 @@ const useDataStore = (view: DatabaseView) => {
             dataviewRefresh: null,
             dataviewUpdater: null,
             renameFile: null,
-            saveDataFromFile: null,
+            importRowsFromCSV: null,
             groupFiles: null,
             bulkRowUpdate: null,
         }

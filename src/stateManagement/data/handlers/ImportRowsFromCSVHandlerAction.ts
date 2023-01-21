@@ -2,28 +2,30 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { DatabaseView } from "views/DatabaseView";
-import { DEFAULT_SETTINGS, SourceDataTypes } from "helpers/Constants";
+import { DEFAULT_SETTINGS, InputType, SourceDataTypes } from "helpers/Constants";
 import { Notice } from "obsidian";
-import { Link, Literal } from "obsidian-dataview";
+import { DataObject, Link, Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 import { VaultManagerDB } from "services/FileManagerService";
 import { resolve_tfolder } from "helpers/FileManagement";
+import * as Papa from "papaparse";
+import { ParseService } from "services/ParseService";
 
-export default class SaveDataFromFileHandlerAction extends AbstractTableAction<DataState> {
+export default class ImportRowsFromCSVHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { view, set, implementation } = tableActionResponse;
         /**
          * 
          * @param file CSV file to save
          */
-        implementation.actions.saveDataFromFile = async (file: File, columns: TableColumn[], config: LocalSettings) => {
+        implementation.actions.importRowsFromCSV = async (file: File, columns: TableColumn[], config: LocalSettings) => {
             try {
                 const reader = new FileReader();
                 reader.onload = async (event) => {
                     const csv = event.target.result;
-                    const rows = await this.parseCSV(csv, columns, config, view);
+                    const rows = await this.importRows(csv, columns, config, view);
                     new Notice(`Saved ${rows.length} rows from ${file.name}`);
                     set((state) => {
                         return {
@@ -41,44 +43,54 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
         return this.goNext(tableActionResponse);
 
     }
-    async parseCSV(csv: string | ArrayBuffer, columns: TableColumn[], config: LocalSettings, view: DatabaseView): Promise<RowDataType[]> {
+    parseCSV(csv: string | ArrayBuffer): DataObject[] {
+        let parsed = Papa.parse(csv.toString(), {
+            header: true,
+            skipEmptyLines: true,
+            comments: "#",
+            dynamicTyping: true,
+        });
+
+        const rows = [];
+        for (const parsedRow of parsed.data) {
+            const fields = this.parseFrontmatter(parsedRow) as DataObject;
+            const result: DataObject = {};
+
+            for (const [key, value] of Object.entries(fields)) {
+                result[key] = value;
+            }
+
+            rows.push(result);
+        }
+        return rows;
+    }
+
+    async importRows(csv: string | ArrayBuffer, columns: TableColumn[], config: LocalSettings, view: DatabaseView): Promise<RowDataType[]> {
         const rows: RowDataType[] = [];
-        const lines = csv.toString().split("\n");
-        const headers = this.normalizeArray(lines[0].split(","));
+
+        const csvLines = this.parseCSV(csv);
+
         const localSources = [
             SourceDataTypes.CURRENT_FOLDER,
             SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS
         ] as string[];
         const isCurrentFolder = localSources.contains(config.source_data);
         const destination_folder = isCurrentFolder ? view.file.parent.path : config.source_destination_path;
-        // Obtain File from headers array
-        const fileIndex = headers.indexOf(
-            view.plugin.settings.global_settings.csv_file_header_key ?? DEFAULT_SETTINGS.global_settings.csv_file_header_key
-        );
-        if (fileIndex === -1) {
-            throw new Error(`${view.plugin.settings.global_settings.csv_file_header_key} column not found in CSV file`);
-        }
-        for (let i = 1; i < lines.length; i++) {
 
-            const currentline = this.normalizeArray(lines[i].split(","));
-            const potentialPath = currentline[fileIndex];
+        const fileKey = view.plugin.settings.global_settings.csv_file_header_key ?? DEFAULT_SETTINGS.global_settings.csv_file_header_key;
+        csvLines.forEach(async (lineRecord: Record<string, Literal>) => {
+            const fileColumn = lineRecord[fileKey];
             // Obtain just the filename from the path
-            const sanitizePath = potentialPath?.split("/").pop().split('.');
+            const sanitizePath = fileColumn?.toString().split("/").pop().split('.');
             let filename = "";
             if (sanitizePath.length > 1) {
                 filename = sanitizePath.slice(0, -1).join('.').trim();
             } else {
                 filename = sanitizePath[0];
             }
+
             if (filename) {
-
                 const filepath = isCurrentFolder ? `${view.file.parent.path}/${filename}.md` : `${config.source_destination_path}/${filename}.md`;
-                const lineRecord: Record<string, Literal> = {};
-
-                currentline.forEach((value, index) => {
-                    lineRecord[headers[index]] = value;
-                });
-
                 await VaultManagerDB.create_markdown_file(
                     resolve_tfolder(destination_folder),
                     filename,
@@ -88,7 +100,6 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
                         inline: {}
                     },
                 );
-
                 const newNote = new NoteInfo({
                     ...lineRecord,
                     file: {
@@ -118,13 +129,48 @@ export default class SaveDataFromFileHandlerAction extends AbstractTableAction<D
                     },
                 });
 
-                rows.push(newNote.getRowDataType(columns));
+                const rowDataType = newNote.getRowDataType(columns);
+                rows.push(rowDataType);
             }
-        }
+        });
 
         return rows;
     }
     normalizeArray(array: string[]): string[] {
         return array.map((value) => value?.replaceAll("\"", "").trim());
+    }
+
+    /** Recursively convert frontmatter into fields. We have to dance around YAML structure. */
+    parseFrontmatter(value: any): Literal {
+        if (value == null) {
+            return null;
+        } else if (typeof value === "object") {
+            if (Array.isArray(value)) {
+                let result = [];
+                for (let child of value as Array<any>) {
+                    result.push(this.parseFrontmatter(child));
+                    result.push(this.parseFrontmatter(child));
+                }
+
+                return result;
+            } else {
+                let object = value as Record<string, any>;
+                let result: Record<string, Literal> = {};
+                for (let key in object) {
+                    result[key] = this.parseFrontmatter(object[key]);
+                    result[key] = this.parseFrontmatter(object[key]);
+                }
+
+                return result;
+            }
+        } else if (typeof value === "number") {
+            return value;
+        } else if (typeof value === "boolean") {
+            return value;
+        } else if (typeof value === "string") {
+            return ParseService.parseLiteral(value, InputType.TEXT, DEFAULT_SETTINGS.local_settings)
+        }
+        // Backup if we don't understand the type.
+        return null;
     }
 }

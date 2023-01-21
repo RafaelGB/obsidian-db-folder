@@ -82,7 +82,7 @@ export type DataStateActions = {
     dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
     dataviewUpdater: (updaterData: UpdaterData, columns: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
     renameFile: (rowIndex: number) => Promise<void>;
-    saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
+    importRowsFromCSV: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
     groupFiles: () => Promise<void>;
     bulkRowUpdate: (rows: RowDataType[], columns: TableColumn[], action: string) => Promise<void>;
 }
