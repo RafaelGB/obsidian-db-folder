@@ -10,7 +10,7 @@ import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 import { VaultManagerDB } from "services/FileManagerService";
 import { resolve_tfolder } from "helpers/FileManagement";
-import { CsvService } from "IO/csv/CsvService";
+import { CsvParserService } from "services/csv/CsvParserService";
 
 export default class ImportRowsFromCSVHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -50,7 +50,7 @@ export default class ImportRowsFromCSVHandlerAction extends AbstractTableAction<
         view: DatabaseView
     ): Promise<RowDataType[]> {
         const rows: RowDataType[] = [];
-        const csvLines = CsvService.parseCSV(csv);
+        const csvLines = CsvParserService.parseCSV(csv);
 
         const localSources = [
             SourceDataTypes.CURRENT_FOLDER,

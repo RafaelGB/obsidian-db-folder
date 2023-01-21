@@ -37,7 +37,7 @@ class CsvToRows {
      * @param value 
      * @returns 
      */
-    parseFrontmatter(value: unknown): Literal {
+    private parseFrontmatter(value: unknown): Literal {
         if (value == null) {
             return null;
         } else if (typeof value === "object") {
@@ -81,4 +81,4 @@ class CsvToRows {
     }
 }
 
-export const CsvService = CsvToRows.getInstance();
+export const CsvParserService = CsvToRows.getInstance();
