@@ -145,9 +145,10 @@ class EditEngine {
 
             // Check if the column is already in the frontmatter
             // assign an empty value to the new key
-            rowFields.frontmatter[ParseService.parseLiteral(newValue, InputType.TEXT, ddbbConfig) as string] = rowFields.frontmatter[columnId] ?? "";
+            const newKey = ParseService.parseLiteral(newValue, InputType.TEXT, ddbbConfig) as string;
+            rowFields.frontmatter[newKey] = rowFields.frontmatter[columnId] ?? "";
             delete rowFields.frontmatter[columnId];
-            await persistFrontmatter(columnId);
+            await persistFrontmatter(columnId, newKey);
         }
 
         // Remove a column
@@ -160,14 +161,18 @@ class EditEngine {
             await persistFrontmatter(columnId);
         }
 
-        async function persistFrontmatter(deletedColumn?: string): Promise<void> {
+        async function persistFrontmatter(deletedColumn?: string, newKey?: string): Promise<void> {
             if (requireApiVersion("1.1.1")) {
                 await app.fileManager.processFrontMatter(file, (frontmatter) => {
-                    frontmatter[columnId] = ParseService.parseLiteral(
-                        rowFields.frontmatter[columnId],
-                        InputType.MARKDOWN,
-                        ddbbConfig
-                    );
+                    if (newKey) {
+                        frontmatter[newKey] = frontmatter[deletedColumn];
+                    } else {
+                        frontmatter[columnId] = ParseService.parseLiteral(
+                            rowFields.frontmatter[columnId],
+                            InputType.MARKDOWN,
+                            ddbbConfig
+                        );
+                    }
 
                     if (deletedColumn) {
                         delete frontmatter[deletedColumn];
