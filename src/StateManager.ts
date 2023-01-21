@@ -1,13 +1,14 @@
 import { DatabaseSettings } from "cdm/SettingsModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { TFile } from 'obsidian';
+import { CustomView } from "views/AbstractView";
 export default class StateManager {
   private onEmpty: () => void;
   private getGlobalSettings: () => DatabaseSettings;
-  private viewSet: Set<DatabaseView> = new Set();
+  private viewSet: Set<CustomView> = new Set();
   public file: TFile;
   constructor(
-    initialView: DatabaseView,
+    initialView: CustomView,
     onEmpty: () => void,
     getGlobalSettings: () => DatabaseSettings
   ) {
@@ -18,14 +19,14 @@ export default class StateManager {
     this.registerView(initialView);
   }
 
-  registerView(view: DatabaseView) {
+  registerView(view: CustomView) {
     if (!this.viewSet.has(view)) {
       this.viewSet.add(view);
-      view.initDatabase();
+      view.build();
     }
   }
 
-  unregisterView(view: DatabaseView) {
+  unregisterView(view: CustomView) {
     if (this.viewSet.has(view)) {
       this.viewSet.delete(view);
 
@@ -35,7 +36,7 @@ export default class StateManager {
     }
   }
 
-  getAView(): DatabaseView {
+  getAView(): CustomView {
     return this.viewSet.values().next().value;
   }
 

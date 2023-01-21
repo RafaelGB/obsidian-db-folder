@@ -70,6 +70,7 @@ export function Table(tableData: TableDataType) {
   const columnActions = tableStore.columns((state) => state.actions);
   const columnsInfo = tableStore.columns((state) => state.info);
   const rows = tableStore.data((state) => state.rows);
+  const rowsActions = tableStore.data((state) => state.actions);
 
   const cell_size_config = tableStore.configState(
     (store) => store.ddbbConfig.cell_size
@@ -199,6 +200,10 @@ export function Table(tableData: TableDataType) {
       globalConfig.logger_level_info === "trace",
     autoResetPageIndex: false,
   });
+
+  React.useEffect(() => {
+    rowsActions.insertRows();
+  }, []);
 
   return (
     <>

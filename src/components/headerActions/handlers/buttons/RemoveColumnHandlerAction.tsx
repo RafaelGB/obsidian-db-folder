@@ -32,7 +32,6 @@ export default class RemoveColumnHandlerAction extends AbstractHeaderAction {
 function removeButton(headerActionResponse: HeaderActionResponse) {
   const { hooks } = headerActionResponse;
   const { column, table } = headerActionResponse.headerMenuProps.headerProps;
-  const { view } = table.options.meta;
   const configActions = table.options.meta.tableState.configState(
     (state) => state.actions
   );
@@ -50,21 +49,15 @@ function removeButton(headerActionResponse: HeaderActionResponse) {
     (store) => store.actions
   );
 
+  const tableColumn = column.columnDef as TableColumn;
   const onClick = async () => {
-    if (ddbbConfig.remove_field_when_delete_column) {
-      rows.map(async (row: RowDataType) => {
-        await EditEngineService.updateRowFileProxy(
-          row.__note__.getFile(),
-          hooks.keyState,
-          undefined, // delete does not need this field
-          columns,
-          ddbbConfig,
-          UpdateRowOptions.REMOVE_COLUMN
-        );
-      });
-    }
-    dataActions.removeDataOfColumn(column.columnDef as TableColumn);
-    columnActions.remove(column.columnDef as TableColumn);
+    dataActions.removeDataOfColumn({
+      column: tableColumn,
+      columns: columns,
+      ddbbConfig: ddbbConfig,
+    });
+
+    columnActions.remove(tableColumn);
     hooks.setMenuEl(null);
     // Remove column from group_folder_column
     const groupFolderColumn = ddbbConfig.group_folder_column.split(",");

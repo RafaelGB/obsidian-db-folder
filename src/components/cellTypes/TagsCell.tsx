@@ -78,13 +78,13 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     );
 
     // Update on disk & memory
-    await dataActions.updateCell(
-      row.index,
-      tableColumn,
-      newCell,
-      columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings()
-    );
+    await dataActions.updateCell({
+      rowIndex: row.index,
+      column: tableColumn,
+      value: newCell,
+      columns: columnsInfo.getAllColumns(),
+      ddbbConfig: configInfo.getLocalSettings(),
+    });
 
     // Add new option to column options
     if (actionMeta.action === "create-option") {

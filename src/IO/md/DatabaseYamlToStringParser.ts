@@ -1,9 +1,9 @@
 import { DatabaseYaml } from "cdm/DatabaseModel";
 import { DiskHandler, DiskHandlerResponse } from "cdm/MashallModel";
-import { UnmarshallDatabaseInfoHandler } from "parsers/handlers/unmarshall/UnmarshallDatabaseInfoHandler";
-import { UnmarshallColumnsHandler } from "parsers/handlers/unmarshall/UnmarshallColumnsHandler";
-import { UnmarshallConfigHandler } from "parsers/handlers/unmarshall/UnmarshallConfigHandler";
-import { UnmarshallFiltersHandler } from "parsers/handlers/unmarshall/UnmarshallFiltersHandler";
+import { UnmarshallDatabaseInfoHandler } from "IO/md/handlers/unmarshall/UnmarshallDatabaseInfoHandler";
+import { UnmarshallColumnsHandler } from "IO/md/handlers/unmarshall/UnmarshallColumnsHandler";
+import { UnmarshallConfigHandler } from "IO/md/handlers/unmarshall/UnmarshallConfigHandler";
+import { UnmarshallFiltersHandler } from "IO/md/handlers/unmarshall/UnmarshallFiltersHandler";
 
 /**
  * PUBLIC METHODS
@@ -12,9 +12,9 @@ import { UnmarshallFiltersHandler } from "parsers/handlers/unmarshall/Unmarshall
  * Given a database config, obtain the string on yaml format
  * @param databaseConfig 
  */
-const DatabaseYamlToStringParser = (databaseConfig: DatabaseYaml): string[] => {
+const databaseYamlToStringParser = (databaseConfig: DatabaseYaml): string => {
   const response = persisDatabaseConfigOnDisk(databaseConfig);
-  return response.disk;
+  return response.disk.join('\n');
 }
 
 /**
@@ -48,4 +48,4 @@ function getHandlers(): DiskHandler[] {
     new UnmarshallFiltersHandler()
   ];
 }
-export default DatabaseYamlToStringParser;
+export default databaseYamlToStringParser;

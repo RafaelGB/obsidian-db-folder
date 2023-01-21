@@ -12,7 +12,7 @@ import {
 
 import {
 	DatabaseView,
-} from 'DatabaseView';
+} from 'views/DatabaseView';
 
 import {
 	DBFolderSettingTab,
@@ -37,10 +37,11 @@ import { generateDbConfiguration, generateNewDatabase } from 'helpers/CommandsHe
 import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
 import { Db } from "services/CoreService";
+import { CustomView } from 'views/AbstractView';
 
 interface WindowRegistry {
-	viewMap: Map<string, DatabaseView>;
-	viewStateReceivers: Array<(views: DatabaseView[]) => void>;
+	viewMap: Map<string, CustomView>;
+	viewStateReceivers: Array<(views: CustomView[]) => void>;
 	appRoot: HTMLElement;
 }
 
@@ -179,7 +180,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
 
-	addView(view: DatabaseView) {
+	addView(view: CustomView) {
 		const win = view.getWindow();
 		const reg = this.windowRegistry.get(win);
 
@@ -221,7 +222,7 @@ export default class DBFolderPlugin extends Plugin {
 		return this.stateManagers.get(view.file);
 	}
 
-	removeView(view: DatabaseView) {
+	removeView(view: CustomView) {
 		const entry = Array.from(this.windowRegistry.entries()).find(([, reg]) => {
 			return reg.viewMap.has(view.id);
 		}, []);

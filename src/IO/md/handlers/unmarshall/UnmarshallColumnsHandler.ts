@@ -1,8 +1,8 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { DiskHandlerResponse } from "cdm/MashallModel";
 import { InputType, YAML_INDENT } from "helpers/Constants";
-import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
-import { parseValuetoSanitizeYamlValue } from "parsers/RowDatabaseFieldsToFile";
+import { AbstractDiskHandler } from "IO/md/handlers/unmarshall/AbstractDiskPropertyHandler";
+import { parseValuetoSanitizeYamlValue } from "IO/md/RowDatabaseFieldsToFile";
 
 export class UnmarshallColumnsHandler extends AbstractDiskHandler {
     handlerName = 'columns';

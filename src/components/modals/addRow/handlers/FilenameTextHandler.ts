@@ -14,10 +14,11 @@ export class FilenameTextHandler extends AbstractHandlerClass<AddRowModalHandler
         let newFilename = "";
         const addNewRowPromise = async () => {
             await dataState.actions
-                .addRow(
-                    newFilename,
-                    columnsState.info.getAllColumns(),
-                    configState.info.getLocalSettings()
+                .addRow({
+                    filename: newFilename,
+                    columns: columnsState.info.getAllColumns(),
+                    ddbbConfig: configState.info.getLocalSettings()
+                }
                 );
             newFilename = "";
             (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";

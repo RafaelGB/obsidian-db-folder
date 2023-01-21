@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React, { StrictMode, useEffect } from "react";
 import { Table } from "components/Table";
 import { TableDataType } from "cdm/FolderModel";
 import useTableStore from "components/reducers/TableReducer";
@@ -9,6 +9,7 @@ export function createDatabase(tableProps: TableDataType): JSX.Element {
 
 export function Database(tableProps: TableDataType) {
   const tableStore = useTableStore(tableProps.view);
+
   return (
     /**
      * StrictMode is a tool for highlighting potential problems in an application.

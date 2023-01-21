@@ -2,7 +2,7 @@ import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ColumnOption } from "cdm/ComponentsModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";
@@ -52,20 +52,37 @@ export interface ConfigState {
 /************************
  * DATA STATE
  ************************/
+export type CreateRowInfo = {
+    filename: string,
+    columns: TableColumn[],
+    ddbbConfig: LocalSettings
+}
+
+export type UpdateRowInfo = {
+    rowIndex: number,
+    column: TableColumn,
+    value: Literal,
+    columns: TableColumn[],
+    ddbbConfig: LocalSettings,
+    isMovingFile?: boolean,
+    saveOnDisk?: boolean
+}
+
 export type DataStateActions = {
-    addRow: (filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
-    updateCell: (rowIndex: number, column: TableColumn, value: Literal, columns: TableColumn[], ddbbConfig: LocalSettings, isMovingFile?: boolean, saveOnDisk?: boolean) => Promise<void>;
+    insertRows: () => Promise<void>;
+    addRow: (args: CreateRowInfo) => Promise<void>;
+    updateCell: (args: UpdateRowInfo) => Promise<void>;
     parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeRow: (row: RowDataType) => Promise<void>;
-    removeDataOfColumn: (column: TableColumn) => void;
+    removeDataOfColumn: (updater: Omit<UpdateRowInfo, "rowIndex" | "value">) => void;
     editOptionForAllRows: (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeOptionForAllRows: (column: TableColumn, option: string, columns: TableColumn[],
         ddbbConfig: LocalSettings) => Promise<void>;
     dataviewRefresh: (column: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
     dataviewUpdater: (updaterData: UpdaterData, columns: TableColumn[], ddbbConfig: LocalSettings, filterConfig: FilterSettings) => Promise<void>;
     renameFile: (rowIndex: number) => Promise<void>;
-    saveDataFromFile: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
+    importRowsFromCSV: (file: File, columns: TableColumn[], config: LocalSettings) => Promise<void>;
     groupFiles: () => Promise<void>;
     bulkRowUpdate: (rows: RowDataType[], columns: TableColumn[], action: string) => Promise<void>;
 }

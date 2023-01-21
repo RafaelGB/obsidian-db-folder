@@ -14,7 +14,7 @@ import { dbTrim } from "helpers/StylesHelper";
 import { TFile } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { obtainAllPossibleRows } from "helpers/VaultManagement";
 import rowContextMenuColumn from "components/contextMenu/RowContextMenu";
 import { containsUpper } from "helpers/WindowElement";

@@ -2,8 +2,8 @@ import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { LocalSettings } from 'cdm/SettingsModel';
 import { DEFAULT_SETTINGS } from 'helpers/Constants';
 import { Literal } from 'obsidian-dataview';
-import { unEscapeSpecialCharacters } from 'parsers/EscapeHelper';
-import { AbstractYamlHandler } from 'parsers/handlers/marshall/AbstractYamlPropertyHandler';
+import { unEscapeSpecialCharacters } from 'IO/md/EscapeHelper';
+import { AbstractYamlHandler } from 'IO/md/handlers/marshall/AbstractYamlPropertyHandler';
 import { DataviewService } from 'services/DataviewService';
 
 export class MarshallConfigHandler extends AbstractYamlHandler {

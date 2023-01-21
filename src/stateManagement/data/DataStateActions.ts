@@ -9,7 +9,7 @@ import ParseDataOfColumnHandlerAction from "./handlers/ParseDataOfColumnHandlerA
 import DataviewRefreshHandlerAction from "./handlers/DataviewRefreshHandlerAction";
 import RemoveOptionForAllRowsAction from "./handlers/RemoveOptionForAllRowsAction";
 import RenameFileHandlerAction from "./handlers/RenameFileHandlerAction";
-import SaveDataFromFileHandlerAction from "./handlers/SaveDataFromFileHandlerAction";
+import ImportRowsFromCSVHandlerAction from "./handlers/ImportRowsFromCSVHandlerAction";
 import GroupFilesHandlerAction from "./handlers/GroupFilesHandlerAction";
 import EditOptionForAllRowsHandlerAction from "./handlers/EditOptionForAllRowsHandlerAction";
 import DataviewUpdaterHandlerAction from "./handlers/DataviewUpdaterHandlerAction";
@@ -31,7 +31,7 @@ class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
       new EditOptionForAllRowsHandlerAction(),
       new RemoveOptionForAllRowsAction(),
       new RenameFileHandlerAction(),
-      new SaveDataFromFileHandlerAction(),
+      new ImportRowsFromCSVHandlerAction(),
       new GroupFilesHandlerAction(),
       new BulkRowUpdateHandlerAction(),
       new InfoDataFunctions()

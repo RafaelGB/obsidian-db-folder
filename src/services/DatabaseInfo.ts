@@ -5,27 +5,29 @@ import {
 } from 'obsidian';
 import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
-import DatabaseYamlToStringParser from 'parsers/DatabaseYamlToStringParser';
+import databaseYamlToStringParser from 'IO/md/DatabaseYamlToStringParser';
 import { ConfigColumn, TableColumn } from 'cdm/FolderModel';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
-import DatabaseStringToYamlParser from 'parsers/DatabaseStringToYamlParser';
+import databaseStringToYamlParser from 'IO/md/DatabaseStringToYamlParser';
 import { DATABASE_CONFIG } from 'helpers/Constants';
 import NoteContentActionBuilder from 'patterns/builders/NoteContentActionBuilder';
 
 export default class DatabaseInfo {
-    private file: TFile;
     public yaml: DatabaseYaml;
-    constructor(file: TFile) {
-        this.file = file;
-    }
 
+    constructor(private file: TFile, private default_local_settings: LocalSettings) { }
+
+    async build(): Promise<DatabaseInfo> {
+        await this.initDatabaseconfigYaml(this.default_local_settings);
+        return this;
+    }
     /**
      * Obtain database configuration from file
      * @param file 
      * @returns 
      */
-    async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
+    private async initDatabaseconfigYaml(default_local_settings: LocalSettings): Promise<void> {
         LOGGER.info(`Load DDBB yaml - "${this.file.path}"`);
         const databaseRaw = await VaultManagerDB.obtainContentFromTfile(this.file);
         if (!databaseRaw || !isDatabaseNote(databaseRaw)) throw new Error('No frontmatter found');
@@ -37,7 +39,7 @@ export default class DatabaseInfo {
         }
 
         const frontmatterRaw = match[1];
-        const response = DatabaseStringToYamlParser(frontmatterRaw);
+        const response = databaseStringToYamlParser(frontmatterRaw);
         if (Object.keys(response.errors).length > 0) {
             const errors = Object.keys(response.errors).map(e => e + ': ' + response.errors[e].join('\n')).join('\n')
             new Notice(errors, 10000);
@@ -52,7 +54,7 @@ export default class DatabaseInfo {
      */
     async saveOnDisk(): Promise<void> {
         LOGGER.info(`Update BBDD yaml - "${this.file.path}"`);
-        const databaseConfigUpdated = DatabaseYamlToStringParser(this.yaml).join("\n");
+        const databaseConfigUpdated = databaseYamlToStringParser(this.yaml);
         const noteObject = new NoteContentActionBuilder()
             .setFile(this.file)
             .addRegExp(DATABASE_CONFIG.REPLACE_YAML_REGEX)

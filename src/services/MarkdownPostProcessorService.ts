@@ -116,11 +116,7 @@ export class PreviewDatabaseModeService {
         ctx: MarkdownPostProcessorContext,
     ): Promise<HTMLElement> => {
         const dbFile = resolve_tfile(ctx.sourcePath);
-        const databaseDisk = new DatabaseInfo(dbFile);
-        await databaseDisk.initDatabaseconfigYaml(
-            this.plugin.settings.local_settings
-        );
-
+        const databaseDisk = await new DatabaseInfo(dbFile, this.plugin.settings.local_settings).build();
         const div = createDiv();
         div.textContent = `${databaseDisk
             .yaml.description}`;

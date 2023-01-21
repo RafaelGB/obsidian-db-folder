@@ -1,7 +1,7 @@
 import { App, Modal, PluginSettingTab } from "obsidian";
 import { add_setting_header } from 'settings/SettingsComponents';
 import DBFolderPlugin from 'main';
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { LOGGER } from "services/Logger";
 import columns_settings_section from "settings/ColumnsSection";
 import { folder_settings_section } from "settings/FolderSection";
@@ -18,6 +18,7 @@ import automation_settings_section from "settings/AutomationSection";
 import helpers_settings_section from "settings/HelpersSection";
 import { applyPluginModalStyle } from "components/styles/ModalStyles";
 import { t } from "lang/helpers";
+import { CustomView } from "views/AbstractView";
 
 export type SettingRetriever = <K extends keyof DatabaseSettings>(
   key: K,
@@ -60,7 +61,7 @@ export class SettingsManager {
    * @param local 
    * @param view optional. Used only for local settings
    */
-  constructUI(containerEl: HTMLElement, heading: string, local: boolean, view?: DatabaseView) {
+  constructUI(containerEl: HTMLElement, heading: string, local: boolean, view?: CustomView) {
     applyPluginModalStyle(containerEl);
     /** Common modal headings */
     containerEl.addClass(StyleClasses.SETTINGS_MODAL);
@@ -127,11 +128,11 @@ export class SettingsManager {
 }
 
 export class SettingsModal extends Modal {
-  view: DatabaseView;
+  view: CustomView;
   settingsManager: SettingsManager;
 
   constructor(
-    view: DatabaseView,
+    view: CustomView,
     config: SettingsManagerConfig,
     settings: DatabaseSettings
   ) {

@@ -25,12 +25,12 @@ function CheckboxCell(props: CellComponentProps) {
       ) as boolean
   );
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked;
     editCheckbox(newValue);
   };
 
-  const editCheckbox = (newValue: boolean) => {
+  const editCheckbox = async (newValue: boolean) => {
     const newCell = ParseService.parseRowToLiteral(
       checkboxRow,
       tableColumn,
@@ -38,13 +38,13 @@ function CheckboxCell(props: CellComponentProps) {
     );
 
     // save on disk
-    dataActions.updateCell(
-      row.index,
-      column.columnDef as TableColumn,
-      newCell,
-      columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings()
-    );
+    await dataActions.updateCell({
+      rowIndex: row.index,
+      column: tableColumn,
+      value: newCell,
+      columns: columnsInfo.getAllColumns(),
+      ddbbConfig: configInfo.getLocalSettings(),
+    });
   };
 
   return (

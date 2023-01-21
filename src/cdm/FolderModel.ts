@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { TableStateInterface } from "cdm/TableStateInterface";
@@ -6,6 +6,7 @@ import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
 import { Column, ColumnDef, ColumnSort, Header, Table } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
+import { CustomView } from "views/AbstractView";
 
 export type Group = Parameter | Parameters | FolderModel | Models;
 type Parameter = {
@@ -100,7 +101,7 @@ export type InitialType = {
 
 export type TableDataType = {
     skipReset: boolean,
-    view: DatabaseView,
+    view: CustomView,
     stateManager: StateManager,
     tableStore?: TableStateInterface
 }

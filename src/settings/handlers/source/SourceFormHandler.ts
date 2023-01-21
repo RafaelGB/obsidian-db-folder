@@ -1,5 +1,5 @@
 import { TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { SourceDataTypes } from "helpers/Constants";
 import { generateDataviewTableQuery } from "helpers/QueryHelper";
 import { c } from "helpers/StylesHelper";

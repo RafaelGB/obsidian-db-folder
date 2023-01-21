@@ -1,7 +1,7 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { DEFAULT_COLUMN_CONFIG, DynamicInputType, TableColumnsTemplate } from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
 import { Notice } from "obsidian";

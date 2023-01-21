@@ -1,4 +1,4 @@
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import { t } from "lang/helpers";
 import { ButtonComponent, SearchComponent, Setting } from "obsidian";
 import { FileAttributeSuggester } from "settings/suggesters/FileAttributeSuggester";

@@ -1,6 +1,6 @@
 import { TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "DatabaseView";
 import { SettingsManager } from "Settings";
+import { CustomView } from "views/AbstractView";
 
 export interface SettingHandler {
     setNext(handler: SettingHandler): SettingHandler;
@@ -12,7 +12,7 @@ export type SettingHandlerResponse = {
     containerEl: HTMLElement,
     local: boolean,
     errors: Record<string, string[]>,
-    view?: DatabaseView,
+    view?: CustomView,
     columns?: TableColumn[],
 }
 

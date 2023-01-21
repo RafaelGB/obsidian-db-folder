@@ -77,14 +77,14 @@ const SelectCell = (popperProps: CellComponentProps) => {
     );
 
     // Update on disk & memory
-    await dataActions.updateCell(
-      row.index,
-      tableColumn,
-      newCell,
-      columnsInfo.getAllColumns(),
-      configInfo.getLocalSettings(),
-      true
-    );
+    await dataActions.updateCell({
+      rowIndex: row.index,
+      column: tableColumn,
+      value: newCell,
+      columns: columnsInfo.getAllColumns(),
+      ddbbConfig: configInfo.getLocalSettings(),
+      isMovingFile: true,
+    });
 
     // Add new option to column options
     if (actionMeta.action === "create-option") {

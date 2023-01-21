@@ -1,5 +1,5 @@
 import { TableStateInterface } from "cdm/TableStateInterface";
-import { DatabaseView } from "DatabaseView";
+import { DatabaseView } from "views/DatabaseView";
 import useAutomationStore from "stateManagement/useAutomationStore";
 import useColumnsStore from "stateManagement/useColumnsStore";
 import useConfigStore from "stateManagement/useConfigStore";

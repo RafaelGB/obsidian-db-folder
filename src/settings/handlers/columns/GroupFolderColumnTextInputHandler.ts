@@ -22,7 +22,11 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
         const config = view.diskConfig.yaml.config;
         if (config.automatically_group_files) {
           const folderPath = destination_folder(view, config);
-          await FileGroupingService.organizeNotesIntoSubfolders(folderPath, view.rows, config);
+          await FileGroupingService.organizeNotesIntoSubfolders(
+            folderPath,
+            await view.getRows(),
+            config
+          );
           await FileGroupingService.removeEmptyFolders(folderPath, config);
           view.reloadDatabase();
         }

@@ -1,8 +1,8 @@
 import { DiskHandlerResponse } from "cdm/MashallModel";
 import { YAML_INDENT } from "helpers/Constants";
-import { escapeSpecialCharacters } from "parsers/EscapeHelper";
-import { AbstractDiskHandler } from "parsers/handlers/unmarshall/AbstractDiskPropertyHandler";
-import { parseValuetoSanitizeYamlValue } from "parsers/RowDatabaseFieldsToFile";
+import { escapeSpecialCharacters } from "IO/md/EscapeHelper";
+import { AbstractDiskHandler } from "IO/md/handlers/unmarshall/AbstractDiskPropertyHandler";
+import { parseValuetoSanitizeYamlValue } from "IO/md/RowDatabaseFieldsToFile";
 
 export class UnmarshallConfigHandler extends AbstractDiskHandler {
     handlerName = 'config';

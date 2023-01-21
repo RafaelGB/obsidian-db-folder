@@ -7,11 +7,12 @@ import { InputType, UpdateRowOptions } from "helpers/Constants";
 import { Literal } from "obsidian-dataview";
 import { VaultManagerDB } from "services/FileManagerService";
 import { EditionError, showDBError } from "errors/ErrorTypes";
-import obtainRowDatabaseFields from "parsers/FileToRowDatabaseFields";
+import obtainRowDatabaseFields from "IO/md/FileToRowDatabaseFields";
 import { EditArguments } from "cdm/ServicesModel";
 import NoteContentActionBuilder from "patterns/builders/NoteContentActionBuilder";
-import { parseFrontmatterFieldsToString } from "parsers/RowDatabaseFieldsToFile";
+import { parseFrontmatterFieldsToString } from "IO/md/RowDatabaseFieldsToFile";
 import { hasFrontmatter } from "helpers/VaultManagement";
+import { ValueOf } from "typings/base";
 
 class EditEngine {
     private static instance: EditEngine;
@@ -78,7 +79,7 @@ class EditEngine {
      * @param newColumnValue 
      * @param option 
      */
-    public async updateRowFileProxy(p_file: TFile, p_columnId: string, p_newValue: Literal, p_columns: TableColumn[], p_ddbbConfig: LocalSettings, p_option: string): Promise<void> {
+    public async updateRowFileProxy(p_file: TFile, p_columnId: string, p_newValue: Literal, p_columns: TableColumn[], p_ddbbConfig: LocalSettings, p_option: ValueOf<typeof UpdateRowOptions>): Promise<void> {
         await this.onFlyEditions.push({
             file: p_file,
             columnId: p_columnId,

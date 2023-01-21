@@ -1,9 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  StrictMode,
-  useEffect,
-  useRef,
-} from "react";
+import React, { ChangeEventHandler, useEffect, useRef } from "react";
 import { TableActionProps } from "cdm/MenuBarModel";
 import { t } from "lang/helpers";
 
@@ -33,7 +28,7 @@ export default function ImportCsvAction(actionProps: TableActionProps) {
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const csvFile = e.target.files[0];
     if (csvFile) {
-      dataActions.saveDataFromFile(
+      dataActions.importRowsFromCSV(
         csvFile,
         columnsInfo.getAllColumns(),
         configInfo.getLocalSettings()
