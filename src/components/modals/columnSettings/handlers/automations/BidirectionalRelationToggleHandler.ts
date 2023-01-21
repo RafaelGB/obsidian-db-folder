@@ -1,6 +1,8 @@
 import { add_toggle } from "settings/SettingsComponents";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import DatabaseInfo from "services/DatabaseInfo";
+import { resolve_tfile } from "helpers/FileManagement";
 
 export class BidirectionalRelationToggleHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
     settingTitle = "Bidirectional Relation";
@@ -15,6 +17,8 @@ export class BidirectionalRelationToggleHandler extends AbstractHandlerClass<Col
                     bidirectional_relation: value
                 });
                 columnSettingsManager.modal.enableReset = true;
+                await this.createBidirectionalRelation(columnHandlerResponse, value);
+
             }
 
             add_toggle(
@@ -26,5 +30,23 @@ export class BidirectionalRelationToggleHandler extends AbstractHandlerClass<Col
             );
         }
         return this.goNext(columnHandlerResponse);
+    }
+
+    /**
+     * Manages the bidirectional relation
+     * @param columnHandlerResponse 
+     */
+    async createBidirectionalRelation(columnHandlerResponse: ColumnSettingsHandlerResponse, toggleValue: boolean): Promise<void> {
+        const { column, columnSettingsManager } = columnHandlerResponse;
+        const { view } = columnSettingsManager.modal;
+        const file = resolve_tfile(column.config.related_note_path);
+        const relationConfig = await new DatabaseInfo(file, view.plugin.settings.local_settings).build();
+        if (toggleValue) {
+            relationConfig.yaml.columns[column.id] = view.diskConfig.yaml.columns[column.id];
+        } else {
+            delete relationConfig.yaml.columns[column.id];
+        }
+        await relationConfig.saveOnDisk();
+        // Check if the relation is already bidirectional
     }
 }
