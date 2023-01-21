@@ -2,7 +2,6 @@ import { DataState, DataStateActions, DataStateInfo, TableActionResponse } from 
 import { DatabaseView } from "views/DatabaseView";
 import { create } from "zustand";
 import data_state_actions from "stateManagement/data/DataStateActions";
-import { update } from "components/cellTypes/Editor/textcomplete/undate/update";
 
 const useDataStore = (view: DatabaseView) => {
     return create<DataState>()((set, get) => {

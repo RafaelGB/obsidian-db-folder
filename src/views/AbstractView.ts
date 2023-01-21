@@ -208,7 +208,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
      * @param callSuper 
      * @returns 
      */
-    onPaneMenu(menu: Menu, source: string, callSuper: boolean = true): void {
+    onPaneMenu(menu: Menu, source: string, callSuper = true): void {
         if (source !== "more-options") {
             super.onPaneMenu(menu, source);
             return;
@@ -244,7 +244,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
             this.initRootContainer(file);
             return await super.onLoadFile(file);
         } catch (e) {
-            const stateManager = this.plugin.stateManagers.get(this.file);
+            LOGGER.error(`Error onLoadFile ${file.path}`, e);
             throw e;
         }
     }
@@ -277,7 +277,9 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     /**
      * Called after unloading a file
      */
-    clear(): void { }
+    clear(): void {
+        // Do nothing
+    }
 
     /****************************************************************
      *                          Getters
@@ -320,7 +322,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
      */
     get id(): string {
         // TODO define id on workfleaf
-        return `${(this.leaf as any).id}:::${this.file?.path}`;
+        return `${this.leaf.id}:::${this.file?.path}`;
     }
 
     /****************************************************************
@@ -366,7 +368,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
 
     setViewData(data: string): void {
         if (!isDatabaseNote(data)) {
-            this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
+            this.plugin.databaseFileModes[this.leaf.id || this.file.path] =
                 InputType.MARKDOWN;
             this.plugin.removeView(this);
             this.plugin.setMarkdownView(this.leaf, false);
@@ -417,11 +419,11 @@ export abstract class CustomView extends TextFileView implements HoverParent {
      *
      * @param evt
      */
-    settingsAction(evt?: MouseEvent): void {
+    settingsAction(): void {
         new SettingsModal(
             this,
             {
-                onSettingsChange: (settings) => {
+                onSettingsChange: () => {
                     /**
                      * Settings are saved into the database file, so we don't need to do anything here.
                      */
@@ -431,8 +433,8 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         ).open();
     }
 
-    markdownAction(evt: MouseEvent): void {
-        this.plugin.databaseFileModes[(this.leaf as any).id || this.file.path] =
+    markdownAction(): void {
+        this.plugin.databaseFileModes[this.leaf.id || this.file.path] =
             InputType.MARKDOWN;
         this.plugin.setMarkdownView(this.leaf);
     }

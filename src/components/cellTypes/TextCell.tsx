@@ -1,5 +1,5 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
-import React, { MouseEventHandler, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import EditorCell from "components/cellTypes/EditorCell";
 import { TableColumn } from "cdm/FolderModel";
