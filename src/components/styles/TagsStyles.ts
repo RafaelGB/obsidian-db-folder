@@ -62,4 +62,5 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<unknown>> = {
         },
     })
 };
+
 export default CustomTagsStyles;
