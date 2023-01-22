@@ -22,7 +22,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
       ? relationCell.map((link: Link) => ({
           label: link.fileName(),
           value: link.path,
-          color: StyleVariables.BACKGROUND_SECONDARY,
+          color: StyleVariables.TEXT_NORMAL,
         }))
       : []
   );
@@ -33,7 +33,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
     const arrayTags = newValue.map((tag) => ({
       label: tag.label,
       value: tag.value,
-      color: StyleVariables.BACKGROUND_SECONDARY,
+      color: StyleVariables.TEXT_NORMAL,
     }));
     setRelationValue(arrayTags);
   };
@@ -56,7 +56,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
       const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
         label: value,
         value: key,
-        color: StyleVariables.BACKGROUND_SECONDARY,
+        color: StyleVariables.TEXT_NORMAL,
       }));
 
       setRelationOptions(multiOptions);
@@ -82,9 +82,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
         onBlur={handleOnBlur}
         onChange={handleOnChange}
         menuPortalTarget={activeDocument.body}
-        className={`react-select-container ${c(
-          "tags-container text-align-center"
-        )}`}
+        className={`${c("tags-container text-align-center")}`}
         classNamePrefix="react-select"
         menuPlacement="auto"
         menuShouldBlockScroll={true}
