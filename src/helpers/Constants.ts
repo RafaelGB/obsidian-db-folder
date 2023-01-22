@@ -250,7 +250,6 @@ export const DatabaseCore = Object.freeze({
 export const UpdateRowOptions = Object.freeze({
   COLUMN_VALUE: 'column_value',
   COLUMN_KEY: 'column_key',
-  INLINE_VALUE: 'inline_value',
   REMOVE_COLUMN: 'remove_column'
 });
 

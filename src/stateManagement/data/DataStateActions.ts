@@ -14,8 +14,9 @@ import GroupFilesHandlerAction from "./handlers/GroupFilesHandlerAction";
 import EditOptionForAllRowsHandlerAction from "./handlers/EditOptionForAllRowsHandlerAction";
 import DataviewUpdaterHandlerAction from "./handlers/DataviewUpdaterHandlerAction";
 import BulkRowUpdateHandlerAction from "./handlers/BulkRowUpdateHandlerAction";
-import { AbstractHandler } from "patterns/chain/AbstractHandler";
 import InfoDataFunctions from "./handlers/InfoDataFunctions";
+import UpdateBidirectionalRelation from "./handlers/UpdateBidirectionalRelation";
+import { AbstractHandler } from "patterns/chain/AbstractHandler";
 
 class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
   protected getHandlers(): AbstractHandler<TableActionResponse<DataState>>[] {
@@ -24,6 +25,7 @@ class DataStateActions extends AbstractChain<TableActionResponse<DataState>> {
       new UpdateCellHandlerAction(),
       new ParseDataOfColumnHandlerAction(),
       new UpdateDataAfterLabelChangeHandlerAction(),
+      new UpdateBidirectionalRelation(),
       new RemoveRowHandlerAction(),
       new RemoveDataOfColumnHandlerAction(),
       new DataviewRefreshHandlerAction(),

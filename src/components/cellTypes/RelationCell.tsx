@@ -83,6 +83,15 @@ const RelationCell = (mdProps: CellComponentProps) => {
         columns: columnsInfo.getAllColumns(),
         ddbbConfig: configInfo.getLocalSettings(),
       });
+
+      if (tableColumn.config.bidirectional_relation) {
+        dataActions.updateBidirectionalRelation(
+          relationRow,
+          tableColumn,
+          oldPaths,
+          newPaths
+        );
+      }
     }
     setDirtyCell(false);
   };

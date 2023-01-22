@@ -13,6 +13,19 @@ import NoteContentActionBuilder from "patterns/builders/NoteContentActionBuilder
 import { parseFrontmatterFieldsToString } from "IO/md/RowDatabaseFieldsToFile";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import { ValueOf } from "typings/base";
+import { RowDatabaseFields } from "cdm/DatabaseModel";
+type EditContext = {
+    file: TFile,
+    columnId: string,
+    column: TableColumn,
+    newValue: Literal,
+    content: string,
+    ddbbConfig: LocalSettings,
+    contentHasFrontmatter: boolean,
+    rowFields: RowDatabaseFields,
+    deletedColumn?: string,
+    newKey?: string
+}
 
 class EditEngine {
     private static instance: EditEngine;
@@ -116,175 +129,261 @@ class EditEngine {
         const column = columns.find(
             c => c.key === (UpdateRowOptions.COLUMN_KEY === option ? newValue : columnId)
         );
-        /*******************************************************************************************
-         *                              FRONTMATTER GROUP FUNCTIONS
-         *******************************************************************************************/
-        // Modify value of a column
-        async function columnValue(): Promise<void> {
-            if (column.config.isInline) {
-                await inlineColumnEdit();
-                return;
-            }
-            rowFields.frontmatter[columnId] = newValue;
-            await persistFrontmatter();
-            await inlineRemoveColumn();
+
+        const context: EditContext = {
+            file,
+            column,
+            columnId,
+            newValue,
+            content,
+            ddbbConfig,
+            contentHasFrontmatter,
+            rowFields
+        };
+
+        switch (option) {
+            case UpdateRowOptions.COLUMN_VALUE:
+                this.columnValue(context);
+                break;
+            case UpdateRowOptions.COLUMN_KEY:
+                this.columnKey(context);
+                break;
+            case UpdateRowOptions.REMOVE_COLUMN:
+                this.removeColumn(context);
+                break;
+            default:
+                throw `Error: option ${option} not supported yet`;
+        }
+        LOGGER.info(`<= updateRowFile.asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option} `);
+    }
+    /*******************************************************************************************
+     *                              FRONTMATTER GROUP FUNCTIONS
+     *******************************************************************************************/
+
+    /**
+     * Delete a column from the frontmatter
+     * @param context 
+     * @returns 
+     */
+    private async removeColumn(context: EditContext): Promise<void> {
+        const { column, file, columnId, rowFields } = context;
+        if (column.config.isInline) {
+            await this.inlineRemoveColumn(file, columnId);
+            return;
+        }
+        delete rowFields.frontmatter[columnId];
+        await this.persistFrontmatter({ ...context, deletedColumn: columnId });
+    }
+
+    /**
+     * Modify the value of a column in the frontmatter
+     */
+    private async columnKey(context: EditContext): Promise<void> {
+        const { column, columnId, newValue, rowFields, ddbbConfig } = context;
+        if (column.config.isInline) {
+            // Go to inline mode
+            await this.inlineColumnKey(context);
+            return;
+        }
+        // If field does not exist yet, ignore it
+        if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)
+            && !Object.prototype.hasOwnProperty.call(rowFields.inline, columnId)) {
+            return;
         }
 
-        // Modify key of a column
-        async function columnKey(): Promise<void> {
-            if (column.config.isInline) {
-                // Go to inline mode
-                await inlineColumnKey();
-                return;
-            }
-            // If field does not exist yet, ignore it
-            if (!Object.prototype.hasOwnProperty.call(rowFields.frontmatter, columnId)
-                && !Object.prototype.hasOwnProperty.call(rowFields.inline, columnId)) {
-                return;
-            }
+        // Check if the column is already in the frontmatter
+        // assign an empty value to the new key
+        const newKey = ParseService.parseLiteral(newValue, InputType.TEXT, ddbbConfig) as string;
+        rowFields.frontmatter[newKey] = rowFields.frontmatter[columnId] ?? "";
+        delete rowFields.frontmatter[columnId];
+        await this.persistFrontmatter({ ...context, deletedColumn: columnId, newKey: newKey });
+    }
 
-            // Check if the column is already in the frontmatter
-            // assign an empty value to the new key
-            const newKey = ParseService.parseLiteral(newValue, InputType.TEXT, ddbbConfig) as string;
-            rowFields.frontmatter[newKey] = rowFields.frontmatter[columnId] ?? "";
-            delete rowFields.frontmatter[columnId];
-            await persistFrontmatter(columnId, newKey);
+    /**
+     * Modify the value of a column in the frontmatter
+     * @param context 
+     * @returns 
+     */
+    private async columnValue(context: EditContext): Promise<void> {
+        const { file, columnId, newValue, column, rowFields } = context;
+        if (column.config.isInline) {
+            await this.inlineColumnEdit(context);
+            return;
         }
+        rowFields.frontmatter[columnId] = newValue;
+        await this.persistFrontmatter(context);
+        await this.inlineRemoveColumn(file, columnId);
+    }
 
-        // Remove a column
-        async function removeColumn(): Promise<void> {
-            if (column.config.isInline) {
-                await inlineRemoveColumn();
-                return;
-            }
-            delete rowFields.frontmatter[columnId];
-            await persistFrontmatter(columnId);
-        }
+    /**
+     * Persist the frontmatter of a file
+     * @param context 
+     */
+    private async persistFrontmatter(
+        context: EditContext,
+    ): Promise<void> {
+        const {
+            file,
+            columnId,
+            content,
+            ddbbConfig,
+            contentHasFrontmatter,
+            rowFields,
+            deletedColumn,
+            newKey
+        } = context;
 
-        async function persistFrontmatter(deletedColumn?: string, newKey?: string): Promise<void> {
-            if (requireApiVersion("1.1.1")) {
-                await app.fileManager.processFrontMatter(file, (frontmatter) => {
-                    if (newKey) {
-                        frontmatter[newKey] = frontmatter[deletedColumn];
-                    } else {
-                        frontmatter[columnId] = ParseService.parseLiteral(
-                            rowFields.frontmatter[columnId],
-                            InputType.MARKDOWN,
-                            ddbbConfig
-                        );
-                    }
+        if (requireApiVersion("1.1.1")) {
+            await app.fileManager.processFrontMatter(file, (frontmatter) => {
+                if (newKey) {
+                    frontmatter[newKey] = frontmatter[deletedColumn];
+                } else {
+                    frontmatter[columnId] = ParseService.parseLiteral(
+                        rowFields.frontmatter[columnId],
+                        InputType.MARKDOWN,
+                        ddbbConfig
+                    );
+                }
 
-                    if (deletedColumn) {
-                        delete frontmatter[deletedColumn];
-                    }
-                });
-            } else {
-                const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---\n*/g : /(^[\s\S]*$)/g;
-                const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
-                const newContent = contentHasFrontmatter ? `${frontmatterFieldsText}\n` : `${frontmatterFieldsText ? frontmatterFieldsText.concat('\n') : frontmatterFieldsText}$1`;
-                const builder = new NoteContentActionBuilder()
-                    .setContent(content)
-                    .setFile(file)
-                    .addRegExp(frontmatterGroupRegex)
-                    .addRegExpNewValue(newContent)
-                    .build();
-                await VaultManagerDB.editNoteContent(builder);
-            }
-        }
-
-        /*******************************************************************************************
-         *                              INLINE GROUP FUNCTIONS
-         *******************************************************************************************/
-        async function inlineColumnEdit(): Promise<void> {
-            const mdProperty = ParseService.parseLiteral(
-                newValue,
-                InputType.MARKDOWN,
-                ddbbConfig,
-                true
-            )
+                if (deletedColumn) {
+                    delete frontmatter[deletedColumn];
+                }
+            });
+        } else {
+            const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---\n*/g : /(^[\s\S]*$)/g;
+            const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
+            const newContent = contentHasFrontmatter ? `${frontmatterFieldsText}\n` : `${frontmatterFieldsText ? frontmatterFieldsText.concat('\n') : frontmatterFieldsText}$1`;
             const builder = new NoteContentActionBuilder()
                 .setContent(content)
                 .setFile(file)
-                .addInlineRegexStandard(columnId)
-                .addRegExpNewValue(`$1 ${mdProperty}`)
-                .addInlineRegexParenthesis(columnId)
-                .addRegExpNewValue(`$1$2$3 ${mdProperty}$5$6`)
-                .addInlineRegexListOrCallout(columnId)
-                .addRegExpNewValue(`$1$2$3 ${mdProperty}`)
-
-            if (!builder.isContentEditable()) {
-                await inlineAddColumn();
-                return;
-            }
-            await VaultManagerDB.editNoteContent(builder.build());
-            await persistFrontmatter(columnId);
-        }
-
-        async function inlineColumnKey(): Promise<void> {
-            if (!Object.keys(rowFields.inline).contains(columnId)) {
-                return;
-            }
-            const noteObject = new NoteContentActionBuilder()
-                .setContent(content)
-                .setFile(file)
-                .addInlineRegexStandard(columnId)
-                .addRegExpNewValue(`${newValue}:: $2`)
-                .addInlineRegexParenthesis(columnId)
-                .addRegExpNewValue(`$1$2${newValue}:: $4$5$6`)
-                .addInlineRegexListOrCallout(columnId)
-                .addRegExpNewValue(`$1$2${newValue}:: $4`)
+                .addRegExp(frontmatterGroupRegex)
+                .addRegExpNewValue(newContent)
                 .build();
-
-            await VaultManagerDB.editNoteContent(noteObject);
-            await persistFrontmatter();
+            await VaultManagerDB.editNoteContent(builder);
         }
+    }
 
-        async function inlineAddColumn(): Promise<void> {
-            const mdProperty = ParseService.parseLiteral(
-                newValue,
-                InputType.MARKDOWN,
-                ddbbConfig,
-                true
-            ).toString();
+    /*******************************************************************************************
+     *                              INLINE GROUP FUNCTIONS
+     *******************************************************************************************/
 
-            const noteObject = new NoteContentActionBuilder()
-                .setContent(content)
-                .setFile(file)
-                .addInlineFieldRegExpPair(ddbbConfig.inline_new_position, columnId, mdProperty)
-                .build();
+    /**
+     * Remove a column from a file using inline notation
+     * @param file 
+     * @param columnId 
+     */
+    private async inlineRemoveColumn(file: TFile, columnId: string): Promise<void> {
+        const noteObject = new NoteContentActionBuilder()
+            .setFile(file)
+            .addInlineRegexStandard(columnId)
+            .addRegExpNewValue(``)
+            .addInlineRegexParenthesis(columnId)
+            .addRegExpNewValue(`$1$2$5$6`)
+            .addInlineRegexListOrCallout(columnId)
+            .addRegExpNewValue(``)
+            .build();
 
-            await VaultManagerDB.editNoteContent(noteObject);
-            await persistFrontmatter(columnId);
+        await VaultManagerDB.editNoteContent(noteObject);
+    }
+
+    /**
+     * Add a column to a file using inline notation
+     * @param context 
+     */
+    private async inlineAddColumn(context: EditContext): Promise<void> {
+        const {
+            file,
+            columnId,
+            content,
+            newValue,
+            ddbbConfig,
+        } = context;
+
+        const mdProperty = ParseService.parseLiteral(
+            newValue,
+            InputType.MARKDOWN,
+            ddbbConfig,
+            true
+        ).toString();
+
+        const noteObject = new NoteContentActionBuilder()
+            .setContent(content)
+            .setFile(file)
+            .addInlineFieldRegExpPair(ddbbConfig.inline_new_position, columnId, mdProperty)
+            .build();
+
+        await VaultManagerDB.editNoteContent(noteObject);
+        await this.persistFrontmatter({ ...context, deletedColumn: columnId });
+    }
+
+    /**
+     * Edit a column using inline notation
+     * @param context 
+     * @returns 
+     */
+    private async inlineColumnEdit(context: EditContext): Promise<void> {
+        const {
+            file,
+            columnId,
+            content,
+            newValue,
+            ddbbConfig,
+        } = context;
+
+        const mdProperty = ParseService.parseLiteral(
+            newValue,
+            InputType.MARKDOWN,
+            ddbbConfig,
+            true
+        )
+        const builder = new NoteContentActionBuilder()
+            .setContent(content)
+            .setFile(file)
+            .addInlineRegexStandard(columnId)
+            .addRegExpNewValue(`$1 ${mdProperty}`)
+            .addInlineRegexParenthesis(columnId)
+            .addRegExpNewValue(`$1$2$3 ${mdProperty}$5$6`)
+            .addInlineRegexListOrCallout(columnId)
+            .addRegExpNewValue(`$1$2$3 ${mdProperty}`)
+
+        if (!builder.isContentEditable()) {
+            await this.inlineAddColumn(context);
+            return;
         }
+        await VaultManagerDB.editNoteContent(builder.build());
+        await this.persistFrontmatter({ ...context, deletedColumn: columnId });
+    }
 
-        async function inlineRemoveColumn(): Promise<void> {
-            const noteObject = new NoteContentActionBuilder()
-                .setFile(file)
-                .addInlineRegexStandard(columnId)
-                .addRegExpNewValue(``)
-                .addInlineRegexParenthesis(columnId)
-                .addRegExpNewValue(`$1$2$5$6`)
-                .addInlineRegexListOrCallout(columnId)
-                .addRegExpNewValue(``)
-                .build();
+    /**
+     * Edit a column key using inline notation
+     * @param context 
+     * @returns 
+     */
+    private async inlineColumnKey(context: EditContext): Promise<void> {
+        const {
+            file,
+            columnId,
+            content,
+            newValue,
+            rowFields,
+        } = context;
 
-            await VaultManagerDB.editNoteContent(noteObject);
+        if (!Object.keys(rowFields.inline).contains(columnId)) {
+            return;
         }
+        const noteObject = new NoteContentActionBuilder()
+            .setContent(content)
+            .setFile(file)
+            .addInlineRegexStandard(columnId)
+            .addRegExpNewValue(`${newValue}:: $2`)
+            .addInlineRegexParenthesis(columnId)
+            .addRegExpNewValue(`$1$2${newValue}:: $4$5$6`)
+            .addInlineRegexListOrCallout(columnId)
+            .addRegExpNewValue(`$1$2${newValue}:: $4`)
+            .build();
 
-        // Record of options
-        const updateOptions: Record<string, (() => Promise<void>)> = {};
-        updateOptions[UpdateRowOptions.COLUMN_VALUE] = columnValue;
-        updateOptions[UpdateRowOptions.COLUMN_KEY] = columnKey;
-        updateOptions[UpdateRowOptions.REMOVE_COLUMN] = removeColumn;
-        updateOptions[UpdateRowOptions.INLINE_VALUE] = inlineColumnEdit;
-        // Execute action
-        if (updateOptions[option]) {
-            // Then execute the action
-            await updateOptions[option]();
-        } else {
-            throw `Error: option ${option} not supported yet`;
-        }
-        LOGGER.info(`<= updateRowFile.asociatedFilePathToCell: ${file.path} | columnId: ${columnId} | newValue: ${newValue} | option: ${option} `);
+        await VaultManagerDB.editNoteContent(noteObject);
+        await this.persistFrontmatter(context);
     }
 
     /**
