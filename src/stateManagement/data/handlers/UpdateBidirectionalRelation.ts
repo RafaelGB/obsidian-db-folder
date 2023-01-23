@@ -4,16 +4,15 @@ import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { obtainColumnsFromFolder } from "components/Columns";
 import { InputType, UpdateRowOptions } from "helpers/Constants";
 import { resolve_tfile } from "helpers/FileManagement";
-
 import { Link, Literal } from "obsidian-dataview";
-import NoteContentActionBuilder from "patterns/builders/NoteContentActionBuilder";
 import DatabaseInfo from "services/DatabaseInfo";
 import { DataviewService } from "services/DataviewService";
 import { EditEngineService } from "services/EditEngineService";
-import { VaultManagerDB } from "services/FileManagerService";
 import NoteInfo from "services/NoteInfo";
 import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
+
+type BidirectionalAction = "add" | "remove";
 
 export default class UpdateBidirectionalRelation extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -33,59 +32,60 @@ export default class UpdateBidirectionalRelation extends AbstractTableAction<Dat
                 .map((path) => DataviewService.getDataviewAPI().fileLink(path));
 
             // Related rows to remove the source link
-            linksToRemoveRow.forEach(async (link) => {
-                const page = DataviewService.getDataviewAPI().page(link.path) as NoteInfoPage;
-                const relatedRow = new NoteInfo(page).getAllRowDataType()
+            this.updateAffectedRows(linksToRemoveRow, linkOfSource, relationConfig, column, relatedColumns, "remove");
 
-                const literal = ParseService.parseLiteral(
-                    relatedRow[column.key] as Literal,
-                    InputType.RELATION,
-                    relationConfig.yaml.config,
-                    true
-                );
-                const parsedNoteToLinks = literal ? literal as Link[] : [];
-                parsedNoteToLinks.remove(linkOfSource);
 
-                const mdProperty = ParseService.parseLiteral(
-                    parsedNoteToLinks,
-                    InputType.MARKDOWN,
-                    relationConfig.yaml.config,
-                    true
-                )
-                const file = resolve_tfile(link.path);
-                await EditEngineService.updateRowFileProxy(file, column.key, mdProperty, relatedColumns, relationConfig.yaml.config, UpdateRowOptions.COLUMN_VALUE);
-            });
-
-            // Related rows to add the source link
             const linksToAddRow = newPaths
                 .filter((path) => !oldPaths.includes(path))
                 .map((path) => DataviewService.getDataviewAPI().fileLink(path));
-            linksToAddRow.forEach(async (link) => {
-                const page = DataviewService.getDataviewAPI().page(link.path) as NoteInfoPage;
-                const relatedRow = new NoteInfo(page).getAllRowDataType()
-
-                const literal = ParseService.parseLiteral(
-                    relatedRow[column.key] as Literal,
-                    InputType.RELATION,
-                    relationConfig.yaml.config,
-                    true
-                );
-                const parsedNoteToLinks = literal ? literal as Link[] : [];
-                parsedNoteToLinks.push(linkOfSource);
-
-                const mdProperty = ParseService.parseLiteral(
-                    parsedNoteToLinks,
-                    InputType.MARKDOWN,
-                    relationConfig.yaml.config,
-                    true
-                )
-                const file = resolve_tfile(link.path);
-                await EditEngineService.updateRowFileProxy(file, column.key, mdProperty, relatedColumns, relationConfig.yaml.config, UpdateRowOptions.COLUMN_VALUE);
-            });
+            // Related rows to add the source link
+            this.updateAffectedRows(linksToAddRow, linkOfSource, relationConfig, column, relatedColumns, "add");
         };
 
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
+
+    }
+
+    private updateAffectedRows(
+        links: Link[],
+        linkOfSource: Link,
+        relationConfig: DatabaseInfo,
+        column: TableColumn,
+        relatedColumns: TableColumn[],
+        action: BidirectionalAction
+    ) {
+        links.forEach(async (link) => {
+            const page = DataviewService.getDataviewAPI().page(link.path) as NoteInfoPage;
+            const relatedRow = new NoteInfo(page).getAllRowDataType()
+
+            const literal = ParseService.parseLiteral(
+                relatedRow[column.key] as Literal,
+                InputType.RELATION,
+                relationConfig.yaml.config,
+                true
+            );
+            const parsedNoteToLinks = literal ? literal as Link[] : [];
+
+            switch (action) {
+                case "add":
+                    parsedNoteToLinks.push(linkOfSource);
+                    break;
+                case "remove":
+                    const index = parsedNoteToLinks.findIndex((l) => l.path === linkOfSource.path);
+                    parsedNoteToLinks.splice(index, 1);
+                    break;
+            }
+
+            const mdProperty = ParseService.parseLiteral(
+                parsedNoteToLinks,
+                InputType.MARKDOWN,
+                relationConfig.yaml.config,
+                true
+            )
+            const file = resolve_tfile(link.path);
+            await EditEngineService.updateRowFileProxy(file, column.key, mdProperty, relatedColumns, relationConfig.yaml.config, UpdateRowOptions.COLUMN_VALUE);
+        });
 
     }
 }

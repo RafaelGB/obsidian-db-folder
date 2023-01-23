@@ -47,8 +47,8 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                         break;
                     }
                     case DATAVIEW_UPDATER_OPERATIONS.UPDATE: {
-                        if (updaterData.isActive && isFileInDDBB) {
-                            LOGGER.info(`Refreshing File "${updaterData.file}" due to active file update. Ignore`);
+                        if (updaterData.isActive) {
+                            LOGGER.info(`Refreshing File "${updaterData.file}" is ignored due to active file update.`);
                             return updater;
                         }
 
