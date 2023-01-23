@@ -10,7 +10,7 @@ import { ConfigColumn, TableColumn } from 'cdm/FolderModel';
 import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import databaseStringToYamlParser from 'IO/md/DatabaseStringToYamlParser';
-import { DATABASE_CONFIG } from 'helpers/Constants';
+import { DATABASE_CONFIG, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import NoteContentActionBuilder from 'patterns/builders/NoteContentActionBuilder';
 
 export default class DatabaseInfo {
@@ -155,6 +155,13 @@ export default class DatabaseInfo {
             ...colToUpdate.config,
             ...partialConfig
         };
+        this.yaml.columns[columnId] = colToUpdate;
+        await this.saveOnDisk();
+    }
+
+    async resetColumnConfig(columnId: string): Promise<void> {
+        const colToUpdate = this.yaml.columns[columnId];
+        colToUpdate.config = DEFAULT_COLUMN_CONFIG;
         this.yaml.columns[columnId] = colToUpdate;
         await this.saveOnDisk();
     }

@@ -24,6 +24,8 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                 await view.diskConfig.updateColumnProperties(column.id, {
                     input: targetInput,
                 });
+
+                await view.diskConfig.resetColumnConfig(column.id);
                 set((updater) => {
 
                     const alteredColumns = [...updater.columns];

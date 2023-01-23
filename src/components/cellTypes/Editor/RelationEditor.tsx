@@ -4,11 +4,11 @@ import { useState } from "react";
 import Select from "react-select";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c } from "helpers/StylesHelper";
-import { recordRowsFromRelation } from "helpers/RelationHelper";
+import { obtainInfoFromRelation } from "helpers/RelationHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
 import { OnChangeValue } from "react-select";
-import { DEFAULT_SETTINGS, StyleVariables } from "helpers/Constants";
+import { StyleVariables } from "helpers/Constants";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
@@ -47,13 +47,11 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
 
   useEffect(() => {
     setTimeout(async () => {
-      const relationRows = await recordRowsFromRelation(
-        tableColumn.config.related_note_path,
-        DEFAULT_SETTINGS.local_settings,
-        columnsInfo.getAllColumns()
+      const { recordRows } = await obtainInfoFromRelation(
+        tableColumn.config.related_note_path
       );
 
-      const multiOptions = Object.entries(relationRows).map(([key, value]) => ({
+      const multiOptions = Object.entries(recordRows).map(([key, value]) => ({
         label: value,
         value: key,
         color: StyleVariables.TEXT_NORMAL,

@@ -40,13 +40,15 @@ export class BidirectionalRelationToggleHandler extends AbstractHandlerClass<Col
         const { column, columnSettingsManager } = columnHandlerResponse;
         const { view } = columnSettingsManager.modal;
         const file = resolve_tfile(column.config.related_note_path);
-        const relationConfig = await new DatabaseInfo(file, view.plugin.settings.local_settings).build();
-        if (toggleValue) {
-            relationConfig.yaml.columns[column.id] = view.diskConfig.yaml.columns[column.id];
-        } else {
-            delete relationConfig.yaml.columns[column.id];
-        }
-        await relationConfig.saveOnDisk();
+        const relatedDB = await new DatabaseInfo(file, view.plugin.settings.local_settings).build();
         // Check if the relation is already bidirectional
+        if (toggleValue) {
+            const relatedColumn = { ...view.diskConfig.yaml.columns[column.id] };
+            relatedColumn.config.related_note_path = view.file.path;
+            relatedDB.yaml.columns[column.id] = relatedColumn;
+        } else {
+            delete relatedDB.yaml.columns[column.id];
+        }
+        await relatedDB.saveOnDisk();
     }
 }

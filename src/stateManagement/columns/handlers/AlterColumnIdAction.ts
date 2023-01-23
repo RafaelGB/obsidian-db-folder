@@ -1,5 +1,7 @@
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
+import { resolve_tfile } from "helpers/FileManagement";
+import DatabaseInfo from "services/DatabaseInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterColumnIdHandlerAction extends AbstractTableAction<ColumnsState> {
@@ -9,6 +11,14 @@ export default class AlterColumnIdHandlerAction extends AbstractTableAction<Colu
             const newNestedIds = nestedIds.join('.');
             // Update on disk
             await view.diskConfig.updateColumnKey(column, newId, nestedIds);
+
+            if (column.config.related_note_path) {
+                // Updated related column from disk
+                const relatedFile = resolve_tfile(column.config.related_note_path);
+                const relatedDB = await new DatabaseInfo(relatedFile, view.plugin.settings.local_settings).build();
+                relatedDB.updateColumnKey(column, newId, nestedIds);
+            }
+
             set((updater) => {
                 const rootWasUpdated = column.id !== newId;
                 const alteredColumns = [...updater.columns];

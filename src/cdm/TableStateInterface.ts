@@ -104,7 +104,7 @@ export interface DataState {
 export type ColumnsStateActions = {
     addToLeft: (column: TableColumn, customName?: string, customType?: string) => void;
     addToRight: (column: TableColumn, customName?: string, customType?: string) => void;
-    remove: (column: TableColumn) => void;
+    remove: (column: TableColumn) => Promise<void>;
     alterSorting: (column: TableColumn) => void;
     addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
     alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => Promise<void>;
