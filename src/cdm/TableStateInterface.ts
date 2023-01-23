@@ -3,7 +3,7 @@ import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ColumnOption } from "cdm/ComponentsModel";
 import { DatabaseView } from "views/DatabaseView";
-import { Literal } from "obsidian-dataview";
+import { Link, Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";
 
@@ -72,6 +72,7 @@ export type DataStateActions = {
     insertRows: () => Promise<void>;
     addRow: (args: CreateRowInfo) => Promise<void>;
     updateCell: (args: UpdateRowInfo) => Promise<void>;
+    updateBidirectionalRelation: (source: RowDataType, column: TableColumn, oldPaths: string[], newPaths: string[]) => Promise<void>;
     parseDataOfColumn: (column: TableColumn, input: string, ddbbConfig: LocalSettings) => void;
     updateDataAfterLabelChange: (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => Promise<void>;
     removeRow: (row: RowDataType) => Promise<void>;
@@ -103,7 +104,7 @@ export interface DataState {
 export type ColumnsStateActions = {
     addToLeft: (column: TableColumn, customName?: string, customType?: string) => void;
     addToRight: (column: TableColumn, customName?: string, customType?: string) => void;
-    remove: (column: TableColumn) => void;
+    remove: (column: TableColumn) => Promise<void>;
     alterSorting: (column: TableColumn) => void;
     addOptionToColumn: (column: TableColumn, option: string, backgroundColor: string) => void;
     alterColumnType: (column: TableColumn, input: string, parsedRows?: RowDataType[]) => Promise<void>;

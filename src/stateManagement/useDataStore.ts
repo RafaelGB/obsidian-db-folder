@@ -18,6 +18,7 @@ const useDataStore = (view: DatabaseView) => {
             addRow: null,
             updateCell: null,
             updateDataAfterLabelChange: null,
+            updateBidirectionalRelation: null,
             removeRow: null,
             editOptionForAllRows: null,
             removeDataOfColumn: null,

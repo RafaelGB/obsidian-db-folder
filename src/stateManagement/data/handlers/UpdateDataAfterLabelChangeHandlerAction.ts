@@ -2,17 +2,18 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { UpdateRowOptions } from "helpers/Constants";
+import { obtainInfoFromRelation } from "helpers/RelationHelper";
 import { dbTrim } from "helpers/StylesHelper";
 import { EditEngineService } from "services/EditEngineService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
-        const { set, implementation } = tableActionResponse;
-        implementation.actions.updateDataAfterLabelChange = async (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => set((state) => {
+        const { get, set, implementation } = tableActionResponse;
+        implementation.actions.updateDataAfterLabelChange = async (column: TableColumn, label: string, columns: TableColumn[], ddbbConfig: LocalSettings) => {
             const newKey = dbTrim(label);
             // Save on disk
-            state.rows.map(async (row: RowDataType) => {
+            get().rows.map(async (row: RowDataType) => {
                 await EditEngineService.updateRowFileProxy(
                     row.__note__.getFile(),
                     column.key,
@@ -22,16 +23,31 @@ export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTab
                     UpdateRowOptions.COLUMN_KEY
                 );
             });
-
-            // Save on memory
-            const alterRows = state.rows.map((row) => {
-                row[newKey] = row[column.key];
-                delete row[column.key];
-                return row;
+            if (column.config.related_note_path) {
+                const { relatedRows, ddbbInfo } = await obtainInfoFromRelation(
+                    column.config.related_note_path
+                );
+                relatedRows.map(async (row: RowDataType) => {
+                    await EditEngineService.updateRowFileProxy(
+                        row.__note__.getFile(),
+                        column.key,
+                        newKey,
+                        columns,
+                        ddbbInfo.yaml.config,
+                        UpdateRowOptions.COLUMN_KEY
+                    );
+                });
+            }
+            set((state) => {
+                // Save on memory
+                const alterRows = state.rows.map((row) => {
+                    row[newKey] = row[column.key];
+                    delete row[column.key];
+                    return row;
+                });
+                return { rows: alterRows };
             });
-            return { rows: alterRows };
         }
-        );
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
     }
