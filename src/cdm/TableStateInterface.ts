@@ -3,7 +3,7 @@ import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ColumnOption } from "cdm/ComponentsModel";
 import { DatabaseView } from "views/DatabaseView";
-import { Link, Literal } from "obsidian-dataview";
+import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";
 

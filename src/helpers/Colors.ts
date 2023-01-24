@@ -59,7 +59,7 @@ export function castHslToString(hsl: HSL): string {
  */
 export function contrastColor(hslStringified: string): string {
   const hsl = castStringtoHsl(hslStringified);
-  let contrast = (2 * hsl.l + hsl.s * (hsl.l <= 0.5 ? 1 : -1)) / 2;
+  const contrast = (2 * hsl.l + hsl.s * (hsl.l <= 0.5 ? 1 : -1)) / 2;
 
   if (contrast > 0.5) {
     return 'black';

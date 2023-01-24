@@ -99,14 +99,6 @@ export abstract class CustomView extends TextFileView implements HoverParent {
             this.diskConfig = await new DatabaseInfo(this.file, this.plugin.settings.local_settings).build();
             this.setDataApi(this.diskConfig.yaml.config.implementation);
 
-            let yamlColumns: Record<string, DatabaseColumn> =
-                this.diskConfig.yaml.columns;
-            // Complete the columns with the metadata columns
-            yamlColumns = await obtainMetadataColumns(
-                yamlColumns,
-                this.diskConfig.yaml.config
-            );
-
             this.columns = await this.getColumns();
             this.initial = this.getInitialType();
             this.formulas = await this.getFormulas();

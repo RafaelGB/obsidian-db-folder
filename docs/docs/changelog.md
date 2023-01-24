@@ -1,3 +1,17 @@
+## 3.3.0
+### Shiny new things
+- New option: Bidirectional relations. You can now create a relation between two databases and the relation will be created in both databases. [#581](https://github.com/RafaelGB/obsidian-db-folder/issues/581)
+- Formulas arrives to rollups! You can now use formulas in rollups. [#758](https://github.com/RafaelGB/obsidian-db-folder/issues/758)
+### Improved
+- Alias allowed with tags and select column type [#613](https://github.com/RafaelGB/obsidian-db-folder/issues/613)
+- Drag and drop for group filters [#562](https://github.com/RafaelGB/obsidian-db-folder/issues/562)
+### Visual
+- Relation support for light mode [#771](https://github.com/RafaelGB/obsidian-db-folder/issues/771)
+### No longer broken
+- CSV import now use papaparse library to avoid errors [#734](https://github.com/RafaelGB/obsidian-db-folder/issues/734)
+- Pagination button is inaccesible no more in some cases for mobile [#588](https://github.com/RafaelGB/obsidian-db-folder/issues/688)
+- Change column id does not remove the column anymore in some cases [#770](https://github.com/RafaelGB/obsidian-db-folder/issues/770)
+- Regression with nested metadata fixed [#769](https://github.com/RafaelGB/obsidian-db-folder/issues/769)
 ## 3.2.4
 ### Shiny new things
 - New source of data for the plugin: Dataview JS Pages. You can write your own pages queries and use them as a source of data. [#628](https://github.com/RafaelGB/obsidian-db-folder/issues/628)

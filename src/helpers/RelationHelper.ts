@@ -1,9 +1,9 @@
-import { DataArray, Literal, SMarkdownPage } from "obsidian-dataview";
+import { SMarkdownPage } from "obsidian-dataview";
 import { DataviewService } from "services/DataviewService";
 import { DatabaseCore, DEFAULT_SETTINGS } from "helpers/Constants";
 import { resolve_tfile } from "helpers/FileManagement";
 import DatabaseInfo from "services/DatabaseInfo";
-import { adapterTFilesToRows, sourceDataviewPages } from "helpers/VaultManagement";
+import { adapterTFilesToRows } from "helpers/VaultManagement";
 import { LocalSettings } from "cdm/SettingsModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { obtainColumnsFromFolder, obtainColumnsFromRows } from "components/Columns";
