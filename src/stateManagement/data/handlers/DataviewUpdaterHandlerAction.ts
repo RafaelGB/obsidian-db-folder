@@ -3,12 +3,14 @@ import { UpdaterData } from "cdm/EmitterModel";
 import { TableColumn } from "cdm/FolderModel";
 import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { DATAVIEW_UPDATER_OPERATIONS, MetadataColumns } from "helpers/Constants";
+import { DATAVIEW_UPDATER_OPERATIONS, MetadataColumns, SourceDataTypes } from "helpers/Constants";
 import tableFilter from "helpers/TableFiltersHelper";
+import { TFile } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
+import { DatabaseView } from "views/DatabaseView";
 
 export default class DataviewUpdaterHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -19,10 +21,11 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
             ddbbConfig: LocalSettings,
             filterConfig: FilterSettings
         ) => {
+
+            const { op, file, oldPath } = updaterData;
+            if (!this.checkIfFileIsInSource(file, view)) return;
             set((updater) => {
                 const { rows } = updater;
-                const { op, file, oldPath } = updaterData;
-
                 const pathToOperate = oldPath ? oldPath : file.path;
                 const indexToOperate = updater.rows.findIndex((row) => row.__note__.filepath === pathToOperate);
                 const isFileInDDBB = indexToOperate !== -1;
@@ -77,5 +80,15 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
         }
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
+    }
+
+    private checkIfFileIsInSource(file: TFile, view: DatabaseView): boolean {
+        switch (view.diskConfig.yaml.config.source_data) {
+            case SourceDataTypes.CURRENT_FOLDER:
+                return file.parent.path.startsWith(view.file.parent.path);
+            case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
+                return file.parent.path === view.file.parent.path;
+        }
+        return true;
     }
 }
