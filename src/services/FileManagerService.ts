@@ -36,7 +36,7 @@ class VaultManager {
     // Custom content by source
     switch (localSettings.source_data) {
       case SourceDataTypes.TAG:
-        content = content.concat(`#${localSettings.source_form_result}\n`);
+        content = content.concat(`${localSettings.source_form_result}\n`);
         break;
       default:
     }
