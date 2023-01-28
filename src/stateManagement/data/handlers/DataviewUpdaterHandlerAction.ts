@@ -50,7 +50,7 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
                         break;
                     }
                     case DATAVIEW_UPDATER_OPERATIONS.UPDATE: {
-                        if (updaterData.isActive) {
+                        if (updaterData.isActive && isFileInDDBB) {
                             LOGGER.info(`Refreshing File "${updaterData.file}" is ignored due to active file update.`);
                             return updater;
                         }
@@ -83,11 +83,17 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
     }
 
     private checkIfFileIsInSource(file: TFile, view: DatabaseView): boolean {
+        const cachedFile = app.metadataCache.getFileCache(file);
         switch (view.diskConfig.yaml.config.source_data) {
             case SourceDataTypes.CURRENT_FOLDER:
                 return file.parent.path.startsWith(view.file.parent.path);
             case SourceDataTypes.CURRENT_FOLDER_WITHOUT_SUBFOLDERS:
                 return file.parent.path === view.file.parent.path;
+            case SourceDataTypes.TAG:
+                return cachedFile.tags
+                    ?.some((tagCache) =>
+                        tagCache.tag === view.diskConfig.yaml.config.source_form_result
+                    );
         }
         return true;
     }
