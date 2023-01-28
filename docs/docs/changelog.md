@@ -1,4 +1,10 @@
 ## 3.3.0
+### Improved
+- Relations now are shown as tags view. You can select the color of those tags in column settings
+### No longer broken
+- Tag format of new entries fixed [#777](https://github.com/RafaelGB/obsidian-db-folder/issues/777)
+- Bug fixes for CSV management [#782](https://github.com/RafaelGB/obsidian-db-folder/issues/782) [#778](https://github.com/RafaelGB/obsidian-db-folder/issues/778) [#740](https://github.com/RafaelGB/obsidian-db-folder/issues/740)
+## 3.3.0-beta.1
 ### Shiny new things
 - New option: Bidirectional relations. You can now create a relation between two databases and the relation will be created in both databases. [#581](https://github.com/RafaelGB/obsidian-db-folder/issues/581)
 - Formulas arrives to rollups! You can now use formulas in rollups. [#758](https://github.com/RafaelGB/obsidian-db-folder/issues/758)

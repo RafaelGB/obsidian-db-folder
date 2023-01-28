@@ -1,10 +1,10 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { InputType, StyleVariables } from "helpers/Constants";
+import { InputType } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
 import { Link } from "obsidian-dataview";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "components/cellTypes/Editor/RelationEditor";
