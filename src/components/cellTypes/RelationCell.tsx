@@ -1,19 +1,20 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { InputType } from "helpers/Constants";
+import { InputType, StyleVariables } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
 import { Link } from "obsidian-dataview";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "components/cellTypes/Editor/RelationEditor";
-import { MarkdownService } from "services/MarkdownRenderService";
+import Relationship from "components/RelationShip";
+import { grey } from "helpers/Colors";
 
 const RelationCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
   const { table, row, column } = defaultCell;
-  const { tableState } = table.options.meta;
+  const { tableState, view } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
   const relationRow = tableState.data((state) => state.rows[row.index]);
   const dataActions = tableState.data((state) => state.actions);
@@ -29,33 +30,7 @@ const RelationCell = (mdProps: CellComponentProps) => {
       ) as Link[]
   );
 
-  const containerCellRef = useRef<HTMLDivElement>();
   const [dirtyCell, setDirtyCell] = useState(false);
-
-  /**
-   * Render markdown content of Obsidian on load
-   */
-  useEffect(() => {
-    if (relationCell.length === 0 || dirtyCell) {
-      // End useEffect
-      return;
-    }
-
-    if (containerCellRef.current !== undefined) {
-      containerCellRef.current.innerHTML = "";
-      const mdRelations = relationCell
-        .map((relation) => {
-          return relation.markdown();
-        })
-        .join(",");
-      MarkdownService.renderMarkdown(
-        defaultCell,
-        `[ ${mdRelations} ]`,
-        containerCellRef.current,
-        5
-      );
-    }
-  }, [row, column, dirtyCell]);
 
   const persistChange = (newPaths: string[]) => {
     const oldPaths = relationCell
@@ -115,9 +90,14 @@ const RelationCell = (mdProps: CellComponentProps) => {
       relationCell={relationCell}
     />
   ) : (
-    <span
-      ref={containerCellRef}
+    <div
       onDoubleClick={handleOnClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleOnClick();
+        }
+      }}
       style={{ width: column.getSize() }}
       className={c(
         getAlignmentClassname(
@@ -126,14 +106,19 @@ const RelationCell = (mdProps: CellComponentProps) => {
           ["tabIndex"]
         )
       )}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          handleOnClick();
-        }
-      }}
       tabIndex={0}
-    />
+    >
+      {relationCell
+        ? relationCell.map((link: Link, index) => (
+            <Relationship
+              key={`relation-${index}-${tableColumn.key}-${link.path}`}
+              value={link.markdown()}
+              backgroundColor={tableColumn.config.relation_color || grey(300)}
+              view={view}
+            />
+          ))
+        : null}
+    </div>
   );
 };
 

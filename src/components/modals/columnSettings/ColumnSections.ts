@@ -17,12 +17,12 @@ import { RollupActionHandler } from "./handlers/rollups/RollupActionHandler";
 import { RollupKeyHandler } from "./handlers/rollups/RollupKeyHandler";
 import { RollupPersistToggleHandler } from "./handlers/rollups/RollupPersistToggleHandler";
 import { RollupFormulaHandler } from "./handlers/rollups/RollupFormulaHandler";
-import { BidirectionalRelationToggleHandler } from "./handlers/automations/BidirectionalRelationToggleHandler";
+import { BidirectionalRelationToggleHandler } from "./handlers/relations/BidirectionalRelationToggleHandler";
+import { RelationColorSelectorHandler } from "./handlers/relations/RelationColorSelectorHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
 import { t } from "lang/helpers";
-
 
 class StyleSetttingsSection extends AbstractChain<ColumnSettingsHandlerResponse> {
     private input: string = InputType.TEXT;
@@ -145,6 +145,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
             case InputType.RELATION:
                 particularHandlers.push(new DatabaseSelectorHandler());
                 particularHandlers.push(new BidirectionalRelationToggleHandler());
+                particularHandlers.push(new RelationColorSelectorHandler());
                 break;
             case InputType.ROLLUP:
                 particularHandlers.push(new RollupAsociatedRelationHandler());

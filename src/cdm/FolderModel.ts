@@ -55,6 +55,7 @@ export interface ConfigColumn {
     // Relations
     related_note_path?: string;
     bidirectional_relation?: boolean;
+    relation_color?: string;
     // Rollups
     asociated_relation_id?: string;
     rollup_action?: string;

@@ -215,6 +215,8 @@ export default {
   "column_settings_modal_selected_column_options_notice_update_error": "Error editing {0}",
   "column_settings_modal_selected_column_options_notice_delete_success": "Label {0} was deleted successfully for all the notes!",
   "column_settings_modal_selected_column_options_notice_delete_error": "Error deleting {0}",
+  "column_settings_modal_relation_color_title": "Relation color",
+  "column_settings_modal_relation_color_desc": "Select the color of the relation",
   /** TEXT MODAL */
   "text_modal_default_placeholder": "Insert text...",
   /******************************************
