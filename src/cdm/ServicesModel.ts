@@ -32,3 +32,11 @@ export abstract class TypeParser<T> {
         return parsed;
     }
 }
+
+/********************************
+ *          CSV MODEL
+ ********************************/
+export type CsvHeaders = {
+    label: string;
+    key: string;
+};

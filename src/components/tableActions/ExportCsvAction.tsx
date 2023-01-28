@@ -1,11 +1,9 @@
 import { TableActionProps } from "cdm/MenuBarModel";
-import {
-  normalizeColumnsToCsvHeader,
-  normalizeRowsToCsvData,
-} from "IO/csv/NormalizeRowsToCSV";
 import React, { useEffect } from "react";
-import { CSVLink } from "react-csv";
 import { t } from "lang/helpers";
+import { RowDataType } from "cdm/FolderModel";
+import { CsvHeaders } from "cdm/ServicesModel";
+import { CsvParserService } from "services/csv/CsvParserService";
 
 const ExportCsvAction = (actionProps: TableActionProps) => {
   const { table } = actionProps;
@@ -13,19 +11,18 @@ const ExportCsvAction = (actionProps: TableActionProps) => {
   const columnsInfo = tableState.columns((state) => state.info);
 
   // Manage CSV
-  const [dataForDownload, setDataForDownload] = React.useState([]);
-  const [headersForDownload, setHeadersForDownload] = React.useState([]);
-  const csvLink = React.useRef(null);
   const inputRef = React.useRef(null);
 
   // Lazily load CSV data
   const getTransactionData = async () => {
-    const csvHeaders = await normalizeColumnsToCsvHeader(
+    const csvHeaders = CsvParserService.getCsvHeaders(
       columnsInfo.getAllColumns()
     );
-    const csvRows = await normalizeRowsToCsvData(table.getRowModel().rows);
-    setDataForDownload(csvRows);
-    setHeadersForDownload(csvHeaders);
+    const csvRows = CsvParserService.normalizeRowsToCsvData(
+      table.getRowModel().rows
+    );
+
+    exportToCsv(`${view.diskConfig.yaml.name}.csv`, csvRows, csvHeaders);
   };
 
   const handleCsvDownload = (e: MouseEvent) => {
@@ -45,20 +42,63 @@ const ExportCsvAction = (actionProps: TableActionProps) => {
 
   return (
     <>
-      <CSVLink
-        data={dataForDownload}
-        headers={headersForDownload}
-        asyncOnClick={true}
-        onClick={getTransactionData}
-        filename={`${view.diskConfig.yaml.name}.csv`}
-        className="hidden"
-        ref={csvLink}
-        target="_blank"
-      >
+      <div onClick={getTransactionData} className="hidden">
         <input style={{ display: "none" }} ref={inputRef} />
-      </CSVLink>
+      </div>
     </>
   );
+};
+
+export const exportToCsv = (
+  filename: string,
+  rows: RowDataType[],
+  headers: CsvHeaders[]
+): void => {
+  if (!rows || !rows.length) {
+    return;
+  }
+  const separator: string = ",";
+
+  const keys: string[] = headers.map((header) => header.key);
+
+  const columHearders = headers.map((header) => header.label);
+
+  const csvContent =
+    columHearders.join(separator) +
+    "\n" +
+    rows
+      .map((row) => {
+        return keys
+          .map((k) => {
+            let cell = row[k] === null || row[k] === undefined ? "" : row[k];
+
+            cell =
+              cell instanceof Date
+                ? cell.toLocaleString()
+                : cell.toString().replace(/"/g, '""');
+
+            if (cell.search(/("|,|\n)/g) >= 0) {
+              cell = `"${cell}"`;
+            }
+            return cell;
+          })
+          .join(separator);
+      })
+      .join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+  const link = document.createElement("a");
+  if (link.download !== undefined) {
+    // Browsers that support HTML5 download attribute
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 };
 
 export default ExportCsvAction;
