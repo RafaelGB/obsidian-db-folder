@@ -4,6 +4,10 @@ import { t } from "lang/helpers";
 import { RowDataType } from "cdm/FolderModel";
 import { CsvHeaders } from "cdm/ServicesModel";
 import { CsvParserService } from "services/csv/CsvParserService";
+import { ParseService } from "services/ParseService";
+import { InputType } from "helpers/Constants";
+import { CustomView } from "views/AbstractView";
+import { Literal } from "obsidian-dataview";
 
 const ExportCsvAction = (actionProps: TableActionProps) => {
   const { table } = actionProps;
@@ -22,7 +26,7 @@ const ExportCsvAction = (actionProps: TableActionProps) => {
       table.getRowModel().rows
     );
 
-    exportToCsv(`${view.diskConfig.yaml.name}.csv`, csvRows, csvHeaders);
+    exportToCsv(`${view.diskConfig.yaml.name}.csv`, csvRows, csvHeaders, view);
   };
 
   const handleCsvDownload = (e: MouseEvent) => {
@@ -52,7 +56,8 @@ const ExportCsvAction = (actionProps: TableActionProps) => {
 export const exportToCsv = (
   filename: string,
   rows: RowDataType[],
-  headers: CsvHeaders[]
+  headers: CsvHeaders[],
+  view: CustomView
 ): void => {
   if (!rows || !rows.length) {
     return;
@@ -72,12 +77,13 @@ export const exportToCsv = (
           .map((k) => {
             let cell = row[k] === null || row[k] === undefined ? "" : row[k];
 
-            cell =
-              cell instanceof Date
-                ? cell.toLocaleString()
-                : cell.toString().replace(/"/g, '""');
+            cell = ParseService.parseLiteral(
+              cell as Literal,
+              InputType.MARKDOWN,
+              view.diskConfig.yaml.config
+            ) as string;
 
-            if (cell.search(/("|,|\n)/g) >= 0) {
+            if (cell.toString().search(/("|,|\n)/g) >= 0) {
               cell = `"${cell}"`;
             }
             return cell;
