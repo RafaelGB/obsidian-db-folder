@@ -1,8 +1,6 @@
 import { DataApi } from "api/data-api";
-import { DatabaseColumn } from "cdm/DatabaseModel";
 import { UpdaterData, ViewEvents } from "cdm/EmitterModel";
 import { InitialType, RowDataType, TableColumn, TableDataType } from "cdm/FolderModel";
-import { obtainMetadataColumns } from "components/Columns";
 import { createDatabase } from "components/index/Database";
 import { DbFolderException } from "errors/AbstractException";
 import { DatabaseCore, DB_ICONS, EMITTERS_BAR_STATUS, EMITTERS_GROUPS, EMITTERS_SHORTCUT, InputType } from "helpers/Constants";

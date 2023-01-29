@@ -21,23 +21,23 @@ class Log implements LogInterface {
     private isDebugModeEnabled: boolean;
     private levelInfo: number;
 
-    public trace: (...args: unknown[]) => void = (...args: unknown[]) => {
+    public trace: (...args: unknown[]) => void = () => {
         // Disable trace mode
     }
 
-    public debug: (...args: unknown[]) => void = (...args: unknown[]) => {
+    public debug: (...args: unknown[]) => void = () => {
         // Disable debug mode
     }
 
-    public info: (...args: unknown[]) => void = (...args: unknown[]) => {
+    public info: (...args: unknown[]) => void = () => {
         // Disable info mode
     }
 
-    public warn: (...args: unknown[]) => void = (...args: unknown[]) => {
+    public warn: (...args: unknown[]) => void = () => {
         // Disable warn mode
     }
 
-    public error: (...args: unknown[]) => void = (...args: unknown[]) => {
+    public error: (...args: unknown[]) => void = () => {
         // Disable error mode
     }
 
@@ -61,7 +61,7 @@ class Log implements LogInterface {
         if (this.levelInfo >= LevelInfoRecord.trace && this.isDebugModeEnabled) {
             this.trace = console.log.bind(console, `[TRACE]`);
         } else {
-            this.trace = (...args: unknown[]) => {
+            this.trace = () => {
                 // Disable trace mode
             }
         }
@@ -77,7 +77,7 @@ class Log implements LogInterface {
         if (this.levelInfo >= LevelInfoRecord.info && this.isDebugModeEnabled) {
             this.info = console.log.bind(console, `[INFO]`);
         } else {
-            this.info = (...args: unknown[]) => {
+            this.info = () => {
                 // Disable info mode
             }
         }
@@ -85,7 +85,7 @@ class Log implements LogInterface {
         if (this.levelInfo >= LevelInfoRecord.warn && this.isDebugModeEnabled) {
             this.warn = console.log.bind(console, `[WARN]`);
         } else {
-            this.warn = (...args: unknown[]) => {
+            this.warn = () => {
                 // Disable warn mode
             }
         }
@@ -93,7 +93,7 @@ class Log implements LogInterface {
         if (this.levelInfo >= LevelInfoRecord.error && this.isDebugModeEnabled) {
             this.error = console.log.bind(console, `[ERROR]`);
         } else {
-            this.error = (...args: unknown[]) => {
+            this.error = () => {
                 // Disable error mode
             }
         }
