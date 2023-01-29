@@ -2,13 +2,13 @@ import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ColumnOption } from "cdm/ComponentsModel";
-import { DatabaseView } from "views/DatabaseView";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";
+import { CustomView } from "views/AbstractView";
 
 export type TableActionResponse<T> = {
-    view: DatabaseView,
+    view: CustomView,
     set: (partial: T | Partial<T> | ((state: T) => T | Partial<T>), replace?: boolean) => void,
     get: () => T,
     implementation: T

@@ -1,12 +1,12 @@
 import { CellContext } from "@tanstack/react-table";
 import { NormalizedPath, RowDataType, TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "views/DatabaseView";
 import { MediaExtensions, SUGGESTER_REGEX } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { CachedMetadata, MarkdownRenderer, setIcon, TFile } from "obsidian";
 import { Literal } from "obsidian-dataview";
 import { LOGGER } from "services/Logger";
+import { CustomView } from "views/AbstractView";
 
 const ILLIGAL_CHARS = /[!"#$%&()*+,.:;<=>?@^`{|}~/[\]\\]/g;
 class MarkdownRenderService {
@@ -66,7 +66,7 @@ class MarkdownRenderService {
      * @param mdMode 
      */
     public async renderStringAsMarkdown(
-        view: DatabaseView,
+        view: CustomView,
         markdownString: string,
         domElement: HTMLDivElement,
         depth: number) {
@@ -111,7 +111,7 @@ class MarkdownRenderService {
      * @param depth 
      * @returns 
      */
-    private handleEmbeds(dom: HTMLDivElement, view: DatabaseView, depth: number) {
+    private handleEmbeds(dom: HTMLDivElement, view: CustomView, depth: number) {
         return Promise.all(
             dom.findAll(".internal-embed").map(async (el) => {
                 const src = el.getAttribute("src");
@@ -181,7 +181,7 @@ class MarkdownRenderService {
      * @param file 
      * @param view 
      */
-    private handleImage(el: HTMLElement, file: TFile, view: DatabaseView) {
+    private handleImage(el: HTMLElement, file: TFile, view: CustomView) {
         el.empty();
 
         el.createEl(
@@ -211,7 +211,7 @@ class MarkdownRenderService {
      * @param file 
      * @param view 
      */
-    private handleAudio(el: HTMLElement, file: TFile, view: DatabaseView) {
+    private handleAudio(el: HTMLElement, file: TFile, view: CustomView) {
         el.empty();
         el.createEl("audio", {
             attr: { controls: "", src: view.app.vault.getResourcePath(file) },
@@ -225,7 +225,7 @@ class MarkdownRenderService {
      * @param file 
      * @param view 
      */
-    private handleVideo(el: HTMLElement, file: TFile, view: DatabaseView) {
+    private handleVideo(el: HTMLElement, file: TFile, view: CustomView) {
         el.empty();
 
         el.createEl(
@@ -261,7 +261,7 @@ class MarkdownRenderService {
         el: HTMLElement,
         file: TFile,
         normalizedPath: NormalizedPath,
-        view: DatabaseView,
+        view: CustomView,
         depth: number
     ) {
         const { markdown, boundary } = await this.getEmbeddedMarkdownString(
@@ -331,7 +331,7 @@ class MarkdownRenderService {
     private async getEmbeddedMarkdownString(
         file: TFile,
         normalizedPath: NormalizedPath,
-        view: DatabaseView
+        view: CustomView
     ) {
         const fileCache = view.app.metadataCache.getFileCache(file);
 
@@ -483,7 +483,7 @@ class MarkdownRenderService {
      * @param dom 
      * @param view 
      */
-    private findUnresolvedLinks(dom: HTMLDivElement, view: DatabaseView) {
+    private findUnresolvedLinks(dom: HTMLDivElement, view: CustomView) {
         const links = dom.querySelectorAll('.internal-link');
 
         links.forEach((link) => {

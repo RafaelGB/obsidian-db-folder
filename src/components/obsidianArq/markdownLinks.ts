@@ -1,10 +1,10 @@
-import { DatabaseView } from "views/DatabaseView";
 import { DatabaseCore } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { useCallback } from "react";
 import StateManager from "StateManager";
+import { CustomView } from "views/AbstractView";
 
-export function obsidianMdLinksOnClickCallback(stateManager: StateManager, view: DatabaseView, filePath: string) {
+export function obsidianMdLinksOnClickCallback(stateManager: StateManager, view: CustomView, filePath: string) {
     return useCallback(
         async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             if (e.type === 'auxclick' || e.button === 2) {
@@ -70,7 +70,7 @@ export function obsidianMdLinksOnClickCallback(stateManager: StateManager, view:
     );
 }
 
-export function obsidianMdLinksOnMouseOverMenuCallback(view: DatabaseView) {
+export function obsidianMdLinksOnMouseOverMenuCallback(view: CustomView) {
     return useCallback(
         async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             const targetEl = e.target as HTMLElement;

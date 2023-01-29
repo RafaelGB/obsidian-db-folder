@@ -1,4 +1,3 @@
-import { DatabaseView } from "views/DatabaseView";
 import StateManager from "StateManager";
 import { RowSelectOption } from "cdm/ComponentsModel";
 import { TableStateInterface } from "cdm/TableStateInterface";
@@ -116,7 +115,7 @@ export interface DatabaseHeaderProps {
 export type RelationshipProps = {
     value: Literal,
     backgroundColor: string
-    view: DatabaseView,
+    view: CustomView,
 }
 
 export type RowTemplateOption = {

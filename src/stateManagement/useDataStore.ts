@@ -1,9 +1,9 @@
 import { DataState, DataStateActions, DataStateInfo, TableActionResponse } from "cdm/TableStateInterface";
-import { DatabaseView } from "views/DatabaseView";
 import { create } from "zustand";
 import data_state_actions from "stateManagement/data/DataStateActions";
+import { CustomView } from "views/AbstractView";
 
-const useDataStore = (view: DatabaseView) => {
+const useDataStore = (view: CustomView) => {
     return create<DataState>()((set, get) => {
         const mockActions: DataStateActions = {
             insertRows: async () => {

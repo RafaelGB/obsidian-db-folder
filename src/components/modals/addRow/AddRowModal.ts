@@ -1,4 +1,3 @@
-import { DatabaseView } from "views/DatabaseView";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
@@ -8,9 +7,10 @@ import { ConfigState, DataState } from "cdm/TableStateInterface";
 import { c } from "helpers/StylesHelper";
 import { t } from "lang/helpers";
 import { add_row_section } from "components/modals/addRow/addRowSections";
+import { CustomView } from "views/AbstractView";
 
 export class AddRowModal extends Modal {
-    view: DatabaseView;
+    view: CustomView;
     headerMenuProps: HeaderMenuProps;
     addRowModalManager: AddRowModalManager;
     state: AddRowModalProps;

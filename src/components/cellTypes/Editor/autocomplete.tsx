@@ -1,4 +1,3 @@
-import { DatabaseView } from "views/DatabaseView";
 import Fuse from "fuse.js";
 import { useIMEInputProps } from "helpers/Generators";
 import { c } from "helpers/StylesHelper";
@@ -17,11 +16,12 @@ import {
   Textcomplete,
 } from "components/cellTypes/Editor/textcomplete/textcomplete-core";
 import { InputEditor } from "components/cellTypes/Editor/textcomplete/textcomplete-input";
+import { CustomView } from "views/AbstractView";
 
 export interface ConstructAutocompleteParams {
   inputRef: RefObject<HTMLTextAreaElement>;
   isAutocompleteVisibleRef: RefObject<boolean>;
-  view: DatabaseView;
+  view: CustomView;
 }
 
 export function constructAutocomplete({
@@ -110,7 +110,7 @@ export function constructAutocomplete({
 
 export interface UseAutocompleteInputPropsParams {
   isInputVisible: boolean;
-  view: DatabaseView;
+  view: CustomView;
   onEnter?: (e: KeyboardEvent) => boolean | void;
   onEscape?: (e: KeyboardEvent) => boolean | void;
   onKeyDown?: (e: KeyboardEvent) => boolean | void;

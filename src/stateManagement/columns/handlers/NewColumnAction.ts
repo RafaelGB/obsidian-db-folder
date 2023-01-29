@@ -1,11 +1,11 @@
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
-import { DatabaseView } from "views/DatabaseView";
 import { DEFAULT_COLUMN_CONFIG, DynamicInputType, TableColumnsTemplate } from "helpers/Constants";
 import { dbTrim } from "helpers/StylesHelper";
 import { Notice } from "obsidian";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
+import { CustomView } from "views/AbstractView";
 
 export default class InsertColumnHandlerAction extends AbstractTableAction<ColumnsState> {
     handle(tableActionResponse: TableActionResponse<ColumnsState>): TableActionResponse<ColumnsState> {
@@ -41,7 +41,7 @@ export default class InsertColumnHandlerAction extends AbstractTableAction<Colum
      * @param desiredPosition 
      * @returns 
      */
-    private generateNewColumn(view: DatabaseView, updater: ColumnsState, index: number, desiredPosition: number, customName?: string, customType?: string): TableColumn[] {
+    private generateNewColumn(view: CustomView, updater: ColumnsState, index: number, desiredPosition: number, customName?: string, customType?: string): TableColumn[] {
         const columnInfo = this.generateNewColumnInfo(
             desiredPosition,
             updater.columns,

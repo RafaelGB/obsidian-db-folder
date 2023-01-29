@@ -11,11 +11,12 @@ import { generateDbConfiguration, generateNewDatabase } from "helpers/CommandsHe
 import { LocalSettings } from "cdm/SettingsModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { c, dbTrim } from "helpers/StylesHelper";
+import { CustomView } from "views/AbstractView";
 
 const projectsMetadataColumns = ["File", "name", "path"];
 class ProjectAPI extends ProjectView {
     private plugin: DBFolderPlugin;
-    private view: DatabaseView;
+    private view: CustomView;
     private enableAutoReload: boolean;
 
     constructor(plugin: DBFolderPlugin) {
