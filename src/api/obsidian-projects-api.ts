@@ -15,9 +15,9 @@ import { CustomView } from "views/AbstractView";
 
 const projectsMetadataColumns = ["File", "name", "path"];
 class ProjectAPI extends ProjectView {
+    private ignoreDataAutoReload: boolean = false;
     private plugin: DBFolderPlugin;
     private view: CustomView;
-    private enableAutoReload: boolean;
 
     constructor(plugin: DBFolderPlugin) {
         super();
@@ -39,7 +39,7 @@ class ProjectAPI extends ProjectView {
 
     async onData({ data }: DataQueryResult) {
         // Check if the there is a data view
-        if (!this.view || !this.enableAutoReload) {
+        if (this.ignoreDataAutoReload || !this.view) {
             return;
         }
 
@@ -90,6 +90,7 @@ class ProjectAPI extends ProjectView {
     // `config`       JSON object with optional view configuration.
     // `saveConfig`   Callback to save configuration changes.
     async onOpen(projectView: ProjectViewProps) {
+        this.ignoreDataAutoReload = true;
         const { contentEl, config, saveConfig, project, viewId } = projectView;
 
         const path = project.dataSource.kind === "folder" ? project.dataSource.config.path : ""
@@ -113,7 +114,8 @@ class ProjectAPI extends ProjectView {
             .createDiv(c("project-view-container"))
             .appendChild(this.view.containerEl);
         this.view.onload();
-        this.enableAutoReload = true;
+        this.ignoreDataAutoReload = false;
+        await this.view.reloadDatabase();
         LOGGER.debug("Database initialized successfully from project view");
     }
 
