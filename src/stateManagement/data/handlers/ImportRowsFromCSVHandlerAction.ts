@@ -1,7 +1,6 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
-import { DatabaseView } from "views/DatabaseView";
 import { DEFAULT_SETTINGS, SourceDataTypes } from "helpers/Constants";
 import { Notice } from "obsidian";
 import { Link, Literal } from "obsidian-dataview";
@@ -11,6 +10,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 import { VaultManagerDB } from "services/FileManagerService";
 import { resolve_tfolder } from "helpers/FileManagement";
 import { CsvParserService } from "services/csv/CsvParserService";
+import { CustomView } from "views/AbstractView";
 
 export default class ImportRowsFromCSVHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -47,7 +47,7 @@ export default class ImportRowsFromCSVHandlerAction extends AbstractTableAction<
         csv: string | ArrayBuffer,
         columns: TableColumn[],
         config: LocalSettings,
-        view: DatabaseView
+        view: CustomView
     ): Promise<RowDataType[]> {
         const rows: RowDataType[] = [];
         const csvLines = CsvParserService.parseCSV(csv);

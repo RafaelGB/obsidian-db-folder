@@ -2,10 +2,10 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, ConfigState, DataState, RowTemplateState } from "cdm/TableStateInterface";
 import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
-import { DatabaseView } from "views/DatabaseView";
 import { FiltersModalManager } from "components/modals/filters/FiltersModal";
 import { Table } from "@tanstack/react-table";
 import { AddRowModalManager } from "components/modals/addRow/AddRowModal";
+import { CustomView } from "views/AbstractView";
 
 /**
  * Base class for all modal responses.
@@ -18,7 +18,7 @@ export type BaseColumnModalProps = {
     dataState: Pick<DataState, "actions">,
     columnState: Pick<ColumnsState, "info" | "actions">,
     configState: Pick<ConfigState, "info">,
-    view: DatabaseView,
+    view: CustomView,
     //headerMenuProps: HeaderMenuProps
 }
 /***************************************
@@ -69,7 +69,7 @@ export type AddRowModalProps = {
     columnsState: Pick<ColumnsState, "info">,
     rowTemplate: Pick<RowTemplateState, "options" | "template" | "update">,
     configState: Pick<ConfigState, "info" | "actions">
-    view: DatabaseView,
+    view: CustomView,
     table: Table<RowDataType>
 }
 

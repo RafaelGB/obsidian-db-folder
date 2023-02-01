@@ -1,9 +1,9 @@
-import { DatabaseView } from "views/DatabaseView";
 import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { FolderSuggest } from "settings/suggesters/FolderSuggester";
+import { CustomView } from "views/AbstractView";
 
-export function destinationFolderSetting(view: DatabaseView, containerEl: HTMLElement) {
+export function destinationFolderSetting(view: CustomView, containerEl: HTMLElement) {
     const source_form_promise = async (value: string): Promise<void> => {
         // update settings
         view.diskConfig.updateConfig({ source_destination_path: value });

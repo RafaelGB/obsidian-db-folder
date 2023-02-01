@@ -178,7 +178,7 @@ export default class DBFolderPlugin extends Plugin {
 		} as ViewState);
 	}
 
-	viewStateReceivers: Array<(views: DatabaseView[]) => void> = [];
+	viewStateReceivers: Array<(views: CustomView[]) => void> = [];
 
 	addView(view: CustomView) {
 		const win = view.getWindow();

@@ -1,5 +1,4 @@
 import { TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "views/DatabaseView";
 import { SourceDataTypes } from "helpers/Constants";
 import { generateDataviewTableQuery } from "helpers/QueryHelper";
 import { c } from "helpers/StylesHelper";
@@ -8,6 +7,7 @@ import { Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { FileSuggest } from "settings/suggesters/FileSuggester";
+import { CustomView } from "views/AbstractView";
 import { destinationFolderSetting } from "./flavours/Helpers";
 import { TagSourceBuilder } from "./flavours/TagsSourceBuilder";
 
@@ -39,7 +39,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
     }
 
 
-    private outgoingAndIncomingHandler(view: DatabaseView, containerEl: HTMLElement) {
+    private outgoingAndIncomingHandler(view: CustomView, containerEl: HTMLElement) {
         const source_form_promise = async (value: string): Promise<void> => {
             // update settings
             view.diskConfig.updateConfig({ source_form_result: value });
@@ -59,7 +59,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
         destinationFolderSetting(view, containerEl);
     }
 
-    private queryHandler(view: DatabaseView, containerEl: HTMLElement, columns: TableColumn[]) {
+    private queryHandler(view: CustomView, containerEl: HTMLElement, columns: TableColumn[]) {
         const query_promise = async (value: string): Promise<void> => {
             if (this.sourceFormResultTimeout) {
                 clearTimeout(this.sourceFormResultTimeout);
@@ -101,7 +101,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
         destinationFolderSetting(view, containerEl);
     }
 
-    private queryJsHandler(view: DatabaseView, containerEl: HTMLElement) {
+    private queryJsHandler(view: CustomView, containerEl: HTMLElement) {
         const query_promise = async (value: string): Promise<void> => {
             if (this.sourceFormResultTimeout) {
                 clearTimeout(this.sourceFormResultTimeout);

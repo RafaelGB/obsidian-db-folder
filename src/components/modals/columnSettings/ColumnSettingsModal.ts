@@ -1,14 +1,14 @@
 import { TableColumn } from "cdm/FolderModel";
-import { DatabaseView } from "views/DatabaseView";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
 import { ColumnSettingsHandlerResponse, ColumnSettingsModalProps } from "cdm/ModalsModel";
 import { particular_settings_section, behavior_settings_section, style_settings_section } from "components/modals/columnSettings/ColumnSections";
 import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
+import { CustomView } from "views/AbstractView";
 
 export class ColumnSettingsModal extends Modal {
-    view: DatabaseView;
+    view: CustomView;
     columnSettingsManager: ColumnSettingsManager;
     dataState: Partial<DataState>;
     configState: Partial<ConfigState>;

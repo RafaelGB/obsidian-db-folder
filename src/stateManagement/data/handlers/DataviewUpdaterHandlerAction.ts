@@ -10,7 +10,7 @@ import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import NoteInfo from "services/NoteInfo";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
-import { DatabaseView } from "views/DatabaseView";
+import { CustomView } from "views/AbstractView";
 
 export default class DataviewUpdaterHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
@@ -82,7 +82,7 @@ export default class DataviewUpdaterHandlerAction extends AbstractTableAction<Da
         return this.goNext(tableActionResponse);
     }
 
-    private checkIfFileIsInSource(file: TFile, view: DatabaseView): boolean {
+    private checkIfFileIsInSource(file: TFile, view: CustomView): boolean {
         const cachedFile = app.metadataCache.getFileCache(file);
         switch (view.diskConfig.yaml.config.source_data) {
             case SourceDataTypes.CURRENT_FOLDER:

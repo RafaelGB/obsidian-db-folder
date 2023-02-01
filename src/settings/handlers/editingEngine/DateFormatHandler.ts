@@ -1,8 +1,8 @@
-import { DatabaseView } from "views/DatabaseView";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { AbstractSettingsHandler, SettingHandlerResponse } from "settings/handlers/AbstractSettingHandler";
 import { add_text } from "settings/SettingsComponents";
+import { CustomView } from "views/AbstractView";
 
 export class DateFormatHandler extends AbstractSettingsHandler {
     settingTitle = t("settings_editing_engine_date_format_title");
@@ -92,19 +92,19 @@ export class DateFormatHandler extends AbstractSettingsHandler {
         return this.goNext(settingHandlerResponse);
     }
 
-    private current_date_format(local: boolean, view: DatabaseView, default_value: string) {
+    private current_date_format(local: boolean, view: CustomView, default_value: string) {
         return local ?
             (view.diskConfig.yaml.config.date_format ?? DEFAULT_SETTINGS.local_settings.date_format) :
             (default_value ?? DEFAULT_SETTINGS.local_settings.date_format);
     }
 
-    private current_datetime_format(local: boolean, view: DatabaseView, default_value: string) {
+    private current_datetime_format(local: boolean, view: CustomView, default_value: string) {
         return local ?
             (view.diskConfig.yaml.config.datetime_format ?? DEFAULT_SETTINGS.local_settings.datetime_format) :
             (default_value ?? DEFAULT_SETTINGS.local_settings.datetime_format);
     }
 
-    private current_medatada_date_format(local: boolean, view: DatabaseView, default_value: string) {
+    private current_medatada_date_format(local: boolean, view: CustomView, default_value: string) {
         return local ?
             (view.diskConfig.yaml.config.metadata_date_format ?? DEFAULT_SETTINGS.local_settings.metadata_date_format) :
             (default_value ?? DEFAULT_SETTINGS.local_settings.metadata_date_format);

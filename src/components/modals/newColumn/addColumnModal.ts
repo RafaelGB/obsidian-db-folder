@@ -1,5 +1,4 @@
 import { AddColumnModalHandlerResponse, AddColumnModalProps } from "cdm/ModalsModel";
-import { DatabaseView } from "views/DatabaseView";
 import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
@@ -7,13 +6,14 @@ import { select_new_column_section } from "components/modals/newColumn/SelectNew
 import { c } from "helpers/StylesHelper";
 import { applyPluginModalStyle } from "components/styles/ModalStyles";
 import { t } from "lang/helpers";
+import { CustomView } from "views/AbstractView";
 
 export class AddColumnModal extends Modal {
-    view: DatabaseView;
+    view: CustomView;
     addColumnManager: AddColumnModalManager;
     enableReset = false;
     constructor(
-        view: DatabaseView,
+        view: CustomView,
         props: AddColumnModalProps
     ) {
         super(view.app);

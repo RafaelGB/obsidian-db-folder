@@ -4,11 +4,11 @@ import {
   ColumnsStateInfo,
   TableActionResponse,
 } from "cdm/TableStateInterface";
-import { DatabaseView } from "views/DatabaseView";
 import { create } from "zustand";
 import column_state_actions from "stateManagement/columns/ColumnsStateActions";
+import { CustomView } from "views/AbstractView";
 
-const useColumnsStore = (view: DatabaseView) => {
+const useColumnsStore = (view: CustomView) => {
   return create<ColumnsState>()((set, get) => {
     const tableActionResponse: TableActionResponse<ColumnsState> = {
       view: view,

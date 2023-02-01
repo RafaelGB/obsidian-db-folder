@@ -1,4 +1,4 @@
-import React, { StrictMode, useEffect } from "react";
+import React, { StrictMode } from "react";
 import { Table } from "components/Table";
 import { TableDataType } from "cdm/FolderModel";
 import useTableStore from "components/reducers/TableReducer";

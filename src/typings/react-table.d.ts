@@ -3,13 +3,13 @@ import { FilterFn } from '@tanstack/react-table';
 import '@tanstack/table-table';
 import { RowDataType } from "cdm/FolderModel";
 import { TableStateInterface } from "cdm/TableStateInterface";
-import { DatabaseView } from 'views/DatabaseView';
+import { CustomView } from 'views/AbstractView';
 
 declare module '@tanstack/react-table' {
     // @ts-ignore
     interface TableMeta {
         tableState: TableStateInterface;
-        view: DatabaseView;
+        view: CustomView;
     }
 
     interface FilterFns {

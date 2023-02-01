@@ -1,16 +1,18 @@
-import { render, screen } from "@testing-library/react";
-import { Database } from "components/index/Database";
-import { TableDataType } from "cdm/FolderModel";
-import { makeData } from "mock/mockTableUtils";
+import { render } from "@testing-library/react";
 import React from "react";
-import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
-import { App } from "obsidian";
-import StateManager from "StateManager";
-import { jest } from "@jest/globals";
+import Relationship from "components/RelationShip";
+import { grey } from "helpers/Colors";
+jest.mock("obsidian");
 
 describe("React-table", () => {
   test("TODO React testing", async () => {
     expect(true).toBeTruthy();
+  });
+
+  it("changes the class when hovered", () => {
+    render(
+      <Relationship value="MockedValue" backgroundColor={grey()} view={null} />
+    );
   });
   // // @ts-ignore
   // const mockGlobalApp: DeepMockProxy<App> = mockDeep<App>();

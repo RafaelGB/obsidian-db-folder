@@ -3,6 +3,7 @@ import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
 import { destinationFolderSetting } from "./Helpers";
+import { CustomView } from "views/AbstractView";
 
 export class TagSourceBuilder {
     settingTitle = t("settings_source_form_title");
@@ -11,7 +12,7 @@ export class TagSourceBuilder {
     tagRecords: Record<string, string> = {};
     selectedTags: string[] = [];
 
-    constructor(private view: DatabaseView, private containerEl: HTMLElement) { }
+    constructor(private view: CustomView, private containerEl: HTMLElement) { }
     /**
      * TAGs custom settings
      * @param view 

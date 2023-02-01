@@ -1,11 +1,11 @@
 import { Row } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
-import { DatabaseView } from "views/DatabaseView";
 import { getNormalizedPath } from "helpers/VaultManagement";
 import { TFile } from "obsidian";
 import React, { useEffect } from "react";
 import { PointerEventHandler, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
+import { CustomView } from "views/AbstractView";
 
 /**
  * Modify on disk checkbox state
@@ -47,7 +47,7 @@ export const MdFileComponent = ({
   view,
 }: {
   row: Row<RowDataType>;
-  view: DatabaseView;
+  view: CustomView;
 }) => {
   const containerCellRef = useRef<HTMLDivElement>();
   useEffect(() => {

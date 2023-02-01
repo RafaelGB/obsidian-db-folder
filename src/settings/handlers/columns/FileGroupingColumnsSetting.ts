@@ -1,7 +1,7 @@
-import { DatabaseView } from "views/DatabaseView";
 import { t } from "lang/helpers";
 import { ButtonComponent, SearchComponent, Setting } from "obsidian";
 import { FileAttributeSuggester } from "settings/suggesters/FileAttributeSuggester";
+import { CustomView } from "views/AbstractView";
 
 export class FileGroupingColumnsSetting {
   fileAttributeSuggester: FileAttributeSuggester;
@@ -11,7 +11,7 @@ export class FileGroupingColumnsSetting {
   label: HTMLSpanElement;
 
   constructor(
-    private view: DatabaseView,
+    private view: CustomView,
     private allowedColumns: Set<string>,
   ) { }
 
