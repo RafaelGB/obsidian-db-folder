@@ -14,6 +14,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
 import { satinizedColumnOption } from "helpers/FileManagement";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const TagsCell = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
@@ -102,6 +103,9 @@ const TagsCell = (tagsProps: CellComponentProps) => {
         });
     }
   };
+  const handleClickAway = () => {
+    setShowSelectTags(false);
+  };
 
   function TagsForm() {
     return (
@@ -120,7 +124,6 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           menuPosition="fixed"
           styles={CustomTagsStyles}
           options={columnOptions}
-          onBlur={() => setShowSelectTags(false)}
           onChange={handleOnChange}
           menuPortalTarget={activeDocument.body}
           className={`react-select-container ${c(
@@ -134,7 +137,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     );
   }
   return (
-    <>
+    <ClickAwayListener onClickAway={handleClickAway}>
       {showSelectTags ? (
         TagsForm()
       ) : (
@@ -175,7 +178,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           )}
         </div>
       )}
-    </>
+    </ClickAwayListener>
   );
 };
 export default TagsCell;
