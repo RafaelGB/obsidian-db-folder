@@ -104,42 +104,45 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     }
   };
   const handleClickAway = () => {
+    console.log("click away");
     setShowSelectTags(false);
   };
 
   function TagsForm() {
     return (
-      <div className={c("tags")}>
-        <CreatableSelect
-          defaultValue={defaultValue}
-          components={{
-            DropdownIndicator: () => null,
-            IndicatorSeparator: () => null,
-          }}
-          closeMenuOnSelect={false}
-          isSearchable
-          isMulti
-          autoFocus
-          openMenuOnFocus
-          menuPosition="fixed"
-          styles={CustomTagsStyles}
-          options={columnOptions}
-          onChange={handleOnChange}
-          menuPortalTarget={activeDocument.body}
-          className={`react-select-container ${c(
-            "tags-container text-align-center"
-          )}`}
-          classNamePrefix="react-select"
-          menuPlacement="auto"
-          menuShouldBlockScroll={true}
-        />
-      </div>
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <div className={c("tags")}>
+          <CreatableSelect
+            defaultValue={defaultValue}
+            components={{
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null,
+            }}
+            closeMenuOnSelect={false}
+            isSearchable
+            isMulti
+            autoFocus
+            openMenuOnFocus
+            menuPosition="fixed"
+            styles={CustomTagsStyles}
+            options={columnOptions}
+            onChange={handleOnChange}
+            menuPortalTarget={activeDocument.body}
+            className={`react-select-container ${c(
+              "tags-container text-align-center"
+            )}`}
+            classNamePrefix="react-select"
+            menuPlacement="auto"
+            menuShouldBlockScroll={true}
+          />
+        </div>
+      </ClickAwayListener>
     );
   }
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
+    <>
       {showSelectTags ? (
-        TagsForm()
+        <TagsForm />
       ) : (
         <div
           className={c(
@@ -178,7 +181,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           )}
         </div>
       )}
-    </ClickAwayListener>
+    </>
   );
 };
 export default TagsCell;
