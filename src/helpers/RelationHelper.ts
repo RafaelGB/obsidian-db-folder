@@ -40,7 +40,7 @@ export async function obtainInfoFromRelation(ddbbPath: string): Promise<Relation
     const relatedRows = await adapterTFilesToRows(ddbbFile, relatedColumns, ddbbInfo.yaml.config, ddbbInfo.yaml.filters);
     relatedRows.forEach((row) => {
         const file = row.__note__.getFile()
-        recordRows[file.path] = file.name;
+        recordRows[file.path] = file.basename;
     });
     return { recordRows, ddbbFile, ddbbInfo, relatedColumns, relatedRows }
 }

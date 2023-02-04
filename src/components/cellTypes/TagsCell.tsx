@@ -14,6 +14,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
 import { InputType } from "helpers/Constants";
 import { satinizedColumnOption } from "helpers/FileManagement";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const TagsCell = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
@@ -102,41 +103,45 @@ const TagsCell = (tagsProps: CellComponentProps) => {
         });
     }
   };
+  const handleClickAway = () => {
+    setShowSelectTags(false);
+  };
 
   function TagsForm() {
     return (
-      <div className={c("tags")}>
-        <CreatableSelect
-          defaultValue={defaultValue}
-          components={{
-            DropdownIndicator: () => null,
-            IndicatorSeparator: () => null,
-          }}
-          closeMenuOnSelect={false}
-          isSearchable
-          isMulti
-          autoFocus
-          openMenuOnFocus
-          menuPosition="fixed"
-          styles={CustomTagsStyles}
-          options={columnOptions}
-          onBlur={() => setShowSelectTags(false)}
-          onChange={handleOnChange}
-          menuPortalTarget={activeDocument.body}
-          className={`react-select-container ${c(
-            "tags-container text-align-center"
-          )}`}
-          classNamePrefix="react-select"
-          menuPlacement="auto"
-          menuShouldBlockScroll={true}
-        />
-      </div>
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <div className={c("tags")}>
+          <CreatableSelect
+            defaultValue={defaultValue}
+            components={{
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null,
+            }}
+            closeMenuOnSelect={false}
+            isSearchable
+            isMulti
+            autoFocus
+            openMenuOnFocus
+            menuPosition="fixed"
+            styles={CustomTagsStyles}
+            options={columnOptions}
+            onChange={handleOnChange}
+            menuPortalTarget={activeDocument.body}
+            className={`react-select-container ${c(
+              "tags-container text-align-center"
+            )}`}
+            classNamePrefix="react-select"
+            menuPlacement="auto"
+            menuShouldBlockScroll={true}
+          />
+        </div>
+      </ClickAwayListener>
     );
   }
   return (
     <>
       {showSelectTags ? (
-        TagsForm()
+        <TagsForm />
       ) : (
         <div
           className={c(

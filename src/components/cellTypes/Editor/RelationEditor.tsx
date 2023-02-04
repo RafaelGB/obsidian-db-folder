@@ -9,13 +9,12 @@ import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
 import { OnChangeValue } from "react-select";
 import { StyleVariables } from "helpers/Constants";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
-  const { table, column } = defaultCell;
+  const { column } = defaultCell;
   const tableColumn = column.columnDef as TableColumn;
-  const { tableState } = table.options.meta;
-  const columnsInfo = tableState.columns((state) => state.info);
 
   const [relationValue, setRelationValue] = useState(
     relationCell
@@ -41,7 +40,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   /**
    * Save changes and close editor
    */
-  const handleOnBlur = () => {
+  const handleClickAway = () => {
     persistChange(relationValue.map((link) => link.value));
   };
 
@@ -62,30 +61,31 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   }, []);
 
   return (
-    <div className={c("relation")}>
-      <Select
-        defaultValue={relationValue}
-        components={{
-          DropdownIndicator: () => null,
-          IndicatorSeparator: () => null,
-        }}
-        closeMenuOnSelect={false}
-        isSearchable
-        isMulti
-        autoFocus
-        openMenuOnFocus
-        menuPosition="fixed"
-        styles={CustomTagsStyles}
-        options={relationOptions}
-        onBlur={handleOnBlur}
-        onChange={handleOnChange}
-        menuPortalTarget={activeDocument.body}
-        className={`${c("tags-container text-align-center")}`}
-        classNamePrefix="react-select"
-        menuPlacement="auto"
-        menuShouldBlockScroll={true}
-      />
-    </div>
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <div className={c("relation")}>
+        <Select
+          defaultValue={relationValue}
+          components={{
+            DropdownIndicator: () => null,
+            IndicatorSeparator: () => null,
+          }}
+          closeMenuOnSelect={false}
+          isSearchable
+          isMulti
+          autoFocus
+          openMenuOnFocus
+          menuPosition="fixed"
+          styles={CustomTagsStyles}
+          options={relationOptions}
+          onChange={handleOnChange}
+          menuPortalTarget={activeDocument.body}
+          className={`${c("tags-container text-align-center")}`}
+          classNamePrefix="react-select"
+          menuPlacement="auto"
+          menuShouldBlockScroll={true}
+        />
+      </div>
+    </ClickAwayListener>
   );
 };
 
