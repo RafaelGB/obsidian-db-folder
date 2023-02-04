@@ -104,7 +104,6 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     }
   };
   const handleClickAway = () => {
-    console.log("click away");
     setShowSelectTags(false);
   };
 

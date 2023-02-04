@@ -119,7 +119,7 @@ export type ColumnsStateInfo = {
     getAllColumns: () => TableColumn[];
     getValueOfAllColumnsAsociatedWith: <K extends keyof TableColumn>(key: K) => TableColumn[K][];
     getVisibilityRecord: () => Record<string, boolean>;
-    getColumnOptions: (id: string) => ColumnOption[];
+    getColumnOptions: (id: string, includeEmptyOption?: boolean) => ColumnOption[];
 }
 
 export interface ColumnsState {

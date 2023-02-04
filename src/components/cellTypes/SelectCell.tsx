@@ -96,6 +96,8 @@ const SelectCell = (popperProps: CellComponentProps) => {
     }
   };
 
+  const options = columnsInfo.getColumnOptions(column.id, cellValue !== "");
+
   function SelectComponent() {
     return (
       <div className={c("tags")}>
@@ -109,9 +111,11 @@ const SelectCell = (popperProps: CellComponentProps) => {
           components={{
             DropdownIndicator: () => null,
             IndicatorSeparator: () => null,
+            ClearIndicator: () => null,
+            CrossIcon: () => null,
           }}
           styles={CustomTagsStyles}
-          options={columnsInfo.getColumnOptions(column.id)}
+          options={options}
           onMenuClose={() => setShowSelect(false)}
           onChange={handleOnChange}
           isMulti={false}
@@ -131,7 +135,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
   return (
     <>
       {showSelect ? (
-        SelectComponent()
+        <SelectComponent />
       ) : (
         /* Current value of the select */
         <div
