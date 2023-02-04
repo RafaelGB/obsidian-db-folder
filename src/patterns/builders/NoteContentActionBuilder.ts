@@ -111,7 +111,7 @@ export default class NoteContentActionBuilder {
             case INLINE_POSITION.LAST_FIELD:
                 if (INLINE_REGEX.INLINE_LAST_FIELD.test(this.content)) {
                     inlineAddRegex = INLINE_REGEX.INLINE_LAST_FIELD;
-                    regex_target = `$1$2$3$4$5$6$7$2$3${columnId}$5:: ${newValue}\n$8`;
+                    regex_target = `$1$2$3$4$5$6$7$8$9$10$2$3$4\n${columnId}$6:: ${newValue}$9\n$12`;
                     break;
                 }
             // Else, fall through to default
