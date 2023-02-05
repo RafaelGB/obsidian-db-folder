@@ -29,11 +29,6 @@ export type RowDatabaseFields = {
     inline: Record<string, Literal>;
 }
 
-export type OptionSelect = {
-    label: string;
-    backgroundColor: string;
-}
-
 export type SortedType = {
     id: string;
     desc: boolean;

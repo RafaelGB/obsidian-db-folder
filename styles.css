@@ -764,6 +764,15 @@ div.database-plugin__td.data-input span:focus {
 .configuration-section-container-columns-template {
   background-color: var(--background-modifier-box-shadow);
 }
+
+.database-plugin__setting-item {
+  display: grid;
+}
+
+.database-plugin__setting-item > .setting-item-info {
+  margin-bottom: 10px;
+}
+
 /**
 *  Row styles
 */

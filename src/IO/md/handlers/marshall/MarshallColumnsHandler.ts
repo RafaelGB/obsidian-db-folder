@@ -1,6 +1,6 @@
 import { DatabaseColumn } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
-import { RowSelectOption } from 'cdm/ComponentsModel';
+import { ColumnOption } from 'cdm/ComponentsModel';
 import { InputType, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'IO/md/handlers/marshall/AbstractYamlPropertyHandler';
 import { Literal } from 'obsidian-dataview';
@@ -118,19 +118,32 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                 if (!column.options || !Array.isArray(column.options)) {
                     column.options = [];
                 } else {
-                    // Control undefined or null labels and backgroundColors
-                    column.options = column.options.filter((option: RowSelectOption) => {
-                        return option.backgroundColor
-                            && option.label
-                            && option.label !== ''
-                            && option.backgroundColor !== '';
-                        // Control duplicates labels in options
-                    }).filter((option: RowSelectOption, index: number, self: RowSelectOption[]) => {
-                        return self.findIndex((t: RowSelectOption) => {
-                            return t.label === option.label;
-                        }) === index;
-                    }
-                    );
+                    // Control undefined or null options
+                    column.options = column.options
+                        // Legacy support
+                        .map((option) => {
+                            if (!option.value) {
+                                option.value = option.label;
+                            }
+                            if (!option.color) {
+                                option.color = option.backgroundColor;
+                            }
+                            return option;
+                        })
+                        // Control empty options
+                        .filter((option) => {
+                            return option.value !== ""
+                                && option.label !== ""
+                                && option.color !== "";
+                        })
+                        // Control duplicated options
+                        .reduce((acc, option) => {
+                            const found = acc.find((o) => o.value === option.value || o.label === option.label);
+                            if (!found) {
+                                acc.push(option);
+                            }
+                            return acc;
+                        }, [] as ColumnOption[]);
                 }
                 break;
         }

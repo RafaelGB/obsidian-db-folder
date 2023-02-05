@@ -1,100 +1,18 @@
-import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { randomColor, castStringtoHsl, castHslToString } from "helpers/Colors";
-import { satinizedColumnOption } from "helpers/FileManagement";
+import { castStringtoHsl, castHslToString } from "helpers/Colors";
 import { t } from "lang/helpers";
-import { ButtonComponent, Notice, Setting } from "obsidian";
+import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { LOGGER } from "services/Logger";
-import { add_setting_header } from "settings/SettingsComponents";
 
 export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
   settingTitle = t("column_settings_modal_selected_column_options_title");
   handle(
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ): ColumnSettingsHandlerResponse {
-    const { column, containerEl, columnSettingsManager } =
-      columnHandlerResponse;
-    const { view } = columnSettingsManager.modal;
-    let newLabel = "";
+    const { column, containerEl } = columnHandlerResponse;
     const options = column.options;
-    const addLabelPromise = async (): Promise<void> => {
-      // Error handling
-      if (newLabel === "") {
-        new Notice(
-          t(
-            "column_settings_modal_selected_column_options_notice_error_empty_label"
-          ),
-          1500
-        );
-        return;
-      }
-      if (options.find((option) => option.label === newLabel)) {
-        new Notice(
-          t(
-            "column_settings_modal_selected_column_options_notice_error_duplicate_label"
-          ),
-          1500
-        );
-        return;
-      }
-      // Add new label
-      const newOption: RowSelectOption = {
-        label: newLabel,
-        backgroundColor: randomColor(),
-      };
-      options.push(newOption);
-      // Persist changes
-      view.diskConfig.updateColumnProperties(column.id, {
-        options: options,
-      });
-
-      this.addOptionSetting(
-        containerEl,
-        newOption,
-        options,
-        options.length - 1,
-        columnHandlerResponse
-      );
-    };
-    add_setting_header(containerEl, this.settingTitle, "h4");
-    new Setting(containerEl)
-      .setName(t("column_settings_modal_selected_column_options_new_option"))
-      .setDesc(
-        t("column_settings_modal_selected_column_options_new_option_desc")
-      )
-      .addText((text) => {
-        text
-          .setPlaceholder(
-            t(
-              "column_settings_modal_selected_column_options_new_option_placeholder"
-            )
-          )
-          .setValue(newLabel)
-          .onChange(async (value: string): Promise<void> => {
-            newLabel = satinizedColumnOption(value);
-            text.setValue(newLabel);
-          });
-        text.inputEl.onkeydown = (e: KeyboardEvent) => {
-          switch (e.key) {
-            case "Enter":
-              text.setValue("");
-              addLabelPromise();
-              break;
-          }
-        };
-      })
-      .addButton((button: ButtonComponent) => {
-        button
-          .setTooltip(
-            t(
-              "column_settings_modal_selected_column_options_new_option_button_tooltip"
-            )
-          )
-          .setButtonText("+")
-          .setCta()
-          .onClick(addLabelPromise);
-      });
 
     options.forEach((option, index) => {
       this.addOptionSetting(
@@ -119,8 +37,8 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
    */
   private addOptionSetting(
     containerEl: HTMLElement,
-    option: RowSelectOption,
-    options: RowSelectOption[],
+    option: ColumnOption,
+    options: ColumnOption[],
     index: number,
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ) {
@@ -129,13 +47,31 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
     const { view, dataState, configState, columnsState } =
       columnSettingsManager.modal;
     let currentLabel = option.label;
+    let currentValue = option.value;
     new Setting(containerEl)
       // Show current label
       .addText((text) => {
         text
+          .setPlaceholder(
+            t(
+              "column_settings_modal_selected_column_options_new_option_label_placeholder"
+            )
+          )
           .setValue(currentLabel)
           .onChange(async (value: string): Promise<void> => {
             currentLabel = value;
+          });
+      })
+      .addText((text) => {
+        text
+          .setPlaceholder(
+            t(
+              "column_settings_modal_selected_column_options_new_option_value_placeholder"
+            )
+          )
+          .setValue(currentValue)
+          .onChange(async (value: string): Promise<void> => {
+            currentValue = value;
           });
       })
       // Edit label button
@@ -143,25 +79,26 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         cb.setIcon("pencil")
           .setTooltip(t("column_settings_modal_selected_column_options_edit"))
           .onClick(async (): Promise<void> => {
-            const oldLabel = option.label;
-            if (currentLabel === oldLabel) {
+            const oldValue = option.value;
+            if (currentLabel === oldValue) {
               new Notice(
-                `Option label "${currentLabel}" was not changed!`,
+                `Option "${option.label}(${option.value})"  was not changed!`,
                 1500
               );
               return;
             }
             // Persist on disk
             options[index].label = currentLabel;
+            options[index].value = currentValue;
             await view.diskConfig.updateColumnProperties(column.id, {
               options: options,
             });
             // Update in memory
-            dataState.actions
+            await dataState.actions
               .editOptionForAllRows(
                 column,
-                oldLabel,
-                currentLabel,
+                oldValue,
+                currentValue,
                 columnsState.info.getAllColumns(),
                 configState.info.getLocalSettings()
               )
@@ -187,11 +124,9 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       // Color picker for background color
       .addColorPicker((colorPicker) => {
         colorPicker
-          .setValueHsl(castStringtoHsl(option.backgroundColor))
+          .setValueHsl(castStringtoHsl(option.color))
           .onChange(async () => {
-            options[index].backgroundColor = castHslToString(
-              colorPicker.getValueHsl()
-            );
+            options[index].color = castHslToString(colorPicker.getValueHsl());
             await view.diskConfig.updateColumnProperties(column.id, {
               options: options,
             });
@@ -213,7 +148,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
             dataState.actions
               .removeOptionForAllRows(
                 column,
-                removedOption.label,
+                removedOption.value,
                 columnsState.info.getAllColumns(),
                 configState.info.getLocalSettings()
               )

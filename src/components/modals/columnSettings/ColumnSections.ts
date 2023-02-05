@@ -3,7 +3,8 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { MediaDimensionsHandler } from "./handlers/media/MediaDimensionsHandler";
 import { MediaToggleHandler } from "./handlers/media/MediaToggleHandler";
 import { InlineToggleHandler } from "./handlers/InlineToggleHandler";
-import { SelectedColumnOptionsHandler } from "./handlers/SelectedColumnOptionsHandler";
+import { AddOptionHandler } from "./handlers/selects/AddOptionHandler";
+import { SelectedColumnOptionsHandler } from "./handlers/selects/SelectedColumnOptionsHandler";
 import { HideCompletedTaskToggleHandler } from "./handlers/tasks/HideCompletedTaskToggleHandler";
 import { LinkAliasToggleHandler } from "./handlers/media/LinkAliasToggleHandler";
 import { FormulaInputHandler } from "./handlers/automations/FormulaInputHandler";
@@ -134,6 +135,7 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.SELECT:
             case InputType.TAGS:
+                particularHandlers.push(new AddOptionHandler());
                 particularHandlers.push(new SelectedColumnOptionsHandler());
                 break;
             case InputType.TASK:

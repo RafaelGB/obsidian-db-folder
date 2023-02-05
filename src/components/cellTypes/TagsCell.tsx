@@ -1,5 +1,5 @@
 import {
-  RowSelectOption,
+  ColumnOption,
   CellComponentProps,
   SelectValue,
 } from "cdm/ComponentsModel";
@@ -41,33 +41,31 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   const [showSelectTags, setShowSelectTags] = useState(false);
 
   const columnOptions = columnsInfo.getColumnOptions(column.id);
-  function getColor(tag: string) {
-    const match = columnOptions.find(
-      (option: { label: string }) => option.label === tag
-    );
+  function mapOption(tag: string) {
+    const match = columnOptions.find((option) => option.value === tag);
     if (match) {
-      return match.color;
+      return match;
     } else {
       // In case of new tag, generate random color
-      const color = randomColor();
-      columnActions.addOptionToColumn(tableColumn, tag, color);
-      return color;
+      const option: ColumnOption = {
+        label: tag,
+        value: tag,
+        color: randomColor(),
+      };
+      columnActions.addOptionToColumn(tableColumn, option);
+      return option;
     }
   }
 
   // Control re renders with useCallback
   const defaultValue = useMemo(() => {
     const optionList = tagsCell || [];
-    return optionList.map((tag: string) => ({
-      label: tag,
-      value: tag,
-      color: getColor(tag),
-    }));
+    return optionList.map((tag: string) => mapOption(tag));
   }, [tagsCell]);
 
   const handleOnChange = async (
     newValue: OnChangeValue<SelectValue, true>,
-    actionMeta: ActionMeta<RowSelectOption>
+    actionMeta: ActionMeta<ColumnOption>
   ) => {
     const arrayTags = newValue.map(
       (tag) => `${satinizedColumnOption(tag.value)}`
@@ -92,14 +90,15 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       newValue
         .filter(
           (tag) =>
-            !tableColumn.options.find((option) => option.label === tag.value)
+            !tableColumn.options.find((option) => option.value === tag.value)
         )
         .forEach((tag) => {
-          columnActions.addOptionToColumn(
-            tableColumn,
-            tag.value,
-            randomColor()
-          );
+          const option: ColumnOption = {
+            label: tag.label,
+            value: tag.value,
+            color: randomColor(),
+          };
+          columnActions.addOptionToColumn(tableColumn, option);
         });
     }
   };
@@ -169,8 +168,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
                 <div key={`key-${tag}`}>
                   <Relationship
                     key={`tags-${row.index}-${tableColumn.key}-${tag}`}
-                    value={tag.toString()}
-                    backgroundColor={getColor(tag)}
+                    option={mapOption(tag)}
                     view={view}
                   />
                 </div>

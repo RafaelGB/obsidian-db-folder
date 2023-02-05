@@ -8,7 +8,7 @@ import {
 import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
-import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { dbTrim } from "helpers/StylesHelper";
 import { TFile } from "obsidian";
@@ -219,7 +219,7 @@ function columnOptions(
   index: number,
   column: DatabaseColumn
 ): TableColumn {
-  const options: RowSelectOption[] = column.options ?? [];
+  const options: ColumnOption[] = column.options ?? [];
   if ((Object.values(InputType) as Array<string>).includes(column.input)) {
     const columnOption = {
       ...(column as Partial<TableColumn>),

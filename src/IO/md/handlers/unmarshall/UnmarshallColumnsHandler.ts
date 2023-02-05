@@ -58,8 +58,8 @@ export class UnmarshallColumnsHandler extends AbstractDiskHandler {
                 if (column.options && Array.isArray(column.options)) {
                     particularInputString.push(`${YAML_INDENT.repeat(2)}options:`);
                     column.options.forEach(option => {
-                        particularInputString.push(`${YAML_INDENT.repeat(3)}- { label: "${option.label}", backgroundColor: "${option
-                            .backgroundColor}"}`);
+                        particularInputString.push(`${YAML_INDENT.repeat(3)}- { label: "${option.label}", value: "${option.value}", color: "${option
+                            .color}"}`);
                     });
                 }
         }
