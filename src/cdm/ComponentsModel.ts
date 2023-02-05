@@ -7,6 +7,8 @@ export type ColumnOption = {
     value: string;
     label: string;
     color: string;
+    // Deprecated
+    backgroundColor?: string;
 }
 
 export type SelectValue = {

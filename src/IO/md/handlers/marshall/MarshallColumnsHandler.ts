@@ -119,17 +119,31 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                     column.options = [];
                 } else {
                     // Control undefined or null options
-                    column.options = column.options.filter((option) => {
-                        return option.value !== ""
-                            && option.label !== ""
-                            && option.color !== "";
-                        // Control duplicates labels in options
-                    }).filter((option, index, self) => {
-                        return self.findIndex((t) => {
-                            return t.label === option.label;
-                        }) === index;
-                    }
-                    );
+                    column.options = column.options
+                        // Legacy support
+                        .map((option) => {
+                            if (!option.value) {
+                                option.value = option.label;
+                            }
+                            if (!option.color) {
+                                option.color = option.backgroundColor;
+                            }
+                            return option;
+                        })
+                        // Control empty options
+                        .filter((option) => {
+                            return option.value !== ""
+                                || option.label !== ""
+                                || option.color !== "";
+                        })
+                        // Control duplicated options
+                        .reduce((acc, option) => {
+                            const found = acc.find((o) => o.value === option.value || o.label === option.label);
+                            if (!found) {
+                                acc.push(option);
+                            }
+                            return acc;
+                        }, [] as ColumnOption[]);
                 }
                 break;
         }
