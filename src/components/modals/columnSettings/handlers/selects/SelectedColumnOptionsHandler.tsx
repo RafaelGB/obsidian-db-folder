@@ -69,7 +69,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
               "column_settings_modal_selected_column_options_new_option_value_placeholder"
             )
           )
-          .setValue(currentLabel)
+          .setValue(currentValue)
           .onChange(async (value: string): Promise<void> => {
             currentValue = value;
           });

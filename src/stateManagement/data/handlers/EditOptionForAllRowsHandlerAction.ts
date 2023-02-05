@@ -37,7 +37,7 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
                     lambdaUpdate = (cellValue: Literal) => {
                         const array = Array.isArray(cellValue)
                             ? (cellValue as Literal[])
-                            : []
+                            : [];
                         return array.map(value => value?.toString() === oldValue ? newValue : value);
                     }
                     break;
