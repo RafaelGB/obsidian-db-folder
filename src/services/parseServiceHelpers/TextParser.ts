@@ -46,16 +46,8 @@ class TextParser extends TypeParser<string | DataObject> {
     }
 
     private parseArrayToText(array: Literal[]): string {
-        const stringArray = array.reduce((acc, curr) => {
-            return acc.toString()
-                .concat(",")
-                .concat(
-                    this
-                        .parse(DataviewService.wrapLiteral(curr))
-                        .toString()
-                );
-        }, "");
-        return `[${stringArray}]`;
+        array = array.map((item) => this.parse(DataviewService.wrapLiteral(item)));
+        return `[${array.join(",")}]`;
     }
 }
 
