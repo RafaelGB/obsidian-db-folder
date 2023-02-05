@@ -9,7 +9,7 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class EditOptionForAllRowsHandlerAction extends AbstractTableAction<DataState> {
     handle(tableActionResponse: TableActionResponse<DataState>): TableActionResponse<DataState> {
         const { get, implementation } = tableActionResponse;
-        implementation.actions.editOptionForAllRows = async (column: TableColumn, oldLabel: string, newLabel: string, columns: TableColumn[],
+        implementation.actions.editOptionForAllRows = async (column: TableColumn, oldValue: string, newValue: string, columns: TableColumn[],
             ddbbConfig: LocalSettings) => {
             // Lambda to select the rows to update
             let lambdaFilter: (cellValue: Literal) => boolean;
@@ -19,12 +19,12 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
                         const array = Array.isArray(cellValue)
                             ? (cellValue as Literal[])
                             : []
-                        return array.length > 0 && array.some(value => value?.toString() === oldLabel);
+                        return array.length > 0 && array.some(value => value?.toString() === oldValue);
                     }
                     break;
                 case InputType.SELECT:
                     lambdaFilter = (cellValue: Literal) => {
-                        return (cellValue?.toString().length > 0 && cellValue?.toString() === oldLabel);
+                        return (cellValue?.toString().length > 0 && cellValue?.toString() === oldValue);
                     };
                     break;
                 default:
@@ -38,12 +38,12 @@ export default class EditOptionForAllRowsHandlerAction extends AbstractTableActi
                         const array = Array.isArray(cellValue)
                             ? (cellValue as Literal[])
                             : []
-                        return array.map(value => value?.toString() === oldLabel ? newLabel : value);
+                        return array.map(value => value?.toString() === oldValue ? newValue : value);
                     }
                     break;
                 case InputType.SELECT:
                     lambdaUpdate = () => {
-                        return newLabel;
+                        return newValue;
                     };
                     break;
                 default:

@@ -79,8 +79,8 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         cb.setIcon("pencil")
           .setTooltip(t("column_settings_modal_selected_column_options_edit"))
           .onClick(async (): Promise<void> => {
-            const oldLabel = option.label;
-            if (currentLabel === oldLabel) {
+            const oldValue = option.value;
+            if (currentLabel === oldValue) {
               new Notice(
                 `Option "${option.label}(${option.value})"  was not changed!`,
                 1500
@@ -94,11 +94,11 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
               options: options,
             });
             // Update in memory
-            dataState.actions
+            await dataState.actions
               .editOptionForAllRows(
                 column,
-                oldLabel,
-                currentLabel,
+                oldValue,
+                currentValue,
                 columnsState.info.getAllColumns(),
                 configState.info.getLocalSettings()
               )
@@ -148,7 +148,7 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
             dataState.actions
               .removeOptionForAllRows(
                 column,
-                removedOption.label,
+                removedOption.value,
                 columnsState.info.getAllColumns(),
                 configState.info.getLocalSettings()
               )
