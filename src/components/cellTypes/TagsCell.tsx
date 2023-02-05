@@ -47,13 +47,13 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       return match;
     } else {
       // In case of new tag, generate random color
-      const color = randomColor();
-      columnActions.addOptionToColumn(tableColumn, tag, tag, color);
-      return {
+      const option: ColumnOption = {
         label: tag,
         value: tag,
-        color: color,
+        color: randomColor(),
       };
+      columnActions.addOptionToColumn(tableColumn, option);
+      return option;
     }
   }
 
@@ -93,12 +93,12 @@ const TagsCell = (tagsProps: CellComponentProps) => {
             !tableColumn.options.find((option) => option.value === tag.value)
         )
         .forEach((tag) => {
-          columnActions.addOptionToColumn(
-            tableColumn,
-            tag.label,
-            tag.value,
-            randomColor()
-          );
+          const option: ColumnOption = {
+            label: tag.label,
+            value: tag.value,
+            color: randomColor(),
+          };
+          columnActions.addOptionToColumn(tableColumn, option);
         });
     }
   };

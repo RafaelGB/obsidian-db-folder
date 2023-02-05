@@ -45,13 +45,13 @@ const SelectCell = (popperProps: CellComponentProps) => {
       return match;
     } else {
       // In case of new select, generate random color
-      const color = randomColor();
-      columnActions.addOptionToColumn(tableColumn, cellValue, cellValue, color);
-      return {
+      const option: ColumnOption = {
         label: cellValue,
         value: cellValue,
-        color: color,
+        color: randomColor(),
       };
+      columnActions.addOptionToColumn(tableColumn, option);
+      return option;
     }
   }
 
@@ -83,12 +83,13 @@ const SelectCell = (popperProps: CellComponentProps) => {
 
     // Add new option to column options
     if (actionMeta.action === "create-option") {
-      await columnActions.addOptionToColumn(
-        tableColumn,
-        sanitized,
-        sanitized,
-        randomColor()
-      );
+      const option: ColumnOption = {
+        label: sanitized,
+        value: sanitized,
+        color: randomColor(),
+      };
+
+      await columnActions.addOptionToColumn(tableColumn, option);
     }
   };
 

@@ -133,8 +133,8 @@ export class MarshallColumnsHandler extends AbstractYamlHandler {
                         // Control empty options
                         .filter((option) => {
                             return option.value !== ""
-                                || option.label !== ""
-                                || option.color !== "";
+                                && option.label !== ""
+                                && option.color !== "";
                         })
                         // Control duplicated options
                         .reduce((acc, option) => {

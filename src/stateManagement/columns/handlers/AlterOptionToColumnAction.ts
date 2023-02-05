@@ -1,3 +1,4 @@
+import { ColumnOption } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
@@ -7,10 +8,9 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
         const { view, set, get, implementation } = tableActionResponse;
         implementation.actions.addOptionToColumn = (
             column: TableColumn,
-            label: string,
-            value: string,
-            color: string
+            option: ColumnOption
         ) => {
+            const { value } = option;
             // Wrap in a promise of a queue to avoid concurrency issues
             const columnIndex = get().columns.findIndex(
                 (col: TableColumn) => col.id === column.id
@@ -20,15 +20,14 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
             const optionIndex = memoryColumn.options.findIndex((o) => o.value === value);
             // Add the option to the column if it doesn't exist
             if (optionIndex === -1) {
+                memoryColumn.options.push(option);
                 // Save on disk
-                const newOptions = [...memoryColumn.options, { label: label, color: color, value: value }];
                 view.diskConfig.updateColumnProperties(column.id, {
-                    options: newOptions,
+                    options: memoryColumn.options,
                 });
 
                 // Save on memory
                 set((updater) => {
-                    memoryColumn.options = newOptions;
                     updater.columns[columnIndex] = memoryColumn;
                     return { columns: updater.columns };
                 });
