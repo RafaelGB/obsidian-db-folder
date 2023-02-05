@@ -3,11 +3,6 @@ import { RowDataType } from "cdm/FolderModel";
 import { Link, Literal } from "obsidian-dataview/lib/data-model/value";
 import { AtomicFilter } from "cdm/SettingsModel";
 
-export type RowSelectOption = {
-    backgroundColor: string,
-    label: string,
-}
-
 export type ColumnOption = {
     value: string;
     label: string;

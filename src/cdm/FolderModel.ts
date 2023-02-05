@@ -1,5 +1,5 @@
 import StateManager from "StateManager";
-import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { TableStateInterface } from "cdm/TableStateInterface";
 import NoteInfo from "services/NoteInfo";
 import { TFile } from "obsidian";
@@ -86,7 +86,7 @@ export type BaseColumn = {
     skipPersist?: boolean;
     isDragDisabled?: boolean;
     // Selects & Tags
-    options?: RowSelectOption[];
+    options?: ColumnOption[];
 }
 
 export type TableColumn = ColumnDef<RowDataType, Literal> & BaseColumn;
@@ -113,8 +113,7 @@ export interface DatabaseHeaderProps {
 }
 
 export type RelationshipProps = {
-    value: Literal,
-    backgroundColor: string
+    option: ColumnOption
     view: CustomView,
 }
 

@@ -1,4 +1,4 @@
-import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { randomColor } from "helpers/Colors";
 import { satinizedColumnOption } from "helpers/FileManagement";
@@ -40,9 +40,10 @@ export class AddOptionHandler extends AbstractHandlerClass<ColumnSettingsHandler
         return;
       }
       // Add new label
-      const newOption: RowSelectOption = {
+      const newOption: ColumnOption = {
         label: newLabel,
-        backgroundColor: randomColor(),
+        value: newValue,
+        color: randomColor(),
       };
       options.push(newOption);
       // Persist changes

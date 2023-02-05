@@ -1,4 +1,4 @@
-import { OptionSelect } from "cdm/DatabaseModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { randomColor } from "helpers/Colors";
@@ -34,7 +34,7 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                         // If the new type is a select or tags, we need to obtain the possible values
                         case InputType.SELECT:
                         case InputType.TAGS: {
-                            const options: OptionSelect[] = [];
+                            const options: ColumnOption[] = [];
                             // Generate selected options
                             parsedRows.forEach((row) => {
                                 // Transform the input into the target type
@@ -47,7 +47,8 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                                 if (cellValue) {
                                     options.push({
                                         label: cellValue?.toString(),
-                                        backgroundColor: randomColor(),
+                                        value: cellValue?.toString(),
+                                        color: randomColor(),
                                     });
                                 }
                             });

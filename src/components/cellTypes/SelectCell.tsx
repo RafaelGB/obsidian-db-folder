@@ -3,7 +3,7 @@ import { grey, randomColor } from "helpers/Colors";
 import React, { useMemo, useState } from "react";
 import {
   CellComponentProps,
-  RowSelectOption,
+  ColumnOption,
   SelectValue,
 } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
@@ -39,32 +39,27 @@ const SelectCell = (popperProps: CellComponentProps) => {
 
   const columnActions = tableState.columns((state) => state.actions);
   const columnOptions = columnsInfo.getColumnOptions(column.id);
-  function getColor() {
-    const match = columnOptions.find(
-      (option: { label: string }) => option.label === cellValue
-    );
+  function mapOption() {
+    const match = columnOptions.find((option) => option.value === cellValue);
     if (match) {
-      return match.color;
+      return match;
     } else {
       // In case of new select, generate random color
       const color = randomColor();
-      columnActions.addOptionToColumn(tableColumn, cellValue, color);
-      return color;
+      columnActions.addOptionToColumn(tableColumn, cellValue, cellValue, color);
+      return {
+        label: cellValue,
+        value: cellValue,
+        color: color,
+      };
     }
   }
 
-  const defaultValue = useMemo(
-    () => ({
-      label: cellValue?.toString(),
-      value: cellValue?.toString(),
-      color: cellValue ? getColor() : grey(200),
-    }),
-    [cellValue]
-  );
+  const defaultValue = useMemo(() => mapOption(), [cellValue]);
 
   const handleOnChange = async (
     newValue: OnChangeValue<SelectValue, false>,
-    actionMeta: ActionMeta<RowSelectOption>
+    actionMeta: ActionMeta<ColumnOption>
   ) => {
     const sanitized = satinizedColumnOption(
       newValue ? newValue.value.toString() : ""
@@ -90,6 +85,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
     if (actionMeta.action === "create-option") {
       await columnActions.addOptionToColumn(
         tableColumn,
+        sanitized,
         sanitized,
         randomColor()
       );
@@ -157,11 +153,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
           tabIndex={0}
         >
           {cellValue ? (
-            <Relationship
-              value={cellValue}
-              backgroundColor={getColor()}
-              view={view}
-            />
+            <Relationship option={defaultValue} view={view} />
           ) : null}
         </div>
       )}

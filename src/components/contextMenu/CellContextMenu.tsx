@@ -75,8 +75,11 @@ export default function CellContextMenu(
           />
         ) : (
           <Relationship
-            value={index}
-            backgroundColor={StyleVariables.BACKGROUND_PRIMARY}
+            option={{
+              label: index.toString(),
+              value: index.toString(),
+              color: StyleVariables.BACKGROUND_PRIMARY,
+            }}
             view={view}
           />
         )}

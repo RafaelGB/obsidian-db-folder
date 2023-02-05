@@ -11,7 +11,14 @@ describe("React-table", () => {
 
   it("changes the class when hovered", () => {
     render(
-      <Relationship value="MockedValue" backgroundColor={grey()} view={null} />
+      <Relationship
+        option={{
+          label: "MockedLabel",
+          value: "MockedValue",
+          color: grey(),
+        }}
+        view={null}
+      />
     );
   });
   // // @ts-ignore

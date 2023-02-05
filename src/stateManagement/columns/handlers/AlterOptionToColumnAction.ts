@@ -7,8 +7,9 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
         const { view, set, get, implementation } = tableActionResponse;
         implementation.actions.addOptionToColumn = (
             column: TableColumn,
-            option: string,
-            backgroundColor: string
+            label: string,
+            value: string,
+            color: string
         ) => {
             // Wrap in a promise of a queue to avoid concurrency issues
             const columnIndex = get().columns.findIndex(
@@ -16,11 +17,11 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
             );
             const memoryColumn = get().columns[columnIndex];
             // Check if the option already exists
-            const optionIndex = memoryColumn.options.findIndex((o) => o.label === option);
+            const optionIndex = memoryColumn.options.findIndex((o) => o.value === value);
             // Add the option to the column if it doesn't exist
             if (optionIndex === -1) {
                 // Save on disk
-                const newOptions = [...memoryColumn.options, { label: option, backgroundColor: backgroundColor }];
+                const newOptions = [...memoryColumn.options, { label: label, color: color, value: value }];
                 view.diskConfig.updateColumnProperties(column.id, {
                     options: newOptions,
                 });

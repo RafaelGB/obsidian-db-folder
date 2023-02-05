@@ -1,10 +1,11 @@
-import { OptionSelect } from "cdm/DatabaseModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 
-export function obtainUniqueOptionValues(arrayOptions: OptionSelect[]): OptionSelect[] {
-    const uniqueValues: OptionSelect[] = [];
+
+export function obtainUniqueOptionValues(arrayOptions: ColumnOption[]): ColumnOption[] {
+    const uniqueValues: ColumnOption[] = [];
     // obtain unique values
-    arrayOptions.forEach((option: OptionSelect) => {
-        if (!uniqueValues.some((uniqueOption: OptionSelect) => uniqueOption.label === option.label)) {
+    arrayOptions.forEach((option) => {
+        if (!uniqueValues.some((uniqueOption) => uniqueOption.value === option.value || uniqueOption.label === option.label)) {
             uniqueValues.push(option);
         }
     });

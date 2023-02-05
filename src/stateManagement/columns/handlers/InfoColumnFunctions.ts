@@ -1,4 +1,4 @@
-import { ColumnOption, RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
 import { grey } from "helpers/Colors";
@@ -30,15 +30,10 @@ export default class InfoColumnFunctions extends AbstractTableAction<ColumnsStat
             }
             const options = opColumn.options
                 .filter(
-                    (option: RowSelectOption) =>
+                    (option: ColumnOption) =>
                         option && option.label !== undefined && option.label !== null
                 )
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((option: RowSelectOption) => ({
-                    value: option.label,
-                    label: option.label,
-                    color: option.backgroundColor,
-                }))
+                .sort((a, b) => a.label.localeCompare(b.label));
             if (includeEmptyOption && options.length > 0) {
                 options.unshift({
                     label: "-- None --",

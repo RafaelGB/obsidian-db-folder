@@ -1,4 +1,4 @@
-import { RowSelectOption } from "cdm/ComponentsModel";
+import { ColumnOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { castStringtoHsl, castHslToString } from "helpers/Colors";
 import { t } from "lang/helpers";
@@ -37,8 +37,8 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
    */
   private addOptionSetting(
     containerEl: HTMLElement,
-    option: RowSelectOption,
-    options: RowSelectOption[],
+    option: ColumnOption,
+    options: ColumnOption[],
     index: number,
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ) {
@@ -47,13 +47,31 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
     const { view, dataState, configState, columnsState } =
       columnSettingsManager.modal;
     let currentLabel = option.label;
+    let currentValue = option.value;
     new Setting(containerEl)
       // Show current label
       .addText((text) => {
         text
+          .setPlaceholder(
+            t(
+              "column_settings_modal_selected_column_options_new_option_label_placeholder"
+            )
+          )
           .setValue(currentLabel)
           .onChange(async (value: string): Promise<void> => {
             currentLabel = value;
+          });
+      })
+      .addText((text) => {
+        text
+          .setPlaceholder(
+            t(
+              "column_settings_modal_selected_column_options_new_option_value_placeholder"
+            )
+          )
+          .setValue(currentLabel)
+          .onChange(async (value: string): Promise<void> => {
+            currentValue = value;
           });
       })
       // Edit label button
@@ -64,13 +82,14 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
             const oldLabel = option.label;
             if (currentLabel === oldLabel) {
               new Notice(
-                `Option label "${currentLabel}" was not changed!`,
+                `Option "${option.label}(${option.value})"  was not changed!`,
                 1500
               );
               return;
             }
             // Persist on disk
             options[index].label = currentLabel;
+            options[index].value = currentValue;
             await view.diskConfig.updateColumnProperties(column.id, {
               options: options,
             });
@@ -105,11 +124,9 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
       // Color picker for background color
       .addColorPicker((colorPicker) => {
         colorPicker
-          .setValueHsl(castStringtoHsl(option.backgroundColor))
+          .setValueHsl(castStringtoHsl(option.color))
           .onChange(async () => {
-            options[index].backgroundColor = castHslToString(
-              colorPicker.getValueHsl()
-            );
+            options[index].color = castHslToString(colorPicker.getValueHsl());
             await view.diskConfig.updateColumnProperties(column.id, {
               options: options,
             });
