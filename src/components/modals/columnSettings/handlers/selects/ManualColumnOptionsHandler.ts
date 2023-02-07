@@ -1,29 +1,30 @@
 import { ColumnOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { castStringtoHsl, castHslToString } from "helpers/Colors";
+import { OptionSource } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { LOGGER } from "services/Logger";
 
-export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
+export class ManualColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
   settingTitle = t("column_settings_modal_selected_column_options_title");
   handle(
     columnHandlerResponse: ColumnSettingsHandlerResponse
   ): ColumnSettingsHandlerResponse {
     const { column, containerEl } = columnHandlerResponse;
     const options = column.options;
-
-    options.forEach((option, index) => {
-      this.addOptionSetting(
-        containerEl,
-        option,
-        options,
-        index,
-        columnHandlerResponse
-      );
-    });
-
+    if (column.config.option_source === OptionSource.MANUAL) {
+      options.forEach((option, index) => {
+        this.addOptionSetting(
+          containerEl,
+          option,
+          options,
+          index,
+          columnHandlerResponse
+        );
+      });
+    }
     return this.goNext(columnHandlerResponse);
   }
 
@@ -79,8 +80,10 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
         cb.setIcon("pencil")
           .setTooltip(t("column_settings_modal_selected_column_options_edit"))
           .onClick(async (): Promise<void> => {
-            const oldValue = option.value;
-            if (currentLabel === oldValue) {
+            if (
+              currentValue === option.value &&
+              currentLabel === option.label
+            ) {
               new Notice(
                 `Option "${option.label}(${option.value})"  was not changed!`,
                 1500
@@ -93,31 +96,33 @@ export class SelectedColumnOptionsHandler extends AbstractHandlerClass<ColumnSet
             await view.diskConfig.updateColumnProperties(column.id, {
               options: options,
             });
-            // Update in memory
-            await dataState.actions
-              .editOptionForAllRows(
-                column,
-                oldValue,
-                currentValue,
-                columnsState.info.getAllColumns(),
-                configState.info.getLocalSettings()
-              )
-              .then(() => {
-                new Notice(
-                  t(
-                    "column_settings_modal_selected_column_options_notice_update_success"
-                  ),
-                  1500
-                );
-              })
-              .catch((err) => {
-                const errMsg = t(
-                  "column_settings_modal_selected_column_options_notice_update_error",
-                  currentLabel
-                );
-                LOGGER.error(errMsg, err);
-                new Notice(errMsg, 3000);
-              });
+            if (currentValue !== option.value) {
+              // Update in memory
+              await dataState.actions
+                .editOptionForAllRows(
+                  column,
+                  option.value,
+                  currentValue,
+                  columnsState.info.getAllColumns(),
+                  configState.info.getLocalSettings()
+                )
+                .then(() => {
+                  new Notice(
+                    t(
+                      "column_settings_modal_selected_column_options_notice_update_success"
+                    ),
+                    1500
+                  );
+                })
+                .catch((err) => {
+                  const errMsg = t(
+                    "column_settings_modal_selected_column_options_notice_update_error",
+                    currentLabel
+                  );
+                  LOGGER.error(errMsg, err);
+                  new Notice(errMsg, 3000);
+                });
+            }
             columnSettingsManager.modal.enableReset = true;
           });
       })

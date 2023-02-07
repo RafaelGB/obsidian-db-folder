@@ -42,7 +42,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
   const columnsInfo = tableState.columns((state) => state.info);
   const columnActions = tableState.columns((state) => state.actions);
   const dataActions = tableState.data((state) => state.actions);
-
+  const automationInfo = tableState.automations((state) => state.info);
   const areColumnsFilterable = tableState.configState(
     (state) => state.ephimeral.enable_columns_filter
   );
@@ -124,6 +124,7 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
         actions: columnActions,
       },
       configState: { info: configInfo },
+      automationState: { info: automationInfo },
       view: table.options.meta.view,
     };
     new AddColumnModal(table.options.meta.view, addColumnProps).open();

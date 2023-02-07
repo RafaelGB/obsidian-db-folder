@@ -343,6 +343,11 @@ export const ConditionFiltersOptions = Object.freeze({
   OR: 'OR'
 });
 
+export const OptionSource = Object.freeze({
+  MANUAL: 'manual',
+  FORMULA: 'formula',
+});
+
 export function getOperatorFilterValue(keyToFind: string): string {
   const entry = Object.entries(OperatorFilter).find(([key]) =>
     key === keyToFind

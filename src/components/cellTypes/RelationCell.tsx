@@ -112,8 +112,11 @@ const RelationCell = (mdProps: CellComponentProps) => {
         ? relationCell.map((link: Link, index) => (
             <Relationship
               key={`relation-${index}-${tableColumn.key}-${link.path}`}
-              value={link.markdown()}
-              backgroundColor={tableColumn.config.relation_color || grey(300)}
+              option={{
+                value: link.markdown(),
+                label: link.markdown(),
+                color: tableColumn.config.relation_color || grey(300),
+              }}
               view={view}
             />
           ))

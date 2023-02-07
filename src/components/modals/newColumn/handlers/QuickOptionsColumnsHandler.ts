@@ -12,7 +12,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
     response: AddColumnModalHandlerResponse
   ): AddColumnModalHandlerResponse {
     const { containerEl, addColumnModalManager } = response;
-    const { columnState, dataState, view, configState } = addColumnModalManager.props;
+    const { columnState, dataState, automationState, view, configState } = addColumnModalManager.props;
     const { addColumnModal } = addColumnModalManager;
     /******************
      * SHOW COLUMN MENU
@@ -38,6 +38,7 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
             dataState: dataState,
             columnState: columnState,
             configState: configState,
+            automationState: automationState,
             view: view,
             tableColumn: column,
           }).open();

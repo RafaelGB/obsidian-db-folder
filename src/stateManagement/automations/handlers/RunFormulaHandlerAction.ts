@@ -1,7 +1,6 @@
 import { RowDataType } from "cdm/FolderModel";
-import { LocalSettings } from "cdm/SettingsModel";
 import { AutomationState, DbInfo, TableActionResponse } from "cdm/TableStateInterface";
-import { Literal } from "obsidian-dataview";
+import { FormulaService } from "services/FormulaService";
 import { LOGGER } from "services/Logger";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
@@ -10,7 +9,7 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
         const { implementation, get } = tableActionResponse;
         implementation.info.runFormula = (input: string, row: RowDataType, dbInfo: DbInfo) => {
             try {
-                return this.evalInput(input, row, dbInfo, get().formula);
+                return FormulaService.evalWith(input, row, dbInfo, get().formula);
             } catch (e) {
                 LOGGER.error(`Error evaluating formula from row ${row.__note__.filepath}: `, e);
                 return "";
@@ -19,17 +18,5 @@ export default class RunFormulaHandlerAction extends AbstractTableAction<Automat
 
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
-    }
-    private evalInput(input: string, row: RowDataType, info: DbInfo, db: {
-        [key: string]: unknown;
-    }): Literal {
-        LOGGER.debug(`Evaluating formula from row ${row.__note__.filepath}: `, input);
-        const dynamicJS = 'return `' + input + '`';
-        const func = new Function('row', 'info', 'db', dynamicJS);
-        const result = func(row, info, db);
-        if (result === "undefined" || result === "null") {
-            return '';
-        }
-        return result;
     }
 }

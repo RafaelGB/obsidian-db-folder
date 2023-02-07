@@ -19,6 +19,8 @@ export default {
   'operator_ends_with': 'Ends with',
   'operator_is_empty': 'Is empty',
   'operator_is_not_empty': 'Is not empty',
+  /** OPTIONS SOURCE */
+  'manual': 'Manual',
   /** NAVBAR */
   'toolbar_menu_aria_label': 'Open table options',
   'toolbar_menu_export_csv': 'Export CSV',
@@ -189,6 +191,9 @@ export default {
 
   "column_settings_modal_wrap_content_toggle_title": "Wrap content",
   "column_settings_modal_wrap_content_toggle_desc": "Enable/disable to wrap content of the column",
+
+  "column_settings_modal_option_source_dropdown_title": "Select option source",
+  "column_settings_modal_option_source_dropdown_desc": "Select the source of the options",
 
   "column_settings_modal_hide_completed_tasks_toggle_title": "Hide completed tasks",
   "column_settings_modal_hide_completed_tasks_toggle_desc": "Enable/disable to hide completed tasks",

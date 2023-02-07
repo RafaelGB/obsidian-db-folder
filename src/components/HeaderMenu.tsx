@@ -1,5 +1,5 @@
 import { StyleVariables } from "helpers/Constants";
-import { dbTrim, c, getLabelHeader } from "helpers/StylesHelper";
+import { dbTrim, c } from "helpers/StylesHelper";
 import AdjustmentsIcon from "components/img/AdjustmentsIcon";
 import React, { FocusEventHandler, useState } from "react";
 import Popper from "@mui/material/Popper";
@@ -18,15 +18,18 @@ import { dynamic_t, t } from "lang/helpers";
 const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
   const { table, column } = headerMenuProps.headerProps;
 
-  const [columnsInfo, columnActions] = table.options.meta.tableState.columns(
-    (state) => [state.info, state.actions]
-  );
-  const dataActions = table.options.meta.tableState.data(
-    (state) => state.actions
-  );
-  const configInfo = table.options.meta.tableState.configState(
-    (state) => state.info
-  );
+  const { tableState } = table.options.meta;
+
+  const [columnsInfo, columnActions] = tableState.columns((state) => [
+    state.info,
+    state.actions,
+  ]);
+
+  const dataActions = tableState.data((state) => state.actions);
+
+  const configInfo = tableState.configState((state) => state.info);
+
+  const automationInfo = tableState.automations((state) => state.info);
 
   /** Header props */
   const { propertyIcon, menuEl, setMenuEl, labelState, setLabelState } =
@@ -238,6 +241,7 @@ const HeaderMenu = (headerMenuProps: HeaderMenuProps) => {
                         actions: columnActions,
                       },
                       configState: { info: configInfo },
+                      automationState: { info: automationInfo },
                       view: table.options.meta.view,
                       tableColumn: column.columnDef as TableColumn,
                     }).open();

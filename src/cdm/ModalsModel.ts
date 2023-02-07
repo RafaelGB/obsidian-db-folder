@@ -1,5 +1,5 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
-import { ColumnsState, ConfigState, DataState, RowTemplateState } from "cdm/TableStateInterface";
+import { AutomationState, ColumnsState, ConfigState, DataState, RowTemplateState } from "cdm/TableStateInterface";
 import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
 import { FiltersModalManager } from "components/modals/filters/FiltersModal";
@@ -18,8 +18,8 @@ export type BaseColumnModalProps = {
     dataState: Pick<DataState, "actions">,
     columnState: Pick<ColumnsState, "info" | "actions">,
     configState: Pick<ConfigState, "info">,
-    view: CustomView,
-    //headerMenuProps: HeaderMenuProps
+    automationState: Pick<AutomationState, "info">,
+    view: CustomView
 }
 /***************************************
  *      COLUMN SETTINGS MODAL
