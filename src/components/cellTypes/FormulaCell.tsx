@@ -33,9 +33,6 @@ const FormulaCell = (mdProps: CellComponentProps) => {
         })
         .toString();
 
-      // If the formula cell is the same as the rendered formula, do nothing
-      if (cell.getValue() === formulaResponse) return;
-
       await MarkdownService.renderMarkdown(
         defaultCell,
         formulaResponse,

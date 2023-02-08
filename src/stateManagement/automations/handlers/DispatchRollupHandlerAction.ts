@@ -6,6 +6,7 @@ import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 import { ROLLUP_ACTIONS } from "helpers/Constants";
+import { FormulaService } from "services/FormulaService";
 
 export default class DispatchRollupHandlerAction extends AbstractTableAction<AutomationState> {
     handle(tableActionResponse: TableActionResponse<AutomationState>): TableActionResponse<AutomationState> {
@@ -14,7 +15,7 @@ export default class DispatchRollupHandlerAction extends AbstractTableAction<Aut
             try {
                 const validatedRelation = this.obtainRelation(relation);
                 if (ROLLUP_ACTIONS.FORMULA === configColumn.rollup_action) {
-                    return this.evalRollupFormulaInput(
+                    return FormulaService.evalRollupWith(
                         configColumn.formula_query,
                         configColumn.rollup_key,
                         validatedRelation,
@@ -49,17 +50,5 @@ export default class DispatchRollupHandlerAction extends AbstractTableAction<Aut
             throw new Error(`Invalid relation type: ${wrappedRelation.type}. Value: ${wrappedRelation.value}`);
         }
         return validatedRelation;
-    }
-
-    private evalRollupFormulaInput(input: string, rollupKey: string, relations: Link[], db: {
-        [key: string]: unknown;
-    }): Literal {
-        const dynamicJS = 'return `' + input + '`';
-        const func = new Function('relations', 'rollupKey', 'db', dynamicJS);
-        const result = func(new Rollup(relations).getPages(), rollupKey, db);
-        if (result === "undefined" || result === "null") {
-            return '';
-        }
-        return result;
     }
 }

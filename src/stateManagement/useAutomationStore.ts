@@ -29,6 +29,7 @@ function mockAutomationState(): Omit<AutomationState, "formula"> {
 
     const mockInfo: AutomationStateInfo = {
         getFormula: null,
+        getFormulas: null,
         runFormula: null,
         dispatchRollup: null,
         dispatchFooter: null,

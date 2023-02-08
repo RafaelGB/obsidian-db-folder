@@ -13,6 +13,8 @@ export default {
     'operator_ends_with': 'Termina con',
     'operator_is_empty': 'Está vacío',
     'operator_is_not_empty': 'No está vacío',
+    /** OPTIONS SOURCE */
+    'manual': 'Manual',
     /** NAVBAR */
     'toolbar_menu_aria_label': 'Abrir menú',
     'toolbar_menu_export_csv': 'Exportar CSV',
@@ -184,6 +186,9 @@ export default {
     "column_settings_modal_wrap_content_toggle_title": "Salto de línea",
     "column_settings_modal_wrap_content_toggle_desc": "Habilitar/deshabilitar el salto de línea para el contenido de esta columna",
 
+    "column_settings_modal_option_source_dropdown_title": "Fuente de las opciones para la columna",
+    "column_settings_modal_option_source_dropdown_desc": "Seleccione la fuente de las opciones para esta columna",
+
     "column_settings_modal_hide_completed_tasks_toggle_title": "Ocultar tareas completadas",
     "column_settings_modal_hide_completed_tasks_toggle_desc": "Habilitar/deshabilitar la ocultación de tareas completadas para esta columna",
     "column_settings_modal_column_id_title": "ID de columna",
@@ -346,4 +351,4 @@ export default {
     "settings_source_form_destination_title": "Seleccionar destino de las nuevas entradas",
     "settings_source_form_destination_desc": "Seleccionar la carpeta destino para las nuevas entradas",
     "settings_source_form_destination_placeholder": "Ejemplo: folder1/folder2",
-};
+}

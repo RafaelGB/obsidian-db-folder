@@ -4,6 +4,7 @@ import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { TableOptions } from "@tanstack/react-table";
 import { BaseColumn, RowDataType } from "cdm/FolderModel";
 import { SMarkdownPage } from "obsidian-dataview";
+import en from "lang/locale/en";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {
@@ -45,3 +46,5 @@ export type TableOptionsResponse = {
 export type NoteInfoPage = Omit<SMarkdownPage, "file"> & {
     file: Pick<SMarkdownPage["file"], "link" | "path" | "ctime" | "mtime" | "tasks" | "outlinks" | "inlinks" | "folder">
 };
+
+export type LocaleDict = keyof typeof en;

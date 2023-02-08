@@ -47,6 +47,9 @@ export interface ConfigColumn {
     // Text
     link_alias_enabled?: boolean;
     custom_link_alias?: string;
+    // Selects & Tags
+    option_source?: string;
+    formula_option_source?: string;
     // Tasks
     task_hide_completed?: boolean;
     // Formulas

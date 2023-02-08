@@ -3,8 +3,9 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { MediaDimensionsHandler } from "./handlers/media/MediaDimensionsHandler";
 import { MediaToggleHandler } from "./handlers/media/MediaToggleHandler";
 import { InlineToggleHandler } from "./handlers/InlineToggleHandler";
+import { OptionSourceDropdownHandler } from "./handlers/selects/OptionSourceDropdownHandler";
 import { AddOptionHandler } from "./handlers/selects/AddOptionHandler";
-import { SelectedColumnOptionsHandler } from "./handlers/selects/SelectedColumnOptionsHandler";
+import { ManualColumnOptionsHandler } from "./handlers/selects/ManualColumnOptionsHandler";
 import { HideCompletedTaskToggleHandler } from "./handlers/tasks/HideCompletedTaskToggleHandler";
 import { LinkAliasToggleHandler } from "./handlers/media/LinkAliasToggleHandler";
 import { FormulaInputHandler } from "./handlers/automations/FormulaInputHandler";
@@ -20,6 +21,7 @@ import { RollupPersistToggleHandler } from "./handlers/rollups/RollupPersistTogg
 import { RollupFormulaHandler } from "./handlers/rollups/RollupFormulaHandler";
 import { BidirectionalRelationToggleHandler } from "./handlers/relations/BidirectionalRelationToggleHandler";
 import { RelationColorSelectorHandler } from "./handlers/relations/RelationColorSelectorHandler";
+import { FormulaColumnOptionsHandler } from "./handlers/selects/FormulaColumnOptionsHandler";
 import { InputType } from "helpers/Constants";
 import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
@@ -135,8 +137,10 @@ class ParticularSetttingsSection extends AbstractChain<ColumnSettingsHandlerResp
                 break;
             case InputType.SELECT:
             case InputType.TAGS:
+                particularHandlers.push(new OptionSourceDropdownHandler());
                 particularHandlers.push(new AddOptionHandler());
-                particularHandlers.push(new SelectedColumnOptionsHandler());
+                particularHandlers.push(new ManualColumnOptionsHandler());
+                particularHandlers.push(new FormulaColumnOptionsHandler());
                 break;
             case InputType.TASK:
                 particularHandlers.push(new HideCompletedTaskToggleHandler());

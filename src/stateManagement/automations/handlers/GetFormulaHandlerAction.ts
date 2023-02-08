@@ -7,6 +7,11 @@ export default class GetFormulaHandlerAction extends AbstractTableAction<Automat
         implementation.info.getFormula = (formulaName: string) => {
             return get().formula[formulaName];
         };
+
+        implementation.info.getFormulas = () => {
+            return get().formula;
+        };
+
         tableActionResponse.implementation = implementation;
         return this.goNext(tableActionResponse);
     }

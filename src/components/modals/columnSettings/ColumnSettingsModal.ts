@@ -4,7 +4,7 @@ import { add_setting_header } from "settings/SettingsComponents";
 import { StyleClasses } from "helpers/Constants";
 import { ColumnSettingsHandlerResponse, ColumnSettingsModalProps } from "cdm/ModalsModel";
 import { particular_settings_section, behavior_settings_section, style_settings_section } from "components/modals/columnSettings/ColumnSections";
-import { ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
+import { AutomationState, ColumnsState, ConfigState, DataState } from "cdm/TableStateInterface";
 import { CustomView } from "views/AbstractView";
 
 export class ColumnSettingsModal extends Modal {
@@ -13,18 +13,20 @@ export class ColumnSettingsModal extends Modal {
     dataState: Partial<DataState>;
     configState: Partial<ConfigState>;
     columnsState: Partial<ColumnsState>;
+    automationState: Partial<AutomationState>;
     tableColumn: TableColumn;
     enableReset = false;
     constructor(
         props: ColumnSettingsModalProps
     ) {
-        const { view, dataState, configState, columnState, tableColumn } = props;
+        const { view, dataState, configState, columnState, automationState, tableColumn } = props;
         super(view.app);
         this.view = view;
         this.dataState = dataState;
         this.configState = configState;
         this.columnsState = columnState;
         this.tableColumn = tableColumn;
+        this.automationState = automationState;
         this.columnSettingsManager = new ColumnSettingsManager(this);
     }
 
