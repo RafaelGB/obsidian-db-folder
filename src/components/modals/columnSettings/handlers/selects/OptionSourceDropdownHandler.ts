@@ -34,6 +34,11 @@ export class OptionSourceDropdownHandler extends AbstractHandlerClass<ColumnSett
         option_source: optionSource,
       });
 
+      // Reset options
+      await view.diskConfig.updateColumnProperties(column.id, {
+        options: [],
+      });
+
       columnHandlerResponse.column.config.option_source = optionSource;
       // Reset column settings
       columnSettingsManager.reset(columnHandlerResponse);

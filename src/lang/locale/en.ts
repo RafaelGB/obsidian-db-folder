@@ -194,6 +194,9 @@ export default {
 
   "column_settings_modal_option_source_dropdown_title": "Select option source",
   "column_settings_modal_option_source_dropdown_desc": "Select the source of the options",
+  "column_settings_modal_formula_option_source_title": "Formula option source",
+  "column_settings_modal_formula_option_source_desc": "Write your formula to generate the options",
+  "column_settings_modal_formula_option_source_placeholder": "Write your formula here...",
 
   "column_settings_modal_hide_completed_tasks_toggle_title": "Hide completed tasks",
   "column_settings_modal_hide_completed_tasks_toggle_desc": "Enable/disable to hide completed tasks",

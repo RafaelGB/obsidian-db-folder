@@ -7,7 +7,7 @@ import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { FormulaService } from "services/FormulaService";
 
 export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-    settingTitle = t("column_settings_modal_option_source_dropdown_title");
+    settingTitle = t("column_settings_modal_formula_option_source_title");
     handle(
         columnHandlerResponse: ColumnSettingsHandlerResponse
     ): ColumnSettingsHandlerResponse {
@@ -24,7 +24,7 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
             };
             new Setting(containerEl)
                 .setName("Formula for column options")
-                .setDesc("Write a formula to generate the options for this column.")
+                .setDesc(t("column_settings_modal_formula_option_source_desc"))
                 .setClass(c("setting-item"))
                 .addTextArea((textArea) => {
                     textArea.setValue(currentFormula);
@@ -33,10 +33,10 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
                     textArea.onChange(formula_promise);
                 }).addExtraButton((cb) => {
                     cb.setIcon("pencil")
-                        .setTooltip("Update your column options with the formula above.")
+                        .setTooltip("column_settings_modal_formula_option_source_placeholder")
                         .onClick(async (): Promise<void> => {
                             if (currentFormula === config.formula_option_source) {
-                                new Notice("No changes made", 1500);
+                                new Notice("No changes were made", 1500);
                                 return;
                             }
                             columnHandlerResponse.column.options = FormulaService.evalOptionsWith(column, automationState.info.getFormulas());
