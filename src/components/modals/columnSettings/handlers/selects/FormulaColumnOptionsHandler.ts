@@ -1,4 +1,3 @@
-import { ColumnOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { OptionSource } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
@@ -63,6 +62,14 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
                 })
             );
             // TODO Show column options read-only
+            columnHandlerResponse.column.options.forEach((option) => {
+                const optionEl = containerEl.createDiv();
+                optionEl.style.backgroundColor = option.color;
+                optionEl.addClass(c("readable-options"));
+                optionEl.createDiv({ text: option.label });
+                optionEl.createDiv({ text: option.value });
+
+            });
         }
         return this.goNext(columnHandlerResponse);
     }

@@ -1,6 +1,7 @@
 import { ColumnOption } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
+import { OptionSource } from "helpers/Constants";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class AlterOptionToColumnHandlerAction extends AbstractTableAction<ColumnsState> {
@@ -10,6 +11,11 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
             column: TableColumn,
             option: ColumnOption
         ) => {
+            if (OptionSource.FORMULA === column.config.formula_option_source) {
+                // End the execution if the option is from a formula
+                return;
+            }
+
             const { value } = option;
             // Wrap in a promise of a queue to avoid concurrency issues
             const columnIndex = get().columns.findIndex(
