@@ -21,7 +21,6 @@ const FormulaCell = (mdProps: CellComponentProps) => {
   const automationInfo = tableState.automations((state) => state.info);
 
   useEffect(() => {
-    console.log("FormulaCell useEffect");
     Promise.resolve().then(async () => {
       // If formula cell is empty, do nothing
       if (formulaRef.current === null) return;
