@@ -53,6 +53,16 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     abstract getFormulas(): Promise<Record<string, unknown>>;
 
     /**
+     * Pre actions to be executed before the database is loaded
+     */
+    abstract preActions(): Promise<void>;
+
+    /**
+     * Post actions to be executed after the database is loaded
+     */
+    abstract postActions(): Promise<void>;
+
+    /**
      * Abstract 
      * @param leaf 
      * @param plugin 
@@ -93,6 +103,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     private async initDatabase(): Promise<void> {
         try {
             LOGGER.info(`=>initDatabase ${this.file.path}`);
+            await this.preActions();
             // Load the database file
             this.diskConfig = await new DatabaseInfo(this.file, this.plugin.settings.local_settings).build();
             this.setDataApi(this.diskConfig.yaml.config.implementation);
@@ -103,6 +114,8 @@ export abstract class CustomView extends TextFileView implements HoverParent {
 
             // Define table properties
             this.shadowColumns = this.columns.filter((col) => col.skipPersist);
+
+            await this.postActions();
             const tableProps: TableDataType = {
                 skipReset: false,
                 view: this,
@@ -111,7 +124,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
             // Render database
             const table = createDatabase(tableProps);
             this.rootContainer.render(table);
-            this.diskConfig.saveOnDisk();
+            await this.diskConfig.saveOnDisk();
             LOGGER.info(`<=initDatabase ${this.file.path}`);
         } catch (e: unknown) {
             LOGGER.error(`initDatabase ${this.file.path}`, e);
