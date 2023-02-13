@@ -1,8 +1,7 @@
 import { DataApi, UpdateApiInfo } from "api/data-api";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { UpdateRowInfo } from "cdm/TableStateInterface";
-import { MetadataColumns, UpdateRowOptions } from "helpers/Constants";
+import { MetadataColumns } from "helpers/Constants";
 import { destination_folder, resolveNewFilePath, resolve_tfile } from "helpers/FileManagement";
 import { DateTime } from "luxon";
 import { Link } from "obsidian-dataview";

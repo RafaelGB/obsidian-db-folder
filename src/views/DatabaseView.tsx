@@ -3,9 +3,12 @@ import {
   obtainColumnsFromFolder,
   obtainMetadataColumns,
 } from "components/Columns";
+import { OptionSource } from "helpers/Constants";
 import obtainInitialType from "helpers/InitialType";
 import { adapterTFilesToRows } from "helpers/VaultManagement";
 import { Db } from "services/CoreService";
+import { FormulaService } from "services/FormulaService";
+import { LOGGER } from "services/Logger";
 import { CustomView } from "./AbstractView";
 
 export class DatabaseView extends CustomView {
@@ -34,5 +37,27 @@ export class DatabaseView extends CustomView {
 
   async getFormulas() {
     return await Db.buildFns(this.diskConfig.yaml.config);
+  }
+
+  async preActions() {
+    // Nothing to do
+  }
+
+  async postActions() {
+    // Automatically update formula options
+    this.columns.forEach(async (column) => {
+      const { config } = column;
+      if (config.option_source === OptionSource.FORMULA) {
+        LOGGER.info(`Updating options for column ${column.id}`);
+        const updatedOptions = FormulaService.evalOptionsWith(
+          column,
+          this.formulas
+        );
+
+        await this.diskConfig.updateColumnProperties(column.id, {
+          options: updatedOptions,
+        });
+      }
+    });
   }
 }

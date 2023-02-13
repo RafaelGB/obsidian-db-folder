@@ -773,11 +773,8 @@ div.database-plugin__td.data-input span:focus {
   margin-bottom: 10px;
 }
 
-.database-plugin__readable-options {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  justify-content: center;
+.database-plugin__center-cell td {
+  text-align: center;
 }
 
 /**

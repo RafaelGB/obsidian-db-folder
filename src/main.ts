@@ -407,13 +407,6 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			app.metadataCache.on("dataview:index-ready", async () => {
-				for (const [, { viewMap }] of Array.from(this.windowRegistry.entries())) {
-					// Refresh all database views
-					for (const view of viewMap.values()) {
-						await view.reloadDatabase();
-					}
-				}
-				await sleep(2000);
 				/**
 				 * Once the index is ready, we can start listening for metadata changes.
 				 */
@@ -497,7 +490,7 @@ export default class DBFolderPlugin extends Plugin {
 
 		// Active View Open Settings
 		this.addCommand({
-			id: 'activ-database-folder-open-settings',
+			id: 'active-database-folder-open-settings',
 			name: t('active_open_settings'),
 			checkCallback: (checking) => {
 				const activeView = app.workspace.getActiveViewOfType(DatabaseView);

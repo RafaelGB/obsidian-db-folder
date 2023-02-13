@@ -23,7 +23,6 @@ export class OptionSourceDropdownHandler extends AbstractHandlerClass<ColumnSett
     });
 
     const optionSourcePromise = async (optionSource: string): Promise<void> => {
-      console.log("optionSourcePromise", optionSource);
       if (optionSource === column.config.option_source) {
         new Notice("No changes made", 1500);
         return;
@@ -32,6 +31,11 @@ export class OptionSourceDropdownHandler extends AbstractHandlerClass<ColumnSett
       // Persist changes
       await view.diskConfig.updateColumnConfig(column.id, {
         option_source: optionSource,
+      });
+
+      // Reset options
+      await view.diskConfig.updateColumnProperties(column.id, {
+        options: [],
       });
 
       columnHandlerResponse.column.config.option_source = optionSource;

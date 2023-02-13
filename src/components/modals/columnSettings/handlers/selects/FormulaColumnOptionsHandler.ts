@@ -7,7 +7,7 @@ import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { FormulaService } from "services/FormulaService";
 
 export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
-    settingTitle = t("column_settings_modal_option_source_dropdown_title");
+    settingTitle = t("column_settings_modal_formula_option_source_title");
     handle(
         columnHandlerResponse: ColumnSettingsHandlerResponse
     ): ColumnSettingsHandlerResponse {
@@ -24,7 +24,7 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
             };
             new Setting(containerEl)
                 .setName("Formula for column options")
-                .setDesc("Write a formula to generate the options for this column.")
+                .setDesc(t("column_settings_modal_formula_option_source_desc"))
                 .setClass(c("setting-item"))
                 .addTextArea((textArea) => {
                     textArea.setValue(currentFormula);
@@ -32,15 +32,17 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
                     textArea.inputEl.addClass(c("textarea-setting"));
                     textArea.onChange(formula_promise);
                 }).addExtraButton((cb) => {
-                    cb.setIcon("pencil")
-                        .setTooltip("Update your column options with the formula above.")
+                    cb.setIcon("reset")
+                        .setTooltip("column_settings_modal_formula_option_source_placeholder")
                         .onClick(async (): Promise<void> => {
-                            if (currentFormula === config.formula_option_source) {
-                                new Notice("No changes made", 1500);
+                            try {
+                                columnHandlerResponse.column.options = FormulaService.evalOptionsWith(column, automationState.info.getFormulas());
+                            } catch (e) {
+                                new Notice("Error in formula: " + e);
                                 return;
                             }
-                            columnHandlerResponse.column.options = FormulaService.evalOptionsWith(column, automationState.info.getFormulas());
                             columnHandlerResponse.column.config.formula_option_source = currentFormula;
+
                             // Persist changes
                             await view.diskConfig.updateColumnConfig(column.id, {
                                 formula_option_source: columnHandlerResponse.column.config.formula_option_source
@@ -61,14 +63,29 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
                     href: "https://rafaelgb.github.io/obsidian-db-folder/features/Formulas/",
                 })
             );
-            // TODO Show column options read-only
+            // Label-Value pairs table
+            const tableEl = containerEl.createEl("table");
+            const thead = tableEl.createEl("thead");
+            const tr = thead.createEl("tr");
+            tr.createEl("th", {
+                text: "Label",
+            });
+            tr.createEl("th", {
+                text: "Value",
+            });
+            const tbody = tableEl.createEl("tbody");
+            // Show column options read-only
             columnHandlerResponse.column.options.forEach((option) => {
-                const optionEl = containerEl.createDiv();
-                optionEl.style.backgroundColor = option.color;
-                optionEl.addClass(c("readable-options"));
-                optionEl.createDiv({ text: option.label });
-                optionEl.createDiv({ text: option.value });
-
+                const tr = tbody.createEl("tr");
+                tr.addClass(c("center-cell"));
+                tr.style.backgroundColor = option.color;
+                // td centering text
+                tr.createEl("td", {
+                    text: option.label,
+                });
+                tr.createEl("td", {
+                    text: option.value,
+                });
             });
         }
         return this.goNext(columnHandlerResponse);

@@ -3,7 +3,7 @@ import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler
 import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
 import { AbstractHandler } from 'patterns/chain/AbstractHandler';
 import { ShowSearchBarByDefaultToggleHandler } from 'settings/handlers/helpersCommands/ShowSearchBarByDefaultToggleHandler';
-import { EnableAutoUpdateToggleHandler } from 'settings/handlers/helpersCommands/EnableAutoUpdateTOggleHandler';
+import { EnableAutoUpdateToggleHandler } from 'settings/handlers/helpersCommands/EnableAutoUpdateToggleHandler';
 import { t } from 'lang/helpers';
 
 class HelpersSection extends AbstractChain<SettingHandlerResponse> {
