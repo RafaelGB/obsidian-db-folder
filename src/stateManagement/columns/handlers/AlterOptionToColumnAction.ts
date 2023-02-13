@@ -11,11 +11,10 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
             column: TableColumn,
             option: ColumnOption
         ) => {
-            if (OptionSource.FORMULA === column.config.formula_option_source) {
+            if (OptionSource.FORMULA === column.config.option_source) {
                 // End the execution if the option is from a formula
                 return;
             }
-
             const { value } = option;
             // Wrap in a promise of a queue to avoid concurrency issues
             const columnIndex = get().columns.findIndex(

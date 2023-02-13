@@ -47,7 +47,7 @@ export class DatabaseView extends CustomView {
     // Automatically update formula options
     this.columns.forEach(async (column) => {
       const { config } = column;
-      if (config.formula_option_source === OptionSource.FORMULA) {
+      if (config.option_source === OptionSource.FORMULA) {
         LOGGER.info(`Updating options for column ${column.id}`);
         const updatedOptions = FormulaService.evalOptionsWith(
           column,
