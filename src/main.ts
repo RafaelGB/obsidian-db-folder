@@ -407,12 +407,6 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			app.metadataCache.on("dataview:index-ready", async () => {
-				for (const [, { viewMap }] of Array.from(this.windowRegistry.entries())) {
-					// Refresh all database views
-					for (const view of viewMap.values()) {
-						await view.reloadDatabase();
-					}
-				}
 				/**
 				 * Once the index is ready, we can start listening for metadata changes.
 				 */
