@@ -36,12 +36,12 @@ export class PaginationSizeHandler extends AbstractSettingsHandler {
             .addSlider((slider) => {
                 this.slider = slider;
                 slider.setDynamicTooltip()
+                    .setLimits(LIMITS.MIN, LIMITS.MAX, LIMITS.STEP)
                     .setValue(
                         local ?
                             view.diskConfig.yaml.config.pagination_size :
                             settingsManager.plugin.settings.local_settings.pagination_size
                     )
-                    .setLimits(LIMITS.MIN, LIMITS.MAX, LIMITS.STEP)
                     .onChange(pagination_size_promise);
             }).addExtraButton((cb) => {
                 cb.setIcon("reset")

@@ -35,8 +35,12 @@ export class FontSizeHandler extends AbstractSettingsHandler {
             .addSlider((slider) => {
                 this.slider = slider;
                 slider.setDynamicTooltip()
-                    .setValue(local ? view.diskConfig.yaml.config.font_size : settingsManager.plugin.settings.local_settings.font_size)
                     .setLimits(LIMITS.MIN, LIMITS.MAX, LIMITS.STEP)
+                    .setValue(
+                        local ? 
+                            view.diskConfig.yaml.config.font_size : 
+                            settingsManager.plugin.settings.local_settings.font_size
+                    )
                     .onChange(font_size_promise);
             }).addExtraButton((cb) => {
                 cb.setIcon("reset")
