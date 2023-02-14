@@ -1,3 +1,18 @@
+## 3.3.1
+### Shiny new things
+- Options for a tag or select column types could be added by formula (Experimental)
+### Improved
+- Support labels for values of columns [#693](https://github.com/RafaelGB/obsidian-db-folder/issues/693)
+### No longer broken
+- YAML list adds a blank entry when displayed fixed[#745](https://github.com/RafaelGB/obsidian-db-folder/issues/745)
+- Regresion with Obsidian project fixed [#786](https://github.com/RafaelGB/obsidian-db-folder/issues/786)
+- Now you can delete a tag or select column type value with the menu opened [#783](https://github.com/RafaelGB/obsidian-db-folder/issues/783)
+- Inline values with brakets were not closed correctly [#798](https://github.com/RafaelGB/obsidian-db-folder/issues/798)
+- Empty space for first position of a list fixed [#803](https://github.com/RafaelGB/obsidian-db-folder/issues/803)
+- Output of formulas were affected with the pagination [#785](https://github.com/RafaelGB/obsidian-db-folder/issues/785)
+- Typo of an import affecting a setting option fixed [#815](https://github.com/RafaelGB/obsidian-db-folder/issues/815) thanks to [schoonc](https://github.com/schoonc)
+- Range input may not display the actual value of "Pagination size" fixed (#816)[https://github.com/RafaelGB/obsidian-db-folder/issues/816] thanks to [schoonc](https://github.com/schoonc)
+
 ## 3.3.0
 ### Improved
 - Relations now are shown as tags view. You can select the color of those tags in column settings
