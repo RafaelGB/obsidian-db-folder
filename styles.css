@@ -593,13 +593,16 @@ div.database-plugin__td.data-input span:focus {
 
 .database-plugin__relationship,
 .react-select__option {
-  color: rgb(66, 66, 66);
   box-sizing: border-box;
   font-weight: 400;
   padding: 2px 6px;
   border-radius: 4px;
   display: inline-block;
   white-space: nowrap;
+}
+
+.database-plugin__relationship p {
+  color: rgb(66, 66, 66);
 }
 
 .react-select__option + .react-select__option {
