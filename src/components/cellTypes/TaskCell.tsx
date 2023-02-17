@@ -19,14 +19,20 @@ const TaskCell = (taskProps: CellComponentProps) => {
     // Check if there are tasks in the cell
     if (taskValue) {
       taskRef.current.innerHTML = "";
-
       if (
         (column.columnDef as TableColumn).config.task_hide_completed &&
         DataviewService.getDataviewAPI().isDataArray(taskValue)
       ) {
-        taskValue = taskValue.where((t: STask) => !t.completed);
+        taskValue = taskValue
+          .where((t: STask) => !t.completed)
+          .map((t: STask) => {
+            t.children = t.children?.filter((c: STask) => !c.completed);
+            return t;
+          });
       }
+
       const taskComponent = new MarkdownRenderChild(taskRef.current);
+
       DataviewService.getDataviewAPI().taskList(
         taskValue as Grouping<SListItem>,
         false,
@@ -36,7 +42,7 @@ const TaskCell = (taskProps: CellComponentProps) => {
       );
       view.addChild(taskComponent);
     }
-  }, [cell.getValue()]);
+  }, []);
   const taskRef = useRef<HTMLDivElement>();
 
   return (
