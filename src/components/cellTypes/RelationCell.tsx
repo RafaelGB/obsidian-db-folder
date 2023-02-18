@@ -103,7 +103,7 @@ const RelationCell = (mdProps: CellComponentProps) => {
         getAlignmentClassname(
           tableColumn.config,
           configInfo.getLocalSettings(),
-          ["tabIndex", "tags-container"]
+          ["tabIndex", "tags-container", "relation-container"]
         )
       )}
       tabIndex={0}
