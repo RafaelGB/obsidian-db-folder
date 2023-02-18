@@ -31,6 +31,7 @@ export class AddEmptyColumnHandler extends AbstractHandlerClass<AddColumnModalHa
           t("add_row_modal_add_empty_notice_informed", newColumnName),
         1500);
       (activeDocument.getElementById(this.textElId) as HTMLInputElement).value = "";
+      addColumnModalManager.addColumnModal.enableReset = true;
     }
 
     const selectTypeHandler = (value: string): void => {

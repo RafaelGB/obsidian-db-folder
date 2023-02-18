@@ -254,6 +254,8 @@ export default {
     "settings_inline_options_position_title": "Posición de los campos inline",
     "settings_inline_options_position_desc": "Selecciona la posición de los nuevos campos inline dentro de la nota",
     "settings_metatata_title": "Meta información",
+    "settings_metatata_file_toggle_title": "Nombre del archivo",
+    "settings_metatata_file_toggle_desc": "Habilitar/deshabilitar la columna de nombre del archivo",
     "settings_metatata_create_toggle_title": "Fecha de creación",
     "settings_metatata_create_toggle_desc": "Habilitar/deshabilitar la columna de fecha de creación",
     "settings_metatata_modified_toggle_title": "Fecha de modificación",

@@ -22,9 +22,10 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
     Object.values(DynamicInputType).forEach((value) => {
       typesRecord[value] = t(value);
     });
+
     // List of columns to show/hide
     columnState.info.getAllColumns()
-      .filter(c => !c.skipPersist)
+      .filter(c => !c.skipPersist && !c.isMetadata)
       .sort((a, b) => a.position - b.position)
       .forEach((column) => {
         const toggleHandler = (shown: boolean): void => {
@@ -64,37 +65,31 @@ export class QuickOptionsColumnsHandler extends AbstractHandlerClass<AddColumnMo
               .setIcon("gear")
               .setTooltip(t("add_row_modal_quick_options_desc_button_add_tooltip", column.label))
               .onClick(openSettingsHandler)
+          }).addDropdown((dropdown) => {
+            dropdown.addOptions(typesRecord);
+            dropdown.setValue(column.input);
+            dropdown.onChange(selectTypeHandler);
           });
-        // Add extra options for non-metadata columns
-        if (!column.isMetadata) {
-          // Select type
-          columnSetting
-            .addDropdown((dropdown) => {
-              dropdown.addOptions(typesRecord);
-              dropdown.setValue(column.input);
-              dropdown.onChange(selectTypeHandler);
-            });
-          // Delete column
-          columnSetting
-            .addButton(button => {
-              button
-                .setIcon("trash")
-                .setTooltip(t("add_row_modal_quick_options_desc_button_delete_tooltip", column.label))
-                .onClick(async () => {
-                  const confirmation = await new ConfirmModal()
-                    .setMessage(t(
-                      "add_row_modal_quick_options_desc_button_delete_notice_confirm",
-                      column.label
-                    ))
-                    .isConfirmed();
-                  if (confirmation) {
-                    columnState.actions.remove(column);
-                    // Refresh the modal to remove the selected column from the dropdown
-                    addColumnModalManager.reset(response);
-                  }
-                })
-            });
-        }
+        // Delete column
+        columnSetting
+          .addButton(button => {
+            button
+              .setIcon("trash")
+              .setTooltip(t("add_row_modal_quick_options_desc_button_delete_tooltip", column.label))
+              .onClick(async () => {
+                const confirmation = await new ConfirmModal()
+                  .setMessage(t(
+                    "add_row_modal_quick_options_desc_button_delete_notice_confirm",
+                    column.label
+                  ))
+                  .isConfirmed();
+                if (confirmation) {
+                  columnState.actions.remove(column);
+                  // Refresh the modal to remove the selected column from the dropdown
+                  addColumnModalManager.reset(response);
+                }
+              })
+          });
       });
     return this.goNext(response);
   }

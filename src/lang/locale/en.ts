@@ -265,6 +265,8 @@ export default {
   "settings_inline_options_position_title": "Select position of new inline fields",
   "settings_inline_options_position_desc": "New inline fields will be created in the selected position on your notes",
   "settings_metatata_title": "Metadata toggle group",
+  "settings_metatata_file_toggle_title": "File name",
+  "settings_metatata_file_toggle_desc": "Enable/disable File Name Column",
   "settings_metatata_create_toggle_title": "Created date",
   "settings_metatata_create_toggle_desc": "Enable/disable Created Metadata Column",
   "settings_metatata_modified_toggle_title": "Modified date",

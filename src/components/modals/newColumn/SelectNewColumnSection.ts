@@ -4,12 +4,14 @@ import { AbstractHandler } from "patterns/chain/AbstractHandler";
 import { AddEmptyColumnHandler } from "components/modals/newColumn/handlers/AddEmptyColumnHandler";
 import { AddExistingColumnHandler } from "components/modals/newColumn/handlers/AddExistingColumnHandler";
 import { QuickOptionsColumnsHandler } from "components/modals/newColumn/handlers/QuickOptionsColumnsHandler";
+import { MetadataToggleGroupHandler } from "./handlers/MetadataToggleGroupHandler";
 
 class SelectNewColumnSection extends AbstractChain<AddColumnModalHandlerResponse> {
     protected getHandlers(): AbstractHandler<AddColumnModalHandlerResponse>[] {
         return [
             new AddEmptyColumnHandler(),
             new AddExistingColumnHandler(),
+            new MetadataToggleGroupHandler(),
             new QuickOptionsColumnsHandler()
         ];
     }
