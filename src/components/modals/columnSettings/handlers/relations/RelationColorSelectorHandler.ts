@@ -2,7 +2,7 @@ import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
 import { t } from "lang/helpers";
-import { castHslToString, castStringtoHsl } from "helpers/Colors";
+import { Db } from "services/CoreService";
 
 export class RelationColorSelectorHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = t("column_settings_modal_relation_color_title");
@@ -15,9 +15,9 @@ export class RelationColorSelectorHandler extends AbstractHandlerClass<ColumnSet
             .setDesc(t("column_settings_modal_relation_color_desc"))
             .addColorPicker((colorPicker) => {
                 colorPicker
-                    .setValueHsl(castStringtoHsl(column.config.relation_color))
+                    .setValueHsl(Db.coreFns.colors.stringtoHsl(column.config.relation_color))
                     .onChange(async () => {
-                        const newColor = castHslToString(
+                        const newColor = Db.coreFns.colors.hslToString(
                             colorPicker.getValueHsl()
                         );
                         await view.diskConfig.updateColumnConfig(column.id, {

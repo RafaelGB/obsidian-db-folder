@@ -2,14 +2,11 @@ import { DateTime } from "luxon";
 import { Db } from "services/CoreService";
 
 jest.mock("obsidian");
-describe("services: CORE", () => {
+describe("services: luxonFn", () => {
     beforeAll(() => {
         // Init the db service
         Db.init();
     });
-    /**
-     * LUXON MODULE
-     */
     test('luxon service: dateToString', () => {
         const parsedString = Db.coreFns.luxon.dateToString(DateTime.now(), "yyyy-MM-dd");
         expect(typeof parsedString).toBe("string");
@@ -39,23 +36,5 @@ describe("services: CORE", () => {
         const date2 = DateTime.fromISO("2021-01-02");
         const range = Db.coreFns.luxon.range([date1, date2]);
         expect(range).toBe(1);
-    });
-
-    /**
-     * NUMBERS MODULE
-     */
-    test('numbers service: sum', () => {
-        const sum = Db.coreFns.numbers.sum([1, 2, 3]);
-        expect(sum).toBe(6);
-    });
-
-    test('numbers service: min', () => {
-        const min = Db.coreFns.numbers.min([1, 2, 3]);
-        expect(min).toBe(1);
-    });
-
-    test('numbers service: max', () => {
-        const max = Db.coreFns.numbers.max([1, 2, 3]);
-        expect(max).toBe(3);
     });
 });

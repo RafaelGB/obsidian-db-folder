@@ -22,8 +22,8 @@ import ConditionSelectorComponent from "components/modals/filters/handlers/Condi
 import IconButton from "@mui/material/IconButton";
 import LabelComponent from "components/modals/filters/handlers/LabelComponent";
 import { Setting } from "obsidian";
-import { castHslToString, castStringtoHsl, randomColor } from "helpers/Colors";
 import { t } from "lang/helpers";
+import { Db } from "services/CoreService";
 type GroupFilterComponentProps = {
   group: FilterGroup;
   recursiveIndex: number[];
@@ -109,13 +109,15 @@ const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
     if (colorPickerRef.current) {
       let currentColor = (group as FilterGroupCondition).color;
       if (!currentColor) {
-        currentColor = randomColor();
+        currentColor = Db.coreFns.colors.randomColor();
       }
       new Setting(colorPickerRef.current).addColorPicker((colorPicker) => {
         colorPicker
-          .setValueHsl(castStringtoHsl(currentColor))
+          .setValueHsl(Db.coreFns.colors.stringtoHsl(currentColor))
           .onChange(async () => {
-            const newColor = castHslToString(colorPicker.getValueHsl());
+            const newColor = Db.coreFns.colors.hslToString(
+              colorPicker.getValueHsl()
+            );
             onChangeColorHandler(newColor);
           });
       });

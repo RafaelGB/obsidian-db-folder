@@ -1,5 +1,4 @@
 import Relationship from "components/RelationShip";
-import { grey, randomColor } from "helpers/Colors";
 import React, { useMemo, useState } from "react";
 import {
   CellComponentProps,
@@ -8,12 +7,14 @@ import {
 } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import CreatableSelect from "react-select/creatable";
+import Select from "react-select";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { satinizedColumnOption } from "helpers/FileManagement";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { ParseService } from "services/ParseService";
-import { InputType } from "helpers/Constants";
+import { InputType, OptionSource } from "helpers/Constants";
+import { Db } from "services/CoreService";
 
 const SelectCell = (popperProps: CellComponentProps) => {
   const { defaultCell } = popperProps;
@@ -48,7 +49,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
       const option: ColumnOption = {
         label: cellValue,
         value: cellValue,
-        color: randomColor(),
+        color: Db.coreFns.colors.randomColor(),
       };
       columnActions.addOptionToColumn(tableColumn, option);
       return option;
@@ -86,7 +87,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
       const option: ColumnOption = {
         label: sanitized,
         value: sanitized,
-        color: randomColor(),
+        color: Db.coreFns.colors.randomColor(),
       };
 
       await columnActions.addOptionToColumn(tableColumn, option);
@@ -96,35 +97,52 @@ const SelectCell = (popperProps: CellComponentProps) => {
   const options = columnsInfo.getColumnOptions(column.id, cellValue !== "");
 
   function SelectComponent() {
+    const selectProps = {
+      defaultValue: defaultValue,
+      isSearchable: true,
+      autoFocus: true,
+      isClearable: true,
+      openMenuOnFocus: true,
+      menuPosition: "fixed" as const,
+      styles: CustomTagsStyles,
+      options: options,
+      onMenuClose: () => setShowSelect(false),
+      onChange: handleOnChange,
+      isMulti: false,
+      menuPortalTarget: activeDocument.body,
+      menuPlacement: "auto" as const,
+      menuShouldBlockScroll: true,
+      className: `react-select-container ${c(
+        "tags-container text-align-center"
+      )}`,
+      classNamePrefix: "react-select",
+      key: `${tableColumn.id}-select-open`,
+    };
     return (
       <div className={c("tags")}>
-        <CreatableSelect
-          defaultValue={defaultValue}
-          isSearchable
-          autoFocus
-          isClearable
-          openMenuOnFocus
-          menuPosition="fixed"
-          components={{
-            DropdownIndicator: () => null,
-            IndicatorSeparator: () => null,
-            ClearIndicator: () => null,
-            CrossIcon: () => null,
-          }}
-          styles={CustomTagsStyles}
-          options={options}
-          onMenuClose={() => setShowSelect(false)}
-          onChange={handleOnChange}
-          isMulti={false}
-          menuPortalTarget={activeDocument.body}
-          menuPlacement="auto"
-          menuShouldBlockScroll={true}
-          className={`react-select-container ${c(
-            "tags-container text-align-center"
-          )}`}
-          classNamePrefix="react-select"
-          key={`${tableColumn.id}-select-open`}
-        />
+        {tableColumn.config.option_source === OptionSource.MANUAL ? (
+          <CreatableSelect
+            {...selectProps}
+            defaultValue={defaultValue}
+            components={{
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null,
+              ClearIndicator: () => null,
+              CrossIcon: () => null,
+            }}
+          />
+        ) : (
+          <Select
+            {...selectProps}
+            defaultValue={defaultValue}
+            components={{
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null,
+              ClearIndicator: () => null,
+              CrossIcon: () => null,
+            }}
+          />
+        )}
       </div>
     );
   }

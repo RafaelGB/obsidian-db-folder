@@ -1,7 +1,7 @@
 import { ColumnOption } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
-import { grey } from "helpers/Colors";
+import { Db } from "services/CoreService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class InfoColumnFunctions extends AbstractTableAction<ColumnsState> {
@@ -38,7 +38,7 @@ export default class InfoColumnFunctions extends AbstractTableAction<ColumnsStat
                 options.unshift({
                     label: "-- None --",
                     value: "",
-                    color: grey(200),
+                    color: Db.coreFns.colors.greyScale(2),
                 });
             }
             return options;

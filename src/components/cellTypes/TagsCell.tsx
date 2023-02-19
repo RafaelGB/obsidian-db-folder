@@ -6,15 +6,16 @@ import {
 import Relationship from "components/RelationShip";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import CreatableSelect from "react-select/creatable";
-import { randomColor } from "helpers/Colors";
+import Select from "react-select";
 import React, { useMemo, useState } from "react";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { ParseService } from "services/ParseService";
-import { InputType } from "helpers/Constants";
+import { InputType, OptionSource } from "helpers/Constants";
 import { satinizedColumnOption } from "helpers/FileManagement";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { Db } from "services/CoreService";
 
 const TagsCell = (tagsProps: CellComponentProps) => {
   const { defaultCell } = tagsProps;
@@ -50,7 +51,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
       const option: ColumnOption = {
         label: tag,
         value: tag,
-        color: randomColor(),
+        color: Db.coreFns.colors.randomColor(),
       };
       columnActions.addOptionToColumn(tableColumn, option);
       return option;
@@ -96,7 +97,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
           const option: ColumnOption = {
             label: tag.label,
             value: tag.value,
-            color: randomColor(),
+            color: Db.coreFns.colors.randomColor(),
           };
           columnActions.addOptionToColumn(tableColumn, option);
         });
@@ -107,32 +108,45 @@ const TagsCell = (tagsProps: CellComponentProps) => {
   };
 
   function TagsForm() {
+    const tagsProps = {
+      defaultValue: defaultValue,
+      closeMenuOnSelect: false,
+      isSearchable: true,
+      isMulti: true,
+      autoFocus: true,
+      openMenuOnFocus: true,
+      menuPosition: "fixed" as const,
+      styles: CustomTagsStyles,
+      options: columnOptions,
+      onChange: handleOnChange,
+      menuPortalTarget: activeDocument.body,
+      className: `react-select-container ${c(
+        "tags-container text-align-center"
+      )}`,
+      classNamePrefix: "react-select",
+      menuPlacement: "auto" as const,
+      menuShouldBlockScroll: true,
+    };
     return (
       <ClickAwayListener onClickAway={handleClickAway}>
         <div className={c("tags")}>
-          <CreatableSelect
-            defaultValue={defaultValue}
-            components={{
-              DropdownIndicator: () => null,
-              IndicatorSeparator: () => null,
-            }}
-            closeMenuOnSelect={false}
-            isSearchable
-            isMulti
-            autoFocus
-            openMenuOnFocus
-            menuPosition="fixed"
-            styles={CustomTagsStyles}
-            options={columnOptions}
-            onChange={handleOnChange}
-            menuPortalTarget={activeDocument.body}
-            className={`react-select-container ${c(
-              "tags-container text-align-center"
-            )}`}
-            classNamePrefix="react-select"
-            menuPlacement="auto"
-            menuShouldBlockScroll={true}
-          />
+          {tableColumn.config.option_source === OptionSource.MANUAL ? (
+            <CreatableSelect
+              {...tagsProps}
+              components={{
+                DropdownIndicator: () => null,
+                IndicatorSeparator: () => null,
+              }}
+            />
+          ) : (
+            <Select
+              {...tagsProps}
+              components={{
+                DropdownIndicator: () => null,
+                IndicatorSeparator: () => null,
+              }}
+            />
+          )}
         </div>
       </ClickAwayListener>
     );

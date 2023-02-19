@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker";
-import { randomColor } from "helpers/Colors";
 import { InputType, DEFAULT_COLUMN_CONFIG } from "helpers/Constants";
 import { TableDataType, TableColumn, RowDataType } from "cdm/FolderModel";
 import { DatabaseColumn } from "cdm/DatabaseModel";
@@ -19,7 +18,7 @@ export async function makeData(count: number): Promise<TableDataType> {
       title: faker.system.fileName(),
       __note__: note,
     };
-    options.push({ label: row.title, backgroundColor: randomColor() });
+    options.push({ label: row.title, backgroundColor: "red" });
 
     data.push(row);
   }

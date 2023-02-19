@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { RelationshipProps } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 import { MarkdownService } from "services/MarkdownRenderService";
+import { Db } from "services/CoreService";
 
 export default function Relationship(relationShipProps: RelationshipProps) {
   const { option, view } = relationShipProps;
@@ -24,6 +25,7 @@ export default function Relationship(relationShipProps: RelationshipProps) {
       ref={ref}
       style={{
         backgroundColor: option.color,
+        color: Db.coreFns.colors.getContrast(option.color),
       }}
     />
   );

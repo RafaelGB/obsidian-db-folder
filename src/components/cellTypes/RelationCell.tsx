@@ -9,7 +9,7 @@ import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
 import RelationEditor from "components/cellTypes/Editor/RelationEditor";
 import Relationship from "components/RelationShip";
-import { grey } from "helpers/Colors";
+import { Db } from "services/CoreService";
 
 const RelationCell = (mdProps: CellComponentProps) => {
   const { defaultCell } = mdProps;
@@ -115,7 +115,9 @@ const RelationCell = (mdProps: CellComponentProps) => {
               option={{
                 value: link.markdown(),
                 label: link.markdown(),
-                color: tableColumn.config.relation_color || grey(300),
+                color:
+                  tableColumn.config.relation_color ||
+                  Db.coreFns.colors.greyScale(3),
               }}
               view={view}
             />
