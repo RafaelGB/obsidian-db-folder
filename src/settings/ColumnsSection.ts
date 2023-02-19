@@ -2,7 +2,7 @@ import { add_setting_header } from 'settings/SettingsComponents';
 import { SettingHandlerResponse } from 'settings/handlers/AbstractSettingHandler';
 import { GroupFolderColumnTextInputHandler } from 'settings/handlers/columns/GroupFolderColumnTextInputHandler';
 import { RemoveFieldsWhenDeleteToggleHandler } from 'settings/handlers/columns/RemoveFieldsWhenDeleteToggleHandler';
-import { MetadataToggleGroupHandler } from 'settings/handlers/columns/MetadataToggleGroupHandler';
+import { DefaultMetadataToggleGroupHandler } from 'settings/handlers/columns/DefaultMetadataToggleGroupHandler';
 import { TemplateColumnsHandler } from 'settings/handlers/columns/TemplateColumnsHandler';
 import { InlineFieldsOptionsHandler } from 'settings/handlers/columns/InlineFieldsOptionsHandler';
 import { AbstractChain } from 'patterns/chain/AbstractFactoryChain';
@@ -22,7 +22,7 @@ class ColumnSetttingsSection extends AbstractChain<SettingHandlerResponse> {
             new GroupFolderColumnTextInputHandler(),
             new RemoveFieldsWhenDeleteToggleHandler(),
             new TemplateColumnsHandler(),
-            new MetadataToggleGroupHandler(),
+            new DefaultMetadataToggleGroupHandler(),
             new InlineFieldsOptionsHandler()
         ];
     }

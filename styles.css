@@ -601,8 +601,17 @@ div.database-plugin__td.data-input span:focus {
   white-space: nowrap;
 }
 
-.database-plugin__relationship p {
-  color: rgb(66, 66, 66);
+.database-plugin__relationship .markdown-preview-view {
+  color: unset;
+}
+
+.database-plugin__relation-container .database-plugin__relationship a:link {
+  color: #dadada;
+  text-decoration: none;
+}
+
+.database-plugin__relation-container .database-plugin__relationship a:hover {
+  color: #a38484;
 }
 
 .react-select__option + .react-select__option {

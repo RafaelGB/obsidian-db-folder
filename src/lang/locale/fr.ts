@@ -249,6 +249,8 @@ export default {
   "settings_inline_options_position_title": "Sélectionner la position des nouveaux champs en ligne",
   "settings_inline_options_position_desc": "De nouveaux champs en ligne seront créés à l'emplacement sélectionné sur vos notes.",
   "settings_metatata_title": "Contrôle des métadonnées",
+  "settings_metatata_file_toggle_title": "Nom du fichier",
+  "settings_metatata_file_toggle_desc": "Activer/désactiver la colonne des métadonnées de nom de fichier.",
   "settings_metatata_create_toggle_title": "Date de création",
   "settings_metatata_create_toggle_desc": "Activer/désactiver la colonne des métadonnées de date de création.",
   "settings_metatata_modified_toggle_title": "Date de modification",

@@ -1,9 +1,9 @@
 import { ColumnOption } from "cdm/ComponentsModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { ColumnsState, TableActionResponse } from "cdm/TableStateInterface";
-import { randomColor } from "helpers/Colors";
 import { InputType } from "helpers/Constants";
 import { obtainUniqueOptionValues } from "helpers/SelectHelper";
+import { Db } from "services/CoreService";
 import { ParseService } from "services/ParseService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
@@ -48,7 +48,7 @@ export default class AlterColumnTypeHandlerAction extends AbstractTableAction<Co
                                     options.push({
                                         label: cellValue?.toString(),
                                         value: cellValue?.toString(),
-                                        color: randomColor(),
+                                        color: Db.coreFns.colors.randomColor(),
                                     });
                                 }
                             });

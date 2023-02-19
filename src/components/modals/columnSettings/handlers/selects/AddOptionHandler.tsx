@@ -1,12 +1,12 @@
 import { ColumnOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { randomColor } from "helpers/Colors";
 import { OptionSource } from "helpers/Constants";
 import { satinizedColumnOption } from "helpers/FileManagement";
 import { c } from "helpers/StylesHelper";
 import { t } from "lang/helpers";
 import { ButtonComponent, Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { Db } from "services/CoreService";
 
 export class AddOptionHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
   settingTitle = t("column_settings_modal_selected_column_options_new_option");
@@ -44,7 +44,7 @@ export class AddOptionHandler extends AbstractHandlerClass<ColumnSettingsHandler
         const newOption: ColumnOption = {
           label: newLabel,
           value: newValue,
-          color: randomColor(),
+          color: Db.coreFns.colors.randomColor(),
         };
         options.push(newOption);
         // Persist changes

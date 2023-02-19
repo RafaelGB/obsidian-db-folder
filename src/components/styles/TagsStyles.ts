@@ -1,9 +1,9 @@
-import { contrastColor } from "helpers/Colors";
 import { StyleVariables } from "helpers/Constants";
 import {
     StylesConfig,
     GroupBase,
 } from "react-select";
+import { Db } from "services/CoreService";
 
 const CustomTagsStyles: StylesConfig<any, true, GroupBase<unknown>> = {
     container: () => ({
@@ -29,7 +29,7 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<unknown>> = {
     option: (styles, { data, isFocused }) => ({
         ...styles,
         backgroundColor: data.color,
-        color: contrastColor(data.color),
+        color: Db.coreFns.colors.getContrast(data.color),
         border: isFocused ? 1 + "px solid " + StyleVariables.TEXT_ACCENT : 0,
         padding: 0,
         width: "100%",
@@ -51,11 +51,11 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<unknown>> = {
     multiValueLabel: (styles, { data }) => ({
         ...styles,
         backgroundColor: data.color,
-        color: contrastColor(data.color),
+        color: Db.coreFns.colors.getContrast(data.color),
     }),
     multiValueRemove: (styles, { data }) => ({
         ...styles,
-        color: contrastColor(data.color),
+        color: Db.coreFns.colors.getContrast(data.color),
         ":hover": {
             backgroundColor: data.color,
             color: StyleVariables.TEXT_ACCENT,

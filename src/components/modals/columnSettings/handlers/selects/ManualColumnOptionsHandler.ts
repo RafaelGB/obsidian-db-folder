@@ -1,10 +1,10 @@
 import { ColumnOption } from "cdm/ComponentsModel";
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
-import { castStringtoHsl, castHslToString } from "helpers/Colors";
 import { OptionSource } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { Db } from "services/CoreService";
 import { LOGGER } from "services/Logger";
 
 export class ManualColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
@@ -129,9 +129,9 @@ export class ManualColumnOptionsHandler extends AbstractHandlerClass<ColumnSetti
       // Color picker for background color
       .addColorPicker((colorPicker) => {
         colorPicker
-          .setValueHsl(castStringtoHsl(option.color))
+          .setValueHsl(Db.coreFns.colors.stringtoHsl(option.color))
           .onChange(async () => {
-            options[index].color = castHslToString(colorPicker.getValueHsl());
+            options[index].color = Db.coreFns.colors.hslToString(colorPicker.getValueHsl());
             await view.diskConfig.updateColumnProperties(column.id, {
               options: options,
             });

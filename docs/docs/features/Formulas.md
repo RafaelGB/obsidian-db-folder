@@ -14,16 +14,37 @@ The code can be written in the column settings. The generated values can be adde
 
 ### Exposed Variables
 Common variables that you can use in your formula are:
+
 - `db` : the database object with predefined functions that can be used in the formula
 - `config` : the table's config information
 
 To use an exposed variable, use the `${}` syntax. For example, to get a value of the `config`, you can use `${config.pagination_size}`.
+
 #### Column Formula
 If you are using a column formula, you can also use the following variables:
+
 - `row` : the row object
+
 #### Footer Formula
 In case you are using a footer formula, you can also use the following variables:
+
 - `values` : An Array of cell values in the column
+
+#### Options Formula
+The options formula is a special case. It is used to generate the options for a column with the type `select` or `tag`. The formula must return an array of objects with the following structure:
+
+```javascript
+{
+    value: "value",
+    label: "label"
+    color: "color" // HSL, RGB, HEX, or color name but with string representation
+}
+```
+Due the nature of the formula, the variables are called directly instead of using the `${}` syntax. For example, to get a value of the `db`, you can use `db.js.myOptionsFormula()`.
+
+You can also use the following variables:
+- `column` : Object with the column information
+
 
 ### Exposed Functions
 

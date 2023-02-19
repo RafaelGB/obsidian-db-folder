@@ -16,8 +16,8 @@ import { createRoot } from "react-dom/client";
 import { Notice } from "obsidian";
 import { AtomicFilter } from "cdm/SettingsModel";
 import Grid from "@mui/material/Grid";
-import { randomColor } from "helpers/Colors";
 import { t } from "lang/helpers";
+import { Db } from "services/CoreService";
 
 export class AddNewFilterHandler extends AbstractHandlerClass<FiltersModalHandlerResponse> {
   settingTitle: string = t("filters_modal_add_single_filter");
@@ -73,7 +73,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
       disabled: false,
       condition: ConditionFiltersOptions.AND,
       filters: [mockAtomicFilter],
-      color: randomColor(),
+      color: Db.coreFns.colors.randomColor(),
     });
     configActions.alterFilters(alteredFilterState);
   };
