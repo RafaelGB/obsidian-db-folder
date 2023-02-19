@@ -407,6 +407,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#options-formula" class="md-nav__link">
+    Options Formula
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -695,6 +702,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#options-formula" class="md-nav__link">
+    Options Formula
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -782,16 +796,33 @@
 </video>
 
 <h3 id="exposed-variables">Exposed Variables</h3>
-<p>Common variables that you can use in your formula are:
-- <code>db</code> : the database object with predefined functions that can be used in the formula
-- <code>config</code> : the table's config information</p>
+<p>Common variables that you can use in your formula are:</p>
+<ul>
+<li><code>db</code> : the database object with predefined functions that can be used in the formula</li>
+<li><code>config</code> : the table's config information</li>
+</ul>
 <p>To use an exposed variable, use the <code>${}</code> syntax. For example, to get a value of the <code>config</code>, you can use <code>${config.pagination_size}</code>.</p>
 <h4 id="column-formula">Column Formula</h4>
-<p>If you are using a column formula, you can also use the following variables:
-- <code>row</code> : the row object</p>
+<p>If you are using a column formula, you can also use the following variables:</p>
+<ul>
+<li><code>row</code> : the row object</li>
+</ul>
 <h4 id="footer-formula">Footer Formula</h4>
-<p>In case you are using a footer formula, you can also use the following variables:
-- <code>values</code> : An Array of cell values in the column</p>
+<p>In case you are using a footer formula, you can also use the following variables:</p>
+<ul>
+<li><code>values</code> : An Array of cell values in the column</li>
+</ul>
+<h4 id="options-formula">Options Formula</h4>
+<p>The options formula is a special case. It is used to generate the options for a column with the type <code>select</code> or <code>tag</code>. The formula must return an array of objects with the following structure:</p>
+<pre><code class="language-javascript">{
+    value: &quot;value&quot;,
+    label: &quot;label&quot;
+    color: &quot;color&quot; // HSL, RGB, HEX, or color name but with string representation
+}
+</code></pre>
+<p>Due the nature of the formula, the variables are called directly instead of using the <code>${}</code> syntax. For example, to get a value of the <code>db</code>, you can use <code>db.js.myOptionsFormula()</code>.</p>
+<p>You can also use the following variables:
+- <code>column</code> : Object with the column information</p>
 <h3 id="exposed-functions">Exposed Functions</h3>
 <p>The root object <code>db</code> has the following functions:</p>
 <ul>
