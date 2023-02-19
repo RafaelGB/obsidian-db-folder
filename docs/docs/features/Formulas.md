@@ -14,15 +14,20 @@ The code can be written in the column settings. The generated values can be adde
 
 ### Exposed Variables
 Common variables that you can use in your formula are:
+
 - `db` : the database object with predefined functions that can be used in the formula
 - `config` : the table's config information
 
 To use an exposed variable, use the `${}` syntax. For example, to get a value of the `config`, you can use `${config.pagination_size}`.
+
 #### Column Formula
 If you are using a column formula, you can also use the following variables:
+
 - `row` : the row object
+
 #### Footer Formula
 In case you are using a footer formula, you can also use the following variables:
+
 - `values` : An Array of cell values in the column
 
 #### Options Formula
