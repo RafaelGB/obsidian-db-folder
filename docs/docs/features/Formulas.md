@@ -25,6 +25,22 @@ If you are using a column formula, you can also use the following variables:
 In case you are using a footer formula, you can also use the following variables:
 - `values` : An Array of cell values in the column
 
+#### Options Formula
+The options formula is a special case. It is used to generate the options for a column with the type `select` or `tag`. The formula must return an array of objects with the following structure:
+
+```javascript
+{
+    value: "value",
+    label: "label"
+    color: "color" // HSL, RGB, HEX, or color name but with string representation
+}
+```
+Due the nature of the formula, the variables are called directly instead of using the `${}` syntax. For example, to get a value of the `db`, you can use `db.js.myOptionsFormula()`.
+
+You can also use the following variables:
+- `column` : Object with the column information
+
+
 ### Exposed Functions
 
 The root object `db` has the following functions:

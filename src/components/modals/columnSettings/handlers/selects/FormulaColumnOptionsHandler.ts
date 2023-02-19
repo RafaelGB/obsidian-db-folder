@@ -4,6 +4,7 @@ import { c } from "helpers/StylesHelper";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
+import { Db } from "services/CoreService";
 import { FormulaService } from "services/FormulaService";
 
 export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse> {
@@ -36,6 +37,7 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
                         .setTooltip("column_settings_modal_formula_option_source_placeholder")
                         .onClick(async (): Promise<void> => {
                             try {
+                                column.config.formula_option_source = currentFormula;
                                 columnHandlerResponse.column.options = FormulaService.evalOptionsWith(column, automationState.info.getFormulas());
                             } catch (e) {
                                 new Notice("Error in formula: " + e);
@@ -79,6 +81,7 @@ export class FormulaColumnOptionsHandler extends AbstractHandlerClass<ColumnSett
                 const tr = tbody.createEl("tr");
                 tr.addClass(c("center-cell"));
                 tr.style.backgroundColor = option.color;
+                tr.style.color = Db.coreFns.colors.getContrast(option.color);
                 // td centering text
                 tr.createEl("td", {
                     text: option.label,

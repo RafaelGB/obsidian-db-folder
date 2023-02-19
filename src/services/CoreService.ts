@@ -33,7 +33,7 @@ class CoreService {
 
     /**
      * Singleton instance
-     * @returns {VaultManager}
+     * @returns {CoreService}
      */
     public static getInstance(): CoreService {
         if (!this.instance) {
