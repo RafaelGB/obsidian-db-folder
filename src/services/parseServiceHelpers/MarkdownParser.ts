@@ -49,8 +49,6 @@ class MarkdownParser extends TypeParser<Literal> {
                 }
                 break;
             case 'string':
-                auxMarkdown = this.wrapWithQuotes(wrapped.value);
-                break;
             default:
                 auxMarkdown = wrapped.value?.toString().trim();
         }

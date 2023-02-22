@@ -1,15 +1,15 @@
 import { RelationEditorComponentProps, SelectValue } from "cdm/ComponentsModel";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import Select from "react-select";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c } from "helpers/StylesHelper";
 import { obtainInfoFromRelation } from "helpers/RelationHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
-import { OnChangeValue } from "react-select";
+import { ActionMeta, OnChangeValue } from "react-select";
 import { StyleVariables } from "helpers/Constants";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import CreatableSelect from "react-select/creatable";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
@@ -28,7 +28,18 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   const [relationOptions, setRelationOptions] = useState([]);
 
   // onChange handler
-  const handleOnChange = async (newValue: OnChangeValue<SelectValue, true>) => {
+  const handleOnChange = async (
+    newValue: OnChangeValue<SelectValue, true>,
+    actionMeta: ActionMeta<SelectValue>
+  ) => {
+    switch (actionMeta.action) {
+      case "create-option":
+        console.log(`Created: ${actionMeta.option}`);
+        break;
+      default:
+      // Do nothing
+    }
+
     const arrayTags = newValue.map((tag) => ({
       label: tag.label,
       value: tag.value,
@@ -63,7 +74,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <div className={c("relation")}>
-        <Select
+        <CreatableSelect
           defaultValue={relationValue}
           components={{
             DropdownIndicator: () => null,
