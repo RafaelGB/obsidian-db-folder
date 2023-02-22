@@ -5,6 +5,7 @@ import { Literal } from "obsidian-dataview";
 import { DateTime } from "luxon";
 import { DataviewService } from "services/DataviewService";
 import { ParseService } from "services/ParseService";
+
 export const parseFrontmatterFieldsToString = (databaseFields: RowDatabaseFields, localSettings: LocalSettings, deletedColumn?: string): string => {
     const frontmatterFields = databaseFields.frontmatter;
     let array: string[] = [];
