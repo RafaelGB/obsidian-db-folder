@@ -15,7 +15,7 @@ import { CustomView } from "views/AbstractView";
 
 const projectsMetadataColumns = ["File", "name", "path"];
 class ProjectAPI extends ProjectView {
-    private ignoreDataAutoReload: boolean = false;
+    private ignoreDataAutoReload = false;
     private plugin: DBFolderPlugin;
     private view: CustomView;
 
