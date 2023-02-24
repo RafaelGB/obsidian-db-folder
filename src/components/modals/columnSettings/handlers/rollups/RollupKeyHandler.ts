@@ -2,9 +2,9 @@ import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
-import { recordFieldsFromRelation } from "helpers/RelationHelper";
 import { ROLLUP_EMBED_ACTIONS } from "helpers/Constants";
 import { t } from "lang/helpers";
+import { RelationalService } from "services/RelationalService";
 export class RollupKeyHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = t("column_settings_modal_rollup_key_title");
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
@@ -27,7 +27,7 @@ export class RollupKeyHandler extends AbstractHandlerClass<ColumnSettingsHandler
                 columnSettingsManager.modal.enableReset = true;
             };
 
-            recordFieldsFromRelation(
+            RelationalService.recordFieldsFromRelation(
                 relationColumn.config.related_note_path,
                 configState.info.getLocalSettings(),
                 allColumns

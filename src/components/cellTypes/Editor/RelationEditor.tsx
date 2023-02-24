@@ -3,13 +3,13 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c } from "helpers/StylesHelper";
-import { obtainInfoFromRelation } from "helpers/RelationHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
 import { ActionMeta, OnChangeValue } from "react-select";
 import { StyleVariables } from "helpers/Constants";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import CreatableSelect from "react-select/creatable";
+import { RelationalService } from "services/RelationalService";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
@@ -57,7 +57,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
 
   useEffect(() => {
     setTimeout(async () => {
-      const { recordRows } = await obtainInfoFromRelation(
+      const { recordRows } = await RelationalService.obtainInfoFromRelation(
         tableColumn.config.related_note_path
       );
 

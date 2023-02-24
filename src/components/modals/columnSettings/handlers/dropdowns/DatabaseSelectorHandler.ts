@@ -2,8 +2,8 @@ import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
 import { StringSuggest } from "settings/suggesters/StringSuggester";
-import { recordAllDatabases } from "helpers/RelationHelper";
 import { t } from "lang/helpers";
+import { RelationalService } from "services/RelationalService";
 
 export class DatabaseSelectorHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle: string = t("column_settings_modal_database_selector_title");
@@ -20,7 +20,7 @@ export class DatabaseSelectorHandler extends AbstractHandlerClass<ColumnSettings
             columnSettingsManager.modal.enableReset = true;
             columnHandlerResponse.columnSettingsManager.reset(columnHandlerResponse);
         }
-        const avaliableDDBB = recordAllDatabases();
+        const avaliableDDBB = RelationalService.recordAllDatabases();
 
         new Setting(containerEl)
             .setName(this.settingTitle)

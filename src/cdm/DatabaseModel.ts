@@ -2,9 +2,11 @@ import { RowType } from "cdm/RowTypeModel"
 import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { TableOptions } from "@tanstack/react-table";
-import { BaseColumn, RowDataType } from "cdm/FolderModel";
+import { BaseColumn, RowDataType, TableColumn } from "cdm/FolderModel";
 import { SMarkdownPage } from "obsidian-dataview";
 import en from "lang/locale/en";
+import { TFile } from "obsidian";
+import DatabaseInfo from "services/DatabaseInfo";
 
 /** database column */
 export interface DatabaseColumn extends BaseColumn {
@@ -48,3 +50,11 @@ export type NoteInfoPage = Omit<SMarkdownPage, "file"> & {
 };
 
 export type LocaleDict = keyof typeof en;
+
+export type RelationInfo = {
+    recordRows: Record<string, string>;
+    ddbbFile: TFile,
+    ddbbInfo: DatabaseInfo,
+    relatedColumns: TableColumn[],
+    relatedRows: RowDataType[]
+}
