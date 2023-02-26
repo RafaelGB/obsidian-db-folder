@@ -43,7 +43,7 @@
 		"jest-mock-extended": "3.0.2",
 		"jest-environment-jsdom": "29.4.3",
 		"obsidian": "1.1.1",
-		"rollup": "3.17.2",
+		"rollup": "3.17.3",
 		"rollup-plugin-typescript2": "0.34.1",
 		"ts-jest": "29.0.5",
 		"tslib": "2.5.0",
