@@ -130,8 +130,8 @@ const TagsCell = (tagsProps: CellComponentProps) => {
     return (
       <ClickAwayListener onClickAway={handleClickAway}>
         <div className={c("tags")}>
-          {tableColumn.config.option_source === OptionSource.MANUAL ? (
-            <CreatableSelect
+          {tableColumn.config.option_source === OptionSource.FORMULA ? (
+            <Select
               {...tagsProps}
               components={{
                 DropdownIndicator: () => null,
@@ -139,7 +139,7 @@ const TagsCell = (tagsProps: CellComponentProps) => {
               }}
             />
           ) : (
-            <Select
+            <CreatableSelect
               {...tagsProps}
               components={{
                 DropdownIndicator: () => null,

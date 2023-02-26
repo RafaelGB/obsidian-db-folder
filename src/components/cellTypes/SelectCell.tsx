@@ -120,8 +120,8 @@ const SelectCell = (popperProps: CellComponentProps) => {
     };
     return (
       <div className={c("tags")}>
-        {tableColumn.config.option_source === OptionSource.MANUAL ? (
-          <CreatableSelect
+        {tableColumn.config.option_source === OptionSource.FORMULA ? (
+          <Select
             {...selectProps}
             defaultValue={defaultValue}
             components={{
@@ -132,7 +132,7 @@ const SelectCell = (popperProps: CellComponentProps) => {
             }}
           />
         ) : (
-          <Select
+          <CreatableSelect
             {...selectProps}
             defaultValue={defaultValue}
             components={{
