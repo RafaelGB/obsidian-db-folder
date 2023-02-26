@@ -6,6 +6,7 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  error?: Error;
 }
 
 export function boundaryPreRendererComponent(errors: Record<string, string[]>) {
@@ -39,11 +40,12 @@ export function boundaryPreRendererComponent(errors: Record<string, string[]>) {
 class DbErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
+    error: null,
   };
 
-  public static getDerivedStateFromError(_: Error): State {
+  public static getDerivedStateFromError(error: Error): State {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true };
+    return { hasError: true, error: error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -51,11 +53,15 @@ class DbErrorBoundary extends Component<Props, State> {
   }
 
   public render() {
-    if (this.state.hasError) {
-      return <h1>Sorry.. there was an error</h1>;
-    }
-
-    return this.props.children;
+    return this.state.hasError ? (
+      <>
+        <h1>Something went wrong.</h1>
+        <h2>{this.state.error.message}</h2>
+        <p>{this.state.error.stack}</p>
+      </>
+    ) : (
+      this.props.children
+    );
   }
 }
 

@@ -16,6 +16,7 @@ import DatabaseInfo from "services/DatabaseInfo";
 import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
+import { dataApiBuilder } from "./DataApiBuilder";
 import DefaultDataImpl from "./impl/DefaultDataImpl";
 
 export abstract class CustomView extends TextFileView implements HoverParent {
@@ -91,9 +92,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
      * @param keyImpl 
      */
     setDataApi(key?: string): void {
-        if (!key || key === "default") {
-            this.dataApi = new DefaultDataImpl(this);
-        }
+        this.dataApi = dataApiBuilder(this.file, key);
     }
 
     async build(): Promise<void> {

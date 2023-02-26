@@ -3,7 +3,7 @@ import { DbInfo } from "cdm/TableStateInterface";
 import Rollup from "lib/Rollup";
 import { Link, Literal } from "obsidian-dataview";
 import { LOGGER } from "./Logger";
-;
+
 class FormulaServiceInstance {
 
     private static instance: FormulaServiceInstance;

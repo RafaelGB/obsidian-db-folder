@@ -40,12 +40,14 @@ const CustomTagsStyles: StylesConfig<any, true, GroupBase<unknown>> = {
     }),
     singleValue: (styles, { data }) => ({
         ...styles,
-        backgroundColor: data.color
+        backgroundColor: data.color,
+        color: Db.coreFns.colors.getContrast(data.color),
     }),
     multiValue: (styles, { data }) => {
         return {
             ...styles,
-            backgroundColor: data.color
+            backgroundColor: data.color,
+            color: Db.coreFns.colors.getContrast(data.color)
         };
     },
     multiValueLabel: (styles, { data }) => ({

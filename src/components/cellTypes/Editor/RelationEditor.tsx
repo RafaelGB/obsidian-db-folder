@@ -1,15 +1,14 @@
 import { RelationEditorComponentProps, SelectValue } from "cdm/ComponentsModel";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import Select from "react-select";
 import CustomTagsStyles from "components/styles/TagsStyles";
 import { c } from "helpers/StylesHelper";
-import { obtainInfoFromRelation } from "helpers/RelationHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
-import { OnChangeValue } from "react-select";
-import { StyleVariables } from "helpers/Constants";
+import { ActionMeta, OnChangeValue } from "react-select";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import CreatableSelect from "react-select/creatable";
+import { RelationalService } from "services/RelationalService";
 
 const RelationEditor = (props: RelationEditorComponentProps) => {
   const { defaultCell, persistChange, relationCell } = props;
@@ -21,18 +20,32 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
       ? relationCell.map((link: Link) => ({
           label: link.fileName(),
           value: link.path,
-          color: StyleVariables.TEXT_NORMAL,
+          color: tableColumn.config.relation_color,
         }))
       : []
   );
   const [relationOptions, setRelationOptions] = useState([]);
 
   // onChange handler
-  const handleOnChange = async (newValue: OnChangeValue<SelectValue, true>) => {
+  const handleOnChange = async (
+    newValue: OnChangeValue<SelectValue, true>,
+    actionMeta: ActionMeta<SelectValue>
+  ) => {
+    switch (actionMeta.action) {
+      case "create-option":
+        await RelationalService.createNoteIntoRelation(
+          tableColumn.config.related_note_path,
+          actionMeta.option.value
+        );
+        break;
+      default:
+      // Do nothing
+    }
+
     const arrayTags = newValue.map((tag) => ({
       label: tag.label,
       value: tag.value,
-      color: StyleVariables.TEXT_NORMAL,
+      color: tableColumn.config.relation_color,
     }));
     setRelationValue(arrayTags);
   };
@@ -46,14 +59,14 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
 
   useEffect(() => {
     setTimeout(async () => {
-      const { recordRows } = await obtainInfoFromRelation(
+      const { recordRows } = await RelationalService.obtainInfoFromRelation(
         tableColumn.config.related_note_path
       );
 
       const multiOptions = Object.entries(recordRows).map(([key, value]) => ({
         label: value,
         value: key,
-        color: StyleVariables.TEXT_NORMAL,
+        color: tableColumn.config.relation_color,
       }));
 
       setRelationOptions(multiOptions);
@@ -63,7 +76,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <div className={c("relation")}>
-        <Select
+        <CreatableSelect
           defaultValue={relationValue}
           components={{
             DropdownIndicator: () => null,

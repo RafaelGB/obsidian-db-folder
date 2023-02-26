@@ -48,6 +48,7 @@ class MarkdownParser extends TypeParser<Literal> {
                     auxMarkdown = wrapped.value;
                 }
                 break;
+            case 'string':
             default:
                 auxMarkdown = wrapped.value?.toString().trim();
         }
@@ -79,7 +80,7 @@ class MarkdownParser extends TypeParser<Literal> {
     private wrapWithQuotes(value: string): string {
         value = value.replaceAll(`\\`, ``);
         value = value.replaceAll(`"`, `\\"`);
-        return `"${value}"`;
+        return `"${value?.toString().trim()}"`;
     }
 }
 

@@ -2,9 +2,9 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { UpdateRowOptions } from "helpers/Constants";
-import { obtainInfoFromRelation } from "helpers/RelationHelper";
 import { dbTrim } from "helpers/StylesHelper";
 import { EditEngineService } from "services/EditEngineService";
+import { RelationalService } from "services/RelationalService";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 
 export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTableAction<DataState> {
@@ -24,7 +24,7 @@ export default class UpdateDataAfterLabelChangeHandlerAction extends AbstractTab
                 );
             });
             if (column.config.related_note_path) {
-                const { relatedRows, ddbbInfo } = await obtainInfoFromRelation(
+                const { relatedRows, ddbbInfo } = await RelationalService.obtainInfoFromRelation(
                     column.config.related_note_path
                 );
                 relatedRows.map(async (row: RowDataType) => {

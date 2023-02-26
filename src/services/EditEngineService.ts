@@ -1,6 +1,6 @@
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
-import { requireApiVersion, TFile } from "obsidian";
+import { TFile } from "obsidian";
 import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
 import { InputType, UpdateRowOptions } from "helpers/Constants";
@@ -10,7 +10,6 @@ import { EditionError, showDBError } from "errors/ErrorTypes";
 import obtainRowDatabaseFields from "IO/md/FileToRowDatabaseFields";
 import { EditArguments } from "cdm/ServicesModel";
 import NoteContentActionBuilder from "patterns/builders/NoteContentActionBuilder";
-import { parseFrontmatterFieldsToString } from "IO/md/RowDatabaseFieldsToFile";
 import { hasFrontmatter } from "helpers/VaultManagement";
 import { ValueOf } from "typings/base";
 import { RowDatabaseFields } from "cdm/DatabaseModel";
@@ -225,42 +224,27 @@ class EditEngine {
         const {
             file,
             columnId,
-            content,
             ddbbConfig,
-            contentHasFrontmatter,
             rowFields,
             deletedColumn,
             newKey
         } = context;
 
-        if (requireApiVersion("1.1.1")) {
-            await app.fileManager.processFrontMatter(file, (frontmatter) => {
-                if (newKey) {
-                    frontmatter[newKey] = frontmatter[deletedColumn];
-                } else {
-                    frontmatter[columnId] = ParseService.parseLiteral(
-                        rowFields.frontmatter[columnId],
-                        InputType.MARKDOWN,
-                        ddbbConfig
-                    );
-                }
+        await app.fileManager.processFrontMatter(file, (frontmatter) => {
+            if (newKey) {
+                frontmatter[newKey] = frontmatter[deletedColumn];
+            } else {
+                frontmatter[columnId] = ParseService.parseLiteral(
+                    rowFields.frontmatter[columnId],
+                    InputType.MARKDOWN,
+                    ddbbConfig
+                );
+            }
 
-                if (deletedColumn) {
-                    delete frontmatter[deletedColumn];
-                }
-            });
-        } else {
-            const frontmatterGroupRegex = contentHasFrontmatter ? /^---[\s\S]+?---\n*/g : /(^[\s\S]*$)/g;
-            const frontmatterFieldsText = parseFrontmatterFieldsToString(rowFields, ddbbConfig, deletedColumn);
-            const newContent = contentHasFrontmatter ? `${frontmatterFieldsText}\n` : `${frontmatterFieldsText ? frontmatterFieldsText.concat('\n') : frontmatterFieldsText}$1`;
-            const builder = new NoteContentActionBuilder()
-                .setContent(content)
-                .setFile(file)
-                .addRegExp(frontmatterGroupRegex)
-                .addRegExpNewValue(newContent)
-                .build();
-            await VaultManagerDB.editNoteContent(builder);
-        }
+            if (deletedColumn) {
+                delete frontmatter[deletedColumn];
+            }
+        });
     }
 
     /*******************************************************************************************

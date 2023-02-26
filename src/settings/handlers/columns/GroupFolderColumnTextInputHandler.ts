@@ -21,7 +21,7 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
       settingsManager.cleanupFns.push(async () => {
         const config = view.diskConfig.yaml.config;
         if (config.automatically_group_files) {
-          const folderPath = destination_folder(view, config);
+          const folderPath = destination_folder(view.file, config);
           await FileGroupingService.organizeNotesIntoSubfolders(
             folderPath,
             await view.getRows(),
