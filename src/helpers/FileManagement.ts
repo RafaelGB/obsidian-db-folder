@@ -68,8 +68,8 @@ export function get_tfiles_from_folder(
   return files;
 }
 
-export function destination_folder(view: CustomView, ddbbConfig: LocalSettings): string {
-  let destination_folder = view.file.parent.path;
+export function destination_folder(databaseFile: TFile, ddbbConfig: LocalSettings): string {
+  let destination_folder = databaseFile.parent.path;
   switch (ddbbConfig.source_data) {
     case SourceDataTypes.TAG:
     case SourceDataTypes.OUTGOING_LINK:

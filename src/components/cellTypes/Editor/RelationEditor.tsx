@@ -34,7 +34,10 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   ) => {
     switch (actionMeta.action) {
       case "create-option":
-        console.log(`Created: ${actionMeta.option}`);
+        await RelationalService.createNoteIntoRelation(
+          tableColumn.config.related_note_path,
+          actionMeta.option.value
+        );
         break;
       default:
       // Do nothing
@@ -64,7 +67,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
       const multiOptions = Object.entries(recordRows).map(([key, value]) => ({
         label: value,
         value: key,
-        color: StyleVariables.TEXT_NORMAL,
+        color: tableColumn.config.relation_color,
       }));
 
       setRelationOptions(multiOptions);

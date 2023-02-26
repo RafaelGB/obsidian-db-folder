@@ -9,7 +9,7 @@ export default class GroupFilesHandlerAction extends AbstractTableAction<DataSta
   ): TableActionResponse<DataState> {
     const { set, implementation, view } = tableActionResponse;
     implementation.actions.groupFiles = async () => {
-      const folderPath = destination_folder(view, view.diskConfig.yaml.config);
+      const folderPath = destination_folder(view.file, view.diskConfig.yaml.config);
       const movedRows = await FileGroupingService.organizeNotesIntoSubfolders(
         folderPath,
         await view.getRows(),

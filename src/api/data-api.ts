@@ -2,8 +2,8 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { UpdateRowInfo } from "cdm/TableStateInterface";
 import { ValueOf } from "typings/base";
-import { CustomView } from "views/AbstractView";
 import { UpdateRowOptions } from "helpers/Constants";
+import { TFile } from "obsidian";
 
 export type UpdateApiInfo = Omit<UpdateRowInfo, "saveOnDisk"> & { action: ValueOf<typeof UpdateRowOptions> };
 /**
@@ -11,7 +11,7 @@ export type UpdateApiInfo = Omit<UpdateRowInfo, "saveOnDisk"> & { action: ValueO
  * Each entity will have a free format data structure, but it will be marshalled to a database standard format.
  */
 export abstract class DataApi {
-    constructor(protected view: CustomView) { }
+    constructor(protected databaseFile: TFile) { }
     /**
      * Create a new entity
      * @param entity 

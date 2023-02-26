@@ -6,8 +6,10 @@ import { DatabaseCore, DEFAULT_SETTINGS } from "helpers/Constants";
 import { resolve_tfile } from "helpers/FileManagement";
 import { adapterTFilesToRows } from "helpers/VaultManagement";
 import { SMarkdownPage } from "obsidian-dataview";
+import { dataApiBuilder } from "views/DataApiBuilder";
 import DatabaseInfo from "./DatabaseInfo";
 import { DataviewService } from "./DataviewService";
+import { LOGGER } from "./Logger";
 
 
 class RelationalServiceInstance {
@@ -70,6 +72,21 @@ class RelationalServiceInstance {
             relationFields[field] = field;
         });
         return relationFields;
+    }
+
+    /**
+     * Create a new note into a relation
+     * @param ddbbPath 
+     * @param content 
+     */
+    public async createNoteIntoRelation(ddbbPath: string, newFilename: string): Promise<void> {
+        LOGGER.info(`--> createNoteIntoRelation. Creating note ${newFilename} into relation ${ddbbPath}`);
+        const ddbbFile = resolve_tfile(ddbbPath);
+        const ddbbInfo = await new DatabaseInfo(ddbbFile, DEFAULT_SETTINGS.local_settings).build();
+        const dataApi = dataApiBuilder(ddbbFile, ddbbInfo.yaml.config.implementation);
+        const relatedColumns = await obtainColumnsFromFolder(ddbbInfo.yaml.columns);
+        await dataApi.create(newFilename, relatedColumns, ddbbInfo.yaml.config);
+        LOGGER.info(`<-- createNoteIntoRelation. Note ${newFilename} created into relation ${ddbbPath}`);
     }
 
     /**

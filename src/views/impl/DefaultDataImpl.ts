@@ -14,7 +14,7 @@ import NoteInfo from "services/NoteInfo";
 
 class DefaultDataImpl extends DataApi {
     async create(filename: string, columns: TableColumn[], ddbbConfig: LocalSettings) {
-        const folderPath = destination_folder(this.view, ddbbConfig);
+        const folderPath = destination_folder(this.databaseFile, ddbbConfig);
         const filepath = await VaultManagerDB.create_row_file(folderPath, filename, ddbbConfig);
 
         const newNote = new NoteInfo({
@@ -63,7 +63,7 @@ class DefaultDataImpl extends DataApi {
                     .filter(Boolean);
             // Update the row on disk
             if (isMovingFile && pathColumns.includes(column.key)) {
-                const folderPath = destination_folder(this.view, ddbbConfig);
+                const folderPath = destination_folder(this.databaseFile, ddbbConfig);
                 const newFilePath = resolveNewFilePath({
                     pathColumns,
                     row: modifiedRow,
