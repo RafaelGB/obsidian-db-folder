@@ -1,3 +1,11 @@
+## 3.3.2
+### Shiny new things
+- You can now create new notes directly from relations [#762](https://github.com/RafaelGB/obsidian-db-folder/issues/762)
+### Visual
+- Visual improvements for select, tags and relation column types. A better contrast and dark mode support [#809](https://github.com/RafaelGB/obsidian-db-folder/issues/809)
+### No longer broken
+- Completed subtasks will be hidden properly when using the "Hide completed tasks" option [#811](https://github.com/RafaelGB/obsidian-db-folder/issues/811)
+
 ## 3.3.1
 ### Shiny new things
 - Options for a tag or select column types could be added by formula (Experimental)
