@@ -6,7 +6,6 @@ import { c } from "helpers/StylesHelper";
 import { TableColumn } from "cdm/FolderModel";
 import { Link } from "obsidian-dataview";
 import { ActionMeta, OnChangeValue } from "react-select";
-import { StyleVariables } from "helpers/Constants";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import CreatableSelect from "react-select/creatable";
 import { RelationalService } from "services/RelationalService";
@@ -21,7 +20,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
       ? relationCell.map((link: Link) => ({
           label: link.fileName(),
           value: link.path,
-          color: StyleVariables.TEXT_NORMAL,
+          color: tableColumn.config.relation_color,
         }))
       : []
   );
@@ -46,7 +45,7 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
     const arrayTags = newValue.map((tag) => ({
       label: tag.label,
       value: tag.value,
-      color: StyleVariables.TEXT_NORMAL,
+      color: tableColumn.config.relation_color,
     }));
     setRelationValue(arrayTags);
   };
