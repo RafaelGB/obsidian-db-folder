@@ -19,7 +19,7 @@ class TextParser extends TypeParser<string | DataObject> {
                     return Db.coreFns.luxon.dateToString(wrapped.value, this.config.datetime_format);
                 }
 
-                if (DataviewService.getDataviewAPI().isDataArray(wrapped.value)) {
+                if (DataviewService.isDataArray(wrapped.value)) {
                     return this.parseArrayToText(
                         (wrapped.value.values as Literal[])
                     );

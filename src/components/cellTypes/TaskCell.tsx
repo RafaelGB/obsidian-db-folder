@@ -14,14 +14,15 @@ const TaskCell = (taskProps: CellComponentProps) => {
   const { defaultCell } = taskProps;
   const { cell, column, table, row } = defaultCell;
   const { view } = table.options.meta;
+  const tableColumn = column.columnDef as TableColumn;
   useEffect(() => {
     let taskValue = cell.getValue();
     // Check if there are tasks in the cell
     if (taskValue) {
       taskRef.current.innerHTML = "";
       if (
-        (column.columnDef as TableColumn).config.task_hide_completed &&
-        DataviewService.getDataviewAPI().isDataArray(taskValue)
+        tableColumn.config.task_hide_completed &&
+        DataviewService.isDataArray(taskValue)
       ) {
         taskValue = taskValue
           .where((t: STask) => !t.completed)

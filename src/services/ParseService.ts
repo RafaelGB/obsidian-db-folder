@@ -42,7 +42,7 @@ class Parse {
             return literal;
         }
 
-        if (DataviewService.getDataviewAPI().isDataArray(literal)) {
+        if (DataviewService.isDataArray(literal)) {
             literal = literal.values
         }
 

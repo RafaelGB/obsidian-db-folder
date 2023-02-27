@@ -17,7 +17,7 @@ class SelectParser extends TypeParser<string> {
             case 'object':
                 if (DateTime.isDateTime(wrapped.value)) {
                     parsedValue = Db.coreFns.luxon.dateToString(wrapped.value, this.config.datetime_format);
-                } else if (DataviewService.getDataviewAPI().isDataArray(wrapped.value)) {
+                } else if (DataviewService.isDataArray(wrapped.value)) {
                     parsedValue = this.parseArrayToText(
                         (wrapped.value.values as Literal[])
                     );
