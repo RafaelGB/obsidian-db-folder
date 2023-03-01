@@ -1,5 +1,6 @@
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { ColumnFilterOption } from "cdm/ComponentsModel";
 import { StyleVariables } from "helpers/Constants";
 import React from "react";
 
@@ -11,7 +12,7 @@ const ExistedColumnSelectorComponent = (selectorProps: {
     conditionIndex: number[],
     level: number
   ) => (event: SelectChangeEvent<string>, child: React.ReactNode) => void;
-  possibleColumns: string[];
+  possibleColumns: ColumnFilterOption[];
 }) => {
   const { currentCol, recursiveIndex, level, onchange, possibleColumns } =
     selectorProps;
@@ -40,13 +41,13 @@ const ExistedColumnSelectorComponent = (selectorProps: {
         }}
       >
         <optgroup label="Fields from notes">
-          {possibleColumns.map((key, index) => {
+          {possibleColumns.map((columnOption, index) => {
             return (
               <option
-                value={key}
-                key={`MenuItem-${index}-existedColumnSelector-${key}--${level}-${recursiveIndex[level]}}`}
+                value={columnOption.key}
+                key={`MenuItem-${index}-existedColumnSelector-${columnOption.key}--${level}-${recursiveIndex[level]}}`}
               >
-                {key}
+                {columnOption.key}
               </option>
             );
           })}

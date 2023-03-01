@@ -1,9 +1,10 @@
-import { DataviewFiltersProps } from "cdm/ComponentsModel";
+import { ColumnFilterOption, DataviewFiltersProps } from "cdm/ComponentsModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import React, { useEffect, useState } from "react";
 import { FilterGroupCondition } from "cdm/SettingsModel";
 import GroupFilterComponent from "components/modals/filters/handlers/GroupFilterComponent";
 import DnDComponent from "components/behavior/DnDComponent";
+import { InputType } from "helpers/Constants";
 
 const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
   const { table } = props;
@@ -13,8 +14,10 @@ const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
   const filters = tableState.configState((state) => state.filters);
   const columnsInfo = tableState.columns((state) => state.info);
 
-  const [possibleColumns, setPossibleColumns] = useState([] as string[]);
-
+  const [possibleColumns, setPossibleColumns] = useState(
+    [] as ColumnFilterOption[]
+  );
+  const DbColumns = columnsInfo.getAllColumns();
   useEffect(() => {
     new Promise<string[]>((resolve) => {
       // Empty conditions to refresh the dataview
@@ -25,11 +28,25 @@ const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
           view.file.parent.path,
           configInfo.getLocalSettings(),
           emptyFilterConditions,
-          columnsInfo.getAllColumns()
+          DbColumns
         )
       );
     }).then((columns) => {
-      setPossibleColumns(columns.sort((a, b) => a.localeCompare(b)));
+      const columnOptions: ColumnFilterOption[] = [];
+      columns.forEach((column) => {
+        const possibleColumn = DbColumns.find(
+          (dbColumn) => dbColumn.key === column
+        );
+        const isColumnExistent = possibleColumn !== undefined;
+        columnOptions.push({
+          enabled: isColumnExistent,
+          key: column,
+          type: isColumnExistent ? possibleColumn.input : InputType.TEXT,
+        });
+      });
+      setPossibleColumns(
+        columnOptions.sort((a, b) => a.key.localeCompare(b.key))
+      );
     });
   }, []);
 

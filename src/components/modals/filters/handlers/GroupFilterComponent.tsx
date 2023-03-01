@@ -24,13 +24,8 @@ import LabelComponent from "components/modals/filters/handlers/LabelComponent";
 import { Setting } from "obsidian";
 import { t } from "lang/helpers";
 import { Db } from "services/CoreService";
-type GroupFilterComponentProps = {
-  group: FilterGroup;
-  recursiveIndex: number[];
-  level: number;
-  table: Table<RowDataType>;
-  possibleColumns: string[];
-};
+import { GroupFilterComponentProps } from "cdm/ComponentsModel";
+
 const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
   const { group, recursiveIndex, level, table, possibleColumns } = groupProps;
   const { tableState } = table.options.meta;

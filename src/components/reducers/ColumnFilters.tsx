@@ -71,12 +71,15 @@ export function TextFilter(headerProps: DatabaseHeaderProps) {
 
 export function NumberFilter(headerProps: DatabaseHeaderProps) {
   const { column } = headerProps;
-  const min = Number(column.getFacetedMinMaxValues()?.[0] ?? undefined);
-  const max = Number(column.getFacetedMinMaxValues()?.[1] ?? undefined);
+  const minRaw = Number(column.getFacetedMinMaxValues()?.[0] ?? undefined);
+  const maxRaw = Number(column.getFacetedMinMaxValues()?.[1] ?? undefined);
   const minValue =
     (column.getFilterValue() as [number, number])?.[0] ?? undefined;
   const maxValue =
     (column.getFilterValue() as [number, number])?.[1] ?? undefined;
+
+  const min = Number.isNaN(minRaw) ? Number.MIN_SAFE_INTEGER : minRaw;
+  const max = Number.isNaN(maxRaw) ? Number.MAX_SAFE_INTEGER : maxRaw;
   return (
     <>
       <div className="flex space-x-2" key={`${column.id}-number-filter`}>
@@ -103,8 +106,8 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
         />
         <DynamicDebouncedInput
           type="number"
-          min={Number.isNaN(min) ? undefined : min}
-          max={Number.isNaN(max) ? undefined : max}
+          min={min}
+          max={max}
           value={maxValue}
           onChange={(value) => {
             if (value === "" || value === null) {
