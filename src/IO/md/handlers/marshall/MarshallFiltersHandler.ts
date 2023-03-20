@@ -1,6 +1,7 @@
 import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from 'cdm/SettingsModel';
+import { InputType } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'IO/md/handlers/marshall/AbstractYamlPropertyHandler';
 import { DataviewService } from 'services/DataviewService';
 
@@ -58,6 +59,10 @@ export class MarshallFiltersHandler extends AbstractYamlHandler {
             if (!DataviewService.isTruthy((filter as AtomicFilter).operator)) {
                 this.addError(`There was not operator key in filter: ${JSON.stringify(filter)}`);
                 return false;
+            }
+            // Type of filter: Optional (if not present, it will be set to TEXT)
+            if (!DataviewService.isTruthy((filter as AtomicFilter).type)) {
+                (filter as AtomicFilter).type = InputType.TEXT;
             }
         }
         return true;

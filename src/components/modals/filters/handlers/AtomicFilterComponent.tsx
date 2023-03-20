@@ -15,7 +15,7 @@ import IconButton from "@mui/material/IconButton";
 const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
   const { table, recursiveIndex, level, atomicFilter, possibleColumns } = props;
   const { tableState } = table.options.meta;
-  const { field, operator, value } = atomicFilter;
+  const { field, operator, value, type } = atomicFilter;
   const configActions = tableState.configState((state) => state.actions);
   const configInfo = tableState.configState((state) => state.info);
   const columnsInfo = tableState.columns((state) => state.info);
@@ -118,6 +118,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
         >
           <ValueFilterComponent
             value={value}
+            type={type}
             handler={onChangeFilterValueHandler(recursiveIndex, level)}
           />
         </Grid>

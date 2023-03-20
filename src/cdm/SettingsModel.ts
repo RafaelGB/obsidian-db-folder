@@ -17,6 +17,7 @@ export type FilterGroupCondition = {
 export type AtomicFilter = {
     field: string;
     operator: string;
+    type: string;
     value?: string;
 }
 /**

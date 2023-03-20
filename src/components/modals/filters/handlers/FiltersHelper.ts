@@ -42,6 +42,7 @@ const modifyRecursiveFilterGroups = (
                         field: possibleColumns[0].key,
                         operator: OperatorFilter.CONTAINS[0],
                         value: "",
+                        type: possibleColumns[0].type,
                     });
                 break;
             case ModifyFilterOptionsEnum.ADD_GROUP:
@@ -54,6 +55,7 @@ const modifyRecursiveFilterGroups = (
                                 field: possibleColumns[0].key,
                                 operator: OperatorFilter.CONTAINS[0],
                                 value: "",
+                                type: possibleColumns[0].type,
                             },
                         ],
                     });

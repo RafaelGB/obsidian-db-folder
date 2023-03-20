@@ -1,15 +1,9 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import {
-  AtomicFilter,
-  FilterGroup,
-  FilterGroupCondition,
-} from "cdm/SettingsModel";
+import { AtomicFilter, FilterGroupCondition } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
 import React, { ChangeEventHandler, useEffect, useState } from "react";
 import AtomicFilterComponent from "components/modals/filters/handlers/AtomicFilterComponent";
-import { Table } from "@tanstack/react-table";
-import { RowDataType } from "cdm/FolderModel";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
