@@ -15,7 +15,7 @@ export class GroupFolderColumnTextInputHandler extends AbstractSettingsHandler {
       const allowedColumns = new Set(
         Object.keys(columns)
           .filter((f) => columns[f].input === InputType.SELECT)
-          .map((key) => columns[key].label),
+          .map((key) => columns[key].key),
       );
 
       settingsManager.cleanupFns.push(async () => {
