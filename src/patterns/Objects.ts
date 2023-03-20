@@ -7,3 +7,6 @@
 export function updateFromPartial<T>(obj: T, updates: Partial<T>): T {
     return { ...obj, ...updates };
 }
+
+
+export const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;

@@ -24,18 +24,20 @@ const FormulaCell = (mdProps: CellComponentProps) => {
     Promise.resolve().then(async () => {
       // If formula cell is empty, do nothing
       if (formulaRef.current === null) return;
-      const formulaResponse = formulaInfo
-        .runFormula(tableColumn.config.formula_query, formulaRow, {
+      const formulaResponse = await formulaInfo.runFormula(
+        tableColumn.config.formula_query,
+        formulaRow,
+        {
           data: dataInfo,
           columns: columnsInfo,
           config: configInfo,
           automation: automationInfo,
-        })
-        .toString();
+        }
+      );
 
       await MarkdownService.renderMarkdown(
         defaultCell,
-        formulaResponse,
+        formulaResponse.toString(),
         formulaRef.current,
         5
       );

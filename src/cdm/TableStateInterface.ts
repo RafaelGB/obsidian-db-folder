@@ -159,7 +159,7 @@ export type AutomationStateActions = {
 export type AutomationStateInfo = {
     getFormula: (name: string) => unknown;
     getFormulas: () => { [key: string]: unknown };
-    runFormula: (input: string, row: RowDataType, dbInfo: DbInfo) => Literal;
+    runFormula: (input: string, row: RowDataType, dbInfo: DbInfo) => Promise<Literal>;
     dispatchFooter: (column: TableColumn, colValues: Literal[]) => Literal;
     dispatchRollup: (configColumn: ConfigColumn, relation: Literal) => Literal;
 }

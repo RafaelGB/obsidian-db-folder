@@ -7,9 +7,9 @@ import { AbstractTableAction } from "stateManagement/AbstractTableAction";
 export default class RunFormulaHandlerAction extends AbstractTableAction<AutomationState> {
     handle(tableActionResponse: TableActionResponse<AutomationState>): TableActionResponse<AutomationState> {
         const { implementation, get } = tableActionResponse;
-        implementation.info.runFormula = (input: string, row: RowDataType, dbInfo: DbInfo) => {
+        implementation.info.runFormula = async (input: string, row: RowDataType, dbInfo: DbInfo) => {
             try {
-                return FormulaService.evalWith(input, row, dbInfo, get().formula);
+                return await FormulaService.evalWith(input, row, dbInfo, get().formula);
             } catch (e) {
                 LOGGER.error(`Error evaluating formula from row ${row.__note__.filepath}: `, e);
                 return "";

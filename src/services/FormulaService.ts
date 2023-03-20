@@ -2,6 +2,7 @@ import { ColumnOption } from "cdm/ComponentsModel"; import { RowDataType, TableC
 import { DbInfo } from "cdm/TableStateInterface";
 import Rollup from "lib/Rollup";
 import { Link, Literal } from "obsidian-dataview";
+import { AsyncFunction } from "patterns/Objects";
 import { LOGGER } from "./Logger";
 
 class FormulaServiceInstance {
@@ -94,13 +95,14 @@ class FormulaServiceInstance {
      * @param db 
      * @returns 
      */
-    evalWith(input: string, row: RowDataType, info: DbInfo, db: {
+    async evalWith(input: string, row: RowDataType, info: DbInfo, db: {
         [key: string]: unknown;
-    }): Literal {
+    }): Promise<Literal> {
         LOGGER.debug(`Evaluating formula from row ${row.__note__.filepath}: `, input);
-        const dynamicJS = 'return `' + input + '`';
-        const func = new Function('row', 'info', 'db', dynamicJS);
-        const result = func(row, info, db);
+        const dynamicJS = 'new Promise((resolve) => {resolve(`' + input + '`)})';
+        const func = new AsyncFunction('row', 'info', 'db', dynamicJS);
+        const result = await func(row, info, db);
+
         if (result === "undefined" || result === "null") {
             return '';
         }
