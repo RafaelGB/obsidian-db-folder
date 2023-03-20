@@ -1,9 +1,11 @@
 import Input from "@mui/material/Input";
+import { InputType } from "helpers/Constants";
 import React, { useState } from "react";
 
 const ValueFilterComponent = (props: {
   handler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
+  type: string;
 }) => {
   const [value, setValue] = useState(props.value);
   const [valueTimeout, setValueTimeout] = useState(null);
@@ -21,14 +23,19 @@ const ValueFilterComponent = (props: {
       }, 1500)
     );
   };
-  return (
-    <Input
-      type="text"
-      className="form-control"
-      value={value}
-      onChange={proxyHandler}
-    />
-  );
+  switch (props.type) {
+    case InputType.CALENDAR:
+      break;
+    default:
+      return (
+        <Input
+          type="text"
+          className="form-control"
+          value={value}
+          onChange={proxyHandler}
+        />
+      );
+  }
 };
 
 export default ValueFilterComponent;

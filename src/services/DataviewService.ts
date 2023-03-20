@@ -1,6 +1,7 @@
 import { Notice } from "obsidian";
-import { DataviewApi, getAPI, isPluginEnabled, STask } from "obsidian-dataview";
+import { DataArray, DataviewApi, getAPI, isPluginEnabled, STask } from "obsidian-dataview";
 import { Literal, WrappedLiteral } from "obsidian-dataview/lib/data-model/value";
+import { LOGGER } from "./Logger";
 class DataviewProxy {
 
     private static instance: DataviewProxy;
@@ -38,6 +39,14 @@ class DataviewProxy {
         return (value as STask[]).every(v => this.isStasks(v));
     }
 
+    isDataArray(value: Literal): value is DataArray<unknown> {
+        try {
+            return this.getDataviewAPI().isDataArray(value);
+        } catch (e) {
+            LOGGER.error(`Error while checking if value is DataArray: ${e.message}`)
+            return false;
+        }
+    }
     /**
      * Singleton instance
      * @returns {VaultManager}

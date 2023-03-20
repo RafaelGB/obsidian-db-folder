@@ -1,3 +1,4 @@
+import { ColumnFilterOption } from "cdm/ComponentsModel";
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from "cdm/SettingsModel";
 import { ConditionFiltersOptions, OperatorFilter } from "helpers/Constants";
 
@@ -15,7 +16,7 @@ export enum ModifyFilterOptionsEnum {
 }
 
 const modifyRecursiveFilterGroups = (
-    possibleColumns: string[],
+    possibleColumns: ColumnFilterOption[],
     filterGroups: FilterGroup[],
     recursiveIndex: number[],
     level: number,
@@ -38,9 +39,10 @@ const modifyRecursiveFilterGroups = (
             case ModifyFilterOptionsEnum.ADD:
                 (filterGroups[recursiveIndex[level]] as FilterGroupCondition)
                     .filters.push({
-                        field: possibleColumns[0],
+                        field: possibleColumns[0].key,
                         operator: OperatorFilter.CONTAINS[0],
                         value: "",
+                        type: possibleColumns[0].type,
                     });
                 break;
             case ModifyFilterOptionsEnum.ADD_GROUP:
@@ -50,9 +52,10 @@ const modifyRecursiveFilterGroups = (
                         disabled: false,
                         filters: [
                             {
-                                field: possibleColumns[0],
+                                field: possibleColumns[0].key,
                                 operator: OperatorFilter.CONTAINS[0],
                                 value: "",
+                                type: possibleColumns[0].type,
                             },
                         ],
                     });

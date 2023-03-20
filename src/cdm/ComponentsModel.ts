@@ -1,7 +1,7 @@
 import { CellContext, Table } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
 import { Link, Literal } from "obsidian-dataview/lib/data-model/value";
-import { AtomicFilter } from "cdm/SettingsModel";
+import { AtomicFilter, FilterGroup } from "cdm/SettingsModel";
 
 export type ColumnOption = {
     value: string;
@@ -37,5 +37,19 @@ export type AtomicFilterComponentProps = {
     recursiveIndex: number[];
     level: number;
     atomicFilter: AtomicFilter;
-    possibleColumns: string[];
+    possibleColumns: ColumnFilterOption[];
 } & DataviewFiltersProps;
+
+export type ColumnFilterOption = {
+    key: string;
+    enabled: boolean;
+    type: string;
+}
+
+export type GroupFilterComponentProps = {
+    group: FilterGroup;
+    recursiveIndex: number[];
+    level: number;
+    table: Table<RowDataType>;
+    possibleColumns: ColumnFilterOption[];
+};

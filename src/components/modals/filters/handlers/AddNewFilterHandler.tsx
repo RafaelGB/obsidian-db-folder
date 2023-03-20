@@ -5,6 +5,7 @@ import {
 } from "cdm/ModalsModel";
 import {
   ConditionFiltersOptions,
+  InputType,
   OperatorFilter,
   StyleVariables,
 } from "helpers/Constants";
@@ -50,6 +51,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
       field: possibleColumns[0],
       operator: OperatorFilter.CONTAINS[0],
       value: "",
+      type: InputType.TEXT,
     });
     configActions.alterFilters(alteredFilterState);
   };
@@ -67,6 +69,7 @@ const NewFiltersForm = (props: FiltersModalProps) => {
       field: possibleColumns[0],
       operator: OperatorFilter.CONTAINS[0],
       value: "",
+      type: InputType.TEXT,
     };
 
     alteredFilterState.conditions.push({
