@@ -1,6 +1,6 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { obtainColumnsFromRows } from "components/Columns";
-import { DynamicInputType, MetadataColumns } from "helpers/Constants";
+import { DatabaseCore, DynamicInputType, MetadataColumns } from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Notice, Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
@@ -32,11 +32,15 @@ export class AddExistingColumnHandler extends AbstractHandlerClass<AddColumnModa
         }
 
         promiseOfObtainColumnsFromRows.then((columnsRaw: string[]) => {
-            // Filter out the columns that are already in the table
             const currentColumns = (columnState.info.getValueOfAllColumnsAsociatedWith('id') as string[]).map(id => id.toLowerCase());
             const filteredColumns: Record<string, string> = {};
             columnsRaw
                 .sort((a, b) => a.localeCompare(b))
+                // Filter reserved columns
+                .filter((columnName: string) => {
+                    return DatabaseCore.FRONTMATTER_KEY !== columnName;
+                })
+                // Filter out the columns that are already in the table
                 .filter((columnName: string) => {
                     return !currentColumns.includes(columnName.toLowerCase())
                 }).forEach((columnName: string) => {
