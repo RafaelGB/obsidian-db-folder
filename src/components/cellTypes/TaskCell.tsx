@@ -1,9 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { Grouping } from "obsidian-dataview/lib/data-model/value";
-import {
-  SListItem,
-  STask,
-} from "obsidian-dataview/lib/data-model/serialized/markdown";
+import { SListItem } from "obsidian-dataview/lib/data-model/serialized/markdown";
 import { DataviewService } from "services/DataviewService";
 import React, { useEffect, useRef } from "react";
 import { TableColumn } from "cdm/FolderModel";
@@ -16,18 +13,15 @@ const TaskCell = (taskProps: CellComponentProps) => {
   const { view } = table.options.meta;
   const tableColumn = column.columnDef as TableColumn;
   useEffect(() => {
-    let taskValue = cell.getValue();
+    let taskValue = cell.getValue() as SListItem[];
     // Check if there are tasks in the cell
-    if (taskValue) {
+    if (taskValue && taskValue.length > 0) {
       taskRef.current.innerHTML = "";
-      if (
-        tableColumn.config.task_hide_completed &&
-        DataviewService.isDataArray(taskValue)
-      ) {
+      if (tableColumn.config.task_hide_completed) {
         taskValue = taskValue
-          .where((t: STask) => !t.completed)
-          .map((t: STask) => {
-            t.children = t.children?.filter((c: STask) => !c.completed);
+          .filter((t) => !t.completed)
+          .map((t) => {
+            t.children = t.children?.filter((c) => !c.completed);
             return t;
           });
       }

@@ -407,22 +407,29 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			app.metadataCache.on("dataview:index-ready", async () => {
+				const initView = app.workspace.getActiveViewOfType(DatabaseView);
+				if (initView) {
+					await initView.reloadDatabase();
+				}
 				/**
 				 * Once the index is ready, we can start listening for metadata changes.
 				 */
 				if (this.settings.global_settings.enable_auto_update) {
-					this.registerEvent(app.metadataCache.on("dataview:metadata-change",
-						(type, file, oldPath?) => {
-							const activeView = app.workspace.getActiveViewOfType(DatabaseView);
-							Array.from(this.windowRegistry.entries()).forEach(async ([, { viewMap }]) => {
-								// Iterate through all the views and reload the database if the file is the same
-								viewMap.forEach(async (view) => {
-									const isActive = activeView && (view.file.path === activeView?.file.path);
-									view.handleExternalMetadataChange(type, file, isActive, oldPath);
+					// Delay the registration of the event to allow the index to be ready entirely
+					setTimeout(() => {
+						this.registerEvent(app.metadataCache.on("dataview:metadata-change",
+							(type, file, oldPath?) => {
+								const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+								Array.from(this.windowRegistry.entries()).forEach(async ([, { viewMap }]) => {
+									// Iterate through all the views and reload the database if the file is the same
+									viewMap.forEach(async (view) => {
+										const isActive = activeView && (view.file.path === activeView?.file.path);
+										view.handleExternalMetadataChange(type, file, isActive, oldPath);
+									});
 								});
-							});
-						})
-					);
+							})
+						);
+					}, 2500);
 				}
 			}));
 
