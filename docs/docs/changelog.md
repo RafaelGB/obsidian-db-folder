@@ -1,3 +1,9 @@
+## 3.3.3
+### No longer broken
+-  Fix hidden completed tasks in dataview mode [#839](https://github.com/RafaelGB/obsidian-db-folder/issues/839)
+- `Columns to group files by` option needs select columnId [#842](https://github.com/RafaelGB/obsidian-db-folder/issues/842)
+- `database-plugin` ignored as an option on existed columns list [#843](https://github.com/RafaelGB/obsidian-db-folder/issues/843)
+- Tags and select can not create new options with news columns [#850](https://github.com/RafaelGB/obsidian-db-folder/issues/850)
 ## 3.3.2
 ### Shiny new things
 - You can now create new notes directly from relations [#762](https://github.com/RafaelGB/obsidian-db-folder/issues/762)

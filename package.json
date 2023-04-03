@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-dbfolder",
-	"version": "3.3.2",
+	"version": "3.3.3",
 	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
