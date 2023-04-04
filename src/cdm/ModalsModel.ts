@@ -6,6 +6,7 @@ import { FiltersModalManager } from "components/modals/filters/FiltersModal";
 import { Table } from "@tanstack/react-table";
 import { AddRowModalManager } from "components/modals/addRow/AddRowModal";
 import { CustomView } from "views/AbstractView";
+import { ColumnFilterOption } from "./ComponentsModel";
 
 /**
  * Base class for all modal responses.
@@ -80,7 +81,7 @@ export type AddRowModalProps = {
 /** Filters Modal */
 export type FiltersModalProps = {
     table: Table<RowDataType>,
-    possibleColumns: string[]
+    possibleColumns: ColumnFilterOption[]
 }
 export type FiltersModalHandlerResponse = {
     filtersModalManager: FiltersModalManager

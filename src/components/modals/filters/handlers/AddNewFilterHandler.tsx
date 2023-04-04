@@ -5,7 +5,6 @@ import {
 } from "cdm/ModalsModel";
 import {
   ConditionFiltersOptions,
-  InputType,
   OperatorFilter,
   StyleVariables,
 } from "helpers/Constants";
@@ -48,10 +47,10 @@ const NewFiltersForm = (props: FiltersModalProps) => {
 
     const alteredFilterState = { ...configInfo.getFilters() };
     alteredFilterState.conditions.push({
-      field: possibleColumns[0],
+      field: possibleColumns[0].key,
       operator: OperatorFilter.CONTAINS[0],
       value: "",
-      type: InputType.TEXT,
+      type: possibleColumns[0].type,
     });
     configActions.alterFilters(alteredFilterState);
   };
@@ -66,10 +65,10 @@ const NewFiltersForm = (props: FiltersModalProps) => {
     const alteredFilterState = { ...configInfo.getFilters() };
 
     const mockAtomicFilter: AtomicFilter = {
-      field: possibleColumns[0],
+      field: possibleColumns[0].key,
       operator: OperatorFilter.CONTAINS[0],
       value: "",
-      type: InputType.TEXT,
+      type: possibleColumns[0].type,
     };
 
     alteredFilterState.conditions.push({

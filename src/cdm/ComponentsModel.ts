@@ -32,6 +32,7 @@ export type RelationEditorComponentProps = {
 
 export type DataviewFiltersProps = {
     table: Table<RowDataType>;
+    possibleColumns: ColumnFilterOption[];
 };
 export type AtomicFilterComponentProps = {
     recursiveIndex: number[];

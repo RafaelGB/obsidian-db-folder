@@ -10,10 +10,13 @@ export class FilterGroupHandler extends AbstractHandlerClass<FiltersModalHandler
     columnHandlerResponse: FiltersModalHandlerResponse
   ): FiltersModalHandlerResponse {
     const { containerEl, filtersModalManager } = columnHandlerResponse;
-    const { table } = filtersModalManager.props;
+    const { table, possibleColumns } = filtersModalManager.props;
 
     createRoot(containerEl.createDiv()).render(
-      <DataviewFiltersComponent table={table} />
+      <DataviewFiltersComponent
+        table={table}
+        possibleColumns={possibleColumns}
+      />
     );
     return this.goNext(columnHandlerResponse);
   }

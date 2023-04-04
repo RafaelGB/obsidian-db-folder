@@ -1,8 +1,12 @@
-import { DataviewFiltersProps } from "cdm/ComponentsModel";
+import { ColumnFilterOption, DataviewFiltersProps } from "cdm/ComponentsModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import { FiltersModal } from "components/modals/filters/FiltersModal";
-import { EMITTERS_GROUPS, EMITTERS_SHORTCUT } from "helpers/Constants";
+import {
+  EMITTERS_GROUPS,
+  EMITTERS_SHORTCUT,
+  InputType,
+} from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import React, { useEffect } from "react";
 
@@ -12,29 +16,38 @@ export default function EditFiltersButton(props: DataviewFiltersProps) {
   const [configInfo, filters] = tableState.configState((state) => [
     state.info,
     state.filters,
-    state.actions,
   ]);
   const columns = tableState.columns((state) => state.columns);
 
-  const openFiltersGroupHandler = async () => {
-    new Promise<string[]>((resolve, reject) => {
-      // Empty conditions to refresh the dataview
-      const emptyFilterConditions = { ...filters };
-      emptyFilterConditions.conditions = [];
-      resolve(
-        obtainColumnsFromRows(
-          view.file.parent.path,
-          configInfo.getLocalSettings(),
-          emptyFilterConditions,
-          columns
-        )
+  const obtainPossibleColumns = async (): Promise<ColumnFilterOption[]> => {
+    const emptyFilterConditions = { ...filters };
+    const allColumns = await obtainColumnsFromRows(
+      view.file.parent.path,
+      configInfo.getLocalSettings(),
+      emptyFilterConditions,
+      columns
+    );
+
+    const columnOptions: ColumnFilterOption[] = [];
+    allColumns.forEach((column) => {
+      const possibleColumn = columns.find(
+        (dbColumn) => dbColumn.key === column
       );
-    }).then((columns) => {
-      new FiltersModal({
-        table,
-        possibleColumns: columns.sort((a, b) => a.localeCompare(b)),
-      }).open();
+
+      columnOptions.push({
+        enabled: possibleColumn !== undefined,
+        key: column,
+        type: possibleColumn ? possibleColumn.input : InputType.TEXT,
+      });
     });
+    return columnOptions.sort((a, b) => a.key.localeCompare(b.key));
+  };
+
+  const openFiltersGroupHandler = async () => {
+    new FiltersModal({
+      table,
+      possibleColumns: await obtainPossibleColumns(),
+    }).open();
   };
 
   /**
