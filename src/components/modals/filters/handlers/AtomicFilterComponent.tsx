@@ -102,6 +102,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
       >
         <OperatorSelectorComponent
           currentOp={operator}
+          type={type}
           recursiveIndex={recursiveIndex}
           level={level}
           onChange={onChangeOperatorHandler}

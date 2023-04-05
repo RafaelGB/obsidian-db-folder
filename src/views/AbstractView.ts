@@ -17,7 +17,6 @@ import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
 import { dataApiBuilder } from "./DataApiBuilder";
-import DefaultDataImpl from "./impl/DefaultDataImpl";
 
 export abstract class CustomView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;

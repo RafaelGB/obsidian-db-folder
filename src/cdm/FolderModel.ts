@@ -115,6 +115,8 @@ export interface DatabaseHeaderProps {
     table: Table<RowDataType>
 }
 
+export type ColumnFilterProps = Pick<DatabaseHeaderProps, 'column'>;
+
 export type RelationshipProps = {
     option: ColumnOption
     view: CustomView,

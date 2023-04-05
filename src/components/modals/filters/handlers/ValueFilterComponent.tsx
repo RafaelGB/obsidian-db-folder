@@ -1,5 +1,4 @@
 import Input from "@mui/material/Input";
-import { InputType } from "helpers/Constants";
 import React, { useState } from "react";
 
 const ValueFilterComponent = (props: {
@@ -23,19 +22,15 @@ const ValueFilterComponent = (props: {
       }, 1500)
     );
   };
-  switch (props.type) {
-    case InputType.CALENDAR:
-      break;
-    default:
-      return (
-        <Input
-          type="text"
-          className="form-control"
-          value={value}
-          onChange={proxyHandler}
-        />
-      );
-  }
+
+  return (
+    <Input
+      type="text"
+      className="form-control"
+      value={value}
+      onChange={proxyHandler}
+    />
+  );
 };
 
 export default ValueFilterComponent;
