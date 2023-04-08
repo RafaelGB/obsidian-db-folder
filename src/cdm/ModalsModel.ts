@@ -2,16 +2,14 @@ import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { AutomationState, ColumnsState, ConfigState, DataState, RowTemplateState } from "cdm/TableStateInterface";
 import { ColumnSettingsManager } from "components/modals/columnSettings/ColumnSettingsModal";
 import { AddColumnModalManager } from "components/modals/newColumn/addColumnModal";
-import { FiltersModalManager } from "components/modals/filters/FiltersModal";
 import { Table } from "@tanstack/react-table";
 import { AddRowModalManager } from "components/modals/addRow/AddRowModal";
 import { CustomView } from "views/AbstractView";
-import { ColumnFilterOption } from "./ComponentsModel";
 
 /**
  * Base class for all modal responses.
  */
-type BaseModalHandlerResponse = {
+export type BaseModalHandlerResponse = {
     containerEl: HTMLElement;
 };
 
@@ -72,17 +70,4 @@ export type AddRowModalProps = {
     configState: Pick<ConfigState, "info" | "actions">
     view: CustomView,
     table: Table<RowDataType>
-}
-
-/***************************************
- *         FILTERS  MODAL
- ***************************************/
-
-/** Filters Modal */
-export type FiltersModalProps = {
-    table: Table<RowDataType>,
-    possibleColumns: ColumnFilterOption[]
-}
-export type FiltersModalHandlerResponse = {
-    filtersModalManager: FiltersModalManager
-} & BaseModalHandlerResponse;
+};

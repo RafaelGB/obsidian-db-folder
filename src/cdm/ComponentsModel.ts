@@ -30,15 +30,19 @@ export type RelationEditorComponentProps = {
     relationCell: Link[];
 } & CellComponentProps;
 
+export type TableFiltersProps = {
+    table: Table<RowDataType>;
+};
+
 export type DataviewFiltersProps = {
     table: Table<RowDataType>;
     possibleColumns: ColumnFilterOption[];
-};
+} & TableFiltersProps;
+
 export type AtomicFilterComponentProps = {
     recursiveIndex: number[];
     level: number;
     atomicFilter: AtomicFilter;
-    possibleColumns: ColumnFilterOption[];
 } & DataviewFiltersProps;
 
 export type ColumnFilterOption = {

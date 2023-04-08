@@ -1,8 +1,8 @@
 import { DataviewFiltersProps } from "cdm/ComponentsModel";
 import React from "react";
 import { FilterGroupCondition } from "cdm/SettingsModel";
-import GroupFilterComponent from "components/modals/filters/handlers/GroupFilterComponent";
 import DnDComponent from "components/behavior/DnDComponent";
+import GroupFilterComponent from "./GroupFilterComponent";
 
 const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
   const { table, possibleColumns } = props;

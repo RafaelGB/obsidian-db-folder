@@ -1,7 +1,7 @@
-import { ColumnFilterOption, DataviewFiltersProps } from "cdm/ComponentsModel";
+import { FiltersModal } from "@features/filters";
+import { ColumnFilterOption, TableFiltersProps } from "cdm/ComponentsModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import MenuDownIcon from "components/img/MenuDownIcon";
-import { FiltersModal } from "components/modals/filters/FiltersModal";
 import {
   EMITTERS_GROUPS,
   EMITTERS_SHORTCUT,
@@ -10,7 +10,7 @@ import {
 import { c } from "helpers/StylesHelper";
 import React, { useEffect } from "react";
 
-export default function EditFiltersButton(props: DataviewFiltersProps) {
+export default function EditFiltersButton(props: TableFiltersProps) {
   const { table } = props;
   const { tableState, view } = table.options.meta;
   const [configInfo, filters] = tableState.configState((state) => [

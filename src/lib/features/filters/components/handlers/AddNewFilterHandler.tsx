@@ -1,9 +1,5 @@
 import Button from "@mui/material/Button";
 import {
-  FiltersModalHandlerResponse,
-  FiltersModalProps,
-} from "cdm/ModalsModel";
-import {
   ConditionFiltersOptions,
   OperatorFilter,
   StyleVariables,
@@ -18,6 +14,10 @@ import { AtomicFilter } from "cdm/SettingsModel";
 import Grid from "@mui/material/Grid";
 import { t } from "lang/helpers";
 import { Db } from "services/CoreService";
+import {
+  FiltersModalHandlerResponse,
+  FiltersModalProps,
+} from "@features/filters/model/FiltersModel";
 
 export class AddNewFilterHandler extends AbstractHandlerClass<FiltersModalHandlerResponse> {
   settingTitle: string = t("filters_modal_add_single_filter");

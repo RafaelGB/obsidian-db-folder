@@ -1,11 +1,11 @@
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import { DataviewFiltersProps } from "cdm/ComponentsModel";
+import { TableFiltersProps } from "cdm/ComponentsModel";
 import { FilterGroupCondition } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
 import React from "react";
 
-const QuickFilters = (props: DataviewFiltersProps) => {
+const QuickFilters = (props: TableFiltersProps) => {
   const { table } = props;
   const { tableState } = table.options.meta;
   const configActions = tableState.configState((state) => state.actions);

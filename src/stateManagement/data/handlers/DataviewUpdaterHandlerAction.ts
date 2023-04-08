@@ -1,10 +1,10 @@
+import { tableFilter } from "@features/filters";
 import { NoteInfoPage } from "cdm/DatabaseModel";
 import { UpdaterData } from "cdm/EmitterModel";
 import { TableColumn } from "cdm/FolderModel";
 import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { DATAVIEW_UPDATER_OPERATIONS, MetadataColumns, SourceDataTypes } from "helpers/Constants";
-import tableFilter from "helpers/TableFiltersHelper";
 import { TFile } from "obsidian";
 import { DataviewService } from "services/DataviewService";
 import { LOGGER } from "services/Logger";

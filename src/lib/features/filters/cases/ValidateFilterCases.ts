@@ -1,28 +1,14 @@
-import { AtomicFilter, FilterGroup, FilterGroupCondition, LocalSettings } from "cdm/SettingsModel";
 import { Literal } from "obsidian-dataview";
-import { ConditionFiltersOptions, getOperatorFilterValue, InputType, OperatorFilter } from "helpers/Constants";
+import { AtomicFilter, FilterGroup, FilterGroupCondition } from "../model/FiltersModel";
+import { LocalSettings } from "cdm/SettingsModel";
 import { ParseService } from "services/ParseService";
+import { ConditionFiltersOptions, InputType, OperatorFilter, getOperatorFilterValue } from "helpers/Constants";
 
-/**
- * Check if a row is valid for a filter
- * @param dbFilters 
- * @param p 
- * @param ddbbConfig 
- * @returns 
- */
-export default function tableFilter(dbFilters: FilterGroup[], p: Record<string, Literal>, ddbbConfig: LocalSettings): boolean {
-    if (!dbFilters || dbFilters.length === 0) return true;
-    return !dbFilters.some((filter) => {
-        return !validateFilter(p, filter, ddbbConfig);
-    });
-}
-
-function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbConfig: LocalSettings): boolean {
+export function validateFilter(p: Record<string, Literal>, filter: FilterGroup, ddbbConfig: LocalSettings): boolean {
     if ((filter as FilterGroupCondition).condition) {
         return validateGroupCondition(p, filter as FilterGroupCondition, ddbbConfig);
     }
     return validateAtomicFilter(p, filter as AtomicFilter, ddbbConfig);
-
 }
 
 function validateAtomicFilter(p: Record<string, Literal>, filter: AtomicFilter, ddbbConfig: LocalSettings): boolean {
@@ -103,44 +89,4 @@ function validateGroupCondition(p: Record<string, Literal>, filter: FilterGroupC
         // Do nothing
     }
     return groupResult;
-}
-
-export function getFilterKeyInFunctionOfInputType(inputType: string): string {
-    let filterKey: string;
-    switch (inputType) {
-        case InputType.MARKDOWN:
-            filterKey = 'markdown';
-            break;
-        case InputType.OUTLINKS:
-        case InputType.INLINKS:
-        case InputType.RELATION:
-            filterKey = 'linksGroup';
-            break;
-        case InputType.CALENDAR:
-        case InputType.CALENDAR_TIME:
-        case InputType.METATADA_TIME:
-            filterKey = 'calendar';
-            break;
-        case InputType.CHECKBOX:
-            filterKey = 'boolean';
-            break;
-        case InputType.TAGS:
-            filterKey = 'tags';
-            break;
-        case InputType.TASK:
-            filterKey = 'task';
-            break;
-        case InputType.SELECT:
-        case InputType.TEXT:
-        case InputType.ROLLUP:
-        case InputType.FORMULA:
-            filterKey = 'plainText';
-            break;
-        case InputType.NUMBER:
-            filterKey = 'number';
-            break;
-        default:
-            filterKey = 'auto';
-    }
-    return filterKey;
 }

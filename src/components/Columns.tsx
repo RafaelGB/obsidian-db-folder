@@ -17,7 +17,7 @@ import { Literal } from "obsidian-dataview/lib/data-model/value";
 import { obtainAllPossibleRows } from "helpers/VaultManagement";
 import rowContextMenuColumn from "components/contextMenu/RowContextMenu";
 import { containsUpper } from "helpers/WindowElement";
-import { getFilterKeyInFunctionOfInputType } from "helpers/TableFiltersHelper";
+import { inputTypeToFilterKey } from "lib/features/filters/mappers/ReactTableMapper";
 
 /**
  * Add mandatory and configured metadata columns of the table
@@ -234,7 +234,7 @@ function columnOptions(
       config: column.config,
     };
     // Custom react-table attributes
-    columnOption["filterFn"] = getFilterKeyInFunctionOfInputType(column.input);
+    columnOption["filterFn"] = inputTypeToFilterKey(column.input);
     return columnOption;
   } else {
     throw `Error: option ${column.input} not supported yet`;

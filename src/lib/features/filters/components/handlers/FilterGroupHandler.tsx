@@ -1,8 +1,8 @@
-import { FiltersModalHandlerResponse } from "cdm/ModalsModel";
-import DataviewFiltersComponent from "components/modals/filters/handlers/DataviewFiltersComponent";
+import { FiltersModalHandlerResponse } from "@features/filters/model/FiltersModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
+import DataviewFiltersComponent from "./DataviewFiltersComponent";
 
 export class FilterGroupHandler extends AbstractHandlerClass<FiltersModalHandlerResponse> {
   settingTitle: string = "Content alignment selector";

@@ -3,22 +3,22 @@ import Grid from "@mui/material/Grid";
 import { AtomicFilter, FilterGroupCondition } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
 import React, { ChangeEventHandler, useEffect, useState } from "react";
-import AtomicFilterComponent from "components/modals/filters/handlers/AtomicFilterComponent";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderDeleteIcon from "@mui/icons-material/FolderDelete";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
-import modifyRecursiveFilterGroups, {
-  ModifyFilterOptionsEnum,
-} from "components/modals/filters/handlers/FiltersHelper";
-import ConditionSelectorComponent from "components/modals/filters/handlers/ConditionSelectorComponent";
 import IconButton from "@mui/material/IconButton";
-import LabelComponent from "components/modals/filters/handlers/LabelComponent";
 import { Setting } from "obsidian";
 import { t } from "lang/helpers";
 import { Db } from "services/CoreService";
 import { GroupFilterComponentProps } from "cdm/ComponentsModel";
+import modifyRecursiveFilterGroups, {
+  ModifyFilterOptionsEnum,
+} from "./FiltersHelper";
+import LabelComponent from "./LabelComponent";
+import ConditionSelectorComponent from "./ConditionSelectorComponent";
+import AtomicFilterComponent from "./AtomicFilterComponent";
 
 const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
   const { group, recursiveIndex, level, table, possibleColumns } = groupProps;
