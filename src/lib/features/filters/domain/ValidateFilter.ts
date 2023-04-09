@@ -69,7 +69,7 @@ class ValidateFilter {
         if (OperatorFilter.IS_NOT_EMPTY[1] === operatorFilter) {
             return (literalToCheck !== null && literalToCheck !== undefined && literalToCheck !== '');
         }
-        console.log('literalToCheck', literalToCheck);
+
         switch (type) {
             case InputType.CALENDAR:
             case InputType.CALENDAR_TIME:

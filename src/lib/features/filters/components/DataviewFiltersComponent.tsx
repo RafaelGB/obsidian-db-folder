@@ -24,6 +24,7 @@ const DataviewFiltersComponent = (props: DataviewFiltersProps) => {
         return (
           <DnDComponent
             id={`${index}`}
+            key={`div-dndComponent-${index}`}
             index={index}
             lambda={reorderFilters}
             dataLabel={"dbfolderFiltersOrder"}

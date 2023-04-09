@@ -42,6 +42,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
         event.target.value
       );
     };
+
   const onChangeOperatorHandler =
     (conditionIndex: number[], level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
@@ -52,6 +53,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
         event.target.value
       );
     };
+
   const commonModifyFilter = (
     conditionIndex: number[],
     level: number,
@@ -75,6 +77,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
       alteredFilterState
     );
   };
+
   return (
     <Grid
       container
