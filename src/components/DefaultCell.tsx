@@ -18,6 +18,7 @@ import RelationCell from "components/cellTypes/RelationCell";
 import RollupCell from "components/cellTypes/RollupCell";
 import { CellContext } from "@tanstack/react-table";
 import { Literal } from "obsidian-dataview";
+import MetadataTagsCell from "./cellTypes/MetadataTagsCell";
 
 export default function DefaultCell(
   defaultCell: CellContext<RowDataType, Literal>
@@ -69,6 +70,10 @@ export default function DefaultCell(
       case InputType.INLINKS:
       case InputType.OUTLINKS:
         return <InOutLinksCell defaultCell={defaultCell} />;
+
+      /** Metadata file tags */
+      case InputType.METADATA_TAGS:
+        return <MetadataTagsCell defaultCell={defaultCell} />;
 
       /** Checkbox option */
       case InputType.CHECKBOX:

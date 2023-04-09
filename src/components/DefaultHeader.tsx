@@ -16,6 +16,7 @@ import IncomingLinkIcon from "components/img/IncomingLinkIcon";
 import CodeIcon from "components/img/CodeIcon";
 import RelationBidirectionalIcon from "components/img/RelationBidirectionalIcon";
 import RollupIcon from "components/img/RollupIcon";
+import MetadataTagsIcon from "components/img/MetadataTags";
 import { AddColumnModal } from "components/modals/newColumn/addColumnModal";
 import {
   BaseFilter,
@@ -96,6 +97,10 @@ export default function DefaultHeader(headerProps: DatabaseHeaderProps) {
       break;
     case InputType.TASK:
       propertyIcon = <TaskIcon />;
+      columnSearch = <BaseFilter {...headerProps} />;
+      break;
+    case InputType.METADATA_TAGS:
+      propertyIcon = <MetadataTagsIcon />;
       columnSearch = <BaseFilter {...headerProps} />;
       break;
     case InputType.CHECKBOX:

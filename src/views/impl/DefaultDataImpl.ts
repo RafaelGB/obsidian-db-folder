@@ -42,6 +42,7 @@ class DefaultDataImpl extends DataApi {
                 tasks: [],
                 inlinks: [],
                 outlinks: [],
+                tags: [],
             },
         });
 

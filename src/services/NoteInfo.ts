@@ -30,6 +30,7 @@ export default class NoteInfo {
         aFile[MetadataColumns.TASKS] = dataviewFile.file.tasks;
         aFile[MetadataColumns.OUTLINKS] = dataviewFile.file.outlinks;
         aFile[MetadataColumns.INLINKS] = dataviewFile.file.inlinks;
+        aFile[MetadataColumns.TAGS] = dataviewFile.file.tags;
         /** Parse data with the type of column */
 
         columns

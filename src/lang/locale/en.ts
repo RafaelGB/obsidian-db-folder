@@ -277,6 +277,8 @@ export default {
   "settings_metatata_inlinks_toggle_desc": "Enable/disable File Inlinks Column",
   "settings_metatata_outlinks_toggle_title": "File Outlinks",
   "settings_metatata_outlinks_toggle_desc": "Enable/disable File Outlinks Column",
+  "settings_metatata_tags_toggle_title": "File Tags",
+  "settings_metatata_tags_toggle_desc": "Enable/disable File Tags Column",
   "settings_remove_fields_title": "Remove fields",
   "settings_remove_fields_desc": "Enable/disable remove fields when a column is deleted",
   "settings_template_title": "Header templates",

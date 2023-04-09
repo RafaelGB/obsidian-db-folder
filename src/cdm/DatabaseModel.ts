@@ -46,7 +46,7 @@ export type TableOptionsResponse = {
 }
 
 export type NoteInfoPage = Omit<SMarkdownPage, "file"> & {
-    file: Pick<SMarkdownPage["file"], "link" | "path" | "ctime" | "mtime" | "tasks" | "outlinks" | "inlinks" | "folder">
+    file: Pick<SMarkdownPage["file"], "link" | "path" | "ctime" | "mtime" | "tasks" | "outlinks" | "inlinks" | "folder" | "tags">;
 };
 
 export type LocaleDict = keyof typeof en;

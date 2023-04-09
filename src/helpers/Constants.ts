@@ -30,6 +30,7 @@ export const StaticInputType = Object.freeze({
   TASK: 'task',
   INLINKS: 'inlinks',
   OUTLINKS: 'outlinks',
+  METADATA_TAGS: 'metadata_tags',
   NEW_COLUMN: 'new_column',
 });
 
@@ -51,7 +52,8 @@ export const MetadataColumns = Object.freeze({
   TASKS: `__tasks__`,
   OUTLINKS: `__outlinks__`,
   INLINKS: `__inlinks__`,
-  ROW_CONTEXT_MENU: "__rowContextMenu__"
+  ROW_CONTEXT_MENU: "__rowContextMenu__",
+  TAGS: `__tags__`,
 });
 
 export const MetadataLabels = Object.freeze({
@@ -62,6 +64,7 @@ export const MetadataLabels = Object.freeze({
   TASK: 'Task',
   OUTLINKS: 'Outlinks',
   INLINKS: 'Inlinks',
+  TAGS: 'File Tags',
 });
 
 export const PaginationRenderOptions = Object.freeze({
@@ -213,6 +216,18 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     csvCandidate: false,
     config: DEFAULT_COLUMN_CONFIG
 
+  },
+  TAGS: {
+    key: MetadataColumns.TAGS,
+    id: MetadataColumns.TAGS,
+    input: InputType.METADATA_TAGS,
+    label: MetadataLabels.TAGS,
+    accessorKey: MetadataColumns.TAGS,
+    isMetadata: true,
+    isDragDisabled: false,
+    skipPersist: false,
+    csvCandidate: false,
+    config: DEFAULT_COLUMN_CONFIG
   },
   ROW_CONTEXT_MENU: {
     id: MetadataColumns.ROW_CONTEXT_MENU,
@@ -413,6 +428,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     show_metadata_tasks: false,
     show_metadata_inlinks: false,
     show_metadata_outlinks: false,
+    show_metadata_tags: false,
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: '',
     source_destination_path: '/',

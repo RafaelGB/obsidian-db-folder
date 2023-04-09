@@ -116,6 +116,27 @@ export class DefaultMetadataToggleGroupHandler extends AbstractSettingsHandler {
                     toggle.setValue(settingsManager.plugin.settings.local_settings.show_metadata_outlinks)
                         .onChange(metadata_outlinks_toggle_promise)
                 );
+
+            /*************************
+             * METADATA TAGS COLUMN
+             ************************/
+            const metadata_tags_toggle_promise = async (value: boolean): Promise<void> => {
+                // switch show tags on/off
+                const update_local_settings = settingsManager.plugin.settings.local_settings;
+                update_local_settings.show_metadata_tags = value;
+                // update settings
+                await settingsManager.plugin.updateSettings({
+                    local_settings: update_local_settings
+                });
+            }
+
+            new Setting(metadata_section)
+                .setName(t("settings_metatata_tags_toggle_title"))
+                .setDesc(t("settings_metatata_tags_toggle_desc"))
+                .addToggle(toggle =>
+                    toggle.setValue(settingsManager.plugin.settings.local_settings.show_metadata_tags)
+                        .onChange(metadata_tags_toggle_promise)
+                );
         }
         return this.goNext(settingHandlerResponse);
     }

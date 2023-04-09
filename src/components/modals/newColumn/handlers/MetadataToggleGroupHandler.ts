@@ -116,6 +116,23 @@ export class MetadataToggleGroupHandler extends AbstractHandlerClass<AddColumnMo
                     .onChange(metadata_outlinks_toggle_promise)
             );
 
+        /************************
+        * METADATA TAGS COLUMN
+        ************************/
+        const metadata_tags_toggle_promise = async (value: boolean): Promise<void> => {
+            // Persist value
+            view.diskConfig.updateConfig({ show_metadata_tags: value });
+            addColumnModalManager.addColumnModal.enableReset = true;
+        }
+
+        new Setting(metadata_section)
+            .setName(t("settings_metatata_tags_toggle_title"))
+            .setDesc(t("settings_metatata_tags_toggle_desc"))
+            .addToggle(toggle =>
+                toggle.setValue(view.diskConfig.yaml.config.show_metadata_tags)
+                    .onChange(metadata_tags_toggle_promise)
+            );
+
         return this.goNext(response);
     }
 }

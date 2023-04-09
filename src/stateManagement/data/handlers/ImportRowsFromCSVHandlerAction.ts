@@ -108,6 +108,7 @@ export default class ImportRowsFromCSVHandlerAction extends AbstractTableAction<
                         tasks: [],
                         inlinks: [],
                         outlinks: [],
+                        tags: [],
                     },
                 });
 

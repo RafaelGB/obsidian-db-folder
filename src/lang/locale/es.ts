@@ -266,6 +266,8 @@ export default {
     "settings_metatata_inlinks_toggle_desc": "Habilitar/deshabilitar la columna de enlaces de archivos entrantes",
     "settings_metatata_outlinks_toggle_title": "Enlaces de archivos salientes",
     "settings_metatata_outlinks_toggle_desc": "Habilitar/deshabilitar la columna de enlaces de archivos salientes",
+    "settings_metatata_tags_toggle_title": "Etiquetas",
+    "settings_metatata_tags_toggle_desc": "Habilitar/deshabilitar la columna de etiquetas",
     "settings_remove_fields_title": "Eliminar campos",
     "settings_remove_fields_desc": "Habilitar/deshabilitar eliminar campos cuando se elimina una columna",
     "settings_template_title": "Plantillas para creación de columnas",

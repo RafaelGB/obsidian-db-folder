@@ -84,6 +84,16 @@ export async function obtainMetadataColumns(
     delete yamlColumns[MetadataColumns.OUTLINKS];
   }
 
+  if (localSetting.show_metadata_tags) {
+    // If TAGS is not already in the table, add it
+    yamlColumns[MetadataColumns.TAGS] = {
+      ...MetadataDatabaseColumns.TAGS,
+      ...(yamlColumns[MetadataColumns.TAGS] ?? {}),
+    };
+  } else {
+    delete yamlColumns[MetadataColumns.TAGS];
+  }
+
   yamlColumns[MetadataColumns.ADD_COLUMN] = {
     ...MetadataDatabaseColumns.ADD_COLUMN,
     position: DatabaseLimits.MAX_COLUMNS + 1,

@@ -94,7 +94,7 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
             case InputType.METATADA_TIME:
             case InputType.INLINKS:
             case InputType.OUTLINKS:
-
+            case InputType.METADATA_TAGS:
                 // do nothing
                 break;
             default:

@@ -261,6 +261,8 @@ export default {
   "settings_metatata_inlinks_toggle_desc": "Activer/désactiver la colonne des liens entrants.",
   "settings_metatata_outlinks_toggle_title": "Fichiers sortants",
   "settings_metatata_outlinks_toggle_desc": "Activer/désactiver la colonne des liens sortants.",
+  "settings_metatata_tags_toggle_title": "Tags",
+  "settings_metatata_tags_toggle_desc": "Activer/désactiver la colonne des tags.",
   "settings_remove_fields_title": "Supprimer les champs",
   "settings_remove_fields_desc": "Activer/désactiver la suppression des champs.",
   "settings_template_title": "Modèle d'en-tête",
