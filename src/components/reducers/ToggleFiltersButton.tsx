@@ -1,17 +1,13 @@
-import { DataviewFiltersProps } from "cdm/ComponentsModel";
+import { TableFiltersProps } from "@features/filters/model/FiltersModel";
 import { UpdaterData } from "cdm/EmitterModel";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";
-import {
-  DATAVIEW_UPDATER_OPERATIONS,
-  EMITTERS_GROUPS,
-  EMITTERS_SHORTCUT,
-} from "helpers/Constants";
+import { EMITTERS_GROUPS, EMITTERS_SHORTCUT } from "helpers/Constants";
 import { c } from "helpers/StylesHelper";
 import React, { useEffect, useRef, useState } from "react";
 import { LOGGER } from "services/Logger";
 
-export default function ToggleFiltersButton(props: DataviewFiltersProps) {
+export default function ToggleFiltersButton(props: TableFiltersProps) {
   const { table } = props;
   const { tableState, view } = table.options.meta;
   const configInfo = tableState.configState((state) => state.info);

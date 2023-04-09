@@ -1,16 +1,16 @@
 import Grid from "@mui/material/Grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { AtomicFilterComponentProps } from "cdm/ComponentsModel";
 import { OperatorFilter, StyleVariables } from "helpers/Constants";
 import React from "react";
-import ValueFilterComponent from "components/modals/filters/handlers/ValueFilterComponent";
+import ValueFilterComponent from "./ValueFilterComponent";
 import modifyRecursiveFilterGroups, {
   ModifyFilterOptionsEnum,
-} from "components/modals/filters/handlers/FiltersHelper";
-import OperatorSelectorComponent from "components/modals/filters/handlers/OperatorSelectorComponent";
-import ExistedColumnSelectorComponent from "components/modals/filters/handlers/ExistedColumnSelectorComponent";
+} from "../domain/FilterActions";
+import OperatorSelectorComponent from "./OperatorSelectorComponent";
+import ExistedColumnSelectorComponent from "./ExistedColumnSelectorComponent";
 import { SelectChangeEvent } from "@mui/material/Select";
 import IconButton from "@mui/material/IconButton";
+import { AtomicFilterComponentProps } from "../model/FiltersModel";
 
 const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
   const { table, recursiveIndex, level, atomicFilter, possibleColumns } = props;
@@ -42,6 +42,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
         event.target.value
       );
     };
+
   const onChangeOperatorHandler =
     (conditionIndex: number[], level: number) =>
     (event: SelectChangeEvent<string>, child: React.ReactNode) => {
@@ -52,6 +53,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
         event.target.value
       );
     };
+
   const commonModifyFilter = (
     conditionIndex: number[],
     level: number,
@@ -75,6 +77,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
       alteredFilterState
     );
   };
+
   return (
     <Grid
       container
@@ -102,6 +105,7 @@ const AtomicFilterComponent = (props: AtomicFilterComponentProps) => {
       >
         <OperatorSelectorComponent
           currentOp={operator}
+          type={type}
           recursiveIndex={recursiveIndex}
           level={level}
           onChange={onChangeOperatorHandler}

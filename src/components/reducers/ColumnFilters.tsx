@@ -1,4 +1,4 @@
-import { DatabaseHeaderProps } from "cdm/FolderModel";
+import { ColumnFilterProps, DatabaseHeaderProps } from "cdm/FolderModel";
 import { DynamicDebouncedInput } from "components/behavior/DebouncedInputFn";
 import DatePicker from "react-datepicker";
 import React, { useState } from "react";
@@ -10,7 +10,7 @@ import { StyleVariables } from "helpers/Constants";
  * @param headerProps
  * @returns
  */
-export function BaseFilter(headerProps: DatabaseHeaderProps) {
+export function BaseFilter(headerProps: ColumnFilterProps) {
   const { column } = headerProps;
 
   return (
@@ -35,7 +35,7 @@ export function BaseFilter(headerProps: DatabaseHeaderProps) {
  * @param headerProps
  * @returns
  */
-export function TextFilter(headerProps: DatabaseHeaderProps) {
+export function TextFilter(headerProps: ColumnFilterProps) {
   const { column } = headerProps;
 
   const sortedUniqueValues = React.useMemo(
@@ -69,7 +69,7 @@ export function TextFilter(headerProps: DatabaseHeaderProps) {
   );
 }
 
-export function NumberFilter(headerProps: DatabaseHeaderProps) {
+export function NumberFilter(headerProps: ColumnFilterProps) {
   const { column } = headerProps;
   const minRaw = Number(column.getFacetedMinMaxValues()?.[0] ?? undefined);
   const maxRaw = Number(column.getFacetedMinMaxValues()?.[1] ?? undefined);
@@ -131,7 +131,7 @@ export function NumberFilter(headerProps: DatabaseHeaderProps) {
   );
 }
 
-export function DateRangeFilter(headerProps: DatabaseHeaderProps) {
+export function DateRangeFilter(headerProps: ColumnFilterProps) {
   const { column } = headerProps;
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -191,7 +191,7 @@ export function DateRangeFilter(headerProps: DatabaseHeaderProps) {
   );
 }
 
-export function BooleanFilter(headerProps: DatabaseHeaderProps) {
+export function BooleanFilter(headerProps: ColumnFilterProps) {
   const { column } = headerProps;
   const [value, setValue] = useState<number | string>("All");
 

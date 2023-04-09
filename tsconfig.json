@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
       "baseUrl": "src",
+      "paths": {
+          "@features/*": ["lib/features/*"]
+        },
       "inlineSources": true,
       "sourceMap": true,
       "module": "ESNext",

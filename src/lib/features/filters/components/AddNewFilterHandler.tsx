@@ -1,11 +1,6 @@
 import Button from "@mui/material/Button";
 import {
-  FiltersModalHandlerResponse,
-  FiltersModalProps,
-} from "cdm/ModalsModel";
-import {
   ConditionFiltersOptions,
-  InputType,
   OperatorFilter,
   StyleVariables,
 } from "helpers/Constants";
@@ -19,6 +14,10 @@ import { AtomicFilter } from "cdm/SettingsModel";
 import Grid from "@mui/material/Grid";
 import { t } from "lang/helpers";
 import { Db } from "services/CoreService";
+import {
+  FiltersModalHandlerResponse,
+  FiltersModalProps,
+} from "@features/filters/model/FiltersModel";
 
 export class AddNewFilterHandler extends AbstractHandlerClass<FiltersModalHandlerResponse> {
   settingTitle: string = t("filters_modal_add_single_filter");
@@ -48,10 +47,10 @@ const NewFiltersForm = (props: FiltersModalProps) => {
 
     const alteredFilterState = { ...configInfo.getFilters() };
     alteredFilterState.conditions.push({
-      field: possibleColumns[0],
+      field: possibleColumns[0].key,
       operator: OperatorFilter.CONTAINS[0],
       value: "",
-      type: InputType.TEXT,
+      type: possibleColumns[0].type,
     });
     configActions.alterFilters(alteredFilterState);
   };
@@ -66,10 +65,10 @@ const NewFiltersForm = (props: FiltersModalProps) => {
     const alteredFilterState = { ...configInfo.getFilters() };
 
     const mockAtomicFilter: AtomicFilter = {
-      field: possibleColumns[0],
+      field: possibleColumns[0].key,
       operator: OperatorFilter.CONTAINS[0],
       value: "",
-      type: InputType.TEXT,
+      type: possibleColumns[0].type,
     };
 
     alteredFilterState.conditions.push({
