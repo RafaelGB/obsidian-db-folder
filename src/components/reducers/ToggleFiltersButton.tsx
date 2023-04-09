@@ -1,4 +1,4 @@
-import { DataviewFiltersProps, TableFiltersProps } from "cdm/ComponentsModel";
+import { TableFiltersProps } from "@features/filters/model/FiltersModel";
 import { UpdaterData } from "cdm/EmitterModel";
 import FilterOffIcon from "components/img/FilterOffIcon";
 import FilterOnIcon from "components/img/FilterOnIcon";

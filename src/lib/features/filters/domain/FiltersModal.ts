@@ -1,10 +1,10 @@
-
 import { StyleClasses } from "helpers/Constants";
 import { Modal } from "obsidian";
 import { add_setting_header } from "settings/SettingsComponents";
 import { t } from "lang/helpers";
 import { FiltersModalHandlerResponse, FiltersModalProps } from "../model/FiltersModel";
-import { filter_group_section } from "./FilterGroupSection";
+import { filter_group_section } from "./FiltersChain";
+
 
 export class FiltersModal extends Modal {
   addColumnManager: FiltersModalManager;

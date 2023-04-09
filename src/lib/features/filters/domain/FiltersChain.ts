@@ -1,8 +1,9 @@
 import { AbstractChain } from "patterns/chain/AbstractFactoryChain";
 import { AbstractHandler } from "patterns/chain/AbstractHandler";
 import { FiltersModalHandlerResponse } from "../model/FiltersModel";
-import { FilterGroupHandler } from "./handlers/FilterGroupHandler";
-import { AddNewFilterHandler } from "./handlers/AddNewFilterHandler";
+import { FilterGroupHandler } from "../components/FilterGroupHandler";
+import { AddNewFilterHandler } from "../components/AddNewFilterHandler";
+
 class FilterGroupSection extends AbstractChain<FiltersModalHandlerResponse> {
     protected getHandlers(): AbstractHandler<FiltersModalHandlerResponse>[] {
         return [

@@ -1,5 +1,8 @@
 import { FiltersModal } from "@features/filters";
-import { ColumnFilterOption, TableFiltersProps } from "cdm/ComponentsModel";
+import {
+  ColumnFilterOption,
+  TableFiltersProps,
+} from "@features/filters/model/FiltersModel";
 import { obtainColumnsFromRows } from "components/Columns";
 import MenuDownIcon from "components/img/MenuDownIcon";
 import {

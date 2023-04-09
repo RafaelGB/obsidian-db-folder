@@ -12,13 +12,13 @@ import IconButton from "@mui/material/IconButton";
 import { Setting } from "obsidian";
 import { t } from "lang/helpers";
 import { Db } from "services/CoreService";
-import { GroupFilterComponentProps } from "cdm/ComponentsModel";
 import modifyRecursiveFilterGroups, {
   ModifyFilterOptionsEnum,
-} from "./FiltersHelper";
+} from "../domain/FilterActions";
 import LabelComponent from "./LabelComponent";
 import ConditionSelectorComponent from "./ConditionSelectorComponent";
 import AtomicFilterComponent from "./AtomicFilterComponent";
+import { GroupFilterComponentProps } from "../model/FiltersModel";
 
 const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
   const { group, recursiveIndex, level, table, possibleColumns } = groupProps;

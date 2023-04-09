@@ -1,8 +1,8 @@
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { ColumnFilterOption } from "cdm/ComponentsModel";
 import { StyleVariables } from "helpers/Constants";
 import React from "react";
+import { ColumnFilterOption } from "../model/FiltersModel";
 
 const ExistedColumnSelectorComponent = (selectorProps: {
   currentCol: string;

@@ -1,6 +1,6 @@
-import { ColumnFilterOption } from "cdm/ComponentsModel";
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from "cdm/SettingsModel";
 import { ConditionFiltersOptions, OperatorFilter } from "helpers/Constants";
+import { ColumnFilterOption } from "../model/FiltersModel";
 
 export enum ModifyFilterOptionsEnum {
     CONDITION = "CONDITION",

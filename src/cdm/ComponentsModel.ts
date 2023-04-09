@@ -29,32 +29,3 @@ export type RelationEditorComponentProps = {
     persistChange: (newPath: string[]) => void;
     relationCell: Link[];
 } & CellComponentProps;
-
-export type TableFiltersProps = {
-    table: Table<RowDataType>;
-};
-
-export type DataviewFiltersProps = {
-    table: Table<RowDataType>;
-    possibleColumns: ColumnFilterOption[];
-} & TableFiltersProps;
-
-export type AtomicFilterComponentProps = {
-    recursiveIndex: number[];
-    level: number;
-    atomicFilter: AtomicFilter;
-} & DataviewFiltersProps;
-
-export type ColumnFilterOption = {
-    key: string;
-    enabled: boolean;
-    type: string;
-}
-
-export type GroupFilterComponentProps = {
-    group: FilterGroup;
-    recursiveIndex: number[];
-    level: number;
-    table: Table<RowDataType>;
-    possibleColumns: ColumnFilterOption[];
-};
