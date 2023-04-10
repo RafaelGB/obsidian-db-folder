@@ -22,7 +22,7 @@ class Parse {
     public parseLiteral(literal: Literal, dataTypeDst: string, localSettings: LocalSettings, isInline = false, wrapQuotes = false): Literal {
         // Check empty or undefined literals
         if (!DataviewService.isTruthy(literal?.toString())) {
-            return "";
+            literal = "";
         }
         literal = this.parseDataArray(literal);
         const wrapped = DataviewService.wrapLiteral(literal);

@@ -56,6 +56,7 @@ function operatorFilterEntriesInFuctionOf(type: string) {
   switch (type) {
     case InputType.CALENDAR:
     case InputType.CALENDAR_TIME:
+    case InputType.NUMBER:
       return rawOperators.filter(
         (op) =>
           ![

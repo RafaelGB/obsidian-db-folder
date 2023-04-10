@@ -1,5 +1,5 @@
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from "cdm/SettingsModel";
-import { ConditionFiltersOptions, OperatorFilter } from "helpers/Constants";
+import { ConditionFiltersOptions, InputType, OperatorFilter } from "helpers/Constants";
 import { ColumnFilterOption } from "../model/FiltersModel";
 
 export enum ModifyFilterOptionsEnum {
@@ -71,6 +71,10 @@ const modifyRecursiveFilterGroups = (
                 break;
             case ModifyFilterOptionsEnum.FIELD:
                 (filterGroups[recursiveIndex[level]] as AtomicFilter).field = value;
+                const potentialTypedField = possibleColumns.find(
+                    (column) => column.key === value
+                );
+                (filterGroups[recursiveIndex[level]] as AtomicFilter).type = potentialTypedField ? potentialTypedField.type : InputType.TEXT;
                 break;
             case ModifyFilterOptionsEnum.VALUE:
                 (filterGroups[recursiveIndex[level]] as AtomicFilter).value = value;

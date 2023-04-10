@@ -112,7 +112,7 @@ const NumberCell = (props: CellComponentProps) => {
       }}
       tabIndex={0}
     >
-      {(numberCell !== undefined && numberCell.toString()) || ""}
+      {isNaN(numberCell) ? "" : numberCell}
     </span>
   );
 };

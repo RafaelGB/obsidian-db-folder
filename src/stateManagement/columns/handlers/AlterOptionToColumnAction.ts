@@ -11,6 +11,10 @@ export default class AlterOptionToColumnHandlerAction extends AbstractTableActio
             column: TableColumn,
             option: ColumnOption
         ) => {
+            if (option.value === "" || option.label === "") {
+                // End the execution if the option is empty
+                return;
+            }
             if (OptionSource.FORMULA === column.config.option_source) {
                 // End the execution if the option is from a formula
                 return;

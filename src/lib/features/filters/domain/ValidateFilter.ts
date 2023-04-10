@@ -69,13 +69,38 @@ class ValidateFilter {
         if (OperatorFilter.IS_NOT_EMPTY[1] === operatorFilter) {
             return (literalToCheck !== null && literalToCheck !== undefined && literalToCheck !== '');
         }
-
         switch (type) {
             case InputType.CALENDAR:
             case InputType.CALENDAR_TIME:
                 return this.calendarAtomicFilter(literalToCheck, operatorFilter, value);
+            case InputType.NUMBER:
+                return this.numberAtomicFilter(literalToCheck, operatorFilter, value);
             default:
                 return this.mdAtomicFilter(literalToCheck, operatorFilter, value);
+        }
+    }
+    private numberAtomicFilter(literalToCheck: Literal, operator: string, value: string): boolean {
+        const adaptedLiteral = ParseService.parseLiteral(literalToCheck, InputType.NUMBER, this.ddbbConfig) as number;
+        const adaptedValue = ParseService.parseLiteral(value, InputType.NUMBER, this.ddbbConfig) as number;
+        if (isNaN(adaptedLiteral) || isNaN(adaptedValue)) {
+            return false;
+        }
+        switch (operator) {
+            case OperatorFilter.EQUAL[1]:
+                return adaptedLiteral === adaptedValue;
+            case OperatorFilter.NOT_EQUAL[1]:
+                return adaptedLiteral !== adaptedValue;
+            case OperatorFilter.GREATER_THAN[1]:
+                return adaptedValue > adaptedLiteral;
+            case OperatorFilter.LESS_THAN[1]:
+                return adaptedValue < adaptedLiteral;
+            case OperatorFilter.GREATER_THAN_OR_EQUAL[1]:
+                return adaptedValue >= adaptedLiteral;
+            case OperatorFilter.LESS_THAN_OR_EQUAL[1]:
+                return adaptedValue <= adaptedLiteral;
+            default:
+                LOGGER.error(`Operator ${operator} not supported for numberAtomicFilter`);
+                return false;
         }
     }
 
