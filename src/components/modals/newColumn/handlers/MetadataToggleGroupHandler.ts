@@ -27,7 +27,7 @@ export class MetadataToggleGroupHandler extends AbstractHandlerClass<AddColumnMo
             .setName(t("settings_metatata_file_toggle_title"))
             .setDesc(t("settings_metatata_file_toggle_desc"))
             .addToggle(toggle =>
-                toggle.setValue(view.diskConfig.yaml.columns.__file__.isHidden)
+                toggle.setValue(!view.diskConfig.yaml.columns.__file__.isHidden)
                     .onChange(metadata_file_toggle_promise)
             );
 

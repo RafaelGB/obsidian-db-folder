@@ -1,5 +1,5 @@
 import { Literal } from "obsidian-dataview";
-import { DateTime } from "luxon";
+import { DateTime, DurationUnit } from "luxon";
 import { AtomicFilter, FilterGroup, FilterGroupCondition } from "../model/FiltersModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { ParseService } from "services/ParseService";
@@ -84,7 +84,7 @@ class ValidateFilter {
             return false;
         }
         const mappedValue = FilterValuesMapper.toCalendarValue(value);
-        const diffMinutes = literalToCheck.diff(mappedValue, 'minute').minutes;
+        const diffMinutes = literalToCheck.diff(mappedValue.date, mappedValue.unit).as(`${mappedValue.unit}s` as DurationUnit);
         switch (operator) {
             case OperatorFilter.EQUAL[1]:
                 return diffMinutes === 0;
