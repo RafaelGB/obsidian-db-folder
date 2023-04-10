@@ -1,3 +1,9 @@
+## 3.4.0
+### Shiny new things
+- Date range filters with autocomplete options. [#604](https://github.com/RafaelGB/obsidian-db-folder/issues/604)
+- New metadata column type. File tags [#817](https://github.com/RafaelGB/obsidian-db-folder/issues/817)
+### No longer broken
+- Add inline fields now respect the format of the last existing inline field
 ## 3.3.3
 ### No longer broken
 -  Fix hidden completed tasks in dataview mode [#839](https://github.com/RafaelGB/obsidian-db-folder/issues/839)
