@@ -1,8 +1,9 @@
 import { tableFilter } from "@features/filters";
+import { FilterSettings } from "@features/filters/model/FiltersModel";
 import { NoteInfoPage } from "cdm/DatabaseModel";
 import { UpdaterData } from "cdm/EmitterModel";
 import { TableColumn } from "cdm/FolderModel";
-import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
+import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { DATAVIEW_UPDATER_OPERATIONS, MetadataColumns, SourceDataTypes } from "helpers/Constants";
 import { TFile } from "obsidian";

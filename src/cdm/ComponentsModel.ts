@@ -1,7 +1,6 @@
-import { CellContext, Table } from "@tanstack/react-table";
+import { CellContext } from "@tanstack/react-table";
 import { RowDataType } from "cdm/FolderModel";
 import { Link, Literal } from "obsidian-dataview/lib/data-model/value";
-import { AtomicFilter, FilterGroup } from "cdm/SettingsModel";
 
 export type ColumnOption = {
     value: string;

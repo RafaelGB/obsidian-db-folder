@@ -3,7 +3,6 @@ import HelperException from "errors/HelperException";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 import { SourceDataTypes } from "helpers/Constants";
 import { RowDataType } from "cdm/FolderModel";
-import { CustomView } from "views/AbstractView";
 
 export function resolve_tfile(file_str: string, restrict = true): TFile {
   file_str = normalizePath(file_str);

@@ -10,11 +10,11 @@ import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Notice } from "obsidian";
-import { AtomicFilter } from "cdm/SettingsModel";
 import Grid from "@mui/material/Grid";
 import { t } from "lang/helpers";
 import { Db } from "services/CoreService";
 import {
+  AtomicFilter,
   FiltersModalHandlerResponse,
   FiltersModalProps,
 } from "@features/filters/model/FiltersModel";

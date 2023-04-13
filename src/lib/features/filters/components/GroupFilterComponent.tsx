@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { AtomicFilter, FilterGroupCondition } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
 import React, { ChangeEventHandler, useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,7 +17,11 @@ import modifyRecursiveFilterGroups, {
 import LabelComponent from "./LabelComponent";
 import ConditionSelectorComponent from "./ConditionSelectorComponent";
 import AtomicFilterComponent from "./AtomicFilterComponent";
-import { GroupFilterComponentProps } from "../model/FiltersModel";
+import {
+  AtomicFilter,
+  FilterGroupCondition,
+  GroupFilterComponentProps,
+} from "../model/FiltersModel";
 
 const GroupFilterComponent = (groupProps: GroupFilterComponentProps) => {
   const { group, recursiveIndex, level, table, possibleColumns } = groupProps;

@@ -1,6 +1,6 @@
+import { AtomicFilter, FilterGroup, FilterGroupCondition } from '@features/filters/model/FiltersModel';
 import { DatabaseYaml } from 'cdm/DatabaseModel';
 import { YamlHandlerResponse } from 'cdm/MashallModel';
-import { AtomicFilter, FilterGroup, FilterGroupCondition } from 'cdm/SettingsModel';
 import { InputType } from 'helpers/Constants';
 import { AbstractYamlHandler } from 'IO/md/handlers/marshall/AbstractYamlPropertyHandler';
 import { DataviewService } from 'services/DataviewService';

@@ -9,7 +9,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { LOGGER } from "services/Logger";
 import { DatabaseColumn } from "cdm/DatabaseModel";
 import { ColumnOption } from "cdm/ComponentsModel";
-import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
+import { LocalSettings } from "cdm/SettingsModel";
 import { dbTrim } from "helpers/StylesHelper";
 import { TFile } from "obsidian";
 import { DataviewService } from "services/DataviewService";
@@ -18,6 +18,7 @@ import { obtainAllPossibleRows } from "helpers/VaultManagement";
 import rowContextMenuColumn from "components/contextMenu/RowContextMenu";
 import { containsUpper } from "helpers/WindowElement";
 import ReactTableMapper from "lib/features/filters/mappers/ReactTableMapper";
+import { FilterSettings } from "@features/filters/model/FiltersModel";
 
 /**
  * Add mandatory and configured metadata columns of the table

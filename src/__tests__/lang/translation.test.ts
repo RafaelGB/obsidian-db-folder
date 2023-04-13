@@ -1,5 +1,5 @@
 import { t } from "lang/helpers";
-import { mockLocalStorage } from "mock/mockWindowUtils";
+import { mockLocalStorage } from "__tests__/mock/mockWindowUtils";
 describe("LANG.t", () => {
     test('t function call', () => {
         const { setItemMock } = mockLocalStorage();

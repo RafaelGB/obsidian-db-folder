@@ -4,22 +4,6 @@ export interface MediaSettings {
     width: number;
     height: number;
 }
-
-export type FilterGroup = AtomicFilter | FilterGroupCondition;
-
-export type FilterGroupCondition = {
-    condition: string;
-    disabled: boolean;
-    filters: FilterGroup[];
-    label?: string;
-    color?: string;
-}
-export type AtomicFilter = {
-    field: string;
-    operator: string;
-    type: string;
-    value?: string;
-}
 /**
  * Options that affects the behavior of the plugin and defines default values with some fields
  */
@@ -64,11 +48,6 @@ export interface LocalSettings {
     metadata_date_format: string;
     enable_footer: boolean;
     implementation: string;
-}
-
-export interface FilterSettings {
-    enabled: boolean;
-    conditions: FilterGroup[];
 }
 
 export interface DatabaseSettings {

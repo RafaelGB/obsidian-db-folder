@@ -1,5 +1,5 @@
 import { Workspace, Vault, MetadataCache, FileManager, UserEvent } from "obsidian";
-import { parseYamlMock } from "../src/mock/mockObsidianUtils"
+import { parseYamlMock } from "../src/__tests__/mock/mockObsidianUtils";
 
 export class App {
 
