@@ -68,7 +68,7 @@ class Parse {
                     newValue = JSON.parse(newValue);
                 } else if (SUGGESTER_REGEX.TEXT_ARRAY.test(newValue)) {
                     // Remove brackets
-                    newValue = newValue.replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2");
+                    newValue = newValue.replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2$3$4");
                     // Split by comma
                     newValue = newValue.split(",");
                 }

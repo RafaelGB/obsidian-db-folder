@@ -39,7 +39,7 @@ class MarkdownRenderService {
             if (SUGGESTER_REGEX.TEXT_ARRAY.test(markdownString)) {
                 let alternativeString = "";
                 markdownString
-                    .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2")
+                    .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2$3$4")
                     .split(",")
                     .forEach((item) => {
                         alternativeString = alternativeString.concat(`- ${item.trim()}\n`);
