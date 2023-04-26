@@ -1,7 +1,9 @@
-import { TableFiltersProps } from "@features/filters/model/FiltersModel";
+import {
+  FilterGroupCondition,
+  TableFiltersProps,
+} from "@features/filters/model/FiltersModel";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import { FilterGroupCondition } from "cdm/SettingsModel";
 import { StyleVariables } from "helpers/Constants";
 import React from "react";
 

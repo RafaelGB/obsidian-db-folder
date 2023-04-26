@@ -1,3 +1,6 @@
+const { pathsToModuleNameMapper } = require('ts-jest');
+const { compilerOptions } = require('./tsconfig');
+
 module.exports = {
     verbose: true,
     preset: 'ts-jest',
@@ -6,5 +9,12 @@ module.exports = {
     transform: {
         '^.+\\.ts$': 'ts-jest',
     },
-    moduleFileExtensions: ['js', 'ts', 'tsx']
+    moduleFileExtensions: ['js', 'ts', 'tsx'],
+    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
+    modulePaths: [
+        'src',
+    ],
+    testMatch: [
+        '**/*.test.ts',
+    ],
 };

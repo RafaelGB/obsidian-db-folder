@@ -481,17 +481,6 @@ export const DatabaseFrontmatterOptions = Object.freeze({
     'name: new database',
     'description: new description',
     'columns:',
-    ' column1:',
-    '  input: text',
-    '  key: column1',
-    '  accessorKey: column1',
-    '  label: Column 1',
-    '  position: 0',
-    '  config:',
-    '   enable_media_view: true',
-    '   media_width: 100',
-    '   media_height: 100',
-    '   isInline: false',
     'filters:',
     ' enabled: false',
     ' conditions:'
@@ -511,7 +500,7 @@ export const SUGGESTER_REGEX = Object.freeze({
   LINK_BLOCK: /\B\[\[([^#\]]+)#?\^([^\]]*)$/,
   EMBED_BLOCK: /\B!\[\[([^#\]]+)#?\^([^\]]*)$/,
 
-  TEXT_ARRAY: /(^\[{1})([^[]{1}.*)(\]{1})$/g,
+  TEXT_ARRAY: /(^\[)(.*)(,)(.*)(\])$/g,
   TEXT_OBJECT: /(^\{{1})(.*)(\}{1})$/g,
 
   CELL_VALID_KEYDOWN: /^[a-zA-Z0-9_-]{1}$/g,

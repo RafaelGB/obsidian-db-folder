@@ -1,5 +1,5 @@
+import { AtomicFilter, FilterGroup, FilterGroupCondition } from "@features/filters/model/FiltersModel";
 import { DiskHandlerResponse } from "cdm/MashallModel";
-import { AtomicFilter, FilterGroup, FilterGroupCondition } from "cdm/SettingsModel";
 import { YAML_INDENT } from "helpers/Constants";
 import { AbstractDiskHandler } from "IO/md/handlers/unmarshall/AbstractDiskPropertyHandler";
 

@@ -1,5 +1,6 @@
+import { FilterSettings } from "@features/filters/model/FiltersModel";
 import { TableColumn } from "cdm/FolderModel";
-import { FilterSettings, LocalSettings } from "cdm/SettingsModel";
+import { LocalSettings } from "cdm/SettingsModel";
 import { DataState, TableActionResponse } from "cdm/TableStateInterface";
 import { adapterTFilesToRows } from "helpers/VaultManagement";
 import { AbstractTableAction } from "stateManagement/AbstractTableAction";

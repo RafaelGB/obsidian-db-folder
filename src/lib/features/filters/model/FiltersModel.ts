@@ -20,6 +20,10 @@ export type AtomicFilter = {
     value?: string;
 }
 
+export interface FilterSettings {
+    enabled: boolean;
+    conditions: FilterGroup[];
+}
 /***************************************
  *      FILTERS COMPONENT
 ***************************************/

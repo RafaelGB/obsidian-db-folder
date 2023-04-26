@@ -7,9 +7,10 @@ import { generateDataviewTableQuery } from 'helpers/QueryHelper';
 import { DataviewService } from 'services/DataviewService';
 import { Literal } from 'obsidian-dataview/lib/data-model/value';
 import { DataArray } from 'obsidian-dataview/lib/api/data-array';
-import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
+import { LocalSettings } from 'cdm/SettingsModel';
 import { NoteInfoPage } from 'cdm/DatabaseModel';
 import { tableFilter } from '@features/filters';
+import { FilterSettings } from '@features/filters/model/FiltersModel';
 
 
 const noBreakSpace = /\u00A0/g;

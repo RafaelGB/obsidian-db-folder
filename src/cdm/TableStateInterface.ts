@@ -1,11 +1,12 @@
 import { SortingState } from "@tanstack/react-table";
 import { ConfigColumn, RowDataType, TableColumn } from "cdm/FolderModel";
-import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ColumnOption } from "cdm/ComponentsModel";
 import { Literal } from "obsidian-dataview";
 import { StoreApi, UseBoundStore } from "zustand";
 import { UpdaterData, ContextHeaderData } from "cdm/EmitterModel";
 import { CustomView } from "views/AbstractView";
+import { FilterSettings } from "@features/filters/model/FiltersModel";
 
 export type TableActionResponse<T> = {
     view: CustomView,

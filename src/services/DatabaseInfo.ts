@@ -7,11 +7,12 @@ import { LOGGER } from 'services/Logger';
 import { VaultManagerDB } from 'services/FileManagerService';
 import databaseYamlToStringParser from 'IO/md/DatabaseYamlToStringParser';
 import { ConfigColumn, TableColumn } from 'cdm/FolderModel';
-import { FilterSettings, LocalSettings } from 'cdm/SettingsModel';
+import { LocalSettings } from 'cdm/SettingsModel';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import databaseStringToYamlParser from 'IO/md/DatabaseStringToYamlParser';
 import { DATABASE_CONFIG, DEFAULT_COLUMN_CONFIG } from 'helpers/Constants';
 import NoteContentActionBuilder from 'patterns/builders/NoteContentActionBuilder';
+import { FilterSettings } from '@features/filters/model/FiltersModel';
 
 export default class DatabaseInfo {
     public yaml: DatabaseYaml;

@@ -1,8 +1,9 @@
-import { FilterSettings, GlobalSettings, LocalSettings } from "cdm/SettingsModel";
+import { GlobalSettings, LocalSettings } from "cdm/SettingsModel";
 import { ConfigState, EphimeralSettings } from "cdm/TableStateInterface";
 import { EphimeralConfiguration } from "helpers/Constants";
 import { create } from "zustand";
 import { CustomView } from "views/AbstractView";
+import { FilterSettings } from "@features/filters/model/FiltersModel";
 
 const useConfigStore = (view: CustomView) => {
     const { global_settings } = view.plugin.settings;

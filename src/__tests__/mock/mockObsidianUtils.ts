@@ -1,4 +1,4 @@
-import { generateYamlColumns } from "mock/mockTableUtils";
+import { generateYamlColumns } from "__tests__/mock/mockTableUtils";
 import { DEFAULT_SETTINGS } from "helpers/Constants";
 import { TFile } from "obsidian";
 

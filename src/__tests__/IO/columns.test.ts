@@ -1,6 +1,6 @@
 import { obtainMetadataColumns, obtainColumnsFromFolder } from "components/Columns";
 import { DEFAULT_SETTINGS, MetadataColumns } from "helpers/Constants";
-import { generateYamlColumns } from "mock/mockTableUtils";
+import { generateYamlColumns } from "../mock/mockTableUtils";
 describe("IO.columns", () => {
     /** Metadata columns */
     test('obtainMetadataColumns()', async () => {
