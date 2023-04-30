@@ -54,6 +54,7 @@ export interface ConfigColumn {
     task_hide_completed?: boolean;
     // Formulas
     formula_query?: string;
+    formula_persist_type?: string;
     // Relations
     related_note_path?: string;
     bidirectional_relation?: boolean;

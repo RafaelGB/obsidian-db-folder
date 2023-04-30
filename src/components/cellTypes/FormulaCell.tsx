@@ -1,6 +1,6 @@
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { TableColumn } from "cdm/FolderModel";
-import { MetadataColumns } from "helpers/Constants";
+import { InputType, MetadataColumns } from "helpers/Constants";
 import { c, getAlignmentClassname } from "helpers/StylesHelper";
 import React, { useEffect, useRef } from "react";
 import { MarkdownService } from "services/MarkdownRenderService";
@@ -51,7 +51,11 @@ const FormulaCell = (mdProps: CellComponentProps) => {
       await dataActions.updateCell({
         rowIndex: row.index,
         column: tableColumn,
-        value: newCell,
+        value: ParseService.parseLiteral(
+          newCell,
+          tableColumn.config.formula_persist_type ?? InputType.TEXT,
+          configInfo.getLocalSettings()
+        ),
         columns: columnsInfo.getAllColumns(),
         ddbbConfig: configInfo.getLocalSettings(),
         saveOnDisk: tableColumn.config.persist_changes ?? false,
