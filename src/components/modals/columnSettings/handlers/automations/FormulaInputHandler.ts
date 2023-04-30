@@ -1,9 +1,10 @@
 import { ColumnSettingsHandlerResponse } from "cdm/ModalsModel";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
 import { Setting } from "obsidian";
-import { add_toggle } from "settings/SettingsComponents";
+import { add_dropdown, add_toggle } from "settings/SettingsComponents";
 import { t } from "lang/helpers";
 import { c } from "helpers/StylesHelper";
+import { InputType } from "helpers/Constants";
 export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHandlerResponse>  {
     settingTitle = 'Formula properties';
     handle(columnHandlerResponse: ColumnSettingsHandlerResponse): ColumnSettingsHandlerResponse {
@@ -25,8 +26,19 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
             await view.diskConfig.updateColumnConfig(column.id, {
                 persist_changes: value
             });
+            columnHandlerResponse.column.config.persist_changes = value;
+            columnSettingsManager.modal.enableReset = true;
+            columnSettingsManager.reset(columnHandlerResponse);
+        }
+
+        const persist_type_dropdown_promise = async (value: string): Promise<void> => {
+            // Persist value
+            await view.diskConfig.updateColumnConfig(column.id, {
+                formula_persist_type: value
+            });
             columnSettingsManager.modal.enableReset = true;
         }
+
         add_toggle(
             containerEl,
             t("column_settings_modal_formula_input_persist_toggle_title"),
@@ -34,6 +46,23 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
             column.config.persist_changes,
             persist_changes_toggle_promise
         );
+
+        if (column.config.persist_changes) {
+            const options = {
+                [InputType.TEXT]: t(InputType.TEXT),
+                [InputType.NUMBER]: t(InputType.NUMBER),
+                [InputType.CHECKBOX]: t(InputType.CHECKBOX),
+            };
+
+            add_dropdown(
+                containerEl,
+                t("column_settings_modal_formula_type_dropdown_title"),
+                t("column_settings_modal_formula_type_dropdown_desc"),
+                column.config.formula_persist_type,
+                options,
+                persist_type_dropdown_promise
+            );
+        }
 
         new Setting(containerEl)
             .setName(t("column_settings_modal_formula_input_textarea_title"))

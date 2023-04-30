@@ -4,11 +4,14 @@ import { DataviewService } from "services/DataviewService";
 
 class BooleanParser extends TypeParser<boolean> {
     parse(wrapped: WrappedLiteral) {
-        if (wrapped.type === 'boolean') {
-            return wrapped.value;
-        } else {
-            const adjustedValue = DataviewService.getDataviewAPI().value.toString(wrapped.value);
-            return adjustedValue === 'true';
+        switch (wrapped.type) {
+            case "boolean":
+                return wrapped.value;
+            case "number":
+                return wrapped.value !== 0;
+            default:
+                return DataviewService.getDataviewAPI().value.toString(wrapped.value) === "true";
+
         }
     }
 }
