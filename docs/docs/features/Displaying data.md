@@ -14,7 +14,7 @@ You can enable a footer from the database or plugin global setting under `Rows s
 
 You have to use the database top bar, which can be toggled by the search icon in the page header, or simply by using `CMD/CTRL+F`. You can create one or multiple filters or you can search (normally or with regex) for any metadata displayed in the database.
 
-After opening the filter modal via the obsidian bar button or the command `DB Folder: OPen filters`, you can either create a `filter` or a `group filter`. The difference is that a `group filter` can include many `filters` with either an **AND** or an **OR** type of relationship, whereas `filters` can only have an **AND** type of relationship between them.
+After opening the filter modal via the obsidian bar button or the command `DB Folder: Open filters`, you can either create a `filter` or a `group filter`. The difference is that a `group filter` can include many `filters` with either an **AND** or an **OR** type of relationship, whereas `filters` can only have an **AND** type of relationship between them.
 
 You can create a `group filter` within a `group filter` for more granular filtering, and you can delete or rename them. Keep in mind that deleting a `parent group filter` will delete all the `children group filters` within it.
 
@@ -31,7 +31,7 @@ You can also filter each column separately via the search filters which can be e
 
 ## Refresh Database
 
-The databaes should refresh after every change, but you can use the `activate/desactive filter` button if you want to manually refresh it. On the other hand, you can disable auto-refreshing when an external change is detected in the plugin global settings.
+The databaes should refresh after every change, but you can use the `activate/deactivate filter` button if you want to manually refresh it. On the other hand, you can disable auto-refreshing when an external change is detected in the plugin global settings.
 
 <video  width="670" controls>
   <source src="https://user-images.githubusercontent.com/38974541/197636392-0c1c17fa-8f21-47dc-8c1f-887ca96d4bab.mov" type="video/mp4">
