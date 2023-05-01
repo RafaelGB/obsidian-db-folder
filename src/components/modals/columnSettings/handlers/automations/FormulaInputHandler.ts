@@ -24,7 +24,8 @@ export class FormulaInputHandler extends AbstractHandlerClass<ColumnSettingsHand
             column.config.link_alias_enabled = value;
             // Persist value
             await view.diskConfig.updateColumnConfig(column.id, {
-                persist_changes: value
+                persist_changes: value,
+                formula_persist_type: value ? InputType.TEXT : null
             });
             columnHandlerResponse.column.config.persist_changes = value;
             columnSettingsManager.modal.enableReset = true;
