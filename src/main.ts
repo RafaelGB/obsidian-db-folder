@@ -29,7 +29,6 @@ import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
 import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, EMITTERS_GROUPS, YAML_INDENT } from 'helpers/Constants';
 import { PreviewDatabaseModeService } from 'services/MarkdownPostProcessorService';
-import { unmountComponentAtNode } from 'react-dom';
 import { isDatabaseNote } from 'helpers/VaultManagement';
 import { getParentWindow } from 'helpers/WindowElement';
 import { DatabaseHelperCreationModal } from 'commands/addDatabaseHelper/databaseHelperCreationModal';
@@ -38,12 +37,7 @@ import { registerDateFnLocale, t } from 'lang/helpers';
 import ProjectAPI from 'api/obsidian-projects-api';
 import { Db } from "services/CoreService";
 import { CustomView } from 'views/AbstractView';
-
-interface WindowRegistry {
-	viewMap: Map<string, CustomView>;
-	viewStateReceivers: Array<(views: CustomView[]) => void>;
-	appRoot: HTMLElement;
-}
+import { ViewRegistryService } from '@features/registry';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -64,8 +58,6 @@ export default class DBFolderPlugin extends Plugin {
 
 	stateManagers: Map<TFile, StateManager> = new Map();
 
-	windowRegistry: Map<Window, WindowRegistry> = new Map();
-
 	ribbonIcon: HTMLElement;
 
 	statusBarItem: HTMLElement;
@@ -76,13 +68,13 @@ export default class DBFolderPlugin extends Plugin {
 		addIcon(DB_ICONS.NAME, DB_ICONS.ICON);
 		this.registerEvent(
 			app.workspace.on('window-open', (_: unknown, win: Window) => {
-				this.mount(win);
+				ViewRegistryService.mount(win);
 			})
 		);
 
 		this.registerEvent(
 			app.workspace.on('window-close', (_: unknown, win: Window) => {
-				this.unmount(win);
+				ViewRegistryService.unmount(win);
 			})
 		);
 
@@ -107,7 +99,7 @@ export default class DBFolderPlugin extends Plugin {
 		this.addMarkdownPostProcessor();
 		this.registerLocale();
 		// Mount an empty component to start; views will be added as we go
-		this.mount(window);
+		ViewRegistryService.mount(window);
 	}
 
 	unload(): void {
@@ -123,18 +115,9 @@ export default class DBFolderPlugin extends Plugin {
 
 	async onunload() {
 		LOGGER.info('Unloading DBFolder plugin');
-
-		this.windowRegistry.forEach((reg, win) => {
-			reg.viewStateReceivers.forEach((fn) => fn([]));
-			this.unmount(win);
-		});
-
-		this.unmount(window);
-
+		ViewRegistryService.unmountAll();
 		this.stateManagers.clear();
-		this.windowRegistry.clear();
 		this.databaseFileModes = {};
-
 		app.workspace.unregisterHoverLinkSource(DatabaseCore.FRONTMATTER_KEY);
 	}
 
@@ -181,16 +164,7 @@ export default class DBFolderPlugin extends Plugin {
 	viewStateReceivers: Array<(views: CustomView[]) => void> = [];
 
 	addView(view: CustomView) {
-		const win = view.getWindow();
-		const reg = this.windowRegistry.get(win);
-
-		if (!reg) {
-			return;
-		}
-
-		if (!reg.viewMap.has(view.id)) {
-			reg.viewMap.set(view.id, view);
-		}
+		ViewRegistryService.addView(view);
 
 		const file = view.file;
 		if (this.stateManagers.has(file)) {
@@ -205,7 +179,6 @@ export default class DBFolderPlugin extends Plugin {
 				)
 			);
 		}
-		reg.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews(win)));
 	}
 
 	getStateManager(file: TFile) {
@@ -213,7 +186,7 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	getStateManagerFromViewID(id: string, win: Window) {
-		const view = this.getDatabaseView(id, win);
+		const view = ViewRegistryService.getDatabaseView(id, win);
 
 		if (!view) {
 			return null;
@@ -223,46 +196,12 @@ export default class DBFolderPlugin extends Plugin {
 	}
 
 	removeView(view: CustomView) {
-		const entry = Array.from(this.windowRegistry.entries()).find(([, reg]) => {
-			return reg.viewMap.has(view.id);
-		}, []);
-
-		if (!entry) {
-			return;
-		}
-
-		const [win, reg] = entry;
+		ViewRegistryService.removeView(view);
 		const file = view.file;
-
-		if (reg.viewMap.has(view.id)) {
-			reg.viewMap.delete(view.id);
-		}
 
 		if (this.stateManagers.has(file)) {
 			this.stateManagers.get(file).unregisterView(view);
-			reg.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews(win)));
 		}
-	}
-
-	unmount(win: Window) {
-		if (!this.windowRegistry.has(win)) {
-			return;
-		}
-
-		const reg = this.windowRegistry.get(win);
-
-		for (const view of reg.viewMap.values()) {
-			view.destroy();
-		}
-
-		unmountComponentAtNode(reg.appRoot);
-
-		reg.appRoot.remove();
-		reg.viewMap.clear();
-		reg.viewStateReceivers.length = 0;
-		reg.appRoot = null;
-
-		this.windowRegistry.delete(win);
 	}
 
 	async setMarkdownView(leaf: WorkspaceLeaf, focus = true) {
@@ -274,46 +213,6 @@ export default class DBFolderPlugin extends Plugin {
 			} as ViewState,
 			{ focus }
 		);
-	}
-
-	getDatabaseViews(win: Window) {
-		const reg = this.windowRegistry.get(win);
-
-		if (reg) {
-			return Array.from(reg.viewMap.values());
-		}
-
-		return [];
-	}
-
-	getDatabaseView(id: string, win: Window) {
-		const reg = this.windowRegistry.get(win);
-
-		if (reg?.viewMap.has(id)) {
-			return reg.viewMap.get(id);
-		}
-
-		for (const reg of this.windowRegistry.values()) {
-			if (reg.viewMap.has(id)) {
-				return reg.viewMap.get(id);
-			}
-		}
-
-		return null;
-	}
-
-	mount(win: Window) {
-		if (this.windowRegistry.has(win)) {
-			return;
-		}
-
-		const el = win.document.body.createDiv();
-
-		this.windowRegistry.set(win, {
-			viewMap: new Map(),
-			viewStateReceivers: [],
-			appRoot: el,
-		});
 	}
 
 	/**
@@ -354,7 +253,7 @@ export default class DBFolderPlugin extends Plugin {
 					source === 'sidebar-context-menu' &&
 					isDatabaseNote(file)
 				) {
-					const views = this.getDatabaseViews(
+					const views = ViewRegistryService.getDatabaseViews(
 						getParentWindow(leaf.view.containerEl)
 					);
 
@@ -419,14 +318,7 @@ export default class DBFolderPlugin extends Plugin {
 					setTimeout(() => {
 						this.registerEvent(app.metadataCache.on("dataview:metadata-change",
 							(type, file, oldPath?) => {
-								const activeView = app.workspace.getActiveViewOfType(DatabaseView);
-								Array.from(this.windowRegistry.entries()).forEach(async ([, { viewMap }]) => {
-									// Iterate through all the views and reload the database if the file is the same
-									viewMap.forEach(async (view) => {
-										const isActive = activeView && (view.file.path === activeView?.file.path);
-										view.handleExternalMetadataChange(type, file, isActive, oldPath);
-									});
-								});
+								ViewRegistryService.reloadActiveViews(type, file, oldPath);
 							})
 						);
 					}, 2500);

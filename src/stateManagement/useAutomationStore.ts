@@ -17,7 +17,6 @@ const useAutomationStore = (view: CustomView) => {
 
         delete view.formulas;
         const automationActions = automation_state_actions.run(tableActionResponse);
-        // return dataActions.implementation;
         return automationActions.implementation;
     });
 }
