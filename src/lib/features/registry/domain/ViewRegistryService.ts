@@ -4,6 +4,7 @@ import { unmountComponentAtNode } from 'react-dom';
 import { TFile } from "obsidian";
 import StateManager from "StateManager";
 import { DatabaseSettings } from "cdm/SettingsModel";
+import { getActiveCustomView } from "@features/obsidian";
 
 class ViewRegistryServiceInstance {
 
@@ -179,7 +180,7 @@ class ViewRegistryServiceInstance {
      * @param oldPath The old path of the file (only for rename) 
      */
     public reloadActiveViews(type: string, file: TFile, oldPath?: string) {
-        const activeView = app.workspace.getActiveViewOfType(CustomView);
+        const activeView = getActiveCustomView();
         Array.from(this.windowRegistry.entries()).forEach(async ([, { viewMap }]) => {
             // Iterate through all the views and reload the database if the file is the same
             viewMap.forEach(async (view) => {
