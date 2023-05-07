@@ -148,6 +148,13 @@ class ViewRegistryServiceInstance {
         return [];
     }
 
+    /**
+     * Obtain the view for the given window and id
+     * 
+     * @param id  The id of the view
+     * @param win  The window to search
+     * @returns 
+     */
     public getDatabaseView(id: string, win: Window) {
         const reg = this.windowRegistry.get(win);
 
@@ -164,6 +171,13 @@ class ViewRegistryServiceInstance {
         return null;
     }
 
+    /**
+     * Reload all the views that are currently active in the workspace
+     * 
+     * @param type The type of change
+     * @param file The file that changed
+     * @param oldPath The old path of the file (only for rename) 
+     */
     public reloadActiveViews(type: string, file: TFile, oldPath?: string) {
         const activeView = app.workspace.getActiveViewOfType(CustomView);
         Array.from(this.windowRegistry.entries()).forEach(async ([, { viewMap }]) => {
@@ -175,10 +189,19 @@ class ViewRegistryServiceInstance {
         });
     }
 
+    /**
+     * Obtain the state manager for the given file
+     * 
+     * @param file 
+     * @returns 
+     */
     public getStateManager(file: TFile) {
         return this.stateManagers.get(file);
     }
 
+    /**
+     * Force refresh all the state managers
+     */
     public forceRefreshAll() {
         this.stateManagers.forEach((stateManager) => {
             stateManager.forceRefresh();

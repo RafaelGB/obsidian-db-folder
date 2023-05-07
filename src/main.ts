@@ -24,7 +24,6 @@ import {
 } from 'typings/api';
 
 import { DatabaseSettings, LocalSettings } from 'cdm/SettingsModel';
-import StateManager from 'StateManager';
 import { around } from 'monkey-around';
 import { LOGGER } from 'services/Logger';
 import { DatabaseCore, DATABASE_CONFIG, DB_ICONS, DEFAULT_SETTINGS, EMITTERS_GROUPS, YAML_INDENT } from 'helpers/Constants';
@@ -38,6 +37,7 @@ import ProjectAPI from 'api/obsidian-projects-api';
 import { Db } from "services/CoreService";
 import { CustomView } from 'views/AbstractView';
 import { ViewRegistryService } from '@features/registry';
+import { getActiveCustomView } from '@features/obsidian';
 
 export default class DBFolderPlugin extends Plugin {
 	/** Plugin-wide default settings. */
@@ -264,7 +264,7 @@ export default class DBFolderPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			app.metadataCache.on("dataview:index-ready", async () => {
-				const initView = app.workspace.getActiveViewOfType(DatabaseView);
+				const initView = getActiveCustomView();
 				if (initView) {
 					await initView.reloadDatabase();
 				}
@@ -287,7 +287,7 @@ export default class DBFolderPlugin extends Plugin {
 		 * Check when the active view focus changes and update bar status
 		 */
 		this.registerEvent(app.workspace.on("active-leaf-change", () => {
-			const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+			const activeView = getActiveCustomView();
 			if (!activeView && this.statusBarItem) {
 				this.statusBarItem.detach();
 				this.statusBarItem = null;
@@ -311,7 +311,7 @@ export default class DBFolderPlugin extends Plugin {
 			id: 'active-database-folder-go-next-page',
 			name: t('active_go_next_page'),
 			checkCallback: (checking) => {
-				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+				const activeView = getActiveCustomView();
 
 				if (!activeView) return false;
 				if (checking) return true;
@@ -324,7 +324,7 @@ export default class DBFolderPlugin extends Plugin {
 			id: 'active-database-folder-go-previous-page',
 			name: t('active_go_previous_page'),
 			checkCallback: (checking) => {
-				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+				const activeView = getActiveCustomView();
 
 				if (!activeView) return false;
 				if (checking) return true;
@@ -337,7 +337,7 @@ export default class DBFolderPlugin extends Plugin {
 			id: 'active-database-folder-add-new-row',
 			name: t('active_add_new_row'),
 			checkCallback: (checking) => {
-				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+				const activeView = getActiveCustomView();
 
 				if (!activeView) return false;
 				if (checking) return true;
@@ -350,7 +350,7 @@ export default class DBFolderPlugin extends Plugin {
 			id: 'active-database-folder-open-settings',
 			name: t('active_open_settings'),
 			checkCallback: (checking) => {
-				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+				const activeView = getActiveCustomView();
 
 				if (!activeView) return false;
 				if (checking) return true;
@@ -363,7 +363,7 @@ export default class DBFolderPlugin extends Plugin {
 			id: 'active-database-folder-toggle-filters',
 			name: t('active_toggle_filters'),
 			checkCallback: (checking) => {
-				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+				const activeView = getActiveCustomView();
 
 				if (!activeView) return false;
 				if (checking) return true;
@@ -376,7 +376,7 @@ export default class DBFolderPlugin extends Plugin {
 			id: 'active-database-folder-open-filters',
 			name: t('active_open_filters'),
 			checkCallback: (checking) => {
-				const activeView = app.workspace.getActiveViewOfType(DatabaseView);
+				const activeView = getActiveCustomView();
 
 				if (!activeView) return false;
 				if (checking) return true;
@@ -417,7 +417,7 @@ export default class DBFolderPlugin extends Plugin {
 
 					executeCommand(next) {
 						return function (command: any) {
-							const view = app.workspace.getActiveViewOfType(DatabaseView);
+							const view = getActiveCustomView();
 
 							if (view && command?.id) {
 								view.emitter.emit(EMITTERS_GROUPS.HOTKEY, command.id);
