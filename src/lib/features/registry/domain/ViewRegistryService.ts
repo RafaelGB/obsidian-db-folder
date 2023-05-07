@@ -2,14 +2,18 @@ import { CustomView } from "views/AbstractView";
 import { WindowRegistry } from "../model/RegistryModel";
 import { unmountComponentAtNode } from 'react-dom';
 import { TFile } from "obsidian";
+import StateManager from "StateManager";
+import { DatabaseSettings } from "cdm/SettingsModel";
 
 class ViewRegistryServiceInstance {
 
     private static instance: ViewRegistryServiceInstance;
     private windowRegistry: Map<Window, WindowRegistry>;
+    private stateManagers: Map<TFile, StateManager>;
 
     constructor() {
         this.windowRegistry = new Map();
+        this.stateManagers = new Map();
     }
 
     /**
@@ -22,6 +26,7 @@ class ViewRegistryServiceInstance {
         });
         this.unmount(window);
         this.windowRegistry.clear();
+        this.stateManagers.clear();
     }
 
     /**
@@ -30,12 +35,25 @@ class ViewRegistryServiceInstance {
      * @param view The view to add
      * @returns 
      */
-    public addView(view: CustomView) {
+    public addView(view: CustomView, settings: DatabaseSettings) {
         const win = view.getWindow();
         const reg = this.windowRegistry.get(win);
 
         if (!reg) {
             return;
+        }
+        const file = view.file;
+        if (this.stateManagers.has(file)) {
+            this.stateManagers.get(file).registerView(view);
+        } else {
+            this.stateManagers.set(
+                file,
+                new StateManager(
+                    view,
+                    () => this.stateManagers.delete(file),
+                    () => settings
+                )
+            );
         }
         reg.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews(win)));
     }
@@ -60,8 +78,12 @@ class ViewRegistryServiceInstance {
         if (reg.viewMap.has(view.id)) {
             reg.viewMap.delete(view.id);
         }
+        const file = view.file;
 
-        reg.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews(win)));
+        if (this.stateManagers.has(file)) {
+            this.stateManagers.get(file).unregisterView(view);
+            reg.viewStateReceivers.forEach((fn) => fn(this.getDatabaseViews(win)));
+        }
     }
 
     /**
@@ -150,6 +172,16 @@ class ViewRegistryServiceInstance {
                 const isActive = activeView && (view.file.path === activeView?.file.path);
                 view.handleExternalMetadataChange(type, file, isActive, oldPath);
             });
+        });
+    }
+
+    public getStateManager(file: TFile) {
+        return this.stateManagers.get(file);
+    }
+
+    public forceRefreshAll() {
+        this.stateManagers.forEach((stateManager) => {
+            stateManager.forceRefresh();
         });
     }
 

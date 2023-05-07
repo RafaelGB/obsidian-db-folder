@@ -17,6 +17,7 @@ import { LOGGER } from "services/Logger";
 import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
 import { dataApiBuilder } from "./DataApiBuilder";
+import { ViewRegistryService } from "@features/registry";
 
 export abstract class CustomView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
@@ -74,12 +75,12 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         this.emitter = createEmitter();
         if (file) {
             this.file = file;
-            this.plugin.removeView(this);
+            ViewRegistryService.removeView(this)
             this.plugin.addView(this);
         } else {
             this.register(
                 this.containerEl.onWindowMigrated(() => {
-                    this.plugin.removeView(this);
+                    ViewRegistryService.removeView(this)
                     this.plugin.addView(this);
                 })
             );
@@ -117,7 +118,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
             const tableProps: TableDataType = {
                 skipReset: false,
                 view: this,
-                stateManager: this.plugin.getStateManager(this.file),
+                stateManager: ViewRegistryService.getStateManager(this.file),
             };
             // Render database
             const table = createDatabase(tableProps);
@@ -141,7 +142,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         if (this.file) {
             // Remove draggables from render, as the DOM has already detached
             this.getStateManager().unregisterView(this);
-            this.plugin.removeView(this);
+            ViewRegistryService.removeView(this)
             this.tableContainer.remove();
             this.detachViewComponents();
             LOGGER.info(`Closed view ${this.file.path}}`);
@@ -299,7 +300,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
      * @returns 
      */
     getStateManager(): StateManager {
-        return this.plugin.getStateManager(this.file);
+        return ViewRegistryService.getStateManager(this.file);
     }
 
     /**
@@ -371,9 +372,8 @@ export abstract class CustomView extends TextFileView implements HoverParent {
         if (!isDatabaseNote(data)) {
             this.plugin.databaseFileModes[this.leaf.id || this.file.path] =
                 InputType.MARKDOWN;
-            this.plugin.removeView(this);
+            ViewRegistryService.removeView(this)
             this.plugin.setMarkdownView(this.leaf, false);
-
             return;
         }
 
@@ -381,7 +381,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     }
 
     get isPrimary(): boolean {
-        return this.plugin.getStateManager(this.file)?.getAView() === this;
+        return ViewRegistryService.getStateManager(this.file)?.getAView() === this;
     }
 
     /****************************************************************

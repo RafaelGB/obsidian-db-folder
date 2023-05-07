@@ -56,8 +56,6 @@ export default class DBFolderPlugin extends Plugin {
 
 	_loaded = false;
 
-	stateManagers: Map<TFile, StateManager> = new Map();
-
 	ribbonIcon: HTMLElement;
 
 	statusBarItem: HTMLElement;
@@ -85,9 +83,7 @@ export default class DBFolderPlugin extends Plugin {
 				await this.saveSettings();
 
 				//Force a complete re-render when settings change
-				this.stateManagers.forEach((stateManager) => {
-					stateManager.forceRefresh();
-				});
+				ViewRegistryService.forceRefreshAll();
 			},
 		})
 		);
@@ -116,7 +112,6 @@ export default class DBFolderPlugin extends Plugin {
 	async onunload() {
 		LOGGER.info('Unloading DBFolder plugin');
 		ViewRegistryService.unmountAll();
-		this.stateManagers.clear();
 		this.databaseFileModes = {};
 		app.workspace.unregisterHoverLinkSource(DatabaseCore.FRONTMATTER_KEY);
 	}
@@ -164,44 +159,7 @@ export default class DBFolderPlugin extends Plugin {
 	viewStateReceivers: Array<(views: CustomView[]) => void> = [];
 
 	addView(view: CustomView) {
-		ViewRegistryService.addView(view);
-
-		const file = view.file;
-		if (this.stateManagers.has(file)) {
-			this.stateManagers.get(file).registerView(view);
-		} else {
-			this.stateManagers.set(
-				file,
-				new StateManager(
-					view,
-					() => this.stateManagers.delete(file),
-					() => this.settings
-				)
-			);
-		}
-	}
-
-	getStateManager(file: TFile) {
-		return this.stateManagers.get(file);
-	}
-
-	getStateManagerFromViewID(id: string, win: Window) {
-		const view = ViewRegistryService.getDatabaseView(id, win);
-
-		if (!view) {
-			return null;
-		}
-
-		return this.stateManagers.get(view.file);
-	}
-
-	removeView(view: CustomView) {
-		ViewRegistryService.removeView(view);
-		const file = view.file;
-
-		if (this.stateManagers.has(file)) {
-			this.stateManagers.get(file).unregisterView(view);
-		}
+		ViewRegistryService.addView(view, this.settings);
 	}
 
 	async setMarkdownView(leaf: WorkspaceLeaf, focus = true) {
