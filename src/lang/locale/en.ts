@@ -281,6 +281,8 @@ export default {
   "settings_metatata_outlinks_toggle_desc": "Enable/disable File Outlinks Column",
   "settings_metatata_tags_toggle_title": "File Tags",
   "settings_metatata_tags_toggle_desc": "Enable/disable File Tags Column",
+  "settings_metatata_checkbox_type_toggle_title": "Checkbox Type",
+  "settings_metatata_checkbox_type_toggle_desc": "Select whether the cell state should be a boolean (true/false) or binary (1/0) in the frontmatter",
   "settings_remove_fields_title": "Remove fields",
   "settings_remove_fields_desc": "Enable/disable remove fields when a column is deleted",
   "settings_template_title": "Header templates",

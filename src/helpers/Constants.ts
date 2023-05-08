@@ -31,6 +31,7 @@ export const StaticInputType = Object.freeze({
   INLINKS: 'inlinks',
   OUTLINKS: 'outlinks',
   METADATA_TAGS: 'metadata_tags',
+  CHECKBOX_TYPE: 'checkbox_type',
   NEW_COLUMN: 'new_column',
 });
 
@@ -54,6 +55,7 @@ export const MetadataColumns = Object.freeze({
   INLINKS: `__inlinks__`,
   ROW_CONTEXT_MENU: "__rowContextMenu__",
   TAGS: `__tags__`,
+  CHECKBOX_TYPE: `__checkbox_type__`,
 });
 
 export const MetadataLabels = Object.freeze({
@@ -65,6 +67,7 @@ export const MetadataLabels = Object.freeze({
   OUTLINKS: 'Outlinks',
   INLINKS: 'Inlinks',
   TAGS: 'File Tags',
+  CHECKBOX_TYPE: 'Checkbox Type',
 });
 
 export const PaginationRenderOptions = Object.freeze({
@@ -223,6 +226,18 @@ export const MetadataDatabaseColumns: MetadataColumnsModel = Object.freeze({
     input: InputType.METADATA_TAGS,
     label: MetadataLabels.TAGS,
     accessorKey: MetadataColumns.TAGS,
+    isMetadata: true,
+    isDragDisabled: false,
+    skipPersist: false,
+    csvCandidate: false,
+    config: DEFAULT_COLUMN_CONFIG
+  },
+  CHECKBOX_TYPE: {
+    key: MetadataColumns.CHECKBOX_TYPE,
+    id: MetadataColumns.CHECKBOX_TYPE,
+    input: InputType.CHECKBOX_TYPE,
+    label: MetadataLabels.CHECKBOX_TYPE,
+    accessorKey: MetadataColumns.CHECKBOX_TYPE,
     isMetadata: true,
     isDragDisabled: false,
     skipPersist: false,
@@ -429,6 +444,7 @@ export const DEFAULT_SETTINGS: DatabaseSettings = {
     show_metadata_inlinks: false,
     show_metadata_outlinks: false,
     show_metadata_tags: false,
+    binary_checkbox_type: false,
     source_data: SourceDataTypes.CURRENT_FOLDER,
     source_form_result: '',
     source_destination_path: '/',

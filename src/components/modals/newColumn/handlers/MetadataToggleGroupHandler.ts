@@ -1,6 +1,6 @@
 import { AddColumnModalHandlerResponse } from "cdm/ModalsModel";
 import { ColumnSettingsModal } from "components/modals/columnSettings/ColumnSettingsModal";
-import { MetadataColumns } from "helpers/Constants";
+import {DEFAULT_SETTINGS, MetadataColumns} from "helpers/Constants";
 import { t } from "lang/helpers";
 import { Setting } from "obsidian";
 import { AbstractHandlerClass } from "patterns/chain/AbstractHandler";
@@ -131,6 +131,24 @@ export class MetadataToggleGroupHandler extends AbstractHandlerClass<AddColumnMo
             .addToggle(toggle =>
                 toggle.setValue(view.diskConfig.yaml.config.show_metadata_tags)
                     .onChange(metadata_tags_toggle_promise)
+            );
+
+        /************************
+         * CHECKBOX TYPE COLUMN
+         ************************/
+        const metadata_checkbox_type_toggle_promise = async (value: boolean): Promise<void> => {
+            // Persist value
+            view.diskConfig.updateConfig({ binary_checkbox_type: value });
+            addColumnModalManager.addColumnModal.enableReset = true;
+            DEFAULT_SETTINGS.local_settings.binary_checkbox_type = value;
+        }
+
+        new Setting(metadata_section)
+            .setName(t("settings_metatata_checkbox_type_toggle_title"))
+            .setDesc(t("settings_metatata_checkbox_type_toggle_desc"))
+            .addToggle(toggle =>
+                toggle.setValue(view.diskConfig.yaml.config.binary_checkbox_type)
+                    .onChange(metadata_checkbox_type_toggle_promise)
             );
 
         return this.goNext(response);

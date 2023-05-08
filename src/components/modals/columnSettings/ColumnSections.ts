@@ -95,6 +95,7 @@ class BehaviorSetttingsSection extends AbstractChain<ColumnSettingsHandlerRespon
             case InputType.INLINKS:
             case InputType.OUTLINKS:
             case InputType.METADATA_TAGS:
+            case InputType.CHECKBOX_TYPE:
                 // do nothing
                 break;
             default:
