@@ -19,6 +19,8 @@ export default {
   'toolbar_menu_import_csv': 'Importer CSV',
   'toolbar_menu_search_bar': 'Recherche globale',
   'toolbar_menu_add_row': 'Ajouter une ligne',
+  'toolbar_menu_redo': 'Refaire',
+  'toolbar_menu_undo': 'Annuler',
   /** SOURCE OPTIONS */
   'current_folder': "Dossier actuel",
   'current_folder_without_subfolders': "Dossier actuel sans sous-dossiers",

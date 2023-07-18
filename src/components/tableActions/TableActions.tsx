@@ -5,6 +5,7 @@ import ExportCsvAction from "components/tableActions/ExportCsvAction";
 import SearchBarAction from "components/tableActions/SearchBarAction";
 import ShortcutsAction from "components/tableActions/ShortcutsAction";
 import AddRowAction from "components/tableActions/AddRowAction";
+import HistoryActions from "./HistoryAction";
 
 export default function TableActions(actionProps: TableActionProps) {
   return (
@@ -14,6 +15,7 @@ export default function TableActions(actionProps: TableActionProps) {
       <SearchBarAction {...actionProps} />
       <AddRowAction {...actionProps} />
       <ShortcutsAction {...actionProps} />
+      <HistoryActions {...actionProps} />
     </>
   );
 }

@@ -18,6 +18,7 @@ import { SettingsModal } from "Settings";
 import StateManager from "StateManager";
 import { dataApiBuilder } from "./DataApiBuilder";
 import { ViewRegistryService } from "@features/registry";
+import { HistoryQueue } from "@features/history";
 
 export abstract class CustomView extends TextFileView implements HoverParent {
     plugin: DBFolderPlugin;
@@ -32,6 +33,7 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     actionButtons: Record<string, HTMLElement> = {};
     dataApi: DataApi;
     columns: Array<TableColumn>;
+    history = new HistoryQueue();
 
     /**
      * Get all the columns configured in the database
@@ -359,6 +361,10 @@ export abstract class CustomView extends TextFileView implements HoverParent {
     openFilters() {
         this.emitter.emit(EMITTERS_GROUPS.SHORTCUT, EMITTERS_SHORTCUT.OPEN_FILTERS);
     }
+
+    /****************************************************************
+     *                          VIEW DATA
+     ****************************************************************/
 
     /**
      * Unparse the database file, and return the resulting text.

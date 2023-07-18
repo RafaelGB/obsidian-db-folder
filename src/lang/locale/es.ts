@@ -21,6 +21,8 @@ export default {
     'toolbar_menu_import_csv': 'Importar CSV',
     'toolbar_menu_search_bar': 'Barra de búsqueda',
     'toolbar_menu_add_row': 'Añadir fila',
+    'toolbar_menu_redo': 'Rehacer',
+    'toolbar_menu_undo': 'Deshacer',
     /** SOURCE OPTIONS */
     'current_folder': "Carpeta actual",
     'current_folder_without_subfolders': "Carpeta actual (sin subcarpetas)",

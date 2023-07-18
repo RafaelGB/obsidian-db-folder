@@ -27,6 +27,8 @@ export default {
   'toolbar_menu_import_csv': 'Import CSV',
   'toolbar_menu_search_bar': 'Global search',
   'toolbar_menu_add_row': 'Add row',
+  'toolbar_menu_redo': 'Redo',
+  'toolbar_menu_undo': 'Undo',
   /** SOURCE OPTIONS */
   'current_folder': "Current folder",
   'current_folder_without_subfolders': "Current folder without subfolders",

@@ -558,6 +558,8 @@ export const EMITTERS_SHORTCUT = Object.freeze({
   ADD_NEW_ROW: "table:add-new-row",
   TOGGLE_FILTERS: "table:toggle-filters",
   OPEN_FILTERS: "table:open-filters",
+  UNDO: "table:undo",
+  REDO: "table:redo",
 });
 
 /* Updater actions */
