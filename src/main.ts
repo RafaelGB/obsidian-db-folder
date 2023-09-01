@@ -8,6 +8,7 @@ import {
 	Platform,
 	MarkdownView,
 	addIcon,
+	TAbstractFile,
 } from 'obsidian';
 
 import {
@@ -190,7 +191,7 @@ export default class DBFolderPlugin extends Plugin {
 
 	registerEvents() {
 		this.registerEvent(
-			app.workspace.on('file-menu', (menu, file: TFile, source, leaf) => {
+			app.workspace.on('file-menu', (menu, file: TAbstractFile, source, leaf) => {
 				// Add a menu item to the folder context menu to create a database
 				if (file instanceof TFolder) {
 					menu.addItem((item) => {
