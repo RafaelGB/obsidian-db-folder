@@ -1,3 +1,6 @@
+## 3.5.0
+### No longer broken
+- Nested properties filter shows \[object Object\] instead of the nested property values. [#968](https://github.com/RafaelGB/obsidian-db-folder/issues/968)
 ## 3.4.0
 ### Shiny new things
 - Date range filters with autocomplete options. [#604](https://github.com/RafaelGB/obsidian-db-folder/issues/604)
