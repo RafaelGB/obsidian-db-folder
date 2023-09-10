@@ -127,7 +127,15 @@ export function Table(tableData: TableDataType) {
   }
 
   const table: Table<RowDataType> = useReactTable({
-    columns: columns,
+    columns: columns.map(column => {
+      if (!column.nestedKey) {
+        return column;
+      } else {
+        const newColumn = Object.assign({}, column);
+        newColumn.accessorKey = `${newColumn.accessorKey}.${newColumn.nestedKey}`;
+        return newColumn;
+      }
+    }),
     data: rows,
     enableExpanding: true,
     getRowCanExpand: () => true,
