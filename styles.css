@@ -244,6 +244,7 @@ div.database-plugin__td.data-input span:focus {
 .database-plugin__markdown-preview-view {
   padding: 0;
   height: fit-content;
+  scrollbar-gutter: auto;
 }
 
 .svg-icon-sm svg {
