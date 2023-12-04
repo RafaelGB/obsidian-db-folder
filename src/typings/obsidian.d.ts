@@ -4,6 +4,12 @@ import { Literal } from "obsidian-dataview";
 declare module "obsidian" {
   interface MetadataCache {
     getLinkSuggestions: () => LinkSuggestion[];
+    /**
+     * Obtain the tags of all the vault with their count.
+     * 
+     * WARNING! not exposed by Obsidian, may break in future.
+     */
+    getTags(): Record<string, number>;
   }
 
   interface FileManager {
@@ -26,15 +32,6 @@ declare module "obsidian" {
      * @param param 
      */
     getConfig(param: string): any;
-  }
-
-  interface MetadataCache {
-    /**
-     * Obtain the tags of all the vault with their count.
-     * 
-     * WARNING! not exposed by Obsidian, may break in future.
-     */
-    getTags(): Record<string, number>;
   }
 
   interface WorkspaceLeaf {
