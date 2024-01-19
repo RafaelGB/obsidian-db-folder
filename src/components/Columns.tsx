@@ -136,7 +136,7 @@ export async function obtainColumnsFromFile(
   Object.entries(rawProperties).forEach(([key, value]) => {
     const lowercaseKey = key.toLowerCase();
     if (!propertiesOfFile[lowercaseKey]) {
-      propertiesOfFile[lowercaseKey] = value;
+      propertiesOfFile[lowercaseKey] = value as Literal;
     }
   });
 

@@ -92,7 +92,7 @@ export class SourceFormHandler extends AbstractSettingsHandler {
                                 .then(() => {
                                     new Notice(t("settings_source_form_query_notice_validate", query), 2000);
                                 })
-                                .catch((e) => {
+                                .catch((e: any) => {
                                     new Notice(t("settings_source_form_query_notice_error", query, e.message), 10000);
                                 });
                         }

@@ -10,9 +10,9 @@ class ArrayParser extends TypeParser<string[] | string> {
         }
 
         if (wrapped.type !== 'array') {
-            return wrapped.value.toString().split(",").map(s => satinizedColumnOption(s.toString().trim()));
+            return wrapped.value.toString().split(",").map((s: any) => satinizedColumnOption(s.toString().trim()));
         }
-        return wrapped.value.map(v => satinizedColumnOption(DataviewService.getDataviewAPI().value.toString(v)));
+        return wrapped.value.map((v: any) => satinizedColumnOption(DataviewService.getDataviewAPI().value.toString(v)));
     }
 }
 

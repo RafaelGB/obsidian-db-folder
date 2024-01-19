@@ -33,7 +33,7 @@ class SortingParser extends TypeParser<Literal> {
                 return wrapped.value.toString();
             case 'array':
                 if (DataviewService.isSTaskArray(wrapped.value)) {
-                    return wrapped.value.reduce((acc, curr) => {
+                    return wrapped.value.reduce((acc: any, curr: any) => {
                         if (!curr.completed) {
                             acc += 1;
                         }
@@ -42,7 +42,7 @@ class SortingParser extends TypeParser<Literal> {
                 }
                 return wrapped.value
                     .map(
-                        v => this.parse(
+                        (v: any) => this.parse(
                             DataviewService.wrapLiteral(v),
                         )
                     ).join(', ');

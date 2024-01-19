@@ -23,9 +23,9 @@ class RelationalServiceInstance {
      */
     public recordAllDatabases(): Record<string, string> {
         const avaliableDDBB: Record<string, string> = {};
-        DataviewService.getDataviewAPI().pages().where((page) => {
+        DataviewService.getDataviewAPI().pages().where((page: any) => {
             return page[DatabaseCore.FRONTMATTER_KEY] !== undefined;
-        }).forEach((page) => {
+        }).forEach((page: any) => {
             const file = (page as SMarkdownPage).file;
             avaliableDDBB[file.path] = file.name;
         });

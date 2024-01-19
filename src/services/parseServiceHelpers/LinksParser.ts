@@ -10,7 +10,7 @@ class LinksParser extends TypeParser<Link[]> {
         }
         // If is an array of links, return it
         if (wrapped.type === 'array') {
-            const filteredLinks = wrapped.value.filter((value) => {
+            const filteredLinks = wrapped.value.filter((value: any) => {
                 const wrappedValue = DataviewService.wrapLiteral(value);
                 return wrappedValue.type === 'link';
             });

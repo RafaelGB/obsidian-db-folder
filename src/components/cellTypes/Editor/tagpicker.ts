@@ -1,4 +1,4 @@
-import Fuse from 'fuse.js';
+import Fuse, { FuseResult } from 'fuse.js';
 
 import { StrategyProps } from 'components/cellTypes/Editor/textcomplete/textcomplete-core';
 
@@ -7,14 +7,14 @@ const tagRegex = /\B#([^\s]*)?$/;
 export function getTagSearchConfig(
   tags: string[],
   tagSearch: Fuse<string>
-): StrategyProps<Fuse.FuseResult<string>> {
+): StrategyProps<FuseResult<string>> {
   return {
     id: 'tag',
     match: tagRegex,
     index: 1,
     search: (
       term: string,
-      callback: (results: Fuse.FuseResult<string>[]) => void
+      callback: (results: FuseResult<string>[]) => void
     ) => {
       if (!term) {
         callback(
@@ -27,9 +27,9 @@ export function getTagSearchConfig(
         ]);
       }
     },
-    template: (result: Fuse.FuseResult<string>) => {
+    template: (result: FuseResult<string>) => {
       return result.item;
     },
-    replace: (result: Fuse.FuseResult<string>): string => `${result.item} `,
+    replace: (result: FuseResult<string>): string => `${result.item} `,
   };
 }

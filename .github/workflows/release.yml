@@ -22,7 +22,7 @@ jobs:
         id: build
         run: |
           npm install
-          npm run build --  --environment BUILD:production
+          npm run release
       # Create the release on github
       - name: Create Release
         id: create_release

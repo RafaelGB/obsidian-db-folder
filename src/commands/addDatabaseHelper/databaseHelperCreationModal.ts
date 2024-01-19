@@ -6,6 +6,7 @@ import { generateDataviewTableQuery } from "helpers/QueryHelper";
 import { t } from "lang/helpers";
 import { Modal, Notice, Setting } from "obsidian";
 import { DataviewService } from "services/DataviewService";
+import { LOGGER } from "services/Logger";
 import { ParseService } from "services/ParseService";
 import { add_dropdown, add_setting_header } from "settings/SettingsComponents";
 import { FileSuggest } from "settings/suggesters/FileSuggester";
@@ -199,7 +200,8 @@ export class DatabaseHelperCreationModalManager {
                                 .then(() => {
                                     new Notice(`Dataview query "${query}" is valid!`, 2000);
                                 })
-                                .catch((e) => {
+                                .catch((e: Error) => {
+                                    LOGGER.error(e);
                                     new Notice(`Dataview query "${query}" is invalid: ${e.message}`, 10000);
                                 });
                         }

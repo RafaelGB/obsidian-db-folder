@@ -6,6 +6,7 @@ import { LocalSettings } from "cdm/SettingsModel";
 import { RowDataType, TableColumn } from "cdm/FolderModel";
 import { deepMerge, generateLiteral } from "helpers/DataObjectHelper";
 import ParseBuilder from "./parseServiceHelpers/ParseBuilder";
+import { DataArray } from "obsidian-dataview/lib/api/data-array";
 
 class Parse {
 
@@ -43,7 +44,7 @@ class Parse {
         }
 
         if (DataviewService.isDataArray(literal)) {
-            literal = literal.values
+            literal = (literal as DataArray<unknown>).values
         }
 
         return literal;

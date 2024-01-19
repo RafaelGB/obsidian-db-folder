@@ -186,14 +186,14 @@ class Rollup {
     public taskCompleted(): number {
         return this.pages.map((page: SMarkdownPage) => {
             const file_tasks = page.file.tasks;
-            return file_tasks.filter(task => task.checked).length
+            return file_tasks.filter((task: any) => task.checked).length
         }).reduce((a, b) => a + b, 0);
     }
 
     public taskTodo(): number {
         return this.pages.map((page: SMarkdownPage) => {
             const file_tasks = page.file.tasks;
-            return file_tasks.filter(task => !task.checked).length
+            return file_tasks.filter((task: any) => !task.checked).length
         }).reduce((a, b) => a + b, 0);
     }
 

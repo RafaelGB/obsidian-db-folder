@@ -1,4 +1,4 @@
-import Fuse from 'fuse.js';
+import Fuse, { FuseResult } from 'fuse.js';
 import { generateInstanceId } from 'helpers/Generators';
 import { c } from 'helpers/StylesHelper';
 import { App, TFile, setIcon } from 'obsidian';
@@ -26,7 +26,7 @@ function getAliasMarkup(
   win: Window,
   stateManager: StateManager,
   filePath: string,
-  res: Fuse.FuseResult<LinkSuggestion>
+  res: FuseResult<LinkSuggestion>
 ) {
   let container = win.document.body.createDiv(c('file-suggestion-wrapper'));
   container.detach();
@@ -63,12 +63,12 @@ export function getFileSearchConfig(
   stateManager: StateManager,
   willAutoPairBrackets: boolean,
   isEmbed: boolean
-): StrategyProps<Fuse.FuseResult<LinkSuggestion>> {
+): StrategyProps<FuseResult<LinkSuggestion>> {
   return {
     id: `link-${isEmbed ? 'embed' : 'normal'}`,
     match: isEmbed ? embedRegex : linkRegex,
     index: 1,
-    template: (res: Fuse.FuseResult<LinkSuggestion>) => {
+    template: (res: FuseResult<LinkSuggestion>) => {
       if (res.item.file === null) {
         const alias = res.item.path.split('|').pop();
 
@@ -86,7 +86,7 @@ export function getFileSearchConfig(
     },
     search: (
       term: string,
-      callback: (results: Fuse.FuseResult<LinkSuggestion>[]) => void
+      callback: (results: FuseResult<LinkSuggestion>[]) => void
     ) => {
       if (!term) {
         callback(
@@ -113,7 +113,7 @@ export function getFileSearchConfig(
         ]);
       }
     },
-    replace: (result: Fuse.FuseResult<LinkSuggestion>): string => {
+    replace: (result: FuseResult<LinkSuggestion>): string => {
       const output: string[] = [];
 
       if (isEmbed && result.item.file.extension === 'md') {
@@ -155,7 +155,7 @@ function getHeadings(
   sourcePath: string,
   filePath: string,
   searchTerm: string
-): Fuse.FuseResult<HeadingSuggestion>[] {
+): FuseResult<HeadingSuggestion>[] {
   if (!filePath) {
     return [];
   }
@@ -198,24 +198,24 @@ export function getHeadingSearchConfig(
   stateManager: StateManager,
   willAutoPairBrackets: boolean,
   isEmbed: boolean
-): StrategyProps<Fuse.FuseResult<HeadingSuggestion>> {
+): StrategyProps<FuseResult<HeadingSuggestion>> {
   return {
     id: `heading-${isEmbed ? 'embed' : 'normal'}`,
     match: isEmbed ? embedHeadingRegex : linkHeadingRegex,
     index: 1,
-    template: (res: Fuse.FuseResult<HeadingSuggestion>) => {
+    template: (res: FuseResult<HeadingSuggestion>) => {
       return res.item.heading;
     },
     search: (
       _: string,
-      callback: (results: Fuse.FuseResult<HeadingSuggestion>[]) => void,
+      callback: (results: FuseResult<HeadingSuggestion>[]) => void,
       marchArr
     ) => {
       callback(
         getHeadings(app, filePath, marchArr[1], marchArr[2])
       );
     },
-    replace: (result: Fuse.FuseResult<HeadingSuggestion>): string => {
+    replace: (result: FuseResult<HeadingSuggestion>): string => {
       const output: string[] = [];
 
       if (isEmbed && result.item.file.extension === 'md') {
@@ -287,7 +287,7 @@ async function getBlocks(
   sourcePath: string,
   filePath: string,
   searchTerm: string,
-  callback: (results: Fuse.FuseResult<BlockSuggestion>[]) => void
+  callback: (results: FuseResult<BlockSuggestion>[]) => void
 ) {
   if (!filePath) {
     return callback([]);
@@ -370,12 +370,12 @@ export function getBlockSearchConfig(
   stateManager: StateManager,
   willAutoPairBrackets: boolean,
   isEmbed: boolean
-): StrategyProps<Fuse.FuseResult<BlockSuggestion>> {
+): StrategyProps<FuseResult<BlockSuggestion>> {
   return {
     id: `block-${isEmbed ? 'embed' : 'normal'}`,
     match: isEmbed ? embedBlockRegex : linkBlockRegex,
     index: 1,
-    template: (res: Fuse.FuseResult<BlockSuggestion>) => {
+    template: (res: FuseResult<BlockSuggestion>) => {
       if (res.item.blockId) {
         return `<div class="${c(
           'file-suggestion-wrapper'
@@ -388,12 +388,12 @@ export function getBlockSearchConfig(
     },
     search: (
       _: string,
-      callback: (results: Fuse.FuseResult<BlockSuggestion>[]) => void,
+      callback: (results: FuseResult<BlockSuggestion>[]) => void,
       marchArr
     ) => {
       getBlocks(app, filePath, marchArr[1], marchArr[2], callback);
     },
-    replace: (result: Fuse.FuseResult<BlockSuggestion>): string => {
+    replace: (result: FuseResult<BlockSuggestion>): string => {
       const output: string[] = [];
 
       if (isEmbed && result.item.file.extension === 'md') {

@@ -25,7 +25,7 @@ class MarkdownParser extends TypeParser<Literal> {
             case 'array':
                 auxMarkdown = wrapped.value
                     .map(
-                        v => this.parse(
+                        (v: any) => this.parse(
                             DataviewService.wrapLiteral(v),
                         )
                     );

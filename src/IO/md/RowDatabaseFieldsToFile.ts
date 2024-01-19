@@ -38,7 +38,7 @@ function stringifyDbYaml(literal: Literal, level: number, localSettings: LocalSe
     // Manage Arrays
     if (DataviewService.getDataviewAPI().value.isArray(literal)) {
         literalBlock.push(`${" ".repeat(level)}${key}:`);
-        literal.forEach((literal) => {
+        literal.forEach((literal: any) => {
             literalBlock.push(...stringifyDbYaml(literal, level + 1, localSettings));
         });
     }
