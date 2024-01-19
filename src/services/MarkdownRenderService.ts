@@ -15,7 +15,8 @@ class MarkdownRenderService {
         defaultCell: CellContext<RowDataType, Literal>,
         markdownString: string,
         domElement: HTMLDivElement,
-        depth: number
+        depth: number,
+        array =true,
     ) {
         try {
             const { table } = defaultCell;
@@ -36,7 +37,7 @@ class MarkdownRenderService {
                 }
             }
             // Array modifiers
-            if (SUGGESTER_REGEX.TEXT_ARRAY.test(markdownString)) {
+            if (array && SUGGESTER_REGEX.TEXT_ARRAY.test(markdownString)) {
                 let alternativeString = "";
                 markdownString
                     .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2$3$4")
