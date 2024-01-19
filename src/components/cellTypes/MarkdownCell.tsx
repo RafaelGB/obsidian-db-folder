@@ -24,9 +24,7 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
         5,
         false
       );
-      
     }
-    console.log((markdownRow[tableColumn.key] as Link).markdown())  // okay
   });
   return (
     <span
