@@ -383,7 +383,7 @@ export const MarkdownBreakerRules = Object.freeze({
 
 
 export const MediaExtensions = Object.freeze({
-  IMAGE: ['bmp', 'png', 'jpg', 'jpeg', 'gif', 'svg'],
+  IMAGE: ['bmp', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'],
   VIDEO: ['mp4', 'webm', 'ogv'],
   AUDIO: ['mp3', 'wav', 'm4a', '3gp', 'flac', 'ogg', 'oga']
 });
