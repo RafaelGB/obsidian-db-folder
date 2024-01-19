@@ -19,11 +19,14 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
       mdRef.current.innerHTML = "";
       MarkdownService.renderMarkdown(
         defaultCell,
-        (markdownRow[tableColumn.key] as Link).markdown(),
+        (markdownRow[tableColumn.key] as Link).markdown(),   // .replaceAll(",","\\,"),  not working - puts \ in output
         mdRef.current,
-        5
+        5,
+        false
       );
+      
     }
+    console.log((markdownRow[tableColumn.key] as Link).markdown())  // okay
   });
   return (
     <span
