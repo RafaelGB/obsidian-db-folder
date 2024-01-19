@@ -21,7 +21,8 @@ const MarkdownCell = (mdProps: CellComponentProps) => {
         defaultCell,
         (markdownRow[tableColumn.key] as Link).markdown(),
         mdRef.current,
-        5
+        5,
+        false
       );
     }
   });
