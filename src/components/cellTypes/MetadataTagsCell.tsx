@@ -17,7 +17,8 @@ const MetadataTagsCell = (mdProps: CellComponentProps) => {
       defaultCell,
       metaTags.join(" "),
       mdRef.current,
-      5
+      5,
+      true
     );
   });
   return (
