@@ -37,15 +37,29 @@ class MarkdownRenderService {
                 }
             }
             // Array modifiers
-            if (array && SUGGESTER_REGEX.TEXT_ARRAY.test(markdownString)) {
-                let alternativeString = "";
-                markdownString
-                    .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2$3$4")
-                    .split(",")
-                    .forEach((item) => {
-                        alternativeString = alternativeString.concat(`- ${item.trim()}\n`);
+            if (array && SUGGESTER_REGEX.TEXT_ARRAY.test(markdownString) && !SUGGESTER_REGEX.IS_MD_LINK.test(markdownString) && !SUGGESTER_REGEX.IS_URL_LINK.test(markdownString)) {
+                // let alternativeString = "";
+                // markdownString
+                //     .replaceAll(SUGGESTER_REGEX.TEXT_ARRAY, "$2$3$4")
+                //     .split(",")
+                //     .forEach((item) => {
+                //         alternativeString = alternativeString.concat(`- ${item.trim()}\n`);
+                //     });
+                // markdownString = alternativeString;
+                const output = markdownString.replace(/(^\[)(.*)(\])$/g,"$2") 
+                let final = ""
+                
+                const strings = output.replace(/(\[\[[^\]]+\]\])/g,"").replace(/\[([^\]]+\]\([^)]+)\)/g,"").split(",").filter(s=>s!=='');
+                const links = output.match(/(\[\[[^\]]+\]\])/g)
+                const urls = output.match(/\[([^\]]+\]\([^)]+)\)/g)
+
+                const array = [...(links ?? []), ...(urls ?? []), ...(strings ?? [])];
+
+                array.forEach((item) => {
+                        final = final.concat(`- ${item.trim()}\n`);
                     });
-                markdownString = alternativeString;
+                
+                markdownString = final;
             }
             await this.renderStringAsMarkdown(
                 view,

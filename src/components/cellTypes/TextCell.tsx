@@ -48,8 +48,10 @@ const TextCell = (props: CellComponentProps) => {
       defaultCell,
       textCell,
       containerCellRef.current,
-      5
+      5,
+      true
     );
+    console.log(textCell)
   }, [dirtyCell, textCell]);
 
   const handleEditableOnclick = () => {
