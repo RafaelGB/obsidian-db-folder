@@ -504,6 +504,11 @@ export const SUGGESTER_REGEX = Object.freeze({
   TEXT_OBJECT: /(^\{{1})(.*)(\}{1})$/g,
 
   CELL_VALID_KEYDOWN: /^[a-zA-Z0-9_-]{1}$/g,
+
+  IS_MD_LINK: /^\[\[.*\]\]$/,
+  IS_URL_LINK: /^\[.*\]\([^)]+\)$/,
+
+  
 });
 
 /******************************************************************************
