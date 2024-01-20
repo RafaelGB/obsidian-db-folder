@@ -46,17 +46,17 @@ class MarkdownRenderService {
                 //         alternativeString = alternativeString.concat(`- ${item.trim()}\n`);
                 //     });
                 // markdownString = alternativeString;
-                const output = markdownString.replace(/(^\[)(.*)(\])$/g,"$2") 
+                const output = markdownString.replace(SUGGESTER_REGEX.REMOVE_BRACKET,"$2") 
                 let final = ""
                 
-                const strings = output.replace(/(\[\[[^\]]+\]\])/g,"").replace(/\[([^\]]+\]\([^)]+)\)/g,"").split(",").filter(s=>s!=='');
-                const links = output.match(/(\[\[[^\]]+\]\])/g)
-                const urls = output.match(/\[([^\]]+\]\([^)]+)\)/g)
+                const strings = output.replace(SUGGESTER_REGEX.MD_LINK_ARRAY,"").replace(SUGGESTER_REGEX.URL_LINK_ARRAY,"").split(",").filter(s=>s!=='');
+                const links = output.match(SUGGESTER_REGEX.MD_LINK_ARRAY)
+                const urls = output.match(SUGGESTER_REGEX.URL_LINK_ARRAY)
 
                 const array = [...(links ?? []), ...(urls ?? []), ...(strings ?? [])];
 
                 array.forEach((item) => {
-                        final = final.concat(`- ${item.trim()}\n`);
+                        final = final.concat(`- ${item.trim().replace(/,$/,"")}\n`);
                     });
                 
                 markdownString = final;
