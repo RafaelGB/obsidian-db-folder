@@ -60,6 +60,11 @@ class MarkdownRenderService {
                     });
                 
                 markdownString = final;
+            } else {
+                const output = markdownString.replace(SUGGESTER_REGEX.REMOVE_BRACKET,"$2");
+                if (SUGGESTER_REGEX.IS_MD_LINK.test(output) || SUGGESTER_REGEX.IS_URL_LINK.test(output)){
+                    markdownString = output;
+                }
             }
             await this.renderStringAsMarkdown(
                 view,
