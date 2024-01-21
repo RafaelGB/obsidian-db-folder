@@ -74,7 +74,6 @@ export class ColumnIdInputHandler extends AbstractHandlerClass<ColumnSettingsHan
             return t("column_settings_modal_column_id_error_empty_root_key");
         }
         // Validate special characters in root key
-        // if (rootKey.match(/[^a-zA-Z0-9_]/)) {
         if (rootKey.match(/[^\w\u0400-\u04FF]/)) {
             return t("column_settings_modal_column_id_error_invalid_key");
         }
