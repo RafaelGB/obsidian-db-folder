@@ -7,7 +7,7 @@ import { CustomView } from "views/AbstractView";
 export function obsidianMdLinksOnClickCallback(stateManager: StateManager, view: CustomView, filePath: string) {
     return useCallback(
         async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            if (e.type === 'auxclick' || e.button === 2) {
+            if ( e.button === 2){ 
                 return;
             }
 

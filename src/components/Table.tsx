@@ -236,7 +236,7 @@ export function Table(tableData: TableDataType) {
           /** Obsidian event to show page preview */
           onMouseOver={obsidianMdLinksOnMouseOverMenuCallback(view)}
           /** Obsidian to open an internal link in a new pane */
-          onClick={obsidianMdLinksOnClickCallback(stateManager, view, filePath)}
+          onMouseDown={obsidianMdLinksOnClickCallback(stateManager, view, filePath)}
           onKeyDown={onKeyDownArrowKeys}
           style={{
             width: table.getCenterTotalSize(),
