@@ -51,7 +51,6 @@ const TextCell = (props: CellComponentProps) => {
       5,
       true
     );
-    console.log(textCell)
   }, [dirtyCell, textCell]);
 
   const handleEditableOnclick = () => {
