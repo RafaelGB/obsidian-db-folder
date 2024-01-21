@@ -940,6 +940,11 @@ div.database-plugin__td.data-input span:focus {
 *               React-datepicker styles
 ************************************************************/
 /** VARIABLES */
+
+.react-datepicker__aria-live {
+  display: none !important;
+}
+
 .react-datepicker {
   --react-datepicker-navigation-height: 24px;
   --react-datepicker-navigation-width: 24px;

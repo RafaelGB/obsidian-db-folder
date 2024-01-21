@@ -1,5 +1,6 @@
 import { DatabaseCore } from "helpers/Constants";
 import { getNormalizedPath } from "helpers/VaultManagement";
+import { PaneType } from "obsidian";
 import { useCallback } from "react";
 import StateManager from "StateManager";
 import { CustomView } from "views/AbstractView";
@@ -39,12 +40,22 @@ export function obsidianMdLinksOnClickCallback(stateManager: StateManager, view:
             if (closestAnchor.hasClass('internal-link')) {
                 e.preventDefault();
                 const destination = closestAnchor.getAttr('href');
-                const inNewLeaf = e.button === 1 || e.ctrlKey || e.metaKey;
+                
+                let newLeaf: boolean | PaneType;
+                if(e.button === 1 || e.ctrlKey || e.metaKey){
+                    if(e.altKey){
+                        newLeaf = "split" as PaneType;
+                    } else {
+                        newLeaf = "tab" as PaneType;
+                    }
+                } else {
+                    newLeaf = false;
+                }
 
                 app.workspace.openLinkText(
                     destination,
                     filePath,
-                    inNewLeaf
+                    newLeaf
                 );
 
                 return;
