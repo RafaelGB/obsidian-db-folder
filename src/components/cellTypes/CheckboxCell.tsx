@@ -3,7 +3,8 @@ import { TableColumn } from "cdm/FolderModel";
 import { c } from "helpers/StylesHelper";
 import { CellComponentProps } from "cdm/ComponentsModel";
 import { ParseService } from "services/ParseService";
-import { InputType } from "helpers/Constants";
+import {DEFAULT_SETTINGS, InputType} from "helpers/Constants";
+import {Notice} from "obsidian";
 
 function CheckboxCell(props: CellComponentProps) {
   const { defaultCell } = props;
@@ -15,22 +16,23 @@ function CheckboxCell(props: CellComponentProps) {
   const checkboxRow = tableState.data((state) => state.rows[row.index]);
   const columnsInfo = tableState.columns((state) => state.info);
   const configInfo = tableState.configState((state) => state.info);
+  const isBinaryCellType = DEFAULT_SETTINGS.local_settings.binary_checkbox_type;
   const checkboxCell = tableState.data(
     (state) =>
       ParseService.parseRowToCell(
         state.rows[row.index],
         tableColumn,
-        InputType.CHECKBOX,
+          isBinaryCellType ? InputType.NUMBER : InputType.CHECKBOX,
         configInfo.getLocalSettings()
-      ) as boolean
+      ) as boolean | number
   );
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked;
-    editCheckbox(newValue);
+    editCheckbox( isBinaryCellType ? (newValue ? 1 : 0) : newValue );
   };
 
-  const editCheckbox = async (newValue: boolean) => {
+  const editCheckbox = async (newValue: boolean | number) => {
     const newCell = ParseService.parseRowToLiteral(
       checkboxRow,
       tableColumn,
@@ -55,13 +57,13 @@ function CheckboxCell(props: CellComponentProps) {
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           e.preventDefault();
-          editCheckbox(!checkboxCell);
+          editCheckbox(isBinaryCellType ? (checkboxCell ? 1 : 0) : !checkboxCell);
         }
       }}
     >
       <input
         type="checkbox"
-        checked={checkboxCell}
+        checked={!!checkboxCell}
         key={`checkbox-input-${row.index}`}
         onChange={handleChange}
       />

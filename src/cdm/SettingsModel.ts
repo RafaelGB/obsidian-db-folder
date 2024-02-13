@@ -34,6 +34,7 @@ export interface LocalSettings {
     show_metadata_inlinks: boolean;
     show_metadata_outlinks: boolean;
     show_metadata_tags: boolean;
+    binary_checkbox_type: boolean;
     source_form_result: string;
     source_destination_path: string;
     source_data: string;
