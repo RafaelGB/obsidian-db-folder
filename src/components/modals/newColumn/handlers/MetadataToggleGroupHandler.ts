@@ -20,7 +20,7 @@ export class MetadataToggleGroupHandler extends AbstractHandlerClass<AddColumnMo
          *************************/
         const metadata_file_toggle_promise = async (value: boolean): Promise<void> => {
             // Persist value
-            await view.diskConfig.updateColumnProperties(MetadataColumns.FILE, { isHidden: value });
+            await view.diskConfig.updateColumnProperties(MetadataColumns.FILE, { isHidden: !value });
             addColumnModalManager.addColumnModal.enableReset = true;
         }
         new Setting(metadata_section)
