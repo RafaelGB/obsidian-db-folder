@@ -3,7 +3,7 @@ import { TableColumn } from "cdm/FolderModel";
 import { LocalSettings } from "cdm/SettingsModel";
 import { obtainColumnsFromFolder, obtainColumnsFromRows } from "components/Columns";
 import { DatabaseCore, DEFAULT_SETTINGS } from "helpers/Constants";
-import { resolve_tfile } from "helpers/FileManagement";
+import { destination_folder, resolve_tfile } from "helpers/FileManagement";
 import { adapterTFilesToRows } from "helpers/VaultManagement";
 import { SMarkdownPage } from "obsidian-dataview";
 import { dataApiBuilder } from "views/DataApiBuilder";
@@ -79,7 +79,7 @@ class RelationalServiceInstance {
      * @param ddbbPath 
      * @param content 
      */
-    public async createNoteIntoRelation(ddbbPath: string, newFilename: string): Promise<void> {
+    public async createNoteIntoRelation(ddbbPath: string, newFilename: string): Promise<string> {
         LOGGER.info(`--> createNoteIntoRelation. Creating note ${newFilename} into relation ${ddbbPath}`);
         const ddbbFile = resolve_tfile(ddbbPath);
         const ddbbInfo = await new DatabaseInfo(ddbbFile, DEFAULT_SETTINGS.local_settings).build();
@@ -87,6 +87,9 @@ class RelationalServiceInstance {
         const relatedColumns = await obtainColumnsFromFolder(ddbbInfo.yaml.columns);
         await dataApi.create(newFilename, relatedColumns, ddbbInfo.yaml.config);
         LOGGER.info(`<-- createNoteIntoRelation. Note ${newFilename} created into relation ${ddbbPath}`);
+        const dest_folder = destination_folder(ddbbFile, ddbbInfo.yaml.config);
+        const newNotePath = `${dest_folder}/${newFilename}.md`;
+        return newNotePath;
     }
 
     /**

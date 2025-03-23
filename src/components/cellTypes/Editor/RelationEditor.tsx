@@ -33,10 +33,17 @@ const RelationEditor = (props: RelationEditorComponentProps) => {
   ) => {
     switch (actionMeta.action) {
       case "create-option":
-        await RelationalService.createNoteIntoRelation(
+        const newNotePath = await RelationalService.createNoteIntoRelation(
           tableColumn.config.related_note_path,
           actionMeta.option.value
         );
+        // Once the note is created, we need to update the value of the new option
+        const newOption = newValue.find(
+          (option) => option.value === actionMeta.option.value
+        );
+        if (newOption) {
+          newOption.value = newNotePath;
+        }
         break;
       default:
       // Do nothing
